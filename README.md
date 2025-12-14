@@ -57,7 +57,7 @@ The application is an open-source project and does not possess a paid Apple Deve
 ### Installation Files:
 The program requires a file in **.dmg** format that contains the **.app** installer inside.
 
-> **💡 Pro Tip:** The best way to obtain valid files is the free application **Mist**. In Mist, select the system version you are interested in and set the output format to **Disk Image (.dmg)**. This guarantees the correct file structure.
+> **💡 Pro Tip:** The best way to obtain valid files is the free application **[MIST by ninxsoft](https://github.com/ninxsoft/Mist)**. In Mist, select the system version you are interested in and set the output format to **Disk Image (.dmg)**. This guarantees the correct file structure.
 
 ---
 
