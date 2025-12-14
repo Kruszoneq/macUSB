@@ -1,0 +1,6925 @@
+{
+  "sourceLanguage" : "pl",
+  "strings" : {
+    "" : {
+
+    },
+    "• Do utworzenia instalatora potrzebny jest dysk USB o pojemności minimum 16 GB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Zum Erstellen des Installers ist ein USB-Laufwerk mit mindestens 16 GB erforderlich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• A USB drive with a minimum capacity of 16 GB is required to create the installer"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Se requiere una memoria USB con una capacidad mínima de 16 GB para crear el instalador"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Une clé USB d'une capacité minimale de 16 Go est requise pour créer l'installateur"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• インストーラを作成するには、最低16GBの容量を持つUSBメモリが必要です"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• É necessário um pen drive com capacidade mínima de 16 GB para criar o instalador"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Для создания установщика требуется USB-накопитель емкостью не менее 16 ГБ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 创建安装程序需要至少 16 GB 容量的 U 盘"
+          }
+        }
+      }
+    },
+    "• Instalator zostanie zmodyfikowany (podpis cyfrowy)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Der Installer wird modifiziert (digitale Signatur)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The installer will be modified (digital signature)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• El instalador será modificado (firma digital)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• L'installateur sera modifié (signature numérique)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• インストーラが変更されます（デジタル署名）"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• O instalador será modificado (assinatura digital)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Установщик будет изменен (цифровая подпись)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 安装程序将被修改（数字签名）"
+          }
+        }
+      }
+    },
+    "• Obraz systemu zostanie przywrócony w Terminalu" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Das Systemabbild wird im Terminal wiederhergestellt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The system image will be restored in Terminal"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La imagen del sistema se restaurará en el Terminal"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• L'image système sera restaurée dans le Terminal"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• システムイメージがターミナルで復元されます"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• A imagem do sistema será restaurada no Terminal"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Образ системы будет восстановлен в Терминале"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 系统镜像将在终端中恢复"
+          }
+        }
+      }
+    },
+    "• Pamięć USB zostanie sformatowana (dane zostaną usunięte)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Das USB-Laufwerk wird formatiert (Daten werden gelöscht)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The USB drive will be formatted (data will be deleted)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La memoria USB será formateada (se borrarán los datos)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La clé USB sera formatée (les données seront supprimées)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• USBメモリがフォーマットされます（データは削除されます）"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• O pen drive será formatado (os dados serão excluídos)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• USB-накопитель будет отформатирован (данные будут удалены)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• U 盘将被格式化（数据将被删除）"
+          }
+        }
+      }
+    },
+    "• Pamięć USB zostanie wymazana" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Das USB-Laufwerk wird gelöscht"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The USB drive will be erased"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La memoria USB será borrada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La clé USB sera effacée"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• USBメモリが消去されます"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• O pen drive será apagado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• USB-накопитель будет стерт"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• U 盘将被抹掉"
+          }
+        }
+      }
+    },
+    "• Plik .dmg musi zawierać instalator systemu macOS lub Mac OS X" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Die .dmg-Datei muss einen macOS- oder Mac OS X-Installer enthalten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The .dmg file must contain a macOS or Mac OS X installer"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• El archivo .dmg debe contener un instalador de macOS o Mac OS X"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Le fichier .dmg doit contenir un installateur macOS ou Mac OS X"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• .dmgファイルには、macOSまたはMac OS Xのインストーラが含まれている必要があります"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• O arquivo .dmg deve conter um instalador do macOS ou Mac OS X"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Файл .dmg должен содержать установщик macOS или Mac OS X"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• .dmg 文件必须包含 macOS 或 Mac OS X 安装程序"
+          }
+        }
+      }
+    },
+    "• Plik instalacyjny zostanie skopiowany" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Die Installationsdatei wird kopiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The installation file will be copied"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• El archivo de instalación será copiado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Le fichier d'installation sera copié"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• インストールファイルがコピーされます"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• O arquivo de instalação será copiado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Файл установки будет скопирован"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 安装文件将被复制"
+          }
+        }
+      }
+    },
+    "• Plik instalacyjny zostanie skopiowany oraz podpisany" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Die Installationsdatei wird kopiert und signiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The installation file will be copied and signed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• El archivo de instalación será copiado y firmado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Le fichier d'installation sera copié et signé"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• インストールファイルがコピーされ、署名されます"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• O arquivo de instalação será copiado e assinado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Файл установки будет скопирован и подписан"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 安装文件将被复制并签名"
+          }
+        }
+      }
+    },
+    "• Plik z systemem zostanie skopiowany i zweryfikowany" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Die Systemdatei wird kopiert und verifiziert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The system file will be copied and verified"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• El archivo del sistema será copiado y verificado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Le fichier système sera copié et vérifié"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• システムファイルがコピーされ、検証されます"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• O arquivo do sistema será copiado e verificado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Системный файл будет скопирован и проверен"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 系统文件将被复制并验证"
+          }
+        }
+      }
+    },
+    "• Pliki tymczasowe zostaną automatycznie usunięte" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Temporäre Dateien werden automatisch gelöscht"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Temporary files will be automatically deleted"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Los archivos temporales se eliminarán automáticamente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Les fichiers temporaires seront automatiquement supprimés"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 一時ファイルは自動的に削除されます"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Arquivos temporários serão excluídos automaticamente"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Временные файлы будут автоматически удалены"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 临时文件将被自动删除"
+          }
+        }
+      }
+    },
+    "• Podłącz dysk USB do docelowego komputera Mac" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Schließen Sie das USB-Laufwerk an den Ziel-Mac an"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Connect the USB drive to the target Mac computer"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Conecte la memoria USB al Mac de destino"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Connectez la clé USB au Mac cible"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• USBメモリを対象のMacに接続します"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Conecte o pen drive ao Mac de destino"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Подключите USB-накопитель к целевому компьютеру Mac"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 将 U 盘连接到目标 Mac 电脑"
+          }
+        }
+      }
+    },
+    "• Terminal wykona końcową weryfikację i podmianę plików" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Das Terminal führt eine abschließende Überprüfung und den Dateiaustausch durch"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Terminal will perform final verification and file replacement"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• El Terminal realizará la verificación final y el reemplazo de archivos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Le Terminal effectuera la vérification finale et le remplacement des fichiers"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• ターミナルが最終確認とファイルの置き換えを実行します"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• O Terminal realizará a verificação final e a substituição de arquivos"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Терминал выполнит окончательную проверку и замену файлов"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 终端将执行最终验证和文件替换"
+          }
+        }
+      }
+    },
+    "• Uruchom komputer trzymając przycisk Option (⌥)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Starten Sie den Computer mit gedrückter Optionstaste (⌥)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Start the computer while holding the Option (⌥) key"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Inicie el ordenador manteniendo pulsada la tecla Opción (⌥)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Démarrez l'ordinateur en maintenant la touche Option (⌥)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Option (⌥) キーを押しながらコンピュータを起動します"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Inicie o computador mantendo pressionada a tecla Option (⌥)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Загрузите компьютер, удерживая клавишу Option (⌥)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 按住 Option (⌥) 键启动电脑"
+          }
+        }
+      }
+    },
+    "• Wybierz instalator systemu macOS lub OS X z listy" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Wählen Sie den macOS- oder OS X-Installer aus der Liste"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Select the macOS or OS X installer from the list"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Seleccione el instalador de macOS u OS X de la lista"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Sélectionnez l'installateur macOS ou OS X dans la liste"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• リストからmacOSまたはOS Xのインストーラを選択します"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Selecione o instalador do macOS ou OS X na lista"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Выберите установщик macOS или OS X из списка"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 从列表中选择 macOS 或 OS X 安装程序"
+          }
+        }
+      }
+    },
+    "• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Es sind mindestens 15 GB freier Speicherplatz erforderlich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• At least 15 GB of free disk space is required"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Se requieren al menos 15 GB de espacio libre en disco"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Au moins 15 Go d'espace disque libre sont requis"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 最低15GBの空きディスク容量が必要です"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Pelo menos 15 GB de espaço livre em disco são necessários"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Требуется не менее 15 ГБ свободного места на диске"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 需要至少 15 GB 的可用磁盘空间"
+          }
+        }
+      }
+    },
+    "• Wymagane podanie hasła administratora" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Administratorpasswort erforderlich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Administrator password required"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Se requiere contraseña de administrador"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Mot de passe administrateur requis"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 管理者パスワードが必要です"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Senha de administrador necessária"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Требуется пароль администратора"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 需要管理员密码"
+          }
+        }
+      }
+    },
+    "• Zalecane jest użycie dysku w standardzie USB 3.0 lub szybszym" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Die Verwendung eines USB 3.0-Laufwerks (oder schneller) wird empfohlen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Using a USB 3.0 or faster drive is recommended"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Se recomienda usar una memoria USB 3.0 o más rápida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• L'utilisation d'une clé USB 3.0 ou plus rapide est recommandée"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• USB 3.0以上の高速なドライブの使用を推奨します"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Recomenda-se o uso de um pen drive USB 3.0 ou mais rápido"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Рекомендуется использовать накопитель USB 3.0 или быстрее"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 建议使用 USB 3.0 或更快的驱动器"
+          }
+        }
+      }
+    },
+    "• Zapis na USB odbędzie się w nowym oknie Terminala" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Das Schreiben auf USB erfolgt in einem neuen Terminalfenster"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Writing to USB will take place in a new Terminal window"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La escritura en USB se realizará en una nueva ventana de Terminal"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• L'écriture sur USB se fera dans une nouvelle fenêtre Terminal"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• USBへの書き込みは新しいターミナルウィンドウで行われます"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• A gravação no USB ocorrerá em uma nova janela do Terminal"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Запись на USB будет происходить в новом окне Терминала"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 写入 USB 将在新的终端窗口中进行"
+          }
+        }
+      }
+    },
+    "Analizowanie" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analysieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyzing"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analizando"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyse en cours"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分析中"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analisando"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Анализ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在分析"
+          }
+        }
+      }
+    },
+    "Analizuj" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analysieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyze"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analizar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyser"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分析"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analisar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Анализировать"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分析"
+          }
+        }
+      }
+    },
+    "Autoryzacja" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisierung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authorization"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorización"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisation"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "認証"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorização"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Авторизация"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "授权"
+          }
+        }
+      }
+    },
+    "Autoryzacja anulowana. Możesz spróbować ponownie." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisierung abgebrochen. Sie können es erneut versuchen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authorization canceled. You can try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorización cancelada. Puedes intentarlo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisation annulée. Vous pouvez réessayer."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "認証がキャンセルされました。再試行できます。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorização cancelada. Você pode tentar novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Авторизация отменена. Вы можете попробовать снова."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "授权已取消。您可以重试。"
+          }
+        }
+      }
+    },
+    "Błąd analizy" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analysefehler"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analysis Error"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error de análisis"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur d'analyse"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分析エラー"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erro de análise"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка анализа"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分析错误"
+          }
+        }
+      }
+    },
+    "Błąd czyszczenia" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereinigungsfehler"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cleanup Error"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error de limpieza"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur de nettoyage"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クリーンアップエラー"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erro de limpeza"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка очистки"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清理错误"
+          }
+        }
+      }
+    },
+    "BŁĄD PROCESU: Nie udało się utworzyć instalatora." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PROZESSFEHLER: Erstellen des Installers fehlgeschlagen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PROCESS ERROR: Failed to create the installer."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ERROR DE PROCESO: No se pudo crear el instalador."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ERREUR DE PROCESSUS : Impossible de créer l'installateur."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プロセスエラー: インストーラの作成に失敗しました。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ERRO DE PROCESSO: Falha ao criar o instalador."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ОШИБКА ПРОЦЕССА: Не удалось создать установщик."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "进程错误：无法创建安装程序。"
+          }
+        }
+      }
+    },
+    "Błąd: Nie wybrano dysku." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler: Kein Laufwerk ausgewählt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error: No drive selected."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error: No se ha seleccionado ningún disco."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur : Aucun disque sélectionné."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エラー: ドライブが選択されていません。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erro: Nenhuma unidade selecionada."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка: Диск не выбран."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "错误：未选择驱动器。"
+          }
+        }
+      }
+    },
+    "Brak autoryzacji" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Autorisierung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Authorization"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin autorización"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas d'autorisation"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "認証なし"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem autorização"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет авторизации"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无授权"
+          }
+        }
+      }
+    },
+    "Cały proces może potrwać kilka minut." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der gesamte Vorgang kann einige Minuten dauern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The entire process may take a few minutes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todo el proceso puede tardar unos minutos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'ensemble du processus peut prendre quelques minutes."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべての処理には数分かかる場合があります。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todo o processo pode levar alguns minutos."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Весь процесс может занять несколько минут."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "整个过程可能需要几分钟。"
+          }
+        }
+      }
+    },
+    "Co teraz?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was jetzt?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What now?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Y ahora qué?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Et maintenant ?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次はどうする？"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E agora?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Что теперь?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "现在做什么？"
+          }
+        }
+      }
+    },
+    "Czy na pewno chcesz przerwać pracę?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Möchten Sie den Vorgang wirklich abbrechen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to abort the operation?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Seguro que desea abortar la operación?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voulez-vous vraiment annuler l'opération ?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本当に操作を中止しますか？"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tem certeza de que deseja abortar a operação?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы уверены, что хотите прервать операцию?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您确定要中止操作吗？"
+          }
+        }
+      }
+    },
+    "Czy na pewno chcesz przerwać?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Möchten Sie wirklich abbrechen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to cancel?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Seguro que desea cancelar?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voulez-vous vraiment annuler ?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本当にキャンセルしますか？"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tem certeza de que deseja cancelar?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы уверены, что хотите отменить?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您确定要取消吗？"
+          }
+        }
+      }
+    },
+    "Czyszczenie plików, proszę czekać..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien werden bereinigt, bitte warten..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cleaning up files, please wait..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limpiando archivos, por favor espere..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nettoyage des fichiers, veuillez patienter..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルをクリーンアップしています。お待ちください..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limpando arquivos, aguarde..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очистка файлов, пожалуйста, подождите..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在清理文件，请稍候..."
+          }
+        }
+      }
+    },
+    "Dalsze działanie aplikacji zostało zablokowane. Aby zacząć od nowa, uruchom ponownie aplikację." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der weitere Betrieb der Anwendung wurde blockiert. Starten Sie die Anwendung neu, um von vorne zu beginnen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Further operation of the application has been blocked. To start over, restart the application."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se ha bloqueado el funcionamiento posterior de la aplicación. Para empezar de nuevo, reinicie la aplicación."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le fonctionnement ultérieur de l'application a été bloqué. Pour recommencer, redémarrez l'application."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリケーションのそれ以上の操作はブロックされました。最初からやり直すには、アプリケーションを再起動してください。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A operação posterior do aplicativo foi bloqueada. Para recomeçar, reinicie o aplicativo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дальнейшая работа приложения заблокирована. Чтобы начать заново, перезапустите приложение."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用程序的进一步操作已被阻止。要重新开始，请重启应用程序。"
+          }
+        }
+      }
+    },
+    "Dalsze działanie aplikacji zostanie zablokowane" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der weitere Betrieb der Anwendung wird blockiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Further operation of the application will be blocked"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se bloqueará el funcionamiento posterior de la aplicación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le fonctionnement ultérieur de l'application sera bloqué"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリケーションのそれ以上の操作はブロックされます"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A operação posterior do aplicativo será bloqueada"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дальнейшая работа приложения будет заблокирована"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用程序的进一步操作将被阻止"
+          }
+        }
+      }
+    },
+    "Deutsch 🇩🇪" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deutsch 🇩🇪"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deutsch 🇩🇪"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deutsch 🇩🇪"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deutsch 🇩🇪"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deutsch 🇩🇪"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deutsch 🇩🇪"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deutsch 🇩🇪"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deutsch 🇩🇪"
+          }
+        }
+      }
+    },
+    "Dostępna aktualizacja" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update verfügbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update available"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualización disponible"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise à jour disponible"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アップデートが利用可能です"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atualização disponível"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступно обновление"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可用更新"
+          }
+        }
+      }
+    },
+    "Dostępna jest wersja %@. Zalecamy aktualizację." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@ ist verfügbar. Wir empfehlen ein Update."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@ is available. We recommend updating."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La versión %@ está disponible. Recomendamos actualizar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La version %@ est disponible. Nous recommandons de mettre à jour."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バージョン%@が利用可能です。アップデートを推奨します。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A versão %@ está disponível. Recomendamos a atualização."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступна версия %@. Рекомендуем обновить."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本 %@ 可用。建议更新。"
+          }
+        }
+      }
+    },
+    "Działanie przerwane przez użytkownika (zamknięto okno Terminala). Aby zacząć od początku, ponownie uruchom aplikację." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorgang vom Benutzer abgebrochen (Terminalfenster geschlossen). Starten Sie die Anwendung neu, um von vorne zu beginnen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operation interrupted by user (Terminal window closed). To start over, restart the application."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operación interrumpida por el usuario (ventana de Terminal cerrada). Para empezar de nuevo, reinicie la aplicación."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opération interrompue par l'utilisateur (fenêtre Terminal fermée). Pour recommencer, redémarrez l'application."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ユーザーによって操作が中断されました（ターミナルウィンドウが閉じられました）。最初からやり直すには、アプリケーションを再起動してください。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operação interrompida pelo usuário (janela do Terminal fechada). Para recomeçar, reinicie o aplicativo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Действие прервано пользователем (окно Терминала закрыто). Чтобы начать сначала, перезапустите приложение."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作被用户中断（终端窗口已关闭）。要重新开始，请重启应用程序。"
+          }
+        }
+      }
+    },
+    "Działanie wykonywane w tle, nie widać paska postępu!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorgang läuft im Hintergrund, kein Fortschrittsbalken sichtbar!"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operation performed in the background, no progress bar visible!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Operación en segundo plano, no hay barra de progreso!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opération en arrière-plan, aucune barre de progression visible !"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バックグラウンドで処理中です。プログレスバーは表示されません！"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operação em segundo plano, sem barra de progresso!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Операция в фоне, индикатор выполнения не виден!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "后台操作中，无进度条显示！"
+          }
+        }
+      }
+    },
+    "English 🇺🇸" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English 🇺🇸"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English 🇺🇸"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English 🇺🇸"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English 🇺🇸"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English 🇺🇸"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English 🇺🇸"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English 🇺🇸"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English 🇺🇸"
+          }
+        }
+      }
+    },
+    "Español 🇪🇸" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Español 🇪🇸"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Español 🇪🇸"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Español 🇪🇸"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Español 🇪🇸"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Español 🇪🇸"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Español 🇪🇸"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Español 🇪🇸"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Español 🇪🇸"
+          }
+        }
+      }
+    },
+    "ETAP: Czyszczenie dysku USB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PHASE: USB-Laufwerk wird bereinigt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "STAGE: Cleaning USB drive"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ETAPA: Limpiando la memoria USB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ÉTAPE : Nettoyage de la clé USB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ステージ: USBメモリをクリーニング中"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ETAPA: Limpando o pen drive"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ЭТАП: Очистка USB-накопителя"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "阶段：正在清理 U 盘"
+          }
+        }
+      }
+    },
+    "ETAP: Wgrywanie instalatora na dysk USB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PHASE: Installer wird auf USB-Laufwerk geschrieben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "STAGE: Writing installer to USB drive"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ETAPA: Escribiendo el instalador en la memoria USB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ÉTAPE : Écriture de l'installateur sur la clé USB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ステージ: インストーラをUSBメモリに書き込み中"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ETAPA: Gravando instalador no pen drive"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ЭТАП: Запись установщика на USB-накопитель"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "阶段：正在将安装程序写入 U 盘"
+          }
+        }
+      }
+    },
+    "ETAP: Wgrywanie instalatora na dysk USB - etap 1/2" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PHASE: Installer wird auf USB geschrieben - Stufe 1/2"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "STAGE: Writing installer to USB drive - stage 1/2"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ETAPA: Escribiendo instalador en USB - etapa 1/2"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ÉTAPE : Écriture de l'installateur sur USB - étape 1/2"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ステージ: インストーラをUSBに書き込み中 - ステージ 1/2"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ETAPA: Gravando instalador no USB - etapa 1/2"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ЭТАП: Запись установщика на USB - этап 1/2"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "阶段：写入安装程序到 U 盘 - 阶段 1/2"
+          }
+        }
+      }
+    },
+    "ETAP: Wgrywanie instalatora na dysk USB - etap 2/2" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PHASE: Installer wird auf USB geschrieben - Stufe 2/2"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "STAGE: Writing installer to USB drive - stage 2/2"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ETAPA: Escribiendo instalador en USB - etapa 2/2"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ÉTAPE : Écriture de l'installateur sur USB - étape 2/2"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ステージ: インストーラをUSBに書き込み中 - ステージ 2/2"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ETAPA: Gravando instalador no USB - etapa 2/2"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ЭТАП: Запись установщика на USB - этап 2/2"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "阶段：写入安装程序到 U 盘 - 阶段 2/2"
+          }
+        }
+      }
+    },
+    "Français 🇫🇷" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Français 🇫🇷"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Français 🇫🇷"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Français 🇫🇷"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Français 🇫🇷"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Français 🇫🇷"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Français 🇫🇷"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Français 🇫🇷"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Français 🇫🇷"
+          }
+        }
+      }
+    },
+    "Gotowe!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig!"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Listo!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminé !"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了！"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronto!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成！"
+          }
+        }
+      }
+    },
+    "GOTOWE!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FERTIG!"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DONE!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡LISTO!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TERMINÉ !"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了！"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PRONTO!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ГОТОВО!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成！"
+          }
+        }
+      }
+    },
+    "Ignoruj" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignorieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignore"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignorar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignorer"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無視"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignorar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Игнорировать"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "忽略"
+          }
+        }
+      }
+    },
+    "Kontynuuj" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortfahren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "続ける"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продолжить"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "继续"
+          }
+        }
+      }
+    },
+    "Kopiowanie plików" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien werden kopiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copying files"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiando archivos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie des fichiers"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルをコピー中"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiando arquivos"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копирование файлов"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在复制文件"
+          }
+        }
+      }
+    },
+    "Kopiowanie plików..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien werden kopiert..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copying files..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiando archivos..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie des fichiers..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルをコピー中..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiando arquivos..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копирование файлов..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在复制文件..."
+          }
+        }
+      }
+    },
+    "Kreator instalatora macOS" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS Installer Creator"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS Installer Creator"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creador de instaladores de macOS"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créateur d'installateur macOS"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOSインストーラ作成ツール"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Criador de instalador do macOS"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создание установщика macOS"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS 安装程序创建器"
+          }
+        }
+      }
+    },
+    "macUSB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB"
+          }
+        }
+      }
+    },
+    "macUSB by Kruszoneq" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB by Kruszoneq"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB by Kruszoneq"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB by Kruszoneq"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB by Kruszoneq"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB by Kruszoneq"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB by Kruszoneq"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB by Kruszoneq"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB by Kruszoneq"
+          }
+        }
+      }
+    },
+    "Modyfikowanie plików" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien werden modifiziert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifying files"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modificando archivos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modification des fichiers"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルを変更中"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modificando arquivos"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменение файлов"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在修改文件"
+          }
+        }
+      }
+    },
+    "Może potrwać od kilku do kilkunastu minut." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies kann einige Minuten dauern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This may take several minutes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto puede tardar varios minutos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cela peut prendre plusieurs minutes."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数分から十数分かかる場合があります。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isso pode levar vários minutos."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Это может занять несколько минут."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这可能需要几分钟到十几分钟。"
+          }
+        }
+      }
+    },
+    "Naciśnij Enter, aby zamknąć..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drücken Sie Enter zum Schließen..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Press Enter to close..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presione Enter para cerrar..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez sur Entrée pour fermer..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enterキーを押して閉じてください..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pressione Enter para fechar..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите Enter, чтобы закрыть..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按 Enter 键关闭..."
+          }
+        }
+      }
+    },
+    "Naciśnij poniższy przycisk, gdy Terminal zakończy pracę" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drücken Sie die Taste unten, wenn das Terminal fertig ist"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Press the button below when Terminal finishes work"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presione el botón de abajo cuando la Terminal termine"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez sur le bouton ci-dessous lorsque le Terminal a terminé"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ターミナルの処理が完了したら下のボタンを押してください"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pressione o botão abaixo quando o Terminal terminar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите кнопку ниже, когда Терминал завершит работу"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "终端工作完成后按下面的按钮"
+          }
+        }
+      }
+    },
+    "Nie" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nein"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "いいえ"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "否"
+          }
+        }
+      }
+    },
+    "Nie rozpoznano instalatora" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installer nicht erkannt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installer not recognized"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalador no reconocido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installateur non reconnu"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "インストーラが認識されませんでした"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalador não reconhecido"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Установщик не распознан"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未识别安装程序"
+          }
+        }
+      }
+    },
+    "Nie udało się usunąć plików tymczasowych: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temporäre Dateien konnten nicht gelöscht werden: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to delete temporary files: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error al eliminar archivos temporales: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de la suppression des fichiers temporaires : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一時ファイルの削除に失敗しました: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falha ao excluir arquivos temporários: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось удалить временные файлы: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法删除临时文件：%@"
+          }
+        }
+      }
+    },
+    "Nie wykryto dysku USB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein USB-Laufwerk erkannt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No USB drive detected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se detectó ninguna memoria USB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune clé USB détectée"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USBメモリが検出されませんでした"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhum pen drive detectado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-накопитель не обнаружен"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未检测到 U 盘"
+          }
+        }
+      }
+    },
+    "Nie znaleziono instalatora systemu macOS" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS-Installer nicht gefunden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS installer not found"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se encontró el instalador de macOS"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installateur macOS introuvable"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOSインストーラが見つかりませんでした"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalador do macOS não encontrado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Установщик macOS не найден"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未找到 macOS 安装程序"
+          }
+        }
+      }
+    },
+    "Nie znaleziono pliku InstallESD.dmg." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InstallESD.dmg-Datei nicht gefunden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InstallESD.dmg file not found."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archivo InstallESD.dmg no encontrado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fichier InstallESD.dmg introuvable."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InstallESD.dmgファイルが見つかりませんでした。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arquivo InstallESD.dmg não encontrado."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Файл InstallESD.dmg не найден."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未找到 InstallESD.dmg 文件。"
+          }
+        }
+      }
+    },
+    "Oczekiwanie na hasło administratora..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warten auf Administratorpasswort..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for administrator password..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esperando la contraseña de administrador..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente du mot de passe administrateur..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理者パスワードを待機中..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aguardando a senha de administrador..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ожидание пароля администратора..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等待管理员密码..."
+          }
+        }
+      }
+    },
+    "Oczekiwanie na plik .dmg..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warten auf .dmg-Datei..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for .dmg file..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esperando el archivo .dmg..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente du fichier .dmg..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ".dmgファイルを待機中..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aguardando arquivo .dmg..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ожидание файла .dmg..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等待 .dmg 文件..."
+          }
+        }
+      }
+    },
+    "Oczekiwanie na wybór docelowego dysku USB..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warten auf Auswahl des USB-Ziellaufwerks..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for USB drive selection..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esperando la selección de la memoria USB de destino..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente de la sélection de la clé USB..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "対象のUSBメモリの選択を待機中..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aguardando a seleção do pen drive de destino..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ожидание выбора целевого USB-накопителя..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等待选择目标 U 盘..."
+          }
+        }
+      }
+    },
+    "Oczekiwanie na zakończenie operacji..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warten auf Abschluss des Vorgangs..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for operation to complete..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esperando a que termine la operación..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente de la fin de l'opération..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作の完了を待機中..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aguardando a conclusão da operação..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ожидание завершения операции..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等待操作完成..."
+          }
+        }
+      }
+    },
+    "Odłączono dysk USB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-Laufwerk getrennt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB drive disconnected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Memoria USB desconectada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clé USB déconnectée"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USBメモリが切断されました"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pen drive desconectado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-накопитель отключен"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U 盘已断开"
+          }
+        }
+      }
+    },
+    "Operacja została anulowana przez użytkownika." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorgang vom Benutzer abgebrochen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operation canceled by user."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operación cancelada por el usuario."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opération annulée par l'utilisateur."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ユーザーによって操作がキャンセルされました。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operação cancelada pelo usuário."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Операция отменена пользователем."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作已被用户取消。"
+          }
+        }
+      }
+    },
+    "Pobierz" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herunterladen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descargar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Télécharger"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ダウンロード"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baixar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Загрузить"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下载"
+          }
+        }
+      }
+    },
+    "Podłącz dysk USB i poczekaj na wykrycie..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen Sie das USB-Laufwerk an und warten Sie auf die Erkennung..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connect USB drive and wait for detection..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conecte la memoria USB y espere a que sea detectada..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connectez la clé USB et attendez la détection..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USBメモリを接続して検出を待機してください..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conecte o pen drive e aguarde a detecção..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подключите USB-накопитель и дождитесь обнаружения..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接 U 盘并等待检测..."
+          }
+        }
+      }
+    },
+    "Podpisywanie instalatora..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installer wird signiert..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signing installer..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firmando el instalador..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signature de l'installateur..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "インストーラに署名中..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assinando o instalador..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подписание установщика..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在签署安装程序..."
+          }
+        }
+      }
+    },
+    "Polski 🇵🇱" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polski 🇵🇱"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polski 🇵🇱"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polski 🇵🇱"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polski 🇵🇱"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polski 🇵🇱"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polski 🇵🇱"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polski 🇵🇱"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polski 🇵🇱"
+          }
+        }
+      }
+    },
+    "Pomyślnie wykryto system" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System erfolgreich erkannt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System successfully detected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistema detectado con éxito"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Système détecté avec succès"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "システムが正常に検出されました"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistema detectado com sucesso"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Система успешно обнаружена"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "系统检测成功"
+          }
+        }
+      }
+    },
+    "Português (BR) 🇧🇷" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Português (BR) 🇧🇷"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Português (BR) 🇧🇷"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Português (BR) 🇧🇷"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Português (BR) 🇧🇷"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Português (BR) 🇧🇷"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Português (BR) 🇧🇷"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Português (BR) 🇧🇷"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Português (BR) 🇧🇷"
+          }
+        }
+      }
+    },
+    "Postępuj zgodnie z instrukcjami w oknie Terminala." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Befolgen Sie die Anweisungen im Terminalfenster."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Follow the instructions in the Terminal window."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siga las instrucciones en la ventana de Terminal."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suivez les instructions dans la fenêtre Terminal."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ターミナルウィンドウの指示に従ってください。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siga as instruções na janela do Terminal."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Следуйте инструкциям в окне Терминала."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请按照终端窗口中的说明进行操作。"
+          }
+        }
+      }
+    },
+    "Proces może potrwać kilka minut." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Vorgang kann einige Minuten dauern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The process may take a few minutes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El proceso puede tardar unos minutos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le processus peut prendre quelques minutes."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "処理には数分かかる場合があります。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O processo pode levar alguns minutos."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Процесс может занять несколько минут."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此过程可能需要几分钟。"
+          }
+        }
+      }
+    },
+    "Proces przerwany" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorgang abgebrochen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Process interrupted"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proceso interrumpido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Processus interrompu"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プロセスが中断されました"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Processo interrompido"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Процесс прерван"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "进程已中断"
+          }
+        }
+      }
+    },
+    "Proces w toku..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorgang läuft..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Process in progress..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proceso en curso..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Processus en cours..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "処理中..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Processo em andamento..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Процесс выполняется..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "进程正在进行..."
+          }
+        }
+      }
+    },
+    "Proszę zachować cierpliwość i nie zamykać okna..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte haben Sie Geduld und schließen Sie das Fenster nicht..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please be patient and do not close the window..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor, tenga paciencia y no cierre la ventana..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veuillez patienter et ne pas fermer la fenêtre..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "しばらくお待ちください。ウィンドウを閉じないでください..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor, tenha paciência e não feche a janela..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пожалуйста, наберитесь терпения и не закрывайте окно..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请耐心等待，不要关闭窗口..."
+          }
+        }
+      }
+    },
+    "Przebieg procesu" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prozessübersicht"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Process overview"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resumen del proceso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperçu du processus"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プロセスの概要"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visão geral do processo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обзор процесса"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "进程概览"
+          }
+        }
+      }
+    },
+    "Przejdź dalej" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiter"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次へ"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продолжить"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "继续"
+          }
+        }
+      }
+    },
+    "Przejdź dalej, aby zakończyć proces..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fahren Sie fort, um den Vorgang abzuschließen..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue to finish the process..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continúe para finalizar el proceso..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuez pour terminer le processus..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次へ進んでプロセスを完了してください..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue para finalizar o processo..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продолжите, чтобы завершить процесс..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "继续以完成该过程..."
+          }
+        }
+      }
+    },
+    "Przerwij i zakończ" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen und beenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abort and exit"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abortar y salir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interrompre et quitter"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中止して終了"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abortar e sair"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прервать и выйти"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中止并退出"
+          }
+        }
+      }
+    },
+    "Przygotowanie plików" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien werden vorbereitet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing files"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparando archivos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Préparation des fichiers"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルを準備中"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparando arquivos"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подготовка файлов"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在准备文件"
+          }
+        }
+      }
+    },
+    "Rozpocznij" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarrer"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начать"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始"
+          }
+        }
+      }
+    },
+    "Ścieżka..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pfad..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Path..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ruta..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chemin..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "パス..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caminho..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Путь..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "路径..."
+          }
+        }
+      }
+    },
+    "Sprawdź powyższe komunikaty błędów." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überprüfen Sie die obigen Fehlermeldungen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check the error messages above."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compruebe los mensajes de error de arriba."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifiez les messages d'erreur ci-dessus."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上記のエラーメッセージを確認してください。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifique as mensagens de erro acima."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверьте сообщения об ошибках выше."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查上面的错误消息。"
+          }
+        }
+      }
+    },
+    "Sukces!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erfolg!"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Success!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Éxito!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Succès !"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成功！"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sucesso!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Успех!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成功！"
+          }
+        }
+      }
+    },
+    "SUKCES! Instalator został utworzony." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ERFOLG! Der Installer wurde erstellt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SUCCESS! The installer has been created."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡ÉXITO! Se ha creado el instalador."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SUCCÈS ! L'installateur a été créé."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成功！インストーラが作成されました。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SUCESSO! O instalador foi criado."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "УСПЕХ! Установщик создан."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成功！安装程序已创建。"
+          }
+        }
+      }
+    },
+    "Szukanie pliku obrazu..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image-Datei wird gesucht..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Searching for image file..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscando archivo de imagen..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recherche du fichier image..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "イメージファイルを検索中..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Procurando arquivo de imagem..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поиск файла образа..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在搜索镜像文件..."
+          }
+        }
+      }
+    },
+    "Tak" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ja"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sí"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oui"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "はい"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sim"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Да"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "是"
+          }
+        }
+      }
+    },
+    "Terminal zamknie się automatycznie za 3 sekundy." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Terminal schließt sich automatisch in 3 Sekunden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminal will close automatically in 3 seconds."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La Terminal se cerrará automáticamente en 3 segundos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le Terminal se fermera automatiquement dans 3 secondes."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ターミナルは3秒後に自動的に閉じます。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Terminal fechará automaticamente em 3 segundos."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Терминал закроется автоматически через 3 секунды."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "终端将在 3 秒后自动关闭。"
+          }
+        }
+      }
+    },
+    "Trwa analizowanie pliku .dmg, proszę czekać" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ".dmg-Datei wird analysiert, bitte warten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyzing .dmg file, please wait"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analizando archivo .dmg, por favor espere"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyse du fichier .dmg en cours, veuillez patienter"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ".dmgファイルを分析中です。お待ちください"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analisando arquivo .dmg, aguarde"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Анализ файла .dmg, пожалуйста, подождите"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在分析 .dmg 文件，请稍候"
+          }
+        }
+      }
+    },
+    "Trwa kopiowanie plików, proszę czekać." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien werden kopiert, bitte warten."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copying files, please wait."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiando archivos, por favor espere."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie des fichiers en cours, veuillez patienter."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルをコピー中です。お待ちください。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiando arquivos, aguarde."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копирование файлов, пожалуйста, подождите."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在复制文件，请稍候。"
+          }
+        }
+      }
+    },
+    "Tworzenie bootowalnych dysków USB z systemem macOS\noraz OS X nigdy nie było takie proste!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Erstellen von bootfähigen macOS- und OS X-USB-Laufwerken\nwar noch nie so einfach!"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating bootable macOS and OS X USB drives\nhas never been easier!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Crear memorias USB de arranque con macOS y OS X\nnunca fue tan fácil!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer des clés USB amorçables macOS et OS X\nn'a jamais été aussi simple !"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOSおよびOS Xの起動可能なUSBメモリの作成が\nかつてないほど簡単になりました！"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Criar pen drives inicializáveis do macOS e OS X\nnunca foi tão fácil!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создание загрузочных USB-дисков macOS и OS X\nеще никогда не было таким простым!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "创建可引导的 macOS 和 OS X U 盘\n从未如此简单！"
+          }
+        }
+      }
+    },
+    "Uruchomiono Terminal" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminal gestartet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminal Launched"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminal iniciado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminal lancé"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ターミナルが起動しました"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminal iniciado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Терминал запущен"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "终端已启动"
+          }
+        }
+      }
+    },
+    "Utworzono instalator systemu" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systeminstaller erstellt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System installer created"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalador del sistema creado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installateur système créé"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "システムインストーラが作成されました"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalador do sistema criado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Установщик системы создан"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已创建系统安装程序"
+          }
+        }
+      }
+    },
+    "UWAGA: Ten etap jest najbardziej czasochłonny." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HINWEIS: Diese Phase dauert am längsten."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NOTE: This stage is the most time-consuming."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NOTA: Esta etapa es la que más tiempo consume."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "REMARQUE : Cette étape est la plus longue."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "注意: この段階が最も時間がかかります。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NOTA: Esta etapa é a mais demorada."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ПРИМЕЧАНИЕ: Этот этап занимает больше всего времени."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "注意：此阶段耗时最长。"
+          }
+        }
+      }
+    },
+    "UWAGA!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ACHTUNG!"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WARNING!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡ADVERTENCIA!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ATTENTION !"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "警告！"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ATENÇÃO!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ВНИМАНИЕ!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "警告！"
+          }
+        }
+      }
+    },
+    "WERSJA SYSTEMU:" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "SYSTEMVERSION:"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "SYSTEM VERSION:"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "VERSIÓN DEL SISTEMA:"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "VERSION DU SYSTÈME :"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "システムバージョン:"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "VERSÃO DO SISTEMA:"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "ВЕРСИЯ СИСТЕМЫ:"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "系统版本："
+              }
+            }
+          }
+        },
+        "Weryfikacja sum kontrolnych..." : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Prüfsummen werden verifiziert..."
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Verifying checksums..."
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Verificando sumas de comprobación..."
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Vérification des sommes de contrôle..."
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "チェックサムを検証中..."
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Verificando somas de verificação..."
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Проверка контрольных сумм..."
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "正在验证校验和..."
+              }
+            }
+          }
+        },
+        "Weryfikowanie plików" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Dateien werden verifiziert"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Verifying files"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Verificando archivos"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Vérification des fichiers"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "ファイルを検証中"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Verificando arquivos"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Проверка файлов"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "正在验证文件"
+              }
+            }
+          }
+        },
+        "Wpisz hasło i naciśnij Enter (hasła nie widać)." : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Geben Sie das Passwort ein und drücken Sie Enter (Passwort ist nicht sichtbar)."
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Enter password and press Enter (password is hidden)."
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Escribe la contraseña y pulsa Enter (la contraseña no es visible)."
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Entrez le mot de passe et appuyez sur Entrée (le mot de passe est masqué)."
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "パスワードを入力してEnterキーを押してください（パスワードは表示されません）。"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Digite a senha e pressione Enter (a senha não fica visível)."
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Введите пароль и нажмите Enter (пароль не виден)."
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "输入密码并按 Enter 键（密码不可见）。"
+              }
+            }
+          }
+        },
+        "Wprowadź hasło administratora, aby kontynuować." : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Geben Sie das Administratorpasswort ein, um fortzufahren."
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Enter administrator password to continue."
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Introduzca la contraseña de administrador para continuar."
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Entrez le mot de passe administrateur pour continuer."
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "続行するには管理者パスワードを入力してください。"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Digite a senha de administrador para continuar."
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Введите пароль администратора для продолжения."
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "输入管理员密码以继续。"
+              }
+            }
+          }
+        },
+        "Wszystkie pliki na wybranym dysku USB zostaną bezpowrotnie usunięte!" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Alle Dateien auf dem ausgewählten USB-Laufwerk werden unwiderruflich gelöscht!"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "All files on the selected USB drive will be permanently erased!"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "¡Todos los archivos en la memoria USB seleccionada se borrarán permanentemente!"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Tous les fichiers sur la clé USB sélectionnée seront définitivement effacés !"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "選択したUSBメモリ上のすべてのファイルは完全に消去されます！"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Todos os arquivos no pen drive selecionado serão apagados permanentemente!"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Все файлы на выбранном USB-накопителе будут безвозвратно удалены!"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "所选 U 盘上的所有文件将被永久清除！"
+              }
+            }
+          }
+        },
+        "Wybierz" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Auswählen"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Select"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Seleccionar"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Choisir"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "選択"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Selecionar"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Выбрать"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "选择"
+              }
+            }
+          }
+        },
+        "Wybierz docelowy dysk USB:" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "USB-Ziellaufwerk auswählen:"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Select target USB drive:"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Seleccione la memoria USB de destino:"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Sélectionnez la clé USB cible :"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "対象のUSBメモリを選択:"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Selecione o pen drive de destino:"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Выберите целевой USB-накопитель:"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "选择目标 U 盘："
+              }
+            }
+          }
+        },
+        "Wybierz go ręcznie lub przeciągnij powyżej" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Wählen Sie es manuell aus oder ziehen Sie es nach oben"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Select it manually or drag it above"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Selecciónelo manualmente o arrástrelo arriba"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Sélectionnez-le manuellement ou glissez-le ci-dessus"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "手動で選択するか、上にドラッグしてください"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Selecione manualmente ou arraste acima"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Выберите его вручную или перетащите выше"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "手动选择或将其拖到上方"
+              }
+            }
+          }
+        },
+        "Wybierz plik .dmg" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : ".dmg-Datei auswählen"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Select .dmg file"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Seleccionar archivo .dmg"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Sélectionner le fichier .dmg"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : ".dmgファイルを選択"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Selecionar arquivo .dmg"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Выбрать файл .dmg"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "选择 .dmg 文件"
+              }
+            }
+          }
+        },
+        "Wybierz..." : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Auswählen..."
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Choose..."
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Elegir..."
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Choisir..."
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "選択..."
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Escolher..."
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Выбрать..."
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "选择..."
+              }
+            }
+          }
+        },
+        "Wybór dysku USB" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "USB-Laufwerksauswahl"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "USB Drive Selection"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Selección de memoria USB"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Sélection de la clé USB"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "USBメモリの選択"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Seleção de pen drive"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Выбор USB-накопителя"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "U 盘选择"
+              }
+            }
+          }
+        },
+        "Wybór systemu macOS" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "macOS-Systemauswahl"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "macOS System Selection"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Selección del sistema macOS"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Sélection du système macOS"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "macOSシステムの選択"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Seleção do sistema macOS"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Выбор системы macOS"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "macOS 系统选择"
+              }
+            }
+          }
+        },
+        "Wybrana wersja systemu" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Ausgewählte Systemversion"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Selected system version"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Versión del sistema seleccionada"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Version du système sélectionnée"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "選択されたシステムバージョン"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Versão do sistema selecionada"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Выбранная версия системы"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "已选择系统版本"
+              }
+            }
+          }
+        },
+        "Wybrany dysk USB" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Ausgewähltes USB-Laufwerk"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Selected USB drive"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Memoria USB seleccionada"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Clé USB sélectionnée"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "選択されたUSBメモリ"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Pen drive selecionado"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Выбранный USB-накопитель"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "已选择 U 盘"
+              }
+            }
+          }
+        },
+        "Wybrany dysk USB ma za małą pojemność" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Die Kapazität des ausgewählten USB-Laufwerks ist zu gering"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Selected USB drive capacity is too small"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "La capacidad de la memoria USB seleccionada es demasiado pequeña"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "La capacité de la clé USB sélectionnée est trop faible"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "選択されたUSBメモリの容量が小さすぎます"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "A capacidade do pen drive selecionado é muito pequena"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Емкость выбранного USB-накопителя слишком мала"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "所选 U 盘容量太小"
+              }
+            }
+          }
+        },
+        "Wybrany system nie jest wspierany przez aplikację" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Das ausgewählte System wird von der Anwendung nicht unterstützt"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Selected system is not supported by the application"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "El sistema seleccionado no es compatible con la aplicación"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Le système sélectionné n'est pas pris en charge par l'application"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "選択されたシステムはアプリケーションでサポートされていません"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "O sistema selecionado não é compatível com o aplicativo"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Выбранная система не поддерживается приложением"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "所选系统不受此应用支持"
+              }
+            }
+          }
+        },
+        "Wymagana autoryzacja" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Autorisierung erforderlich"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Authorization required"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Autorización requerida"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Autorisation requise"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "認証が必要です"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Autorização necessária"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Требуется авторизация"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "需要授权"
+              }
+            }
+          }
+        },
+        "Wymagane jest minimum 16 GB." : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Mindestens 16 GB erforderlich."
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Min 16GB required."
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Mínimo 16 GB requeridos."
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Minimum 16 Go requis."
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "最低16GBが必要です。"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Mínimo 16 GB necessários."
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Требуется минимум 16 ГБ."
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "至少需要 16 GB。"
+              }
+            }
+          }
+        },
+        "Wymagane uprawnienia administratora." : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Administratorrechte erforderlich."
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Administrator privileges required."
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Se requieren privilegios de administrador."
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Droits d'administrateur requis."
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "管理者権限が必要です。"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Privilégios de administrador necessários."
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Требуются права администратора."
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "需要管理员权限。"
+              }
+            }
+          }
+        },
+        "Wymagania" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Anforderungen"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Requirements"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Requisitos"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Exigences"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "要件"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Requisitos"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Требования"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "要求"
+              }
+            }
+          }
+        },
+        "Wymagania sprzętowe" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Hardwareanforderungen"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Hardware Requirements"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Requisitos de hardware"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Configuration matérielle requise"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "ハードウェア要件"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Requisitos de hardware"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Требования к оборудованию"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "硬件要求"
+              }
+            }
+          }
+        },
+        "Wystąpił błąd" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Ein Fehler ist aufgetreten"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "An error occurred"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Ocurrió un error"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Une erreur est survenue"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "エラーが発生しました"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Ocorreu um erro"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Произошла ошибка"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "发生错误"
+              }
+            }
+          }
+        },
+    "Zakończ" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminer"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "終了"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concluir"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершить"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
+          }
+        }
+      }
+    },
+    "Zakończ i wyjdź" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beenden und schließen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish and Exit"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminar y salir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminer et Quitter"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了して終了"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalizar e Sair"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершить и выйти"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成并退出"
+          }
+        }
+      }
+    },
+    "Zakończono" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgeschlossen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finished"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalizado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminé"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concluído"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершено"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已完成"
+          }
+        }
+      }
+    },
+    "Zakończono pracę!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arbeit abgeschlossen!"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Work complete!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Trabajo completado!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Travail terminé !"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "作業完了！"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trabalho concluído!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Работа завершена!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工作完成！"
+          }
+        }
+      }
+    },
+    "Zmień język" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache ändern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change language"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar idioma"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changer de langue"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "言語を変更"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mudar idioma"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сменить язык"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更改语言"
+          }
+        }
+      }
+    },
+    "Русский 🇷🇺" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Русский 🇷🇺"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Русский 🇷🇺"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Русский 🇷🇺"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Русский 🇷🇺"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Русский 🇷🇺"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Русский 🇷🇺"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Русский 🇷🇺"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Русский 🇷🇺"
+          }
+        }
+      }
+    },
+    "日本語 🇯🇵" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日本語 🇯🇵"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日本語 🇯🇵"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日本語 🇯🇵"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日本語 🇯🇵"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日本語 🇯🇵"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日本語 🇯🇵"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日本語 🇯🇵"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日本語 🇯🇵"
+          }
+        }
+      }
+    },
+    "简体中文 🇨🇳" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简体中文 🇨🇳"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简体中文 🇨🇳"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简体中文 🇨🇳"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简体中文 🇨🇳"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简体中文 🇨🇳"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简体中文 🇨🇳"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简体中文 🇨🇳"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简体中文 🇨🇳"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}

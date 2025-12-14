@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0F1D673C2EEF237400EC9CA8 /* version.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F1D673B2EEF235A00EC9CA8 /* version.json */; };
+		0FB1C3B02EEC7E6700A86E0F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0FB1C3AF2EEC7E5F00A86E0F /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		0F94F4B52EDE3E520019F69A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,17 +29,45 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F1D673B2EEF235A00EC9CA8 /* version.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = version.json; sourceTree = "<group>"; };
 		0F94F4A52EDE3E510019F69A /* macUSB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = macUSB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F94F4B42EDE3E520019F69A /* macUSBTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = macUSBTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F94F4BE2EDE3E520019F69A /* macUSBUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = macUSBUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FB1C3772EEC7B5A00A86E0F /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		0FB1C3AC2EEC7C8D00A86E0F /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		0FB1C3AF2EEC7E5F00A86E0F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		0F94F4A72EDE3E510019F69A /* macUSB */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = macUSB;
-			sourceTree = "<group>";
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0F0A5C2F2EE4DEF7006EA56B /* Exceptions for "macUSB" folder in "macUSB" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"/Localized: Credits.rtf",
+				"Analiza pliku i podsumowanie/FinishUSBView.swift",
+				"Analiza pliku i podsumowanie/SystemAnalysisView.swift",
+				"Ekran startowy/WelcomeView.swift",
+				Info.plist,
+				Item.swift,
+				"Kreatory instalatorów/UniversalInstallationView.swift",
+				LanguageManager.swift,
+				Localizable.xcstrings,
+				macUSBApp.swift,
+				macUSBIcon.icon,
+				"Menu boczne/ContentView.swift",
+				Models.swift,
+			);
+			target = 0F94F4A42EDE3E510019F69A /* macUSB */;
 		};
+		0F11CFC52EE4E76F0072AFEC /* Exceptions for "macUSB" folder in "macUSBUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				macUSBIcon.icon,
+			);
+			target = 0F94F4BD2EDE3E520019F69A /* macUSBUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
 		0F94F4B72EDE3E520019F69A /* macUSBTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = macUSBTests;
@@ -43,6 +76,15 @@
 		0F94F4C12EDE3E520019F69A /* macUSBUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = macUSBUITests;
+			sourceTree = "<group>";
+		};
+		0FA4D68E2EE4D133006211FD /* macUSB */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0F0A5C2F2EE4DEF7006EA56B /* Exceptions for "macUSB" folder in "macUSB" target */,
+				0F11CFC52EE4E76F0072AFEC /* Exceptions for "macUSB" folder in "macUSBUITests" target */,
+			);
+			path = macUSB;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,7 +117,11 @@
 		0F94F49C2EDE3E510019F69A = {
 			isa = PBXGroup;
 			children = (
-				0F94F4A72EDE3E510019F69A /* macUSB */,
+				0F1D673B2EEF235A00EC9CA8 /* version.json */,
+				0FB1C3772EEC7B5A00A86E0F /* LICENSE.txt */,
+				0FB1C3AF2EEC7E5F00A86E0F /* README.md */,
+				0FB1C3AC2EEC7C8D00A86E0F /* .gitignore */,
+				0FA4D68E2EE4D133006211FD /* macUSB */,
 				0F94F4B72EDE3E520019F69A /* macUSBTests */,
 				0F94F4C12EDE3E520019F69A /* macUSBUITests */,
 				0F94F4A62EDE3E510019F69A /* Products */,
@@ -106,9 +152,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				0F94F4A72EDE3E510019F69A /* macUSB */,
 			);
 			name = macUSB;
 			packageProductDependencies = (
@@ -155,6 +198,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				0F94F4C12EDE3E520019F69A /* macUSBUITests */,
+				0FA4D68E2EE4D133006211FD /* macUSB */,
 			);
 			name = macUSBUITests;
 			packageProductDependencies = (
@@ -187,11 +231,19 @@
 				};
 			};
 			buildConfigurationList = 0F94F4A02EDE3E510019F69A /* Build configuration list for PBXProject "macUSB" */;
-			developmentRegion = en;
+			developmentRegion = pl;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				pl,
+				de,
+				ja,
+				fr,
+				es,
+				"pt-BR",
+				"zh-Hans",
+				ru,
 			);
 			mainGroup = 0F94F49C2EDE3E510019F69A;
 			minimizedProjectReferenceProxies = 1;
@@ -226,6 +278,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FB1C3B02EEC7E6700A86E0F /* README.md in Resources */,
+				0F1D673C2EEF237400EC9CA8 /* version.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,6 +382,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -384,28 +439,38 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Release;
 		};
 		0F94F4C92EDE3E520019F69A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = macUSBIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = macUSB/macUSB.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				ENABLE_APP_SANDBOX = YES;
+				DEVELOPMENT_TEAM = 27NC66L8P2;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
+				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_FILE = macUSB/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = macUSB;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2025 Kruszoneq. All rights reserved. Licensed under the MIT License.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = krystian.macUSB;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -420,22 +485,31 @@
 		0F94F4CA2EDE3E520019F69A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = macUSBIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = macUSB/macUSB.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				ENABLE_APP_SANDBOX = YES;
+				DEVELOPMENT_TEAM = 27NC66L8P2;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
+				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_FILE = macUSB/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = macUSB;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2025 Kruszoneq. All rights reserved. Licensed under the MIT License.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = krystian.macUSB;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;

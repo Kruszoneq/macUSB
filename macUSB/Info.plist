@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleIconFile</key>
+	<string>macUSBIcon</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>Polish</string>
+		<string>fr</string>
+		<string>zh_CN</string>
+		<string>de</string>
+		<string>it</string>
+		<string>ja</string>
+		<string>Russian</string>
+		<string>Spanish</string>
+		<string>Portuguese</string>
+	</array>
+</dict>
+</plist>
