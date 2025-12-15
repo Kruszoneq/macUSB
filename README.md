@@ -81,7 +81,7 @@ The table below shows systems that have successfully passed tests for creating a
 | **OS X Yosemite** | 10.10 | ✅ |
 | **OS X Mavericks** | 10.9 | ❌ |
 | **OS X Mountain Lion** | 10.8 | ✅ |
-| **Mac OS X Lion** | 10.7 | ✅ |
+| **OS X Lion** | 10.7 | ✅ |
 
 ---
 
