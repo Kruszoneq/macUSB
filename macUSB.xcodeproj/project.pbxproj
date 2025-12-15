@@ -68,16 +68,6 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		0F94F4B72EDE3E520019F69A /* macUSBTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = macUSBTests;
-			sourceTree = "<group>";
-		};
-		0F94F4C12EDE3E520019F69A /* macUSBUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = macUSBUITests;
-			sourceTree = "<group>";
-		};
 		0FA4D68E2EE4D133006211FD /* macUSB */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -122,8 +112,6 @@
 				0FB1C3AF2EEC7E5F00A86E0F /* README.md */,
 				0FB1C3AC2EEC7C8D00A86E0F /* .gitignore */,
 				0FA4D68E2EE4D133006211FD /* macUSB */,
-				0F94F4B72EDE3E520019F69A /* macUSBTests */,
-				0F94F4C12EDE3E520019F69A /* macUSBUITests */,
 				0F94F4A62EDE3E510019F69A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -173,9 +161,6 @@
 			dependencies = (
 				0F94F4B62EDE3E520019F69A /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				0F94F4B72EDE3E520019F69A /* macUSBTests */,
-			);
 			name = macUSBTests;
 			packageProductDependencies = (
 			);
@@ -197,7 +182,6 @@
 				0F94F4C02EDE3E520019F69A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				0F94F4C12EDE3E520019F69A /* macUSBUITests */,
 				0FA4D68E2EE4D133006211FD /* macUSB */,
 			);
 			name = macUSBUITests;
