@@ -374,11 +374,13 @@ struct SystemAnalysisView: View {
                         
                         // Modern (Big Sur+)
                         let isModern =
+                            nameLower.contains("tahoe") || // Dodano Tahoe
                             nameLower.contains("sur") ||
                             nameLower.contains("monterey") ||
                             nameLower.contains("ventura") ||
                             nameLower.contains("sonoma") ||
                             nameLower.contains("sequoia") ||
+                            rawVer.starts(with: "21.") || // Dodano Tahoe (v26/21.x)
                             rawVer.starts(with: "11.") ||
                             (rawVer.starts(with: "12.") && !isExplicitlyUnsupported) ||
                             (rawVer.starts(with: "13.") && !nameLower.contains("high")) ||
@@ -433,6 +435,7 @@ struct SystemAnalysisView: View {
     
     func formatMarketingVersion(raw: String, name: String) -> String {
         let n = name.lowercased()
+        if n.contains("tahoe") { return "26" } // Dodano Tahoe
         if n.contains("sequoia") { return "15" }
         if n.contains("sonoma") { return "14" }
         if n.contains("ventura") { return "13" }

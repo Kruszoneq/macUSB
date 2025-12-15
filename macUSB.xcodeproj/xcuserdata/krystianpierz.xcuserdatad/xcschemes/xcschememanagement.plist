@@ -11,11 +11,6 @@
 			<key>orderHint</key>
 			<integer>8</integer>
 		</dict>
-		<key>Copy of macUSB.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>1</integer>
-		</dict>
 		<key>macUSB DE.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -24,7 +19,7 @@
 		<key>macUSB EN.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>11</integer>
+			<integer>1</integer>
 		</dict>
 		<key>macUSB ES.xcscheme</key>
 		<dict>

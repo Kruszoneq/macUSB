@@ -27,7 +27,7 @@ With Apple's transition to its own silicon (M1, M2, M3...), preparing installati
 The application automates the entire process of creating a bootable USB drive. You don't need to search for commands online, worry about disk formatting, or manually fix validation errors in old installation files.
 
 ### What do you gain?
-* **Legacy Support:** The ability to create installers for systems over a decade old (e.g., OS X Lion) directly on the latest MacBook Pro with an M3 processor.
+* **Legacy Support:** The ability to create installers for systems over a decade old (e.g., OS X Lion) directly on the latest Mac on Apple Silicon.
 * **Time Saving:** The app detects the system version in the `.dmg` file, formats the drive, and copies files automatically.
 * **Auto Fixes:** For certain older systems (e.g., High Sierra/Mojave), the app automatically applies necessary fixes so the installer works despite expired Apple certificates.
 
@@ -57,7 +57,7 @@ The application is an open-source project and does not possess a paid Apple Deve
 ### Installation Files:
 The program requires a file in **.dmg** format that contains the **.app** installer inside.
 
-> **💡 Pro Tip:** The best way to obtain valid files is the free application **Mist**. In Mist, select the system version you are interested in and set the output format to **Disk Image (.dmg)**. This guarantees the correct file structure.
+> **💡 Pro Tip:** The best way to obtain valid files is the free application **[MIST by ninxsoft](https://github.com/ninxsoft/Mist)**. In Mist, select the system version you are interested in and set the output format to **Disk Image (.dmg)**. This guarantees the correct file structure.
 
 ---
 
