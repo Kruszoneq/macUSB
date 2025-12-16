@@ -51,14 +51,14 @@ struct SystemAnalysisView: View {
                         
                         // ETAP 1: PLIK
                         VStack(alignment: .leading, spacing: 15) {
-                            Text("Wybierz plik .dmg").font(.headline)
+                            Text("Wybierz plik .dmg lub .app").font(.headline)
                             
                             HStack(alignment: .top) {
                                 Image(systemName: "info.circle.fill").font(.title2).foregroundColor(.secondary).frame(width: 32)
                                 VStack(alignment: .leading, spacing: 5) {
                                     Text("Wymagania").font(.headline).foregroundColor(.primary)
                                     VStack(alignment: .leading, spacing: 3) {
-                                        Text("• Plik .dmg musi zawierać instalator systemu macOS lub Mac OS X")
+                                        Text("• Plik .dmg lub .app musi zawierać instalator systemu macOS lub Mac OS X")
                                         Text("• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku")
                                     }
                                     .font(.subheadline).foregroundColor(.secondary)
@@ -88,7 +88,7 @@ struct SystemAnalysisView: View {
                             HStack(alignment: .center) {
                                 Image(systemName: "doc.badge.plus").font(.title2).foregroundColor(.secondary).frame(width: 32)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Oczekiwanie na plik .dmg...").font(.subheadline).foregroundColor(.secondary)
+                                    Text("Oczekiwanie na plik .dmg lub .app...").font(.subheadline).foregroundColor(.secondary)
                                     Text("Wybierz go ręcznie lub przeciągnij powyżej").font(.caption).foregroundColor(.secondary.opacity(0.8))
                                 }
                                 Spacer()
@@ -304,8 +304,18 @@ struct SystemAnalysisView: View {
     func handleDrop(providers: [NSItemProvider]) -> Bool {
         if let provider = providers.first(where: { $0.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) }) {
             provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { (item, error) in
-                if let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) { processDroppedURL(url) }
-                else if let url = item as? URL { processDroppedURL(url) }
+                if let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) {
+                    let ext = url.pathExtension.lowercased()
+                    if ext == "dmg" || ext == "app" {
+                        processDroppedURL(url)
+                    }
+                }
+                else if let url = item as? URL {
+                    let ext = url.pathExtension.lowercased()
+                    if ext == "dmg" || ext == "app" {
+                        processDroppedURL(url)
+                    }
+                }
             }
             return true
         }
@@ -314,25 +324,38 @@ struct SystemAnalysisView: View {
     
     func processDroppedURL(_ url: URL) {
         DispatchQueue.main.async {
-            if url.pathExtension.lowercased() == "dmg" {
+            let ext = url.pathExtension.lowercased()
+            if ext == "dmg" || ext == "app" {
                 withAnimation {
-                    self.selectedFilePath = url.path; self.selectedFileUrl = url
-                    self.recognizedVersion = ""; self.isSystemDetected = false; self.sourceAppURL = nil
-                    self.selectedDrive = nil; self.capacityCheckFinished = false
-                    self.showUSBSection = false; self.showUnsupportedMessage = false
+                    self.selectedFilePath = url.path
+                    self.selectedFileUrl = url
+                    self.recognizedVersion = ""
+                    self.isSystemDetected = false
+                    self.sourceAppURL = nil
+                    self.selectedDrive = nil
+                    self.capacityCheckFinished = false
+                    self.showUSBSection = false
+                    self.showUnsupportedMessage = false
                 }
             }
         }
     }
     
     func selectDMGFile() {
-        let p = NSOpenPanel(); p.allowedContentTypes = [.diskImage]; p.allowsMultipleSelection = false
+        let p = NSOpenPanel()
+        p.allowedContentTypes = [.diskImage, .applicationBundle]
+        p.allowsMultipleSelection = false
         p.begin { if $0 == .OK, let url = p.url {
             withAnimation {
-                selectedFilePath = url.path; selectedFileUrl = url
-                recognizedVersion = ""; isSystemDetected = false; sourceAppURL = nil
-                selectedDrive = nil; capacityCheckFinished = false
-                showUSBSection = false; showUnsupportedMessage = false
+                selectedFilePath = url.path
+                selectedFileUrl = url
+                recognizedVersion = ""
+                isSystemDetected = false
+                sourceAppURL = nil
+                selectedDrive = nil
+                capacityCheckFinished = false
+                showUSBSection = false
+                showUnsupportedMessage = false
             }
         }}
     }
@@ -342,91 +365,179 @@ struct SystemAnalysisView: View {
         withAnimation { isAnalyzing = true }
         selectedDrive = nil; capacityCheckFinished = false
         showUSBSection = false; showUnsupportedMessage = false
-        let oldMountPath = self.mountedDMGPath
-        DispatchQueue.global(qos: .userInitiated).async {
-            if let path = oldMountPath {
-                let task = Process(); task.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil"); task.arguments = ["detach", path, "-force"]; try? task.run(); task.waitUntilExit()
-            }
-            let result = mountAndReadInfo(dmgUrl: url)
-            DispatchQueue.main.async {
-                withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                    self.isAnalyzing = false
-                    if let (_, _, _, mp) = result { self.mountedDMGPath = mp } else { self.mountedDMGPath = nil }
-                    if let (name, rawVer, appURL, _) = result {
-                        let friendlyVer = formatMarketingVersion(raw: rawVer, name: name)
-                        var cleanName = name
-                        cleanName = cleanName.replacingOccurrences(of: "Install ", with: "")
-                        cleanName = cleanName.replacingOccurrences(of: "macOS ", with: "")
-                        cleanName = cleanName.replacingOccurrences(of: "Mac OS X ", with: "")
-                        cleanName = cleanName.replacingOccurrences(of: "OS X ", with: "")
-                        let prefix = name.contains("macOS") ? "macOS" : (name.contains("OS X") ? "OS X" : "macOS")
-                        
-                        self.recognizedVersion = "\(prefix) \(cleanName) \(friendlyVer)"
-                        self.sourceAppURL = appURL
-                        
-                        let nameLower = name.lowercased()
-                        
-                        // Systemy niewspierane (Explicit) - USUNIĘTO CATALINĘ
-                        let isExplicitlyUnsupported = nameLower.contains("sierra") && !nameLower.contains("high")
-                        
-                        // Catalina detection
-                        let isCatalina = nameLower.contains("catalina") || rawVer.starts(with: "10.15")
-                        
-                        // Modern (Big Sur+)
-                        let isModern =
-                            nameLower.contains("tahoe") || // Dodano Tahoe
-                            nameLower.contains("sur") ||
-                            nameLower.contains("monterey") ||
-                            nameLower.contains("ventura") ||
-                            nameLower.contains("sonoma") ||
-                            nameLower.contains("sequoia") ||
-                            rawVer.starts(with: "21.") || // Dodano Tahoe (v26/21.x)
-                            rawVer.starts(with: "11.") ||
-                            (rawVer.starts(with: "12.") && !isExplicitlyUnsupported) ||
-                            (rawVer.starts(with: "13.") && !nameLower.contains("high")) ||
-                            (rawVer.starts(with: "14.") && !nameLower.contains("mojave")) ||
-                            (rawVer.starts(with: "15.") && !isExplicitlyUnsupported)
-                        
-                        // Old Supported (Mojave + High Sierra)
-                        let isOldSupported =
-                            nameLower.contains("mojave") ||
-                            nameLower.contains("high sierra") ||
-                            rawVer.starts(with: "10.14") ||
-                            rawVer.starts(with: "10.13") ||
-                            (rawVer.starts(with: "14.") && nameLower.contains("mojave")) ||
-                            (rawVer.starts(with: "13.") && nameLower.contains("high"))
-
-                        // Legacy No Codesign (Yosemite + El Capitan)
-                        let isLegacyDetected =
-                            nameLower.contains("yosemite") ||
-                            nameLower.contains("el capitan") ||
-                            rawVer.starts(with: "10.10") ||
-                            rawVer.starts(with: "10.11")
-                        
-                        // Legacy Restore (Lion + Mountain Lion)
-                        let isRestoreLegacy =
-                            nameLower.contains("mountain lion") ||
-                            nameLower.contains("lion") ||
-                            rawVer.starts(with: "10.8") ||
-                            rawVer.starts(with: "10.7")
-                        
-                        // ZMIANA: Dodanie isCatalina do isSystemDetected
-                        self.isSystemDetected = isModern || isOldSupported || isLegacyDetected || isRestoreLegacy || isCatalina
-                        
-                        // Catalina ma swój własny codesign, więc tu wyłączamy standardowy 'needsCodesign'
-                        self.needsCodesign = isOldSupported && !isModern && !isLegacyDetected
-                        self.isLegacyDetected = isLegacyDetected
-                        self.isRestoreLegacy = isRestoreLegacy
-                        self.isCatalina = isCatalina
-                        
-                        if self.isSystemDetected {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUSBSection = true } }
+        
+        let ext = url.pathExtension.lowercased()
+        if ext == "dmg" {
+            let oldMountPath = self.mountedDMGPath
+            DispatchQueue.global(qos: .userInitiated).async {
+                if let path = oldMountPath {
+                    let task = Process(); task.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil"); task.arguments = ["detach", path, "-force"]; try? task.run(); task.waitUntilExit()
+                }
+                let result = mountAndReadInfo(dmgUrl: url)
+                DispatchQueue.main.async {
+                    withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                        self.isAnalyzing = false
+                        if let (_, _, _, mp) = result { self.mountedDMGPath = mp } else { self.mountedDMGPath = nil }
+                        if let (name, rawVer, appURL, _) = result {
+                            let friendlyVer = formatMarketingVersion(raw: rawVer, name: name)
+                            var cleanName = name
+                            cleanName = cleanName.replacingOccurrences(of: "Install ", with: "")
+                            cleanName = cleanName.replacingOccurrences(of: "macOS ", with: "")
+                            cleanName = cleanName.replacingOccurrences(of: "Mac OS X ", with: "")
+                            cleanName = cleanName.replacingOccurrences(of: "OS X ", with: "")
+                            let prefix = name.contains("macOS") ? "macOS" : (name.contains("OS X") ? "OS X" : "macOS")
+                            
+                            self.recognizedVersion = "\(prefix) \(cleanName) \(friendlyVer)"
+                            self.sourceAppURL = appURL
+                            
+                            let nameLower = name.lowercased()
+                            
+                            // Systemy niewspierane (Explicit) - USUNIĘTO CATALINĘ
+                            let isExplicitlyUnsupported = nameLower.contains("sierra") && !nameLower.contains("high")
+                            
+                            // Catalina detection
+                            let isCatalina = nameLower.contains("catalina") || rawVer.starts(with: "10.15")
+                            
+                            // Modern (Big Sur+)
+                            let isModern =
+                                nameLower.contains("tahoe") || // Dodano Tahoe
+                                nameLower.contains("sur") ||
+                                nameLower.contains("monterey") ||
+                                nameLower.contains("ventura") ||
+                                nameLower.contains("sonoma") ||
+                                nameLower.contains("sequoia") ||
+                                rawVer.starts(with: "21.") || // Dodano Tahoe (v26/21.x)
+                                rawVer.starts(with: "11.") ||
+                                (rawVer.starts(with: "12.") && !isExplicitlyUnsupported) ||
+                                (rawVer.starts(with: "13.") && !nameLower.contains("high")) ||
+                                (rawVer.starts(with: "14.") && !nameLower.contains("mojave")) ||
+                                (rawVer.starts(with: "15.") && !isExplicitlyUnsupported)
+                            
+                            // Old Supported (Mojave + High Sierra)
+                            let isOldSupported =
+                                nameLower.contains("mojave") ||
+                                nameLower.contains("high sierra") ||
+                                rawVer.starts(with: "10.14") ||
+                                rawVer.starts(with: "10.13") ||
+                                (rawVer.starts(with: "14.") && nameLower.contains("mojave")) ||
+                                (rawVer.starts(with: "13.") && nameLower.contains("high"))
+                            
+                            // Legacy No Codesign (Yosemite + El Capitan)
+                            let isLegacyDetected =
+                                nameLower.contains("yosemite") ||
+                                nameLower.contains("el capitan") ||
+                                rawVer.starts(with: "10.10") ||
+                                rawVer.starts(with: "10.11")
+                            
+                            // Legacy Restore (Lion + Mountain Lion)
+                            let isRestoreLegacy =
+                                nameLower.contains("mountain lion") ||
+                                nameLower.contains("lion") ||
+                                rawVer.starts(with: "10.8") ||
+                                rawVer.starts(with: "10.7")
+                            
+                            // ZMIANA: Dodanie isCatalina do isSystemDetected
+                            self.isSystemDetected = isModern || isOldSupported || isLegacyDetected || isRestoreLegacy || isCatalina
+                            
+                            // Catalina ma swój własny codesign, więc tu wyłączamy standardowy 'needsCodesign'
+                            self.needsCodesign = isOldSupported && !isModern && !isLegacyDetected
+                            self.isLegacyDetected = isLegacyDetected
+                            self.isRestoreLegacy = isRestoreLegacy
+                            self.isCatalina = isCatalina
+                            
+                            if self.isSystemDetected {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUSBSection = true } }
+                            } else {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUnsupportedMessage = true } }
+                            }
                         } else {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUnsupportedMessage = true } }
+                            // Użyto String(localized:) aby ten ciąg został wykryty, mimo że jest przypisywany do zmiennej
+                            self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
                         }
-                    } else {
-                        // Użyto String(localized:) aby ten ciąg został wykryty, mimo że jest przypisywany do zmiennej
-                        self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
+                    }
+                }
+            }
+        }
+        else if ext == "app" {
+            DispatchQueue.global(qos: .userInitiated).async {
+                let result = readAppInfo(appUrl: url)
+                DispatchQueue.main.async {
+                    withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                        self.isAnalyzing = false
+                        self.mountedDMGPath = nil
+                        if let (name, rawVer, appURL) = result {
+                            let friendlyVer = formatMarketingVersion(raw: rawVer, name: name)
+                            var cleanName = name
+                            cleanName = cleanName.replacingOccurrences(of: "Install ", with: "")
+                            cleanName = cleanName.replacingOccurrences(of: "macOS ", with: "")
+                            cleanName = cleanName.replacingOccurrences(of: "Mac OS X ", with: "")
+                            cleanName = cleanName.replacingOccurrences(of: "OS X ", with: "")
+                            let prefix = name.contains("macOS") ? "macOS" : (name.contains("OS X") ? "OS X" : "macOS")
+                            
+                            self.recognizedVersion = "\(prefix) \(cleanName) \(friendlyVer)"
+                            self.sourceAppURL = appURL
+                            
+                            let nameLower = name.lowercased()
+                            
+                            // Systemy niewspierane (Explicit) - USUNIĘTO CATALINĘ
+                            let isExplicitlyUnsupported = nameLower.contains("sierra") && !nameLower.contains("high")
+                            
+                            // Catalina detection
+                            let isCatalina = nameLower.contains("catalina") || rawVer.starts(with: "10.15")
+                            
+                            // Modern (Big Sur+)
+                            let isModern =
+                                nameLower.contains("tahoe") || // Dodano Tahoe
+                                nameLower.contains("sur") ||
+                                nameLower.contains("monterey") ||
+                                nameLower.contains("ventura") ||
+                                nameLower.contains("sonoma") ||
+                                nameLower.contains("sequoia") ||
+                                rawVer.starts(with: "21.") || // Dodano Tahoe (v26/21.x)
+                                rawVer.starts(with: "11.") ||
+                                (rawVer.starts(with: "12.") && !isExplicitlyUnsupported) ||
+                                (rawVer.starts(with: "13.") && !nameLower.contains("high")) ||
+                                (rawVer.starts(with: "14.") && !nameLower.contains("mojave")) ||
+                                (rawVer.starts(with: "15.") && !isExplicitlyUnsupported)
+                            
+                            // Old Supported (Mojave + High Sierra)
+                            let isOldSupported =
+                                nameLower.contains("mojave") ||
+                                nameLower.contains("high sierra") ||
+                                rawVer.starts(with: "10.14") ||
+                                rawVer.starts(with: "10.13") ||
+                                (rawVer.starts(with: "14.") && nameLower.contains("mojave")) ||
+                                (rawVer.starts(with: "13.") && nameLower.contains("high"))
+                            
+                            // Legacy No Codesign (Yosemite + El Capitan)
+                            let isLegacyDetected =
+                                nameLower.contains("yosemite") ||
+                                nameLower.contains("el capitan") ||
+                                rawVer.starts(with: "10.10") ||
+                                rawVer.starts(with: "10.11")
+                            
+                            // Legacy Restore (Lion + Mountain Lion)
+                            let isRestoreLegacy =
+                                nameLower.contains("mountain lion") ||
+                                nameLower.contains("lion") ||
+                                rawVer.starts(with: "10.8") ||
+                                rawVer.starts(with: "10.7")
+                            
+                            self.isSystemDetected = isModern || isOldSupported || isLegacyDetected || isRestoreLegacy || isCatalina
+                            
+                            self.needsCodesign = isOldSupported && !isModern && !isLegacyDetected
+                            self.isLegacyDetected = isLegacyDetected
+                            self.isRestoreLegacy = isRestoreLegacy
+                            self.isCatalina = isCatalina
+                            
+                            if self.isSystemDetected {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUSBSection = true } }
+                            } else {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUnsupportedMessage = true } }
+                            }
+                        } else {
+                            self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
+                        }
                     }
                 }
             }
@@ -451,6 +562,17 @@ struct SystemAnalysisView: View {
         if n.contains("mountain lion") { return "10.8" }
         if n.contains("lion") { return "10.7" }
         return raw
+    }
+    
+    func readAppInfo(appUrl: URL) -> (String, String, URL)? {
+        let plistUrl = appUrl.appendingPathComponent("Contents/Info.plist")
+        if let d = try? Data(contentsOf: plistUrl),
+           let dict = try? PropertyListSerialization.propertyList(from: d, format: nil) as? [String: Any] {
+            let name = (dict["CFBundleDisplayName"] as? String) ?? appUrl.lastPathComponent
+            let ver = (dict["CFBundleShortVersionString"] as? String) ?? "?"
+            return (name, ver, appUrl)
+        }
+        return nil
     }
     
     func mountAndReadInfo(dmgUrl: URL) -> (String, String, URL, String)? {

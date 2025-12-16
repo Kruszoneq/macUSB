@@ -134,7 +134,7 @@ struct WelcomeView: View {
         .onAppear {
             checkForUpdates()
         }
-        .alert("Dostępna aktualizacja", isPresented: $showUpdateAlert) {
+        .alert("Dostępna aktualizacja!", isPresented: $showUpdateAlert) {
             Button("Pobierz", role: .none) {
                 if let url = URL(string: updateURL) { NSWorkspace.shared.open(url) }
             }

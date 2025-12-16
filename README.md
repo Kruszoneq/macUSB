@@ -2,7 +2,8 @@
 
 ### Creating bootable macOS and OS X USB drives has never been easier!
 
-![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon-gray) ![License](https://img.shields.io/badge/License-MIT-blue)
+![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) ![Vibe Coded](https://img.shields.io/badge/Vibe%20Coded%2C%20purple)
+
 
 **macUSB** is a one-click tool that transforms your modern Mac (Apple Silicon) into a service machine capable of reviving older Apple computers.
 
@@ -28,10 +29,10 @@ The application automates the entire process of creating a bootable USB drive. Y
 
 ### What do you gain?
 * **Legacy Support:** The ability to create installers for systems over a decade old (e.g., OS X Lion) directly on the latest Mac on Apple Silicon.
-* **Time Saving:** The app detects the system version in the `.dmg` file, formats the drive, and copies files automatically.
+* **Time Saving:** The app detects the system version in the **`.dmg` or `.app`** file, formats the drive, and copies files automatically.
 * **Auto Fixes:** For certain older systems (e.g., High Sierra/Mojave), the app automatically applies necessary fixes so the installer works despite expired Apple certificates.
 
-> **Fun Fact:** The application was created using the "Vibe Coding" method in collaboration with the Gemini 3 Pro AI model. The project proves that programming barriers (even cross-architectural ones) can be overcome with determination and AI support.
+> **Fun Fact:** The application was created using the "Vibe Coding" method in collaboration with the Gemini 3 Pro and GPT-5 AI models. The project proves that programming barriers (even cross-architectural ones) can be overcome with determination and AI support.
 
 ---
 
@@ -51,13 +52,18 @@ The application is an open-source project and does not possess a paid Apple Deve
 ## ⚙️ Requirements
 
 ### Host Computer (where you run the app):
-* Processor: **Apple Silicon** (M1/M2/M3, etc.).
-* System: **macOS Sonoma 14.6** or newer.
+* **Processor:** Both Apple Silicon (M1/M2/M3, etc.) and Intel are supported.
+* **System:** **macOS Sonoma 14.6** or newer.
+* **Storage:** Minimum of **15 GB** of free disk space is required **to create the installers**.
+
+### USB Drives (for installer creation):
+* **Capacity:** Minimum of **16 GB** is required.
+* **Recommendation:** USB 3.0 or newer is highly recommended for faster installation times.
 
 ### Installation Files:
-The program requires a file in **.dmg** format that contains the **.app** installer inside.
+The program supports both **`.dmg`** disk images and raw **`.app`** installer files.
 
-> **💡 Pro Tip:** The best way to obtain valid files is the free application **[MIST by ninxsoft](https://github.com/ninxsoft/Mist)**. In Mist, select the system version you are interested in and set the output format to **Disk Image (.dmg)**. This guarantees the correct file structure.
+> **💡 Pro Tip:** The best way to obtain valid files is the free application **[MIST by ninxsoft](https://github.com/ninxsoft/Mist)**. Simply select the system version you are interested in. This guarantees the correct file structure/source.
 
 ---
 
@@ -68,6 +74,7 @@ The table below shows systems that have successfully passed tests for creating a
 
 | System | Version | USB Creation Status |
 | :--- | :--- | :---: |
+| **macOS Tahoe** | 26 | ✅ |
 | **macOS Sequoia** | 15 | ✅ |
 | **macOS Sonoma** | 14 | ✅ |
 | **macOS Ventura** | 13 | ✅ |
@@ -92,7 +99,7 @@ During testing, compatibility issues were identified with certain system version
 * **macOS Sierra (10.12):** The USB creation process fails, causing a rapid RAM fill-up and severe system stuttering.
 * **OS X Mavericks (10.9):** The installer file is incorrectly verified by the system as "damaged," preventing the procedure from starting.
 
-If a `.dmg` image with one of the above systems is selected, macUSB will display an unsupported message and will not allow you to proceed to the next step.
+If a **`.dmg`** image or a **`.app`** installer with one of the above systems is selected, macUSB will display an unsupported message and will not allow you to proceed to the next step.
 
 ---
 

@@ -42,7 +42,6 @@
 		0F0A5C2F2EE4DEF7006EA56B /* Exceptions for "macUSB" folder in "macUSB" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"/Localized: Credits.rtf",
 				"Analiza pliku i podsumowanie/FinishUSBView.swift",
 				"Analiza pliku i podsumowanie/SystemAnalysisView.swift",
 				"Ekran startowy/WelcomeView.swift",
@@ -61,7 +60,17 @@
 		0F11CFC52EE4E76F0072AFEC /* Exceptions for "macUSB" folder in "macUSBUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"Analiza pliku i podsumowanie/FinishUSBView.swift",
+				"Analiza pliku i podsumowanie/SystemAnalysisView.swift",
+				"Ekran startowy/WelcomeView.swift",
+				Item.swift,
+				"Kreatory instalatorów/UniversalInstallationView.swift",
+				LanguageManager.swift,
+				Localizable.xcstrings,
+				macUSBApp.swift,
 				macUSBIcon.icon,
+				"Menu boczne/ContentView.swift",
+				Models.swift,
 			);
 			target = 0F94F4BD2EDE3E520019F69A /* macUSBUITests */;
 		};
@@ -453,7 +462,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -492,7 +501,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
