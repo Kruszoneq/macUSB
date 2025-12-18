@@ -1929,54 +1929,55 @@
         }
       }
     },
-    "Dostępna jest wersja %@. Zalecamy aktualizację." : {
+    "Dostępna jest nowa wersja: %@\nZalecana aktualizacja!" : {
+      "comment" : "New version available notification with recommended update",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Version %@ ist verfügbar. Wir empfehlen ein Update."
+            "value" : "Eine neue Version ist verfügbar: %@\nAktualisierung empfohlen!"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Version %@ is available. We recommend updating."
+            "value" : "A new version is available: %@\nUpdate recommended!"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La versión %@ está disponible. Recomendamos actualizar."
+            "value" : "Hay una nueva versión disponible: %@\n¡Se recomienda actualizar!"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La version %@ est disponible. Nous recommandons de mettre à jour."
+            "value" : "Une nouvelle version est disponible : %@\nMise à jour recommandée !"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "バージョン%@が利用可能です。アップデートを推奨します。"
+            "value" : "新しいバージョンが利用可能です：%@\nアップデートを推奨します！"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A versão %@ está disponível. Recomendamos a atualização."
+            "value" : "Uma nova versão está disponível: %@\nAtualização recomendada!"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Доступна версия %@. Рекомендуем обновить."
+            "value" : "Доступна новая версия: %@\nРекомендуется обновление!"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "版本 %@ 可用。建议更新。"
+            "value" : "发现新版本：%@\n建议更新！"
           }
         }
       }

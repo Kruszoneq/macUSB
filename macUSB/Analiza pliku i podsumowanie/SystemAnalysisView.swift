@@ -29,6 +29,7 @@ struct SystemAnalysisView: View {
     
     @State private var availableDrives: [USBDrive] = []
     @State private var selectedDrive: USBDrive?
+    @State private var selectedDriveDisplayNameSnapshot: String? = nil
     
     let driveRefreshTimer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     
@@ -175,7 +176,11 @@ struct SystemAnalysisView: View {
                 VStack(spacing: 0) {
                     Divider()
                     HStack {
-                        Button(action: { isTabLocked = true; navigateToInstall = true }) {
+                        Button(action: { 
+                            selectedDriveDisplayNameSnapshot = selectedDrive?.displayName
+                            isTabLocked = true
+                            navigateToInstall = true 
+                        }) {
                             HStack { Text("Przejdź dalej"); Image(systemName: "arrow.right.circle.fill") }
                                 .frame(maxWidth: .infinity).padding(8)
                         }
@@ -193,6 +198,7 @@ struct SystemAnalysisView: View {
                         destination: UniversalInstallationView(
                             sourceAppURL: appURL,
                             targetDrive: selectedDrive,
+                            targetDriveDisplayName: selectedDriveDisplayNameSnapshot,
                             systemName: recognizedVersion,
                             needsCodesign: needsCodesign,
                             isLegacySystem: isLegacyDetected,

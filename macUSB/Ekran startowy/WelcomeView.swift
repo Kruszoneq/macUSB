@@ -140,7 +140,7 @@ struct WelcomeView: View {
             }
             Button("Ignoruj", role: .cancel) { }
         } message: {
-            Text("Dostępna jest wersja \(updateVersion). Zalecamy aktualizację.")
+            Text("Dostępna jest nowa wersja: \(Text(updateVersion).bold())\nZalecana aktualizacja!")
         }
     }
     
@@ -169,3 +169,4 @@ struct WelcomeView: View {
         }.resume()
     }
 }
+

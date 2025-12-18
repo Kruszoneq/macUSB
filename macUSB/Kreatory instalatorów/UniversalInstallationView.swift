@@ -4,6 +4,7 @@ import AppKit
 struct UniversalInstallationView: View {
     let sourceAppURL: URL
     let targetDrive: USBDrive?
+    let targetDriveDisplayName: String?
     let systemName: String
     
     // Flagi
@@ -68,12 +69,12 @@ struct UniversalInstallationView: View {
                     .background(Color.green.opacity(0.1)).cornerRadius(8)
                     
                     // RAMKA: Dysk USB
-                    if let drive = targetDrive {
+                    if let name = targetDriveDisplayName ?? targetDrive?.displayName {
                         HStack {
                             Image(systemName: "externaldrive.fill").font(.title2).foregroundColor(.blue).frame(width: 32)
                             VStack(alignment: .leading) {
                                 Text("Wybrany dysk USB").font(.caption).foregroundColor(.secondary)
-                                Text(drive.displayName).font(.headline)
+                                Text(name).font(.headline)
                             }
                             Spacer()
                         }
