@@ -59,3 +59,4 @@ struct WindowConfigurator: NSViewRepresentable {
 }
 
 // USUNIĘTO KLASĘ LanguageManager STĄD, ABY UNIKNĄĆ DUPLIKACJI
+

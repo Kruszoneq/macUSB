@@ -14,6 +14,7 @@ struct UniversalInstallationView: View {
     // Flaga Catalina
     let isCatalina: Bool
     let isSierra: Bool
+    let isPPC: Bool
     
     @Binding var rootIsActive: Bool
     @Binding var isTabLocked: Bool
@@ -93,6 +94,10 @@ struct UniversalInstallationView: View {
                                     Text("• Pamięć USB zostanie wymazana")
                                     Text("• Obraz systemu zostanie przywrócony w Terminalu")
                                     Text("• Wymagane podanie hasła administratora")
+                                } else if isPPC {
+                                    Text("• Dysk USB zostanie sformatowany (APM + HFS+)")
+                                    Text("• Obraz instalacyjny zostanie przywrócony na USB")
+                                    Text("• Operacja zostanie wykonana w Terminalu (wymagane hasło administratora)")
                                 } else {
                                     if isCatalina {
                                         Text("• Plik instalacyjny zostanie skopiowany oraz podpisany")
@@ -406,7 +411,8 @@ struct UniversalInstallationView: View {
                 destination: FinishUSBView(
                     systemName: systemName,
                     mountPoint: sourceAppURL.deletingLastPathComponent(),
-                    onReset: {}
+                    onReset: {},
+                    isPPC: isPPC
                 ),
                 isActive: $navigateToFinish
             ) { EmptyView() }
@@ -531,19 +537,33 @@ struct UniversalInstallationView: View {
             errorMessage = String(localized: "Błąd: Nie wybrano dysku.")
             return
         }
-        withAnimation(.easeInOut(duration: 0.4)) { isTabLocked = true; isProcessing = true }; isTerminalWorking = false; showFinishButton = false; processSuccess = false; errorMessage = ""; navigateToFinish = false; stopUSBMonitoring(); showAuthWarning = false; isRollingBack = false; monitoringWarmupCounter = 0
+        withAnimation(.easeInOut(duration: 0.4)) {
+            isTabLocked = true
+            isProcessing = true
+        }
+        isTerminalWorking = false
+        showFinishButton = false
+        processSuccess = false
+        errorMessage = ""
+        navigateToFinish = false
+        stopUSBMonitoring()
+        showAuthWarning = false
+        isRollingBack = false
+        monitoringWarmupCounter = 0
         self.processingIcon = "doc.on.doc.fill"
         
         let isFromMountedVolume = sourceAppURL.path.hasPrefix("/Volumes/")
         self.log("Źródło instalatora: \(sourceAppURL.path)")
         self.log("Źródło z zamontowanego woluminu: \(isFromMountedVolume ? "TAK" : "NIE")")
-        self.log("Flagi: isCatalina=\(isCatalina), isSierra=\(isSierra), needsCodesign=\(needsCodesign), isLegacySystem=\(isLegacySystem), isRestoreLegacy=\(isRestoreLegacy)")
+        self.log("Flagi: isCatalina=\(isCatalina), isSierra=\(isSierra), needsCodesign=\(needsCodesign), isLegacySystem=\(isLegacySystem), isRestoreLegacy=\(isRestoreLegacy), isPPC=\(isPPC)")
         self.log("Folder TEMP: \(tempWorkURL.path)")
         
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let fileManager = FileManager.default
-                if !fileManager.fileExists(atPath: tempWorkURL.path) { try fileManager.createDirectory(at: tempWorkURL, withIntermediateDirectories: true) }
+                if !fileManager.fileExists(atPath: tempWorkURL.path) {
+                    try fileManager.createDirectory(at: tempWorkURL, withIntermediateDirectories: true)
+                }
                 
                 // --- TŁUMACZENIA DO TERMINALA (STANDARD) ---
                 let msgHeader = String(localized: "ETAP: Wgrywanie instalatora na dysk USB")
@@ -572,6 +592,13 @@ struct UniversalInstallationView: View {
                 
                 let msgCatDone = String(localized: "GOTOWE!")
                 
+                // --- TŁUMACZENIA DLA PPC ---
+                let msgPPCStage1 = String(localized: "ETAP 1/2 - FORMATOWANIE DYSKU USB")
+                let msgPPCStage2 = String(localized: "ETAP 2/2 - TWORZENIE USB")
+                let msgPPCSource = String(localized: "ŹRÓDŁO:")
+                let msgPPCTarget = String(localized: "CEL:")
+                let msgPPCNote = String(localized: "Wolumin zostanie nazwany PPC (APM + HFS+).")
+                
                 let usbPath = drive.url.path
                 var scriptCommand = ""
                 
@@ -581,8 +608,12 @@ struct UniversalInstallationView: View {
                 if fileManager.fileExists(atPath: terminalDoneURL.path) { try? fileManager.removeItem(at: terminalDoneURL) }
                 if fileManager.fileExists(atPath: terminalActiveURL.path) { try? fileManager.removeItem(at: terminalActiveURL) }
                 
+                // Promote effectiveAppURL to outer scope so it can be used later
+                var effectiveAppURL = self.sourceAppURL
+                var didCopyToTemp = false
+                
                 if isRestoreLegacy {
-                    // --- SEKCJA LEGACY (bez zmian) ---
+                    // --- SEKCJA LEGACY RESTORE ---
                     let sourceESD = sourceAppURL.appendingPathComponent("Contents/SharedSupport/InstallESD.dmg")
                     self.log("Restore Legacy: źródło InstallESD.dmg = \(sourceESD.path)")
                     
@@ -597,7 +628,6 @@ struct UniversalInstallationView: View {
                     
                     let targetESD = tempWorkURL.appendingPathComponent("InstallESD.dmg")
                     self.log("Restore Legacy: cel InstallESD.dmg w TEMP = \(targetESD.path)")
-                    
                     if fileManager.fileExists(atPath: targetESD.path) { try? fileManager.removeItem(at: targetESD) }
                     
                     self.log("Restore Legacy: kopiuję InstallESD.dmg do TEMP...")
@@ -618,7 +648,7 @@ struct UniversalInstallationView: View {
                     do {
                         let combinedCommand = "touch '\(authSignalURL.path)' && chmod u+w '\(targetESD.path)' && /usr/sbin/asr imagescan --source '\(targetESD.path)'"
                         self.log("ASR imagescan command: \(combinedCommand)")
-                        try runAdminCommand(combinedCommand)
+                        try self.runAdminCommand(combinedCommand)
                         self.log("ASR imagescan zakończony pomyślnie.")
                         DispatchQueue.main.async { withAnimation { self.showAuthWarning = false } }
                     } catch {
@@ -647,11 +677,64 @@ struct UniversalInstallationView: View {
                     """
                     self.log("ASR restore: source='\(targetESD.path)' target='\(usbPath)'")
                     
-                } else {
-                    // Ustal źródło: z /Volumes (DMG) czy lokalny .app
-                    var effectiveAppURL = sourceAppURL
-                    var didCopyToTemp = false
+                } else if isPPC {
+                    // --- SEKCJA PPC (PowerPC): FORMAT + RESTORE ---
+                    let ppcSourceVolumePath = sourceAppURL.deletingLastPathComponent().path
+                    self.log("PPC: Źródło woluminu = \(ppcSourceVolumePath)")
+                    self.log("PPC: Cel USB (montowany) = \(usbPath)")
+                    
+                    let selectedBSD = drive.device
+                    let parentWholeDisk: String = selectedBSD.range(of: #"^disk\d+"#, options: .regularExpression).map { String(selectedBSD[$0]) } ?? selectedBSD
+                    self.log("PPC: Wybrany dysk BSD = \(selectedBSD) -> Whole disk = /dev/\(parentWholeDisk)")
+                    
+                    scriptCommand = """
+                    touch '\(terminalActiveURL.path)'
+                    trap "rm -f '\(terminalActiveURL.path)'" EXIT
 
+                    USB_DEV="/dev/\(parentWholeDisk)"
+                    echo "Docelowy dysk: $USB_DEV"
+
+                    # --- ETAP 1/2: FORMATOWANIE ---
+                    clear
+                    echo "================================================================================"
+                    echo "                                     macUSB"
+                    echo "================================================================================"
+                    echo "\(msgPPCStage1)"
+                    echo "\(msgSystemLabel) \(systemName)"
+                    echo "\(msgEraseWarning)"
+                    echo "--------------------------------------------------------------------------------"
+                    echo "\(msgPPCTarget) $USB_DEV"
+                    echo "\(msgPPCNote)"
+                    echo "================================================================================"
+                    echo ""
+                    sudo /usr/sbin/diskutil partitionDisk "$USB_DEV" APM HFS+ "PPC" 100%
+                    EXIT_CODE=$?
+
+                    # --- ETAP 2/2: TWORZENIE USB ---
+                    if [ $EXIT_CODE -eq 0 ]; then
+                        clear
+                        echo "================================================================================"
+                        echo "                                     macUSB"
+                        echo "================================================================================"
+                        echo "\(msgPPCStage2)"
+                        echo "\(msgSystemLabel) \(systemName)"
+                        echo "--------------------------------------------------------------------------------"
+                        echo "\(msgPPCSource) \(ppcSourceVolumePath)"
+                        echo "\(msgPPCTarget) /Volumes/PPC"
+                        echo "================================================================================"
+                        echo ""
+                        sudo /usr/sbin/asr restore --source '\(ppcSourceVolumePath)' --target '/Volumes/PPC' --erase --noverify --noprompt
+                        EXIT_CODE=$?
+                    fi
+
+                    touch '\(terminalDoneURL.path)'
+                    """
+                } else {
+                    // --- SEKCJA STANDARD (createinstallmedia) ---
+                    // Ustal źródło: z /Volumes (DMG) czy lokalny .app
+                    effectiveAppURL = sourceAppURL
+                    didCopyToTemp = false
+                    
                     if isSierra {
                         // Tryb specjalny dla macOS Sierra: zawsze kopiujemy do TEMP i modyfikujemy
                         self.log("Tryb Sierra: kopiowanie do TEMP i modyfikacje")
@@ -666,16 +749,16 @@ struct UniversalInstallationView: View {
                         self.log("   Cel: \(destinationAppURL.path)")
                         try fileManager.copyItem(at: sourceAppURL, to: destinationAppURL)
                         self.log("✅ Kopiowanie do TEMP zakończone (Sierra).")
-
+                        
                         effectiveAppURL = destinationAppURL
                         didCopyToTemp = true
-
+                        
                         // --- Modyfikacje pliku (B) ---
                         DispatchQueue.main.async {
                             self.processingTitle = String(localized: "Modyfikowanie plików")
                             self.processingSubtitle = String(localized: "Aktualizacja wersji i podpisywanie...")
                         }
-
+                        
                         // 1) plutil: ustaw CFBundleShortVersionString na 12.6.03
                         let plistPath = destinationAppURL.appendingPathComponent("Contents/Info.plist").path
                         self.log("Sierra: plutil modyfikacja CFBundleShortVersionString -> 12.6.03 (\(plistPath))")
@@ -684,7 +767,7 @@ struct UniversalInstallationView: View {
                         plutilTask.arguments = ["-replace", "CFBundleShortVersionString", "-string", "12.6.03", plistPath]
                         try plutilTask.run()
                         plutilTask.waitUntilExit()
-
+                        
                         // 2) xattr: zdejmij kwarantannę z całej aplikacji
                         self.log("Sierra: zdejmowanie kwarantanny (xattr) z \(destinationAppURL.path)")
                         let xattrTask2 = Process()
@@ -692,7 +775,7 @@ struct UniversalInstallationView: View {
                         xattrTask2.arguments = ["-dr", "com.apple.quarantine", destinationAppURL.path]
                         try xattrTask2.run()
                         xattrTask2.waitUntilExit()
-
+                        
                         // 3) codesign: podpisz createinstallmedia w (B)
                         let cimPath = destinationAppURL.appendingPathComponent("Contents/Resources/createinstallmedia").path
                         self.log("Sierra: podpisywanie createinstallmedia (\(cimPath))")
@@ -701,48 +784,43 @@ struct UniversalInstallationView: View {
                         csTask2.arguments = ["-s", "-", "-f", cimPath]
                         try csTask2.run()
                         csTask2.waitUntilExit()
-
+                        
                     } else {
                         if isFromMountedVolume || isCatalina || needsCodesign {
                             self.log("Tryb standardowy: kopiowanie do TEMP (powód: \(isFromMountedVolume ? "DMG" : (isCatalina ? "Catalina" : "wymaga podpisu")))")
-                            // DMG lub przypadki wymagające modyfikacji: kopiujemy do TEMP
                             DispatchQueue.main.async {
                                 self.processingTitle = String(localized: "Kopiowanie plików")
                                 self.processingSubtitle = String(localized: "Trwa kopiowanie plików, proszę czekać.")
                             }
                             let destinationAppURL = tempWorkURL.appendingPathComponent(sourceAppURL.lastPathComponent)
                             if fileManager.fileExists(atPath: destinationAppURL.path) { try? fileManager.removeItem(at: destinationAppURL) }
-
+                            
                             self.log("➡️ Rozpoczynam kopiowanie pliku .app do folderu TEMP...")
                             self.log("   Źródło: \(sourceAppURL.path)")
                             self.log("   Cel: \(destinationAppURL.path)")
                             try fileManager.copyItem(at: sourceAppURL, to: destinationAppURL)
                             self.log("✅ Kopiowanie do TEMP zakończone.")
-
+                            
                             effectiveAppURL = destinationAppURL
                             didCopyToTemp = true
-
-                            // Codesign w Swift (In-App) dla Cataliny oraz Mojave/High Sierra
+                            
                             if isCatalina || needsCodesign {
                                 DispatchQueue.main.async {
                                     self.processingTitle = String(localized: "Modyfikowanie plików")
                                     self.processingSubtitle = String(localized: "Podpisywanie instalatora...")
                                 }
-                                try performLocalCodesign(on: destinationAppURL)
+                                try self.performLocalCodesign(on: destinationAppURL)
                             }
                         } else {
-                            // Lokalny .app dla Modern (Big Sur+) oraz Legacy (Yosemite/El Capitan): pracujemy na oryginale
                             effectiveAppURL = sourceAppURL
                             self.log("Tryb standardowy: praca na oryginalnym .app bez kopiowania: \(effectiveAppURL.path)")
                         }
                     }
                     
-                    // Dla Legacy (Yosemite/El Capitan) oraz Sierra: dodaj --applicationpath do efektywnego źródła
                     var legacyArg = isLegacySystem ? "--applicationpath '\(effectiveAppURL.path)'" : ""
                     if isSierra { legacyArg = "--applicationpath '\(effectiveAppURL.path)'" }
                     if !legacyArg.isEmpty { self.log("Dodano argument legacy: \(legacyArg)") } else { self.log("Bez argumentu --applicationpath (nieniezbędny)") }
                     
-                    // Ścieżka do createinstallmedia na efektywnym źródle
                     let createInstallMediaURL = effectiveAppURL.appendingPathComponent("Contents/Resources/createinstallmedia")
                     self.log("createinstallmedia: \(createInstallMediaURL.path)")
                     
@@ -751,10 +829,7 @@ struct UniversalInstallationView: View {
                     EXIT_CODE=$?
                     """
                     
-                    // --- CATALINA POST-PROCESS ---
                     if isCatalina {
-                        // FIX: createinstallmedia zmienia nazwę woluminu na "Install macOS Catalina".
-                        // Musimy użyć nowej ścieżki, a nie starej (usbPath), bo inaczej rm i ditto nie znajdą celu.
                         let catalinaVolumePath = "/Volumes/Install macOS Catalina"
                         let targetAppOnUSB = "\(catalinaVolumePath)/Install macOS Catalina.app"
                         let cleanAppSource = sourceAppURL.resolvingSymlinksInPath().path
@@ -783,12 +858,11 @@ struct UniversalInstallationView: View {
                             echo "\(msgCatStage2)"
                             echo "\(msgSystemLabel) \(systemName)"
                             echo "--------------------------------------------------------------------------------"
-                            # Usunięto pustą linię tutaj (Visual Fix)
                             echo "\(msgCatWarn1)"
                             echo "\(msgCatWarn2)"
                             echo "\(msgCatWarn3)"
                             echo "\(msgCatWarn4)"
-                            echo "================================================================================" # Dodano separator
+                            echo "================================================================================"
                             
                             ditto "\(cleanAppSource)" "\(targetAppOnUSB)"
                             EXIT_CODE=$?
@@ -811,15 +885,14 @@ struct UniversalInstallationView: View {
                 }
                 
                 DispatchQueue.main.async {
-                    withAnimation { 
+                    withAnimation {
                         self.isProcessing = false
-                        self.isTerminalWorking = true 
+                        self.isTerminalWorking = true
                     }
                     self.log("Terminal: uruchomiono skrypt, monitoring rozpoczęty.")
                     self.startTerminalCompletionTimer(completionURL: terminalDoneURL, activeURL: terminalActiveURL)
                 }
                 
-                // Wybór nagłówka startowego (dla Cataliny inny)
                 let startHeader = isCatalina ? msgCatStage1 : msgHeader
                 
                 let scriptContent = """
@@ -866,7 +939,16 @@ struct UniversalInstallationView: View {
                 self.log("Terminal otwarty ze skryptem: \(scriptURL.path)")
                 
             } catch {
-                DispatchQueue.main.async { withAnimation { self.isProcessing = false; self.errorMessage = error.localizedDescription; self.isTabLocked = false; self.startUSBMonitoring(); self.isTerminalWorking = false; self.showFinishButton = false } }
+                DispatchQueue.main.async {
+                    withAnimation {
+                        self.isProcessing = false
+                        self.errorMessage = error.localizedDescription
+                        self.isTabLocked = false
+                        self.startUSBMonitoring()
+                        self.isTerminalWorking = false
+                        self.showFinishButton = false
+                    }
+                }
             }
         }
     }

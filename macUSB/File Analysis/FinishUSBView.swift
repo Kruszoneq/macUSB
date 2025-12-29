@@ -5,6 +5,7 @@ struct FinishUSBView: View {
     let systemName: String
     let mountPoint: URL
     let onReset: () -> Void
+    let isPPC: Bool
     
     @State private var isCleaning: Bool = true
     @State private var cleanupSuccess: Bool = false
@@ -50,14 +51,39 @@ struct FinishUSBView: View {
                             Text("Co teraz?").font(.headline).foregroundColor(.primary)
                             VStack(alignment: .leading, spacing: 5) {
                                 Text("• Podłącz dysk USB do docelowego komputera Mac")
-                                Text("• Uruchom komputer trzymając przycisk Option (⌥)")
-                                Text("• Wybierz instalator systemu macOS lub OS X z listy")
+                                
+                                if isPPC {
+                                    Spacer().frame(height: 8)
+                                    Text("Intel:").bold()
+                                    Text("• Uruchom komputer trzymając przycisk Option (⌥)")
+                                    Text("• Wybierz instalator systemu macOS lub OS X z listy")
+                                    
+                                    Spacer().frame(height: 8)
+                                    Text("PowerPC:").bold()
+                                    Text("• Uruchom komputer w Open Firmware, trzymając klawisze Command (⌘) + Option (⌥) + O + F")
+                                    Text("• Wpisz komendę bootowania z dysku USB adekwatną do twojego komputera")
+                                    
+                                    Spacer().frame(height: 8)
+                                } else {
+                                    Text("• Uruchom komputer trzymając przycisk Option (⌥)")
+                                    Text("• Wybierz instalator systemu macOS lub OS X z listy")
+                                }
                             }
                             .font(.subheadline).foregroundColor(.secondary)
                         }
                     }
                     .padding().frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.gray.opacity(0.1)).cornerRadius(8)
+                    
+                    if isPPC {
+                        HStack(alignment: .center) {
+                            Image(systemName: "info.circle.fill").font(.title2).foregroundColor(.gray).frame(width: 32)
+                            Text("Szczegółowa instrukcja dostępna tutaj").font(.subheadline).foregroundColor(.secondary)
+                            Spacer()
+                        }
+                        .padding().frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.gray.opacity(0.1)).cornerRadius(8)
+                    }
                     
                 }
                 .padding()
@@ -175,3 +201,4 @@ struct WindowAccessor_Finish: NSViewRepresentable {
         init(callback: @escaping (NSWindow) -> Void) { self.callback = callback }
     }
 }
+

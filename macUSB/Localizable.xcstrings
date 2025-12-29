@@ -56,6 +56,12 @@
         }
       }
     },
+    "• Dozwolone formaty plików to .dmg, .iso oraz .app" : {
+
+    },
+    "• Dysk USB zostanie sformatowany (APM + HFS+)" : {
+
+    },
     "• Instalator zostanie zmodyfikowany (podpis cyfrowy)" : {
       "localizations" : {
         "de" : {
@@ -108,6 +114,9 @@
         }
       }
     },
+    "• Obraz instalacyjny zostanie przywrócony na USB" : {
+
+    },
     "• Obraz systemu zostanie przywrócony w Terminalu" : {
       "localizations" : {
         "de" : {
@@ -159,6 +168,9 @@
           }
         }
       }
+    },
+    "• Operacja zostanie wykonana w Terminalu (wymagane hasło administratora)" : {
+
     },
     "• Pamięć USB zostanie sformatowana (dane zostaną usunięte)" : {
       "localizations" : {
@@ -265,6 +277,7 @@
       }
     },
     "• Plik .dmg lub .app musi zawierać instalator systemu macOS lub Mac OS X" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -680,6 +693,12 @@
         }
       }
     },
+    "• Uruchom komputer w Open Firmware, trzymając klawisze Command (⌘) + Option (⌥) + O + F" : {
+
+    },
+    "• Wpisz komendę bootowania z dysku USB adekwatną do twojego komputera" : {
+
+    },
     "• Wybierz instalator systemu macOS lub OS X z listy" : {
       "localizations" : {
         "de" : {
@@ -732,7 +751,11 @@
         }
       }
     },
+    "• Wybrany plik musi zawierać instalator systemu macOS lub Mac OS X" : {
+
+    },
     "• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -783,6 +806,9 @@
           }
         }
       }
+    },
+    "• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym" : {
+
     },
     "• Wymagane podanie hasła administratora" : {
       "localizations" : {
@@ -1513,6 +1539,9 @@
         }
       }
     },
+    "CEL:" : {
+
+    },
     "Co teraz?" : {
       "localizations" : {
         "de" : {
@@ -2190,6 +2219,12 @@
         }
       }
     },
+    "ETAP 1/2 - FORMATOWANIE DYSKU USB" : {
+
+    },
+    "ETAP 2/2 - TWORZENIE USB" : {
+
+    },
     "ETAP: Czyszczenie dysku USB" : {
       "localizations" : {
         "de" : {
@@ -2605,6 +2640,9 @@
           }
         }
       }
+    },
+    "Intel:" : {
+
     },
     "Kontynuuj" : {
       "localizations" : {
@@ -3439,6 +3477,7 @@
       }
     },
     "Oczekiwanie na plik .dmg lub .app..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3490,7 +3529,11 @@
         }
       }
     },
+    "Oczekiwanie na plik .dmg, .iso lub .app..." : {
+
+    },
     "Oczekiwanie na wybór docelowego dysku USB..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4061,6 +4104,9 @@
           }
         }
       }
+    },
+    "PowerPC:" : {
+
     },
     "Proces może potrwać kilka minut." : {
       "localizations" : {
@@ -4842,6 +4888,9 @@
         }
       }
     },
+    "Szczegółowa instrukcja dostępna tutaj" : {
+
+    },
     "Szukanie pliku obrazu..." : {
       "localizations" : {
         "de" : {
@@ -5052,6 +5101,7 @@
       }
     },
     "Trwa analizowanie pliku .dmg, proszę czekać" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5102,6 +5152,9 @@
           }
         }
       }
+    },
+    "Trwa analizowanie pliku, proszę czekać" : {
+
     },
     "Trwa kopiowanie plików, proszę czekać." : {
       "localizations" : {
@@ -5623,6 +5676,9 @@
         }
       }
     },
+    "Wolumin zostanie nazwany PPC (APM + HFS+)." : {
+
+    },
     "Wpisz hasło i naciśnij Enter (hasła nie widać)." : {
       "localizations" : {
         "de" : {
@@ -5935,7 +5991,11 @@
         }
       }
     },
+    "Wybierz plik" : {
+
+    },
     "Wybierz plik .dmg lub .app" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6923,6 +6983,9 @@
           }
         }
       }
+    },
+    "ŹRÓDŁO:" : {
+
     },
     "Русский 🇷🇺" : {
       "localizations" : {
