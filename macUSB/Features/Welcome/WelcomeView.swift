@@ -7,9 +7,6 @@ struct WelcomeView: View {
     @EnvironmentObject var languageManager: LanguageManager
     
     @State private var dummyLock: Bool = false
-    @State private var showUpdateAlert: Bool = false
-    @State private var updateVersion: String = ""
-    @State private var updateURL: String = ""
     
     let versionCheckURL = URL(string: "https://raw.githubusercontent.com/Kruszoneq/macUSB/main/version.json")!
     
@@ -134,14 +131,6 @@ struct WelcomeView: View {
         .onAppear {
             checkForUpdates()
         }
-        .alert("Dostępna aktualizacja!", isPresented: $showUpdateAlert) {
-            Button("Pobierz", role: .none) {
-                if let url = URL(string: updateURL) { NSWorkspace.shared.open(url) }
-            }
-            Button("Ignoruj", role: .cancel) { }
-        } message: {
-            Text("Dostępna jest nowa wersja: \(Text(updateVersion).bold())\nZalecana aktualizacja!")
-        }
     }
     
     func checkForUpdates() {
@@ -157,9 +146,17 @@ struct WelcomeView: View {
                     
                     if remoteVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
                         DispatchQueue.main.async {
-                            self.updateVersion = remoteVersion
-                            self.updateURL = downloadLink
-                            self.showUpdateAlert = true
+                            let alert = NSAlert()
+                            alert.icon = NSApplication.shared.applicationIconImage
+                            alert.alertStyle = .informational
+                            alert.messageText = String(localized: "Dostępna aktualizacja!")
+                            alert.informativeText = String(localized: "Dostępna jest nowa wersja: \(remoteVersion). Zalecamy aktualizację!")
+                            alert.addButton(withTitle: String(localized: "Pobierz"))
+                            alert.addButton(withTitle: String(localized: "Ignoruj"))
+                            let response = alert.runModal()
+                            if response == .alertFirstButtonReturn, let url = URL(string: downloadLink) {
+                                NSWorkspace.shared.open(url)
+                            }
                         }
                     }
                 }

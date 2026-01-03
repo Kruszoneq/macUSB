@@ -7,13 +7,33 @@ struct SystemAnalysisView: View {
     
     @Binding var isTabLocked: Bool
     @StateObject private var logic = AnalysisLogic()
+    @State private var shouldResetToStart: Bool = false
     
     @State private var selectedDriveDisplayNameSnapshot: String? = nil
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
     @State private var analysisWindowHandler: AnalysisWindowHandler?
     
-    let driveRefreshTimer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+    let driveRefreshTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
+    
+    private func updateMenuState() {
+        // Enable only when analysis has finished with a file that is NOT supported by the app.
+        // Hide/disable when the selected system is supported (including PPC flow) or analysis not finished.
+        let analysisFinished = !logic.isAnalyzing
+        let hasAnySelection = !logic.selectedFilePath.isEmpty || logic.selectedFileUrl != nil
+        let isValidSelection = (logic.sourceAppURL != nil) || logic.isPPC
+
+        let unrecognizedBlocking = (!logic.isSystemDetected
+                                    && !logic.recognizedVersion.isEmpty
+                                    && logic.sourceAppURL == nil
+                                    && !logic.showUnsupportedMessage)
+
+        let recognizedUnsupported = (!logic.isSystemDetected
+                                     && !logic.recognizedVersion.isEmpty
+                                     && logic.showUnsupportedMessage)
+
+        MenuState.shared.skipAnalysisEnabled = analysisFinished && hasAnySelection && !isValidSelection && (unrecognizedBlocking || recognizedUnsupported)
+    }
     
     // MARK: - Subviews split to help the type-checker
     private var headerSection: some View {
@@ -31,7 +51,7 @@ struct SystemAnalysisView: View {
                 Text("Wymagania").font(.headline).foregroundColor(.primary)
                 VStack(alignment: .leading, spacing: 3) {
                     Text("• Wybrany plik musi zawierać instalator systemu macOS lub Mac OS X")
-                    Text("• Dozwolone formaty plików to .dmg, .iso oraz .app")
+                    Text("• Dozwolone formaty plików to .dmg, .iso, .cdr oraz .app")
                     Text("• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym")
                 }
                 .font(.subheadline).foregroundColor(.secondary)
@@ -76,7 +96,7 @@ struct SystemAnalysisView: View {
         HStack(alignment: .center) {
             Image(systemName: "doc.badge.plus").font(.title2).foregroundColor(.secondary).frame(width: 32)
             VStack(alignment: .leading, spacing: 2) {
-                Text("Oczekiwanie na plik .dmg, .iso lub .app...").font(.subheadline).foregroundColor(.secondary)
+                Text("Oczekiwanie na plik .dmg, .iso, .cdr lub .app...").font(.subheadline).foregroundColor(.secondary)
                 Text("Wybierz go ręcznie lub przeciągnij powyżej").font(.caption).foregroundColor(.secondary.opacity(0.8))
             }
             Spacer()
@@ -113,6 +133,16 @@ struct SystemAnalysisView: View {
                     VStack(alignment: .leading) {
                         Text("Pomyślnie wykryto system").font(.caption).foregroundColor(.secondary)
                         Text(logic.recognizedVersion).font(.headline).foregroundColor(.green)
+                        if logic.userSkippedAnalysis {
+                            Text(String(localized: "Analiza nie została wykonana - wybór użytkownika"))
+                                .font(.caption)
+                                .foregroundColor(.green)
+                        }
+                        if let arch = logic.legacyArchInfo, !arch.isEmpty {
+                            Text(arch)
+                                .font(.caption)
+                                .foregroundColor(.green)
+                        }
                     }
                 }
                 .padding().frame(maxWidth: .infinity, alignment: .leading)
@@ -159,7 +189,6 @@ struct SystemAnalysisView: View {
                         needsCodesign: logic.needsCodesign,
                         isLegacySystem: logic.isLegacyDetected,
                         isRestoreLegacy: logic.isRestoreLegacy,
-                        // PRZEKAZANIE FLAGI CATALINA
                         isCatalina: logic.isCatalina,
                         isSierra: logic.isSierra,
                         isPPC: logic.isPPC,
@@ -239,8 +268,28 @@ struct SystemAnalysisView: View {
         }
         .background(navigationBackgroundLink)
         .background(windowAccessorBackground)
-        .onReceive(driveRefreshTimer) { _ in if logic.isSystemDetected { logic.refreshDrives() } }
-        .onAppear { logic.refreshDrives() }
+        .onReceive(driveRefreshTimer) { _ in
+            logic.refreshDrives()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .macUSBResetToStart)) { _ in
+            // Reset logic state and UI as if first launch
+            logic.resetAll()
+            isTabLocked = false
+            navigateToInstall = false
+            selectedDriveDisplayNameSnapshot = nil
+            MenuState.shared.skipAnalysisEnabled = false
+        }
+        .onChange(of: logic.showUnsupportedMessage) { _ in updateMenuState() }
+        .onChange(of: logic.recognizedVersion) { _ in updateMenuState() }
+        .onChange(of: logic.isAnalyzing) { _ in updateMenuState() }
+        .onChange(of: logic.isSystemDetected) { _ in updateMenuState() }
+        .onChange(of: logic.selectedFilePath) { _ in updateMenuState() }
+        .onChange(of: logic.isPPC) { _ in updateMenuState() }
+        .onChange(of: logic.sourceAppURL) { _ in updateMenuState() }
+        .onReceive(NotificationCenter.default.publisher(for: .macUSBStartTigerMultiDVD)) { _ in
+            logic.forceTigerMultiDVDSelection()
+        }
+        .onAppear { logic.refreshDrives(); updateMenuState() }
         .navigationTitle("macUSB")
         .navigationBarBackButtonHidden(true)
     }
@@ -277,7 +326,8 @@ struct SystemAnalysisView: View {
                             Text("Wybierz...").tag(nil as USBDrive?)
                             ForEach(logic.availableDrives) { drive in Text(drive.displayName).tag(drive as USBDrive?) }
                         }
-                        .labelsHidden().frame(maxWidth: .infinity, alignment: .leading)
+                        .labelsHidden()
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
             }

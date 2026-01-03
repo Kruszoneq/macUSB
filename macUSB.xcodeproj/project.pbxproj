@@ -42,40 +42,51 @@
 		0F0A5C2F2EE4DEF7006EA56B /* Exceptions for "macUSB" folder in "macUSB" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Content/ContentView.swift,
-				"File Analysis/AnalysisLogic.swift",
-				"File Analysis/FinishUSBView.swift",
-				"File Analysis/SystemAnalysisView.swift",
-				Info.plist,
-				"Installer Creator/UniversalInstallationView.swift",
-				Item.swift,
-				LanguageManager.swift,
-				Localizable.xcstrings,
-				macUSBApp.swift,
+				App/ContentView.swift,
+				App/macUSBApp.swift,
+				Features/Analysis/AnalysisLogic.swift,
+				Features/Analysis/SystemAnalysisView.swift,
+				Features/Finish/FinishUSBView.swift,
+				Features/Installation/CreatorLogic.swift,
+				Features/Installation/UniversalInstallationView.swift,
+				Features/Welcome/WelcomeView.swift,
 				macUSBIcon.icon,
-				Models.swift,
-				Welcome/WelcomeView.swift,
+				Resources/Localizable.xcstrings,
+				Shared/Models/Item.swift,
+				Shared/Models/Models.swift,
+				Shared/Services/LanguageManager.swift,
+				Shared/Services/MenuState.swift,
+				Shared/Services/UpdateChecker.swift,
+				Shared/Services/USBDriveLogic.swift,
 			);
 			target = 0F94F4A42EDE3E510019F69A /* macUSB */;
 		};
 		0F11CFC52EE4E76F0072AFEC /* Exceptions for "macUSB" folder in "macUSBUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Content/ContentView.swift,
-				"Installer Creator/UniversalInstallationView.swift",
-				Item.swift,
-				LanguageManager.swift,
-				Localizable.xcstrings,
-				macUSBApp.swift,
+				App/ContentView.swift,
+				App/macUSBApp.swift,
+				Features/Installation/CreatorLogic.swift,
+				Features/Installation/UniversalInstallationView.swift,
+				Features/Welcome/WelcomeView.swift,
 				macUSBIcon.icon,
-				Models.swift,
-				Welcome/WelcomeView.swift,
+				Resources/Localizable.xcstrings,
+				Shared/Models/Item.swift,
+				Shared/Models/Models.swift,
+				Shared/Services/LanguageManager.swift,
+				Shared/Services/MenuState.swift,
+				Shared/Services/UpdateChecker.swift,
 			);
 			target = 0F94F4BD2EDE3E520019F69A /* macUSBUITests */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		0F7852D92F0977F700FCE876 /* .github */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = .github;
+			sourceTree = "<group>";
+		};
 		0FA4D68E2EE4D133006211FD /* macUSB */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -115,6 +126,7 @@
 		0F94F49C2EDE3E510019F69A = {
 			isa = PBXGroup;
 			children = (
+				0F7852D92F0977F700FCE876 /* .github */,
 				0F1D673B2EEF235A00EC9CA8 /* version.json */,
 				0FB1C3772EEC7B5A00A86E0F /* LICENSE.txt */,
 				0FB1C3AF2EEC7E5F00A86E0F /* README.md */,
@@ -190,6 +202,7 @@
 				0F94F4C02EDE3E520019F69A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				0F7852D92F0977F700FCE876 /* .github */,
 				0FA4D68E2EE4D133006211FD /* macUSB */,
 			);
 			name = macUSBUITests;
@@ -207,7 +220,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2610;
-				LastUpgradeCheck = 2610;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					0F94F4A42EDE3E510019F69A = {
 						CreatedOnToolsVersion = 26.1.1;
@@ -320,6 +333,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -349,6 +363,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -373,6 +388,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -384,6 +400,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -413,6 +430,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -430,6 +448,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
@@ -447,6 +466,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_PREVIEWS = YES;
@@ -455,13 +475,13 @@
 				INFOPLIST_FILE = macUSB/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = macUSB;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Krystian Pierz. All rights reserved. Licensed under the MIT License.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025-2026 Krystian Pierz. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -486,6 +506,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_PREVIEWS = YES;
@@ -494,13 +515,13 @@
 				INFOPLIST_FILE = macUSB/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = macUSB;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Krystian Pierz. All rights reserved. Licensed under the MIT License.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025-2026 Krystian Pierz. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -519,6 +540,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.1;
 				MARKETING_VERSION = 1.0;
@@ -539,6 +561,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.1;
 				MARKETING_VERSION = 1.0;
@@ -558,6 +581,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = krystian.macUSBUITests;
@@ -576,6 +600,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = krystian.macUSBUITests;

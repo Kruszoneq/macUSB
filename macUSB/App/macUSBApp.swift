@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -13,6 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 @main
 struct macUSBApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @StateObject private var menuState = MenuState.shared
     
     init() {
         // --- LOGIKA JĘZYKOWA (Hard Force English Fallback) ---
@@ -52,7 +54,11 @@ struct macUSBApp: App {
             let runningApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)
             if runningApps.count > 1 {
                 for app in runningApps where app.processIdentifier != ProcessInfo.processInfo.processIdentifier {
-                    app.activate(options: [.activateIgnoringOtherApps])
+                    if #available(macOS 14.0, *) {
+                        app.activate()
+                    } else {
+                        app.activate(options: [])
+                    }
                 }
                 NSApplication.shared.terminate(nil)
             }
@@ -68,7 +74,50 @@ struct macUSBApp: App {
         .windowResizability(.contentSize)
         .commands {
             CommandGroup(replacing: .newItem) { }
+            CommandGroup(before: .newItem) {
+                Menu(String(localized: "Pomiń analizowanie pliku")) {
+                    Button(String(localized: "Mac OS X Tiger 10.4 (Multi DVD)")) {
+                        let alert = NSAlert()
+                        alert.alertStyle = .informational
+                        alert.icon = NSApp.applicationIconImage
+                        alert.messageText = String(localized: "Tworzenie USB z Mac OS X Tiger (Multi DVD)")
+                        alert.informativeText = String(localized: "Dla wybranego obrazu zostanie pominięta weryfikacja wersji. Aplikacja wymusi rozpoznanie pliku jako „Mac OS X Tiger 10.4”, aby umożliwić jego zamontowanie i zapis na USB. Czy chcesz kontynuować?")
+                        alert.addButton(withTitle: String(localized: "Nie"))
+                        alert.addButton(withTitle: String(localized: "Tak"))
+                        if let window = NSApp.keyWindow ?? NSApp.mainWindow {
+                            alert.beginSheetModal(for: window) { response in
+                                if response == .alertSecondButtonReturn {
+                                    NotificationCenter.default.post(name: .macUSBStartTigerMultiDVD, object: nil)
+                                }
+                            }
+                        } else {
+                            let response = alert.runModal()
+                            if response == .alertSecondButtonReturn {
+                                NotificationCenter.default.post(name: .macUSBStartTigerMultiDVD, object: nil)
+                            }
+                        }
+                    }
+                    .keyboardShortcut("t", modifiers: [.option, .command])
+                    .disabled(!menuState.skipAnalysisEnabled)
+                }
+            }
             CommandGroup(replacing: .windowList) { }
+            CommandGroup(after: .appInfo) {
+                Button {
+                    UpdateChecker.shared.checkFromMenu()
+                } label: {
+                    Label(String(localized: "Sprawdź dostępność aktualizacji"), systemImage: "arrow.triangle.2.circlepath")
+                }
+                Divider()
+                Button {
+                    if let url = URL(string: "https://github.com/Kruszoneq/macUSB") {
+                        NSWorkspace.shared.open(url)
+                    }
+                } label: {
+                    Label(String(localized: "Repozytorium na GitHubie"), systemImage: "link")
+                }
+            }
         }
     }
 }
+

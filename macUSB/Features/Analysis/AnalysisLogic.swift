@@ -27,26 +27,57 @@ final class AnalysisLogic: ObservableObject {
     @Published var isUnsupportedSierra: Bool = false
     @Published var isPPC: Bool = false
     @Published var legacyArchInfo: String? = nil
+    @Published var userSkippedAnalysis: Bool = false
 
     @Published var availableDrives: [USBDrive] = []
-    @Published var selectedDrive: USBDrive?
+    @Published var selectedDrive: USBDrive? {
+        didSet {
+            // Log only when the detected/selected drive actually changes
+            if oldValue?.url != selectedDrive?.url {
+                let selectedPath = selectedDrive?.url.path ?? "brak"
+                self.log("Wybrano dysk: \(selectedPath)")
+            }
+        }
+    }
 
     @Published var isCapacitySufficient: Bool = false
     @Published var capacityCheckFinished: Bool = false
 
+    // Computed: true only when app has recognized a supported system and can proceed normally
+    var isRecognizedAndSupported: Bool {
+        // Recognized and supported when analysis finished, a valid source exists or PPC flow is selected,
+        // the system is detected (modern/legacy/catalina/sierra), and it's not marked unsupported.
+        let recognized = (!isAnalyzing)
+        let hasValidSourceOrPPC = (sourceAppURL != nil) || isPPC
+        let detected = isSystemDetected || isPPC
+        let unsupported = showUnsupportedMessage || isUnsupportedSierra
+        return recognized && hasValidSourceOrPPC && detected && !unsupported
+    }
+    
+    // MARK: - Logging
+    private func log(_ message: String) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        print("----------")
+        print("[\(formatter.string(from: Date()))] \(message)")
+    }
+
     // MARK: - Logic (moved from SystemAnalysisView)
     func handleDrop(providers: [NSItemProvider]) -> Bool {
+        self.log("Odebrano przeciągnięcie pliku (providers=\(providers.count)). Szukam URL...")
         if let provider = providers.first(where: { $0.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) }) {
             provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { (item, error) in
                 if let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) {
+                    self.log("Przeciągnięto plik: \(url.path) (ext: \(url.pathExtension.lowercased()))")
                     let ext = url.pathExtension.lowercased()
-                    if ext == "dmg" || ext == "app" || ext == "iso" {
+                    if ext == "dmg" || ext == "app" || ext == "iso" || ext == "cdr" {
                         self.processDroppedURL(url)
                     }
                 }
                 else if let url = item as? URL {
+                    self.log("Przeciągnięto plik: \(url.path) (ext: \(url.pathExtension.lowercased()))")
                     let ext = url.pathExtension.lowercased()
-                    if ext == "dmg" || ext == "app" || ext == "iso" {
+                    if ext == "dmg" || ext == "app" || ext == "iso" || ext == "cdr" {
                         self.processDroppedURL(url)
                     }
                 }
@@ -59,7 +90,8 @@ final class AnalysisLogic: ObservableObject {
     func processDroppedURL(_ url: URL) {
         DispatchQueue.main.async {
             let ext = url.pathExtension.lowercased()
-            if ext == "dmg" || ext == "app" || ext == "iso" {
+            self.log("Wybrano plik: \(url.path) (ext: \(ext)). Resetuję stan i przygotowuję analizę.")
+            if ext == "dmg" || ext == "app" || ext == "iso" || ext == "cdr" {
                 withAnimation {
                     self.selectedFilePath = url.path
                     self.selectedFileUrl = url
@@ -74,20 +106,22 @@ final class AnalysisLogic: ObservableObject {
                     self.isUnsupportedSierra = false
                     self.isPPC = false
                     self.legacyArchInfo = nil
+                    self.userSkippedAnalysis = false
                 }
             }
         }
     }
 
     func selectDMGFile() {
+        self.log("Otwieram panel wyboru pliku…")
         let p = NSOpenPanel()
         p.allowedContentTypes = [.diskImage, .applicationBundle]
-        // Dodajemy obsługę .iso, który nie ma jeszcze UTType w UniformTypeIdentifiers, więc rozszerzamy allowedFileTypes
-        p.allowedFileTypes = ["dmg", "iso", "app"]
+        // Dodajemy obsługę .iso i .cdr, które nie mają jeszcze UTType w UniformTypeIdentifiers, więc rozszerzamy allowedFileTypes
+        p.allowedFileTypes = ["dmg", "iso", "cdr", "app"]
         p.allowsMultipleSelection = false
         p.begin { if $0 == .OK, let url = p.url {
             let ext = url.pathExtension.lowercased()
-            guard ext == "dmg" || ext == "iso" || ext == "app" else { return }
+            guard ext == "dmg" || ext == "iso" || ext == "cdr" || ext == "app" else { return }
             withAnimation {
                 self.selectedFilePath = url.path
                 self.selectedFileUrl = url
@@ -102,12 +136,17 @@ final class AnalysisLogic: ObservableObject {
                 self.isUnsupportedSierra = false
                 self.isPPC = false
                 self.legacyArchInfo = nil
+                self.userSkippedAnalysis = false
             }
-        }}
+            self.log("Wybrano plik z panelu: \(url.path) (ext: \(ext))")
+        } else {
+            self.log("Anulowano wybór pliku")
+        } }
     }
 
     func startAnalysis() {
         guard let url = selectedFileUrl else { return }
+        self.log("Rozpoczynam analizę pliku: \(url.path)")
         withAnimation { isAnalyzing = true }
         selectedDrive = nil; capacityCheckFinished = false
         showUSBSection = false; showUnsupportedMessage = false
@@ -115,7 +154,8 @@ final class AnalysisLogic: ObservableObject {
         isPPC = false
 
         let ext = url.pathExtension.lowercased()
-        if ext == "dmg" || ext == "iso" {
+        if ext == "dmg" || ext == "iso" || ext == "cdr" {
+            self.log("Analiza obrazu (DMG/ISO/CDR): montowanie obrazu przez hdiutil (attach -plist -nobrowse -readonly), odczyt Info.plist z aplikacji oraz wykrywanie wersji i trybu instalacji.")
             let oldMountPath = self.mountedDMGPath
             DispatchQueue.global(qos: .userInitiated).async {
                 if let path = oldMountPath {
@@ -155,10 +195,21 @@ final class AnalysisLogic: ObservableObject {
                             // Leopard/Tiger detection (PowerPC) using name, raw version, or mounted SystemVersion.plist
                             let isLeopard = nameLower.contains("leopard") || rawVer.starts(with: "10.5") || (userVisibleVersionFromMounted?.hasPrefix("10.5") ?? false)
                             let isTiger = nameLower.contains("tiger") || rawVer.starts(with: "10.4") || (userVisibleVersionFromMounted?.hasPrefix("10.4") ?? false)
+                            let isPanther = nameLower.contains("panther") || rawVer.starts(with: "10.3") || (userVisibleVersionFromMounted?.hasPrefix("10.3") ?? false)
+                            let isSnowLeopard = nameLower.contains("snow leopard") || rawVer.starts(with: "10.6") || (userVisibleVersionFromMounted?.hasPrefix("10.6") ?? false)
 
+                            // Disable kernel arch detection for Panther (10.3), Tiger (10.4), Leopard (10.5) and Snow Leopard (10.6). Always mark PPC flow for legacy, but do not set legacyArchInfo.
+                            if (isLeopard || isTiger || isPanther || isSnowLeopard) {
+                                self.isPPC = true // niezależnie od architektury, proces USB taki sam
+                                self.legacyArchInfo = nil
+                            }
+
+                            // Legacy versions exact recognition for mounted userVisibleVersion or fallback for legacy systems
                             if isLeopard {
                                 if let userVisible = userVisibleVersionFromMounted {
                                     self.recognizedVersion = "Mac OS X Leopard \(userVisible)"
+                                } else if rawVer.starts(with: "10.5") {
+                                    self.recognizedVersion = "Mac OS X Leopard \(rawVer)"
                                 } else {
                                     self.recognizedVersion = "Mac OS X Leopard"
                                 }
@@ -166,21 +217,47 @@ final class AnalysisLogic: ObservableObject {
                             if isTiger {
                                 if let userVisible = userVisibleVersionFromMounted {
                                     self.recognizedVersion = "Mac OS X Tiger \(userVisible)"
+                                } else if rawVer.starts(with: "10.4") {
+                                    self.recognizedVersion = "Mac OS X Tiger \(rawVer)"
                                 } else {
                                     self.recognizedVersion = "Mac OS X Tiger"
                                 }
                             }
-
-                            // Detect architecture from mach_kernel for Tiger/Leopard and always mark as PPC flow
-                            if (isLeopard || isTiger) {
-                                self.isPPC = true // niezależnie od architektury, proces USB taki sam
-                                if let mountPath = self.mountedDMGPath {
-                                    if let rawArch = self.detectLegacyKernelArch(at: URL(fileURLWithPath: mountPath)) {
-                                        let arch: String = (rawArch == "Universal") ? "PowerPC + Intel" : (rawArch == "PPC" ? "PowerPC" : "Intel")
-                                        self.legacyArchInfo = arch
-                                        self.recognizedVersion += " - \(arch)"
-                                    }
+                            if isPanther {
+                                if let userVisible = userVisibleVersionFromMounted {
+                                    self.recognizedVersion = "Mac OS X Panther \(userVisible)"
+                                } else if rawVer.starts(with: "10.3") {
+                                    self.recognizedVersion = "Mac OS X Panther \(rawVer)"
+                                } else {
+                                    self.recognizedVersion = "Mac OS X Panther"
                                 }
+                            }
+                            if isSnowLeopard {
+                                if let userVisible = userVisibleVersionFromMounted {
+                                    self.recognizedVersion = "Mac OS X Snow Leopard \(userVisible)"
+                                } else if rawVer.starts(with: "10.6") {
+                                    self.recognizedVersion = "Mac OS X Snow Leopard \(rawVer)"
+                                } else {
+                                    self.recognizedVersion = "Mac OS X Snow Leopard"
+                                }
+                            }
+                            // If Panther is detected, mark as unsupported and block further processing
+                            if isPanther {
+                                self.isSystemDetected = false
+                                self.showUSBSection = false
+                                self.isPPC = false
+                                self.legacyArchInfo = nil
+                                // Show unsupported message immediately
+                                withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) {
+                                    self.showUnsupportedMessage = true
+                                }
+                                self.needsCodesign = false
+                                self.isLegacyDetected = false
+                                self.isRestoreLegacy = false
+                                self.isCatalina = false
+                                self.isSierra = false
+                                self.isUnsupportedSierra = false
+                                return
                             }
 
                             // Systemy niewspierane (Explicit) - USUNIĘTO CATALINĘ
@@ -254,15 +331,18 @@ final class AnalysisLogic: ObservableObject {
                             } else {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUnsupportedMessage = true } }
                             }
+                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion). Flagi: isCatalina=\(self.isCatalina), isSierra=\(self.isSierra), isLegacyDetected=\(self.isLegacyDetected), isRestoreLegacy=\(self.isRestoreLegacy), isPPC=\(self.isPPC), isUnsupportedSierra=\(self.isUnsupportedSierra). Mount=\(self.mountedDMGPath ?? "brak")")
                         } else {
                             // Użyto String(localized:) aby ten ciąg został wykryty, mimo że jest przypisywany do zmiennej
                             self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
+                            self.log("Analiza zakończona: nie rozpoznano instalatora.")
                         }
                     }
                 }
             }
         }
         else if ext == "app" {
+            self.log("Analiza aplikacji (.app): odczyt Info.plist (CFBundleDisplayName, CFBundleShortVersionString) oraz wykrywanie wersji i trybu instalacji.")
             DispatchQueue.global(qos: .userInitiated).async {
                 let result = self.readAppInfo(appUrl: url)
                 DispatchQueue.main.async {
@@ -286,12 +366,47 @@ final class AnalysisLogic: ObservableObject {
                             // Leopard detection (PowerPC)
                             let isLeopard = nameLower.contains("leopard") || rawVer.starts(with: "10.5")
                             let isTiger = nameLower.contains("tiger") || rawVer.starts(with: "10.4")
+                            let isPanther = nameLower.contains("panther") || rawVer.starts(with: "10.3")
+                            let isSnowLeopard = nameLower.contains("snow leopard") || rawVer.starts(with: "10.6")
 
                             self.legacyArchInfo = nil
 
-                            // Dla Leoparda/Tigera zawsze traktujemy jako PPC flow
-                            if isLeopard || isTiger {
+                            // Dla Snow Leoparda/Leoparda/Tigera zawsze traktujemy jako PPC flow
+                            if isLeopard || isTiger || isSnowLeopard {
                                 self.isPPC = true
+                            }
+
+                            // Ustal dokładną wersję dla Panther/Tiger/Leopard/Snow Leopard (dla .app)
+                            if isPanther || isTiger || isLeopard || isSnowLeopard {
+                                let isExact = rawVer.starts(with: "10.3") || rawVer.starts(with: "10.4") || rawVer.starts(with: "10.5") || rawVer.starts(with: "10.6")
+                                let exactSuffix = isExact ? " \(rawVer)" : ""
+                                if isPanther {
+                                    self.recognizedVersion = "Mac OS X Panther\(exactSuffix)"
+                                } else if isTiger {
+                                    self.recognizedVersion = "Mac OS X Tiger\(exactSuffix)"
+                                } else if isLeopard {
+                                    self.recognizedVersion = "Mac OS X Leopard\(exactSuffix)"
+                                } else if isSnowLeopard {
+                                    self.recognizedVersion = "Mac OS X Snow Leopard\(exactSuffix)"
+                                }
+                            }
+                            // If Panther is detected, mark as unsupported and block further processing
+                            if isPanther {
+                                self.isSystemDetected = false
+                                self.showUSBSection = false
+                                self.isPPC = false
+                                self.legacyArchInfo = nil
+                                // Show unsupported message immediately
+                                withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) {
+                                    self.showUnsupportedMessage = true
+                                }
+                                self.needsCodesign = false
+                                self.isLegacyDetected = false
+                                self.isRestoreLegacy = false
+                                self.isCatalina = false
+                                self.isSierra = false
+                                self.isUnsupportedSierra = false
+                                return
                             }
 
                             // Systemy niewspierane (Explicit) - USUNIĘTO CATALINĘ
@@ -355,7 +470,7 @@ final class AnalysisLogic: ObservableObject {
                                 self.recognizedVersion = "macOS Sierra 10.12"
                                 self.needsCodesign = false
                             }
-                            // isPPC zostało ustawione wcześniej dla Leoparda/Tigera; dla pozostałych pozostaje false
+                            // isPPC zostało ustawione wcześniej dla Snow Leoparda/Leoparda/Tigera; dla pozostałych pozostaje false
                             self.isPPC = self.isPPC || false
 
                             if self.isSystemDetected {
@@ -363,11 +478,58 @@ final class AnalysisLogic: ObservableObject {
                             } else {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUnsupportedMessage = true } }
                             }
+                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion). Flagi: isCatalina=\(self.isCatalina), isSierra=\(self.isSierra), isLegacyDetected=\(self.isLegacyDetected), isRestoreLegacy=\(self.isRestoreLegacy), isPPC=\(self.isPPC), isUnsupportedSierra=\(self.isUnsupportedSierra)")
                         } else {
                             self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
+                            self.log("Analiza zakończona: nie rozpoznano instalatora.")
                         }
                     }
                 }
+            }
+        }
+    }
+
+    func forceTigerMultiDVDSelection() {
+        self.log("Ręcznie wybrano tryb Tiger Multi DVD")
+        let fileURL = self.selectedFileUrl
+        DispatchQueue.global(qos: .userInitiated).async {
+            var mountPoint: String? = self.mountedDMGPath
+            var effectiveSourceAppURL: URL? = nil
+            if let url = fileURL {
+                let ext = url.pathExtension.lowercased()
+                if ext == "dmg" || ext == "iso" || ext == "cdr" {
+                    if mountPoint == nil {
+                        mountPoint = self.mountImageForPPC(dmgUrl: url)
+                    }
+                    if let mp = mountPoint {
+                        effectiveSourceAppURL = URL(fileURLWithPath: mp).appendingPathComponent("Install")
+                    }
+                } else if ext == "app" {
+                    effectiveSourceAppURL = url
+                }
+            }
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.isAnalyzing = false
+                    self.userSkippedAnalysis = true
+                    self.recognizedVersion = "Mac OS X Tiger 10.4"
+                    self.sourceAppURL = effectiveSourceAppURL
+                    self.mountedDMGPath = mountPoint
+                    self.isSystemDetected = true
+                    self.showUnsupportedMessage = false
+                    self.showUSBSection = true
+                    self.needsCodesign = false
+                    self.isLegacyDetected = false
+                    self.isRestoreLegacy = false
+                    self.isCatalina = false
+                    self.isSierra = false
+                    self.isUnsupportedSierra = false
+                    self.isPPC = true
+                    self.legacyArchInfo = nil
+                    self.selectedDrive = nil
+                    self.capacityCheckFinished = false
+                }
+                self.log("Ustawiono Tiger Multi DVD: recognizedVersion=\(self.recognizedVersion), mount=\(self.mountedDMGPath ?? "brak"), isPPC=\(self.isPPC)")
             }
         }
     }
@@ -389,6 +551,8 @@ final class AnalysisLogic: ObservableObject {
         if n.contains("mavericks") { return "10.9" }
         if n.contains("mountain lion") { return "10.8" }
         if n.contains("lion") { return "10.7" }
+        if n.contains("snow leopard") { return "10.6" }
+        if n.contains("panther") { return "10.3" }
         return raw
     }
 
@@ -425,20 +589,35 @@ final class AnalysisLogic: ObservableObject {
         return nil
     }
 
-    func refreshDrives() {
-        let keys: [URLResourceKey] = [.volumeNameKey, .volumeIsRemovableKey, .volumeIsInternalKey, .volumeTotalCapacityKey]
-        guard let urls = FileManager.default.mountedVolumeURLs(includingResourceValuesForKeys: keys, options: .skipHiddenVolumes) else { return }
-        let currentSelectedURL = selectedDrive?.url
-        let foundDrives = urls.compactMap { url -> USBDrive? in
-            guard let v = try? url.resourceValues(forKeys: Set(keys)), let isRemovable = v.volumeIsRemovable, isRemovable, let isInternal = v.volumeIsInternal, !isInternal, let name = v.volumeName else { return nil }
-            let size = ByteCountFormatter.string(fromByteCount: Int64(v.volumeTotalCapacity ?? 0), countStyle: .file)
-            let deviceName = self.getBSDName(from: url)
-            return USBDrive(name: name, device: deviceName, size: size, url: url)
+    func mountImageForPPC(dmgUrl: URL) -> String? {
+        let task = Process(); task.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
+        task.arguments = ["attach", dmgUrl.path, "-plist", "-nobrowse", "-readonly"]
+        let pipe = Pipe(); task.standardOutput = pipe; try? task.run(); task.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        guard let plist = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any], let entities = plist["system-entities"] as? [[String: Any]] else { return nil }
+        for e in entities {
+            if let mp = e["mount-point"] as? String { return mp }
         }
+        return nil
+    }
+
+    func refreshDrives() {
+        let currentSelectedURL = selectedDrive?.url
+        let foundDrives = USBDriveLogic.enumerateAvailableDrives()
         self.availableDrives = foundDrives
         if let currentURL = currentSelectedURL {
-            if let stillConnectedDrive = foundDrives.first(where: { $0.url == currentURL }) { self.selectedDrive = stillConnectedDrive } else { self.selectedDrive = nil; self.capacityCheckFinished = false }
-        } else { if self.selectedDrive != nil { self.selectedDrive = nil; self.capacityCheckFinished = false } }
+            if let stillConnectedDrive = foundDrives.first(where: { $0.url == currentURL }) {
+                self.selectedDrive = stillConnectedDrive
+            } else {
+                self.selectedDrive = nil
+                self.capacityCheckFinished = false
+            }
+        } else {
+            if self.selectedDrive != nil {
+                self.selectedDrive = nil
+                self.capacityCheckFinished = false
+            }
+        }
     }
 
     func checkCapacity() {
@@ -449,77 +628,55 @@ final class AnalysisLogic: ObservableObject {
         } else { isCapacitySufficient = false; capacityCheckFinished = true }
     }
 
-    func getBSDName(from url: URL) -> String {
-        return url.withUnsafeFileSystemRepresentation { ptr in
-            guard let ptr = ptr else { return "unknown" }
-            var stat = statfs(); if statfs(ptr, &stat) == 0 { var raw = stat.f_mntfromname; return withUnsafePointer(to: &raw) { $0.withMemoryRebound(to: CChar.self, capacity: Int(MAXPATHLEN)) { String(cString: $0).replacingOccurrences(of: "/dev/", with: "") } } }
-            return "unknown"
-        } ?? "unknown"
+    func resetAll() {
+        let oldMount = self.mountedDMGPath
+        if let path = oldMount {
+            let task = Process()
+            task.launchPath = "/usr/bin/hdiutil"
+            task.arguments = ["detach", path, "-force"]
+            try? task.run()
+            task.waitUntilExit()
+        }
+        DispatchQueue.main.async {
+            withAnimation {
+                self.selectedFilePath = ""
+                self.selectedFileUrl = nil
+                self.recognizedVersion = ""
+                self.sourceAppURL = nil
+                self.mountedDMGPath = nil
+
+                self.isAnalyzing = false
+                self.isSystemDetected = false
+                self.showUSBSection = false
+                self.showUnsupportedMessage = false
+
+                self.needsCodesign = true
+                self.isLegacyDetected = false
+                self.isRestoreLegacy = false
+                self.isCatalina = false
+                self.isSierra = false
+                self.isUnsupportedSierra = false
+                self.isPPC = false
+                self.legacyArchInfo = nil
+                self.userSkippedAnalysis = false
+
+                self.availableDrives = []
+                self.selectedDrive = nil
+
+                self.isCapacitySufficient = false
+                self.capacityCheckFinished = false
+            }
+        }
     }
 
-    /// Attempts to detect architecture of legacy OS X kernel by inspecting the mach_kernel file located at the root of the mounted volume.
-    /// Returns "PPC", "Intel", or "Universal" when determinable; otherwise nil.
-    func detectLegacyKernelArch(at mountURL: URL) -> String? {
-        let kernelURL = mountURL.appendingPathComponent("mach_kernel")
-        guard let data = try? Data(contentsOf: kernelURL) else { return nil }
-        // Mach-O magic constants
-        let MH_MAGIC: UInt32 = 0xfeedface
-        let MH_CIGAM: UInt32 = 0xcefaedfe
-        let MH_MAGIC_64: UInt32 = 0xfeedfacf
-        let MH_CIGAM_64: UInt32 = 0xcffaedfe
-        let FAT_MAGIC: UInt32 = 0xcafebabe
-        let FAT_CIGAM: UInt32 = 0xbebafeca
-
-        func readUInt32(_ offset: Int) -> UInt32? {
-            guard offset + 4 <= data.count else { return nil }
-            return data.withUnsafeBytes { ptr in ptr.load(fromByteOffset: offset, as: UInt32.self) }
-        }
-
-        func swap32(_ x: UInt32) -> UInt32 { return (x << 24) | ((x << 8) & 0x00FF0000) | ((x >> 8) & 0x0000FF00) | (x >> 24) }
-
-        // CPU type constants
-        let CPU_TYPE_I386: UInt32 = 7
-        let CPU_TYPE_POWERPC: UInt32 = 18
-
-        guard let magic = readUInt32(0) else { return nil }
-
-        // Helper to interpret a single Mach-O header and return architecture string
-        func archForMachO(at offset: Int, swapped: Bool) -> String? {
-            guard let cputypeRaw = readUInt32(offset + 4) else { return nil }
-            let cputype = swapped ? swap32(cputypeRaw) : cputypeRaw
-            if cputype == CPU_TYPE_POWERPC { return "PPC" }
-            if cputype == CPU_TYPE_I386 { return "Intel" }
-            return nil
-        }
-
-        // Thin Mach-O
-        if magic == MH_MAGIC || magic == MH_MAGIC_64 {
-            return archForMachO(at: 0, swapped: false)
-        }
-        if magic == MH_CIGAM || magic == MH_CIGAM_64 {
-            return archForMachO(at: 0, swapped: true)
-        }
-
-        // Fat binary
-        if magic == FAT_MAGIC || magic == FAT_CIGAM {
-            let swapped = (magic == FAT_CIGAM)
-            guard let nfatRaw = readUInt32(4) else { return nil }
-            let nfat = Int(swapped ? swap32(nfatRaw) : nfatRaw)
-            var hasPPC = false
-            var hasIntel = false
-            var offset = 8
-            for _ in 0..<nfat {
-                guard let cputypeRaw = readUInt32(offset) else { break }
-                let cputype = swapped ? swap32(cputypeRaw) : cputypeRaw
-                if cputype == CPU_TYPE_POWERPC { hasPPC = true }
-                if cputype == CPU_TYPE_I386 { hasIntel = true }
-                offset += 20 // sizeof(struct fat_arch) = 5 * UInt32
-            }
-            if hasPPC && hasIntel { return "Universal" }
-            if hasPPC { return "PPC" }
-            if hasIntel { return "Intel" }
-        }
-
-        return nil
+    // Call this from the UI when the user presses the "Przejdź dalej" button
+    func recordProceedPressed() {
+        self.log("Użytkownik nacisnął przycisk 'Przejdź dalej'. Wybrany dysk: \(self.selectedDrive?.url.path ?? "brak"), źródło: \(self.sourceAppURL?.path ?? "brak"), rozpoznano: \(self.recognizedVersion)")
     }
 }
+
+extension Notification.Name {
+    static let macUSBResetToStart = Notification.Name("macUSB.resetToStart")
+    static let macUSBStartTigerMultiDVD = Notification.Name("macUSB.startTigerMultiDVD")
+}
+

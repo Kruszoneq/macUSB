@@ -56,11 +56,109 @@
         }
       }
     },
-    "• Dozwolone formaty plików to .dmg, .iso oraz .app" : {
-
+    "• Dozwolone formaty plików to .dmg, .iso, .cdr oraz .app" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Zulässige Dateiformate sind .dmg, .iso, .cdr und .app"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Allowed file formats are .dmg, .iso, .cdr, and .app"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Los formatos de archivo permitidos son .dmg, .iso, .cdr y .app"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Les formats de fichiers autorisés sont .dmg, .iso, .cdr et .app"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 許可されるファイル形式は .dmg, .iso, .cdr および .app です"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Os formatos de arquivo permitidos são .dmg, .iso, .cdr e .app"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Допустимые форматы файлов: .dmg, .iso, .cdr и .app"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 允许的文件格式为 .dmg, .iso, .cdr 和 .app"
+          }
+        }
+      }
     },
     "• Dysk USB zostanie sformatowany (APM + HFS+)" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Das USB-Laufwerk wird formatiert (APM + HFS+)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The USB drive will be formatted (APM + HFS+)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La memoria USB será formateada (APM + HFS+)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La clé USB sera formatée (APM + HFS+)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• USBメモリはフォーマットされます (APM + HFS+)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• O pen drive será formatado (APM + HFS+)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• USB-накопитель будет отформатирован (APM + HFS+)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• U 盘将被格式化 (APM + HFS+)"
+          }
+        }
+      }
     },
     "• Instalator zostanie zmodyfikowany (podpis cyfrowy)" : {
       "localizations" : {
@@ -115,7 +213,56 @@
       }
     },
     "• Obraz instalacyjny zostanie przywrócony na USB" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Das Installationsabbild wird auf USB wiederhergestellt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The installation image will be restored to USB"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La imagen de instalación se restaurará en el USB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• L'image d'installation sera restaurée sur la clé USB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• インストールイメージがUSBに復元されます"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• A imagem de instalação será restaurada no USB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Установочный образ будет восстановлен на USB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 安装镜像将被恢复到 USB"
+          }
+        }
+      }
     },
     "• Obraz systemu zostanie przywrócony w Terminalu" : {
       "localizations" : {
@@ -170,7 +317,56 @@
       }
     },
     "• Operacja zostanie wykonana w Terminalu (wymagane hasło administratora)" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Der Vorgang wird im Terminal ausgeführt (Administratorpasswort erforderlich)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The operation will be performed in Terminal (administrator password required)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La operación se realizará en el Terminal (se requiere contraseña de administrador)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• L'opération sera effectuée dans le Terminal (mot de passe administrateur requis)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 操作はターミナルで実行されます（管理者パスワードが必要です）"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• A operação será realizada no Terminal (senha de administrador necessária)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Операция будет выполнена в Терминале (требуется пароль администратора)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 操作将在终端中执行（需要管理员密码）"
+          }
+        }
+      }
     },
     "• Pamięć USB zostanie sformatowana (dane zostaną usunięte)" : {
       "localizations" : {
@@ -272,59 +468,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• U 盘将被抹掉"
-          }
-        }
-      }
-    },
-    "• Plik .dmg lub .app musi zawierać instalator systemu macOS lub Mac OS X" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Die .dmg- oder .app-Datei muss einen macOS- oder Mac OS X-Installer enthalten"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• The .dmg or .app file must contain a macOS or Mac OS X installer"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• El archivo .dmg o .app debe contener un instalador de macOS o Mac OS X"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Le fichier .dmg ou .app doit contenir un installateur macOS ou Mac OS X"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• .dmgまたは.appファイルには、macOSまたはMac OS Xのインストーラが含まれている必要があります"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• O arquivo .dmg ou .app deve conter um instalador do macOS ou Mac OS X"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Файл .dmg или .app должен содержать установщик macOS или Mac OS X"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• .dmg 或 .app 文件必须包含 macOS 或 Mac OS X 安装程序"
           }
         }
       }
@@ -693,12 +836,6 @@
         }
       }
     },
-    "• Uruchom komputer w Open Firmware, trzymając klawisze Command (⌘) + Option (⌥) + O + F" : {
-
-    },
-    "• Wpisz komendę bootowania z dysku USB adekwatną do twojego komputera" : {
-
-    },
     "• Wybierz instalator systemu macOS lub OS X z listy" : {
       "localizations" : {
         "de" : {
@@ -752,63 +889,108 @@
       }
     },
     "• Wybrany plik musi zawierać instalator systemu macOS lub Mac OS X" : {
-
-    },
-    "• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Es sind mindestens 15 GB freier Speicherplatz erforderlich"
+            "value" : "• Die ausgewählte Datei muss einen macOS- oder Mac OS X-Installer enthalten"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• At least 15 GB of free disk space is required"
+            "value" : "• The selected file must contain a macOS or Mac OS X installer"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Se requieren al menos 15 GB de espacio libre en disco"
+            "value" : "• El archivo seleccionado debe contener un instalador de macOS o Mac OS X"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Au moins 15 Go d'espace disque libre sont requis"
+            "value" : "• Le fichier sélectionné doit contenir un installateur macOS ou Mac OS X"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• 最低15GBの空きディスク容量が必要です"
+            "value" : "• 選択したファイルにはmacOSまたはMac OS Xインストーラが含まれている必要があります"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Pelo menos 15 GB de espaço livre em disco são necessários"
+            "value" : "• O arquivo selecionado deve conter um instalador do macOS ou Mac OS X"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Требуется не менее 15 ГБ свободного места на диске"
+            "value" : "• Выбранный файл должен содержать установщик macOS или Mac OS X"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• 需要至少 15 GB 的可用磁盘空间"
+            "value" : "• 所选文件必须包含 macOS 或 Mac OS X 安装程序"
           }
         }
       }
     },
     "• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Es sind mindestens 15 GB freier Festplattenspeicher erforderlich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• At least 15 GB of free hard drive space is required"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Se requieren al menos 15 GB de espacio libre en el disco duro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Au moins 15 Go d'espace libre sur le disque dur sont requis"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• ハードドライブに少なくとも15GBの空き容量が必要です"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• É necessário pelo menos 15 GB de espaço livre no disco rígido"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Требуется не менее 15 ГБ свободного места на жестком диске"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 需要至少 15 GB 的硬盘可用空间"
+          }
+        }
+      }
     },
     "• Wymagane podanie hasła administratora" : {
       "localizations" : {
@@ -966,6 +1148,58 @@
         }
       }
     },
+    "Aby uruchomić instalator z dysku USB na Macu z PowerPC, niezbędne jest wpisanie komendy w konsoli Open Firmware. Pełna instrukcja obsługi znajduje się w repozytorium macUSB.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um das Installationsprogramm von einem USB-Laufwerk auf einem PowerPC-Mac zu starten, müssen Sie einen Befehl in der Open-Firmware-Konsole eingeben. Eine vollständige Anleitung finden Sie im macUSB-Repository."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To boot the installer from a USB drive on a PowerPC Mac, you must enter a command in the Open Firmware console. Full instructions are available in the macUSB repository."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para arrancar el instalador desde una unidad USB en un Mac PowerPC, es necesario introducir un comando en la consola de Open Firmware. Las instrucciones completas están en el repositorio macUSB."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour démarrer l’installateur depuis une clé USB sur un Mac PowerPC, vous devez saisir une commande dans la console Open Firmware. La notice complète se trouve dans le dépôt macUSB."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PowerPC Mac で USB ドライブからインストーラを起動するには、Open Firmware コンソールでコマンドを入力する必要があります。詳細な手順は macUSB リポジトリにあります。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para iniciar o instalador a partir de uma unidade USB em um Mac PowerPC, é necessário digitar um comando no console Open Firmware. As instruções completas estão no repositório macUSB."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чтобы запустить установщик с USB-накопителя на Mac с PowerPC, нужно ввести команду в консоли Open Firmware. Полная инструкция находится в репозитории macUSB."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要在 PowerPC Mac 上从 USB 启动安装器，需要在 Open Firmware 控制台中输入一条命令。完整说明可在 macUSB 仓库中找到。"
+          }
+        }
+      }
+    },
     "Aktualizacja wersji i podpisywanie..." : {
       "comment" : "Version update and code signing in progress",
       "localizations" : {
@@ -1015,6 +1249,58 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在更新版本并进行签名…"
+          }
+        }
+      }
+    },
+    "Analiza nie została wykonana - wybór użytkownika" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyse nicht durchgeführt - Benutzerauswahl"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analysis not performed - user choice"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Análisis no realizado - elección del usuario"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyse non effectuée - choix de l'utilisateur"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分析は実行されませんでした - ユーザーの選択"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Análise não realizada - escolha do usuário"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Анализ не выполнен - выбор пользователя"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分析未执行 - 用户选择"
           }
         }
       }
@@ -1487,6 +1773,58 @@
         }
       }
     },
+    "Brak dostępnych aktualizacji" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Updates verfügbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No updates available"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay actualizaciones disponibles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune mise à jour disponible"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "利用可能なアップデートはありません"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhuma atualização disponível"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет доступных обновлений"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无可用更新"
+          }
+        }
+      }
+    },
     "Cały proces może potrwać kilka minut." : {
       "localizations" : {
         "de" : {
@@ -1540,7 +1878,56 @@
       }
     },
     "CEL:" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ZIEL:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TARGET:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DESTINO:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CIBLE :"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ターゲット:"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ALVO:"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ЦЕЛЬ:"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目标:"
+          }
+        }
+      }
     },
     "Co teraz?" : {
       "localizations" : {
@@ -1698,54 +2085,54 @@
         }
       }
     },
-    "Czyszczenie plików, proszę czekać..." : {
+    "Czyszczenie plików tymczasowych" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dateien werden bereinigt, bitte warten..."
+            "value" : "Bereinigen temporärer Dateien"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cleaning up files, please wait..."
+            "value" : "Cleaning temporary files"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Limpiando archivos, por favor espere..."
+            "value" : "Limpiando archivos temporales"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nettoyage des fichiers, veuillez patienter..."
+            "value" : "Nettoyage des fichiers temporaires"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ファイルをクリーンアップしています。お待ちください..."
+            "value" : "一時ファイルを削除中"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Limpando arquivos, aguarde..."
+            "value" : "Limpando arquivos temporários"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Очистка файлов, пожалуйста, подождите..."
+            "value" : "Очистка временных файлов"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "正在清理文件，请稍候..."
+            "value" : "正在清理临时文件"
           }
         }
       }
@@ -1906,6 +2293,58 @@
         }
       }
     },
+    "Dla wybranego obrazu zostanie pominięta weryfikacja wersji. Aplikacja wymusi rozpoznanie pliku jako „Mac OS X Tiger 10.4”, aby umożliwić jego zamontowanie i zapis na USB. Czy chcesz kontynuować?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Versionsüberprüfung wird für das ausgewählte Abbild übersprungen. Die Anwendung erzwingt die Erkennung der Datei als „Mac OS X Tiger 10.4“, um das Mounten und Schreiben auf USB zu ermöglichen. Möchten Sie fortfahren?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version verification will be skipped for the selected image. The application will force recognition of the file as “Mac OS X Tiger 10.4” to enable mounting and writing to USB. Do you want to continue?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se omitirá la verificación de la versión para la imagen seleccionada. La aplicación forzará el reconocimiento del archivo como \"Mac OS X Tiger 10.4\" para permitir su montaje y escritura en el USB. ¿Desea continuar?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La vérification de la version sera ignorée pour l'image sélectionnée. L'application forcera la reconnaissance du fichier comme « Mac OS X Tiger 10.4 » pour permettre son montage et son écriture sur USB. Voulez-vous continuer ?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択されたイメージのバージョン確認はスキップされます。アプリケーションはファイルを「Mac OS X Tiger 10.4」として強制的に認識させ、マウントおよびUSBへの書き込みを可能にします。続けますか？"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A verificação de versão será ignorada para a imagem selecionada. O aplicativo forçará o reconhecimento do arquivo como \"Mac OS X Tiger 10.4\" para permitir a montagem e gravação no USB. Deseja continuar?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверка версии для выбранного образа будет пропущена. Приложение принудительно распознает файл как «Mac OS X Tiger 10.4», чтобы разрешить его монтирование и запись на USB. Вы хотите продолжить?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将跳过所选镜像的版本验证。应用程序将强制识别该文件为 “Mac OS X Tiger 10.4”，以允许挂载并写入 USB。您想继续吗？"
+          }
+        }
+      }
+    },
     "Dostępna aktualizacja!" : {
       "localizations" : {
         "de" : {
@@ -1958,107 +2397,106 @@
         }
       }
     },
-    "Dostępna jest nowa wersja: %@\nZalecana aktualizacja!" : {
-      "comment" : "New version available notification with recommended update",
+    "Dostępna jest nowa wersja: %@. Zalecamy aktualizację!" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eine neue Version ist verfügbar: %@\nAktualisierung empfohlen!"
+            "value" : "Eine neue Version ist verfügbar: %@. Wir empfehlen ein Update!"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A new version is available: %@\nUpdate recommended!"
+            "value" : "A new version is available: %@. We recommend updating!"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hay una nueva versión disponible: %@\n¡Se recomienda actualizar!"
+            "value" : "Hay una nueva versión disponible: %@. ¡Recomendamos actualizar!"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Une nouvelle version est disponible : %@\nMise à jour recommandée !"
+            "value" : "Une nouvelle version est disponible : %@. Nous vous recommandons de mettre à jour !"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "新しいバージョンが利用可能です：%@\nアップデートを推奨します！"
+            "value" : "新しいバージョンが利用可能です: %@。アップデートをお勧めします！"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uma nova versão está disponível: %@\nAtualização recomendada!"
+            "value" : "Uma nova versão está disponível: %@. Recomendamos a atualização!"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Доступна новая версия: %@\nРекомендуется обновление!"
+            "value" : "Доступна новая версия: %@. Рекомендуем обновить!"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "发现新版本：%@\n建议更新！"
+            "value" : "有新版本可用：%@。建议更新！"
           }
         }
       }
     },
-    "Działanie przerwane przez użytkownika (zamknięto okno Terminala). Aby zacząć od początku, ponownie uruchom aplikację." : {
+    "Działanie przerwane przez użytkownika. Możesz zacząć od początku." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vorgang vom Benutzer abgebrochen (Terminalfenster geschlossen). Starten Sie die Anwendung neu, um von vorne zu beginnen."
+            "value" : "Vorgang vom Benutzer abgebrochen. Sie können von vorne beginnen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Operation interrupted by user (Terminal window closed). To start over, restart the application."
+            "value" : "Operation interrupted by user. You can start over."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Operación interrumpida por el usuario (ventana de Terminal cerrada). Para empezar de nuevo, reinicie la aplicación."
+            "value" : "Operación interrumpida por el usuario. Puedes empezar de nuevo."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Opération interrompue par l'utilisateur (fenêtre Terminal fermée). Pour recommencer, redémarrez l'application."
+            "value" : "Opération interrompue par l'utilisateur. Vous pouvez recommencer."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ユーザーによって操作が中断されました（ターミナルウィンドウが閉じられました）。最初からやり直すには、アプリケーションを再起動してください。"
+            "value" : "ユーザーによって操作が中断されました。最初からやり直せます。"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Operação interrompida pelo usuário (janela do Terminal fechada). Para recomeçar, reinicie o aplicativo."
+            "value" : "Operação interrompida pelo usuário. Você pode recomeçar."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Действие прервано пользователем (окно Терминала закрыто). Чтобы начать сначала, перезапустите приложение."
+            "value" : "Операция прервана пользователем. Вы можете начать сначала."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "操作被用户中断（终端窗口已关闭）。要重新开始，请重启应用程序。"
+            "value" : "操作被用户中断。您可以重新开始。"
           }
         }
       }
@@ -2220,10 +2658,108 @@
       }
     },
     "ETAP 1/2 - FORMATOWANIE DYSKU USB" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SCHRITT 1/2 - USB-LAUFWERK FORMATIEREN"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "STEP 1/2 - FORMATTING USB DRIVE"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PASO 1/2 - FORMATEANDO MEMORIA USB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ÉTAPE 1/2 - FORMATAGE DE LA CLÉ USB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ステップ 1/2 - USBドライブをフォーマット中"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ETAPA 1/2 - FORMATANDO PEN DRIVE"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ЭТАП 1/2 - ФОРМАТИРОВАНИЕ USB-НАКОПИТЕЛЯ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "步骤 1/2 - 格式化 U 盘"
+          }
+        }
+      }
     },
     "ETAP 2/2 - TWORZENIE USB" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SCHRITT 2/2 - USB ERSTELLEN"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "STEP 2/2 - CREATING USB"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PASO 2/2 - CREANDO USB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ÉTAPE 2/2 - CRÉATION USB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ステップ 2/2 - USB作成中"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ETAPA 2/2 - CRIANDO USB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ЭТАП 2/2 - СОЗДАНИЕ USB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "步骤 2/2 - 创建 USB"
+          }
+        }
+      }
     },
     "ETAP: Czyszczenie dysku USB" : {
       "localizations" : {
@@ -2641,8 +3177,57 @@
         }
       }
     },
-    "Intel:" : {
-
+    "Instrukcja bootowania z dysku USB (GitHub)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anleitung zum Booten von USB (GitHub)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "USB boot instructions (GitHub)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instrucciones para arrancar desde USB (GitHub)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instructions de démarrage depuis USB (GitHub)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "USB からの起動手順（GitHub）"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instruções para inicializar pelo USB (GitHub)"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Инструкция по загрузке с USB (GitHub)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从 USB 启动说明（GitHub）"
+          }
+        }
+      }
     },
     "Kontynuuj" : {
       "localizations" : {
@@ -2800,6 +3385,58 @@
         }
       }
     },
+    "Korzystasz z najnowszej dostępnej wersji aplikacji" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie verwenden die neueste verfügbare Version der Anwendung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You are using the latest available version of the application"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estás usando la última versión disponible de la aplicación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous utilisez la dernière version disponible de l'application"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最新バージョンのアプリケーションを使用しています"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você está usando a versão mais recente disponível do aplicativo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы используете последнюю доступную версию приложения"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您正在使用该应用程序的最新可用版本"
+          }
+        }
+      }
+    },
     "Kreator instalatora macOS" : {
       "localizations" : {
         "de" : {
@@ -2848,6 +3485,58 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macOS 安装程序创建器"
+          }
+        }
+      }
+    },
+    "Mac OS X Tiger 10.4 (Multi DVD)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac OS X Tiger 10.4 (Multi DVD)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac OS X Tiger 10.4 (Multi DVD)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac OS X Tiger 10.4 (Multi DVD)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac OS X Tiger 10.4 (Multi DVD)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac OS X Tiger 10.4 (Multi DVD)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac OS X Tiger 10.4 (Multi DVD)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac OS X Tiger 10.4 (Multi DVD)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac OS X Tiger 10.4 (Multi DVD)"
           }
         }
       }
@@ -3112,58 +3801,6 @@
         }
       }
     },
-    "Naciśnij poniższy przycisk, gdy Terminal zakończy pracę" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Drücken Sie die Taste unten, wenn das Terminal fertig ist"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Press the button below when Terminal finishes work"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Presione el botón de abajo cuando la Terminal termine"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Appuyez sur le bouton ci-dessous lorsque le Terminal a terminé"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ターミナルの処理が完了したら下のボタンを押してください"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pressione o botão abaixo quando o Terminal terminar"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Нажмите кнопку ниже, когда Терминал завершит работу"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "终端工作完成后按下面的按钮"
-          }
-        }
-      }
-    },
     "Nie" : {
       "localizations" : {
         "de" : {
@@ -3424,6 +4061,58 @@
         }
       }
     },
+    "Niepowodzenie!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehlgeschlagen!"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failure!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Fallo!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec !"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "失敗！"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falha!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сбой!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "失败！"
+          }
+        }
+      }
+    },
     "Oczekiwanie na hasło administratora..." : {
       "localizations" : {
         "de" : {
@@ -3476,111 +4165,54 @@
         }
       }
     },
-    "Oczekiwanie na plik .dmg lub .app..." : {
-      "extractionState" : "stale",
+    "Oczekiwanie na plik .dmg, .iso, .cdr lub .app..." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Warten auf .dmg- oder .app-Datei..."
+            "value" : "Warte auf .dmg, .iso, .cdr oder .app Datei..."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Waiting for .dmg or .app file..."
+            "value" : "Waiting for .dmg, .iso, .cdr, or .app file..."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esperando archivo .dmg o .app..."
+            "value" : "Esperando archivo .dmg, .iso, .cdr o .app..."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En attente du fichier .dmg ou .app..."
+            "value" : "En attente d'un fichier .dmg, .iso, .cdr ou .app..."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ".dmgまたは.appファイルを待機中..."
+            "value" : ".dmg, .iso, .cdr または .app ファイルを待機中..."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aguardando arquivo .dmg ou .app..."
+            "value" : "Aguardando arquivo .dmg, .iso, .cdr ou .app..."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ожидание файла .dmg или .app..."
+            "value" : "Ожидание файла .dmg, .iso, .cdr или .app..."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "等待 .dmg 或 .app 文件..."
-          }
-        }
-      }
-    },
-    "Oczekiwanie na plik .dmg, .iso lub .app..." : {
-
-    },
-    "Oczekiwanie na wybór docelowego dysku USB..." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Warten auf Auswahl des USB-Ziellaufwerks..."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Waiting for USB drive selection..."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esperando la selección de la memoria USB de destino..."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En attente de la sélection de la clé USB..."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "対象のUSBメモリの選択を待機中..."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aguardando a seleção do pen drive de destino..."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ожидание выбора целевого USB-накопителя..."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "等待选择目标 U 盘..."
+            "value" : "等待 .dmg, .iso, .cdr 或 .app 文件..."
           }
         }
       }
@@ -3949,6 +4581,58 @@
         }
       }
     },
+    "Pomiń analizowanie pliku" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateianalyse überspringen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skip file analysis"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omitir análisis de archivo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignorer l'analyse du fichier"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイル分析をスキップ"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pular análise de arquivo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пропустить анализ файла"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跳过文件分析"
+          }
+        }
+      }
+    },
     "Pomyślnie wykryto system" : {
       "localizations" : {
         "de" : {
@@ -4105,9 +4789,6 @@
         }
       }
     },
-    "PowerPC:" : {
-
-    },
     "Proces może potrwać kilka minut." : {
       "localizations" : {
         "de" : {
@@ -4260,6 +4941,110 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "进程正在进行..."
+          }
+        }
+      }
+    },
+    "Proszę czekać" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte warten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please wait"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor espere"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veuillez patienter"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お待ちください"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor, aguarde"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пожалуйста, подождите"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请稍候"
+          }
+        }
+      }
+    },
+    "Proszę czekać..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte warten..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please wait..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor espere..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veuillez patienter..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お待ちください..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor, aguarde..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пожалуйста, подождите..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请稍候..."
           }
         }
       }
@@ -4524,6 +5309,58 @@
         }
       }
     },
+    "Przerywanie działania" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorgang wird abgebrochen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aborting operation"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abortando operación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interruption de l'opération"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作を中止しています"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abortando operação"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прерывание операции"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在中止操作"
+          }
+        }
+      }
+    },
     "Przygotowanie plików" : {
       "localizations" : {
         "de" : {
@@ -4572,6 +5409,58 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在准备文件"
+          }
+        }
+      }
+    },
+    "Repozytorium na GitHubie" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub-Repository"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub Repository"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repositorio en GitHub"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dépôt GitHub"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHubリポジトリ"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repositório no GitHub"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Репозиторий на GitHub"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub 仓库"
           }
         }
       }
@@ -4732,6 +5621,58 @@
         }
       }
     },
+    "Sprawdź dostępność aktualizacji" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach Updates suchen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check for updates"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar actualizaciones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher des mises à jour"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アップデートを確認"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verificar atualizações"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверить наличие обновлений"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查更新"
+          }
+        }
+      }
+    },
     "Sprawdź powyższe komunikaty błędów." : {
       "localizations" : {
         "de" : {
@@ -4780,6 +5721,58 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "请检查上面的错误消息。"
+          }
+        }
+      }
+    },
+    "Spróbuj ponownie od początku" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versuchen Sie es von vorne erneut"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again from the beginning"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inténtalo de nuevo desde el principio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réessayez depuis le début"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最初からやり直してください"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tente novamente desde o início"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Попробуйте еще раз с самого начала"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从头再试一次"
           }
         }
       }
@@ -4887,9 +5880,6 @@
           }
         }
       }
-    },
-    "Szczegółowa instrukcja dostępna tutaj" : {
-
     },
     "Szukanie pliku obrazu..." : {
       "localizations" : {
@@ -5100,61 +6090,57 @@
         }
       }
     },
-    "Trwa analizowanie pliku .dmg, proszę czekać" : {
-      "extractionState" : "stale",
+    "Trwa analizowanie pliku, proszę czekać" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ".dmg-Datei wird analysiert, bitte warten"
+            "value" : "Datei wird analysiert, bitte warten"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Analyzing .dmg file, please wait"
+            "value" : "Analyzing file, please wait"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Analizando archivo .dmg, por favor espere"
+            "value" : "Analizando archivo, por favor espere"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Analyse du fichier .dmg en cours, veuillez patienter"
+            "value" : "Analyse du fichier en cours, veuillez patienter"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ".dmgファイルを分析中です。お待ちください"
+            "value" : "ファイルを分析中、お待ちください"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Analisando arquivo .dmg, aguarde"
+            "value" : "Analisando arquivo, aguarde"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Анализ файла .dmg, пожалуйста, подождите"
+            "value" : "Анализ файла, пожалуйста, подождите"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "正在分析 .dmg 文件，请稍候"
+            "value" : "正在分析文件，请稍候"
           }
         }
       }
-    },
-    "Trwa analizowanie pliku, proszę czekać" : {
-
     },
     "Trwa kopiowanie plików, proszę czekać." : {
       "localizations" : {
@@ -5256,6 +6242,110 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "创建可引导的 macOS 和 OS X U 盘\n从未如此简单！"
+          }
+        }
+      }
+    },
+    "Tworzenie instalatora nie powiodło się" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstellung des Installers fehlgeschlagen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installer creation failed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error al crear el instalador"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La création de l'installateur a échoué"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "インストーラの作成に失敗しました"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falha na criação do instalador"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось создать установщик"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装程序创建失败"
+          }
+        }
+      }
+    },
+    "Tworzenie USB z Mac OS X Tiger (Multi DVD)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac OS X Tiger (Multi DVD) USB erstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating Mac OS X Tiger (Multi DVD) USB"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creando USB de Mac OS X Tiger (Multi DVD)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Création de la clé USB Mac OS X Tiger (Multi DVD)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac OS X Tiger (Multi DVD) USBを作成中"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Criando USB do Mac OS X Tiger (Multi DVD)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создание USB с Mac OS X Tiger (Multi DVD)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在创建 Mac OS X Tiger (Multi DVD) USB"
           }
         }
       }
@@ -5520,6 +6610,58 @@
         }
       }
     },
+    "W przypadku Maca z PowerPC": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Für PowerPC-Macs"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For PowerPC Macs"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para Macs PowerPC"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pour les Mac PowerPC"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PowerPC Mac の場合"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para Macs PowerPC"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для Mac с PowerPC"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "对于 PowerPC Mac"
+          }
+        }
+      }
+    },
     "WERSJA SYSTEMU:" : {
       "localizations" : {
         "de" : {
@@ -5677,7 +6819,56 @@
       }
     },
     "Wolumin zostanie nazwany PPC (APM + HFS+)." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Volume wird PPC (APM + HFS+) genannt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The volume will be named PPC (APM + HFS+)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El volumen se llamará PPC (APM + HFS+)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le volume sera nommé PPC (APM + HFS+)."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ボリューム名はPPC (APM + HFS+) になります。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O volume será nomeado PPC (APM + HFS+)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Том будет назван PPC (APM + HFS+)."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卷将被命名为 PPC (APM + HFS+)。"
+          }
+        }
+      }
     },
     "Wpisz hasło i naciśnij Enter (hasła nie widać)." : {
       "localizations" : {
@@ -5992,57 +7183,53 @@
       }
     },
     "Wybierz plik" : {
-
-    },
-    "Wybierz plik .dmg lub .app" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wählen Sie eine .dmg- oder .app-Datei"
+            "value" : "Datei auswählen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Select a .dmg or .app file"
+            "value" : "Select file"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seleccione un archivo .dmg o .app"
+            "value" : "Seleccionar archivo"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sélectionnez un fichier .dmg ou .app"
+            "value" : "Sélectionner un fichier"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ".dmgまたは.appファイルを選択"
+            "value" : "ファイルを選択"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Selecione um arquivo .dmg ou .app"
+            "value" : "Selecionar arquivo"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Выберите файл .dmg или .app"
+            "value" : "Выбрать файл"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "选择 .dmg 或 .app 文件"
+            "value" : "选择文件"
           }
         }
       }
@@ -6724,6 +7911,58 @@
         }
       }
     },
+    "Zacznij od początku" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von vorne beginnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start over"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empezar de nuevo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recommencer"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最初からやり直す"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recomeçar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начать сначала"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新开始"
+          }
+        }
+      }
+    },
     "Zakończ" : {
       "localizations" : {
         "de" : {
@@ -6932,6 +8171,58 @@
         }
       }
     },
+    "Zamknij" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerrar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermer"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "閉じる"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fechar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрыть"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭"
+          }
+        }
+      }
+    },
     "Zmień język" : {
       "localizations" : {
         "de" : {
@@ -6985,7 +8276,56 @@
       }
     },
     "ŹRÓDŁO:" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QUELLE:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SOURCE:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FUENTE:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SOURCE :"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ソース:"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FONTE:"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ИСТОЧНИК:"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "来源:"
+          }
+        }
+      }
     },
     "Русский 🇷🇺" : {
       "localizations" : {

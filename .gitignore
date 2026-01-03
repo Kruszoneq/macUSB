@@ -17,12 +17,12 @@
 # Temp
 macUSB_temp/
 
-# Systemowe pliki macOS (ikony folderów itp.)
+# System
 .AppleDouble
 .LSOverride
 ._*
 
-# Skompilowane aplikacje (nie wrzucamy ich do kodu źródłowego!)
+# Files
 *.app
 *.ipa
 *.dSYM
