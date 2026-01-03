@@ -92,7 +92,7 @@ The table lists systems supported by the application that are successfully recog
 | **Mac OS X Tiger**[^2] | 10.4 | ✅ |
 
 [^1]: Only version **10.12.6** is supported.
-[^2]: Automatic detection supports only the **Single DVD** edition. Multi-disc editions might be unrecognized or misidentified (e.g., as "Read Before You Install"). In such cases, please use **File** → **“Skip file analysis”** → **“Mac OS X Tiger 10.4 (Multi DVD)”** or press the keyboard shortcut **Command (⌘)** + **Option (⌥)** + **T**. <br>💡 **Installation Tip:** When the installer requests the second disc (Disc 2), simply unplug the USB drive containing Disc 1 and insert the USB drive containing Disc 2. The **installer on the target Mac** will automatically detect the new volume and continue the installation.
+[^2]: Automatic detection supports only the **Single DVD** edition. Multi-disc editions might be unrecognized or misidentified (e.g., as "Read Before You Install"). In such cases, please use **File** → **“Skip file analysis”** → **“Mac OS X Tiger 10.4 (Multi DVD)”** or press the keyboard shortcut **Command (⌘)** + **Option (⌥)** + **T**. <br>**Installation Tip:** When the installer requests the second disc (Disc 2), simply unplug the USB drive containing Disc 1 and insert the USB drive containing Disc 2. The **installer on the target Mac** will automatically detect the new volume and continue the installation.
 
 ---
  
