@@ -59,7 +59,7 @@ The application is an open-source project and does not possess a paid Apple Deve
 * **Recommendation:** USB 3.0 or newer is highly recommended for faster installation times.
 
 ### Installation Files:
-The program supports **`.dmg`** and **`.iso`** disk images, as well as raw **`.app`** installer files.
+The program supports **`.dmg`**, **`.cdr`** and **`.iso`** disk images, as well as raw **`.app`** installer files.
 
 > **💡 Pro Tip:** The best way to obtain valid files is the free application **[MIST by ninxsoft](https://github.com/ninxsoft/Mist)**. Simply select the system version you are interested in. This guarantees the correct file structure/source.
 
