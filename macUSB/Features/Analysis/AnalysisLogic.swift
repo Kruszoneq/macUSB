@@ -42,6 +42,9 @@ final class AnalysisLogic: ObservableObject {
 
     @Published var isCapacitySufficient: Bool = false
     @Published var capacityCheckFinished: Bool = false
+    
+    // Setting: Allow big USB drives
+    @Published var showLargeExternalDrives: Bool = true
 
     // Computed: true only when app has recognized a supported system and can proceed normally
     var isRecognizedAndSupported: Bool {
@@ -603,7 +606,7 @@ final class AnalysisLogic: ObservableObject {
 
     func refreshDrives() {
         let currentSelectedURL = selectedDrive?.url
-        let foundDrives = USBDriveLogic.enumerateAvailableDrives()
+        let foundDrives = USBDriveLogic.enumerateAvailableDrives(includeLargeDrives: showLargeExternalDrives)
         self.availableDrives = foundDrives
         if let currentURL = currentSelectedURL {
             if let stillConnectedDrive = foundDrives.first(where: { $0.url == currentURL }) {

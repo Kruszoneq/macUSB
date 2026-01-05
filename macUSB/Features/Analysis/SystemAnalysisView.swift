@@ -311,6 +311,20 @@ struct SystemAnalysisView: View {
             
             VStack(alignment: .leading, spacing: 10) {
                 Text("Wybierz docelowy dysk USB:").font(.subheadline)
+                
+                HStack {
+                    Toggle(isOn: $logic.showLargeExternalDrives) {
+                        Text(String(localized: "Pokaż duże dyski zewnętrzne")).font(.caption)
+                    }
+                    .toggleStyle(.switch)
+                    .controlSize(.small)
+                    .onChange(of: logic.showLargeExternalDrives) { _ in
+                        logic.refreshDrives()
+                    }
+                    Spacer()
+                }
+                .padding(.vertical, 4)
+                
                 if logic.availableDrives.isEmpty {
                     HStack {
                         Image(systemName: "externaldrive.badge.xmark").font(.title2).foregroundColor(.red).frame(width: 32)
