@@ -1148,54 +1148,54 @@
         }
       }
     },
-    "Aby uruchomić instalator z dysku USB na Macu z PowerPC, niezbędne jest wpisanie komendy w konsoli Open Firmware. Pełna instrukcja obsługi znajduje się w repozytorium macUSB.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Um das Installationsprogramm von einem USB-Laufwerk auf einem PowerPC-Mac zu starten, müssen Sie einen Befehl in der Open-Firmware-Konsole eingeben. Eine vollständige Anleitung finden Sie im macUSB-Repository."
+    "Aby uruchomić instalator z dysku USB na Macu z PowerPC, niezbędne jest wpisanie komendy w konsoli Open Firmware. Pełna instrukcja obsługi znajduje się w repozytorium macUSB." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um das Installationsprogramm von einem USB-Laufwerk auf einem PowerPC-Mac zu starten, müssen Sie einen Befehl in der Open-Firmware-Konsole eingeben. Eine vollständige Anleitung finden Sie im macUSB-Repository."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "To boot the installer from a USB drive on a PowerPC Mac, you must enter a command in the Open Firmware console. Full instructions are available in the macUSB repository."
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To boot the installer from a USB drive on a PowerPC Mac, you must enter a command in the Open Firmware console. Full instructions are available in the macUSB repository."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Para arrancar el instalador desde una unidad USB en un Mac PowerPC, es necesario introducir un comando en la consola de Open Firmware. Las instrucciones completas están en el repositorio macUSB."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para arrancar el instalador desde una unidad USB en un Mac PowerPC, es necesario introducir un comando en la consola de Open Firmware. Las instrucciones completas están en el repositorio macUSB."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pour démarrer l’installateur depuis une clé USB sur un Mac PowerPC, vous devez saisir une commande dans la console Open Firmware. La notice complète se trouve dans le dépôt macUSB."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour démarrer l’installateur depuis une clé USB sur un Mac PowerPC, vous devez saisir une commande dans la console Open Firmware. La notice complète se trouve dans le dépôt macUSB."
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PowerPC Mac で USB ドライブからインストーラを起動するには、Open Firmware コンソールでコマンドを入力する必要があります。詳細な手順は macUSB リポジトリにあります。"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PowerPC Mac で USB ドライブからインストーラを起動するには、Open Firmware コンソールでコマンドを入力する必要があります。詳細な手順は macUSB リポジトリにあります。"
           }
         },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Para iniciar o instalador a partir de uma unidade USB em um Mac PowerPC, é necessário digitar um comando no console Open Firmware. As instruções completas estão no repositório macUSB."
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para iniciar o instalador a partir de uma unidade USB em um Mac PowerPC, é necessário digitar um comando no console Open Firmware. As instruções completas estão no repositório macUSB."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Чтобы запустить установщик с USB-накопителя на Mac с PowerPC, нужно ввести команду в консоли Open Firmware. Полная инструкция находится в репозитории macUSB."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чтобы запустить установщик с USB-накопителя на Mac с PowerPC, нужно ввести команду в консоли Open Firmware. Полная инструкция находится в репозитории macUSB."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "要在 PowerPC Mac 上从 USB 启动安装器，需要在 Open Firmware 控制台中输入一条命令。完整说明可在 macUSB 仓库中找到。"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要在 PowerPC Mac 上从 USB 启动安装器，需要在 Open Firmware 控制台中输入一条命令。完整说明可在 macUSB 仓库中找到。"
           }
         }
       }
@@ -2813,6 +2813,110 @@
         }
       }
     },
+    "ETAP: Przywracanie obrazu na USB" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "SCHRITT: Image auf USB wiederherstellen"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "STEP: Restoring image to USB"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "PASO: Restaurando imagen en USB"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "ÉTAPE : Restauration de l'image sur USB"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "ステップ: イメージをUSBに復元中"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "ETAPA: Restaurando imagem no USB"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "ЭТАП: Восстановление образа на USB"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "步骤：正在将镜像恢复到 USB"
+              }
+            }
+          }
+        },
+    "ETAP: Skanowanie obrazu" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "SCHRITT: Image scannen"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "STEP: Scanning image"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "PASO: Escaneando imagen"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "ÉTAPE : Analyse de l'image"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "ステップ: イメージをスキャン中"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "ETAPA: Escaneando imagem"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "ЭТАП: Сканирование образа"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "步骤：正在扫描镜像"
+              }
+            }
+          }
+        },
     "ETAP: Wgrywanie instalatora na dysk USB" : {
       "localizations" : {
         "de" : {
@@ -3177,54 +3281,54 @@
         }
       }
     },
-    "Instrukcja bootowania z dysku USB (GitHub)": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Anleitung zum Booten von USB (GitHub)"
+    "Instrukcja bootowania z dysku USB (GitHub)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anleitung zum Booten von USB (GitHub)"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "USB boot instructions (GitHub)"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB boot instructions (GitHub)"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Instrucciones para arrancar desde USB (GitHub)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instrucciones para arrancar desde USB (GitHub)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Instructions de démarrage depuis USB (GitHub)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instructions de démarrage depuis USB (GitHub)"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "USB からの起動手順（GitHub）"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB からの起動手順（GitHub）"
           }
         },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Instruções para inicializar pelo USB (GitHub)"
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instruções para inicializar pelo USB (GitHub)"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Инструкция по загрузке с USB (GitHub)"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Инструкция по загрузке с USB (GitHub)"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "从 USB 启动说明（GitHub）"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从 USB 启动说明（GitHub）"
           }
         }
       }
@@ -3385,6 +3489,58 @@
         }
       }
     },
+    "Kopiowanie pliku obrazu..." : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Abbilddatei wird kopiert..."
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Copying image file..."
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Copiando archivo de imagen..."
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Copie du fichier image..."
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "イメージファイルをコピー中..."
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Copiando arquivo de imagem..."
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Копирование файла образа..."
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "正在复制镜像文件..."
+              }
+            }
+          }
+        },
     "Korzystasz z najnowszej dostępnej wersji aplikacji" : {
       "localizations" : {
         "de" : {
@@ -4061,6 +4217,58 @@
         }
       }
     },
+    "Nie znaleziono pliku obrazu." : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Abbilddatei nicht gefunden."
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Image file not found."
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "No se encontró el archivo de imagen."
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Fichier image introuvable."
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "イメージファイルが見つかりません。"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Arquivo de imagem não encontrado."
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Файл образа не найден."
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "未找到镜像文件。"
+              }
+            }
+          }
+        },
     "Niepowodzenie!" : {
       "localizations" : {
         "de" : {
@@ -4321,6 +4529,110 @@
         }
       }
     },
+    "OK" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "OK"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "OK"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Aceptar"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "OK"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "OK"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "OK"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "OK"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "确定"
+              }
+            }
+          }
+        },
+    "Opcje" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Optionen"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Options"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Opciones"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Options"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "オプション"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Opções"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Опции"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "选项"
+              }
+            }
+          }
+        },
     "Operacja została anulowana przez użytkownika." : {
       "localizations" : {
         "de" : {
@@ -5933,6 +6245,58 @@
         }
       }
     },
+    "Ta funkcja umożliwia tworzenie instalatora na zewnętrznych dyskach twardych i SSD. Zachowaj szczególną ostrożność przy wyborze dysku docelowego z listy, aby uniknąć przypadkowej utraty danych!" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Diese Funktion ermöglicht das Erstellen des Installers auf externen Festplatten und SSDs. Seien Sie bei der Auswahl des Ziellaufwerks besonders vorsichtig, um Datenverlust zu vermeiden!"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "This feature allows creating the installer on external hard drives and SSDs. Please verify the selected target drive carefully to avoid accidental data loss!"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Esta función permite crear el instalador en discos duros externos y SSD. ¡Tenga mucho cuidado al seleccionar el disco de destino para evitar la pérdida accidental de datos!"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Cette fonctionnalité permet de créer l'installateur sur des disques durs externes et SSD. Soyez particulièrement prudent lors du choix du disque cible pour éviter toute perte de données accidentelle !"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "この機能を使用すると、外付けハードドライブやSSDにインストーラを作成できます。データの誤消去を防ぐため、ターゲットドライブを選択する際は十分注意してください！"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Este recurso permite criar o instalador em discos rígidos externos e SSDs. Tenha muito cuidado ao selecionar o disco de destino para evitar a perda acidental de dados!"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Эта функция позволяет создавать установщик на внешних жестких дисках и SSD. Будьте особенно осторожны при выборе целевого диска, чтобы избежать случайной потери данных!"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "此功能允许在外部硬盘和 SSD 上创建安装程序。选择目标驱动器时请格外小心，以避免意外丢失数据！"
+              }
+            }
+          }
+        },
     "Ta wersja systemu macOS Sierra nie jest wspierana przez aplikację. Potrzebna jest nowsza wersja instalatora." : {
       "comment" : "Unsupported Sierra (not 12.6.06) message",
       "localizations" : {
@@ -6610,54 +6974,54 @@
         }
       }
     },
-    "W przypadku Maca z PowerPC": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Für PowerPC-Macs"
+    "W przypadku Maca z PowerPC" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für PowerPC-Macs"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "For PowerPC Macs"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For PowerPC Macs"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Para Macs PowerPC"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para Macs PowerPC"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pour les Mac PowerPC"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour les Mac PowerPC"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PowerPC Mac の場合"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PowerPC Mac の場合"
           }
         },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Para Macs PowerPC"
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para Macs PowerPC"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Для Mac с PowerPC"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для Mac с PowerPC"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "对于 PowerPC Mac"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "对于 PowerPC Mac"
           }
         }
       }
@@ -6818,6 +7182,58 @@
         }
       }
     },
+    "Włącz obsługę dysków zewnętrznych" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Unterstützung für externe Laufwerke aktivieren"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Enable external drive support"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Activar soporte para discos externos"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Activer la prise en charge des disques externes"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "外付けドライブのサポートを有効にする"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Ativar suporte a discos externos"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Включить поддержку внешних дисков"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "启用外部驱动器支持"
+              }
+            }
+          }
+        },
     "Wolumin zostanie nazwany PPC (APM + HFS+)." : {
       "localizations" : {
         "de" : {

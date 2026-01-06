@@ -8,6 +8,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSWindow.allowsAutomaticWindowTabbing = false
+        
+        // Ensure external drives support is disabled by default on launch
+        UserDefaults.standard.set(false, forKey: "AllowExternalDrives")
+        UserDefaults.standard.synchronize()
+        // Update MenuState to reflect the default state in UI
+        MenuState.shared.externalDrivesEnabled = false
+    }
+    
+    func applicationWillTerminate(_ notification: Notification) {
+        // Reset external drives support on app termination
+        UserDefaults.standard.set(false, forKey: "AllowExternalDrives")
+        UserDefaults.standard.synchronize()
+        // Reflect the state in MenuState for consistency
+        MenuState.shared.externalDrivesEnabled = false
     }
 }
 
@@ -74,7 +88,8 @@ struct macUSBApp: App {
         .windowResizability(.contentSize)
         .commands {
             CommandGroup(replacing: .newItem) { }
-            CommandGroup(before: .newItem) {
+            
+            CommandMenu(String(localized: "Opcje")) {
                 Menu(String(localized: "Pomiń analizowanie pliku")) {
                     Button(String(localized: "Mac OS X Tiger 10.4 (Multi DVD)")) {
                         let alert = NSAlert()
@@ -99,6 +114,22 @@ struct macUSBApp: App {
                     }
                     .keyboardShortcut("t", modifiers: [.option, .command])
                     .disabled(!menuState.skipAnalysisEnabled)
+                }
+                Divider()
+                Button(String(localized: "Włącz obsługę dysków zewnętrznych")) {
+                    let alert = NSAlert()
+                    alert.alertStyle = .informational
+                    alert.icon = NSApp.applicationIconImage
+                    alert.messageText = String(localized: "Włącz obsługę dysków zewnętrznych")
+                    alert.informativeText = String(localized: "Ta funkcja umożliwia tworzenie instalatora na zewnętrznych dyskach twardych i SSD. Zachowaj szczególną ostrożność przy wyborze dysku docelowego z listy, aby uniknąć przypadkowej utraty danych!")
+                    alert.addButton(withTitle: String(localized: "OK"))
+
+                    if let window = NSApp.keyWindow ?? NSApp.mainWindow {
+                        alert.beginSheetModal(for: window) { _ in menuState.enableExternalDrives() }
+                    } else {
+                        _ = alert.runModal()
+                        menuState.enableExternalDrives()
+                    }
                 }
             }
             CommandGroup(replacing: .windowList) { }

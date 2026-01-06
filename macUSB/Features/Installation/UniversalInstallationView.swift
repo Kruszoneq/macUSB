@@ -6,6 +6,7 @@ struct UniversalInstallationView: View {
     let targetDrive: USBDrive?
     let targetDriveDisplayName: String?
     let systemName: String
+    let originalImageURL: URL?
     
     // Flagi
     let needsCodesign: Bool
@@ -14,6 +15,7 @@ struct UniversalInstallationView: View {
     // Flaga Catalina
     let isCatalina: Bool
     let isSierra: Bool
+    let isMavericks: Bool
     let isPPC: Bool
     
     @Binding var rootIsActive: Bool

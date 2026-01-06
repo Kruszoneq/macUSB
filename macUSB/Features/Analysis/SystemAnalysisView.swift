@@ -21,7 +21,7 @@ struct SystemAnalysisView: View {
         // Hide/disable when the selected system is supported (including PPC flow) or analysis not finished.
         let analysisFinished = !logic.isAnalyzing
         let hasAnySelection = !logic.selectedFilePath.isEmpty || logic.selectedFileUrl != nil
-        let isValidSelection = (logic.sourceAppURL != nil) || logic.isPPC
+        let isValidSelection = (logic.sourceAppURL != nil) || logic.isPPC || logic.isMavericks
 
         let unrecognizedBlocking = (!logic.isSystemDetected
                                     && !logic.recognizedVersion.isEmpty
@@ -186,11 +186,13 @@ struct SystemAnalysisView: View {
                         targetDrive: logic.selectedDrive,
                         targetDriveDisplayName: selectedDriveDisplayNameSnapshot,
                         systemName: logic.recognizedVersion,
+                        originalImageURL: logic.selectedFileUrl,
                         needsCodesign: logic.needsCodesign,
                         isLegacySystem: logic.isLegacyDetected,
                         isRestoreLegacy: logic.isRestoreLegacy,
                         isCatalina: logic.isCatalina,
                         isSierra: logic.isSierra,
+                        isMavericks: logic.isMavericks,
                         isPPC: logic.isPPC,
                         rootIsActive: $navigateToInstall,
                         isTabLocked: $isTabLocked
@@ -241,8 +243,8 @@ struct SystemAnalysisView: View {
                         Spacer().frame(height: 12)
                         usbSelectionSection
                             .id("usbSection")
-                            .disabled(!(((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC)))
-                            .opacity((((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC)) ? 1.0 : 0.5)
+                            .disabled(!(((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC || logic.isMavericks)))
+                            .opacity((((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC || logic.isMavericks)) ? 1.0 : 0.5)
                     }
                     .padding()
                 }
@@ -260,8 +262,8 @@ struct SystemAnalysisView: View {
                             .frame(maxWidth: .infinity).padding(8)
                     }
                     .buttonStyle(.borderedProminent).controlSize(.large).tint(Color.accentColor)
-                    .disabled(!(((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC) && logic.selectedDrive != nil && logic.capacityCheckFinished && logic.isCapacitySufficient))
-                    .opacity((((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC) && logic.selectedDrive != nil && logic.capacityCheckFinished && logic.isCapacitySufficient) ? 1.0 : 0.5)
+                    .disabled(!(((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC || logic.isMavericks) && logic.selectedDrive != nil && logic.capacityCheckFinished && logic.isCapacitySufficient))
+                    .opacity((((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC || logic.isMavericks) && logic.selectedDrive != nil && logic.capacityCheckFinished && logic.isCapacitySufficient) ? 1.0 : 0.5)
                 }
                 .padding().background(Color(NSColor.windowBackgroundColor))
             }

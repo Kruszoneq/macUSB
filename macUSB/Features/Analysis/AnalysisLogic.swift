@@ -24,6 +24,7 @@ final class AnalysisLogic: ObservableObject {
     // NOWOŚĆ: Flaga dla Cataliny
     @Published var isCatalina: Bool = false
     @Published var isSierra: Bool = false
+    @Published var isMavericks: Bool = false
     @Published var isUnsupportedSierra: Bool = false
     @Published var isPPC: Bool = false
     @Published var legacyArchInfo: String? = nil
@@ -54,6 +55,34 @@ final class AnalysisLogic: ObservableObject {
         return recognized && hasValidSourceOrPPC && detected && !unsupported
     }
     
+    // MARK: - Helper to enumerate external hard drives (non-removable)
+    private func enumerateExternalUSBHardDrives() -> [USBDrive] {
+        let keys: [URLResourceKey] = [
+            .volumeNameKey,
+            .volumeIsRemovableKey,
+            .volumeIsInternalKey,
+            .volumeTotalCapacityKey
+        ]
+        guard let urls = FileManager.default.mountedVolumeURLs(includingResourceValuesForKeys: keys, options: .skipHiddenVolumes) else { return [] }
+
+        let candidates: [USBDrive] = urls.compactMap { url -> USBDrive? in
+            guard let v = try? url.resourceValues(forKeys: Set(keys)) else { return nil }
+            // Only external (non-internal), non-network, non-removable volumes (HDD/SSD)
+            if (v.volumeIsInternal ?? true) { return nil }
+            // Filter out obvious network-mounted volumes by scheme (e.g., afp, smb, nfs)
+            let scheme = url.scheme?.lowercased()
+            if let scheme = scheme, ["afp", "smb", "nfs", "ftp", "webdav"].contains(scheme) { return nil }
+            if (v.volumeIsRemovable ?? false) { return nil }
+            guard let name = v.volumeName else { return nil }
+            let bsd = USBDriveLogic.getBSDName(from: url)
+            guard !bsd.isEmpty && bsd != "unknown" else { return nil }
+            let totalCapacity = Int64(v.volumeTotalCapacity ?? 0)
+            let size = ByteCountFormatter.string(fromByteCount: totalCapacity, countStyle: .file)
+            return USBDrive(name: name, device: bsd, size: size, url: url)
+        }
+        return candidates
+    }
+
     // MARK: - Logging
     private func log(_ message: String) {
         let formatter = DateFormatter()
@@ -103,6 +132,7 @@ final class AnalysisLogic: ObservableObject {
                     self.showUSBSection = false
                     self.showUnsupportedMessage = false
                     self.isSierra = false
+                    self.isMavericks = false
                     self.isUnsupportedSierra = false
                     self.isPPC = false
                     self.legacyArchInfo = nil
@@ -133,6 +163,7 @@ final class AnalysisLogic: ObservableObject {
                 self.showUSBSection = false
                 self.showUnsupportedMessage = false
                 self.isSierra = false
+                self.isMavericks = false
                 self.isUnsupportedSierra = false
                 self.isPPC = false
                 self.legacyArchInfo = nil
@@ -152,6 +183,7 @@ final class AnalysisLogic: ObservableObject {
         showUSBSection = false; showUnsupportedMessage = false
         isUnsupportedSierra = false
         isPPC = false
+        isMavericks = false
 
         let ext = url.pathExtension.lowercased()
         if ext == "dmg" || ext == "iso" || ext == "cdr" {
@@ -256,6 +288,7 @@ final class AnalysisLogic: ObservableObject {
                                 self.isRestoreLegacy = false
                                 self.isCatalina = false
                                 self.isSierra = false
+                                self.isMavericks = false
                                 self.isUnsupportedSierra = false
                                 return
                             }
@@ -270,6 +303,8 @@ final class AnalysisLogic: ObservableObject {
                             let isSierra = (rawVer == "12.6.06")
                             let isSierraName = nameLower.contains("sierra") && !nameLower.contains("high")
                             let isUnsupportedSierraVersion = isSierraName && !isSierra
+
+                            let isMavericks = nameLower.contains("mavericks") || rawVer.starts(with: "10.9")
 
                             // Modern (Big Sur+)
                             let isModern =
@@ -310,7 +345,7 @@ final class AnalysisLogic: ObservableObject {
                                 rawVer.starts(with: "10.7")
 
                             // ZMIANA: Dodanie isCatalina do isSystemDetected
-                            self.isSystemDetected = isModern || isOldSupported || isLegacyDetected || isRestoreLegacy || isCatalina || isSierra
+                            self.isSystemDetected = isModern || isOldSupported || isLegacyDetected || isRestoreLegacy || isCatalina || isSierra || isMavericks
 
                             // Catalina ma swój własny codesign, więc tu wyłączamy standardowy 'needsCodesign'
                             self.needsCodesign = isOldSupported && !isModern && !isLegacyDetected
@@ -318,6 +353,7 @@ final class AnalysisLogic: ObservableObject {
                             self.isRestoreLegacy = isRestoreLegacy
                             self.isCatalina = isCatalina
                             self.isSierra = isSierra
+                            self.isMavericks = isMavericks
                             self.isUnsupportedSierra = isUnsupportedSierraVersion
                             if isSierra {
                                 self.recognizedVersion = "macOS Sierra 10.12"
@@ -331,7 +367,7 @@ final class AnalysisLogic: ObservableObject {
                             } else {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUnsupportedMessage = true } }
                             }
-                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion). Flagi: isCatalina=\(self.isCatalina), isSierra=\(self.isSierra), isLegacyDetected=\(self.isLegacyDetected), isRestoreLegacy=\(self.isRestoreLegacy), isPPC=\(self.isPPC), isUnsupportedSierra=\(self.isUnsupportedSierra). Mount=\(self.mountedDMGPath ?? "brak")")
+                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion). Flagi: isCatalina=\(self.isCatalina), isSierra=\(self.isSierra), isLegacyDetected=\(self.isLegacyDetected), isRestoreLegacy=\(self.isRestoreLegacy), isPPC=\(self.isPPC), isUnsupportedSierra=\(self.isUnsupportedSierra), isMavericks=\(self.isMavericks), Mount=\(self.mountedDMGPath ?? "brak")")
                         } else {
                             // Użyto String(localized:) aby ten ciąg został wykryty, mimo że jest przypisywany do zmiennej
                             self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
@@ -405,6 +441,7 @@ final class AnalysisLogic: ObservableObject {
                                 self.isRestoreLegacy = false
                                 self.isCatalina = false
                                 self.isSierra = false
+                                self.isMavericks = false
                                 self.isUnsupportedSierra = false
                                 return
                             }
@@ -419,6 +456,8 @@ final class AnalysisLogic: ObservableObject {
                             let isSierra = (rawVer == "12.6.06")
                             let isSierraName = nameLower.contains("sierra") && !nameLower.contains("high")
                             let isUnsupportedSierraVersion = isSierraName && !isSierra
+
+                            let isMavericks = nameLower.contains("mavericks") || rawVer.starts(with: "10.9")
 
                             // Modern (Big Sur+)
                             let isModern =
@@ -465,6 +504,7 @@ final class AnalysisLogic: ObservableObject {
                             self.isRestoreLegacy = isRestoreLegacy
                             self.isCatalina = isCatalina
                             self.isSierra = isSierra
+                            self.isMavericks = isMavericks
                             self.isUnsupportedSierra = isUnsupportedSierraVersion
                             if isSierra {
                                 self.recognizedVersion = "macOS Sierra 10.12"
@@ -478,7 +518,7 @@ final class AnalysisLogic: ObservableObject {
                             } else {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUnsupportedMessage = true } }
                             }
-                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion). Flagi: isCatalina=\(self.isCatalina), isSierra=\(self.isSierra), isLegacyDetected=\(self.isLegacyDetected), isRestoreLegacy=\(self.isRestoreLegacy), isPPC=\(self.isPPC), isUnsupportedSierra=\(self.isUnsupportedSierra)")
+                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion). Flagi: isCatalina=\(self.isCatalina), isSierra=\(self.isSierra), isLegacyDetected=\(self.isLegacyDetected), isRestoreLegacy=\(self.isRestoreLegacy), isPPC=\(self.isPPC), isUnsupportedSierra=\(self.isUnsupportedSierra), isMavericks=\(self.isMavericks)")
                         } else {
                             self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
                             self.log("Analiza zakończona: nie rozpoznano instalatora.")
@@ -523,6 +563,7 @@ final class AnalysisLogic: ObservableObject {
                     self.isRestoreLegacy = false
                     self.isCatalina = false
                     self.isSierra = false
+                    self.isMavericks = false
                     self.isUnsupportedSierra = false
                     self.isPPC = true
                     self.legacyArchInfo = nil
@@ -603,7 +644,17 @@ final class AnalysisLogic: ObservableObject {
 
     func refreshDrives() {
         let currentSelectedURL = selectedDrive?.url
-        let foundDrives = USBDriveLogic.enumerateAvailableDrives()
+        var foundDrives = USBDriveLogic.enumerateAvailableDrives()
+        let allowExternal = UserDefaults.standard.bool(forKey: "AllowExternalDrives")
+        if allowExternal {
+            let extra = enumerateExternalUSBHardDrives()
+            // Merge unique by URL
+            for d in extra {
+                if !foundDrives.contains(where: { $0.url == d.url }) {
+                    foundDrives.append(d)
+                }
+            }
+        }
         self.availableDrives = foundDrives
         if let currentURL = currentSelectedURL {
             if let stillConnectedDrive = foundDrives.first(where: { $0.url == currentURL }) {
@@ -655,6 +706,7 @@ final class AnalysisLogic: ObservableObject {
                 self.isRestoreLegacy = false
                 self.isCatalina = false
                 self.isSierra = false
+                self.isMavericks = false
                 self.isUnsupportedSierra = false
                 self.isPPC = false
                 self.legacyArchInfo = nil

@@ -54,21 +54,25 @@ The application is an open-source project and does not possess a paid Apple Deve
 * **System:** **macOS Sonoma 14.6** or newer.
 * **Storage:** Minimum of **15 GB** of free disk space is required **to create the installers**.
 
-### USB Drives (for installer creation):
-* **Capacity:** Minimum of **16 GB** is required.
-* **Recommendation:** USB 3.0 or newer is highly recommended for faster installation times.
+### USB Drives & External Storage
+* **Capacity:** A minimum of **16 GB** is required.
+* **Speed:** USB 3.0 or newer is highly recommended for faster installation times.
+* **External Drives (HDD/SSD):** By default, only USB flash drives are detected for safety. To use external disks, enable **Options** → **Enable external drives support**.
 
 ### Installation Files:
 The program supports **`.dmg`**, **`.cdr`** and **`.iso`** disk images, as well as raw **`.app`** installer files.
 
-> **💡 Pro Tip:** The best way to obtain valid files is the free application **[MIST by ninxsoft](https://github.com/ninxsoft/Mist)**. Simply select the system version you are interested in. This guarantees the correct file structure/source.
+> **Pro Tip:** Where to get valid files?
+> * **OS X 10.7** and **10.10 – macOS 26:** The most convenient solution is downloading via the free app **[Mist](https://github.com/ninxsoft/Mist)**.
+> * **OS X 10.9:** The recommended source is **[Mavericks Forever](https://mavericksforever.com/)** (macUSB support was developed based on the image from this site).
+> * **Mac OS X 10.4 – 10.6 (Intel):** Disk images are available on the **Internet Archive**.
+> * **Mac OS X 10.4 – 10.5 (PowerPC):** Images for PPC architecture can be found on **Macintosh Garden**.
 
 ---
 
 ## 💿 Supported Versions
 
 The table lists systems supported by the application that are successfully recognized and written to a USB drive.
-(✅ - Supported, ❌ - Not supported)
 
 | System | Version | Supported |
 | :--- | :--- | :---: |
@@ -84,15 +88,16 @@ The table lists systems supported by the application that are successfully recog
 | **macOS Sierra**[^1] | 10.12 | ✅ |
 | **OS X El Capitan** | 10.11 | ✅ |
 | **OS X Yosemite** | 10.10 | ✅ |
-| **OS X Mavericks** | 10.9 | ❌ |
+| **OS X Mavericks**[^2] | 10.9 | ✅ |
 | **OS X Mountain Lion** | 10.8 | ✅ |
 | **OS X Lion** | 10.7 | ✅ |
 | **Mac OS X Snow Leopard** | 10.6 | ✅ |
 | **Mac OS X Leopard** | 10.5 | ✅ |
-| **Mac OS X Tiger**[^2] | 10.4 | ✅ |
+| **Mac OS X Tiger**[^3] | 10.4 | ✅ |
 
 [^1]: Only version **10.12.6** is supported.
-[^2]: Automatic detection supports only the **Single DVD** edition. Multi-disc editions might be unrecognized or misidentified (e.g., as "Read Before You Install"). In such cases, please use **File** → **“Skip file analysis”** → **“Mac OS X Tiger 10.4 (Multi DVD)”** or press the keyboard shortcut **Command (⌘)** + **Option (⌥)** + **T**. <br>**Installation Tip:** When the installer requests the second disc (Disc 2), simply unplug the USB drive containing Disc 1 and insert the USB drive containing Disc 2. The **installer on the target Mac** will automatically detect the new volume and continue the installation.
+[^2]: Tested on the image downloaded from [Mavericks Forever](https://mavericksforever.com/). Images from other sources have not been verified.
+[^3]: Automatic detection supports only the **Single DVD** edition. Multi-disc editions might be unrecognized or misidentified (e.g., as "Read Before You Install"). In such cases, please use **Options** → **“Skip file analysis”** → **“Mac OS X Tiger 10.4 (Multi DVD)”** or press the keyboard shortcut **Command (⌘)** + **Option (⌥)** + **T**. <br>**Installation Tip:** When the installer requests the second disc (Disc 2), simply unplug the USB drive containing Disc 1 and insert the USB drive containing Disc 2. The **installer on the target Mac** will automatically detect the new volume and continue the installation.
 
 ---
  
