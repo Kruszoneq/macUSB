@@ -63,7 +63,7 @@ The application is an open-source project and does not possess a paid Apple Deve
 The program supports **`.dmg`**, **`.cdr`** and **`.iso`** disk images, as well as raw **`.app`** installer files.
 
 > **Pro Tip:** Where to get valid files?
-> * **OS X 10.7** and **10.10 – macOS 26:** The most convenient solution is downloading via the free app **[Mist](https://github.com/ninxsoft/Mist)**.
+> * **OS X 10.7 - 10.8** and **10.10 – macOS 26:** The most convenient solution is downloading via the free app **[Mist](https://github.com/ninxsoft/Mist)**.
 > * **OS X 10.9:** The recommended source is **[Mavericks Forever](https://mavericksforever.com/)** (macUSB support was developed based on the image from this site).
 > * **Mac OS X 10.4 – 10.6 (Intel):** Disk images are available on the **Internet Archive**.
 > * **Mac OS X 10.4 – 10.5 (PowerPC):** Images for PPC architecture can be found on **Macintosh Garden**.
