@@ -28,7 +28,7 @@ The application automates the entire process of creating a bootable USB drive. Y
 * **Auto Fixes:** For certain systems (e.g., High Sierra/Mojave), the app automatically applies necessary fixes so the installer works despite expired Apple certificates.
 * **PowerPC Revival:** The app formats USB drives to the Apple Partition Map (APM) scheme required by PowerPC Macs and transfers the installer directly from **`.iso`**, **`.cdr`** or **`.dmg`** files. This allows for installation without the need for physical CDs/DVDs or FireWire drives.
   
-  > 📖 **Guide:** [Step-by-step: Booting from USB on PowerPC Macs using Open Firmware](.github/PPC_BOOT_INSTRUCTIONS.md)
+  > 📖 **Guide:** [Step-by-step: Booting from USB on PowerPC Macs using Open Firmware](https://kruszoneq.github.io/macUSB/pages/guides/ppc_boot_instructions.html)
 
 > **Fun Fact:** The application was created using the "Vibe Coding" method in collaboration with the Gemini 3 Pro and GPT-5 AI models. The project proves that programming barriers (even cross-architectural ones) can be overcome with determination and AI support.
 
