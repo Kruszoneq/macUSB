@@ -34,19 +34,6 @@ The application automates the entire process of creating a bootable USB drive. Y
 
 ---
 
-## ⚠️ Installation and First Run
-
-The application is an open-source project and does not possess a paid Apple Developer signature, so Gatekeeper will block it by default.
-
-**How to run the app for the first time:**
-
-1. Try to open the app - you will see an "Unknown Developer" message.
-2. Go to **System Settings** -> **Privacy & Security**.
-3. Scroll down to the **Security** section and click the **"Open Anyway"** button next to macUSB.
-4. When writing the system to the flash drive, a system prompt asking for **access to removable volumes** will appear. You must **Allow** this so the application can format and write the system to the USB.
-
----
-
 ## ⚙️ Requirements
 
 ### Host Computer (where you run the app):
