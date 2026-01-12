@@ -2,7 +2,7 @@
 
 ### Creating bootable macOS and OS X USB drives has never been easier!
 
-![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) ![Vibe Coded](https://img.shields.io/badge/Vibe%20Coded%20-gray)
+![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) ![Vibe Coded](https://img.shields.io/badge/Vibe%20Coded%20-gray) [![Website](https://img.shields.io/badge/Website-macUSB-blueviolet)](https://kruszoneq.github.io/macUSB/)
 
 
 **macUSB** is a one-click tool that transforms your modern Mac (Apple Silicon) into a service machine capable of reviving older Apple computers.
@@ -97,7 +97,7 @@ The table lists systems supported by the application that are successfully recog
 
 [^1]: Only version **10.12.6** is supported.
 [^2]: Tested on the image downloaded from [Mavericks Forever](https://mavericksforever.com/). Images from other sources have not been verified.
-[^3]: Automatic detection supports only the **Single DVD** edition. Multi-disc editions might be unrecognized or misidentified (e.g., as "Read Before You Install"). In such cases, please use **Options** → **“Skip file analysis”** → **“Mac OS X Tiger 10.4 (Multi DVD)”** or press the keyboard shortcut **Command (⌘)** + **Option (⌥)** + **T**. <br>**Installation Tip:** When the installer requests the second disc (Disc 2), simply unplug the USB drive containing Disc 1 and insert the USB drive containing Disc 2. The **installer on the target Mac** will automatically detect the new volume and continue the installation.
+[^3]: The **Single DVD** edition is recognized automatically. Instructions for the **Multi-DVD** edition are available on the application's website: [Tiger Multi-DVD Guide](https://kruszoneq.github.io/macUSB/pages/guides/multidvd_tiger.html).
 
 ---
  
