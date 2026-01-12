@@ -91,7 +91,7 @@ struct FinishUSBView: View {
                                 Image(systemName: "globe.europe.africa.fill").font(.title2).foregroundColor(.gray).frame(width: 32)
                                 VStack(alignment: .leading, spacing: 10) {
                                     Text("W przypadku Maca z PowerPC").font(.headline).foregroundColor(.primary)
-                                    Text("Aby uruchomić instalator z dysku USB na Macu z PowerPC, niezbędne jest wpisanie komendy w konsoli Open Firmware. Pełna instrukcja obsługi znajduje się w repozytorium macUSB.")
+                                    Text("Aby uruchomić instalator z dysku USB na Macu z PowerPC, niezbędne jest wpisanie komendy w konsoli Open Firmware. Pełna instrukcja obsługi znajduje się na stronie internetowej aplikacji.")
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                 }

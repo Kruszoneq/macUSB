@@ -139,13 +139,22 @@ struct macUSBApp: App {
                 } label: {
                     Label(String(localized: "Sprawdź dostępność aktualizacji"), systemImage: "arrow.triangle.2.circlepath")
                 }
+            }
+            CommandGroup(after: .help) {
                 Divider()
                 Button {
-                    if let url = URL(string: "https://github.com/Kruszoneq/macUSB") {
+                    if let url = URL(string: "https://kruszoneq.github.io/macUSB/") {
                         NSWorkspace.shared.open(url)
                     }
                 } label: {
-                    Label(String(localized: "Repozytorium na GitHubie"), systemImage: "link")
+                    Label(String(localized: "Strona internetowa macUSB"), systemImage: "globe")
+                }
+                Button {
+                    if let url = URL(string: "https://github.com/Kruszoneq/macUSB/issues") {
+                        NSWorkspace.shared.open(url)
+                    }
+                } label: {
+                    Label(String(localized: "Zgłoś błąd (GitHub)"), systemImage: "exclamationmark.triangle")
                 }
             }
         }
