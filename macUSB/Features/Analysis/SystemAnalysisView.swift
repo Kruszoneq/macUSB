@@ -13,6 +13,7 @@ struct SystemAnalysisView: View {
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
     @State private var analysisWindowHandler: AnalysisWindowHandler?
+    @State private var hostingWindow: NSWindow? = nil
     
     let driveRefreshTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     
@@ -33,6 +34,19 @@ struct SystemAnalysisView: View {
                                      && logic.showUnsupportedMessage)
 
         MenuState.shared.skipAnalysisEnabled = analysisFinished && hasAnySelection && !isValidSelection && (unrecognizedBlocking || recognizedUnsupported)
+    }
+    
+    private func presentMavericksDialog() {
+        guard let window = hostingWindow else { return }
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.icon = NSApp.applicationIconImage
+        alert.messageText = String(localized: "Wykryto system OS X Mavericks", comment: "Mavericks detected alert title")
+        alert.informativeText = String(localized: "Upewnij się, że wybrany obraz systemu pochodzi ze strony Mavericks Forever. Inne wersje mogą powodować błędy w trakcie tworzenia instalatora na nośniku USB.", comment: "Mavericks detected alert description")
+        alert.addButton(withTitle: String(localized: "OK"))
+        alert.beginSheetModal(for: window) { _ in
+            logic.shouldShowMavericksDialog = false
+        }
     }
     
     // MARK: - Subviews split to help the type-checker
@@ -216,6 +230,7 @@ struct SystemAnalysisView: View {
                 )
                 window.delegate = handler
                 self.analysisWindowHandler = handler
+                self.hostingWindow = window
             }
         }
     }
@@ -288,10 +303,17 @@ struct SystemAnalysisView: View {
         .onChange(of: logic.selectedFilePath) { _ in updateMenuState() }
         .onChange(of: logic.isPPC) { _ in updateMenuState() }
         .onChange(of: logic.sourceAppURL) { _ in updateMenuState() }
+        .onChange(of: logic.shouldShowMavericksDialog) { show in
+            if show { presentMavericksDialog() }
+        }
         .onReceive(NotificationCenter.default.publisher(for: .macUSBStartTigerMultiDVD)) { _ in
             logic.forceTigerMultiDVDSelection()
         }
-        .onAppear { logic.refreshDrives(); updateMenuState() }
+        .onAppear {
+            logic.refreshDrives()
+            updateMenuState()
+            if logic.shouldShowMavericksDialog { presentMavericksDialog() }
+        }
         .navigationTitle("macUSB")
         .navigationBarBackButtonHidden(true)
     }

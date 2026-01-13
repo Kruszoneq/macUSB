@@ -26,6 +26,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var isSierra: Bool = false
     @Published var isMavericks: Bool = false
     @Published var isUnsupportedSierra: Bool = false
+    @Published var shouldShowMavericksDialog: Bool = false
     @Published var isPPC: Bool = false
     @Published var legacyArchInfo: String? = nil
     @Published var userSkippedAnalysis: Bool = false
@@ -137,6 +138,7 @@ final class AnalysisLogic: ObservableObject {
                     self.isPPC = false
                     self.legacyArchInfo = nil
                     self.userSkippedAnalysis = false
+                    self.shouldShowMavericksDialog = false
                 }
             }
         }
@@ -168,6 +170,7 @@ final class AnalysisLogic: ObservableObject {
                 self.isPPC = false
                 self.legacyArchInfo = nil
                 self.userSkippedAnalysis = false
+                self.shouldShowMavericksDialog = false
             }
             self.log("Wybrano plik z panelu: \(url.path) (ext: \(ext))")
         } else {
@@ -354,6 +357,9 @@ final class AnalysisLogic: ObservableObject {
                             self.isCatalina = isCatalina
                             self.isSierra = isSierra
                             self.isMavericks = isMavericks
+                            if isMavericks {
+                                self.shouldShowMavericksDialog = true
+                            }
                             self.isUnsupportedSierra = isUnsupportedSierraVersion
                             if isSierra {
                                 self.recognizedVersion = "macOS Sierra 10.12"
@@ -505,6 +511,9 @@ final class AnalysisLogic: ObservableObject {
                             self.isCatalina = isCatalina
                             self.isSierra = isSierra
                             self.isMavericks = isMavericks
+                            if isMavericks {
+                                self.shouldShowMavericksDialog = true
+                            }
                             self.isUnsupportedSierra = isUnsupportedSierraVersion
                             if isSierra {
                                 self.recognizedVersion = "macOS Sierra 10.12"
@@ -711,6 +720,7 @@ final class AnalysisLogic: ObservableObject {
                 self.isPPC = false
                 self.legacyArchInfo = nil
                 self.userSkippedAnalysis = false
+                self.shouldShowMavericksDialog = false
 
                 self.availableDrives = []
                 self.selectedDrive = nil

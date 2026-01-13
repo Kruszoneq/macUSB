@@ -1149,57 +1149,57 @@
       }
     },
     "Aby uruchomić instalator z dysku USB na Macu z PowerPC, niezbędne jest wpisanie komendy w konsoli Open Firmware. Pełna instrukcja obsługi znajduje się na stronie internetowej aplikacji." : {
-          "localizations" : {
-            "de" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Um den Installer von einem USB-Laufwerk auf einem PowerPC-Mac zu starten, müssen Sie einen Befehl in der Open Firmware-Konsole eingeben. Eine vollständige Anleitung finden Sie auf der Website der Anwendung."
-              }
-            },
-            "en" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "To boot the installer from a USB drive on a PowerPC Mac, you must enter a command in the Open Firmware console. Full instructions are available on the application's website."
-              }
-            },
-            "es" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Para arrancar el instalador desde una memoria USB en un Mac con PowerPC, es necesario introducir un comando en la consola de Open Firmware. Las instrucciones completas están disponibles en el sitio web de la aplicación."
-              }
-            },
-            "fr" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Pour démarrer l'installateur à partir d'une clé USB sur un Mac PowerPC, vous devez saisir une commande dans la console Open Firmware. Les instructions complètes sont disponibles sur le site web de l'application."
-              }
-            },
-            "ja" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "PowerPC MacでUSBドライブからインストーラを起動するには、Open Firmwareコンソールでコマンドを入力する必要があります。詳しい手順はアプリケーションのウェブサイトをご覧ください。"
-              }
-            },
-            "pt-BR" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Para inicializar o instalador de um pen drive USB em um Mac PowerPC, é necessário inserir um comando no console do Open Firmware. As instruções completas estão disponíveis no site do aplicativo."
-              }
-            },
-            "ru" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Чтобы запустить установщик с USB-накопителя на Mac с PowerPC, необходимо ввести команду в консоли Open Firmware. Полная инструкция доступна на веб-сайте приложения."
-              }
-            },
-            "zh-Hans" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "要在 PowerPC Mac 上从 USB 驱动器启动安装程序，必须在 Open Firmware 控制台中输入命令。完整说明可在应用程序网站上找到。"
-              }
-            }
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um den Installer von einem USB-Laufwerk auf einem PowerPC-Mac zu starten, müssen Sie einen Befehl in der Open Firmware-Konsole eingeben. Eine vollständige Anleitung finden Sie auf der Website der Anwendung."
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To boot the installer from a USB drive on a PowerPC Mac, you must enter a command in the Open Firmware console. Full instructions are available on the application's website."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para arrancar el instalador desde una memoria USB en un Mac con PowerPC, es necesario introducir un comando en la consola de Open Firmware. Las instrucciones completas están disponibles en el sitio web de la aplicación."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour démarrer l'installateur à partir d'une clé USB sur un Mac PowerPC, vous devez saisir une commande dans la console Open Firmware. Les instructions complètes sont disponibles sur le site web de l'application."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PowerPC MacでUSBドライブからインストーラを起動するには、Open Firmwareコンソールでコマンドを入力する必要があります。詳しい手順はアプリケーションのウェブサイトをご覧ください。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para inicializar o instalador de um pen drive USB em um Mac PowerPC, é necessário inserir um comando no console do Open Firmware. As instruções completas estão disponíveis no site do aplicativo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чтобы запустить установщик с USB-накопителя на Mac с PowerPC, необходимо ввести команду в консоли Open Firmware. Полная инструкция доступна на веб-сайте приложения."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要在 PowerPC Mac 上从 USB 驱动器启动安装程序，必须在 Open Firmware 控制台中输入命令。完整说明可在应用程序网站上找到。"
+          }
+        }
+      }
+    },
     "Aktualizacja wersji i podpisywanie..." : {
       "comment" : "Version update and code signing in progress",
       "localizations" : {
@@ -6038,57 +6038,57 @@
       }
     },
     "Strona internetowa macUSB" : {
-          "localizations" : {
-            "de" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "macUSB-Website"
-              }
-            },
-            "en" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "macUSB Website"
-              }
-            },
-            "es" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Sitio web de macUSB"
-              }
-            },
-            "fr" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Site web de macUSB"
-              }
-            },
-            "ja" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "macUSBウェブサイト"
-              }
-            },
-            "pt-BR" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Site do macUSB"
-              }
-            },
-            "ru" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Веб-сайт macUSB"
-              }
-            },
-            "zh-Hans" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "macUSB 网站"
-              }
-            }
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB-Website"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB Website"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sitio web de macUSB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Site web de macUSB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSBウェブサイト"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Site do macUSB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Веб-сайт macUSB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB 网站"
+          }
+        }
+      }
+    },
     "Sukces!" : {
       "localizations" : {
         "de" : {
@@ -6713,6 +6713,9 @@
           }
         }
       }
+    },
+    "Upewnij się, że wybrany obraz systemu pochodzi ze strony Mavericks Forever. Inne wersje mogą powodować błędy w trakcie tworzenia instalatora na nośniku USB." : {
+      "comment" : "Mavericks detected alert description"
     },
     "Uruchomiono Terminal" : {
       "localizations" : {
@@ -8015,6 +8018,9 @@
         }
       }
     },
+    "Wykryto system OS X Mavericks" : {
+      "comment" : "Mavericks detected alert title"
+    },
     "Wymagana autoryzacja" : {
       "localizations" : {
         "de" : {
@@ -8640,57 +8646,57 @@
       }
     },
     "Zgłoś błąd (GitHub)" : {
-          "localizations" : {
-            "de" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Fehler melden (GitHub)"
-              }
-            },
-            "en" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Report a bug (GitHub)"
-              }
-            },
-            "es" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Reportar un error (GitHub)"
-              }
-            },
-            "fr" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Signaler un bug (GitHub)"
-              }
-            },
-            "ja" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "バグを報告 (GitHub)"
-              }
-            },
-            "pt-BR" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Relatar um erro (GitHub)"
-              }
-            },
-            "ru" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Сообщить об ошибке (GitHub)"
-              }
-            },
-            "zh-Hans" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "报告错误 (GitHub)"
-              }
-            }
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler melden (GitHub)"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report a bug (GitHub)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reportar un error (GitHub)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signaler un bug (GitHub)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バグを報告 (GitHub)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relatar um erro (GitHub)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сообщить об ошибке (GitHub)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "报告错误 (GitHub)"
+          }
+        }
+      }
+    },
     "Zmień język" : {
       "localizations" : {
         "de" : {
