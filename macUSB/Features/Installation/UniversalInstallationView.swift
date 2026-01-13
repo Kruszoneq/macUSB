@@ -512,6 +512,7 @@ class UniversalWindowHandler: NSObject, NSWindowDelegate {
             return true
         }
         let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
         alert.messageText = String(localized: "UWAGA!")
         alert.informativeText = String(localized: "Czy na pewno chcesz przerwać pracę?")

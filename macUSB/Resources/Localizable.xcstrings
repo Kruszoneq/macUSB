@@ -6715,7 +6715,57 @@
       }
     },
     "Upewnij się, że wybrany obraz systemu pochodzi ze strony Mavericks Forever. Inne wersje mogą powodować błędy w trakcie tworzenia instalatora na nośniku USB." : {
-      "comment" : "Mavericks detected alert description"
+      "comment" : "Mavericks detected alert description",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stellen Sie sicher, dass das ausgewählte Systemabbild von der Mavericks Forever-Website stammt. Andere Versionen können Fehler beim Erstellen des USB-Installers verursachen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ensure that the selected system image comes from the Mavericks Forever website. Other versions may cause errors during the USB installer creation."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asegúrese de que la imagen del sistema seleccionada provenga del sitio web de Mavericks Forever. Otras versiones pueden causar errores durante la creación del instalador USB."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assurez-vous que l'image système sélectionnée provient du site Web Mavericks Forever. D'autres versions peuvent provoquer des erreurs lors de la création du programme d'installation USB."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したシステムイメージがMavericks ForeverのWebサイトからのものであることを確認してください。他のバージョンでは、USBインストーラの作成中にエラーが発生する可能性があります。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Certifique-se de que a imagem do sistema selecionada venha do site Mavericks Forever. Outras versões podem causar erros durante a criação do instalador USB."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Убедитесь, что выбранный образ системы загружен с сайта Mavericks Forever. Другие версии могут вызвать ошибки при создании установочного USB-накопителя."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确保所选系统镜像来自 Mavericks Forever 网站。其他版本可能会在创建 USB 安装程序时导致错误。"
+          }
+        }
+      }
     },
     "Uruchomiono Terminal" : {
       "localizations" : {
@@ -8019,7 +8069,57 @@
       }
     },
     "Wykryto system OS X Mavericks" : {
-      "comment" : "Mavericks detected alert title"
+      "comment" : "Mavericks detected alert title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OS X Mavericks erkannt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OS X Mavericks detected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OS X Mavericks detectado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OS X Mavericks détecté"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OS X Mavericksが検出されました"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OS X Mavericks detectado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обнаружена система OS X Mavericks"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检测到 OS X Mavericks"
+          }
+        }
+      }
     },
     "Wymagana autoryzacja" : {
       "localizations" : {
