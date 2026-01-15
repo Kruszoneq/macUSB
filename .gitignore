@@ -1,0 +1,33 @@
+# Xcode
+.DS_Store
+*/build/
+*.os
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xccheckout
+*.xccurrentversion
+*.xcplaygroundpage/
+*.xcworkspacedata
+*.xcuserstate
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Temp
+macUSB_temp/
+
+# System
+.AppleDouble
+.LSOverride
+._*
+
+# Files
+*.app
+*.ipa
+*.dSYM
+*.zip
+
+# Xcode DerivedData (jeśli kiedyś zmienisz lokalizację)
+DerivedData/
+CODEX.md

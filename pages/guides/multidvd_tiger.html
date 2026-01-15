@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Create a Mac OS X Tiger 10.4 Multi-DVD Bootable USB — macUSB Guide</title>
+  <meta name="description" content="Step-by-step guide: create a bootable Mac OS X Tiger 10.4 Multi-DVD USB installer with macUSB, force correct detection for Disc 2+, and switch discs during installation." />
+  <meta name="keywords" content="Mac OS X Tiger Multi-DVD, Tiger multi disc installer, bootable USB Tiger, macUSB Tiger Multi-DVD, create Tiger USB installer">
+  <link rel="canonical" href="https://kruszoneq.github.io/macUSB/pages/guides/multidvd_tiger.html">
+
+  <meta property="og:title" content="Mac OS X Tiger Multi-DVD USB — macUSB Guide">
+  <meta property="og:description" content="Step-by-step guide: create a bootable Mac OS X Tiger 10.4 Multi-DVD USB installer with macUSB, force correct detection for Disc 2+, and switch discs during installation.">
+  <meta property="og:image" content="https://kruszoneq.github.io/macUSB/assets/screenshots/multidvd_tiger/06-creation.png">
+  <meta property="og:url" content="https://kruszoneq.github.io/macUSB/pages/guides/multidvd_tiger.html">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Create a Mac OS X Tiger 10.4 Multi-DVD Bootable USB — macUSB Guide">
+  <meta name="twitter:description" content="Step-by-step guide: create a bootable Tiger 10.4 Multi-DVD USB installer with macUSB, force detection for Disc 2+, and switch discs during installation.">
+  <meta name="twitter:image" content="https://kruszoneq.github.io/macUSB/assets/screenshots/multidvd_tiger/06-creation.png">
+
+  <link rel="icon" type="image/png" href="../../assets/icon/macUSBiconPNG.png" />
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main class="page" id="top">
+    <header class="page-header">
+      <h1 class="page-title">Tiger Multi-DVD USB — macUSB Guide</h1>
+      <p class="page-lead">
+        Use this guide to create a <strong>Mac&nbsp;OS&nbsp;X Tiger&nbsp;10.4 Multi‑DVD bootable USB installer</strong> with <strong>macUSB</strong>.
+        It also covers what to do <strong>when Disc 2 (or later) isn’t detected correctly</strong> and how to <strong>switch discs during installation</strong>.
+      </p>
+    </header>
+
+    <div class="page-layout">
+      <aside class="page-toc-sidebar" aria-label="Table of contents">
+        <span class="page-toc-title">Table of contents</span>
+        <ul class="page-toc-list">
+          <li><a href="#files">Files you’ll need</a></li>
+          <li><a href="#single-dvd">Single-DVD edition</a></li>
+          <li><a href="#multi-dvd">Multi-DVD edition</a></li>
+          <li><a href="#disc-switching">During installation: switching discs</a></li>
+          <li><a href="#next-steps">Additional notes for PowerPC Macs</a></li>
+        </ul>
+      </aside>
+
+      <div class="page-content">
+    <section class="page-section" id="files">
+      <h2>Files you’ll need</h2>
+      <p class="muted">
+        When you use a Multi‑DVD release, the installer is split across multiple disc images (for example
+        <span class="kbd">Tiger CD1.cdr</span>, <span class="kbd">Tiger CD2.cdr</span>, and so on). macUSB writes one disc image to USB at a time.
+        If you select anything other than Disc 1, you may need to force detection (covered below).
+      </p>
+
+      <figure class="img-figure">
+        <img
+          class="guide-image"
+          src="../../assets/screenshots/multidvd_tiger/01-files.png"
+          alt="Finder: Tiger installer files (CD1/CD2/CD3/CD4) prepared for macUSB"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption class="img-hint" aria-hidden="true">Click to zoom</figcaption>
+      </figure>
+    </section>
+    <section class="page-section" id="single-dvd">
+      <h2>Single-DVD edition</h2>
+      <p class="muted">
+        If you use the <strong>Single‑DVD</strong> Tiger installer, macUSB detects the system version automatically — no extra steps required.
+      </p>
+
+      <figure class="img-figure">
+        <img
+          class="guide-image"
+          src="../../assets/screenshots/multidvd_tiger/02-cd1.png"
+          alt="macUSB: Tiger Single-DVD correctly detected"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption class="img-hint" aria-hidden="true">Click to zoom</figcaption>
+      </figure>
+    </section>
+
+    <section class="page-section" id="multi-dvd">
+      <h2>Multi-DVD edition</h2>
+      <p class="muted">Follow these steps if you select Disc 2 (or any later disc) and auto‑detection doesn’t look right.</p>
+
+      <ol class="page-list">
+        <li>
+          Select your Tiger image in macUSB.
+          <br />
+          <span class="muted">
+            If you select Disc 2 (or any later disc), macUSB may not recognize the installer — or it may detect it incorrectly
+            (for example: <span class="kbd">OS X Read Before You Install 1.0.0</span>).
+          </span>
+
+          <figure class="img-figure">
+            <img
+              class="guide-image"
+              src="../../assets/screenshots/multidvd_tiger/03-cd2.png"
+              alt="macUSB: Tiger Multi-DVD image not recognized"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption class="img-hint" aria-hidden="true">Click to zoom</figcaption>
+          </figure>
+        </li>
+
+        <li>
+          Open <strong>Options</strong> → <strong>Skip file analysis</strong> → <strong>Mac OS X Tiger 10.4 (Multi DVD)</strong>
+          <span class="muted">(or use the keyboard shortcut</span>
+          <span class="kbd">Option (⌥)</span> + <span class="kbd">Command (⌘)</span> + <span class="kbd">T</span><span class="muted">).</span>
+          <br />
+          <span class="muted">
+            macUSB will warn that analysis will be skipped and Tiger will be forced. Confirm to continue.
+          </span>
+
+          <figure class="img-figure">
+            <img
+              class="guide-image"
+              src="../../assets/screenshots/multidvd_tiger/04-info.png"
+              alt="macUSB: Warning — skipping analysis and forcing Tiger detection"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption class="img-hint" aria-hidden="true">Click to zoom</figcaption>
+          </figure>
+        </li>
+
+        <li>
+          After confirming, Tiger should appear as recognized, with a note that file analysis was skipped by user choice.
+
+          <figure class="img-figure">
+            <img
+              class="guide-image"
+              src="../../assets/screenshots/multidvd_tiger/05-cd2ok.png"
+              alt="macUSB: Tiger detected (analysis skipped by user choice)"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption class="img-hint" aria-hidden="true">Click to zoom</figcaption>
+          </figure>
+        </li>
+
+        <li>
+          Continue normally — the creation flow stays the same.
+
+          <figure class="img-figure">
+            <img
+              class="guide-image"
+              src="../../assets/screenshots/multidvd_tiger/06-creation.png"
+              alt="macUSB: Ready to create the USB installer"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption class="img-hint" aria-hidden="true">Click to zoom</figcaption>
+          </figure>
+        </li>
+      </ol>
+
+
+      <section class="page-section" id="disc-switching">
+        <h2>During installation: switching discs</h2>
+        <p class="muted">
+          Each USB drive you create (from Disc 1, Disc 2, and so on) will be detected correctly by the Mac during installation.
+        </p>
+
+        <ol class="page-list">
+          <li>Start the installation using the USB created from <strong>Disc 1</strong>.</li>
+          <li>After Disc 1 completes, the Mac will restart automatically.</li>
+          <li>
+            When the installer prompts you to insert <strong>Disc 2</strong>, unplug the <strong>Disc 1</strong> USB drive and plug in the USB created from <strong>Disc 2</strong>.
+          </li>
+        </ol>
+
+        <p class="muted">
+          Tested on <strong>iMac (Late 2006)</strong> (Intel) and <strong>iMac G5</strong> (PowerPC).
+        </p>
+      </section>
+
+      <hr class="page-divider" />
+
+      <section class="page-section" id="next-steps">
+        <h2>Additional notes for PowerPC Macs</h2>
+        <p class="muted">
+          If you’re preparing media for a PowerPC Mac, booting from USB typically requires entering a command in Open Firmware.
+          After macUSB finishes creating the installer, you’ll see a direct link to the full boot instructions.
+        </p>
+
+        <figure class="img-figure">
+          <img
+            class="guide-image"
+            src="../../assets/screenshots/multidvd_tiger/07-finish.png"
+            alt="macUSB: Finished screen with a link to PowerPC USB boot instructions"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption class="img-hint" aria-hidden="true">Click to zoom</figcaption>
+        </figure>
+
+        <div class="callout" style="margin-top:18px;">
+          <strong>Guide:</strong> <a href="./ppc_boot_instructions.html">PowerPC USB Boot (Open Firmware)</a>
+        </div>
+      </section>
+    </section>
+
+    <div class="page-actions">
+      <div class="page-actions-left">
+        <a class="cta-button" href="https://github.com/Kruszoneq/macUSB/releases">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 3v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M8.5 10.5 12 13.9l3.5-3.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M5 17.5v2.5h14V17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>Download macUSB</span>
+        </a>
+        <span id="latest-version" class="version-info">Latest release</span>
+      </div>
+      <a class="page-link" href="#top">Back to top</a>
+    </div>
+    </section>
+    </div> <!-- /.page-content -->
+    </div> <!-- /.page-layout -->
+  </main>
+
+  <footer>
+    <p>Copyright © 2025-2026 Krystian Pierz</p>
+  </footer>
+
+  <script src="../../assets/js/main.js" defer></script>
+</body>
+</html>

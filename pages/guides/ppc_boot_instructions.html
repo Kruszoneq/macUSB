@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PowerPC USB Boot (Open Firmware) — macUSB Guide</title>
+  <meta name="description" content="Step-by-step guide to booting a PowerPC Mac from a macUSB installer drive using Open Firmware." />
+  <meta name="keywords" content="PowerPC USB boot, Mac OS X PowerPC install, Open Firmware boot USB, macUSB PowerPC, boot Mac OS X Tiger USB">
+  <link rel="canonical" href="https://kruszoneq.github.io/macUSB/pages/guides/ppc_boot_instructions.html">
+  <meta property="og:title" content="PowerPC USB Boot (Open Firmware) — macUSB Guide">
+  <link rel="icon" type="image/png" href="../../assets/icon/macUSBiconPNG.png" />
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <main class="page" id="top">
+    <header class="page-header">
+      <h1 class="page-title">PowerPC USB Boot — Open Firmware Instructions</h1>
+      <p class="page-lead">
+        Use this guide to boot a PowerPC Mac from a USB installer using Open Firmware.
+      </p>
+    </header>
+
+    
+    
+
+    <section class="page-section" id="prerequisites">
+      <h2>Prerequisites</h2>
+      <ul class="page-list">
+        <li>A wired USB keyboard.</li>
+        <li>
+          <strong>A macUSB-created installer USB drive:</strong>
+          Prepare your installer with <strong>macUSB</strong> to ensure reliable USB booting on PowerPC Macs.
+          <span class="muted">Single‑DVD and Multi‑DVD editions are supported.</span>
+        </li>
+      </ul>
+      <div class="callout" style="margin-top:18px;">
+        <strong>Guide:</strong> <a href="./multidvd_tiger.html">Tiger Multi‑DVD USB — macUSB Guide</a>
+      </div>
+    </section>
+
+    <section class="page-section" id="procedure">
+      <h2>Procedure</h2>
+      <ol class="page-list">
+        <li>Insert the USB drive into a USB port on the computer.</li>
+        <li>Power on the Mac and immediately press and hold: <span class="kbd">Command (⌘)</span> + <span class="kbd">Option (⌥)</span> + <span class="kbd">O</span> + <span class="kbd">F</span>.</li>
+        <li>Release the keys when you see the white screen with the Open Firmware prompt.</li>
+      </ol>
+    </section>
+
+    <section class="page-section" id="step-1">
+      <h2>Step 1: Locate the USB Device</h2>
+      <p class="muted">You need to find which alias points to your USB drive.</p>
+
+      <ol class="page-list">
+        <li>Type <span class="kbd">dev usb0</span> and press <strong>Enter</strong>.</li>
+        <li>Type <span class="kbd">ls</span> and press <strong>Enter</strong> to see the list of devices.</li>
+        <li>
+          Look for a disk entry, usually named <span class="kbd">disk@1</span> (or <span class="kbd">disk@2</span>, etc.).
+          <ul class="page-list">
+            <li><strong>If you do not see a disk entry:</strong> Repeat the steps above for other ports by typing <span class="kbd">dev usb1</span>, <span class="kbd">dev usb2</span>, etc., followed by <span class="kbd">ls</span>, until you find the port with the disk.</li>
+          </ul>
+        </li>
+      </ol>
+
+      <pre class="code-block"><code>dev usb0
+ls</code></pre>
+    </section>
+
+    <section class="page-section" id="step-2">
+      <h2>Step 2: Get the Hardware Path</h2>
+
+      <ol class="page-list">
+        <li>Select the disk by typing <span class="kbd">dev disk@X</span> (replace <span class="kbd">X</span> with the number found in the previous step, e.g., <span class="kbd">dev disk@1</span>) and press <strong>Enter</strong>.</li>
+        <li>Type <span class="kbd">pwd</span> and press <strong>Enter</strong>.</li>
+        <li>The screen will display the full hardware path to the device. <strong>Write this path down exactly as it appears.</strong></li>
+      </ol>
+
+      <pre class="code-block"><code>dev disk@1
+pwd</code></pre>
+    </section>
+
+    <section class="page-section" id="step-3">
+      <h2>Step 3: The Boot Command</h2>
+
+      <p>
+        You’ll now build the boot command using the path from Step 2 and the loader location. The OS X loader (<span class="kbd">BootX</span>)
+        is typically on partition 3.
+      </p>
+
+      <pre class="code-block"><code>boot [path_from_step_2]:3,\System\Library\CoreServices\BootX</code></pre>
+    </section>
+
+    <hr class="page-divider">
+    <section class="page-section" id="example">
+      <h2>Example (iMac G5)</h2>
+
+      <p>
+        On an iMac G5, the hardware path is often complex and starts with <span class="kbd">/ht@</span>. You must type the full path returned by the <span class="kbd">pwd</span> command.
+      </p>
+
+      <h3 class="minor">Scenario:</h3>
+      <ul class="page-list">
+        <li>You found the disk on <span class="kbd">usb0</span> or <span class="kbd">usb1</span>.</li>
+        <li>The <span class="kbd">pwd</span> command returned: <span class="kbd">/ht@0,f2000000/pci@2/usb@b/disk@1</span></li>
+      </ul>
+
+      <h3 class="minor">Command to type:</h3>
+      <pre class="code-block"><code>boot /ht@0,f2000000/pci@2/usb@b/disk@1:3,\System\Library\CoreServices\BootX</code></pre>
+    </section>
+
+    <div class="page-actions">
+      <div class="page-actions-left">
+        <a class="cta-button" href="https://github.com/Kruszoneq/macUSB/releases">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 3v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M8.5 10.5 12 13.9l3.5-3.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M5 17.5v2.5h14V17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>Download macUSB</span>
+        </a>
+        <span id="latest-version" class="version-info">Latest release</span>
+      </div>
+      <a class="page-link" href="#top">Back to top</a>
+    </div>
+  </main>
+
+  <footer>
+    <p>Copyright © 2025-2026 Krystian Pierz</p>
+  </footer>
+
+  <script src="../../assets/js/main.js" defer></script>
+</body>
+</html>
+
