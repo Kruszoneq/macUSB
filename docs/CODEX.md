@@ -188,6 +188,7 @@ About page:
 - No “Installation and first run” section.
 - “What you get” includes a Security card noting notarization starting with v1.1.2.
 - PowerPC booting guide link is a button inside the “PowerPC revival” card.
+- “PowerPC revival” spans full width in the “What you get” grid.
 
 Footnotes:
 - Apple Docs-style superscripts (no pill backgrounds).

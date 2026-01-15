@@ -324,6 +324,10 @@ a:focus-visible {
             padding: 16px 16px 14px;
         }
 
+        .page-card.page-card-wide {
+            grid-column: 1 / -1;
+        }
+
         .page-card p {
             margin: 0;
             color: var(--text-secondary);
