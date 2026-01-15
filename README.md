@@ -2,7 +2,7 @@
 
 ### Creating bootable macOS and OS X USB drives has never been easier!
 
-![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) ![Vibe Coded](https://img.shields.io/badge/Vibe%20Coded%20-gray) [![Website](https://img.shields.io/badge/Website-macUSB-blueviolet)](https://kruszoneq.github.io/macUSB/)
+![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) [Security](https://img.shields.io/badge/Security-Notarized-success) ![Vibe Coded](https://img.shields.io/badge/Vibe%20Coded%20-gray) ![Vibe Coded](https://img.shields.io/badge/Vibe%20Coded%20-gray) [![Website](https://img.shields.io/badge/Website-macUSB-blueviolet)](https://kruszoneq.github.io/macUSB/)
 
 
 **macUSB** is a one-click tool that transforms your modern Mac (Apple Silicon) into a service machine capable of reviving older Apple computers.
@@ -30,7 +30,11 @@ The application automates the entire process of creating a bootable USB drive. Y
   
   > 📖 **Guide:** [Step-by-step: Booting from USB on PowerPC Macs using Open Firmware](https://kruszoneq.github.io/macUSB/pages/guides/ppc_boot_instructions.html)
 
-> **Fun Fact:** The application was created using the "Vibe Coding" method in collaboration with the Gemini 3 Pro and GPT-5 AI models. The project proves that programming barriers (even cross-architectural ones) can be overcome with determination and AI support.
+* **Security:** Starting with version **v1.1.2**, the application is officially **notarized by Apple**. This guarantees that the software is free from malicious code and ensures a seamless, secure first launch on macOS without requiring any extra security workarounds.
+
+---
+
+**Fun Fact:** The application was created using the "Vibe Coding" method. Every single function has been rigorously verified for correct operation to ensure full stability. This project proves that programming barriers (even cross-architectural ones) can be overcome with determination and AI support while maintaining the highest standards of code quality.
 
 ---
 
@@ -83,7 +87,7 @@ The table lists systems supported by the application that are successfully recog
 | **Mac OS X Tiger**[^3] | 10.4 | ✅ |
 
 [^1]: Only version **10.12.6** is supported.
-[^2]: Tested on the image downloaded from [Mavericks Forever](https://mavericksforever.com/). Images from other sources have not been verified.
+[^2]: Fully works with the image downloaded from [Mavericks Forever](https://mavericksforever.com/). Images from other sources have not been verified and may cause errors.
 [^3]: The **Single DVD** edition is recognized automatically. Instructions for the **Multi-DVD** edition are available on the application's website: [Tiger Multi-DVD Guide](https://kruszoneq.github.io/macUSB/pages/guides/multidvd_tiger.html).
 
 ---
@@ -101,6 +105,18 @@ The application interface automatically adapts to the system language:
 * 🇧🇷 Portuguese (PT-BR)
 * 🇨🇳 Simplified Chinese (ZH-Hans)
 * 🇷🇺 Russian (RU)
+
+---
+
+## 🛠️ Support & Bug Reports
+
+If you encounter any issues, please report them via [GitHub Issues](https://github.com/Kruszoneq/macUSB/issues). To help me replicate and fix the bug faster, please include the following details:
+
+* **Description of the issue:** What happened and at what stage?
+* **Screenshot:** An image of the error or the application window is highly helpful for diagnosis.
+* **Host OS Version:** Which macOS version are you running macUSB on (e.g., macOS Sequoia 15.1)?
+* **Target OS Version:** Which system are you trying to prepare (e.g., Mac OS X Tiger 10.4)?
+* **Installer Source & LINK:** Where did the installer file come from (e.g., Mist, Internet Archive)? **If possible, please provide a link to the source** – this allows me to download the exact same image and test it on my end.
 
 ---
 

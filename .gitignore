@@ -1,5 +1,4 @@
-# Xcode
-.DS_Store
+# Xcode project and user data
 */build/
 *.os
 *.xcodeproj/project.xcworkspace/
@@ -9,24 +8,42 @@
 *.xcplaygroundpage/
 *.xcworkspacedata
 *.xcuserstate
+*.xcarchive
+*.xcresult
+*.xccovreport
+*.xccovarchive
+*.xcworkspace/xcuserdata/
+*.xcuserdatad/
 
-# Swift Package Manager
+# Swift Package Manager (SPM)
 .build/
 .swiftpm/
 
-# Temp
+# Project-specific temporary files
 macUSB_temp/
 
-# System
+# macOS system files
+.DS_Store
 .AppleDouble
 .LSOverride
 ._*
 
-# Files
+# SourceKit-LSP artifacts
+.sourcekit-lsp/
+
+# Developer tools and editors
+.vscode/
+.idea/
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Build artifacts and archives
 *.app
 *.ipa
 *.dSYM
 *.zip
 
-# Xcode DerivedData (jeśli kiedyś zmienisz lokalizację)
+# Xcode DerivedData (for custom locations)
 DerivedData/
