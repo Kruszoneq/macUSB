@@ -2,7 +2,7 @@
 
 ### Creating bootable macOS and OS X USB drives has never been easier!
 
-![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) [Security](https://img.shields.io/badge/Security-Notarized-success) ![Vibe Coded](https://img.shields.io/badge/Vibe%20Coded%20-gray) ![Vibe Coded](https://img.shields.io/badge/Vibe%20Coded%20-gray) [![Website](https://img.shields.io/badge/Website-macUSB-blueviolet)](https://kruszoneq.github.io/macUSB/)
+![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) ![Security](https://img.shields.io/badge/Security-Notarized-success) ![Vibe Coded](https://img.shields.io/badge/Vibe%20Coded%20-gray) [![Website](https://img.shields.io/badge/Website-macUSB-blueviolet)](https://kruszoneq.github.io/macUSB/)
 
 
 **macUSB** is a one-click tool that transforms your modern Mac (Apple Silicon) into a service machine capable of reviving older Apple computers.
