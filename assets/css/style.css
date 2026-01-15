@@ -99,7 +99,8 @@ a:focus-visible {
         .window-header,
         footer,
         .theme-toggle,
-        .cta-button {
+        .cta-button,
+        .card-button {
             transition: background-color 0.35s ease,
                         color 0.35s ease,
                         border-color 0.35s ease,
@@ -115,6 +116,7 @@ a:focus-visible {
             footer,
             .theme-toggle,
             .cta-button,
+            .card-button,
             .screenshot-stage img,
             .scroll-cue {
                 transition: none !important;
@@ -327,6 +329,40 @@ a:focus-visible {
             color: var(--text-secondary);
             font-size: 15px;
             line-height: 1.45;
+        }
+
+        .page-card .card-link {
+            margin: 12px 0 0;
+        }
+
+        .page-card .card-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: var(--surface-1);
+            color: var(--text-main);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .page-card .card-button:hover {
+            background-color: rgba(120, 120, 120, 0.12);
+            border-color: rgba(120, 120, 120, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .page-card .card-button:active {
+            transform: translateY(0);
+        }
+
+        .page-card .card-button:focus-visible {
+            outline: 2px solid var(--border-color);
+            outline-offset: 3px;
         }
 
         .page-split {
