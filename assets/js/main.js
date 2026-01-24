@@ -350,7 +350,7 @@ fetch('https://api.github.com/repos/Kruszoneq/macUSB/releases/latest')
   }
 
   function bind() {
-    const imgs = document.querySelectorAll('img.guide-image');
+    const imgs = document.querySelectorAll('img.guide-image, img.zoom-image');
     imgs.forEach((img) => {
       if (img.dataset.zoomBound === '1') return;
       img.dataset.zoomBound = '1';

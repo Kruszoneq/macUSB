@@ -61,6 +61,7 @@ IMPORTANT: All pages must load the navbar from `/pages/partials.html` via JS inj
 - Hero is full-viewport and split on desktop: left media slider, right content (logo/title/subtitle/CTA/version/requirements).
 - On narrower screens, hero stacks content above media and recenters text.
 - Slider should visually match the height of the hero content block (icon/title/text/CTA).
+- The `#screenshots` section contains the three feature cards, then the section title, then three stacked rows of screenshots with descriptions.
 
 ### Colors & theming
 - Theme supports: system auto + manual override.
@@ -107,7 +108,8 @@ In partial HTML, use `{{BASE}}` placeholder where needed, then replace in JS:
 - `.screenshot-stage` uses images with `data-step` ordering.
 - Carousel auto-advances with IntersectionObserver (starts when visible).
 - Do not remove; do not break ordering logic.
-- The `#screenshots` section below the hero contains a placeholder only (future gallery hook).
+- The `#screenshots` section below the hero uses items with a left screen + right description layout; on small screens the description stacks under the screen.
+- Screens in the `#screenshots` section are zoomable via the existing lightbox; use `class="zoom-image"`.
 
 ### F) Theme detection + manual toggle
 - Stored in localStorage under key: `macusb-theme` (`auto|light|dark`)
@@ -280,3 +282,6 @@ Before shipping:
 ## 12) Changelog
 
 - 2026-01-24: Added meta rules for maintaining this document, documented the hero split layout, scroll cue behavior, and CSS variable dependencies for viewport sizing.
+- 2026-01-24: Documented the screenshots section placeholder layout and the position of the feature cards above it.
+- 2026-01-24: Updated screenshots section to use three real app screenshots with a section title.
+- 2026-01-24: Moved the screenshots title below the feature cards and enabled click-to-zoom for the landing screenshots.

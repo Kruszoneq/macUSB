@@ -693,6 +693,16 @@ a:focus-visible {
             opacity: 0.92;
         }
 
+        .screenshots-title {
+            width: 100%;
+            max-width: 980px;
+            margin: 40px auto 30px;
+            font-size: 32px;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+            text-align: center;
+        }
+
         .screenshot-stage {
             width: 100%;
             max-width: 980px;
@@ -723,24 +733,76 @@ a:focus-visible {
             transform: translateY(-4px) scale(0.998);
         }
 
-        .screenshot-placeholder {
+        .screenshot-list {
             width: 100%;
             max-width: 980px;
-            aspect-ratio: 16 / 10;
-            border-radius: 20px;
-            border: 1px dashed var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            margin: 0 auto;
+        }
+
+        .screenshot-item {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+            align-items: center;
+            gap: 28px;
+            padding: 20px;
+            border-radius: 22px;
+            border: 1px solid var(--border-color);
             background: var(--surface-1);
+            box-shadow: 0 18px 40px var(--shadow-color);
+        }
+
+        .screenshot-frame {
+            aspect-ratio: 16 / 10;
+            border-radius: 16px;
+            border: 1px dashed var(--border-color);
+            background: color-mix(in srgb, var(--surface-2) 88%, var(--text-main) 12%);
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             color: var(--text-secondary);
-            font-size: 15px;
+            font-size: 14px;
+            letter-spacing: -0.01em;
+            overflow: hidden;
+        }
+
+        .screenshot-frame span {
+            padding: 0 10px;
+        }
+
+        .screenshot-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .zoom-image {
+            cursor: zoom-in;
+        }
+
+        .screenshot-description h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+            font-weight: 600;
             letter-spacing: -0.01em;
         }
 
-        .screenshot-placeholder p {
+        .screenshot-description p {
             margin: 0;
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .screenshot-description .screenshot-note {
+            margin-top: 10px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            opacity: 0.9;
         }
 
         /* Legacy leftover styles (harmless if unused) */
@@ -833,6 +895,16 @@ a:focus-visible {
             .hero .screenshot-stage {
                 height: auto;
                 aspect-ratio: 16 / 10;
+            }
+
+            .screenshot-item {
+                grid-template-columns: 1fr;
+                gap: 18px;
+                padding: 18px;
+            }
+
+            .screenshots-title {
+                font-size: 26px;
             }
         }
 
