@@ -603,6 +603,7 @@ a:focus-visible {
             color: var(--text-secondary);
             opacity: 0;
             transition: opacity 0.5s ease;
+            margin-top: 6px;
         }
 
         .requirements-info {
@@ -679,7 +680,7 @@ a:focus-visible {
         .screenshots-intro {
             width: 100%;
             max-width: 980px;
-            margin: 0 auto 80px;
+            margin: 0 auto 10px;
             text-align: center;
         }
 
@@ -755,7 +756,9 @@ a:focus-visible {
         }
 
         .screenshot-frame {
-            aspect-ratio: 16 / 10;
+            width: clamp(220px, 30vw, 360px);
+            aspect-ratio: 3 / 4;
+            justify-self: start;
             border-radius: 16px;
             border: 1px dashed var(--border-color);
             background: color-mix(in srgb, var(--surface-2) 88%, var(--text-main) 12%);
@@ -840,7 +843,7 @@ a:focus-visible {
 
         .supports-info {
             max-width: 980px;
-            margin: 40px auto 0;
+            margin: 14px auto 0;
             padding: 0 20px;
             text-align: center;
         }
@@ -905,6 +908,10 @@ a:focus-visible {
 
             .screenshots-title {
                 font-size: 26px;
+            }
+
+            .screenshot-frame {
+                width: 100%;
             }
         }
 
