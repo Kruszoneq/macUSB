@@ -936,6 +936,7 @@ a:focus-visible {
             /* Mobile ergonomics */
             .hero { padding-bottom: 72px; }
             .screenshots-intro { margin-bottom: 32px; }
+            .features { grid-template-columns: 1fr; }
             .theme-toggle { width: 44px; height: 44px; }
             .scroll-cue { bottom: 16px; }
             .supports-info { margin-top: 28px; }

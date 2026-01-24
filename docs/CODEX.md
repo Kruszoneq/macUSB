@@ -63,6 +63,7 @@ IMPORTANT: All pages must load the navbar from `/pages/partials.html` via JS inj
 - Slider should visually match the height of the hero content block (icon/title/text/CTA).
 - The `#screenshots` section contains the intro copy plus a caption line (`.supports-info`), then the three feature cards, then the section title, then three stacked rows of screenshots with descriptions.
 - Screenshot frames in `#screenshots` use a portrait aspect ratio to match the app UI and reduce empty space; keep them visually narrower than the description column.
+- Feature cards stack vertically on smartphone-sized screens.
 
 ### Colors & theming
 - Theme supports: system auto + manual override.
@@ -288,3 +289,4 @@ Before shipping:
 - 2026-01-24: Moved the screenshots title below the feature cards and enabled click-to-zoom for the landing screenshots.
 - 2026-01-24: Recorded the intro caption placement in the screenshots section and updated the checklist accordingly.
 - 2026-01-24: Noted the portrait aspect ratio for screenshot frames in `#screenshots`.
+- 2026-01-24: Documented mobile stacking behavior for the feature cards.
