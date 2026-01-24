@@ -500,9 +500,9 @@ a:focus-visible {
         .hero-inner {
             width: 100%;
             display: grid;
-            grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+            grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
             grid-template-areas: "media content";
-            gap: 56px;
+            gap: 44px;
             align-items: stretch;
         }
 

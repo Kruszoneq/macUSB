@@ -5,6 +5,14 @@ Purpose: allow an AI assistant (Codex) to continue development consistently, wit
 
 ---
 
+## 0) How to use this document (meta rules)
+
+- Treat this file as the single source of truth whenever it is referenced by the user.
+- When new UI/UX patterns or behaviors are introduced, update this file in the same change.
+- Always add a short entry to the Changelog when you append or change rules here.
+
+---
+
 ## 1) Project Overview
 
 **Project:** macUSB (open-source macOS app for creating bootable installers)  
@@ -49,6 +57,11 @@ IMPORTANT: All pages must load the navbar from `/pages/partials.html` via JS inj
 - Content max width: ~980px for pages.
 - Rounded corners; subtle borders; frosted nav on scroll.
 
+### Landing layout (index)
+- Hero is full-viewport and split on desktop: left media slider, right content (logo/title/subtitle/CTA/version/requirements).
+- On narrower screens, hero stacks content above media and recenters text.
+- Slider should visually match the height of the hero content block (icon/title/text/CTA).
+
 ### Colors & theming
 - Theme supports: system auto + manual override.
 - Dark theme background is not pure black; intentionally uses `#303030`.
@@ -90,9 +103,11 @@ In partial HTML, use `{{BASE}}` placeholder where needed, then replace in JS:
 - Writes to `#latest-version` as: `Latest version: <tag>`
 
 ### E) Landing screenshots carousel
-- Landing uses `.screenshot-stage` and images with `data-step` ordering.
+- Carousel lives inside the hero on desktop: `.hero-media .screenshot-stage` (left column).
+- `.screenshot-stage` uses images with `data-step` ordering.
 - Carousel auto-advances with IntersectionObserver (starts when visible).
 - Do not remove; do not break ordering logic.
+- The `#screenshots` section below the hero contains a placeholder only (future gallery hook).
 
 ### F) Theme detection + manual toggle
 - Stored in localStorage under key: `macusb-theme` (`auto|light|dark`)
@@ -110,6 +125,9 @@ In partial HTML, use `{{BASE}}` placeholder where needed, then replace in JS:
   - Hover on desktop fine pointers
   - Click on touch/mobile
   - Keyboard accessible (Enter/Space/ArrowDown, Escape)
+
+### H) Scroll cue (hero)
+- The down-arrow button in the hero scrolls to `#screenshots`. Keep the anchor ID and smooth-scroll behavior.
 
 ---
 
@@ -206,6 +224,7 @@ Footnotes:
   - guides: `../../assets/js/main.js`
 - Same for CSS path.
 - Prefer minimal inline styles. If necessary, migrate to `style.css`.
+- `main.js` updates `--vh` and `--nav-height` CSS variables; the landing hero relies on these for full-viewport sizing and spacing.
 
 Hover “delay” bugs:
 - Avoid pointer-event traps that keep hover active after mouse leaves.
@@ -250,7 +269,14 @@ Before shipping:
 - [ ] Scrolled nav becomes frosted and remains readable in dark mode.
 - [ ] Latest version text loads from GitHub API.
 - [ ] Landing hero fits viewport without weird offsets.
-- [ ] Screenshots carousel works, only visible below hero on scroll.
+- [ ] Screenshots carousel works in the hero and stays aligned with the hero content height.
+- [ ] #screenshots section shows placeholder (no carousel duplication).
 - [ ] Guide screenshots are not oversized; click-to-zoom works.
 - [ ] No broken relative links (local + GitHub Pages).
 - [ ] Meta tags present for guides (title/description/canonical/OG).
+
+---
+
+## 12) Changelog
+
+- 2026-01-24: Added meta rules for maintaining this document, documented the hero split layout, scroll cue behavior, and CSS variable dependencies for viewport sizing.
