@@ -31,38 +31,9 @@ struct macUSBApp: App {
     @StateObject private var menuState = MenuState.shared
     
     init() {
-        // --- LOGIKA JĘZYKOWA (Hard Force English Fallback) ---
+        // Ustaw globalny język jak najwcześniej (na podstawie wyboru użytkownika lub systemu)
+        LanguageManager.applyPreferredLanguageAtLaunch()
         
-        // 1. Pobieramy preferowane języki użytkownika z systemu
-        let userLanguages = Locale.preferredLanguages // np. ["it-IT", "en-US"]
-        
-        // 2. Definiujemy, co my wspieramy (bez "Base")
-        // UWAGA: Nie wpisujemy tu "pl", jeśli chcemy, by PL działało tylko dla PL,
-        // a dla reszty EN. Ale dla bezpieczeństwa dajemy oba.
-        let supportedLanguages = ["pl", "de", "fr", "es", "pt", "ja", "zh", "ru", "en"]
-        
-        // 3. Sprawdzamy, czy pierwszy preferowany język użytkownika jest u nas wspierany
-        let primaryUserLang = userLanguages.first?.prefix(2).lowercased() ?? "en" // np. "it"
-        
-        let isSupported = supportedLanguages.contains(String(primaryUserLang))
-        
-        // 4. KLUCZOWY MOMENT:
-        // Jeśli język to np. IT (niewspierany), a my mamy kod w PL (Base),
-        // to system weźmie PL. Musimy temu zapobiec i wymusić EN.
-        
-        if !isSupported {
-            // Wymuszamy Angielski dla wszystkich niewspieranych
-            UserDefaults.standard.set(["en"], forKey: "AppleLanguages")
-            UserDefaults.standard.synchronize() // Ważne: zapisz natychmiast
-        } else {
-            // Jeśli język jest wspierany (np. PL, DE), usuwamy wymuszenie,
-            // żeby system sam wybrał właściwy plik .strings
-            UserDefaults.standard.removeObject(forKey: "AppleLanguages")
-            UserDefaults.standard.synchronize()
-        }
-        
-        // --- KONIEC LOGIKI JĘZYKOWEJ ---
-
         // Blokada przed podwójnym uruchomieniem
         if let bundleId = Bundle.main.bundleIdentifier {
             let runningApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)

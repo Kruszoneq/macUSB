@@ -1200,6 +1200,9 @@
         }
       }
     },
+    "Aby zmienić język interfejsu we wszystkich elementach aplikacji (w tym menu i przyciskach), wymagany jest restart. Kliknij poniżej, aby uruchomić aplikację ponownie." : {
+
+    },
     "Aktualizacja wersji i podpisywanie..." : {
       "comment" : "Version update and code signing in progress",
       "localizations" : {
@@ -6767,6 +6770,9 @@
         }
       }
     },
+    "Uruchom aplikację ponownie" : {
+
+    },
     "Uruchomiono Terminal" : {
       "localizations" : {
         "de" : {
@@ -8380,6 +8386,9 @@
           }
         }
       }
+    },
+    "Wymagany restart aplikacji" : {
+
     },
     "Wystąpił błąd" : {
       "localizations" : {
