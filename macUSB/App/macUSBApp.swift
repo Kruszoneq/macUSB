@@ -29,6 +29,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 struct macUSBApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var menuState = MenuState.shared
+    @StateObject private var languageManager = LanguageManager()
     
     init() {
         // Ustaw globalny język jak najwcześniej (na podstawie wyboru użytkownika lub systemu)
@@ -53,6 +54,7 @@ struct macUSBApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(languageManager)
                 .frame(width: 550, height: 750)
                 .frame(minWidth: 550, maxWidth: 550, minHeight: 750, maxHeight: 750)
         }
@@ -120,6 +122,41 @@ struct macUSBApp: App {
                             }
                         }
                     }
+                }
+            }
+            CommandMenu(String(localized: "Język")) {
+                Button {
+                    languageManager.currentLanguage = "auto"
+                } label: {
+                    Label(String(localized: "Automatycznie"), systemImage: languageManager.isAuto ? "checkmark" : "")
+                }
+                Divider()
+                Button { languageManager.currentLanguage = "pl" } label: {
+                    Label("Polski", systemImage: languageManager.currentLanguage == "pl" ? "checkmark" : "")
+                }
+                Button { languageManager.currentLanguage = "en" } label: {
+                    Label("English", systemImage: languageManager.currentLanguage == "en" ? "checkmark" : "")
+                }
+                Button { languageManager.currentLanguage = "de" } label: {
+                    Label("Deutsch", systemImage: languageManager.currentLanguage == "de" ? "checkmark" : "")
+                }
+                Button { languageManager.currentLanguage = "fr" } label: {
+                    Label("Français", systemImage: languageManager.currentLanguage == "fr" ? "checkmark" : "")
+                }
+                Button { languageManager.currentLanguage = "es" } label: {
+                    Label("Español", systemImage: languageManager.currentLanguage == "es" ? "checkmark" : "")
+                }
+                Button { languageManager.currentLanguage = "pt-BR" } label: {
+                    Label("Português (BR)", systemImage: languageManager.currentLanguage == "pt-BR" ? "checkmark" : "")
+                }
+                Button { languageManager.currentLanguage = "ru" } label: {
+                    Label("Русский", systemImage: languageManager.currentLanguage == "ru" ? "checkmark" : "")
+                }
+                Button { languageManager.currentLanguage = "zh-Hans" } label: {
+                    Label("简体中文", systemImage: languageManager.currentLanguage == "zh-Hans" ? "checkmark" : "")
+                }
+                Button { languageManager.currentLanguage = "ja" } label: {
+                    Label("日本語", systemImage: languageManager.currentLanguage == "ja" ? "checkmark" : "")
                 }
             }
             CommandGroup(replacing: .windowList) { }

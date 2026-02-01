@@ -4,14 +4,11 @@ import Combine
 
 struct ContentView: View {
     @State private var path = NavigationPath()
-    
-    // Teraz Xcode znajdzie klasę w pliku LanguageManager.swift
-    @StateObject private var languageManager = LanguageManager()
+    @EnvironmentObject private var languageManager: LanguageManager
     
     var body: some View {
         NavigationStack(path: $path) {
             WelcomeView()
-                .environmentObject(languageManager)
         }
         // Sztywny rozmiar kontentu
         .frame(width: 550, height: 750)
