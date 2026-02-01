@@ -57,72 +57,11 @@ struct WelcomeView: View {
             
             // --- STOPKA (Bottom Bar) ---
             HStack {
-                // LEWA STRONA: Autor
+                Spacer()
                 Text("macUSB by Kruszoneq")
                     .font(.caption)
                     .foregroundColor(.secondary.opacity(0.6))
-                
                 Spacer()
-                
-                // PRAWA STRONA: Wybór języka
-                Menu {
-                    // Sekcja: Wybierz język
-                    // 🇵🇱 Polish
-                    Button { languageManager.currentLanguage = "pl" } label: {
-                        Label("Polski 🇵🇱", systemImage: languageManager.currentLanguage == "pl" ? "checkmark" : "")
-                    }
-                    
-                    // 🇺🇸 English
-                    Button { languageManager.currentLanguage = "en" } label: {
-                        Label("English 🇺🇸", systemImage: languageManager.currentLanguage == "en" ? "checkmark" : "")
-                    }
-                    
-                    // 🇩🇪 German
-                    Button { languageManager.currentLanguage = "de" } label: {
-                        Label("Deutsch 🇩🇪", systemImage: languageManager.currentLanguage == "de" ? "checkmark" : "")
-                    }
-                    
-                    // 🇫🇷 French
-                    Button { languageManager.currentLanguage = "fr" } label: {
-                        Label("Français 🇫🇷", systemImage: languageManager.currentLanguage == "fr" ? "checkmark" : "")
-                    }
-                    
-                    // 🇪🇸 Spanish
-                    Button { languageManager.currentLanguage = "es" } label: {
-                        Label("Español 🇪🇸", systemImage: languageManager.currentLanguage == "es" ? "checkmark" : "")
-                    }
-                    
-                    // 🇧🇷 Portuguese (Brazil)
-                    Button { languageManager.currentLanguage = "pt-BR" } label: {
-                        Label("Português (BR) 🇧🇷", systemImage: languageManager.currentLanguage == "pt-BR" ? "checkmark" : "")
-                    }
-                    
-                    // 🇷🇺 Russian
-                    Button { languageManager.currentLanguage = "ru" } label: {
-                        Label("Русский 🇷🇺", systemImage: languageManager.currentLanguage == "ru" ? "checkmark" : "")
-                    }
-                    
-                    // 🇨🇳 Simplified Chinese
-                    Button { languageManager.currentLanguage = "zh-Hans" } label: {
-                        Label("简体中文 🇨🇳", systemImage: languageManager.currentLanguage == "zh-Hans" ? "checkmark" : "")
-                    }
-                    
-                    // 🇯🇵 Japanese
-                    Button { languageManager.currentLanguage = "ja" } label: {
-                        Label("日本語 🇯🇵", systemImage: languageManager.currentLanguage == "ja" ? "checkmark" : "")
-                    }
-                    
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "globe")
-                        Text("Zmień język") // Klucz do tłumaczenia (np. "Change Language")
-                            .font(.caption)
-                            .fontWeight(.medium)
-                    }
-                    .foregroundColor(.secondary)
-                }
-                .menuStyle(.borderlessButton)
-                .fixedSize() // Zapobiega ucinaniu tekstu
             }
             .padding(.horizontal, 25)
             .padding(.bottom, 20)

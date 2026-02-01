@@ -1201,57 +1201,57 @@
       }
     },
     "Aby zmienić język interfejsu we wszystkich elementach aplikacji (w tym menu i przyciskach), wymagany jest restart. Kliknij poniżej, aby uruchomić aplikację ponownie." : {
-          "localizations" : {
-            "de" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Um die Oberflächensprache in allen Elementen der Anwendung (einschließlich Menüs und Schaltflächen) zu ändern, ist ein Neustart erforderlich. Klicken Sie unten, um die Anwendung neu zu starten."
-              }
-            },
-            "en" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "To change the interface language in all application elements (including menus and buttons), a restart is required. Click below to restart the application."
-              }
-            },
-            "es" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Para cambiar el idioma de la interfaz en todos los elementos de la aplicación (incluidos menús y botones), es necesario reiniciar. Haga clic a continuación para reiniciar la aplicación."
-              }
-            },
-            "fr" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Pour changer la langue de l'interface dans tous les éléments de l'application (y compris les menus et les boutons), un redémarrage est nécessaire. Cliquez ci-dessous pour redémarrer l'application."
-              }
-            },
-            "ja" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "アプリケーションのすべての要素（メニューやボタンを含む）でインターフェース言語を変更するには、再起動が必要です。以下をクリックしてアプリケーションを再起動してください。"
-              }
-            },
-            "pt-BR" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Para alterar o idioma da interface em todos os elementos do aplicativo (incluindo menus e botões), é necessário reiniciar. Clique abaixo para reiniciar o aplicativo."
-              }
-            },
-            "ru" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Для изменения языка интерфейса во всех элементах приложения (включая меню и кнопки) требуется перезапуск. Нажмите ниже, чтобы перезапустить приложение."
-              }
-            },
-            "zh-Hans" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "要更改所有应用程序元素（包括菜单和按钮）中的界面语言，需要重启。点击下方以重启应用程序。"
-              }
-            }
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um die Oberflächensprache in allen Elementen der Anwendung (einschließlich Menüs und Schaltflächen) zu ändern, ist ein Neustart erforderlich. Klicken Sie unten, um die Anwendung neu zu starten."
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To change the interface language in all application elements (including menus and buttons), a restart is required. Click below to restart the application."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para cambiar el idioma de la interfaz en todos los elementos de la aplicación (incluidos menús y botones), es necesario reiniciar. Haga clic a continuación para reiniciar la aplicación."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour changer la langue de l'interface dans tous les éléments de l'application (y compris les menus et les boutons), un redémarrage est nécessaire. Cliquez ci-dessous pour redémarrer l'application."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリケーションのすべての要素（メニューやボタンを含む）でインターフェース言語を変更するには、再起動が必要です。以下をクリックしてアプリケーションを再起動してください。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para alterar o idioma da interface em todos os elementos do aplicativo (incluindo menus e botões), é necessário reiniciar. Clique abaixo para reiniciar o aplicativo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для изменения языка интерфейса во всех элементах приложения (включая меню и кнопки) требуется перезапуск. Нажмите ниже, чтобы перезапустить приложение."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要更改所有应用程序元素（包括菜单和按钮）中的界面语言，需要重启。点击下方以重启应用程序。"
+          }
+        }
+      }
+    },
     "Aktualizacja wersji i podpisywanie..." : {
       "comment" : "Version update and code signing in progress",
       "localizations" : {
@@ -1457,6 +1457,58 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "分析"
+          }
+        }
+      }
+    },
+    "Automatycznie" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automático"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatique"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automático"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автоматически"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动"
           }
         }
       }
@@ -2293,54 +2345,54 @@
         }
       }
     },
-    "Deutsch 🇩🇪" : {
+    "Deutsch" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deutsch 🇩🇪"
+            "value" : "Deutsch"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deutsch 🇩🇪"
+            "value" : "Deutsch"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deutsch 🇩🇪"
+            "value" : "Deutsch"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deutsch 🇩🇪"
+            "value" : "Deutsch"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deutsch 🇩🇪"
+            "value" : "Deutsch"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deutsch 🇩🇪"
+            "value" : "Deutsch"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deutsch 🇩🇪"
+            "value" : "Deutsch"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deutsch 🇩🇪"
+            "value" : "Deutsch"
           }
         }
       }
@@ -2605,106 +2657,106 @@
         }
       }
     },
-    "English 🇺🇸" : {
+    "English" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "English 🇺🇸"
+            "value" : "English"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "English 🇺🇸"
+            "value" : "English"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "English 🇺🇸"
+            "value" : "English"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "English 🇺🇸"
+            "value" : "English"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "English 🇺🇸"
+            "value" : "English"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "English 🇺🇸"
+            "value" : "English"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "English 🇺🇸"
+            "value" : "English"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "English 🇺🇸"
+            "value" : "English"
           }
         }
       }
     },
-    "Español 🇪🇸" : {
+    "Español" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Español 🇪🇸"
+            "value" : "Español"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Español 🇪🇸"
+            "value" : "Español"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Español 🇪🇸"
+            "value" : "Español"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Español 🇪🇸"
+            "value" : "Español"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Español 🇪🇸"
+            "value" : "Español"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Español 🇪🇸"
+            "value" : "Español"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Español 🇪🇸"
+            "value" : "Español"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Español 🇪🇸"
+            "value" : "Español"
           }
         }
       }
@@ -3125,54 +3177,54 @@
         }
       }
     },
-    "Français 🇫🇷" : {
+    "Français" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Français 🇫🇷"
+            "value" : "Français"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Français 🇫🇷"
+            "value" : "Français"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Français 🇫🇷"
+            "value" : "Français"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Français 🇫🇷"
+            "value" : "Français"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Français 🇫🇷"
+            "value" : "Français"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Français 🇫🇷"
+            "value" : "Français"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Français 🇫🇷"
+            "value" : "Français"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Français 🇫🇷"
+            "value" : "Français"
           }
         }
       }
@@ -3381,6 +3433,58 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "从 USB 启动说明（GitHub）"
+          }
+        }
+      }
+    },
+    "Język" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idioma"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langue"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "言語"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idioma"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Язык"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "语言"
           }
         }
       }
@@ -4005,6 +4109,58 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "按 Enter 键关闭..."
+          }
+        }
+      }
+    },
+    "Narzędzia" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Werkzeuge"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tools"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herramientas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outils"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ツール"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ferramentas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Инструменты"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工具"
           }
         }
       }
@@ -4737,6 +4893,58 @@
         }
       }
     },
+    "Otwórz Narzędzie dyskowe" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Festplattendienstprogramm öffnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Disk Utility"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir Utilidad de Discos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir Utilitaire de disque"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ディスクユーティリティを開く"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir Utilitário de Disco"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открыть Дисковую утилиту"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开磁盘工具"
+          }
+        }
+      }
+    },
     "Pobierz" : {
       "localizations" : {
         "de" : {
@@ -4893,54 +5101,54 @@
         }
       }
     },
-    "Polski 🇵🇱" : {
+    "Polski" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Polski 🇵🇱"
+            "value" : "Polski"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Polski 🇵🇱"
+            "value" : "Polski"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Polski 🇵🇱"
+            "value" : "Polski"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Polski 🇵🇱"
+            "value" : "Polski"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Polski 🇵🇱"
+            "value" : "Polski"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Polski 🇵🇱"
+            "value" : "Polski"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Polski 🇵🇱"
+            "value" : "Polski"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Polski 🇵🇱"
+            "value" : "Polski"
           }
         }
       }
@@ -5049,54 +5257,54 @@
         }
       }
     },
-    "Português (BR) 🇧🇷" : {
+    "Português (BR)" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Português (BR) 🇧🇷"
+            "value" : "Português (BR)"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Português (BR) 🇧🇷"
+            "value" : "Português (BR)"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Português (BR) 🇧🇷"
+            "value" : "Português (BR)"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Português (BR) 🇧🇷"
+            "value" : "Português (BR)"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Português (BR) 🇧🇷"
+            "value" : "Português (BR)"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Português (BR) 🇧🇷"
+            "value" : "Português (BR)"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Português (BR) 🇧🇷"
+            "value" : "Português (BR)"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Português (BR) 🇧🇷"
+            "value" : "Português (BR)"
           }
         }
       }
@@ -6820,57 +7028,57 @@
       }
     },
     "Uruchom aplikację ponownie" : {
-          "localizations" : {
-            "de" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Anwendung neu starten"
-              }
-            },
-            "en" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Restart application"
-              }
-            },
-            "es" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Reiniciar aplicación"
-              }
-            },
-            "fr" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Redémarrer l'application"
-              }
-            },
-            "ja" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "アプリケーションを再起動"
-              }
-            },
-            "pt-BR" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Reiniciar aplicativo"
-              }
-            },
-            "ru" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Перезапустить приложение"
-              }
-            },
-            "zh-Hans" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "重启应用程序"
-              }
-            }
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anwendung neu starten"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart application"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar aplicación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redémarrer l'application"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリケーションを再起動"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar aplicativo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перезапустить приложение"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重启应用程序"
+          }
+        }
+      }
+    },
     "Uruchomiono Terminal" : {
       "localizations" : {
         "de" : {
@@ -7339,54 +7547,54 @@
         }
       }
     },
-    "Włącz obsługę dysków zewnętrznych" : {
+    "Włącz obsługę zewnętrznych dysków twardych" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unterstützung für externe Laufwerke aktivieren"
+            "value" : "Unterstützung für externe Festplatten aktivieren"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enable external drive support"
+            "value" : "Enable external hard drive support"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Activar soporte para discos externos"
+            "value" : "Activar soporte para discos duros externos"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Activer la prise en charge des disques externes"
+            "value" : "Activer la prise en charge des disques durs externes"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "外付けドライブのサポートを有効にする"
+            "value" : "外付けハードドライブのサポートを有効にする"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ativar suporte a discos externos"
+            "value" : "Ativar suporte a discos rígidos externos"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Включить поддержку внешних дисков"
+            "value" : "Включить поддержку внешних жестких дисков"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "启用外部驱动器支持"
+            "value" : "启用外部硬盘支持"
           }
         }
       }
@@ -8486,57 +8694,57 @@
       }
     },
     "Wymagany restart aplikacji" : {
-          "localizations" : {
-            "de" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Neustart der Anwendung erforderlich"
-              }
-            },
-            "en" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Application restart required"
-              }
-            },
-            "es" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Se requiere reiniciar la aplicación"
-              }
-            },
-            "fr" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Redémarrage de l'application requis"
-              }
-            },
-            "ja" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "アプリケーションの再起動が必要です"
-              }
-            },
-            "pt-BR" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Reinicialização do aplicativo necessária"
-              }
-            },
-            "ru" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Требуется перезапуск приложения"
-              }
-            },
-            "zh-Hans" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "需要重启应用程序"
-              }
-            }
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neustart der Anwendung erforderlich"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Application restart required"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se requiere reiniciar la aplicación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redémarrage de l'application requis"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリケーションの再起動が必要です"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reinicialização do aplicativo necessária"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Требуется перезапуск приложения"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要重启应用程序"
+          }
+        }
+      }
+    },
     "Wystąpił błąd" : {
       "localizations" : {
         "de" : {
@@ -8953,58 +9161,6 @@
         }
       }
     },
-    "Zmień język" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sprache ändern"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Change language"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cambiar idioma"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Changer de langue"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "言語を変更"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mudar idioma"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сменить язык"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更改语言"
-          }
-        }
-      }
-    },
     "ŹRÓDŁO:" : {
       "localizations" : {
         "de" : {
@@ -9057,158 +9213,158 @@
         }
       }
     },
-    "Русский 🇷🇺" : {
+    "Русский" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Русский 🇷🇺"
+            "value" : "Русский"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Русский 🇷🇺"
+            "value" : "Русский"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Русский 🇷🇺"
+            "value" : "Русский"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Русский 🇷🇺"
+            "value" : "Русский"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Русский 🇷🇺"
+            "value" : "Русский"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Русский 🇷🇺"
+            "value" : "Русский"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Русский 🇷🇺"
+            "value" : "Русский"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Русский 🇷🇺"
+            "value" : "Русский"
           }
         }
       }
     },
-    "日本語 🇯🇵" : {
+    "日本語" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日本語 🇯🇵"
+            "value" : "日本語"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日本語 🇯🇵"
+            "value" : "日本語"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日本語 🇯🇵"
+            "value" : "日本語"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日本語 🇯🇵"
+            "value" : "日本語"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日本語 🇯🇵"
+            "value" : "日本語"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日本語 🇯🇵"
+            "value" : "日本語"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日本語 🇯🇵"
+            "value" : "日本語"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日本語 🇯🇵"
+            "value" : "日本語"
           }
         }
       }
     },
-    "简体中文 🇨🇳" : {
+    "简体中文" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "简体中文 🇨🇳"
+            "value" : "简体中文"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "简体中文 🇨🇳"
+            "value" : "简体中文"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "简体中文 🇨🇳"
+            "value" : "简体中文"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "简体中文 🇨🇳"
+            "value" : "简体中文"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "简体中文 🇨🇳"
+            "value" : "简体中文"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "简体中文 🇨🇳"
+            "value" : "简体中文"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "简体中文 🇨🇳"
+            "value" : "简体中文"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "简体中文 🇨🇳"
+            "value" : "简体中文"
           }
         }
       }

@@ -52,6 +52,9 @@ class LanguageManager: ObservableObject {
     // Domyślna wartość to "auto" - oznacza "podążaj za systemem".
     @AppStorage("selected_language_v2") private var storedLanguage: String = "auto"
     
+    // Informacja, czy aktywny jest tryb automatyczny (podążaj za systemem)
+    var isAuto: Bool { storedLanguage == "auto" }
+    
     // To jest właściwość, z której korzysta całe UI.
     var currentLanguage: String {
         get {
