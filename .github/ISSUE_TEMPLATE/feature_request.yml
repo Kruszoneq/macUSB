@@ -1,0 +1,32 @@
+name: "Feature Request"
+description: "Suggest a new idea or improvement for macUSB."
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to propose new features or improvements. Please be specific about the technical benefits of your suggestion.
+  - type: textarea
+    id: feature_description
+    attributes:
+      label: "Feature Description"
+      description: "A clear and concise description of the proposed feature."
+      placeholder: "Example: Add a system notification or a sound alert once the process of creating the bootable drive is finished."
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: "Motivation and Use Case"
+      description: "Why is this feature needed? What problem does it solve for users of macUSB?"
+      placeholder: "Example: This would allow the user to work on other tasks and be immediately informed when the USB drive is ready to be unplugged."
+    validations:
+      required: true
+  - type: textarea
+    id: implementation_ideas
+    attributes:
+      label: "Possible Implementation"
+      description: "Do you have any technical ideas on how this could be implemented? (Optional)"
+      placeholder: "Mention specific commands, libraries, or methods if applicable."
+    validations:
+      required: false
