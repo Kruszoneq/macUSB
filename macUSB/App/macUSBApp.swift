@@ -87,11 +87,11 @@ struct macUSBApp: App {
                     .disabled(!menuState.skipAnalysisEnabled)
                 }
                 Divider()
-                Button(String(localized: "Włącz obsługę dysków zewnętrznych")) {
+                Button(String(localized: "Włącz obsługę zewnętrznych dysków twardych")) {
                     let alert = NSAlert()
                     alert.alertStyle = .informational
                     alert.icon = NSApp.applicationIconImage
-                    alert.messageText = String(localized: "Włącz obsługę dysków zewnętrznych")
+                    alert.messageText = String(localized: "Włącz obsługę zewnętrznych dysków twardych")
                     alert.informativeText = String(localized: "Ta funkcja umożliwia tworzenie instalatora na zewnętrznych dyskach twardych i SSD. Zachowaj szczególną ostrożność przy wyborze dysku docelowego z listy, aby uniknąć przypadkowej utraty danych!")
                     alert.addButton(withTitle: String(localized: "OK"))
 
@@ -100,6 +100,25 @@ struct macUSBApp: App {
                     } else {
                         _ = alert.runModal()
                         menuState.enableExternalDrives()
+                    }
+                }
+            }
+            CommandMenu(String(localized: "Narzędzia")) {
+                Button(String(localized: "Otwórz Narzędzie dyskowe")) {
+                    if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.DiskUtility") {
+                        NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration(), completionHandler: nil)
+                    } else {
+                        let candidatePaths = [
+                            "/System/Applications/Utilities/Disk Utility.app",
+                            "/Applications/Utilities/Disk Utility.app"
+                        ]
+                        for path in candidatePaths {
+                            if FileManager.default.fileExists(atPath: path) {
+                                let url = URL(fileURLWithPath: path, isDirectory: true)
+                                NSWorkspace.shared.open(url)
+                                break
+                            }
+                        }
                     }
                 }
             }

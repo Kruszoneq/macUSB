@@ -1201,57 +1201,57 @@
       }
     },
     "Aby zmienić język interfejsu we wszystkich elementach aplikacji (w tym menu i przyciskach), wymagany jest restart. Kliknij poniżej, aby uruchomić aplikację ponownie." : {
-          "localizations" : {
-            "de" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Um die Oberflächensprache in allen Elementen der Anwendung (einschließlich Menüs und Schaltflächen) zu ändern, ist ein Neustart erforderlich. Klicken Sie unten, um die Anwendung neu zu starten."
-              }
-            },
-            "en" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "To change the interface language in all application elements (including menus and buttons), a restart is required. Click below to restart the application."
-              }
-            },
-            "es" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Para cambiar el idioma de la interfaz en todos los elementos de la aplicación (incluidos menús y botones), es necesario reiniciar. Haga clic a continuación para reiniciar la aplicación."
-              }
-            },
-            "fr" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Pour changer la langue de l'interface dans tous les éléments de l'application (y compris les menus et les boutons), un redémarrage est nécessaire. Cliquez ci-dessous pour redémarrer l'application."
-              }
-            },
-            "ja" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "アプリケーションのすべての要素（メニューやボタンを含む）でインターフェース言語を変更するには、再起動が必要です。以下をクリックしてアプリケーションを再起動してください。"
-              }
-            },
-            "pt-BR" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Para alterar o idioma da interface em todos os elementos do aplicativo (incluindo menus e botões), é necessário reiniciar. Clique abaixo para reiniciar o aplicativo."
-              }
-            },
-            "ru" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Для изменения языка интерфейса во всех элементах приложения (включая меню и кнопки) требуется перезапуск. Нажмите ниже, чтобы перезапустить приложение."
-              }
-            },
-            "zh-Hans" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "要更改所有应用程序元素（包括菜单和按钮）中的界面语言，需要重启。点击下方以重启应用程序。"
-              }
-            }
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um die Oberflächensprache in allen Elementen der Anwendung (einschließlich Menüs und Schaltflächen) zu ändern, ist ein Neustart erforderlich. Klicken Sie unten, um die Anwendung neu zu starten."
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To change the interface language in all application elements (including menus and buttons), a restart is required. Click below to restart the application."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para cambiar el idioma de la interfaz en todos los elementos de la aplicación (incluidos menús y botones), es necesario reiniciar. Haga clic a continuación para reiniciar la aplicación."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour changer la langue de l'interface dans tous les éléments de l'application (y compris les menus et les boutons), un redémarrage est nécessaire. Cliquez ci-dessous pour redémarrer l'application."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリケーションのすべての要素（メニューやボタンを含む）でインターフェース言語を変更するには、再起動が必要です。以下をクリックしてアプリケーションを再起動してください。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para alterar o idioma da interface em todos os elementos do aplicativo (incluindo menus e botões), é necessário reiniciar. Clique abaixo para reiniciar o aplicativo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для изменения языка интерфейса во всех элементах приложения (включая меню и кнопки) требуется перезапуск. Нажмите ниже, чтобы перезапустить приложение."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要更改所有应用程序元素（包括菜单和按钮）中的界面语言，需要重启。点击下方以重启应用程序。"
+          }
+        }
+      }
+    },
     "Aktualizacja wersji i podpisywanie..." : {
       "comment" : "Version update and code signing in progress",
       "localizations" : {
@@ -4009,6 +4009,58 @@
         }
       }
     },
+    "Narzędzia" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Werkzeuge"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Tools"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Herramientas"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Outils"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "ツール"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Ferramentas"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Инструменты"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "工具"
+              }
+            }
+          }
+        },
     "Nie" : {
       "localizations" : {
         "de" : {
@@ -4737,6 +4789,58 @@
         }
       }
     },
+    "Otwórz Narzędzie dyskowe" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Festplattendienstprogramm öffnen"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Open Disk Utility"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Abrir Utilidad de Discos"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Ouvrir Utilitaire de disque"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "ディスクユーティリティを開く"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Abrir Utilitário de Disco"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Открыть Дисковую утилиту"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "打开磁盘工具"
+              }
+            }
+          }
+        },
     "Pobierz" : {
       "localizations" : {
         "de" : {
@@ -6820,57 +6924,57 @@
       }
     },
     "Uruchom aplikację ponownie" : {
-          "localizations" : {
-            "de" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Anwendung neu starten"
-              }
-            },
-            "en" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Restart application"
-              }
-            },
-            "es" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Reiniciar aplicación"
-              }
-            },
-            "fr" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Redémarrer l'application"
-              }
-            },
-            "ja" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "アプリケーションを再起動"
-              }
-            },
-            "pt-BR" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Reiniciar aplicativo"
-              }
-            },
-            "ru" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Перезапустить приложение"
-              }
-            },
-            "zh-Hans" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "重启应用程序"
-              }
-            }
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anwendung neu starten"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart application"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar aplicación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redémarrer l'application"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリケーションを再起動"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar aplicativo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перезапустить приложение"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重启应用程序"
+          }
+        }
+      }
+    },
     "Uruchomiono Terminal" : {
       "localizations" : {
         "de" : {
@@ -7339,58 +7443,58 @@
         }
       }
     },
-    "Włącz obsługę dysków zewnętrznych" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unterstützung für externe Laufwerke aktivieren"
+    "Włącz obsługę zewnętrznych dysków twardych" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Unterstützung für externe Festplatten aktivieren"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Enable external hard drive support"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Activar soporte para discos duros externos"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Activer la prise en charge des disques durs externes"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "外付けハードドライブのサポートを有効にする"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Ativar suporte a discos rígidos externos"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Включить поддержку внешних жестких дисков"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "启用外部硬盘支持"
+              }
+            }
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable external drive support"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activar soporte para discos externos"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activer la prise en charge des disques externes"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "外付けドライブのサポートを有効にする"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ativar suporte a discos externos"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Включить поддержку внешних дисков"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "启用外部驱动器支持"
-          }
-        }
-      }
-    },
     "Wolumin zostanie nazwany PPC (APM + HFS+)." : {
       "localizations" : {
         "de" : {
@@ -8486,57 +8590,57 @@
       }
     },
     "Wymagany restart aplikacji" : {
-          "localizations" : {
-            "de" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Neustart der Anwendung erforderlich"
-              }
-            },
-            "en" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Application restart required"
-              }
-            },
-            "es" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Se requiere reiniciar la aplicación"
-              }
-            },
-            "fr" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Redémarrage de l'application requis"
-              }
-            },
-            "ja" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "アプリケーションの再起動が必要です"
-              }
-            },
-            "pt-BR" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Reinicialização do aplicativo necessária"
-              }
-            },
-            "ru" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Требуется перезапуск приложения"
-              }
-            },
-            "zh-Hans" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "需要重启应用程序"
-              }
-            }
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neustart der Anwendung erforderlich"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Application restart required"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se requiere reiniciar la aplicación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redémarrage de l'application requis"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリケーションの再起動が必要です"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reinicialização do aplicativo necessária"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Требуется перезапуск приложения"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要重启应用程序"
+          }
+        }
+      }
+    },
     "Wystąpił błąd" : {
       "localizations" : {
         "de" : {
