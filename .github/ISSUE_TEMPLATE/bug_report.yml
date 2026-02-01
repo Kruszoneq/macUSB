@@ -1,0 +1,67 @@
+name: "Bug Report"
+description: "Report a technical issue or error in macUSB."
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please provide the following technical details to allow for accurate reproduction and diagnosis of the issue.
+  - type: checkboxes
+    id: version_check
+    attributes:
+      label: "Application Version"
+      options:
+        - label: "I confirm that I am using the latest available version of macUSB."
+          required: true
+  - type: input
+    id: host_os_version
+    attributes:
+      label: "Host OS Version"
+      description: "The version of macOS currently running macUSB."
+      placeholder: "e.g., macOS Sequoia 15.1"
+    validations:
+      required: true
+  - type: input
+    id: target_os_version
+    attributes:
+      label: "Target OS Version"
+      description: "The version of macOS/OS X you are attempting to prepare."
+      placeholder: "e.g., Mac OS X Tiger 10.4"
+    validations:
+      required: true
+  - type: dropdown
+    id: file_format
+    attributes:
+      label: "File Format"
+      description: "Select the format of the source installer file."
+      multiple: true
+      options:
+        - ".dmg"
+        - ".app"
+        - ".iso"
+        - ".cdr"
+        - "Other"
+    validations:
+      required: true
+  - type: textarea
+    id: installer_source
+    attributes:
+      label: "Installer Source and Link"
+      description: "Specify where the installer file was obtained. Provide a direct link if possible."
+      placeholder: "e.g., Mist, Internet Archive (include URL)"
+    validations:
+      required: true
+  - type: textarea
+    id: detailed_description
+    attributes:
+      label: "Detailed Description of the Issue"
+      description: "Provide a comprehensive explanation of the error. Specify the exact stage where the process fails."
+      placeholder: "Example: After selecting the .dmg file, the application stays on the scanning screen for 5 minutes and then returns 'Analysis error'..."
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### Screenshots
+        Attach images of the error or the application window by dragging and dropping them below.

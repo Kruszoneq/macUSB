@@ -110,13 +110,12 @@ The application interface automatically adapts to the system language:
 
 ## 🛠️ Support & Bug Reports
 
-If you encounter any issues, please report them via [GitHub Issues](https://github.com/Kruszoneq/macUSB/issues). To help me replicate and fix the bug faster, please include the following details:
+Any technical issues or suggestions for new features should be reported via [GitHub Issues](https://github.com/Kruszoneq/macUSB/issues). To simplify the diagnostic process and expedite issue handling, it is highly recommended to use the available reporting templates whenever possible:
 
-* **Description of the issue:** What happened and at what stage?
-* **Screenshot:** An image of the error or the application window is highly helpful for diagnosis.
-* **Host OS Version:** Which macOS version are you running macUSB on (e.g., macOS Sequoia 15.1)?
-* **Target OS Version:** Which system are you trying to prepare (e.g., Mac OS X Tiger 10.4)?
-* **Installer Source & LINK:** Where did the installer file come from (e.g., Mist, Internet Archive)? **If possible, please provide a link to the source** – this allows me to download the exact same image and test it on my end.
+* **Bug Report**: Recommended for reporting technical errors. If possible, details such as **Host OS Version**, **Target OS Version**, file format (e.g., **.dmg**, **.app**), and the installer source and link should be provided.
+* **Feature Request**: Recommended for suggesting new ideas or improvements for the application.
+
+Including screenshots of the error or the application window is highly helpful and allows for a faster analysis of the reported issue.
 
 ---
 
