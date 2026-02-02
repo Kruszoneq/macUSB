@@ -8223,6 +8223,58 @@
         }
       }
     },
+    "Wybrano nośnik USB 2.0" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "USB 2.0-Laufwerk ausgewählt"
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "USB 2.0 drive selected"
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Unidad USB 2.0 seleccionada"
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Lecteur USB 2.0 sélectionné"
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "USB 2.0ドライブが選択されました"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Unidade USB 2.0 selecionada"
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Выбран накопитель USB 2.0"
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "已选择 USB 2.0 驱动器"
+              }
+            }
+          }
+        },
     "Wybrany dysk USB" : {
       "localizations" : {
         "de" : {
@@ -8327,6 +8379,58 @@
         }
       }
     },
+    "Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces tworzenia instalatora może potrwać kilkanaście minut" : {
+          "localizations" : {
+            "de" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Das ausgewählte Laufwerk verwendet einen älteren Datenübertragungsstandard. Die Erstellung des Installers kann einige Minuten dauern."
+              }
+            },
+            "en" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "The selected drive operates on an older data transfer standard. The installer creation process may take several minutes."
+              }
+            },
+            "es" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "La unidad seleccionada utiliza un estándar de transferencia de datos más antiguo. El proceso de creación del instalador puede tardar varios minutos."
+              }
+            },
+            "fr" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Le lecteur sélectionné utilise une norme de transfert de données plus ancienne. La création de l'installateur peut prendre plusieurs minutes."
+              }
+            },
+            "ja" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "選択されたドライブは古いデータ転送規格を使用しています。インストーラの作成には十数分かかる場合があります。"
+              }
+            },
+            "pt-BR" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "A unidade selecionada usa um padrão de transferência de dados mais antigo. O processo de criação do instalador pode levar vários minutos."
+              }
+            },
+            "ru" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "Выбранный накопитель использует устаревший стандарт передачи данных. Процесс создания установщика может занять несколько минут."
+              }
+            },
+            "zh-Hans" : {
+              "stringUnit" : {
+                "state" : "translated",
+                "value" : "所选驱动器使用的是较旧的数据传输标准。安装程序创建过程可能需要几分钟。"
+              }
+            }
+          }
+        },
     "Wybrany system nie jest wspierany przez aplikację" : {
       "comment" : "Generic unsupported system message",
       "localizations" : {

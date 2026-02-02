@@ -1,6 +1,75 @@
 import Foundation
+import IOKit
+import IOKit.storage
+import IOKit.usb
 
 struct USBDriveLogic {
+    /// Zwraca nazwę dysku bazowego (np. z "disk2s1" -> "disk2")
+    static func wholeDiskName(from bsd: String) -> String {
+        if let range = bsd.range(of: #"^disk\d+"#, options: .regularExpression) {
+            return String(bsd[range])
+        }
+        return bsd
+    }
+
+    /// Odczytuje właściwość z IORegistry jako Any
+    private static func ioRegistryProperty(_ entry: io_registry_entry_t, key: String) -> Any? {
+        let cfKey = key as CFString
+        if let cfProp = IORegistryEntryCreateCFProperty(entry, cfKey, kCFAllocatorDefault, 0)?.takeRetainedValue() {
+            return cfProp
+        }
+        return nil
+    }
+
+    /// Przechodzi po rodzicach w płaszczyźnie kIOServicePlane aż do korzenia, zwracając wykryty standard USB
+    static func detectUSBSpeed(forBSDName bsdWholeName: String) -> USBPortSpeed? {
+        // Wyszukaj w IORegistry węzeł IOMedia odpowiadający whole disk o nazwie BSD
+        var iterator: io_iterator_t = 0
+        guard let match = IOServiceMatching("IOMedia") else { return nil }
+        // Pobierz wszystkie IOMedia i przefiltruj we własnym zakresie
+        if IOServiceGetMatchingServices(0, match, &iterator) != KERN_SUCCESS { return nil }
+        defer { IOObjectRelease(iterator) }
+
+        var media: io_object_t = IO_OBJECT_NULL
+        while case let service = IOIteratorNext(iterator), service != IO_OBJECT_NULL {
+            defer { IOObjectRelease(service) }
+            // Sprawdź nazwę BSD i czy to whole media
+            let bsdName = ioRegistryProperty(service, key: kIOBSDNameKey as String) as? String
+            let isWhole = (ioRegistryProperty(service, key: kIOMediaWholeKey as String) as? NSNumber)?.boolValue ?? false
+            if bsdName == bsdWholeName && isWhole {
+                // Wspinaj się po rodzicach i szukaj węzłów USB
+                var current: io_registry_entry_t = service
+                while true {
+                    var parent: io_registry_entry_t = IO_OBJECT_NULL
+                    let kr = IORegistryEntryGetParentEntry(current, kIOServicePlane, &parent)
+                    if kr != KERN_SUCCESS || parent == IO_OBJECT_NULL { break }
+
+                    // Spróbuj odczytać bcdUSB
+                    if let bcd = ioRegistryProperty(parent, key: "bcdUSB") as? NSNumber {
+                        let value = bcd.intValue
+                        if value >= 0x0400 { IOObjectRelease(parent); return .usb4 }
+                        if value >= 0x0320 { IOObjectRelease(parent); return .usb32 }
+                        if value >= 0x0310 { IOObjectRelease(parent); return .usb31 }
+                        if value >= 0x0300 { IOObjectRelease(parent); return .usb3 }
+                        if value >= 0x0200 { IOObjectRelease(parent); return .usb2 }
+                    }
+                    // Spróbuj odczytać PortSpeed (np. "High Speed", "SuperSpeed")
+                    if let speedStr = ioRegistryProperty(parent, key: "PortSpeed") as? String {
+                        let s = speedStr.lowercased()
+                        if s.contains("superspeed") { IOObjectRelease(parent); return .usb3 }
+                        if s.contains("high speed") { IOObjectRelease(parent); return .usb2 }
+                    }
+
+                    IOObjectRelease(current)
+                    current = parent
+                }
+                if current != IO_OBJECT_NULL { IOObjectRelease(current) }
+                break
+            }
+        }
+        return nil
+    }
+
     /// Returns true if the mounted volume at the given URL is a network filesystem.
     private static func isNetworkVolume(url: URL) -> Bool {
         return url.withUnsafeFileSystemRepresentation { ptr in
@@ -64,7 +133,9 @@ struct USBDriveLogic {
             let totalCapacity = Int64(v.volumeTotalCapacity ?? 0)
             let size = ByteCountFormatter.string(fromByteCount: totalCapacity, countStyle: .file)
             let deviceName = getBSDName(from: url)
-            return USBDrive(name: name, device: deviceName, size: size, url: url)
+            let whole = wholeDiskName(from: deviceName)
+            let speed = detectUSBSpeed(forBSDName: whole)
+            return USBDrive(name: name, device: deviceName, size: size, url: url, usbSpeed: speed)
         }
         return drives
     }

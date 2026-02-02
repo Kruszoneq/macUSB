@@ -79,7 +79,9 @@ final class AnalysisLogic: ObservableObject {
             guard !bsd.isEmpty && bsd != "unknown" else { return nil }
             let totalCapacity = Int64(v.volumeTotalCapacity ?? 0)
             let size = ByteCountFormatter.string(fromByteCount: totalCapacity, countStyle: .file)
-            return USBDrive(name: name, device: bsd, size: size, url: url)
+            let whole = USBDriveLogic.wholeDiskName(from: bsd)
+            let speed = USBDriveLogic.detectUSBSpeed(forBSDName: whole)
+            return USBDrive(name: name, device: bsd, size: size, url: url, usbSpeed: speed)
         }
         return candidates
     }
