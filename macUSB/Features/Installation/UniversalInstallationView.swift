@@ -88,6 +88,29 @@ struct UniversalInstallationView: View {
                         .padding().frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color.blue.opacity(0.1)).cornerRadius(8)
                     }
+
+                    if let drive = targetDrive, drive.usbSpeed == .usb2 {
+                        HStack(alignment: .center) {
+                            Image(systemName: "externaldrive.fill")
+                                .font(.title2)
+                                .foregroundColor(.orange)
+                                .frame(width: 32)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Wybrano nośnik USB 2.0")
+                                    .font(.headline)
+                                    .foregroundColor(.orange)
+                                Text("Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces tworzenia instalatora może potrwać kilkanaście minut")
+                                    .font(.subheadline)
+                                    .foregroundColor(.orange.opacity(0.8))
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.orange.opacity(0.1))
+                        .cornerRadius(8)
+                        .transition(.opacity)
+                    }
                     
                     // RAMKA: Przebieg
                     HStack(alignment: .top) {
