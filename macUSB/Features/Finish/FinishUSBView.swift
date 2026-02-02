@@ -11,6 +11,7 @@ struct FinishUSBView: View {
     @State private var isCleaning: Bool = true
     @State private var cleanupSuccess: Bool = false
     @State private var cleanupErrorMessage: String? = nil
+    @State private var didPlayResultSound: Bool = false
     
     private var isSnowLeopard: Bool {
         let lower = systemName.lowercased()
@@ -206,7 +207,7 @@ struct FinishUSBView: View {
                 window.styleMask.remove(.resizable)
             }
         )
-        .onAppear { performCleanupWithDelay() }
+        .onAppear { playResultSoundOnce(); performCleanupWithDelay() }
     }
     
     // --- LOGIKA ---
@@ -230,6 +231,27 @@ struct FinishUSBView: View {
                     self.cleanupErrorMessage = errorMsg
                     self.isCleaning = false
                 }
+            }
+        }
+    }
+    
+    // --- DŹWIĘK WYNIKU ---
+    func playResultSoundOnce() {
+        // Zabezpieczenie przed wielokrotnym odtworzeniem
+        if didPlayResultSound { return }
+        didPlayResultSound = true
+        
+        if didFail {
+            // Dźwięk niepowodzenia
+            if let failSound = NSSound(named: NSSound.Name("Basso")) {
+                failSound.play()
+            }
+        } else {
+            // Dźwięk sukcesu (jak w instalatorach pkg)
+            if let successSound = NSSound(named: NSSound.Name("Glass")) {
+                successSound.play()
+            } else if let hero = NSSound(named: NSSound.Name("Hero")) {
+                hero.play()
             }
         }
     }

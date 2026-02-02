@@ -104,6 +104,42 @@ struct macUSBApp: App {
                         menuState.enableExternalDrives()
                     }
                 }
+                Divider()
+                Menu(String(localized: "Język")) {
+                    Button {
+                        languageManager.currentLanguage = "auto"
+                    } label: {
+                        Label(String(localized: "Automatycznie"), systemImage: languageManager.isAuto ? "checkmark" : "")
+                    }
+                    Divider()
+                    Button { languageManager.currentLanguage = "pl" } label: {
+                        Label("Polski", systemImage: languageManager.currentLanguage == "pl" ? "checkmark" : "")
+                    }
+                    Button { languageManager.currentLanguage = "en" } label: {
+                        Label("English", systemImage: languageManager.currentLanguage == "en" ? "checkmark" : "")
+                    }
+                    Button { languageManager.currentLanguage = "de" } label: {
+                        Label("Deutsch", systemImage: languageManager.currentLanguage == "de" ? "checkmark" : "")
+                    }
+                    Button { languageManager.currentLanguage = "fr" } label: {
+                        Label("Français", systemImage: languageManager.currentLanguage == "fr" ? "checkmark" : "")
+                    }
+                    Button { languageManager.currentLanguage = "es" } label: {
+                        Label("Español", systemImage: languageManager.currentLanguage == "es" ? "checkmark" : "")
+                    }
+                    Button { languageManager.currentLanguage = "pt-BR" } label: {
+                        Label("Português (BR)", systemImage: languageManager.currentLanguage == "pt-BR" ? "checkmark" : "")
+                    }
+                    Button { languageManager.currentLanguage = "ru" } label: {
+                        Label("Русский", systemImage: languageManager.currentLanguage == "ru" ? "checkmark" : "")
+                    }
+                    Button { languageManager.currentLanguage = "zh-Hans" } label: {
+                        Label("简体中文", systemImage: languageManager.currentLanguage == "zh-Hans" ? "checkmark" : "")
+                    }
+                    Button { languageManager.currentLanguage = "ja" } label: {
+                        Label("日本語", systemImage: languageManager.currentLanguage == "ja" ? "checkmark" : "")
+                    }
+                }
             }
             CommandMenu(String(localized: "Narzędzia")) {
                 Button(String(localized: "Otwórz Narzędzie dyskowe")) {
@@ -122,41 +158,6 @@ struct macUSBApp: App {
                             }
                         }
                     }
-                }
-            }
-            CommandMenu(String(localized: "Język")) {
-                Button {
-                    languageManager.currentLanguage = "auto"
-                } label: {
-                    Label(String(localized: "Automatycznie"), systemImage: languageManager.isAuto ? "checkmark" : "")
-                }
-                Divider()
-                Button { languageManager.currentLanguage = "pl" } label: {
-                    Label("Polski", systemImage: languageManager.currentLanguage == "pl" ? "checkmark" : "")
-                }
-                Button { languageManager.currentLanguage = "en" } label: {
-                    Label("English", systemImage: languageManager.currentLanguage == "en" ? "checkmark" : "")
-                }
-                Button { languageManager.currentLanguage = "de" } label: {
-                    Label("Deutsch", systemImage: languageManager.currentLanguage == "de" ? "checkmark" : "")
-                }
-                Button { languageManager.currentLanguage = "fr" } label: {
-                    Label("Français", systemImage: languageManager.currentLanguage == "fr" ? "checkmark" : "")
-                }
-                Button { languageManager.currentLanguage = "es" } label: {
-                    Label("Español", systemImage: languageManager.currentLanguage == "es" ? "checkmark" : "")
-                }
-                Button { languageManager.currentLanguage = "pt-BR" } label: {
-                    Label("Português (BR)", systemImage: languageManager.currentLanguage == "pt-BR" ? "checkmark" : "")
-                }
-                Button { languageManager.currentLanguage = "ru" } label: {
-                    Label("Русский", systemImage: languageManager.currentLanguage == "ru" ? "checkmark" : "")
-                }
-                Button { languageManager.currentLanguage = "zh-Hans" } label: {
-                    Label("简体中文", systemImage: languageManager.currentLanguage == "zh-Hans" ? "checkmark" : "")
-                }
-                Button { languageManager.currentLanguage = "ja" } label: {
-                    Label("日本語", systemImage: languageManager.currentLanguage == "ja" ? "checkmark" : "")
                 }
             }
             CommandGroup(replacing: .windowList) { }
