@@ -4,10 +4,16 @@ import AppKit
 // Logic extracted from UniversalInstallationView without changing behavior or UI
 extension UniversalInstallationView {
     // --- POMOCNIK LOGOWANIA ---
-    func log(_ message: String) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
-        print("[\(formatter.string(from: Date()))] \(message)")
+    func log(_ message: String, category: String = "Installation") {
+        AppLogging.info(message, category: category)
+    }
+
+    func logError(_ message: String, category: String = "Installation") {
+        AppLogging.error(message, category: category)
+    }
+
+    func stage(_ title: String) {
+        AppLogging.stage(title)
     }
 
     // --- LOGIKA ---
@@ -77,7 +83,7 @@ extension UniversalInstallationView {
 
     // Lokalna funkcja codesign (bez sudo, w aplikacji)
     func performLocalCodesign(on appURL: URL) throws {
-        self.log("➡️ Uruchamiam lokalny codesign (bez sudo) na pliku w TEMP...")
+        self.log("Uruchamiam lokalny codesign (bez sudo) na pliku w TEMP...")
         let path = appURL.path
 
         // 1. Zdejmij atrybuty kwarantanny/rozszerzone
@@ -105,12 +111,12 @@ extension UniversalInstallationView {
                 try task.run()
                 task.waitUntilExit()
                 if task.terminationStatus != 0 {
-                    self.log("⚠️ Błąd codesign dla \(component) (kod: \(task.terminationStatus)) - kontynuuję mimo to.")
+                    self.logError("Błąd codesign dla \(component) (kod: \(task.terminationStatus)) - kontynuuję mimo to.")
                 }
             }
         }
 
-        self.log("✅ Lokalny codesign zakończony.")
+        self.log("Lokalny codesign zakończony.")
     }
 
     func startCreationProcess() {
@@ -220,9 +226,11 @@ extension UniversalInstallationView {
                     if fileManager.fileExists(atPath: targetESD.path) { try? fileManager.removeItem(at: targetESD) }
 
                     self.log("Restore Legacy: kopiuję InstallESD.dmg do TEMP...")
+                    AppLogging.separator()
                     DispatchQueue.main.async { self.processingSubtitle = String(localized: "Kopiowanie plików...") }
                     try fileManager.copyItem(at: sourceESD, to: targetESD)
                     self.log("Restore Legacy: kopiowanie zakończone.")
+                    AppLogging.separator()
 
                     let authSignalURL = tempWorkURL.appendingPathComponent("auth_ok")
                     if fileManager.fileExists(atPath: authSignalURL.path) { try? fileManager.removeItem(at: authSignalURL) }
@@ -283,6 +291,7 @@ extension UniversalInstallationView {
                         self.processingSubtitle = String(localized: "Kopiowanie pliku obrazu...")
                     }
 
+                    AppLogging.separator()
                     if !fileManager.fileExists(atPath: sourceImage.path) {
                         throw NSError(domain: "macUSB", code: 404, userInfo: [NSLocalizedDescriptionKey: String(localized: "Nie znaleziono pliku obrazu.")])
                     }
@@ -294,6 +303,7 @@ extension UniversalInstallationView {
                     self.log("Mavericks: kopiuję obraz do TEMP...")
                     try fileManager.copyItem(at: sourceImage, to: targetESD)
                     self.log("Mavericks: kopiowanie zakończone.")
+                    AppLogging.separator()
 
                     // Mavericks: oba kroki wykonujemy w Terminalu z sudo (imagescan, potem restore)
                     scriptCommand = """
@@ -406,18 +416,20 @@ extension UniversalInstallationView {
 
                     if isSierra {
                         // Tryb specjalny dla macOS Sierra: zawsze kopiujemy do TEMP i modyfikujemy
-                        self.log("Tryb Sierra: kopiowanie do TEMP i modyfikacje")
+                        self.log("Kopiowanie .app do TEMP (Sierra)")
                         DispatchQueue.main.async {
                             self.processingTitle = String(localized: "Kopiowanie plików")
                             self.processingSubtitle = String(localized: "Trwa kopiowanie plików, proszę czekać.")
                         }
                         let destinationAppURL = tempWorkURL.appendingPathComponent(sourceAppURL.lastPathComponent)
                         if fileManager.fileExists(atPath: destinationAppURL.path) { try? fileManager.removeItem(at: destinationAppURL) }
-                        self.log("➡️ Kopiowanie .app do TEMP (Sierra)")
+                        AppLogging.separator()
+                        self.log("Kopiowanie .app do TEMP (Sierra)")
                         self.log("   Źródło: \(sourceAppURL.path)")
                         self.log("   Cel: \(destinationAppURL.path)")
                         try fileManager.copyItem(at: sourceAppURL, to: destinationAppURL)
-                        self.log("✅ Kopiowanie do TEMP zakończone (Sierra).")
+                        self.log("Kopiowanie do TEMP zakończone (Sierra).")
+                        AppLogging.separator()
 
                         effectiveAppURL = destinationAppURL
                         didCopyToTemp = true
@@ -464,11 +476,14 @@ extension UniversalInstallationView {
                             let destinationAppURL = tempWorkURL.appendingPathComponent(sourceAppURL.lastPathComponent)
                             if fileManager.fileExists(atPath: destinationAppURL.path) { try? fileManager.removeItem(at: destinationAppURL) }
 
-                            self.log("➡️ Rozpoczynam kopiowanie pliku .app do folderu TEMP...")
+                            self.log("Rozpoczynam kopiowanie pliku .app do folderu TEMP...")
+                            AppLogging.separator()
+                            self.log("Rozpoczynam kopiowanie pliku .app do folderu TEMP...")
                             self.log("   Źródło: \(sourceAppURL.path)")
                             self.log("   Cel: \(destinationAppURL.path)")
                             try fileManager.copyItem(at: sourceAppURL, to: destinationAppURL)
-                            self.log("✅ Kopiowanie do TEMP zakończone.")
+                            self.log("Kopiowanie do TEMP zakończone.")
+                            AppLogging.separator()
 
                             effectiveAppURL = destinationAppURL
                             didCopyToTemp = true
@@ -611,8 +626,11 @@ extension UniversalInstallationView {
                 self.log("Zapis skryptu: \(scriptURL.path)")
                 try scriptContent.write(to: scriptURL, atomically: true, encoding: .utf8)
                 try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: scriptURL.path)
+                AppLogging.separator()
                 NSWorkspace.shared.open(scriptURL)
+                AppLogging.separator()
                 self.log("Terminal otwarty ze skryptem: \(scriptURL.path)")
+                AppLogging.separator()
 
             } catch {
                 DispatchQueue.main.async {
@@ -735,7 +753,7 @@ extension UniversalInstallationView {
 
         if let err = error {
             let msg = err[NSAppleScript.errorMessage] as? String ?? "Nieznany błąd AppleScript"
-            self.log("SHELL ERROR: \(msg)")
+            self.logError("SHELL ERROR: \(msg)")
             throw NSError(domain: "macUSB", code: 999, userInfo: [NSLocalizedDescriptionKey: msg])
         }
     }
