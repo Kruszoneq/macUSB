@@ -72,6 +72,13 @@ Model Maca: \(model)
         appendToBuffer(message)
     }
 
+    /// Loguje prosty separator w logach.
+    public static func separator() {
+        let message = "------------"
+        appLogger.info("\(message, privacy: .public)")
+        appendToBuffer(message)
+    }
+
     /// Log informacji dla danej kategorii (jednowierszowy, z godziną).
     public static func info(_ message: String, category: String = "General") {
         let t = currentTimeString()
@@ -127,3 +134,4 @@ private extension AppLogging {
         return String(cString: buffer)
     }
 }
+

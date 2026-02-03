@@ -38,7 +38,7 @@ final class AnalysisLogic: ObservableObject {
             if oldValue?.url != selectedDrive?.url {
                 let id = selectedDrive?.device ?? "unknown"
                 let speed = selectedDrive?.usbSpeed?.rawValue ?? "USB"
-                self.log("Wybrano dysk: \(id) (\(speed))", category: "USBSelection")
+                self.log("Wybrano nośnik: \(id) (\(speed)) — pojemność: \(self.selectedDrive?.size ?? "?")", category: "USBSelection")
             }
         }
     }
@@ -146,6 +146,8 @@ final class AnalysisLogic: ObservableObject {
                     self.userSkippedAnalysis = false
                     self.shouldShowMavericksDialog = false
                 }
+                self.log("Lokalizacja wybranego pliku: \(url.path)")
+                self.log("Źródło do rozpoznania wersji: \(url.path)")
             }
         }
     }
@@ -179,6 +181,8 @@ final class AnalysisLogic: ObservableObject {
                 self.shouldShowMavericksDialog = false
             }
             self.log("Wybrano plik w formacie .\(ext)")
+            self.log("Lokalizacja wybranego pliku: \(url.path)")
+            self.log("Źródło do rozpoznania wersji: \(url.path)")
         } else {
             self.log("Anulowano wybór pliku")
         } }
@@ -188,6 +192,7 @@ final class AnalysisLogic: ObservableObject {
         guard let url = selectedFileUrl else { return }
         self.stage("Analiza pliku — start")
         self.log("Rozpoczynam analizę pliku")
+        self.log("Źródło pliku do odczytu wersji: \(url.path)")
         withAnimation { isAnalyzing = true }
         selectedDrive = nil; capacityCheckFinished = false
         showUSBSection = false; showUnsupportedMessage = false
@@ -388,7 +393,9 @@ final class AnalysisLogic: ObservableObject {
                                 self.isUnsupportedSierra ? "isUnsupportedSierra" : nil,
                                 self.isMavericks ? "isMavericks" : nil
                             ].compactMap { $0 }.joined(separator: ", ")
-                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion). Flagi: \(trueFlags.isEmpty ? "brak" : trueFlags)")
+                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion)")
+                            self.log("Przypisane flagi: \(trueFlags.isEmpty ? "brak" : trueFlags)")
+                            AppLogging.separator()
                             
                             if self.isSystemDetected {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUSBSection = true } }
@@ -399,6 +406,7 @@ final class AnalysisLogic: ObservableObject {
                             // Użyto String(localized:) aby ten ciąg został wykryty, mimo że jest przypisywany do zmiennej
                             self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
                             self.log("Analiza zakończona: nie rozpoznano instalatora.")
+                            AppLogging.separator()
                         }
                     }
                 }
@@ -407,6 +415,7 @@ final class AnalysisLogic: ObservableObject {
         else if ext == "app" {
             self.stage("Analiza aplikacji (.app) — start")
             self.log("Analiza aplikacji (.app): odczyt Info.plist (CFBundleDisplayName, CFBundleShortVersionString) oraz wykrywanie wersji i trybu instalacji.")
+            self.log("Źródło pliku do odczytu wersji: \(url.path)")
             DispatchQueue.global(qos: .userInitiated).async {
                 let result = self.readAppInfo(appUrl: url)
                 DispatchQueue.main.async {
@@ -555,7 +564,9 @@ final class AnalysisLogic: ObservableObject {
                                 self.isUnsupportedSierra ? "isUnsupportedSierra" : nil,
                                 self.isMavericks ? "isMavericks" : nil
                             ].compactMap { $0 }.joined(separator: ", ")
-                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion). Flagi: \(trueFlags.isEmpty ? "brak" : trueFlags)")
+                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion)")
+                            self.log("Przypisane flagi: \(trueFlags.isEmpty ? "brak" : trueFlags)")
+                            AppLogging.separator()
 
                             if self.isSystemDetected {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUSBSection = true } }
@@ -565,6 +576,7 @@ final class AnalysisLogic: ObservableObject {
                         } else {
                             self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
                             self.log("Analiza zakończona: nie rozpoznano instalatora.")
+                            AppLogging.separator()
                         }
                     }
                 }
@@ -643,7 +655,7 @@ final class AnalysisLogic: ObservableObject {
 
     func readAppInfo(appUrl: URL) -> (String, String, URL)? {
         let plistUrl = appUrl.appendingPathComponent("Contents/Info.plist")
-        self.log("Odczyt Info.plist")
+        self.log("Odczyt Info.plist: \(plistUrl.path)")
         if let d = try? Data(contentsOf: plistUrl),
            let dict = try? PropertyListSerialization.propertyList(from: d, format: nil) as? [String: Any] {
             let name = (dict["CFBundleDisplayName"] as? String) ?? appUrl.lastPathComponent
@@ -668,20 +680,40 @@ final class AnalysisLogic: ObservableObject {
         self.log("Przetwarzanie wyników hdiutil attach (\(entities.count) encji)")
         for e in entities {
             if let mp = e["mount-point"] as? String {
-                self.log("Zamontowano obraz")
+                let devEntry = (e["dev-entry"] as? String) ?? (e["devname"] as? String)
+                var mountId = "unknown"
+                if let dev = devEntry {
+                    let bsd = URL(fileURLWithPath: dev).lastPathComponent // e.g. disk9s1
+                    if let range = bsd.range(of: #"s\d+$"#, options: .regularExpression) {
+                        mountId = String(bsd[..<range.lowerBound]) // e.g. disk9
+                    } else {
+                        mountId = bsd // e.g. disk9
+                    }
+                }
+
+                self.log("Zamontowano obraz: \(mp) [id: \(mountId)]")
                 let mUrl = URL(fileURLWithPath: mp)
-                if let item = try? FileManager.default.contentsOfDirectory(at: mUrl, includingPropertiesForKeys: nil).first(where: { $0.pathExtension == "app" }) {
-                    self.log("Znaleziono aplikację w obrazie")
+                let dirContents = try? FileManager.default.contentsOfDirectory(at: mUrl, includingPropertiesForKeys: nil)
+                if let item = dirContents?.first(where: { $0.pathExtension == "app" }) {
                     let plistUrl = item.appendingPathComponent("Contents/Info.plist")
+                    self.log("Odczyt Info.plist: \(plistUrl.path)")
                     if let d = try? Data(contentsOf: plistUrl), let dict = try? PropertyListSerialization.propertyList(from: d, format: nil) as? [String: Any] {
                         let name = (dict["CFBundleDisplayName"] as? String) ?? item.lastPathComponent
                         let ver = (dict["CFBundleShortVersionString"] as? String) ?? "?"
                         self.log("Odczytano Info.plist z obrazu: name=\(name), version=\(ver)")
                         return (name, ver, item, mp)
+                    } else {
+                        self.logError("Nie udało się odczytać Info.plist z obrazu: \(plistUrl.path)")
+                    }
+                } else {
+                    self.log("Nie znaleziono pakietu .app w zamontowanym obrazie: \(mp)")
+                    if let names = dirContents?.map({ $0.lastPathComponent }).prefix(10) {
+                        self.log("Zawartość katalogu (\(mp)) [pierwsze 10]: \(names.joined(separator: ", "))")
                     }
                 }
             }
         }
+        self.log("Próbowano zamontować obraz i znaleźć pakiet .app oraz plik Info.plist, ale nie zostały odnalezione.")
         self.logError("Nie udało się odczytać informacji z obrazu")
         return nil
     }
@@ -698,7 +730,17 @@ final class AnalysisLogic: ObservableObject {
         }
         for e in entities {
             if let mp = e["mount-point"] as? String {
-                self.log("Zamontowano obraz (PPC)")
+                let devEntry = (e["dev-entry"] as? String) ?? (e["devname"] as? String)
+                var mountId = "unknown"
+                if let dev = devEntry {
+                    let bsd = URL(fileURLWithPath: dev).lastPathComponent
+                    if let range = bsd.range(of: #"s\d+$"#, options: .regularExpression) {
+                        mountId = String(bsd[..<range.lowerBound])
+                    } else {
+                        mountId = bsd
+                    }
+                }
+                self.log("Zamontowano obraz (PPC): \(mp) [id: \(mountId)]")
                 return mp
             }
         }
@@ -788,7 +830,7 @@ final class AnalysisLogic: ObservableObject {
 
     // Call this from the UI when the user presses the "Przejdź dalej" button
     func recordProceedPressed() {
-        self.log("Użytkownik nacisnął przycisk 'Przejdź dalej'. Wybrany dysk: \(self.selectedDrive?.url.path ?? "brak"), źródło: \(self.sourceAppURL?.path ?? "brak"), rozpoznano: \(self.recognizedVersion)")
+        self.log("Użytkownik nacisnął przycisk 'Przejdź dalej'. Wybrany nośnik: \(self.selectedDrive?.url.path ?? "brak"), źródło: \(self.sourceAppURL?.path ?? "brak"), rozpoznano: \(self.recognizedVersion)")
     }
 }
 
