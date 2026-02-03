@@ -497,6 +497,11 @@ struct UniversalInstallationView: View {
             .hidden()
         )
         .onAppear {
+            AppLogging.separator()
+            AppLogging.separator()
+            AppLogging.info("Przejście do kreatora", category: "Navigation")
+            AppLogging.separator()
+            AppLogging.separator()
             if !isProcessing && !isTerminalWorking && !processSuccess && !isCancelled && !isUSBDisconnectedLock && !isRollingBack {
                 startUSBMonitoring()
             }
