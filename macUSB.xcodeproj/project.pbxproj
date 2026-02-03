@@ -55,6 +55,7 @@
 				Shared/Models/Item.swift,
 				Shared/Models/Models.swift,
 				Shared/Services/LanguageManager.swift,
+				Shared/Services/Logging.swift,
 				Shared/Services/MenuState.swift,
 				Shared/Services/UpdateChecker.swift,
 				Shared/Services/USBDriveLogic.swift,
@@ -74,6 +75,7 @@
 				Shared/Models/Item.swift,
 				Shared/Models/Models.swift,
 				Shared/Services/LanguageManager.swift,
+				Shared/Services/Logging.swift,
 				Shared/Services/MenuState.swift,
 				Shared/Services/UpdateChecker.swift,
 			);

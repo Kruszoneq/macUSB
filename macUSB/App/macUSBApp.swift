@@ -184,6 +184,47 @@ struct macUSBApp: App {
                 } label: {
                     Label(String(localized: "Zgłoś błąd (GitHub)"), systemImage: "exclamationmark.triangle")
                 }
+                Divider()
+                Button {
+                    let savePanel = NSSavePanel()
+                    let defaults = UserDefaults.standard
+                    if let lastPath = defaults.string(forKey: "DiagnosticsExportLastDirectory") {
+                        let lastURL = URL(fileURLWithPath: lastPath, isDirectory: true)
+                        if FileManager.default.fileExists(atPath: lastURL.path) {
+                            savePanel.directoryURL = lastURL
+                        } else {
+                            savePanel.directoryURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first
+                        }
+                    } else {
+                        savePanel.directoryURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first
+                    }
+                    savePanel.allowedFileTypes = ["txt"]
+                    let df = DateFormatter()
+                    df.dateFormat = "yyyyMMdd_HHmmss"
+                    savePanel.nameFieldStringValue = "macUSB_\(df.string(from: Date()))_logs.txt"
+                    savePanel.canCreateDirectories = true
+                    savePanel.isExtensionHidden = false
+                    savePanel.title = String(localized: "Eksportuj logi diagnostyczne")
+                    savePanel.message = String(localized: "Wybierz miejsce zapisu pliku z logami diagnostycznymi")
+                    if savePanel.runModal() == .OK, let url = savePanel.url {
+                        let text = AppLogging.exportedLogText()
+                        do {
+                            try text.data(using: .utf8)?.write(to: url)
+                            let dir = url.deletingLastPathComponent()
+                            UserDefaults.standard.set(dir.path, forKey: "DiagnosticsExportLastDirectory")
+                        } catch {
+                            let alert = NSAlert()
+                            alert.icon = NSApp.applicationIconImage
+                            alert.alertStyle = .warning
+                            alert.messageText = String(localized: "Nie udało się zapisać pliku z logami")
+                            alert.informativeText = error.localizedDescription
+                            alert.addButton(withTitle: String(localized: "OK"))
+                            alert.runModal()
+                        }
+                    }
+                } label: {
+                    Label(String(localized: "Eksportuj logi diagnostyczne..."), systemImage: "square.and.arrow.down")
+                }
             }
         }
     }

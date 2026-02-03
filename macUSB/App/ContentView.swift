@@ -1,6 +1,7 @@
 import SwiftUI
 import AppKit
 import Combine
+import OSLog
 
 struct ContentView: View {
     @State private var path = NavigationPath()
@@ -22,6 +23,9 @@ struct ContentView: View {
             if needsRestart {
                 presentRestartAlert()
             }
+        }
+        .onAppear {
+            AppLogging.logAppStartupOnce()
         }
     }
     
@@ -94,5 +98,6 @@ struct WindowConfigurator: NSViewRepresentable {
 }
 
 // USUNIĘTO KLASĘ LanguageManager STĄD, ABY UNIKNĄĆ DUPLIKACJI
+
 
 
