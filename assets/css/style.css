@@ -569,7 +569,7 @@ a:focus-visible {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 5px;
         }
 
         .cta-button {
@@ -603,7 +603,7 @@ a:focus-visible {
             color: var(--text-secondary);
             opacity: 0;
             transition: opacity 0.5s ease;
-            margin-top: 6px;
+            margin-top: 3px;
         }
 
         .requirements-info {
