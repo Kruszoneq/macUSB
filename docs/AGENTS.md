@@ -1,7 +1,25 @@
-# macUSB Website — AI Codex Context & Rules (Single Source of Truth)
+# macUSB Website — Agent & Human Guide (Single Source of Truth)
 
 This document defines the working rules, design language, site structure, and non-negotiable behaviors of the macUSB website (GitHub Pages).  
-Purpose: allow an AI assistant (Codex) to continue development consistently, without breaking existing UX, animations, or functionality.
+Purpose: provide a clear, shared reference for AI agents (Codex) and humans to maintain the site consistently without breaking UX, animations, or functionality.
+
+---
+
+## Table of Contents
+
+- [0) How to use this document (meta rules)](#0-how-to-use-this-document-meta-rules)
+- [1) Project Overview](#1-project-overview)
+- [2) Folder / File Structure (Current)](#2-folder--file-structure-current)
+- [3) Design System / Style (Apple-like)](#3-design-system--style-apple-like)
+- [4) Non-negotiable Behaviors (Do NOT break)](#4-non-negotiable-behaviors-do-not-break)
+- [5) Navbar Information Architecture](#5-navbar-information-architecture)
+- [6) Guides Pages: Content & UX Rules](#6-guides-pages-content--ux-rules)
+- [7) Content Conventions (Microcopy)](#7-content-conventions-microcopy)
+- [8) Implementation Notes / Gotchas](#8-implementation-notes--gotchas)
+- [9) Development Workflow](#9-development-workflow)
+- [10) Next Planned Work (Roadmap)](#10-next-planned-work-roadmap)
+- [11) Acceptance Checklist (for any change)](#11-acceptance-checklist-for-any-change)
+- [12) Changelog](#12-changelog)
 
 ---
 
@@ -10,6 +28,7 @@ Purpose: allow an AI assistant (Codex) to continue development consistently, wit
 - Treat this file as the single source of truth whenever it is referenced by the user.
 - When new UI/UX patterns or behaviors are introduced, update this file in the same change.
 - Always add a short entry to the Changelog when you append or change rules here.
+- This document is maintained in English only.
 
 ---
 
@@ -307,3 +326,6 @@ Before shipping:
 - 2026-02-08: Added rule for placing the Buy Me a Coffee button in the landing page footer.
 - 2026-02-08: Documented shared footer partial and injection rules.
 - 2026-02-08: Documented BMC fallback button behavior in the shared footer.
+- 2026-02-08: Added a manual table of contents with anchor links.
+- 2026-02-08: Noted that AGENTS.md is maintained in English.
+- 2026-02-08: Renamed CODEX.md to AGENTS.md.
