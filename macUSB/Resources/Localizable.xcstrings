@@ -2658,109 +2658,109 @@
       }
     },
     "Eksportuj logi diagnostyczne" : {
-          "localizations" : {
-            "de" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Diagnoseprotokolle exportieren"
-              }
-            },
-            "en" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Export diagnostic logs"
-              }
-            },
-            "es" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Exportar registros de diagnóstico"
-              }
-            },
-            "fr" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Exporter les journaux de diagnostic"
-              }
-            },
-            "ja" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "診断ログをエクスポート"
-              }
-            },
-            "pt-BR" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Exportar logs de diagnóstico"
-              }
-            },
-            "ru" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Экспорт журналов диагностики"
-              }
-            },
-            "zh-Hans" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "导出诊断日志"
-              }
-            }
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnoseprotokolle exportieren"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export diagnostic logs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportar registros de diagnóstico"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporter les journaux de diagnostic"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "診断ログをエクスポート"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportar logs de diagnóstico"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Экспорт журналов диагностики"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出诊断日志"
+          }
+        }
+      }
+    },
     "Eksportuj logi diagnostyczne..." : {
-          "localizations" : {
-            "de" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Diagnoseprotokolle exportieren..."
-              }
-            },
-            "en" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Export diagnostic logs..."
-              }
-            },
-            "es" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Exportar registros de diagnóstico..."
-              }
-            },
-            "fr" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Exporter les journaux de diagnostic..."
-              }
-            },
-            "ja" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "診断ログをエクスポート..."
-              }
-            },
-            "pt-BR" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Exportar logs de diagnóstico..."
-              }
-            },
-            "ru" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Экспорт журналов диагностики..."
-              }
-            },
-            "zh-Hans" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "导出诊断日志..."
-              }
-            }
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnoseprotokolle exportieren..."
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export diagnostic logs..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportar registros de diagnóstico..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporter les journaux de diagnostic..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "診断ログをエクスポート..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportar logs de diagnóstico..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Экспорт журналов диагностики..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出诊断日志..."
+          }
+        }
+      }
+    },
     "English" : {
       "localizations" : {
         "de" : {
@@ -4426,57 +4426,57 @@
       }
     },
     "Nie udało się zapisać pliku z logami" : {
-          "localizations" : {
-            "de" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Protokolldatei konnte nicht gespeichert werden"
-              }
-            },
-            "en" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Failed to save logs file"
-              }
-            },
-            "es" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "No se pudo guardar el archivo de registros"
-              }
-            },
-            "fr" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Échec de l'enregistrement du fichier de journaux"
-              }
-            },
-            "ja" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "ログファイルを保存できませんでした"
-              }
-            },
-            "pt-BR" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Falha ao salvar o arquivo de logs"
-              }
-            },
-            "ru" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Не удалось сохранить файл журналов"
-              }
-            },
-            "zh-Hans" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "无法保存日志文件"
-              }
-            }
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protokolldatei konnte nicht gespeichert werden"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to save logs file"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo guardar el archivo de registros"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de l'enregistrement du fichier de journaux"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ログファイルを保存できませんでした"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falha ao salvar o arquivo de logs"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить файл журналов"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法保存日志文件"
+          }
+        }
+      }
+    },
     "Nie wykryto dysku USB" : {
       "localizations" : {
         "de" : {
@@ -6141,6 +6141,58 @@
         }
       }
     },
+    "Repozytorium macUSB na GitHub" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB-Repository auf GitHub"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB GitHub Repository"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repositorio de macUSB en GitHub"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dépôt macUSB sur GitHub"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSBのGitHubリポジトリ"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repositório do macUSB no GitHub"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Репозиторий macUSB на GitHub"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB 的 GitHub 仓库"
+          }
+        }
+      }
+    },
     "Rozpocznij" : {
       "localizations" : {
         "de" : {
@@ -7703,6 +7755,58 @@
         }
       }
     },
+    "Wesprzyj projekt macUSB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unterstütze das macUSB‑Projekt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support the macUSB project"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apoya el proyecto macUSB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soutenir le projet macUSB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB プロジェクトを支援"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apoie o projeto macUSB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поддержать проект macUSB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支持 macUSB 项目"
+          }
+        }
+      }
+    },
     "Włącz obsługę zewnętrznych dysków twardych" : {
       "localizations" : {
         "de" : {
@@ -8120,57 +8224,57 @@
       }
     },
     "Wybierz miejsce zapisu pliku z logami diagnostycznymi" : {
-          "localizations" : {
-            "de" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Speicherort für Diagnoseprotokolldatei auswählen"
-              }
-            },
-            "en" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Select location to save diagnostic logs file"
-              }
-            },
-            "es" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Seleccionar ubicación para guardar el archivo de registros de diagnóstico"
-              }
-            },
-            "fr" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Sélectionner l'emplacement pour enregistrer le fichier de journaux de diagnostic"
-              }
-            },
-            "ja" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "診断ログファイルの保存先を選択"
-              }
-            },
-            "pt-BR" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Selecionar local para salvar o arquivo de logs de diagnóstico"
-              }
-            },
-            "ru" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "Выберите место для сохранения файла журналов диагностики"
-              }
-            },
-            "zh-Hans" : {
-              "stringUnit" : {
-                "state" : "translated",
-                "value" : "选择保存诊断日志文件的位置"
-              }
-            }
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speicherort für Diagnoseprotokolldatei auswählen"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select location to save diagnostic logs file"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionar ubicación para guardar el archivo de registros de diagnóstico"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionner l'emplacement pour enregistrer le fichier de journaux de diagnostic"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "診断ログファイルの保存先を選択"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecionar local para salvar o arquivo de logs de diagnóstico"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите место для сохранения файла журналов диагностики"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择保存诊断日志文件的位置"
+          }
+        }
+      }
+    },
     "Wybierz plik" : {
       "localizations" : {
         "de" : {

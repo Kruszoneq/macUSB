@@ -178,11 +178,26 @@ struct macUSBApp: App {
                     Label(String(localized: "Strona internetowa macUSB"), systemImage: "globe")
                 }
                 Button {
+                    if let url = URL(string: "https://github.com/Kruszoneq/macUSB") {
+                        NSWorkspace.shared.open(url)
+                    }
+                } label: {
+                    Label(String(localized: "Repozytorium macUSB na GitHub"), systemImage: "chevron.left.forwardslash.chevron.right")
+                }
+                Button {
                     if let url = URL(string: "https://github.com/Kruszoneq/macUSB/issues") {
                         NSWorkspace.shared.open(url)
                     }
                 } label: {
                     Label(String(localized: "Zgłoś błąd (GitHub)"), systemImage: "exclamationmark.triangle")
+                }
+                Divider()
+                Button {
+                    if let url = URL(string: "https://buymeacoffee.com/kruszoneq") {
+                        NSWorkspace.shared.open(url)
+                    }
+                } label: {
+                    Label(String(localized: "Wesprzyj projekt macUSB"), systemImage: "cup.and.saucer")
                 }
                 Divider()
                 Button {
@@ -229,4 +244,3 @@ struct macUSBApp: App {
         }
     }
 }
-
