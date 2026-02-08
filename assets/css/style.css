@@ -927,6 +927,30 @@ a:focus-visible {
 
         footer a { color: var(--text-secondary); text-decoration: underline; }
 
+        .bmc-fallback-wrap {
+            margin-bottom: 16px;
+        }
+
+        .bmc-fallback {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .bmc-fallback:hover {
+            background-color: #0077ed;
+            transform: scale(1.01);
+        }
+
         /* Mobile tweaks */
         @media (max-width: 768px) {
             .hero { padding-top: 120px; }

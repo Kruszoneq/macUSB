@@ -34,8 +34,9 @@ Purpose: allow an AI assistant (Codex) to continue development consistently, wit
 Key web files:
 - `/index.html` — landing
 - `/assets/css/style.css` — all styling
-- `/assets/js/main.js` — behavior + navbar injection + theme + dropdown + screenshots + GitHub release fetch + lightbox + TOC generator/scrollspy
+- `/assets/js/main.js` — behavior + navbar/footer injection + theme + dropdown + screenshots + GitHub release fetch + lightbox + TOC generator/scrollspy
 - `/pages/partials.html` — shared NAVBAR partial (single source of truth for nav)
+- `/pages/footer.html` — shared FOOTER partial (single source of truth for footer)
 - `/pages/about.html` — About page
 - `/pages/guides/ppc_boot_instructions.html` — PowerPC boot guide
 - `/pages/guides/multidvd_tiger.html` — Tiger Multi-DVD guide
@@ -45,7 +46,7 @@ Assets:
 - `/assets/screenshots/app/*` — app screenshots used in landing carousel
 - `/assets/screenshots/multidvd_tiger/*` — guide screenshots
 
-IMPORTANT: All pages must load the navbar from `/pages/partials.html` via JS injection (see Section 4).
+IMPORTANT: All pages must load the navbar from `/pages/partials.html` and the footer from `/pages/footer.html` via JS injection (see Section 4).
 
 ---
 
@@ -133,6 +134,11 @@ In partial HTML, use `{{BASE}}` placeholder where needed, then replace in JS:
 ### H) Scroll cue (hero)
 - The down-arrow button in the hero scrolls to `#screenshots`. Keep the anchor ID and smooth-scroll behavior.
 
+### I) Footer shared across all pages
+- `footer.html` contains the footer markup.
+- `main.js` injects it into `<div id="footer"></div>`.
+- **Do not copy/paste the footer into each page**; only modify `footer.html`.
+
 ---
 
 ## 5) Navbar Information Architecture
@@ -217,11 +223,17 @@ Footnotes:
 - Footnote 3 on About page links to Tiger Multi-DVD guide with phrasing:
   “The Single DVD edition is recognized automatically. Detailed instructions for the Multi-DVD edition are available here: Tiger Multi-DVD Guide.”
 
+Footer:
+- The footer is shared via `/pages/footer.html` and appears on all pages.
+- It includes the Buy Me a Coffee script plus a fallback “Support macUSB” link button.
+- Fallback is acceptable (and may be the only visible button if the BMC widget does not render).
+
 ---
 
 ## 8) Implementation Notes / Gotchas
 
 - Always include `<div id="navbar"></div>` near top of body.
+- Always include `<div id="footer"></div>` near the end of body.
 - Always include `main.js` with correct relative path:
   - index: `/assets/js/main.js`
   - pages: `../assets/js/main.js`
@@ -268,6 +280,8 @@ When making changes:
 
 Before shipping:
 - [ ] Navbar appears on index + about + all guides.
+- [ ] Footer appears on index + about + all guides (loaded via `/pages/footer.html`).
+- [ ] Footer includes a visible “Support macUSB” button (widget or fallback).
 - [ ] Guides dropdown works on desktop hover and mobile click.
 - [ ] Theme toggles smoothly; dark uses #303030 background.
 - [ ] Scrolled nav becomes frosted and remains readable in dark mode.
@@ -290,3 +304,6 @@ Before shipping:
 - 2026-01-24: Recorded the intro caption placement in the screenshots section and updated the checklist accordingly.
 - 2026-01-24: Noted the portrait aspect ratio for screenshot frames in `#screenshots`.
 - 2026-01-24: Documented mobile stacking behavior for the feature cards.
+- 2026-02-08: Added rule for placing the Buy Me a Coffee button in the landing page footer.
+- 2026-02-08: Documented shared footer partial and injection rules.
+- 2026-02-08: Documented BMC fallback button behavior in the shared footer.
