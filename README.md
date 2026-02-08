@@ -8,6 +8,12 @@
 **macUSB** is a one-click tool that transforms your modern Mac (Apple Silicon) into a service machine capable of reviving older Apple computers.
 
 ---
+## ☕ Support
+
+If you’d like to support the project, here’s a simple way.
+
+<a href="https://www.buymeacoffee.com/kruszoneq" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
 ## 🖼️ Preview
 
 <p align="center">
@@ -130,4 +136,3 @@ Copyright © 2025-2026 Krystian Pierz
 ---
 
 **Note:** The application interface and this README file were translated using Gemini 3 Pro. Please excuse any potential translation errors.
-
