@@ -58,6 +58,7 @@ Detailed contract is documented in [Section 16](#16-debug-chapter).
 
 Startup permissions flow:
 - After the optional update alert on the Welcome screen, the app may show a notification-permission prompt.
+- The update alert shows both remote available version and currently running app version.
 Detailed notification behavior is documented in [Section 15](#15-notifications-chapter).
 
 Fixed window size:
@@ -346,7 +347,7 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Info.plist` — Bundle metadata and localization list.
 - `macUSB/App/macUSBApp.swift` — App entry point, menus, AppDelegate behavior, and debug-only top-level `DEBUG` command menu.
 - `macUSB/App/ContentView.swift` — Root view, window configuration, locale injection, and root-level debug navigation route handling.
-- `macUSB/Features/Welcome/WelcomeView.swift` — Welcome screen and update check.
+- `macUSB/Features/Welcome/WelcomeView.swift` — Welcome screen and update check (update alert includes remote and current app version line).
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` — File/USB selection UI and navigation to install.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic; propagates/logs USB metadata (speed, partition scheme, filesystem format, `needsFormatting`) and exposes `selectedDriveForInstallation` (PPC override of formatting flag).
 - `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation UI state and progress.

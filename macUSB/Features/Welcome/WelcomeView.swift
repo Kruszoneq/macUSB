@@ -103,7 +103,9 @@ struct WelcomeView: View {
                             alert.icon = NSApplication.shared.applicationIconImage
                             alert.alertStyle = .informational
                             alert.messageText = String(localized: "Dostępna aktualizacja!")
-                            alert.informativeText = String(localized: "Dostępna jest nowa wersja: \(remoteVersion). Zalecamy aktualizację!")
+                            let remoteVersionLine = String(localized: "Dostępna jest nowa wersja: \(remoteVersion). Zalecamy aktualizację!")
+                            let currentVersionLine = String(localized: "Aktualnie uruchomiona wersja: \(currentVersion)")
+                            alert.informativeText = "\(remoteVersionLine)\n\(currentVersionLine)"
                             alert.addButton(withTitle: String(localized: "Pobierz"))
                             alert.addButton(withTitle: String(localized: "Ignoruj"))
                             let response = alert.runModal()
