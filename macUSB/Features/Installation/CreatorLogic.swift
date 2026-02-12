@@ -144,6 +144,16 @@ extension UniversalInstallationView {
         self.log("Źródło instalatora: \(sourceAppURL.path)")
         self.log("Źródło z zamontowanego woluminu: \(isFromMountedVolume ? "TAK" : "NIE")")
         self.log("Flagi: isCatalina=\(isCatalina), isSierra=\(isSierra), isMavericks=\(isMavericks), needsCodesign=\(needsCodesign), isLegacySystem=\(isLegacySystem), isRestoreLegacy=\(isRestoreLegacy), isPPC=\(isPPC)")
+        if isPPC {
+            self.log(
+                "Snapshot docelowego nośnika USB: ID urządzenia: \(drive.device), Pojemność: \(drive.size), Standard USB: \(drive.usbSpeed?.rawValue ?? "unknown"), Schemat: \(drive.partitionScheme?.rawValue ?? "unknown"), Format: \(drive.fileSystemFormat?.rawValue ?? "unknown"), Tryb: PPC, APM"
+            )
+        } else {
+            let requiresFormattingText = drive.requiresFormattingInNextStages ? "TAK" : "NIE"
+            self.log(
+                "Snapshot docelowego nośnika USB: ID urządzenia: \(drive.device), Pojemność: \(drive.size), Standard USB: \(drive.usbSpeed?.rawValue ?? "unknown"), Schemat: \(drive.partitionScheme?.rawValue ?? "unknown"), Format: \(drive.fileSystemFormat?.rawValue ?? "unknown"), Wymaga formatowania w kolejnych etapach: \(requiresFormattingText)"
+            )
+        }
         self.log("Folder TEMP: \(tempWorkURL.path)")
 
         DispatchQueue.global(qos: .userInitiated).async {
@@ -758,4 +768,3 @@ extension UniversalInstallationView {
         }
     }
 }
-

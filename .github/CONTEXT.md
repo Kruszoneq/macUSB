@@ -62,7 +62,7 @@ Key concepts:
 - State-driven UI: extensive use of `@State`, `@StateObject`, `@EnvironmentObject` and `@Published` to bind logic to UI.
 - NotificationCenter: used for flow resets and special-case actions (Tiger Multi-DVD override).
 - System analysis: reads `Info.plist` from the installer app inside a mounted image or `.app` bundle.
-- USB detection: enumerates mounted external volumes; optionally includes external HDD/SSD with a user option.
+- USB detection: enumerates mounted external volumes; optionally includes external HDD/SSD with a user option; detects USB speed, partition scheme, filesystem format, and computes a formatting-required flag for later stages.
 - Terminal script execution: a shell script is written to a temporary folder, then opened in Terminal to run with `sudo`.
 
 ---
@@ -220,6 +220,7 @@ Used for most modern macOS installers.
 ### PowerPC Flow
 - Formats disk with `diskutil partitionDisk` using APM + HFS+.
 - Uses `asr restore` to write the image to `/Volumes/PPC`.
+- When `isPPC` is active, the drive flag `requiresFormattingInNextStages` is forced to `false` for installation context, because PPC formatting is already part of this flow.
 
 ### Sierra Special Handling
 - Always copies `.app` to TEMP.
@@ -286,6 +287,17 @@ Features:
 - In-memory buffer for exporting logs (max 5000 lines).
 - Exportable from the app menu into a `.txt` file.
 
+### Log Message Requirements
+The following requirements are mandatory for diagnostic logs:
+- All application-authored diagnostic logs (existing and future) must be written in Polish.
+- Keep logs human-readable first. Prefer descriptive labels over raw key/value fragments.
+- For USB metadata, use explicit labels in messages, e.g. `Schemat: GPT, Format: HFS+`, instead of `scheme=GPT, fs=HFS+`.
+- Keep boolean diagnostics readable for non-technical support checks (prefer `TAK` / `NIE` in Polish logs).
+- PPC special case: when `isPPC` is active, do not log formatting-required as `TAK/NIE`; log `PPC, APM` instead.
+- Keep critical USB context together in a single line when a target drive is selected or installation starts (device ID, capacity, USB standard, partition scheme, filesystem format, formatting-required flag).
+- Continue using categories (`USBSelection`, `Installation`, etc.) so exported logs are easy to filter.
+- New logs must continue to go through `AppLogging` APIs (`info`, `error`, `stage`) to preserve timestamps and export behavior.
+
 ---
 
 ## 11. Complete File Reference (Every File)
@@ -309,17 +321,17 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/App/ContentView.swift` — Root view, window configuration, locale injection.
 - `macUSB/Features/Welcome/WelcomeView.swift` — Welcome screen and update check.
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` — File/USB selection UI and navigation to install.
-- `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic.
+- `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic; propagates/logs USB metadata (speed, partition scheme, filesystem format, formatting-required flag).
 - `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation UI state and progress.
 - `macUSB/Features/Installation/CreatorLogic.swift` — All installer creation logic and terminal scripting.
 - `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, cleanup, and sound feedback.
-- `macUSB/Shared/Models/Models.swift` — `USBDrive`, `USBPortSpeed`, and `SidebarItem` definitions.
+- `macUSB/Shared/Models/Models.swift` — `USBDrive`, `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
 - `macUSB/Shared/Models/Item.swift` — SwiftData model stub (currently unused).
 - `macUSB/Shared/Services/LanguageManager.swift` — Language selection and locale handling.
 - `macUSB/Shared/Services/MenuState.swift` — Shared menu state (skip analysis, external drives).
 - `macUSB/Shared/Services/UpdateChecker.swift` — Manual update checking.
 - `macUSB/Shared/Services/Logging.swift` — Central logging and log export.
-- `macUSB/Shared/Services/USBDriveLogic.swift` — USB volume enumeration and speed detection.
+- `macUSB/Shared/Services/USBDriveLogic.swift` — USB volume enumeration plus metadata detection (speed, partition scheme, filesystem format).
 - `macUSB/Resources/Localizable.xcstrings` — Localization catalog (source language: Polish).
 - `macUSB/Resources/Assets.xcassets/Contents.json` — Asset catalog index.
 - `macUSB/Resources/Assets.xcassets/AccentColor.colorset/Contents.json` — Accent color definition.
@@ -342,9 +354,9 @@ This section lists the main call relationships and data flow.
 - `macUSB/App/ContentView.swift` → presents `WelcomeView`, injects `LanguageManager`, calls `AppLogging.logAppStartupOnce()`.
 - `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json` directly.
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`.
-- `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`.
+- `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
 - `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress, calls logic in `CreatorLogic`, navigates to `FinishUSBView`.
-- `macUSB/Features/Installation/CreatorLogic.swift` → uses `AppLogging`, writes Terminal scripts, runs privileged commands (AppleScript + sudo).
+- `macUSB/Features/Installation/CreatorLogic.swift` → uses `AppLogging`, logs selected USB metadata snapshot, writes Terminal scripts, runs privileged commands (AppleScript + sudo).
 - `macUSB/Features/Finish/FinishUSBView.swift` → cleanup (unmount + delete temp), provides reset callback.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
 - `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift` and `SystemAnalysisView`.

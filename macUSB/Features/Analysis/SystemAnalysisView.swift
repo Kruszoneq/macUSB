@@ -197,7 +197,7 @@ struct SystemAnalysisView: View {
                 NavigationLink(
                     destination: UniversalInstallationView(
                         sourceAppURL: appURL,
-                        targetDrive: logic.selectedDrive,
+                        targetDrive: logic.selectedDriveForInstallation,
                         targetDriveDisplayName: selectedDriveDisplayNameSnapshot,
                         systemName: logic.recognizedVersion,
                         originalImageURL: logic.selectedFileUrl,
@@ -397,4 +397,3 @@ class AnalysisWindowHandler: NSObject, NSWindowDelegate {
     let onCleanup: () -> Void; init(onCleanup: @escaping () -> Void) { self.onCleanup = onCleanup }
     func windowShouldClose(_ sender: NSWindow) -> Bool { onCleanup(); return true }
 }
-

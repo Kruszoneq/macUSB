@@ -38,9 +38,40 @@ final class AnalysisLogic: ObservableObject {
             if oldValue?.url != selectedDrive?.url {
                 let id = selectedDrive?.device ?? "unknown"
                 let speed = selectedDrive?.usbSpeed?.rawValue ?? "USB"
-                self.log("Wybrano nośnik: \(id) (\(speed)) — pojemność: \(self.selectedDrive?.size ?? "?")", category: "USBSelection")
+                let partitionScheme = selectedDrive?.partitionScheme?.rawValue ?? "unknown"
+                let fileSystem = selectedDrive?.fileSystemFormat?.rawValue ?? "unknown"
+                if isPPC {
+                    self.log(
+                        "Wybrano nośnik: \(id) (\(speed)) — Pojemność: \(self.selectedDrive?.size ?? "?"), Schemat: \(partitionScheme), Format: \(fileSystem), Tryb: PPC, APM",
+                        category: "USBSelection"
+                    )
+                } else {
+                    let requiresFormattingText = (selectedDrive?.requiresFormattingInNextStages ?? true) ? "TAK" : "NIE"
+                    self.log(
+                        "Wybrano nośnik: \(id) (\(speed)) — Pojemność: \(self.selectedDrive?.size ?? "?"), Schemat: \(partitionScheme), Format: \(fileSystem), Wymaga formatowania w kolejnych etapach: \(requiresFormattingText)",
+                        category: "USBSelection"
+                    )
+                }
             }
         }
+    }
+
+    /// Nośnik przekazywany do etapu instalacji. W trybie PPC flaga
+    /// requiresFormattingInNextStages jest wymuszana na false, ponieważ
+    /// formatowanie (APM + HFS+) jest już wbudowane w dalszy proces.
+    var selectedDriveForInstallation: USBDrive? {
+        guard let drive = selectedDrive else { return nil }
+        guard isPPC else { return drive }
+        return USBDrive(
+            name: drive.name,
+            device: drive.device,
+            size: drive.size,
+            url: drive.url,
+            usbSpeed: drive.usbSpeed,
+            partitionScheme: drive.partitionScheme,
+            fileSystemFormat: drive.fileSystemFormat,
+            requiresFormattingInNextStages: false
+        )
     }
 
     @Published var isCapacitySufficient: Bool = false
@@ -82,7 +113,17 @@ final class AnalysisLogic: ObservableObject {
             let size = ByteCountFormatter.string(fromByteCount: totalCapacity, countStyle: .file)
             let whole = USBDriveLogic.wholeDiskName(from: bsd)
             let speed = USBDriveLogic.detectUSBSpeed(forBSDName: whole)
-            return USBDrive(name: name, device: bsd, size: size, url: url, usbSpeed: speed)
+            let partitionScheme = USBDriveLogic.detectPartitionScheme(forBSDName: whole)
+            let fileSystemFormat = USBDriveLogic.detectFileSystemFormat(forVolumeURL: url)
+            return USBDrive(
+                name: name,
+                device: bsd,
+                size: size,
+                url: url,
+                usbSpeed: speed,
+                partitionScheme: partitionScheme,
+                fileSystemFormat: fileSystemFormat
+            )
         }
         return candidates
     }
@@ -838,4 +879,3 @@ extension Notification.Name {
     static let macUSBResetToStart = Notification.Name("macUSB.resetToStart")
     static let macUSBStartTigerMultiDVD = Notification.Name("macUSB.startTigerMultiDVD")
 }
-
