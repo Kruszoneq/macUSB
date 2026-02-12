@@ -193,8 +193,9 @@ Files accepted:
 - `.dmg`, `.iso`, `.cdr`, `.app`
 
 Detection strategy:
-- For images (`.dmg`, `.iso`, `.cdr`): `hdiutil attach -plist -nobrowse -readonly`, then search mounted volume for `.app` and read `Info.plist`, with fallback to `SystemVersion.plist` for legacy systems.
+- For images (`.dmg`, `.iso`, `.cdr`): `hdiutil attach -plist -nobrowse -readonly`, then for legacy media first check `Install Mac OS X` (folder) and `Install Mac OS X.app` for `Contents/Info.plist`; if not found, fallback to general `.app` scan and `Info.plist` read, with additional fallback to `SystemVersion.plist` for legacy systems.
 - For `.app`: read `Contents/Info.plist` directly.
+- During icon detection, analysis logs both the attempted `Contents/Resources` path and the exact `.icns` file path used when icon loading succeeds.
 
 Key flags set by analysis:
 - `isModern`: Big Sur and later (including Tahoe/Sequoia/Sonoma/Ventura/etc.)
