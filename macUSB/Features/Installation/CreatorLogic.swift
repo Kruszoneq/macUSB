@@ -808,13 +808,15 @@ extension UniversalInstallationView {
 
     func performImmediateCancellation() {
         stopUSBMonitoring()
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.unmountDMG()
-            DispatchQueue.main.async {
-                withAnimation(.easeInOut(duration: 0.5)) {
-                    self.isCancelled = true
-                    self.navigateToFinish = false
-                    self.isCancelling = false
+        cancelHelperWorkflowIfNeeded {
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.unmountDMG()
+                DispatchQueue.main.async {
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        self.isCancelled = true
+                        self.navigateToFinish = false
+                        self.isCancelling = false
+                    }
                 }
             }
         }

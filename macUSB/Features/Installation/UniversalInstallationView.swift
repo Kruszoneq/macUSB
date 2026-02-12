@@ -32,6 +32,10 @@ struct UniversalInstallationView: View {
     
     @State var errorMessage: String = ""
     @State var isTerminalWorking: Bool = false
+    @State var helperProgressPercent: Double = 0
+    @State var helperStageTitle: String = ""
+    @State var helperStatusText: String = ""
+    @State var activeHelperWorkflowID: String? = nil
     @State var showFinishButton: Bool = false
     @State var processSuccess: Bool = false
     @State var navigateToFinish: Bool = false
@@ -121,12 +125,12 @@ struct UniversalInstallationView: View {
                                 if isRestoreLegacy {
                                     Text("• Plik z systemem zostanie skopiowany i zweryfikowany")
                                     Text("• Pamięć USB zostanie wymazana")
-                                    Text("• Obraz systemu zostanie przywrócony w Terminalu")
-                                    Text("• Wymagane podanie hasła administratora")
+                                    Text("• Obraz systemu zostanie przywrócony przez helper systemowy")
+                                    Text("• System może poprosić o potwierdzenie uprawnień administratora")
                                 } else if isPPC {
                                     Text("• Dysk USB zostanie sformatowany (APM + HFS+)")
                                     Text("• Obraz instalacyjny zostanie przywrócony na USB")
-                                    Text("• Operacja zostanie wykonana w Terminalu (wymagane hasło administratora)")
+                                    Text("• Operacja zostanie wykonana przez helper systemowy (wymagane uprawnienia administratora)")
                                 } else {
                                     if isCatalina {
                                         Text("• Plik instalacyjny zostanie skopiowany oraz podpisany")
@@ -138,9 +142,9 @@ struct UniversalInstallationView: View {
                                     }
                                     
                                     Text("• Pamięć USB zostanie sformatowana (dane zostaną usunięte)")
-                                    Text("• Zapis na USB odbędzie się w nowym oknie Terminala")
+                                    Text("• Zapis na USB zostanie wykonany przez helper systemowy")
                                     if isCatalina {
-                                        Text("• Terminal wykona końcową weryfikację i podmianę plików")
+                                        Text("• Helper wykona końcową weryfikację i podmianę plików")
                                     }
                                 }
                                 Text("• Pliki tymczasowe zostaną automatycznie usunięte")
@@ -196,7 +200,7 @@ struct UniversalInstallationView: View {
                     
                     if !isProcessing && !isTerminalWorking && !processSuccess && !isCancelled && !isUSBDisconnectedLock && !isRollingBack && !isCancelling {
                         VStack(spacing: 15) {
-                            Button(action: startCreationProcess) {
+                            Button(action: startCreationProcessEntry) {
                                 HStack {
                                     Text("Rozpocznij")
                                     Image(systemName: "arrow.right.circle.fill")
@@ -332,8 +336,11 @@ struct UniversalInstallationView: View {
                                 }
                                 
                                 VStack(alignment: .leading, spacing: 5) {
-                                    Text(processingTitle).font(.headline)
-                                    Text(processingSubtitle).font(.caption).foregroundColor(.secondary)
+                                    Text(processingTitle.isEmpty ? String(localized: "Rozpoczynanie...") : processingTitle)
+                                        .font(.headline)
+                                    Text(processingSubtitle.isEmpty ? String(localized: "Przygotowywanie operacji...") : processingSubtitle)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
                                 }
                                 Spacer()
                             }
@@ -406,19 +413,21 @@ struct UniversalInstallationView: View {
                     if isTerminalWorking {
                         VStack(spacing: 20) {
                             HStack(spacing: 15) {
-                                Image(systemName: "terminal.fill").font(.largeTitle).foregroundColor(.secondary)
+                                Image(systemName: "lock.shield.fill").font(.largeTitle).foregroundColor(.accentColor)
                                 VStack(alignment: .leading, spacing: 5) {
-                                    Text("Uruchomiono Terminal").font(.headline)
-                                    Text("Postępuj zgodnie z instrukcjami w oknie Terminala.").font(.caption).foregroundColor(.secondary)
+                                    Text(helperStageTitle.isEmpty ? String(localized: "Trwa tworzenie instalatora") : helperStageTitle)
+                                        .font(.headline)
+                                    Text(helperStatusText.isEmpty ? String(localized: "Helper wykonuje operacje uprzywilejowane.") : helperStatusText)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
                                 }
                                 Spacer()
+                                Text("\(Int(helperProgressPercent))%")
+                                    .font(.headline)
                             }
                             Divider()
-                            HStack {
-                                ProgressView().controlSize(.small)
-                                Text("Oczekiwanie na zakończenie operacji...").font(.caption).foregroundColor(.secondary)
-                                Spacer()
-                            }
+                            ProgressView(value: helperProgressPercent, total: 100)
+                                .progressViewStyle(.linear)
                         }
                         .padding().frame(maxWidth: .infinity)
                         .background(Color.accentColor.opacity(0.1)).cornerRadius(10)
@@ -554,4 +563,3 @@ class UniversalWindowHandler: NSObject, NSWindowDelegate {
         } else { return false }
     }
 }
-

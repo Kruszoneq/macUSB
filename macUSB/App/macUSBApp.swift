@@ -15,6 +15,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Update MenuState to reflect the default state in UI
         MenuState.shared.externalDrivesEnabled = false
         NotificationPermissionManager.shared.refreshState()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            HelperServiceManager.shared.bootstrapIfNeededAtStartup { ready in
+                AppLogging.info(
+                    "Startup helper readiness: \(ready ? "ready" : "not_ready")",
+                    category: "Installation"
+                )
+            }
+        }
     }
     
     func applicationWillTerminate(_ notification: Notification) {
@@ -169,6 +178,16 @@ struct macUSBApp: App {
                             }
                         }
                     }
+                }
+                Divider()
+                Button(String(localized: "Status helpera")) {
+                    HelperServiceManager.shared.presentStatusAlert()
+                }
+                Button(String(localized: "Napraw helpera")) {
+                    HelperServiceManager.shared.repairRegistrationFromMenu()
+                }
+                Button(String(localized: "Usuń helpera")) {
+                    HelperServiceManager.shared.unregisterFromMenu()
                 }
             }
             CommandGroup(replacing: .windowList) { }

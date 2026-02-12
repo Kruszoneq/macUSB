@@ -72,7 +72,9 @@ struct WelcomeView: View {
             guard !didRunStartupFlow else { return }
             didRunStartupFlow = true
             checkForUpdates {
-                NotificationPermissionManager.shared.handleStartupFlowIfNeeded()
+                HelperServiceManager.shared.bootstrapIfNeededAtStartup { _ in
+                    NotificationPermissionManager.shared.handleStartupFlowIfNeeded()
+                }
             }
         }
     }

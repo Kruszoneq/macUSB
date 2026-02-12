@@ -29,7 +29,7 @@
 ---
 
 ## 1. Purpose and Scope
-`macUSB` is a macOS app that turns a modern Mac (Apple Silicon or Intel) into a “service machine” for creating bootable macOS/OS X/Mac OS X USB installers. It streamlines a process that otherwise requires manual Terminal commands and legacy compatibility fixes.
+`macUSB` is a macOS app that turns a modern Mac (Apple Silicon or Intel) into a “service machine” for creating bootable macOS/OS X/Mac OS X USB installers. It streamlines a process that otherwise requires manual privileged command-line operations and legacy compatibility fixes.
 
 Core goals:
 - Allow users to create bootable USB installers from `.dmg`, `.iso`, `.cdr`, or `.app` sources.
@@ -44,7 +44,7 @@ Core goals:
 Navigation flow (SwiftUI):
 1. Welcome screen → start button.
 2. System analysis → user selects file, app analyzes it, then user selects a USB target.
-3. Installer creation → app prepares and launches a Terminal script to do privileged operations.
+3. Installer creation → app prepares files locally and delegates privileged operations to a LaunchDaemon helper via XPC.
 4. Finish screen → cleanup, success/failure feedback, optional PPC instructions.
 
 Main UI screens (in order):
@@ -70,14 +70,14 @@ Fixed window size:
 The project is a SwiftUI macOS app with a pragmatic separation of views, logic extensions, services, and models.
 
 Key concepts:
-- SwiftUI + AppKit integration: menus, NSAlert dialogs, window configuration, and Terminal launching use AppKit APIs.
+- SwiftUI + AppKit integration: menus, NSAlert dialogs, and window configuration use AppKit APIs.
 - View logic split: `UniversalInstallationView` UI lives in one file; its heavy logic lives in `CreatorLogic.swift` as an extension to keep type-checker complexity manageable.
 - State-driven UI: extensive use of `@State`, `@StateObject`, `@EnvironmentObject` and `@Published` to bind logic to UI.
 - NotificationCenter: used for flow resets, special-case actions (Tiger Multi-DVD override), and debug-only routing shortcuts.
 - Notification permissions are centrally handled by `NotificationPermissionManager` (startup prompt, menu toggle, and system settings redirection).
 - System analysis: reads `Info.plist` from the installer app inside a mounted image or `.app` bundle.
 - USB detection: enumerates mounted external volumes; optionally includes external HDD/SSD with a user option; detects USB speed, partition scheme, filesystem format, and computes the `needsFormatting` flag for later stages.
-- Terminal script execution: a shell script is written to a temporary folder, then opened in Terminal to run with `sudo`.
+- Privileged helper execution: a LaunchDaemon helper is registered via `SMAppService`, and privileged work is executed via typed XPC requests.
 
 ---
 
@@ -146,7 +146,8 @@ Inputs and file selection:
 
 Progress indicators:
 - Inline progress uses `ProgressView().controlSize(.small)` next to status text.
-- Terminal-running and processing states show a dedicated panel with icon, title, subtitle, and progress indicator.
+- During helper execution, the installation screen shows a dedicated progress panel with stage title, status text, numeric percent, and linear progress bar.
+- Live helper log lines are not rendered in UI; they are recorded into diagnostics logs for export.
 
 Welcome screen specifics:
 - App icon is shown at 128 × 128.
@@ -219,11 +220,10 @@ Implemented in: `UniversalInstallationView` (UI) + `CreatorLogic.swift` (logic)
 
 ### Standard Flow (createinstallmedia)
 Used for most modern macOS installers.
-- `createinstallmedia` is run in Terminal with `sudo`.
-- If the selected drive has `needsFormatting == true` and flow is non-PPC, Terminal first formats the whole disk to `GPT + HFS+`, then continues to USB creation.
+- `createinstallmedia` is executed by the privileged helper (LaunchDaemon) using typed XPC requests.
+- If the selected drive has `needsFormatting == true` and flow is non-PPC, helper first formats the whole disk to `GPT + HFS+`, then continues to USB creation.
 - In standard flow, preformatting runs after copy/patch/sign preparation steps and before `createinstallmedia`.
-- After preformatting succeeds, Terminal is cleared and a fresh stage header is shown before USB creation starts.
-- The effective target path is passed as `TARGET_USB_PATH` (updated after preformat mountpoint refresh).
+- The effective target path is resolved by helper (`TARGET_USB_PATH` equivalent), including mountpoint refresh after preformat.
 - The app may copy the `.app` to a TEMP directory first when:
 - the source is mounted from `/Volumes` (image), or
 - Catalina requires post-processing, or
@@ -231,15 +231,14 @@ Used for most modern macOS installers.
 
 ### Legacy Restore Flow (Lion / Mountain Lion)
 - Copies `InstallESD.dmg` to TEMP.
-- Runs `asr imagescan` with admin privileges.
-- If `needsFormatting == true` (non-PPC), a `GPT + HFS+` preformat stage runs in Terminal before restore.
-- After preformatting succeeds, Terminal is cleared and a fresh stage header is shown before restore starts.
-- Then `asr restore` runs to `TARGET_USB_PATH` (dynamic path after optional preformat).
+- Runs `asr imagescan` in helper context (root).
+- If `needsFormatting == true` (non-PPC), a `GPT + HFS+` preformat stage runs in helper before restore.
+- Then `asr restore` runs to helper-resolved target path after optional preformat.
 
 ### Mavericks Flow
 - Copies the source image to TEMP.
-- If `needsFormatting == true` (non-PPC), a `GPT + HFS+` preformat stage runs in Terminal before restore.
-- Runs `asr imagescan`, then `asr restore` in Terminal (restore target resolved via `TARGET_USB_PATH`).
+- If `needsFormatting == true` (non-PPC), a `GPT + HFS+` preformat stage runs in helper before restore.
+- Runs `asr imagescan`, then `asr restore` in helper (restore target resolved by helper).
 
 ### PowerPC Flow
 - Formats disk with `diskutil partitionDisk` using APM + HFS+.
@@ -254,19 +253,15 @@ Used for most modern macOS installers.
 
 ### Catalina Special Handling
 - Uses `createinstallmedia` first.
-- Then replaces the installer app on the USB volume using `ditto`.
+- Then helper replaces the installer app on the USB volume using `ditto`.
 - Removes quarantine attributes on the target app.
 
-### Terminal Monitoring Strategy
-The app writes signal files to track progress:
-- `terminal_running` → Terminal is active
-- `terminal_done` → Terminal finished
-- `terminal_success` → Operation succeeded
-- `terminal_error` → Operation failed
-- `auth_ok` → Admin authorization was granted
-- `formatting_started` → GPT+HFS+ formatting stage has started (non-PPC preformat flow)
-- `formatting_done` → GPT+HFS+ formatting stage completed and flow continues to USB creation
-- `CreatorLogic` watches `formatting_started` / `formatting_done` and emits dedicated `AppLogging.stage(...)` markers for formatting start/end.
+### Helper Monitoring Strategy
+The app tracks helper progress through XPC progress events:
+- `stageKey`, `stageTitle`, `statusText`, `percent`, and optional `logLine`.
+- UI shows stage/status/progress bar + numeric percent.
+- `logLine` values are recorded to diagnostics logs under `HelperLiveLog` and are exportable.
+- Live helper logs are not displayed in the installation UI.
 
 ---
 
@@ -285,8 +280,9 @@ Command-line tools:
 
 AppKit/Swift APIs:
 - `NSAlert`, `NSOpenPanel`, `NSSavePanel`
-- `NSWorkspace` (open URLs, launch Terminal scripts)
-- `NSAppleScript` (admin privileges for commands)
+- `NSWorkspace` (open URLs and system settings deep-links)
+- `ServiceManagement` (`SMAppService`) for helper registration and state management
+- `NSXPCConnection` / `NSXPCListener` for app↔helper IPC
 - `IOKit` (USB device speed detection)
 - `OSLog` (logging)
 
@@ -315,7 +311,7 @@ Features:
 - Category-based info/error logs with timestamps.
 - In-memory buffer for exporting logs (max 5000 lines).
 - Exportable from the app menu into a `.txt` file.
-- Formatting stage logs are emitted based on Terminal signal files (`formatting_started`, `formatting_done`) to mark start/end of preformatting.
+- Helper stdout/stderr lines are recorded under the `HelperLiveLog` category and included in diagnostics export.
 
 ### Log Message Requirements
 The following requirements are mandatory for diagnostic logs:
@@ -353,13 +349,17 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` — File/USB selection UI and navigation to install.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic; propagates/logs USB metadata (speed, partition scheme, filesystem format, `needsFormatting`) and exposes `selectedDriveForInstallation` (PPC override of formatting flag).
 - `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation UI state and progress.
-- `macUSB/Features/Installation/CreatorLogic.swift` — Installer creation logic and terminal scripting, including conditional non-PPC preformat (`GPT + HFS+`), formatting signal watchers, and staged terminal refresh between format/create phases.
+- `macUSB/Features/Installation/CreatorLogic.swift` — Legacy/auxiliary installation logic (including debug fallback path).
+- `macUSB/Features/Installation/CreatorHelperLogic.swift` — Primary installation path via privileged helper (SMAppService + XPC), helper progress mapping, and helper cancellation flow.
 - `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, cleanup, sound feedback, background-result system notification (when app is inactive), and optional cleanup overrides used by debug simulation.
 - `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
 - `macUSB/Shared/Models/Item.swift` — SwiftData model stub (currently unused).
 - `macUSB/Shared/Services/LanguageManager.swift` — Language selection and locale handling.
 - `macUSB/Shared/Services/MenuState.swift` — Shared menu state (skip analysis, external drives).
 - `macUSB/Shared/Services/NotificationPermissionManager.swift` — Central notification permission and app-level toggle manager (startup prompt, menu action, system settings redirect).
+- `macUSB/Shared/Services/Helper/HelperIPC.swift` — Shared app-side helper request/result/event payloads and XPC protocol contracts.
+- `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift` — App-side XPC client for start/cancel/health checks and progress/result routing.
+- `macUSB/Shared/Services/Helper/HelperServiceManager.swift` — Helper registration/repair/removal/status logic using `SMAppService`.
 - `macUSB/Shared/Services/UpdateChecker.swift` — Manual update checking.
 - `macUSB/Shared/Services/Logging.swift` — Central logging and log export.
 - `macUSB/Shared/Services/USBDriveLogic.swift` — USB volume enumeration plus metadata detection (speed, partition scheme, filesystem format).
@@ -371,7 +371,9 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Resources/Assets.xcassets/macUSB Icon/Assets/Contents.json` — Sub-asset container metadata.
 - `macUSB/Resources/Assets.xcassets/macUSB Icon/icon.dataset/Contents.json` — Icon dataset metadata.
 - `macUSB/Resources/Assets.xcassets/macUSB Icon/icon.dataset/icon.json` — Icon JSON definition.
+- `macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist` — LaunchDaemon definition embedded into the app bundle for SMAppService registration.
 - `macUSB/macUSBIcon.icon/icon.json` — Original icon definition for the app icon source.
+- `macUSBHelper/main.swift` — Privileged helper executable entry point (LaunchDaemon XPC listener and root workflow execution).
 
 Notes on non-source items:
 - `.DS_Store` files are Finder metadata and not used by the app.
@@ -381,17 +383,22 @@ Notes on non-source items:
 ## 12. File Relationships (Who Calls What)
 This section lists the main call relationships and data flow.
 
-- `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`, `NotificationPermissionManager`; in `DEBUG` also publishes `macUSBDebugGoToBigSurSummary` and `macUSBDebugGoToTigerSummary` from SwiftUI command menu actions.
+- `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`, `NotificationPermissionManager`, `HelperServiceManager`; in `DEBUG` also publishes `macUSBDebugGoToBigSurSummary` and `macUSBDebugGoToTigerSummary` from SwiftUI command menu actions.
 - `macUSB/App/ContentView.swift` → presents `WelcomeView`, injects `LanguageManager`, calls `AppLogging.logAppStartupOnce()`, and maps debug notifications to delayed (2s) `FinishUSBView` routes (Big Sur and Tiger/PPC).
-- `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json`, then triggers startup notification-permission flow.
+- `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json`, bootstraps helper readiness via `HelperServiceManager`, then triggers startup notification-permission flow.
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, and forwards `selectedDriveForInstallation` to installation flow.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
-- `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress, calls logic in `CreatorLogic`, navigates to `FinishUSBView`.
-- `macUSB/Features/Installation/CreatorLogic.swift` → uses `AppLogging`, logs selected USB metadata snapshot, conditionally preformats non-PPC drives, watches formatting signal files, writes Terminal scripts, runs privileged commands (AppleScript + sudo).
+- `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress (stage/status/percent), starts the helper path via `startCreationProcessEntry()`, and navigates to `FinishUSBView`.
+- `macUSB/Features/Installation/CreatorHelperLogic.swift` → builds typed helper requests, coordinates helper execution/cancellation, and maps XPC progress events into UI state.
+- `macUSB/Features/Installation/CreatorLogic.swift` → keeps shared install helpers and a `DEBUG`-only legacy fallback path (`Debug.UseLegacyTerminalFlow`).
 - `macUSB/Features/Finish/FinishUSBView.swift` → cleanup (unmount + delete temp), result sound, optional background system notification gated by permission/toggle, and reset callback.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
 - `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift`, `SystemAnalysisView`, and `NotificationPermissionManager`.
 - `macUSB/Shared/Services/NotificationPermissionManager.swift` → reads `UNUserNotificationCenter` state, updates `MenuState`, controls startup/menu alerts for notification permission, and opens system settings when blocked.
+- `macUSB/Shared/Services/Helper/HelperServiceManager.swift` → registers/repairs/removes LaunchDaemon helper via `SMAppService` and reports readiness.
+- `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift` → app-side XPC client that starts/cancels helper workflows and logs `logLine` events to `HelperLiveLog`.
+- `macUSB/Shared/Services/Helper/HelperIPC.swift` → helper IPC payload contracts (request, progress event, result).
+- `macUSBHelper/main.swift` → helper-side XPC service, root workflow executor, progress event emitter, and cancellation handling.
 - `macUSB/Shared/Services/UpdateChecker.swift` → called from app menu.
 
 ---
@@ -401,9 +408,9 @@ This section lists the main call relationships and data flow.
 2. Do not add hidden behavior in the UI: show warnings for destructive operations.
 3. Respect flow flags: `AnalysisLogic` flags are the source of truth for installation paths.
 4. Keep the window fixed: UI assumes a 550×750 fixed layout.
-5. Terminal operations must be observable: use marker files in TEMP for monitoring.
+5. Privileged helper operations must be observable: keep stage/status/percent progress events flowing to UI and keep `logLine` in diagnostics logs (`HelperLiveLog`) rather than screen panels.
 6. Use `AppLogging` for all important steps: keep logs helpful for diagnostics.
-7. Avoid running privileged commands silently: use Terminal or AppleScript prompts.
+7. In `Release`, privileged install flow must run through `SMAppService` + LaunchDaemon helper (no terminal fallback); legacy terminal path is allowed only behind the `DEBUG` kill-switch.
 8. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.
 9. Debug menu contract: top-level `DEBUG` menu is allowed only for `DEBUG` builds; it must not be available in `Release` builds.
 

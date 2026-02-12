@@ -4,6 +4,9 @@
     "" : {
 
     },
+    "%lld%%" : {
+
+    },
     "• Do utworzenia instalatora potrzebny jest dysk USB o pojemności minimum 16 GB" : {
       "localizations" : {
         "de" : {
@@ -160,6 +163,9 @@
         }
       }
     },
+    "• Helper wykona końcową weryfikację i podmianę plików" : {
+
+    },
     "• Instalator zostanie zmodyfikowany (podpis cyfrowy)" : {
       "localizations" : {
         "de" : {
@@ -264,7 +270,11 @@
         }
       }
     },
+    "• Obraz systemu zostanie przywrócony przez helper systemowy" : {
+
+    },
     "• Obraz systemu zostanie przywrócony w Terminalu" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -316,7 +326,11 @@
         }
       }
     },
+    "• Operacja zostanie wykonana przez helper systemowy (wymagane uprawnienia administratora)" : {
+
+    },
     "• Operacja zostanie wykonana w Terminalu (wymagane hasło administratora)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -732,7 +746,11 @@
         }
       }
     },
+    "• System może poprosić o potwierdzenie uprawnień administratora" : {
+
+    },
     "• Terminal wykona końcową weryfikację i podmianę plików" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -993,6 +1011,7 @@
       }
     },
     "• Wymagane podanie hasła administratora" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1097,6 +1116,7 @@
       }
     },
     "• Zapis na USB odbędzie się w nowym oknie Terminala" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1147,6 +1167,12 @@
           }
         }
       }
+    },
+    "• Zapis na USB zostanie wykonany przez helper systemowy" : {
+
+    },
+    "Aby uruchomić helper systemowy, aplikacja musi znajdować się w katalogu Applications." : {
+
     },
     "Aby uruchomić instalator z dysku USB na Macu z PowerPC, niezbędne jest wpisanie komendy w konsoli Open Firmware. Pełna instrukcja obsługi znajduje się na stronie internetowej aplikacji." : {
       "localizations" : {
@@ -1199,6 +1225,9 @@
           }
         }
       }
+    },
+    "Aby używać helpera uprzywilejowanego, przenieś aplikację macUSB do katalogu Applications i uruchom ją ponownie." : {
+
     },
     "Aby zmienić język interfejsu we wszystkich elementach aplikacji (w tym menu i przyciskach), wymagany jest restart. Kliknij poniżej, aby uruchomić aplikację ponownie." : {
       "localizations" : {
@@ -1301,6 +1330,58 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在更新版本并进行签名…"
+          }
+        }
+      }
+    },
+    "Aktualnie uruchomiona wersja: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuell ausgeführte Version: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Currently running version: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versión actualmente en ejecución: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version actuellement utilisée : %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在実行中のバージョン: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versão em execução no momento: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Текущая запущенная версия: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前运行版本：%@"
           }
         }
       }
@@ -2397,9 +2478,6 @@
         }
       }
     },
-    "DEBUG" : {
-
-    },
     "Deutsch" : {
       "localizations" : {
         "de" : {
@@ -2604,58 +2682,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "有新版本可用：%@。建议更新！"
-          }
-        }
-      }
-    },
-    "Aktualnie uruchomiona wersja: %@" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aktuell ausgeführte Version: %@"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Currently running version: %@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Versión actualmente en ejecución: %@"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Version actuellement utilisée : %@"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "現在実行中のバージョン: %@"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Versão em execução no momento: %@"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Текущая запущенная версия: %@"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "当前运行版本：%@"
           }
         }
       }
@@ -3596,6 +3622,27 @@
         }
       }
     },
+    "Helper nie jest gotowy do pracy." : {
+
+    },
+    "Helper uruchamia pierwszy etap operacji uprzywilejowanych..." : {
+
+    },
+    "Helper wykonuje operacje uprzywilejowane." : {
+
+    },
+    "Helper wymaga zatwierdzenia w Ustawieniach systemowych." : {
+
+    },
+    "Helper został usunięty" : {
+
+    },
+    "Helper został zarejestrowany, ale wymaga zatwierdzenia przez użytkownika." : {
+
+    },
+    "Helper został zarejestrowany, ale wymaga zatwierdzenia w Ustawieniach systemowych, aby mógł wykonywać operacje uprzywilejowane." : {
+
+    },
     "Ignoruj" : {
       "localizations" : {
         "de" : {
@@ -4116,6 +4163,12 @@
         }
       }
     },
+    "Lokalizacja aplikacji: /Applications (OK)" : {
+
+    },
+    "Lokalizacja aplikacji: poza /Applications" : {
+
+    },
     "Mac OS X Tiger 10.4 (Multi DVD)" : {
       "localizations" : {
         "de" : {
@@ -4428,6 +4481,12 @@
         }
       }
     },
+    "Napraw helpera" : {
+
+    },
+    "Naprawa helpera zakończona" : {
+
+    },
     "Narzędzia" : {
       "localizations" : {
         "de" : {
@@ -4479,6 +4538,9 @@
           }
         }
       }
+    },
+    "Nawiązywanie połączenia XPC..." : {
+
     },
     "Nie" : {
       "localizations" : {
@@ -4636,6 +4698,9 @@
         }
       }
     },
+    "Nie udało się aktywować helpera." : {
+
+    },
     "Nie udało się usunąć plików tymczasowych: %@" : {
       "localizations" : {
         "de" : {
@@ -4740,6 +4805,9 @@
         }
       }
     },
+    "Nie udało się zarejestrować helpera" : {
+
+    },
     "Nie wykryto dysku USB" : {
       "localizations" : {
         "de" : {
@@ -4791,6 +4859,12 @@
           }
         }
       }
+    },
+    "Nie zarejestrowany" : {
+
+    },
+    "Nie znaleziono" : {
+
     },
     "Nie znaleziono pliku InstallESD.dmg." : {
       "localizations" : {
@@ -4896,6 +4970,12 @@
         }
       }
     },
+    "Nie znaleziono źródła PPC do przywracania." : {
+
+    },
+    "Nie znaleziono źródłowego pliku obrazu." : {
+
+    },
     "Niepowodzenie!" : {
       "localizations" : {
         "de" : {
@@ -4947,6 +5027,15 @@
           }
         }
       }
+    },
+    "Nieznany" : {
+
+    },
+    "Nieznany status helpera po rejestracji." : {
+
+    },
+    "Nieznany status helpera." : {
+
     },
     "Nośnik zostanie sformatowany do GPT + HFS+." : {
       "localizations" : {
@@ -5105,6 +5194,7 @@
       }
     },
     "Oczekiwanie na zakończenie operacji..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5312,6 +5402,12 @@
         }
       }
     },
+    "Operacja nie powiodła się" : {
+
+    },
+    "Operacja zakończona" : {
+
+    },
     "Operacja została anulowana przez użytkownika." : {
       "localizations" : {
         "de" : {
@@ -5415,6 +5511,9 @@
           }
         }
       }
+    },
+    "Otwórz Ustawienia" : {
+
     },
     "Pobierz" : {
       "localizations" : {
@@ -5781,6 +5880,7 @@
       }
     },
     "Postępuj zgodnie z instrukcjami w oknie Terminala." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6666,6 +6766,7 @@
       }
     },
     "Przejdź do podsumowania (Big Sur) (2s delay)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6771,6 +6872,7 @@
       }
     },
     "Przejdź do podsumowania (Tiger) (2s delay)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6978,6 +7080,9 @@
         }
       }
     },
+    "Przygotowanie" : {
+
+    },
     "Przygotowanie plików" : {
       "localizations" : {
         "de" : {
@@ -7029,6 +7134,9 @@
           }
         }
       }
+    },
+    "Przygotowywanie operacji..." : {
+
     },
     "Repozytorium macUSB na GitHub" : {
       "localizations" : {
@@ -7186,6 +7294,9 @@
         }
       }
     },
+    "Rozpoczynanie..." : {
+
+    },
     "Ścieżka..." : {
       "localizations" : {
         "de" : {
@@ -7342,6 +7453,9 @@
         }
       }
     },
+    "Sprawdzanie gotowości helpera..." : {
+
+    },
     "Spróbuj ponownie od początku" : {
       "localizations" : {
         "de" : {
@@ -7393,6 +7507,9 @@
           }
         }
       }
+    },
+    "Status helpera" : {
+
     },
     "Strona internetowa macUSB" : {
       "localizations" : {
@@ -7915,6 +8032,9 @@
         }
       }
     },
+    "Trwa tworzenie instalatora" : {
+
+    },
     "Tworzenie bootowalnych dysków USB z systemem macOS\noraz OS X nigdy nie było takie proste!" : {
       "localizations" : {
         "de" : {
@@ -8124,6 +8244,9 @@
         }
       }
     },
+    "Uruchamianie helpera" : {
+
+    },
     "Uruchom aplikację ponownie" : {
       "localizations" : {
         "de" : {
@@ -8177,6 +8300,7 @@
       }
     },
     "Uruchomiono Terminal" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8227,6 +8351,9 @@
           }
         }
       }
+    },
+    "Usuń helpera" : {
+
     },
     "Utworzono instalator systemu" : {
       "localizations" : {
@@ -8799,6 +8926,9 @@
           }
         }
       }
+    },
+    "Włączony" : {
+
     },
     "Wolumin zostanie nazwany PPC (APM + HFS+)." : {
       "localizations" : {
@@ -9790,6 +9920,9 @@
         }
       }
     },
+    "Wymaga zatwierdzenia" : {
+
+    },
     "Wymagana autoryzacja" : {
       "localizations" : {
         "de" : {
@@ -9841,6 +9974,9 @@
           }
         }
       }
+    },
+    "Wymagana lokalizacja /Applications" : {
+
     },
     "Wymagane jest minimum 16 GB." : {
       "localizations" : {
@@ -9945,6 +10081,9 @@
           }
         }
       }
+    },
+    "Wymagane zatwierdzenie helpera" : {
+
     },
     "Wymagania" : {
       "localizations" : {
