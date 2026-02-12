@@ -110,6 +110,7 @@ Common status icons and their semantic colors:
 - Warning: `exclamationmark.triangle.fill` in orange.
 - Info: `info.circle.fill` in gray/secondary.
 - USB: `externaldrive.fill` (blue/orange depending on state).
+- In `SystemAnalysisView` success state, the app tries installer icons in this order: `Contents/Resources/ProductPageIcon.icns`, `Contents/Resources/InstallAssistant.icns`, then `Contents/Resources/Install Mac OS X.icns` (case-insensitive lookup). If none is found, fallback to `checkmark.circle.fill`.
 Frequently used SF Symbols in screens and menus include:
 - `info.circle.fill`, `doc.badge.plus`, `internaldrive`, `checkmark.circle.fill`, `xmark.circle.fill`, `xmark.octagon.fill`, `exclamationmark.triangle.fill`, `externaldrive.fill`, `externaldrive.badge.xmark`, `applelogo`, `gearshape.2`, `clock`, `lock.fill`, `hand.raised.fill`, `terminal.fill`, `arrow.right`, `arrow.right.circle.fill`, `arrow.counterclockwise`, `xmark.circle`, `xmark.circle.fill`, `globe.europe.africa.fill`, `cup.and.saucer`, `square.and.arrow.down`, `arrow.triangle.2.circlepath`, `globe`, `chevron.left.forwardslash.chevron.right`.
 

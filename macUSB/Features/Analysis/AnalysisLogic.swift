@@ -10,6 +10,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var selectedFileUrl: URL?
     @Published var recognizedVersion: String = ""
     @Published var sourceAppURL: URL?
+    @Published var detectedSystemIcon: NSImage?
     @Published var mountedDMGPath: String? = nil
 
     @Published var isAnalyzing: Bool = false
@@ -175,6 +176,7 @@ final class AnalysisLogic: ObservableObject {
                     self.recognizedVersion = ""
                     self.isSystemDetected = false
                     self.sourceAppURL = nil
+                    self.detectedSystemIcon = nil
                     self.selectedDrive = nil
                     self.capacityCheckFinished = false
                     self.showUSBSection = false
@@ -209,6 +211,7 @@ final class AnalysisLogic: ObservableObject {
                 self.recognizedVersion = ""
                 self.isSystemDetected = false
                 self.sourceAppURL = nil
+                self.detectedSystemIcon = nil
                 self.selectedDrive = nil
                 self.capacityCheckFinished = false
                 self.showUSBSection = false
@@ -235,6 +238,7 @@ final class AnalysisLogic: ObservableObject {
         self.log("Rozpoczynam analizę pliku")
         self.log("Źródło pliku do odczytu wersji: \(url.path)")
         withAnimation { isAnalyzing = true }
+        detectedSystemIcon = nil
         selectedDrive = nil; capacityCheckFinished = false
         showUSBSection = false; showUnsupportedMessage = false
         isUnsupportedSierra = false
@@ -267,6 +271,7 @@ final class AnalysisLogic: ObservableObject {
 
                             self.recognizedVersion = "\(prefix) \(cleanName) \(friendlyVer)"
                             self.sourceAppURL = appURL
+                            self.updateDetectedSystemIcon(from: appURL)
 
                             // Try to read ProductUserVisibleVersion from mounted image (Tiger/Leopard)
                             var userVisibleVersionFromMounted: String? = nil
@@ -474,6 +479,7 @@ final class AnalysisLogic: ObservableObject {
 
                             self.recognizedVersion = "\(prefix) \(cleanName) \(friendlyVer)"
                             self.sourceAppURL = appURL
+                            self.updateDetectedSystemIcon(from: appURL)
 
                             let nameLower = name.lowercased()
 
@@ -650,6 +656,7 @@ final class AnalysisLogic: ObservableObject {
                     self.userSkippedAnalysis = true
                     self.recognizedVersion = "Mac OS X Tiger 10.4"
                     self.sourceAppURL = effectiveSourceAppURL
+                    self.updateDetectedSystemIcon(from: effectiveSourceAppURL)
                     self.mountedDMGPath = mountPoint
                     self.isSystemDetected = true
                     self.showUnsupportedMessage = false
@@ -705,6 +712,83 @@ final class AnalysisLogic: ObservableObject {
             return (name, ver, appUrl)
         }
         self.logError("Nie udało się odczytać Info.plist")
+        return nil
+    }
+
+    private func updateDetectedSystemIcon(from appURL: URL?) {
+        guard let appURL = appURL else {
+            self.detectedSystemIcon = nil
+            return
+        }
+
+        let iconFileCandidates = [
+            "ProductPageIcon.icns",
+            "InstallAssistant.icns",
+            "Install Mac OS X.icns"
+        ]
+
+        for installerURL in self.candidateInstallerLocations(from: appURL) {
+            let resourcesURL = installerURL.appendingPathComponent("Contents/Resources", isDirectory: true)
+            guard let iconURL = self.findIconURL(in: resourcesURL, preferredFileNames: iconFileCandidates),
+                  let icon = NSImage(contentsOf: iconURL) else {
+                continue
+            }
+
+            self.detectedSystemIcon = icon
+            self.log("Wczytano ikonę systemu: \(iconURL.path)")
+            return
+        }
+
+        self.detectedSystemIcon = nil
+        self.log("Nie znaleziono ikony instalatora (\(iconFileCandidates.joined(separator: ", "))) dla: \(appURL.path)")
+    }
+
+    private func candidateInstallerLocations(from url: URL) -> [URL] {
+        var result: [URL] = []
+        let fm = FileManager.default
+
+        func appendUnique(_ candidate: URL) {
+            let normalized = candidate.standardizedFileURL
+            guard !result.contains(where: { $0.standardizedFileURL == normalized }) else { return }
+            result.append(candidate)
+        }
+
+        appendUnique(url)
+
+        if url.pathExtension.lowercased() != "app" {
+            // Część starych obrazów ma instalator pod klasyczną nazwą "Install Mac OS X".
+            appendUnique(url.appendingPathComponent("Install Mac OS X.app", isDirectory: true))
+            appendUnique(url.appendingPathComponent("Install OS X.app", isDirectory: true))
+            appendUnique(url.appendingPathComponent("Install macOS.app", isDirectory: true))
+
+            if let children = try? fm.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) {
+                for child in children where child.pathExtension.lowercased() == "app" {
+                    appendUnique(child)
+                }
+            }
+        }
+
+        return result.filter { fm.fileExists(atPath: $0.path) }
+    }
+
+    private func findIconURL(in resourcesURL: URL, preferredFileNames: [String]) -> URL? {
+        let fm = FileManager.default
+        guard fm.fileExists(atPath: resourcesURL.path),
+              let files = try? fm.contentsOfDirectory(at: resourcesURL, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) else {
+            return nil
+        }
+
+        var byLowercasedName: [String: URL] = [:]
+        for file in files {
+            byLowercasedName[file.lastPathComponent.lowercased()] = file
+        }
+
+        for fileName in preferredFileNames {
+            if let match = byLowercasedName[fileName.lowercased()] {
+                return match
+            }
+        }
+
         return nil
     }
 
@@ -841,6 +925,7 @@ final class AnalysisLogic: ObservableObject {
                 self.selectedFileUrl = nil
                 self.recognizedVersion = ""
                 self.sourceAppURL = nil
+                self.detectedSystemIcon = nil
                 self.mountedDMGPath = nil
 
                 self.isAnalyzing = false

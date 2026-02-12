@@ -143,7 +143,17 @@ struct SystemAnalysisView: View {
             let isValid = (logic.sourceAppURL != nil) || logic.isPPC
             if isValid {
                 HStack(alignment: .center) {
-                    Image(systemName: "checkmark.circle.fill").font(.title2).foregroundColor(.green).frame(width: 32)
+                    if let detectedIcon = logic.detectedSystemIcon {
+                        Image(nsImage: detectedIcon)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 32, height: 32)
+                    } else {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(.green)
+                            .frame(width: 32)
+                    }
                     VStack(alignment: .leading) {
                         Text("Pomyślnie wykryto system").font(.caption).foregroundColor(.secondary)
                         Text(logic.recognizedVersion).font(.headline).foregroundColor(.green)
