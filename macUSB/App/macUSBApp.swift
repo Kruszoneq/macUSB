@@ -2,10 +2,6 @@ import SwiftUI
 import AppKit
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    private var debugMenuHandler: DebugMenuHandler?
-    private var debugMenuObservers: [NSObjectProtocol] = []
-    private let debugMenuTitle = "DEBUG"
-
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
@@ -19,16 +15,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Update MenuState to reflect the default state in UI
         MenuState.shared.externalDrivesEnabled = false
         NotificationPermissionManager.shared.refreshState()
-
-        configureDebugMenuObservers()
-
-        DispatchQueue.main.async {
-            if self.isRunningFromXcode {
-                self.installDebugMenuIfNeeded()
-            } else {
-                self.uninstallDebugMenuIfNeeded()
-            }
-        }
     }
     
     func applicationWillTerminate(_ notification: Notification) {
@@ -37,97 +23,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         UserDefaults.standard.synchronize()
         // Reflect the state in MenuState for consistency
         MenuState.shared.externalDrivesEnabled = false
-
-        for observer in debugMenuObservers {
-            NotificationCenter.default.removeObserver(observer)
-        }
-        debugMenuObservers.removeAll()
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
         NotificationPermissionManager.shared.refreshState()
-    }
-
-    private var isRunningFromXcode: Bool {
-        let env = ProcessInfo.processInfo.environment
-        return env["XCODE_VERSION_ACTUAL"] != nil || env["__XCODE_BUILT_PRODUCTS_DIR_PATHS"] != nil
-    }
-
-    private func configureDebugMenuObservers() {
-        let center = NotificationCenter.default
-        let didAppearObserver = center.addObserver(
-            forName: .macUSBWelcomeViewDidAppear,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            guard let self else { return }
-            guard self.isRunningFromXcode else {
-                self.uninstallDebugMenuIfNeeded()
-                return
-            }
-            self.installDebugMenuIfNeeded()
-        }
-
-        let didDisappearObserver = center.addObserver(
-            forName: .macUSBWelcomeViewDidDisappear,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.uninstallDebugMenuIfNeeded()
-        }
-
-        debugMenuObservers = [didAppearObserver, didDisappearObserver]
-    }
-
-    private func installDebugMenuIfNeeded() {
-        guard let mainMenu = NSApp.mainMenu else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.installDebugMenuIfNeeded()
-            }
-            return
-        }
-        guard !mainMenu.items.contains(where: { $0.title == debugMenuTitle }) else { return }
-
-        let topLevelItem = NSMenuItem(title: debugMenuTitle, action: nil, keyEquivalent: "")
-        let submenu = NSMenu(title: debugMenuTitle)
-
-        let handler = DebugMenuHandler()
-        let goToBigSurSummaryItem = NSMenuItem(
-            title: String(localized: "Przejdź do podsumowania (Big Sur)"),
-            action: #selector(DebugMenuHandler.goToBigSurSummary),
-            keyEquivalent: ""
-        )
-        goToBigSurSummaryItem.target = handler
-
-        let goToTigerSummaryItem = NSMenuItem(
-            title: String(localized: "Przejdź do podsumowania (Tiger)"),
-            action: #selector(DebugMenuHandler.goToTigerSummary),
-            keyEquivalent: ""
-        )
-        goToTigerSummaryItem.target = handler
-
-        submenu.addItem(goToBigSurSummaryItem)
-        submenu.addItem(goToTigerSummaryItem)
-        topLevelItem.submenu = submenu
-        mainMenu.addItem(topLevelItem)
-
-        self.debugMenuHandler = handler
-    }
-
-    private func uninstallDebugMenuIfNeeded() {
-        guard let mainMenu = NSApp.mainMenu else { return }
-        guard let index = mainMenu.items.firstIndex(where: { $0.title == debugMenuTitle }) else { return }
-        mainMenu.removeItem(at: index)
-    }
-}
-
-private final class DebugMenuHandler: NSObject {
-    @objc func goToBigSurSummary() {
-        NotificationCenter.default.post(name: .macUSBDebugGoToBigSurSummary, object: nil)
-    }
-
-    @objc func goToTigerSummary() {
-        NotificationCenter.default.post(name: .macUSBDebugGoToTigerSummary, object: nil)
     }
 }
 
@@ -353,6 +252,16 @@ struct macUSBApp: App {
                     Label(String(localized: "Eksportuj logi diagnostyczne..."), systemImage: "square.and.arrow.down")
                 }
             }
+            #if DEBUG
+            CommandMenu("DEBUG") {
+                Button(String(localized: "Przejdź do podsumowania (Big Sur) (2s delay)")) {
+                    NotificationCenter.default.post(name: .macUSBDebugGoToBigSurSummary, object: nil)
+                }
+                Button(String(localized: "Przejdź do podsumowania (Tiger) (2s delay)")) {
+                    NotificationCenter.default.post(name: .macUSBDebugGoToTigerSummary, object: nil)
+                }
+            }
+            #endif
         }
     }
 }

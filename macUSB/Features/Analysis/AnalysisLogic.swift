@@ -880,6 +880,4 @@ extension Notification.Name {
     static let macUSBStartTigerMultiDVD = Notification.Name("macUSB.startTigerMultiDVD")
     static let macUSBDebugGoToBigSurSummary = Notification.Name("macUSB.debugGoToBigSurSummary")
     static let macUSBDebugGoToTigerSummary = Notification.Name("macUSB.debugGoToTigerSummary")
-    static let macUSBWelcomeViewDidAppear = Notification.Name("macUSB.welcomeViewDidAppear")
-    static let macUSBWelcomeViewDidDisappear = Notification.Name("macUSB.welcomeViewDidDisappear")
 }

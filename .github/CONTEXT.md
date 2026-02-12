@@ -23,6 +23,8 @@
 12. [File Relationships (Who Calls What)](#file-relationships-who-calls-what)
 13. [Contributor Rules and Patterns](#contributor-rules-and-patterns)
 14. [Potential Redundancies and Delicate Areas](#potential-redundancies-and-delicate-areas)
+15. [Notifications Chapter](#15-notifications-chapter)
+16. [DEBUG Chapter](#16-debug-chapter)
 
 ---
 
@@ -49,13 +51,14 @@ Main UI screens (in order):
 - `WelcomeView` → `SystemAnalysisView` → `UniversalInstallationView` → `FinishUSBView`
 
 Debug-only shortcut:
-- While running the app from Xcode, the app adds a top-level `DEBUG` menu as the last system menu tab only when `WelcomeView` is active.
-- The `DEBUG` menu is removed automatically when user leaves `WelcomeView` (e.g., navigates to file/USB selection), and reappears on return.
-- `DEBUG` → `Przejdź do podsumowania (Big Sur)` triggers a simulated success path for `macOS Big Sur 11` and navigates to `FinishUSBView` after a 2-second delay.
-- `DEBUG` → `Przejdź do podsumowania (Tiger)` triggers a simulated success path for `Mac OS X Tiger 10.4` with `isPPC = true` and navigates to `FinishUSBView` after a 2-second delay.
+- In `DEBUG` builds, the app shows a top-level `DEBUG` menu in the system menu bar.
+- `DEBUG` → `Przejdź do podsumowania (Big Sur) (2s delay)` triggers a simulated success path for `macOS Big Sur 11` and navigates to `FinishUSBView` after a 2-second delay.
+- `DEBUG` → `Przejdź do podsumowania (Tiger) (2s delay)` triggers a simulated success path for `Mac OS X Tiger 10.4` with `isPPC = true` and navigates to `FinishUSBView` after a 2-second delay.
+Detailed contract is documented in [Section 16](#16-debug-chapter).
 
 Startup permissions flow:
 - After the optional update alert on the Welcome screen, the app may show a notification-permission prompt.
+Detailed notification behavior is documented in [Section 15](#15-notifications-chapter).
 
 Fixed window size:
 - 550 × 750, non-resizable.
@@ -341,9 +344,9 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB.xcodeproj/xcshareddata/xcschemes/macUSB.xcscheme` — Shared build scheme.
 - `macUSB/macUSB.entitlements` — App entitlements (currently empty).
 - `macUSB/Info.plist` — Bundle metadata and localization list.
-- `macUSB/App/macUSBApp.swift` — App entry point, menus, AppDelegate behavior, and runtime-managed top-level `DEBUG` menu injection/removal (Xcode-run + `WelcomeView` visibility).
+- `macUSB/App/macUSBApp.swift` — App entry point, menus, AppDelegate behavior, and debug-only top-level `DEBUG` command menu.
 - `macUSB/App/ContentView.swift` — Root view, window configuration, locale injection, and root-level debug navigation route handling.
-- `macUSB/Features/Welcome/WelcomeView.swift` — Welcome screen, update check, and welcome visibility notifications used to toggle `DEBUG` menu.
+- `macUSB/Features/Welcome/WelcomeView.swift` — Welcome screen and update check.
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` — File/USB selection UI and navigation to install.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic; propagates/logs USB metadata (speed, partition scheme, filesystem format, `needsFormatting`) and exposes `selectedDriveForInstallation` (PPC override of formatting flag).
 - `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation UI state and progress.
@@ -375,9 +378,9 @@ Notes on non-source items:
 ## 12. File Relationships (Who Calls What)
 This section lists the main call relationships and data flow.
 
-- `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`, `NotificationPermissionManager`; listens for `WelcomeView` appear/disappear notifications to add/remove `DEBUG` menu when running from Xcode, and publishes `macUSBDebugGoToBigSurSummary` / `macUSBDebugGoToTigerSummary` from AppKit menu actions.
+- `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`, `NotificationPermissionManager`; in `DEBUG` also publishes `macUSBDebugGoToBigSurSummary` and `macUSBDebugGoToTigerSummary` from SwiftUI command menu actions.
 - `macUSB/App/ContentView.swift` → presents `WelcomeView`, injects `LanguageManager`, calls `AppLogging.logAppStartupOnce()`, and maps debug notifications to delayed (2s) `FinishUSBView` routes (Big Sur and Tiger/PPC).
-- `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json`, triggers startup notification-permission flow, and emits welcome appear/disappear notifications for debug menu visibility.
+- `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json`, then triggers startup notification-permission flow.
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, and forwards `selectedDriveForInstallation` to installation flow.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
 - `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress, calls logic in `CreatorLogic`, navigates to `FinishUSBView`.
@@ -399,7 +402,7 @@ This section lists the main call relationships and data flow.
 6. Use `AppLogging` for all important steps: keep logs helpful for diagnostics.
 7. Avoid running privileged commands silently: use Terminal or AppleScript prompts.
 8. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.
-9. Debug menu contract: top-level `DEBUG` menu is available only while app is launched from Xcode and `WelcomeView` is active; it must not remain visible after navigating past Welcome in normal flow.
+9. Debug menu contract: top-level `DEBUG` menu is allowed only for `DEBUG` builds; it must not be available in `Release` builds.
 
 ---
 
@@ -408,6 +411,131 @@ This section lists the main call relationships and data flow.
 - Legacy detection and special cases are complex: changes in `AnalysisLogic` affect multiple installation paths.
 - Localization: some Polish strings are hard-coded in `Text("...")`; ensure keys exist in `Localizable.xcstrings`.
 - Cleanup logic is scattered: window close handlers, cancel flows, and finish view all attempt cleanup.
+
+---
+
+## 15. Notifications Chapter
+This chapter defines notification permissions, UI toggles, and delivery rules.
+
+Core components:
+- `NotificationPermissionManager` is the source of truth for notification policy.
+- `MenuState.notificationsEnabled` is the effective menu checkmark state.
+- `WelcomeView` runs startup permission flow after optional update alert.
+- `FinishUSBView` sends completion notification only when policy allows.
+
+State model:
+- System permission state comes from `UNUserNotificationCenter.getNotificationSettings()`.
+- App-level toggle is stored in `UserDefaults` key `NotificationsEnabledInAppV1`.
+- Startup prompt handling flag is stored in `UserDefaults` key `NotificationsStartupPromptHandledV1`.
+- Effective enabled state (menu checkmark): `systemAuthorized && appEnabledInApp`.
+
+System status interpretation (as implemented):
+- Treated as authorized: `.authorized`, `.provisional`.
+- Treated as blocked: `.denied`.
+- Treated as undecided: `.notDetermined`.
+
+Startup flow:
+1. `WelcomeView.onAppear` runs `checkForUpdates(completion:)`.
+2. After update flow completes (including alert close), app calls `NotificationPermissionManager.handleStartupFlowIfNeeded()`.
+3. If system is authorized:
+- Ensure app toggle default exists (`true` if missing).
+- Mark startup prompt as handled.
+4. If system is denied:
+- Mark startup prompt as handled.
+- Do not show startup prompt.
+5. If system is not determined and startup prompt is not handled:
+- Show custom alert:
+- Title: `Czy chcesz włączyć powiadomienia?`
+- Body: `Pozwoli to na otrzymanie informacji o zakończeniu procesu przygotowania nośnika instalacyjnego.`
+- Buttons: primary `Włącz powiadomienia`, secondary `Nie teraz`
+- For startup flow, any choice marks prompt as handled.
+
+Menu behavior (`Opcje` → `Powiadomienia`):
+- Checkmark source: `MenuState.notificationsEnabled`.
+- On tap, behavior depends on system status:
+- Authorized/provisional: toggle app-level flag only (on/off in app), no redirection to system settings.
+- Not determined: show enable prompt again (same as startup prompt), without reusing startup handled lock.
+- Denied: show blocked alert:
+- Title: `Powiadomienia są wyłączone`
+- Body: `Powiadomienia dla macUSB zostały zablokowane w ustawieniach systemowych. Aby otrzymywać informacje o zakończeniu procesów, należy zezwolić aplikacji na ich wyświetlanie w systemie.`
+- Buttons: primary `Przejdź do ustawień systemowych`, secondary `Nie teraz`
+
+System settings redirection:
+- First try deep-link:
+- `x-apple.systempreferences:com.apple.preference.notifications?id=<bundleID>`
+- Fallback:
+- `x-apple.systempreferences:com.apple.preference.notifications`
+- Final fallback: open System Settings app by bundle ID (`com.apple.systempreferences` or `com.apple.SystemSettings`).
+
+Refresh rules:
+- `applicationDidFinishLaunching` and `applicationDidBecomeActive` both call `refreshState()` to keep menu checkmark aligned with real system state after returning from Settings.
+
+Finish screen delivery rules:
+- `FinishUSBView.sendSystemNotificationIfInactive()` is called on appear.
+- Notification is attempted only once per view instance (`didSendBackgroundNotification` guard).
+- Notification is sent only when:
+- App is inactive (`!NSApp.isActive`),
+- System status is authorized/provisional,
+- App-level toggle is enabled.
+- Delivery check is centralized in `NotificationPermissionManager.shouldDeliverInAppNotification`.
+- No automatic permission request is performed from `FinishUSBView`.
+
+Completion notification content:
+- Success:
+- Title: `Instalator gotowy`
+- Body: `Proces zapisu na nośniku zakończył się pomyślnie.`
+- Failure:
+- Title: `Wystąpił błąd`
+- Body: `Proces tworzenia instalatora na wybranym nośniku zakończył się niepowodzeniem.`
+
+Persistence and UX rules:
+- `Nie teraz` in startup prompt suppresses only startup auto-prompt; user can still re-open permission prompt from menu when status is `.notDetermined`.
+- App-level toggle persists across app restarts.
+- Effective enablement always requires both system permission and app toggle.
+
+---
+
+## 16. DEBUG Chapter
+This chapter defines the contract for debug-only shortcuts and behavior.
+
+Scope:
+- `DEBUG` functionality exists only when the app is compiled with `#if DEBUG`.
+- In non-`DEBUG` builds (`Release`), the `DEBUG` menu and its actions must not be available.
+
+Menu entry:
+- Top-level menu name: `DEBUG`.
+- Menu actions (localized labels):
+- `Przejdź do podsumowania (Big Sur) (2s delay)`
+- `Przejdź do podsumowania (Tiger) (2s delay)`
+
+Action behavior:
+- Both actions are immediate triggers that publish NotificationCenter events from `macUSBApp.swift`.
+- Big Sur action publishes `macUSBDebugGoToBigSurSummary`.
+- Tiger action publishes `macUSBDebugGoToTigerSummary`.
+
+Navigation behavior (root-level):
+- `ContentView` listens for both debug notifications.
+- On each action, a delayed navigation task (`2s`) is scheduled.
+- Existing pending debug task is canceled first, so only the last action executes.
+- On execution, app resets to root flow (`macUSBResetToStart` + new `NavigationPath`) and pushes debug route to `FinishUSBView`.
+
+Simulation payload:
+- Big Sur route:
+- `systemName = "macOS Big Sur 11"`
+- `didFail = false`
+- `isPPC = false`
+- Tiger route:
+- `systemName = "Mac OS X Tiger 10.4"`
+- `didFail = false`
+- `isPPC = true`
+
+Safety constraints:
+- Debug routes use isolated temp paths (`macUSB_debug_*`) and pass `shouldDetachMountPoint = false` to avoid side effects on real workflow mounts.
+- Existing production flow (`UniversalInstallationView` → `FinishUSBView`) remains unchanged.
+
+Rules:
+- Do not expose debug actions to end users in `Release`.
+- Keep debug navigation deterministic and side-effect-safe.
 
 ---
 

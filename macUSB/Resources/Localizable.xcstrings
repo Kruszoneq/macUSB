@@ -2397,6 +2397,9 @@
         }
       }
     },
+    "DEBUG" : {
+
+    },
     "Deutsch" : {
       "localizations" : {
         "de" : {
@@ -6558,6 +6561,7 @@
       }
     },
     "Przejdź do podsumowania (Big Sur)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6609,7 +6613,60 @@
         }
       }
     },
+    "Przejdź do podsumowania (Big Sur) (2s delay)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zur Zusammenfassung wechseln (Big Sur) (2s delay)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to summary (Big Sur) (2s delay)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir al resumen (Big Sur) (2s delay)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aller au résumé (Big Sur) (2s delay)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サマリーへ移動（Big Sur）(2s delay)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir para o resumo (Big Sur) (2s delay)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перейти к сводке (Big Sur) (2s delay)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前往摘要（Big Sur）(2s delay)"
+          }
+        }
+      }
+    },
     "Przejdź do podsumowania (Tiger)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6657,6 +6714,58 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "前往摘要（Tiger）"
+          }
+        }
+      }
+    },
+    "Przejdź do podsumowania (Tiger) (2s delay)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zur Zusammenfassung wechseln (Tiger) (2s delay)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to summary (Tiger) (2s delay)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir al resumen (Tiger) (2s delay)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aller au résumé (Tiger) (2s delay)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サマリーへ移動（Tiger）(2s delay)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir para o resumo (Tiger) (2s delay)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перейти к сводке (Tiger) (2s delay)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前往摘要（Tiger）(2s delay)"
           }
         }
       }

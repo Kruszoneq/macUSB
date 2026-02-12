@@ -69,15 +69,11 @@ struct WelcomeView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
-            NotificationCenter.default.post(name: .macUSBWelcomeViewDidAppear, object: nil)
             guard !didRunStartupFlow else { return }
             didRunStartupFlow = true
             checkForUpdates {
                 NotificationPermissionManager.shared.handleStartupFlowIfNeeded()
             }
-        }
-        .onDisappear {
-            NotificationCenter.default.post(name: .macUSBWelcomeViewDidDisappear, object: nil)
         }
     }
     
