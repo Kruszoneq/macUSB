@@ -5,6 +5,7 @@ final class MenuState: ObservableObject {
     static let shared = MenuState()
     @Published var skipAnalysisEnabled: Bool = false
     @Published var externalDrivesEnabled: Bool = UserDefaults.standard.bool(forKey: "AllowExternalDrives")
+    @Published var notificationsEnabled: Bool = false
     
     func enableExternalDrives() {
         UserDefaults.standard.set(true, forKey: "AllowExternalDrives")

@@ -14,6 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         UserDefaults.standard.synchronize()
         // Update MenuState to reflect the default state in UI
         MenuState.shared.externalDrivesEnabled = false
+        NotificationPermissionManager.shared.refreshState()
     }
     
     func applicationWillTerminate(_ notification: Notification) {
@@ -22,6 +23,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         UserDefaults.standard.synchronize()
         // Reflect the state in MenuState for consistency
         MenuState.shared.externalDrivesEnabled = false
+    }
+
+    func applicationDidBecomeActive(_ notification: Notification) {
+        NotificationPermissionManager.shared.refreshState()
     }
 }
 
@@ -140,6 +145,12 @@ struct macUSBApp: App {
                         Label("日本語", systemImage: languageManager.currentLanguage == "ja" ? "checkmark" : "")
                     }
                 }
+                Divider()
+                Button {
+                    NotificationPermissionManager.shared.handleMenuNotificationsTapped()
+                } label: {
+                    Label(String(localized: "Powiadomienia"), systemImage: menuState.notificationsEnabled ? "checkmark" : "")
+                }
             }
             CommandMenu(String(localized: "Narzędzia")) {
                 Button(String(localized: "Otwórz Narzędzie dyskowe")) {
@@ -241,6 +252,16 @@ struct macUSBApp: App {
                     Label(String(localized: "Eksportuj logi diagnostyczne..."), systemImage: "square.and.arrow.down")
                 }
             }
+            #if DEBUG
+            CommandMenu("DEBUG") {
+                Button(String(localized: "Przejdź do podsumowania (Big Sur) (2s delay)")) {
+                    NotificationCenter.default.post(name: .macUSBDebugGoToBigSurSummary, object: nil)
+                }
+                Button(String(localized: "Przejdź do podsumowania (Tiger) (2s delay)")) {
+                    NotificationCenter.default.post(name: .macUSBDebugGoToTigerSummary, object: nil)
+                }
+            }
+            #endif
         }
     }
 }

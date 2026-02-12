@@ -14,7 +14,7 @@
 		<key>macUSB AUTO.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 		<key>macUSB DE.xcscheme</key>
 		<dict>
@@ -24,7 +24,7 @@
 		<key>macUSB EN.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>3</integer>
 		</dict>
 		<key>macUSB ES.xcscheme</key>
 		<dict>
@@ -55,6 +55,11 @@
 		<dict>
 			<key>orderHint</key>
 			<integer>9</integer>
+		</dict>
+		<key>macUSB Release.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
 		</dict>
 		<key>macUSB ZH-Hans.xcscheme</key>
 		<dict>

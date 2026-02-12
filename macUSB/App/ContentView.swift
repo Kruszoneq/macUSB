@@ -3,13 +3,65 @@ import AppKit
 import Combine
 import OSLog
 
+private enum AppRoute: Hashable {
+    case debugFinishUSBBigSurSuccess
+    case debugFinishUSBTigerSuccess
+}
+
 struct ContentView: View {
     @State private var path = NavigationPath()
     @EnvironmentObject private var languageManager: LanguageManager
+    @State private var pendingDebugNavigationWorkItem: DispatchWorkItem?
+
+    private var debugMountPointURL: URL {
+        FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_debug_mount_point")
+    }
+
+    private var debugCleanupTempWorkURL: URL {
+        FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_debug_temp")
+    }
+
+    private var debugTigerMountPointURL: URL {
+        FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_debug_tiger_mount_point")
+    }
+
+    private var debugTigerCleanupTempWorkURL: URL {
+        FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_debug_tiger_temp")
+    }
     
     var body: some View {
         NavigationStack(path: $path) {
             WelcomeView()
+                .navigationDestination(for: AppRoute.self) { route in
+                    switch route {
+                    case .debugFinishUSBBigSurSuccess:
+                        FinishUSBView(
+                            systemName: "macOS Big Sur 11",
+                            mountPoint: debugMountPointURL,
+                            onReset: {
+                                NotificationCenter.default.post(name: .macUSBResetToStart, object: nil)
+                                path = NavigationPath()
+                            },
+                            isPPC: false,
+                            didFail: false,
+                            cleanupTempWorkURL: debugCleanupTempWorkURL,
+                            shouldDetachMountPoint: false
+                        )
+                    case .debugFinishUSBTigerSuccess:
+                        FinishUSBView(
+                            systemName: "Mac OS X Tiger 10.4",
+                            mountPoint: debugTigerMountPointURL,
+                            onReset: {
+                                NotificationCenter.default.post(name: .macUSBResetToStart, object: nil)
+                                path = NavigationPath()
+                            },
+                            isPPC: true,
+                            didFail: false,
+                            cleanupTempWorkURL: debugTigerCleanupTempWorkURL,
+                            shouldDetachMountPoint: false
+                        )
+                    }
+                }
         }
         // Sztywny rozmiar kontentu
         .frame(width: 550, height: 750)
@@ -27,8 +79,35 @@ struct ContentView: View {
         .onAppear {
             AppLogging.logAppStartupOnce()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .macUSBDebugGoToBigSurSummary)) { _ in
+            scheduleDebugSummaryNavigation(
+                route: .debugFinishUSBBigSurSuccess,
+                logMessage: "DEBUG: Zaplanowano przejście do podsumowania Big Sur za 2 sekundy"
+            )
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .macUSBDebugGoToTigerSummary)) { _ in
+            scheduleDebugSummaryNavigation(
+                route: .debugFinishUSBTigerSuccess,
+                logMessage: "DEBUG: Zaplanowano przejście do podsumowania Tiger (isPPC) za 2 sekundy"
+            )
+        }
     }
-    
+
+    private func scheduleDebugSummaryNavigation(route: AppRoute, logMessage: String) {
+        AppLogging.info(logMessage, category: "Navigation")
+        pendingDebugNavigationWorkItem?.cancel()
+
+        let workItem = DispatchWorkItem {
+            NotificationCenter.default.post(name: .macUSBResetToStart, object: nil)
+            path = NavigationPath()
+            path.append(route)
+            pendingDebugNavigationWorkItem = nil
+        }
+
+        pendingDebugNavigationWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: workItem)
+    }
+
     private func restartApp() {
         let path = Bundle.main.bundlePath
         let task = Process()
@@ -98,6 +177,3 @@ struct WindowConfigurator: NSViewRepresentable {
 }
 
 // USUNIĘTO KLASĘ LanguageManager STĄD, ABY UNIKNĄĆ DUPLIKACJI
-
-
-
