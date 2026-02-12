@@ -110,6 +110,7 @@ Common status icons and their semantic colors:
 - Warning: `exclamationmark.triangle.fill` in orange.
 - Info: `info.circle.fill` in gray/secondary.
 - USB: `externaldrive.fill` (blue/orange depending on state).
+- In `SystemAnalysisView` success state, the app tries installer icons in this order: `Contents/Resources/ProductPageIcon.icns`, `Contents/Resources/InstallAssistant.icns`, then `Contents/Resources/Install Mac OS X.icns` (case-insensitive lookup). If none is found, fallback to `checkmark.circle.fill`.
 Frequently used SF Symbols in screens and menus include:
 - `info.circle.fill`, `doc.badge.plus`, `internaldrive`, `checkmark.circle.fill`, `xmark.circle.fill`, `xmark.octagon.fill`, `exclamationmark.triangle.fill`, `externaldrive.fill`, `externaldrive.badge.xmark`, `applelogo`, `gearshape.2`, `clock`, `lock.fill`, `hand.raised.fill`, `terminal.fill`, `arrow.right`, `arrow.right.circle.fill`, `arrow.counterclockwise`, `xmark.circle`, `xmark.circle.fill`, `globe.europe.africa.fill`, `cup.and.saucer`, `square.and.arrow.down`, `arrow.triangle.2.circlepath`, `globe`, `chevron.left.forwardslash.chevron.right`.
 
@@ -192,8 +193,9 @@ Files accepted:
 - `.dmg`, `.iso`, `.cdr`, `.app`
 
 Detection strategy:
-- For images (`.dmg`, `.iso`, `.cdr`): `hdiutil attach -plist -nobrowse -readonly`, then search mounted volume for `.app` and read `Info.plist`, with fallback to `SystemVersion.plist` for legacy systems.
+- For images (`.dmg`, `.iso`, `.cdr`): `hdiutil attach -plist -nobrowse -readonly`, then for legacy media first check `Install Mac OS X` (folder) and `Install Mac OS X.app` for `Contents/Info.plist`; if not found, fallback to general `.app` scan and `Info.plist` read, with additional fallback to `SystemVersion.plist` for legacy systems.
 - For `.app`: read `Contents/Info.plist` directly.
+- During icon detection, analysis logs both the attempted `Contents/Resources` path and the exact `.icns` file path used when icon loading succeeds.
 
 Key flags set by analysis:
 - `isModern`: Big Sur and later (including Tahoe/Sequoia/Sonoma/Ventura/etc.)
