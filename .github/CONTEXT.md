@@ -48,6 +48,15 @@ Navigation flow (SwiftUI):
 Main UI screens (in order):
 - `WelcomeView` → `SystemAnalysisView` → `UniversalInstallationView` → `FinishUSBView`
 
+Debug-only shortcut:
+- While running the app from Xcode, the app adds a top-level `DEBUG` menu as the last system menu tab only when `WelcomeView` is active.
+- The `DEBUG` menu is removed automatically when user leaves `WelcomeView` (e.g., navigates to file/USB selection), and reappears on return.
+- `DEBUG` → `Przejdź do podsumowania (Big Sur)` triggers a simulated success path for `macOS Big Sur 11` and navigates to `FinishUSBView` after a 2-second delay.
+- `DEBUG` → `Przejdź do podsumowania (Tiger)` triggers a simulated success path for `Mac OS X Tiger 10.4` with `isPPC = true` and navigates to `FinishUSBView` after a 2-second delay.
+
+Startup permissions flow:
+- After the optional update alert on the Welcome screen, the app may show a notification-permission prompt.
+
 Fixed window size:
 - 550 × 750, non-resizable.
 
@@ -60,7 +69,8 @@ Key concepts:
 - SwiftUI + AppKit integration: menus, NSAlert dialogs, window configuration, and Terminal launching use AppKit APIs.
 - View logic split: `UniversalInstallationView` UI lives in one file; its heavy logic lives in `CreatorLogic.swift` as an extension to keep type-checker complexity manageable.
 - State-driven UI: extensive use of `@State`, `@StateObject`, `@EnvironmentObject` and `@Published` to bind logic to UI.
-- NotificationCenter: used for flow resets and special-case actions (Tiger Multi-DVD override).
+- NotificationCenter: used for flow resets, special-case actions (Tiger Multi-DVD override), and debug-only routing shortcuts.
+- Notification permissions are centrally handled by `NotificationPermissionManager` (startup prompt, menu toggle, and system settings redirection).
 - System analysis: reads `Info.plist` from the installer app inside a mounted image or `.app` bundle.
 - USB detection: enumerates mounted external volumes; optionally includes external HDD/SSD with a user option; detects USB speed, partition scheme, filesystem format, and computes the `needsFormatting` flag for later stages.
 - Terminal script execution: a shell script is written to a temporary folder, then opened in Terminal to run with `sudo`.
@@ -142,6 +152,7 @@ Finish screen specifics:
 - Success/failure block uses green/red status panels.
 - Cleanup section shows a blue panel with a trash icon while cleaning.
 - Reset and exit buttons remain large, full-width, and prominent.
+- If `FinishUSBView` appears while the app is inactive, the app sends a macOS system notification with success/failure result text only when both system permission and app-level notification toggle are enabled.
 
 Formatting conventions:
 - Bullet lists in UI are rendered as literal `Text("• ...")` lines, not as SwiftUI `List` or `Text` with markdown.
@@ -281,6 +292,8 @@ Stored in `UserDefaults`:
 - `selected_language_v2`: user’s preferred language (`auto` or fixed language).
 - `AppleLanguages`: system override for app language selection.
 - `DiagnosticsExportLastDirectory`: last folder used to export logs.
+- `NotificationsStartupPromptHandledV1`: whether startup notification prompt has already been handled.
+- `NotificationsEnabledInAppV1`: app-level toggle for notifications (independent from system permission).
 
 Reset behavior:
 - On app launch and termination, `AllowExternalDrives` is forced to `false` to avoid unsafe defaults.
@@ -328,18 +341,19 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB.xcodeproj/xcshareddata/xcschemes/macUSB.xcscheme` — Shared build scheme.
 - `macUSB/macUSB.entitlements` — App entitlements (currently empty).
 - `macUSB/Info.plist` — Bundle metadata and localization list.
-- `macUSB/App/macUSBApp.swift` — App entry point, menus, AppDelegate behavior.
-- `macUSB/App/ContentView.swift` — Root view, window configuration, locale injection.
-- `macUSB/Features/Welcome/WelcomeView.swift` — Welcome screen and update check.
+- `macUSB/App/macUSBApp.swift` — App entry point, menus, AppDelegate behavior, and runtime-managed top-level `DEBUG` menu injection/removal (Xcode-run + `WelcomeView` visibility).
+- `macUSB/App/ContentView.swift` — Root view, window configuration, locale injection, and root-level debug navigation route handling.
+- `macUSB/Features/Welcome/WelcomeView.swift` — Welcome screen, update check, and welcome visibility notifications used to toggle `DEBUG` menu.
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` — File/USB selection UI and navigation to install.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic; propagates/logs USB metadata (speed, partition scheme, filesystem format, `needsFormatting`) and exposes `selectedDriveForInstallation` (PPC override of formatting flag).
 - `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation UI state and progress.
 - `macUSB/Features/Installation/CreatorLogic.swift` — Installer creation logic and terminal scripting, including conditional non-PPC preformat (`GPT + HFS+`), formatting signal watchers, and staged terminal refresh between format/create phases.
-- `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, cleanup, and sound feedback.
+- `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, cleanup, sound feedback, background-result system notification (when app is inactive), and optional cleanup overrides used by debug simulation.
 - `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
 - `macUSB/Shared/Models/Item.swift` — SwiftData model stub (currently unused).
 - `macUSB/Shared/Services/LanguageManager.swift` — Language selection and locale handling.
 - `macUSB/Shared/Services/MenuState.swift` — Shared menu state (skip analysis, external drives).
+- `macUSB/Shared/Services/NotificationPermissionManager.swift` — Central notification permission and app-level toggle manager (startup prompt, menu action, system settings redirect).
 - `macUSB/Shared/Services/UpdateChecker.swift` — Manual update checking.
 - `macUSB/Shared/Services/Logging.swift` — Central logging and log export.
 - `macUSB/Shared/Services/USBDriveLogic.swift` — USB volume enumeration plus metadata detection (speed, partition scheme, filesystem format).
@@ -361,16 +375,17 @@ Notes on non-source items:
 ## 12. File Relationships (Who Calls What)
 This section lists the main call relationships and data flow.
 
-- `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`.
-- `macUSB/App/ContentView.swift` → presents `WelcomeView`, injects `LanguageManager`, calls `AppLogging.logAppStartupOnce()`.
-- `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json` directly.
+- `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`, `NotificationPermissionManager`; listens for `WelcomeView` appear/disappear notifications to add/remove `DEBUG` menu when running from Xcode, and publishes `macUSBDebugGoToBigSurSummary` / `macUSBDebugGoToTigerSummary` from AppKit menu actions.
+- `macUSB/App/ContentView.swift` → presents `WelcomeView`, injects `LanguageManager`, calls `AppLogging.logAppStartupOnce()`, and maps debug notifications to delayed (2s) `FinishUSBView` routes (Big Sur and Tiger/PPC).
+- `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json`, triggers startup notification-permission flow, and emits welcome appear/disappear notifications for debug menu visibility.
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, and forwards `selectedDriveForInstallation` to installation flow.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
 - `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress, calls logic in `CreatorLogic`, navigates to `FinishUSBView`.
 - `macUSB/Features/Installation/CreatorLogic.swift` → uses `AppLogging`, logs selected USB metadata snapshot, conditionally preformats non-PPC drives, watches formatting signal files, writes Terminal scripts, runs privileged commands (AppleScript + sudo).
-- `macUSB/Features/Finish/FinishUSBView.swift` → cleanup (unmount + delete temp), provides reset callback.
+- `macUSB/Features/Finish/FinishUSBView.swift` → cleanup (unmount + delete temp), result sound, optional background system notification gated by permission/toggle, and reset callback.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
-- `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift` and `SystemAnalysisView`.
+- `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift`, `SystemAnalysisView`, and `NotificationPermissionManager`.
+- `macUSB/Shared/Services/NotificationPermissionManager.swift` → reads `UNUserNotificationCenter` state, updates `MenuState`, controls startup/menu alerts for notification permission, and opens system settings when blocked.
 - `macUSB/Shared/Services/UpdateChecker.swift` → called from app menu.
 
 ---
@@ -384,6 +399,7 @@ This section lists the main call relationships and data flow.
 6. Use `AppLogging` for all important steps: keep logs helpful for diagnostics.
 7. Avoid running privileged commands silently: use Terminal or AppleScript prompts.
 8. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.
+9. Debug menu contract: top-level `DEBUG` menu is available only while app is launched from Xcode and `WelcomeView` is active; it must not remain visible after navigating past Welcome in normal flow.
 
 ---
 

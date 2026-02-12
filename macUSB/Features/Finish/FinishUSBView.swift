@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import UserNotifications
 
 struct FinishUSBView: View {
     let systemName: String
@@ -7,11 +8,32 @@ struct FinishUSBView: View {
     let onReset: () -> Void
     let isPPC: Bool
     let didFail: Bool
+    let cleanupTempWorkURL: URL?
+    let shouldDetachMountPoint: Bool
     
     @State private var isCleaning: Bool = true
     @State private var cleanupSuccess: Bool = false
     @State private var cleanupErrorMessage: String? = nil
     @State private var didPlayResultSound: Bool = false
+    @State private var didSendBackgroundNotification: Bool = false
+
+    init(
+        systemName: String,
+        mountPoint: URL,
+        onReset: @escaping () -> Void,
+        isPPC: Bool,
+        didFail: Bool,
+        cleanupTempWorkURL: URL? = nil,
+        shouldDetachMountPoint: Bool = true
+    ) {
+        self.systemName = systemName
+        self.mountPoint = mountPoint
+        self.onReset = onReset
+        self.isPPC = isPPC
+        self.didFail = didFail
+        self.cleanupTempWorkURL = cleanupTempWorkURL
+        self.shouldDetachMountPoint = shouldDetachMountPoint
+    }
     
     private var isSnowLeopard: Bool {
         let lower = systemName.lowercased()
@@ -19,7 +41,7 @@ struct FinishUSBView: View {
     }
     
     var tempWorkURL: URL {
-        return FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_temp")
+        return cleanupTempWorkURL ?? FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_temp")
     }
     
     var body: some View {
@@ -207,7 +229,11 @@ struct FinishUSBView: View {
                 window.styleMask.remove(.resizable)
             }
         )
-        .onAppear { playResultSoundOnce(); performCleanupWithDelay() }
+        .onAppear {
+            playResultSoundOnce()
+            performCleanupWithDelay()
+            sendSystemNotificationIfInactive()
+        }
     }
     
     // --- LOGIKA ---
@@ -216,7 +242,13 @@ struct FinishUSBView: View {
         DispatchQueue.global(qos: .userInitiated).async {
             var success = true
             var errorMsg: String? = nil
-            let unmountTask = Process(); unmountTask.launchPath = "/usr/bin/hdiutil"; unmountTask.arguments = ["detach", self.mountPoint.path, "-force"]; try? unmountTask.run(); unmountTask.waitUntilExit()
+            if self.shouldDetachMountPoint {
+                let unmountTask = Process()
+                unmountTask.launchPath = "/usr/bin/hdiutil"
+                unmountTask.arguments = ["detach", self.mountPoint.path, "-force"]
+                try? unmountTask.run()
+                unmountTask.waitUntilExit()
+            }
             if FileManager.default.fileExists(atPath: self.tempWorkURL.path) {
                 do { try FileManager.default.removeItem(at: self.tempWorkURL) } catch {
                     success = false;
@@ -255,6 +287,38 @@ struct FinishUSBView: View {
             }
         }
     }
+
+    // --- POWIADOMIENIE SYSTEMOWE ---
+    func sendSystemNotificationIfInactive() {
+        guard !didSendBackgroundNotification else { return }
+        guard !NSApp.isActive else { return }
+        didSendBackgroundNotification = true
+
+        let title = didFail ? String(localized: "Wystąpił błąd") : String(localized: "Instalator gotowy")
+        let body = didFail
+            ? String(localized: "Proces tworzenia instalatora na wybranym nośniku zakończył się niepowodzeniem.")
+            : String(localized: "Proces zapisu na nośniku zakończył się pomyślnie.")
+
+        NotificationPermissionManager.shared.shouldDeliverInAppNotification { shouldDeliver in
+            guard shouldDeliver else { return }
+            let center = UNUserNotificationCenter.current()
+            scheduleSystemNotification(title: title, body: body, center: center)
+        }
+    }
+
+    func scheduleSystemNotification(title: String, body: String, center: UNUserNotificationCenter) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = .default
+
+        let request = UNNotificationRequest(
+            identifier: "macUSB.finish.\(UUID().uuidString)",
+            content: content,
+            trigger: nil
+        )
+        center.add(request, withCompletionHandler: nil)
+    }
 }
 
 // Pomocnik dla FinishUSBView (aby uniknąć konfliktów nazw)
@@ -272,4 +336,3 @@ struct WindowAccessor_Finish: NSViewRepresentable {
         init(callback: @escaping (NSWindow) -> Void) { self.callback = callback }
     }
 }
-

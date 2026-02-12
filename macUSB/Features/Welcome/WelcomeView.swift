@@ -7,6 +7,7 @@ struct WelcomeView: View {
     @EnvironmentObject var languageManager: LanguageManager
     
     @State private var dummyLock: Bool = false
+    @State private var didRunStartupFlow: Bool = false
     
     let versionCheckURL = URL(string: "https://raw.githubusercontent.com/Kruszoneq/macUSB/main/version.json")!
     
@@ -68,15 +69,32 @@ struct WelcomeView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
-            checkForUpdates()
+            NotificationCenter.default.post(name: .macUSBWelcomeViewDidAppear, object: nil)
+            guard !didRunStartupFlow else { return }
+            didRunStartupFlow = true
+            checkForUpdates {
+                NotificationPermissionManager.shared.handleStartupFlowIfNeeded()
+            }
+        }
+        .onDisappear {
+            NotificationCenter.default.post(name: .macUSBWelcomeViewDidDisappear, object: nil)
         }
     }
     
-    func checkForUpdates() {
+    func checkForUpdates(completion: @escaping () -> Void) {
         let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
         
         URLSession.shared.dataTask(with: versionCheckURL) { data, response, error in
-            guard let data = data, error == nil else { return }
+            let finishOnMain: () -> Void = {
+                DispatchQueue.main.async {
+                    completion()
+                }
+            }
+
+            guard let data = data, error == nil else {
+                finishOnMain()
+                return
+            }
             
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String],
@@ -96,11 +114,17 @@ struct WelcomeView: View {
                             if response == .alertFirstButtonReturn, let url = URL(string: downloadLink) {
                                 NSWorkspace.shared.open(url)
                             }
+                            completion()
                         }
+                    } else {
+                        finishOnMain()
                     }
+                } else {
+                    finishOnMain()
                 }
             } catch {
                 print("Błąd sprawdzania aktualizacji: \(error)")
+                finishOnMain()
             }
         }.resume()
     }
@@ -114,4 +138,3 @@ struct WelcomeView: View {
         NSApp.terminate(nil)
     }
 }
-

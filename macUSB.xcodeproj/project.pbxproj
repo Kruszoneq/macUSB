@@ -57,6 +57,7 @@
 				Shared/Services/LanguageManager.swift,
 				Shared/Services/Logging.swift,
 				Shared/Services/MenuState.swift,
+				Shared/Services/NotificationPermissionManager.swift,
 				Shared/Services/UpdateChecker.swift,
 				Shared/Services/USBDriveLogic.swift,
 			);
@@ -77,6 +78,7 @@
 				Shared/Services/LanguageManager.swift,
 				Shared/Services/Logging.swift,
 				Shared/Services/MenuState.swift,
+				Shared/Services/NotificationPermissionManager.swift,
 				Shared/Services/UpdateChecker.swift,
 			);
 			target = 0F94F4BD2EDE3E520019F69A /* macUSBUITests */;
