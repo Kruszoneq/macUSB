@@ -21,6 +21,37 @@ struct USBDriveLogic {
         return nil
     }
 
+    /// Wykrywa schemat partycji dla whole-disk o nazwie BSD (np. disk2)
+    static func detectPartitionScheme(forBSDName bsdWholeName: String) -> PartitionScheme? {
+        var iterator: io_iterator_t = 0
+        guard let match = IOServiceMatching("IOMedia") else { return nil }
+        if IOServiceGetMatchingServices(0, match, &iterator) != KERN_SUCCESS { return nil }
+        defer { IOObjectRelease(iterator) }
+
+        while case let service = IOIteratorNext(iterator), service != IO_OBJECT_NULL {
+            defer { IOObjectRelease(service) }
+
+            let bsdName = ioRegistryProperty(service, key: kIOBSDNameKey as String) as? String
+            let isWhole = (ioRegistryProperty(service, key: kIOMediaWholeKey as String) as? NSNumber)?.boolValue ?? false
+            guard bsdName == bsdWholeName, isWhole else { continue }
+
+            let content = (ioRegistryProperty(service, key: kIOMediaContentKey as String) as? String)?.lowercased()
+            switch content {
+            case "guid_partition_scheme":
+                return .gpt
+            case "apple_partition_scheme":
+                return .apm
+            case "fdisk_partition_scheme":
+                return .mbr
+            case .some:
+                return .unknown
+            case .none:
+                return nil
+            }
+        }
+        return nil
+    }
+
     /// Przechodzi po rodzicach w płaszczyźnie kIOServicePlane aż do korzenia, zwracając wykryty standard USB
     static func detectUSBSpeed(forBSDName bsdWholeName: String) -> USBPortSpeed? {
         // Wyszukaj w IORegistry węzeł IOMedia odpowiadający whole disk o nazwie BSD
@@ -72,22 +103,42 @@ struct USBDriveLogic {
 
     /// Returns true if the mounted volume at the given URL is a network filesystem.
     private static func isNetworkVolume(url: URL) -> Bool {
+        guard let fsName = fileSystemTypeName(url: url) else { return false }
+        let networkTypes: Set<String> = ["smbfs", "afpfs", "webdav", "nfs", "cifs"]
+        return networkTypes.contains(fsName)
+    }
+
+    /// Returns a normalized filesystem type name from statfs (e.g. apfs, hfs, exfat).
+    private static func fileSystemTypeName(url: URL) -> String? {
         return url.withUnsafeFileSystemRepresentation { ptr in
-            guard let ptr = ptr else { return false }
+            guard let ptr = ptr else { return nil }
             var stat = statfs()
-            if statfs(ptr, &stat) == 0 {
-                // Extract filesystem type name (e.g., "apfs", "smbfs", "webdav", "afpfs")
-                let fsName = withUnsafePointer(to: &stat.f_fstypename) {
-                    $0.withMemoryRebound(to: CChar.self, capacity: Int(MFSTYPENAMELEN)) {
-                        String(cString: $0)
-                    }
-                }.lowercased()
-                // Common network filesystem types
-                let networkTypes: Set<String> = ["smbfs", "afpfs", "webdav", "nfs", "cifs"]
-                return networkTypes.contains(fsName)
-            }
-            return false
-        } ?? false
+            guard statfs(ptr, &stat) == 0 else { return nil }
+            return withUnsafePointer(to: &stat.f_fstypename) {
+                $0.withMemoryRebound(to: CChar.self, capacity: Int(MFSTYPENAMELEN)) {
+                    String(cString: $0)
+                }
+            }.lowercased()
+        } ?? nil
+    }
+
+    /// Wykrywa format systemu plików dla zamontowanego woluminu.
+    static func detectFileSystemFormat(forVolumeURL url: URL) -> FileSystemFormat? {
+        guard let fsName = fileSystemTypeName(url: url) else { return nil }
+        switch fsName {
+        case "apfs":
+            return .apfs
+        case "hfs":
+            return .hfsPlus
+        case "exfat":
+            return .exfat
+        case "msdos":
+            return .fat
+        case "ntfs":
+            return .ntfs
+        default:
+            return .unknown
+        }
     }
 
     /// Returns the BSD device name (e.g., "disk2s1") for a mounted volume URL.
@@ -135,7 +186,17 @@ struct USBDriveLogic {
             let deviceName = getBSDName(from: url)
             let whole = wholeDiskName(from: deviceName)
             let speed = detectUSBSpeed(forBSDName: whole)
-            return USBDrive(name: name, device: deviceName, size: size, url: url, usbSpeed: speed)
+            let partitionScheme = detectPartitionScheme(forBSDName: whole)
+            let fileSystemFormat = detectFileSystemFormat(forVolumeURL: url)
+            return USBDrive(
+                name: name,
+                device: deviceName,
+                size: size,
+                url: url,
+                usbSpeed: speed,
+                partitionScheme: partitionScheme,
+                fileSystemFormat: fileSystemFormat
+            )
         }
         return drives
     }

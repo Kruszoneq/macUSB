@@ -67,6 +67,38 @@ extension UniversalInstallationView {
         }
     }
 
+    func startFormattingSignalTimer(startURL: URL, doneURL: URL, completionURL: URL, errorURL: URL) {
+        var didLogFormattingStart = false
+        var didLogFormattingDone = false
+
+        Timer.scheduledTimer(withTimeInterval: 0.4, repeats: true) { timer in
+            if self.isCancelled || !self.errorMessage.isEmpty {
+                timer.invalidate()
+                return
+            }
+
+            let fileManager = FileManager.default
+
+            if !didLogFormattingStart && fileManager.fileExists(atPath: startURL.path) {
+                didLogFormattingStart = true
+                AppLogging.stage("Formatowanie USB — start")
+                self.log("Rozpoczęto formatowanie nośnika USB (GPT + HFS+).", category: "Installation")
+            }
+
+            if !didLogFormattingDone && fileManager.fileExists(atPath: doneURL.path) {
+                didLogFormattingDone = true
+                AppLogging.stage("Formatowanie USB — zakończono")
+                self.log("Zakończono formatowanie nośnika USB. Rozpoczynanie etapu tworzenia USB.", category: "Installation")
+                timer.invalidate()
+                return
+            }
+
+            if fileManager.fileExists(atPath: completionURL.path) || fileManager.fileExists(atPath: errorURL.path) {
+                timer.invalidate()
+            }
+        }
+    }
+
     func handleTerminalClosedPrematurely() {
         stopUSBMonitoring()
         DispatchQueue.main.async {
@@ -140,10 +172,23 @@ extension UniversalInstallationView {
         monitoringWarmupCounter = 0
         self.processingIcon = "doc.on.doc.fill"
 
+        let shouldPreformat = drive.needsFormatting && !isPPC
+
         let isFromMountedVolume = sourceAppURL.path.hasPrefix("/Volumes/")
         self.log("Źródło instalatora: \(sourceAppURL.path)")
         self.log("Źródło z zamontowanego woluminu: \(isFromMountedVolume ? "TAK" : "NIE")")
         self.log("Flagi: isCatalina=\(isCatalina), isSierra=\(isSierra), isMavericks=\(isMavericks), needsCodesign=\(needsCodesign), isLegacySystem=\(isLegacySystem), isRestoreLegacy=\(isRestoreLegacy), isPPC=\(isPPC)")
+        if isPPC {
+            self.log(
+                "Snapshot docelowego nośnika USB: ID urządzenia: \(drive.device), Pojemność: \(drive.size), Standard USB: \(drive.usbSpeed?.rawValue ?? "unknown"), Schemat: \(drive.partitionScheme?.rawValue ?? "unknown"), Format: \(drive.fileSystemFormat?.rawValue ?? "unknown"), Tryb: PPC, APM"
+            )
+        } else {
+            let needsFormattingText = drive.needsFormatting ? "TAK" : "NIE"
+            self.log(
+                "Snapshot docelowego nośnika USB: ID urządzenia: \(drive.device), Pojemność: \(drive.size), Standard USB: \(drive.usbSpeed?.rawValue ?? "unknown"), Schemat: \(drive.partitionScheme?.rawValue ?? "unknown"), Format: \(drive.fileSystemFormat?.rawValue ?? "unknown"), Wymaga formatowania w kolejnych etapach: \(needsFormattingText)"
+            )
+            self.log("Weryfikacja etapu preformatowania: needsFormatting=\(needsFormattingText), czy uruchomić preformatowanie=\(shouldPreformat ? "TAK" : "NIE")")
+        }
         self.log("Folder TEMP: \(tempWorkURL.path)")
 
         DispatchQueue.global(qos: .userInitiated).async {
@@ -189,19 +234,62 @@ extension UniversalInstallationView {
                 let msgPPCSource = String(localized: "ŹRÓDŁO:")
                 let msgPPCTarget = String(localized: "CEL:")
                 let msgPPCNote = String(localized: "Wolumin zostanie nazwany PPC (APM + HFS+).")
+                let msgGPTStage = String(localized: "ETAP: FORMATOWANIE DYSKU USB (GPT + HFS+)")
+                let msgGPTNote = String(localized: "Nośnik zostanie sformatowany do GPT + HFS+.")
 
                 let usbPath = drive.url.path
+                let selectedBSD = drive.device
+                let parentWholeDisk: String = selectedBSD.range(of: #"^disk\d+"#, options: .regularExpression).map { String(selectedBSD[$0]) } ?? selectedBSD
+                let usbLabel = drive.url.lastPathComponent
+                let escapedUSBLabel = usbLabel
+                    .replacingOccurrences(of: "\\", with: "\\\\")
+                    .replacingOccurrences(of: "\"", with: "\\\"")
                 var scriptCommand = ""
 
                 let terminalDoneURL = tempWorkURL.appendingPathComponent("terminal_done")
                 let terminalActiveURL = tempWorkURL.appendingPathComponent("terminal_running")
                 let terminalSuccessURL = tempWorkURL.appendingPathComponent("terminal_success")
                 let terminalErrorURL = tempWorkURL.appendingPathComponent("terminal_error")
+                let formattingStartedURL = tempWorkURL.appendingPathComponent("formatting_started")
+                let formattingDoneURL = tempWorkURL.appendingPathComponent("formatting_done")
 
                 if fileManager.fileExists(atPath: terminalDoneURL.path) { try? fileManager.removeItem(at: terminalDoneURL) }
                 if fileManager.fileExists(atPath: terminalActiveURL.path) { try? fileManager.removeItem(at: terminalActiveURL) }
                 if fileManager.fileExists(atPath: terminalSuccessURL.path) { try? fileManager.removeItem(at: terminalSuccessURL) }
                 if fileManager.fileExists(atPath: terminalErrorURL.path) { try? fileManager.removeItem(at: terminalErrorURL) }
+                if fileManager.fileExists(atPath: formattingStartedURL.path) { try? fileManager.removeItem(at: formattingStartedURL) }
+                if fileManager.fileExists(atPath: formattingDoneURL.path) { try? fileManager.removeItem(at: formattingDoneURL) }
+
+                let preformatBlock = shouldPreformat ? """
+                USB_DEV="/dev/\(parentWholeDisk)"
+                USB_LABEL="\(escapedUSBLabel)"
+                TARGET_USB_PATH='\(usbPath)'
+
+                # --- ETAP: FORMATOWANIE GPT + HFS+ ---
+                clear
+                echo "================================================================================"
+                echo "                                     macUSB"
+                echo "================================================================================"
+                echo "\(msgGPTStage)"
+                echo "\(msgSystemLabel) \(systemName)"
+                echo "\(msgEraseWarning)"
+                echo "--------------------------------------------------------------------------------"
+                echo "\(msgPPCTarget) $USB_DEV"
+                echo "\(msgGPTNote)"
+                echo "================================================================================"
+                echo ""
+                touch '\(formattingStartedURL.path)'
+                sudo /usr/sbin/diskutil partitionDisk "$USB_DEV" GPT HFS+ "$USB_LABEL" 100%
+                EXIT_CODE=$?
+
+                if [ $EXIT_CODE -eq 0 ]; then
+                    TARGET_USB_PATH="/Volumes/$USB_LABEL"
+                    touch '\(formattingDoneURL.path)'
+                fi
+                """ : """
+                TARGET_USB_PATH='\(usbPath)'
+                EXIT_CODE=0
+                """
 
                 // Promote effectiveAppURL to outer scope so it can be used later
                 var effectiveAppURL = self.sourceAppURL
@@ -265,11 +353,23 @@ extension UniversalInstallationView {
                     touch '\(terminalActiveURL.path)'
                     trap "rm -f '\(terminalActiveURL.path)'" EXIT
 
-                    echo "\(msgRestoreStart)"
-                    echo "\(msgEraseWarning)"
-                    sudo /usr/sbin/asr restore --source '\(targetESD.path)' --target '\(usbPath)' --erase --noprompt --noverify
+                    \(preformatBlock)
 
-                    EXIT_CODE=$?
+                    if [ $EXIT_CODE -eq 0 ]; then
+                        clear
+                        echo "================================================================================"
+                        echo "                                     macUSB"
+                        echo "================================================================================"
+                        echo "\(msgRestoreStart)"
+                        echo "\(msgSystemLabel) \(systemName)"
+                        echo "\(msgEraseWarning)"
+                        echo "--------------------------------------------------------------------------------"
+                        echo ""
+
+                        sudo /usr/sbin/asr restore --source '\(targetESD.path)' --target "$TARGET_USB_PATH" --erase --noprompt --noverify
+                        EXIT_CODE=$?
+                    fi
+
                     if [ $EXIT_CODE -eq 0 ]; then
                         touch '\(terminalSuccessURL.path)'
                     else
@@ -278,7 +378,7 @@ extension UniversalInstallationView {
 
                     touch '\(terminalDoneURL.path)'
                     """
-                    self.log("ASR restore: source='\(targetESD.path)' target='\(usbPath)'")
+                    self.log("ASR restore: source='\(targetESD.path)' target='\(usbPath)' (dynamicznie przez TARGET_USB_PATH po ewentualnym formatowaniu)")
 
                 } else if isMavericks {
                     // --- SEKCJA MAVERICKS: IMAGESCAN + RESTORE ---
@@ -310,19 +410,23 @@ extension UniversalInstallationView {
                     touch '\(terminalActiveURL.path)'
                     trap "rm -f '\(terminalActiveURL.path)'" EXIT
 
-                    # --- ETAP 1/2: IMAGESCAN ---
-                    clear
-                    echo "================================================================================"
-                    echo "                                     macUSB"
-                    echo "================================================================================"
-                    echo "\(msgMavStage1)"
-                    echo "\(msgSystemLabel) \(systemName)"
-                    echo "--------------------------------------------------------------------------------"
-                    echo ""
+                    \(preformatBlock)
 
-                    chmod u+w '\(targetESD.path)'
-                    sudo /usr/sbin/asr imagescan --source '\(targetESD.path)'
-                    EXIT_CODE=$?
+                    if [ $EXIT_CODE -eq 0 ]; then
+                        # --- ETAP 1/2: IMAGESCAN ---
+                        clear
+                        echo "================================================================================"
+                        echo "                                     macUSB"
+                        echo "================================================================================"
+                        echo "\(msgMavStage1)"
+                        echo "\(msgSystemLabel) \(systemName)"
+                        echo "--------------------------------------------------------------------------------"
+                        echo ""
+
+                        chmod u+w '\(targetESD.path)'
+                        sudo /usr/sbin/asr imagescan --source '\(targetESD.path)'
+                        EXIT_CODE=$?
+                    fi
 
                     # --- ETAP 2/2: RESTORE ---
                     if [ $EXIT_CODE -eq 0 ]; then
@@ -336,7 +440,7 @@ extension UniversalInstallationView {
                         echo "\(msgEraseWarning)"
                         echo "================================================================================"
                         echo ""
-                        sudo /usr/sbin/asr restore --source '\(targetESD.path)' --target '\(usbPath)' --erase --noprompt
+                        sudo /usr/sbin/asr restore --source '\(targetESD.path)' --target "$TARGET_USB_PATH" --erase --noprompt
                         EXIT_CODE=$?
                     fi
 
@@ -348,7 +452,7 @@ extension UniversalInstallationView {
 
                     touch '\(terminalDoneURL.path)'
                     """
-                    self.log("ASR Mavericks: source='\(targetESD.path)' (from original='\(sourceImage.path)') target='\(usbPath)'")
+                    self.log("ASR Mavericks: source='\(targetESD.path)' (from original='\(sourceImage.path)') target='\(usbPath)' (dynamicznie przez TARGET_USB_PATH po ewentualnym formatowaniu)")
 
                 } else if isPPC {
                     // --- SEKCJA PPC (PowerPC): FORMAT + RESTORE ---
@@ -356,8 +460,6 @@ extension UniversalInstallationView {
                     self.log("PPC: Źródło woluminu = \(ppcSourceVolumePath)")
                     self.log("PPC: Cel USB (montowany) = \(usbPath)")
 
-                    let selectedBSD = drive.device
-                    let parentWholeDisk: String = selectedBSD.range(of: #"^disk\d+"#, options: .regularExpression).map { String(selectedBSD[$0]) } ?? selectedBSD
                     self.log("PPC: Wybrany dysk BSD = \(selectedBSD) -> Whole disk = /dev/\(parentWholeDisk)")
 
                     scriptCommand = """
@@ -508,9 +610,24 @@ extension UniversalInstallationView {
                     let createInstallMediaURL = effectiveAppURL.appendingPathComponent("Contents/Resources/createinstallmedia")
                     self.log("createinstallmedia: \(createInstallMediaURL.path)")
 
+                    let postFormatStageHeader = isCatalina ? msgCatStage1 : msgHeader
+
                     var bashLogic = """
-                    sudo '\(createInstallMediaURL.path)' --volume '\(usbPath)' \(legacyArg) --nointeraction
-                    EXIT_CODE=$?
+                    \(preformatBlock)
+
+                    if [ $EXIT_CODE -eq 0 ]; then
+                        clear
+                        echo "================================================================================"
+                        echo "                                     macUSB"
+                        echo "================================================================================"
+                        echo "\(postFormatStageHeader)"
+                        echo "\(msgSystemLabel) \(systemName)"
+                        echo "--------------------------------------------------------------------------------"
+                        echo ""
+
+                        sudo '\(createInstallMediaURL.path)' --volume "$TARGET_USB_PATH" \(legacyArg) --nointeraction
+                        EXIT_CODE=$?
+                    fi
                     """
 
                     if isCatalina {
@@ -580,6 +697,14 @@ extension UniversalInstallationView {
                         self.isTerminalWorking = true
                     }
                     self.log("Terminal: uruchomiono skrypt, monitoring rozpoczęty.")
+                    if shouldPreformat {
+                        self.startFormattingSignalTimer(
+                            startURL: formattingStartedURL,
+                            doneURL: formattingDoneURL,
+                            completionURL: terminalDoneURL,
+                            errorURL: terminalErrorURL
+                        )
+                    }
                     self.startTerminalCompletionTimer(completionURL: terminalDoneURL, activeURL: terminalActiveURL, errorURL: terminalErrorURL)
                 }
 
@@ -758,4 +883,3 @@ extension UniversalInstallationView {
         }
     }
 }
-
