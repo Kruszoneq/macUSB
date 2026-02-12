@@ -62,7 +62,7 @@ Key concepts:
 - State-driven UI: extensive use of `@State`, `@StateObject`, `@EnvironmentObject` and `@Published` to bind logic to UI.
 - NotificationCenter: used for flow resets and special-case actions (Tiger Multi-DVD override).
 - System analysis: reads `Info.plist` from the installer app inside a mounted image or `.app` bundle.
-- USB detection: enumerates mounted external volumes; optionally includes external HDD/SSD with a user option; detects USB speed, partition scheme, filesystem format, and computes a formatting-required flag for later stages.
+- USB detection: enumerates mounted external volumes; optionally includes external HDD/SSD with a user option; detects USB speed, partition scheme, filesystem format, and computes the `needsFormatting` flag for later stages.
 - Terminal script execution: a shell script is written to a temporary folder, then opened in Terminal to run with `sudo`.
 
 ---
@@ -203,6 +203,10 @@ Implemented in: `UniversalInstallationView` (UI) + `CreatorLogic.swift` (logic)
 ### Standard Flow (createinstallmedia)
 Used for most modern macOS installers.
 - `createinstallmedia` is run in Terminal with `sudo`.
+- If the selected drive has `needsFormatting == true` and flow is non-PPC, Terminal first formats the whole disk to `GPT + HFS+`, then continues to USB creation.
+- In standard flow, preformatting runs after copy/patch/sign preparation steps and before `createinstallmedia`.
+- After preformatting succeeds, Terminal is cleared and a fresh stage header is shown before USB creation starts.
+- The effective target path is passed as `TARGET_USB_PATH` (updated after preformat mountpoint refresh).
 - The app may copy the `.app` to a TEMP directory first when:
 - the source is mounted from `/Volumes` (image), or
 - Catalina requires post-processing, or
@@ -211,16 +215,19 @@ Used for most modern macOS installers.
 ### Legacy Restore Flow (Lion / Mountain Lion)
 - Copies `InstallESD.dmg` to TEMP.
 - Runs `asr imagescan` with admin privileges.
-- Then `asr restore` to the target USB drive.
+- If `needsFormatting == true` (non-PPC), a `GPT + HFS+` preformat stage runs in Terminal before restore.
+- After preformatting succeeds, Terminal is cleared and a fresh stage header is shown before restore starts.
+- Then `asr restore` runs to `TARGET_USB_PATH` (dynamic path after optional preformat).
 
 ### Mavericks Flow
 - Copies the source image to TEMP.
-- Runs `asr imagescan`, then `asr restore` in Terminal.
+- If `needsFormatting == true` (non-PPC), a `GPT + HFS+` preformat stage runs in Terminal before restore.
+- Runs `asr imagescan`, then `asr restore` in Terminal (restore target resolved via `TARGET_USB_PATH`).
 
 ### PowerPC Flow
 - Formats disk with `diskutil partitionDisk` using APM + HFS+.
 - Uses `asr restore` to write the image to `/Volumes/PPC`.
-- When `isPPC` is active, the drive flag `requiresFormattingInNextStages` is forced to `false` for installation context, because PPC formatting is already part of this flow.
+- When `isPPC` is active, the drive flag `needsFormatting` is forced to `false` for installation context, because PPC formatting is already part of this flow.
 
 ### Sierra Special Handling
 - Always copies `.app` to TEMP.
@@ -240,6 +247,9 @@ The app writes signal files to track progress:
 - `terminal_success` → Operation succeeded
 - `terminal_error` → Operation failed
 - `auth_ok` → Admin authorization was granted
+- `formatting_started` → GPT+HFS+ formatting stage has started (non-PPC preformat flow)
+- `formatting_done` → GPT+HFS+ formatting stage completed and flow continues to USB creation
+- `CreatorLogic` watches `formatting_started` / `formatting_done` and emits dedicated `AppLogging.stage(...)` markers for formatting start/end.
 
 ---
 
@@ -249,7 +259,7 @@ The app relies on these macOS utilities and APIs.
 Command-line tools:
 - `hdiutil` (attach/detach, disk image mount handling)
 - `asr` (imagescan, restore for legacy + Mavericks/PPC)
-- `diskutil` (partitioning for PPC)
+- `diskutil` (partitioning for PPC and non-PPC GPT+HFS+ preformat stage)
 - `createinstallmedia` (installer creation)
 - `codesign` (fixing installer signature for legacy/catalina)
 - `xattr` (quarantine and extended attribute cleanup)
@@ -286,6 +296,7 @@ Features:
 - Category-based info/error logs with timestamps.
 - In-memory buffer for exporting logs (max 5000 lines).
 - Exportable from the app menu into a `.txt` file.
+- Formatting stage logs are emitted based on Terminal signal files (`formatting_started`, `formatting_done`) to mark start/end of preformatting.
 
 ### Log Message Requirements
 The following requirements are mandatory for diagnostic logs:
@@ -294,7 +305,7 @@ The following requirements are mandatory for diagnostic logs:
 - For USB metadata, use explicit labels in messages, e.g. `Schemat: GPT, Format: HFS+`, instead of `scheme=GPT, fs=HFS+`.
 - Keep boolean diagnostics readable for non-technical support checks (prefer `TAK` / `NIE` in Polish logs).
 - PPC special case: when `isPPC` is active, do not log formatting-required as `TAK/NIE`; log `PPC, APM` instead.
-- Keep critical USB context together in a single line when a target drive is selected or installation starts (device ID, capacity, USB standard, partition scheme, filesystem format, formatting-required flag).
+- Keep critical USB context together in a single line when a target drive is selected or installation starts (device ID, capacity, USB standard, partition scheme, filesystem format, `needsFormatting` flag).
 - Continue using categories (`USBSelection`, `Installation`, etc.) so exported logs are easy to filter.
 - New logs must continue to go through `AppLogging` APIs (`info`, `error`, `stage`) to preserve timestamps and export behavior.
 
@@ -321,11 +332,11 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/App/ContentView.swift` — Root view, window configuration, locale injection.
 - `macUSB/Features/Welcome/WelcomeView.swift` — Welcome screen and update check.
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` — File/USB selection UI and navigation to install.
-- `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic; propagates/logs USB metadata (speed, partition scheme, filesystem format, formatting-required flag).
+- `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic; propagates/logs USB metadata (speed, partition scheme, filesystem format, `needsFormatting`) and exposes `selectedDriveForInstallation` (PPC override of formatting flag).
 - `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation UI state and progress.
-- `macUSB/Features/Installation/CreatorLogic.swift` — All installer creation logic and terminal scripting.
+- `macUSB/Features/Installation/CreatorLogic.swift` — Installer creation logic and terminal scripting, including conditional non-PPC preformat (`GPT + HFS+`), formatting signal watchers, and staged terminal refresh between format/create phases.
 - `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, cleanup, and sound feedback.
-- `macUSB/Shared/Models/Models.swift` — `USBDrive`, `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
+- `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
 - `macUSB/Shared/Models/Item.swift` — SwiftData model stub (currently unused).
 - `macUSB/Shared/Services/LanguageManager.swift` — Language selection and locale handling.
 - `macUSB/Shared/Services/MenuState.swift` — Shared menu state (skip analysis, external drives).
@@ -353,10 +364,10 @@ This section lists the main call relationships and data flow.
 - `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`.
 - `macUSB/App/ContentView.swift` → presents `WelcomeView`, injects `LanguageManager`, calls `AppLogging.logAppStartupOnce()`.
 - `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json` directly.
-- `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`.
+- `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, and forwards `selectedDriveForInstallation` to installation flow.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
 - `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress, calls logic in `CreatorLogic`, navigates to `FinishUSBView`.
-- `macUSB/Features/Installation/CreatorLogic.swift` → uses `AppLogging`, logs selected USB metadata snapshot, writes Terminal scripts, runs privileged commands (AppleScript + sudo).
+- `macUSB/Features/Installation/CreatorLogic.swift` → uses `AppLogging`, logs selected USB metadata snapshot, conditionally preformats non-PPC drives, watches formatting signal files, writes Terminal scripts, runs privileged commands (AppleScript + sudo).
 - `macUSB/Features/Finish/FinishUSBView.swift` → cleanup (unmount + delete temp), provides reset callback.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
 - `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift` and `SystemAnalysisView`.

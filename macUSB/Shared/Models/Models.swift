@@ -47,7 +47,7 @@ struct USBDrive: Hashable, Identifiable {
     let usbSpeed: USBPortSpeed?
     let partitionScheme: PartitionScheme?
     let fileSystemFormat: FileSystemFormat?
-    let requiresFormattingInNextStages: Bool
+    let needsFormatting: Bool
     
     init(
         name: String,
@@ -57,7 +57,7 @@ struct USBDrive: Hashable, Identifiable {
         usbSpeed: USBPortSpeed? = nil,
         partitionScheme: PartitionScheme? = nil,
         fileSystemFormat: FileSystemFormat? = nil,
-        requiresFormattingInNextStages: Bool? = nil
+        needsFormatting: Bool? = nil
     ) {
         self.name = name
         self.device = device
@@ -68,7 +68,7 @@ struct USBDrive: Hashable, Identifiable {
         self.fileSystemFormat = fileSystemFormat
 
         let computedRequiresFormatting = !(partitionScheme == .gpt && fileSystemFormat == .hfsPlus)
-        self.requiresFormattingInNextStages = requiresFormattingInNextStages ?? computedRequiresFormatting
+        self.needsFormatting = needsFormatting ?? computedRequiresFormatting
     }
     
     // Format wyświetlania: disk1s1 - 16GB - SANDISK

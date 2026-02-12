@@ -46,9 +46,9 @@ final class AnalysisLogic: ObservableObject {
                         category: "USBSelection"
                     )
                 } else {
-                    let requiresFormattingText = (selectedDrive?.requiresFormattingInNextStages ?? true) ? "TAK" : "NIE"
+                    let needsFormattingText = (selectedDrive?.needsFormatting ?? true) ? "TAK" : "NIE"
                     self.log(
-                        "Wybrano nośnik: \(id) (\(speed)) — Pojemność: \(self.selectedDrive?.size ?? "?"), Schemat: \(partitionScheme), Format: \(fileSystem), Wymaga formatowania w kolejnych etapach: \(requiresFormattingText)",
+                        "Wybrano nośnik: \(id) (\(speed)) — Pojemność: \(self.selectedDrive?.size ?? "?"), Schemat: \(partitionScheme), Format: \(fileSystem), Wymaga formatowania w kolejnych etapach: \(needsFormattingText)",
                         category: "USBSelection"
                     )
                 }
@@ -57,7 +57,7 @@ final class AnalysisLogic: ObservableObject {
     }
 
     /// Nośnik przekazywany do etapu instalacji. W trybie PPC flaga
-    /// requiresFormattingInNextStages jest wymuszana na false, ponieważ
+    /// needsFormatting jest wymuszana na false, ponieważ
     /// formatowanie (APM + HFS+) jest już wbudowane w dalszy proces.
     var selectedDriveForInstallation: USBDrive? {
         guard let drive = selectedDrive else { return nil }
@@ -70,7 +70,7 @@ final class AnalysisLogic: ObservableObject {
             usbSpeed: drive.usbSpeed,
             partitionScheme: drive.partitionScheme,
             fileSystemFormat: drive.fileSystemFormat,
-            requiresFormattingInNextStages: false
+            needsFormatting: false
         )
     }
 

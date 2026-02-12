@@ -3021,6 +3021,58 @@
         }
       }
     },
+    "ETAP: FORMATOWANIE DYSKU USB (GPT + HFS+)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SCHRITT: FORMATIEREN DES USB-LAUFWERKS (GPT + HFS+)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "STAGE: FORMATTING USB DRIVE (GPT + HFS+)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ETAPA: FORMATEANDO UNIDAD USB (GPT + HFS+)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ÉTAPE : FORMATAGE DU DISQUE USB (GPT + HFS+)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ステージ: USBドライブをフォーマット中 (GPT + HFS+)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ETAPA: FORMATANDO UNIDADE USB (GPT + HFS+)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ЭТАП: ФОРМАТИРОВАНИЕ USB-НАКОПИТЕЛЯ (GPT + HFS+)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "阶段：正在格式化 U 盘（GPT + HFS+）"
+          }
+        }
+      }
+    },
     "ETAP: Przywracanie obrazu na USB" : {
       "localizations" : {
         "de" : {
@@ -4681,6 +4733,58 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "失败！"
+          }
+        }
+      }
+    },
+    "Nośnik zostanie sformatowany do GPT + HFS+." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Laufwerk wird auf GPT + HFS+ formatiert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The drive will be formatted to GPT + HFS+."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La unidad se formateará a GPT + HFS+."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le disque sera formaté en GPT + HFS+."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ドライブは GPT + HFS+ にフォーマットされます。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A unidade será formatada para GPT + HFS+."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Носитель будет отформатирован в GPT + HFS+."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该驱动器将被格式化为 GPT + HFS+。"
           }
         }
       }
