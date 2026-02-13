@@ -5,7 +5,6 @@
 	<key>AssociatedBundleIdentifiers</key>
 	<array>
 		<string>com.kruszoneq.macUSB</string>
-		<string>com.kruszoneq.macusb.helper</string>
 	</array>
 	<key>Label</key>
 	<string>com.kruszoneq.macusb.helper</string>

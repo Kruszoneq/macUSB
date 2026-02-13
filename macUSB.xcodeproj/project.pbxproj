@@ -69,11 +69,11 @@
 		0FB1C3772EEC7B5A00A86E0F /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		0FB1C3AC2EEC7C8D00A86E0F /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		0FB1C3AF2EEC7E5F00A86E0F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-			A10000012F00000100000005 /* macUSBHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = macUSBHelper; sourceTree = BUILT_PRODUCTS_DIR; };
-			A10000012F00000100000006 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-			A10000012F00000100000007 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist; sourceTree = "<group>"; };
-			A10000012F00000100000013 /* macUSBHelper.debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macUSBHelper.debug.entitlements; sourceTree = "<group>"; };
-			A10000012F00000100000014 /* macUSBHelper.release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macUSBHelper.release.entitlements; sourceTree = "<group>"; };
+		A10000012F00000100000005 /* macUSBHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = macUSBHelper; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000012F00000100000006 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		A10000012F00000100000007 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist; sourceTree = "<group>"; };
+		A10000012F00000100000013 /* macUSBHelper.debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macUSBHelper.debug.entitlements; sourceTree = "<group>"; };
+		A10000012F00000100000014 /* macUSBHelper.release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macUSBHelper.release.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -214,16 +214,16 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
-			A10000012F0000010000000B /* macUSBHelper */ = {
-				isa = PBXGroup;
-				children = (
-					A10000012F00000100000006 /* main.swift */,
-					A10000012F00000100000013 /* macUSBHelper.debug.entitlements */,
-					A10000012F00000100000014 /* macUSBHelper.release.entitlements */,
-				);
-				path = macUSBHelper;
-				sourceTree = "<group>";
-			};
+		A10000012F0000010000000B /* macUSBHelper */ = {
+			isa = PBXGroup;
+			children = (
+				A10000012F00000100000006 /* main.swift */,
+				A10000012F00000100000013 /* macUSBHelper.debug.entitlements */,
+				A10000012F00000100000014 /* macUSBHelper.release.entitlements */,
+			);
+			path = macUSBHelper;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -780,52 +780,51 @@
 			};
 			name = Release;
 		};
-			A10000012F00000100000010 /* Debug */ = {
-				isa = XCBuildConfiguration;
-				buildSettings = {
-					CODE_SIGN_ENTITLEMENTS = macUSBHelper/macUSBHelper.debug.entitlements;
-					CODE_SIGN_IDENTITY = "Apple Development";
-					"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-					CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
-					CODE_SIGN_STYLE = Automatic;
-					CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-					CURRENT_PROJECT_VERSION = 1;
-					DEVELOPMENT_TEAM = 27NC66L8P2;
-					ENABLE_HARDENED_RUNTIME = YES;
-					ENTITLEMENTS_REQUIRED = NO;
-					GENERATE_INFOPLIST_FILE = YES;
-					MACOSX_DEPLOYMENT_TARGET = 14.6;
-					MARKETING_VERSION = 1.0;
-					PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macusb.helper;
-					PRODUCT_NAME = "$(TARGET_NAME)";
-					SKIP_INSTALL = YES;
-					SWIFT_EMIT_LOC_STRINGS = NO;
-					SWIFT_VERSION = 5.0;
-				};
+		A10000012F00000100000010 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 27NC66L8P2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENTITLEMENTS_REQUIRED = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macusb.helper;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+			};
 			name = Debug;
 		};
-			A10000012F00000100000011 /* Release */ = {
-				isa = XCBuildConfiguration;
-				buildSettings = {
-					CODE_SIGN_ENTITLEMENTS = macUSBHelper/macUSBHelper.release.entitlements;
-					CODE_SIGN_IDENTITY = "Developer ID Application";
-					"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
-					CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
-					CODE_SIGN_STYLE = Manual;
-					CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-					CURRENT_PROJECT_VERSION = 1;
-					DEVELOPMENT_TEAM = 27NC66L8P2;
-					ENABLE_HARDENED_RUNTIME = YES;
-					ENTITLEMENTS_REQUIRED = NO;
-					GENERATE_INFOPLIST_FILE = YES;
-					MACOSX_DEPLOYMENT_TARGET = 14.6;
-					MARKETING_VERSION = 1.0;
-					PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macusb.helper;
-					PRODUCT_NAME = "$(TARGET_NAME)";
-					PROVISIONING_PROFILE_SPECIFIER = "";
-					SKIP_INSTALL = YES;
-					SWIFT_EMIT_LOC_STRINGS = NO;
-					SWIFT_VERSION = 5.0;
+		A10000012F00000100000011 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Manual;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 27NC66L8P2;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = 27NC66L8P2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENTITLEMENTS_REQUIRED = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macusb.helper;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

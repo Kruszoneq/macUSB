@@ -1,6 +1,7 @@
 import Foundation
 import AppKit
 import ServiceManagement
+import Darwin
 
 final class HelperServiceManager {
     static let shared = HelperServiceManager()
@@ -17,6 +18,10 @@ final class HelperServiceManager {
     private var ensureInProgress = false
     private var pendingEnsureCompletions: [EnsureCompletion] = []
     private var pendingEnsureInteractive = false
+    private var repairInProgress = false
+    private var statusCheckInProgress = false
+    private var statusCheckingPanel: NSPanel?
+    private let statusHealthTimeout: TimeInterval = 1.6
 
     private init() {}
 
@@ -38,19 +43,41 @@ final class HelperServiceManager {
     }
 
     func presentStatusAlert() {
-        evaluateStatus { statusText in
-            let alert = NSAlert()
-            alert.icon = NSApp.applicationIconImage
-            alert.alertStyle = .informational
-            alert.messageText = String(localized: "Status helpera")
-            alert.informativeText = statusText
-            alert.addButton(withTitle: String(localized: "OK"))
-            self.presentAlert(alert)
+        coordinationQueue.async {
+            guard !self.statusCheckInProgress else {
+                return
+            }
+
+            self.statusCheckInProgress = true
+
+            DispatchQueue.main.async {
+                self.presentStatusCheckingPanelIfNeeded()
+            }
+
+            self.evaluateStatus { statusText in
+                DispatchQueue.main.async {
+                    self.dismissStatusCheckingPanelIfNeeded()
+
+                    let alert = NSAlert()
+                    alert.icon = NSApp.applicationIconImage
+                    alert.alertStyle = .informational
+                    alert.messageText = String(localized: "Status helpera")
+                    alert.informativeText = statusText
+                    alert.addButton(withTitle: String(localized: "OK"))
+                    self.presentAlert(alert)
+
+                    self.coordinationQueue.async {
+                        self.statusCheckInProgress = false
+                    }
+                }
+            }
         }
     }
 
     func repairRegistrationFromMenu() {
+        guard markRepairStartIfPossible() else { return }
         ensureReadyForPrivilegedWork(interactive: true) { ready, message in
+            self.finishRepairFlow()
             self.presentOperationSummary(
                 success: ready,
                 message: message ?? String(localized: "Naprawa helpera zakończona")
@@ -168,6 +195,25 @@ final class HelperServiceManager {
                 return
             }
 
+            if isRunningFromXcodeSession() && isOperationNotPermitted(error) {
+                AppLogging.error(
+                    "Rejestracja helpera z uruchomienia Xcode została zablokowana przez system (Operation not permitted).",
+                    category: "Installation"
+                )
+                PrivilegedOperationClient.shared.queryHealth(withTimeout: 1.2) { ok, details in
+                    if ok {
+                        completion(true, nil)
+                        return
+                    }
+
+                    completion(
+                        false,
+                        String(localized: "System zablokował rejestrację helpera z uruchomienia Xcode. Uruchom raz aplikację z katalogu Applications, zatwierdź działanie helpera w tle, a następnie wróć do testów w Xcode. Szczegóły XPC: \(details)")
+                    )
+                }
+                return
+            }
+
             DispatchQueue.main.async {
                 self.presentRegistrationErrorAlertIfNeeded(error: error, interactive: interactive)
             }
@@ -233,6 +279,14 @@ final class HelperServiceManager {
                 PrivilegedOperationClient.shared.queryHealth { retryOK, retryDetails in
                     if retryOK {
                         completion(true, nil)
+                        return
+                    }
+
+                    if self.isRunningFromXcodeSession() {
+                        completion(
+                            false,
+                            "Helper jest włączony, ale XPC nadal nie odpowiada w sesji Xcode: \(retryDetails)"
+                        )
                         return
                     }
 
@@ -318,7 +372,7 @@ final class HelperServiceManager {
             #endif
         }
 
-        PrivilegedOperationClient.shared.queryHealth { ok, details in
+        PrivilegedOperationClient.shared.queryHealth(withTimeout: statusHealthTimeout) { ok, details in
             lines.append("XPC health: \(ok ? "OK" : "BŁĄD")")
             lines.append("Szczegóły: \(details)")
             completion(lines.joined(separator: "\n"))
@@ -411,6 +465,104 @@ final class HelperServiceManager {
         alert.informativeText = error.localizedDescription
         alert.addButton(withTitle: String(localized: "OK"))
         presentAlert(alert)
+    }
+
+    private func presentStatusCheckingPanelIfNeeded() {
+        guard statusCheckingPanel == nil else { return }
+
+        let panelSize = NSSize(width: 320, height: 110)
+        let panel = NSPanel(
+            contentRect: NSRect(origin: .zero, size: panelSize),
+            styleMask: [.titled],
+            backing: .buffered,
+            defer: false
+        )
+        panel.title = String(localized: "Status helpera")
+        panel.isFloatingPanel = true
+        panel.level = .floating
+        panel.standardWindowButton(.closeButton)?.isHidden = true
+        panel.standardWindowButton(.miniaturizeButton)?.isHidden = true
+        panel.standardWindowButton(.zoomButton)?.isHidden = true
+        panel.isMovable = false
+
+        let contentView = NSView(frame: NSRect(origin: .zero, size: panelSize))
+
+        let spinner = NSProgressIndicator(frame: NSRect(x: 24, y: 46, width: 20, height: 20))
+        spinner.style = .spinning
+        spinner.controlSize = .regular
+        spinner.startAnimation(nil)
+        contentView.addSubview(spinner)
+
+        let titleField = NSTextField(labelWithString: String(localized: "Sprawdzanie statusu..."))
+        titleField.font = NSFont.systemFont(ofSize: 15, weight: .semibold)
+        titleField.frame = NSRect(x: 56, y: 52, width: 240, height: 20)
+        contentView.addSubview(titleField)
+
+        let subtitleField = NSTextField(labelWithString: String(localized: "Proszę czekać"))
+        subtitleField.font = NSFont.systemFont(ofSize: 12, weight: .regular)
+        subtitleField.textColor = .secondaryLabelColor
+        subtitleField.frame = NSRect(x: 56, y: 30, width: 240, height: 16)
+        contentView.addSubview(subtitleField)
+
+        panel.contentView = contentView
+
+        if let ownerWindow = NSApp.keyWindow ?? NSApp.mainWindow {
+            let ownerFrame = ownerWindow.frame
+            let origin = NSPoint(
+                x: ownerFrame.midX - panelSize.width / 2,
+                y: ownerFrame.midY - panelSize.height / 2
+            )
+            panel.setFrameOrigin(origin)
+        } else {
+            panel.center()
+        }
+
+        panel.orderFrontRegardless()
+        statusCheckingPanel = panel
+    }
+
+    private func dismissStatusCheckingPanelIfNeeded() {
+        guard let panel = statusCheckingPanel else { return }
+        panel.orderOut(nil)
+        statusCheckingPanel = nil
+    }
+
+    private func markRepairStartIfPossible() -> Bool {
+        coordinationQueue.sync {
+            if repairInProgress {
+                DispatchQueue.main.async {
+                    self.presentOperationSummary(
+                        success: false,
+                        message: String(localized: "Trwa już naprawa helpera. Poczekaj na jej zakończenie.")
+                    )
+                }
+                return false
+            }
+            repairInProgress = true
+            return true
+        }
+    }
+
+    private func finishRepairFlow() {
+        coordinationQueue.async {
+            self.repairInProgress = false
+        }
+    }
+
+    private func isOperationNotPermitted(_ error: Error) -> Bool {
+        let nsError = error as NSError
+        if nsError.code == Int(EPERM) || nsError.code == 1 {
+            return true
+        }
+        return nsError.localizedDescription.localizedCaseInsensitiveContains("operation not permitted")
+    }
+
+    private func isRunningFromXcodeSession() -> Bool {
+        #if DEBUG
+        return Self.isRunningFromXcodeDevelopmentBuild()
+        #else
+        return false
+        #endif
     }
 
     private func presentOperationSummary(success: Bool, message: String) {

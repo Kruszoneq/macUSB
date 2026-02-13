@@ -24,18 +24,6 @@ final class PrivilegedOperationClient: NSObject {
         onStartError: @escaping (String) -> Void,
         onStarted: @escaping (String) -> Void
     ) {
-        guard let proxy = helperProxy(onError: onStartError) else {
-            return
-        }
-
-        let requestData: Data
-        do {
-            requestData = try HelperXPCCodec.encode(request)
-        } catch {
-            onStartError("Nie udało się zakodować żądania helpera: \(error.localizedDescription)")
-            return
-        }
-
         let stateLock = NSLock()
         var didFinish = false
         let finishOnce: (@escaping () -> Void) -> Void = { action in
@@ -49,7 +37,33 @@ final class PrivilegedOperationClient: NSObject {
             action()
         }
 
-        let timeoutWorkItem = DispatchWorkItem { [weak self] in
+        var timeoutWorkItem: DispatchWorkItem?
+        let failStart: (String) -> Void = { [weak self] message in
+            DispatchQueue.main.async {
+                timeoutWorkItem?.cancel()
+                self?.resetConnection()
+                finishOnce {
+                    onStartError(message)
+                }
+            }
+        }
+
+        guard let proxy = helperProxy(onError: { message in
+            failStart(message)
+        }) else {
+            failStart("Nie udało się uzyskać połączenia XPC z helperem.")
+            return
+        }
+
+        let requestData: Data
+        do {
+            requestData = try HelperXPCCodec.encode(request)
+        } catch {
+            failStart("Nie udało się zakodować żądania helpera: \(error.localizedDescription)")
+            return
+        }
+
+        timeoutWorkItem = DispatchWorkItem { [weak self] in
             self?.resetConnection()
             DispatchQueue.main.async {
                 finishOnce {
@@ -57,15 +71,17 @@ final class PrivilegedOperationClient: NSObject {
                 }
             }
         }
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(
-            deadline: .now() + startReplyTimeout,
-            execute: timeoutWorkItem
-        )
+        if let timeoutWorkItem {
+            DispatchQueue.global(qos: .userInitiated).asyncAfter(
+                deadline: .now() + startReplyTimeout,
+                execute: timeoutWorkItem
+            )
+        }
 
         proxy.startWorkflow(requestData as NSData) { [weak self] workflowID, error in
             DispatchQueue.main.async {
                 finishOnce {
-                    timeoutWorkItem.cancel()
+                    timeoutWorkItem?.cancel()
 
                     if let error {
                         onStartError(error.localizedDescription)
@@ -108,14 +124,10 @@ final class PrivilegedOperationClient: NSObject {
     }
 
     func queryHealth(completion: @escaping (Bool, String) -> Void) {
-        guard let proxy = helperProxy(onError: { _ in
-            DispatchQueue.main.async {
-                completion(false, "Brak połączenia XPC z helperem")
-            }
-        }) else {
-            return
-        }
+        queryHealth(withTimeout: healthReplyTimeout, completion: completion)
+    }
 
+    func queryHealth(withTimeout timeout: TimeInterval, completion: @escaping (Bool, String) -> Void) {
         let stateLock = NSLock()
         var didFinish = false
         let finishOnce: (_ ok: Bool, _ details: String) -> Void = { ok, details in
@@ -129,20 +141,38 @@ final class PrivilegedOperationClient: NSObject {
             completion(ok, details)
         }
 
-        let timeoutWorkItem = DispatchWorkItem { [weak self] in
+        var timeoutWorkItem: DispatchWorkItem?
+        let failHealth: (String) -> Void = { [weak self] message in
+            DispatchQueue.main.async {
+                timeoutWorkItem?.cancel()
+                self?.resetConnection()
+                finishOnce(false, message)
+            }
+        }
+
+        guard let proxy = helperProxy(onError: { _ in
+            failHealth("Brak połączenia XPC z helperem")
+        }) else {
+            failHealth("Brak połączenia XPC z helperem")
+            return
+        }
+
+        timeoutWorkItem = DispatchWorkItem { [weak self] in
             self?.resetConnection()
             DispatchQueue.main.async {
                 finishOnce(false, "Timeout połączenia XPC z helperem")
             }
         }
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(
-            deadline: .now() + healthReplyTimeout,
-            execute: timeoutWorkItem
-        )
+        if let timeoutWorkItem {
+            DispatchQueue.global(qos: .userInitiated).asyncAfter(
+                deadline: .now() + timeout,
+                execute: timeoutWorkItem
+            )
+        }
 
         proxy.queryHealth { ok, details in
             DispatchQueue.main.async {
-                timeoutWorkItem.cancel()
+                timeoutWorkItem?.cancel()
                 finishOnce(ok, details as String)
             }
         }

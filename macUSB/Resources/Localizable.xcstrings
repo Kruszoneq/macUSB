@@ -7460,6 +7460,9 @@
     "Sprawdzanie gotowości helpera..." : {
 
     },
+    "Sprawdzanie statusu..." : {
+
+    },
     "Spróbuj ponownie od początku" : {
       "localizations" : {
         "de" : {
@@ -7670,6 +7673,9 @@
           }
         }
       }
+    },
+    "System zablokował rejestrację helpera z uruchomienia Xcode. Uruchom raz aplikację z katalogu Applications, zatwierdź działanie helpera w tle, a następnie wróć do testów w Xcode. Szczegóły XPC: %@" : {
+
     },
     "Szukanie pliku obrazu..." : {
       "localizations" : {
@@ -7985,6 +7991,9 @@
       }
     },
     "Trwa inna operacja helpera. Poczekaj chwilę i spróbuj ponownie." : {
+
+    },
+    "Trwa już naprawa helpera. Poczekaj na jej zakończenie." : {
 
     },
     "Trwa kopiowanie plików, proszę czekać." : {
