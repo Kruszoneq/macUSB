@@ -155,6 +155,10 @@ final class PrivilegedOperationClient: NSObject {
         lock.unlock()
     }
 
+    func resetConnectionForRecovery() {
+        resetConnection()
+    }
+
     private func helperProxy(onError: @escaping (String) -> Void) -> PrivilegedHelperToolXPCProtocol? {
         let connection = ensureConnection()
         let proxy = connection.remoteObjectProxyWithErrorHandler { error in

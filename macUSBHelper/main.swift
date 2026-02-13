@@ -92,6 +92,7 @@ private final class HelperWorkflowExecutor {
     private let stateQueue = DispatchQueue(label: "macUSB.helper.executor.state")
     private var activeProcess: Process?
     private var latestPercent: Double = 0
+    private var lastStageOutputLine: String?
 
     init(request: HelperWorkflowRequestPayload, workflowID: String, sendEvent: @escaping (HelperProgressEventPayload) -> Void) {
         self.request = request
@@ -345,6 +346,7 @@ private final class HelperWorkflowExecutor {
 
     private func runStage(_ stage: WorkflowStage) throws {
         try throwIfCancelled()
+        lastStageOutputLine = nil
 
         if stage.executable == "/usr/bin/true" {
             return
@@ -404,10 +406,17 @@ private final class HelperWorkflowExecutor {
         try throwIfCancelled()
 
         guard process.terminationStatus == 0 else {
+            var description = "Polecenie \(stage.executable) zakończyło się błędem (kod \(process.terminationStatus))."
+            if let lastLine = lastStageOutputLine {
+                description += " Ostatni komunikat: \(lastLine)"
+                if isRemovableVolumePermissionFailure(lastLine) {
+                    description += " System zablokował dostęp procesu uprzywilejowanego do woluminu wymiennego (TCC/System Policy). Upewnij się, że aplikacja i helper są podpisane tym samym Team ID i zainstalowane od nowa."
+                }
+            }
             throw HelperExecutionError.failed(
                 stage: stage.key,
                 exitCode: process.terminationStatus,
-                description: "Polecenie \(stage.executable) zakończyło się błędem (kod \(process.terminationStatus))."
+                description: description
             )
         }
     }
@@ -415,6 +424,7 @@ private final class HelperWorkflowExecutor {
     private func handleOutputLine(_ rawLine: String, stage: WorkflowStage) {
         let line = rawLine.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !line.isEmpty else { return }
+        lastStageOutputLine = line
 
         var percent = latestPercent
         if stage.parseToolPercent, let parsed = extractPercent(from: line) {
@@ -439,6 +449,13 @@ private final class HelperWorkflowExecutor {
             timestamp: Date()
         )
         sendEvent(event)
+    }
+
+    private func isRemovableVolumePermissionFailure(_ line: String) -> Bool {
+        let lowered = line.lowercased()
+        return lowered.contains("operation not permitted") ||
+        lowered.contains("operacja nie jest dozwolona") ||
+        lowered.contains("could not validate sizes - operacja nie jest dozwolona")
     }
 
     private func extractPercent(from line: String) -> Double? {

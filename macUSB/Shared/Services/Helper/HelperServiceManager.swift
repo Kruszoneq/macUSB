@@ -12,6 +12,12 @@ final class HelperServiceManager {
     static let debugLegacyTerminalFallbackKey = "Debug.UseLegacyTerminalFlow"
     #endif
 
+    private typealias EnsureCompletion = (Bool, String?) -> Void
+    private let coordinationQueue = DispatchQueue(label: "macUSB.helper.registration", qos: .userInitiated)
+    private var ensureInProgress = false
+    private var pendingEnsureCompletions: [EnsureCompletion] = []
+    private var pendingEnsureInteractive = false
+
     private init() {}
 
     func bootstrapIfNeededAtStartup(completion: @escaping (Bool) -> Void) {
@@ -22,7 +28,7 @@ final class HelperServiceManager {
         }
         #endif
 
-        ensureReadyForPrivilegedWork(interactive: true) { ready, _ in
+        ensureReadyForPrivilegedWork(interactive: false) { ready, _ in
             completion(ready)
         }
     }
@@ -44,30 +50,36 @@ final class HelperServiceManager {
     }
 
     func repairRegistrationFromMenu() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            let service = SMAppService.daemon(plistName: Self.daemonPlistName)
-            do {
-                if service.status != .notRegistered {
-                    try service.unregister()
-                }
-                try service.register()
-                DispatchQueue.main.async {
-                    self.handlePostRegistrationStatus(interactive: true) { ready, message in
-                        self.presentOperationSummary(success: ready, message: message ?? String(localized: "Naprawa helpera zakończona"))
-                    }
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    self.presentOperationSummary(success: false, message: error.localizedDescription)
-                }
-            }
+        ensureReadyForPrivilegedWork(interactive: true) { ready, message in
+            self.presentOperationSummary(
+                success: ready,
+                message: message ?? String(localized: "Naprawa helpera zakończona")
+            )
         }
     }
 
     func unregisterFromMenu() {
-        DispatchQueue.global(qos: .userInitiated).async {
+        coordinationQueue.async {
+            if self.ensureInProgress {
+                DispatchQueue.main.async {
+                    self.presentOperationSummary(
+                        success: false,
+                        message: String(localized: "Trwa inna operacja helpera. Poczekaj chwilę i spróbuj ponownie.")
+                    )
+                }
+                return
+            }
+
             let service = SMAppService.daemon(plistName: Self.daemonPlistName)
+
             do {
+                if service.status == .notRegistered || service.status == .notFound {
+                    DispatchQueue.main.async {
+                        self.presentOperationSummary(success: true, message: String(localized: "Helper jest już usunięty"))
+                    }
+                    return
+                }
+
                 try service.unregister()
                 DispatchQueue.main.async {
                     self.presentOperationSummary(success: true, message: String(localized: "Helper został usunięty"))
@@ -90,35 +102,91 @@ final class HelperServiceManager {
             return
         }
 
-        let service = SMAppService.daemon(plistName: Self.daemonPlistName)
+        queueEnsureRequest(interactive: interactive, completion: completion)
+    }
 
+    private func queueEnsureRequest(interactive: Bool, completion: @escaping EnsureCompletion) {
+        coordinationQueue.async {
+            self.pendingEnsureCompletions.append(completion)
+            self.pendingEnsureInteractive = self.pendingEnsureInteractive || interactive
+
+            guard !self.ensureInProgress else {
+                AppLogging.info(
+                    "Wykryto równoległe żądanie gotowości helpera - dołączam do trwającej operacji.",
+                    category: "Installation"
+                )
+                return
+            }
+
+            self.ensureInProgress = true
+            let runInteractive = self.pendingEnsureInteractive
+            self.runEnsureFlow(interactive: runInteractive)
+        }
+    }
+
+    private func runEnsureFlow(interactive: Bool) {
+        let service = SMAppService.daemon(plistName: Self.daemonPlistName)
         switch service.status {
         case .enabled:
-            validateEnabledServiceHealth(interactive: interactive, allowRecovery: true, completion: completion)
+            validateEnabledServiceHealth(interactive: interactive, allowRecovery: true) { ready, message in
+                self.finalizeEnsureRequests(ready: ready, message: message)
+            }
 
         case .requiresApproval:
             if interactive {
-                presentApprovalRequiredAlert()
+                DispatchQueue.main.async {
+                    self.presentApprovalRequiredAlert()
+                }
             }
-            completion(false, String(localized: "Helper wymaga zatwierdzenia w Ustawieniach systemowych."))
+            finalizeEnsureRequests(
+                ready: false,
+                message: String(localized: "Helper wymaga zatwierdzenia w Ustawieniach systemowych.")
+            )
 
         case .notRegistered, .notFound:
-            DispatchQueue.global(qos: .userInitiated).async {
-                do {
-                    try service.register()
-                    DispatchQueue.main.async {
-                        self.handlePostRegistrationStatus(interactive: interactive, completion: completion)
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        self.presentRegistrationErrorAlertIfNeeded(error: error, interactive: interactive)
-                        completion(false, error.localizedDescription)
-                    }
-                }
+            registerAndValidate(interactive: interactive) { ready, message in
+                self.finalizeEnsureRequests(ready: ready, message: message)
             }
 
         @unknown default:
-            completion(false, String(localized: "Nieznany status helpera."))
+            finalizeEnsureRequests(ready: false, message: String(localized: "Nieznany status helpera."))
+        }
+    }
+
+    private func registerAndValidate(interactive: Bool, completion: @escaping EnsureCompletion) {
+        let service = SMAppService.daemon(plistName: Self.daemonPlistName)
+        do {
+            try service.register()
+            handlePostRegistrationStatus(interactive: interactive, completion: completion)
+        } catch {
+            if service.status == .enabled {
+                AppLogging.info(
+                    "register() zwrócił błąd, ale helper jest oznaczony jako enabled. Kontynuuję walidację.",
+                    category: "Installation"
+                )
+                handlePostRegistrationStatus(interactive: interactive, completion: completion)
+                return
+            }
+
+            DispatchQueue.main.async {
+                self.presentRegistrationErrorAlertIfNeeded(error: error, interactive: interactive)
+            }
+            completion(false, error.localizedDescription)
+        }
+    }
+
+    private func finalizeEnsureRequests(ready: Bool, message: String?) {
+        coordinationQueue.async {
+            let completions = self.pendingEnsureCompletions
+            self.pendingEnsureCompletions.removeAll()
+            self.pendingEnsureInteractive = false
+            self.ensureInProgress = false
+
+            DispatchQueue.main.async {
+                completions.forEach { callback in
+                    callback(ready, message)
+                }
+            }
         }
     }
 
@@ -155,11 +223,26 @@ final class HelperServiceManager {
                 return
             }
 
-            self.recoverRegistrationAfterHealthFailure(
-                interactive: interactive,
-                healthDetails: details,
-                completion: completion
+            AppLogging.error(
+                "Weryfikacja health helpera nieudana: \(details). Próba resetu połączenia XPC.",
+                category: "Installation"
             )
+            PrivilegedOperationClient.shared.resetConnectionForRecovery()
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                PrivilegedOperationClient.shared.queryHealth { retryOK, retryDetails in
+                    if retryOK {
+                        completion(true, nil)
+                        return
+                    }
+
+                    self.recoverRegistrationAfterHealthFailure(
+                        interactive: interactive,
+                        healthDetails: "\(details). Po resecie XPC: \(retryDetails)",
+                        completion: completion
+                    )
+                }
+            }
         }
     }
 
@@ -168,39 +251,49 @@ final class HelperServiceManager {
         healthDetails: String,
         completion: @escaping (Bool, String?) -> Void
     ) {
-        DispatchQueue.global(qos: .userInitiated).async {
+        coordinationQueue.async {
             let service = SMAppService.daemon(plistName: Self.daemonPlistName)
             do {
-                if service.status != .notRegistered {
+                if service.status == .enabled {
                     try service.unregister()
+                    Thread.sleep(forTimeInterval: 0.25)
                 }
+
                 try service.register()
-                DispatchQueue.main.async {
-                    self.handlePostRegistrationStatus(interactive: interactive) { ready, message in
-                        guard ready else {
-                            completion(false, message)
-                            return
-                        }
-                        PrivilegedOperationClient.shared.queryHealth { recovered, recoveredDetails in
-                            if recovered {
-                                completion(true, nil)
-                            } else {
-                                completion(
-                                    false,
-                                    "Helper został ponownie zarejestrowany, ale XPC nadal nie działa: \(recoveredDetails). Poprzedni błąd: \(healthDetails)"
-                                )
-                            }
+                self.handlePostRegistrationStatus(interactive: interactive) { ready, message in
+                    guard ready else {
+                        completion(false, message)
+                        return
+                    }
+
+                    PrivilegedOperationClient.shared.queryHealth { recovered, recoveredDetails in
+                        if recovered {
+                            completion(true, nil)
+                        } else {
+                            completion(
+                                false,
+                                "Helper został ponownie zarejestrowany, ale XPC nadal nie działa: \(recoveredDetails). Poprzedni błąd: \(healthDetails)"
+                            )
                         }
                     }
                 }
             } catch {
+                if service.status == .enabled {
+                    AppLogging.info(
+                        "Ponowna rejestracja helpera zwróciła błąd, ale status to enabled. Kontynuuję walidację.",
+                        category: "Installation"
+                    )
+                    self.handlePostRegistrationStatus(interactive: interactive, completion: completion)
+                    return
+                }
+
                 DispatchQueue.main.async {
                     self.presentRegistrationErrorAlertIfNeeded(error: error, interactive: interactive)
-                    completion(
-                        false,
-                        "Helper nie odpowiada przez XPC (\(healthDetails)). Nie udało się ponownie zarejestrować helpera: \(error.localizedDescription)"
-                    )
                 }
+                completion(
+                    false,
+                    "Helper nie odpowiada przez XPC (\(healthDetails)). Nie udało się ponownie zarejestrować helpera: \(error.localizedDescription)"
+                )
             }
         }
     }

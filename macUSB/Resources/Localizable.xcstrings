@@ -3625,6 +3625,9 @@
         }
       }
     },
+    "Helper jest już usunięty" : {
+
+    },
     "Helper nie jest gotowy do pracy." : {
 
     },
@@ -7980,6 +7983,9 @@
           }
         }
       }
+    },
+    "Trwa inna operacja helpera. Poczekaj chwilę i spróbuj ponownie." : {
+
     },
     "Trwa kopiowanie plików, proszę czekać." : {
       "localizations" : {
