@@ -793,6 +793,81 @@ Ponizsze kroki sa recepta migracji z wersji terminal-only do obecnego etapu.
 
 ---
 
+## Delta vs `developing` (checklista merge/reimplementacji)
+Ponizsza lista to rzeczy wykryte przez porownanie `developing...feature/helper`, ktore latwo pominac przy przyszlej migracji.
+To jest lista "co jeszcze dopilnowac", niezaleznie od glownych sekcji opisanych wyzej.
+
+1. `macUSB/Features/Welcome/WelcomeView.swift`
+- `onAppear` nie uruchamia juz od razu samego flow powiadomien.
+- Najpierw wywolywane jest:
+  - `HelperServiceManager.shared.bootstrapIfNeededAtStartup { _ in ... }`
+- Dopiero po tym uruchamiane jest:
+  - `NotificationPermissionManager.shared.handleStartupFlowIfNeeded()`
+- Powod: startup helper readiness ma byc czescia standardowego wejscia do aplikacji, a nie tylko menu/instalacji.
+
+2. `macUSB/App/macUSBApp.swift`
+- `AppDelegate.applicationDidFinishLaunching` ma opoznione (~0.4s) wywolanie startup bootstrap helpera z logiem:
+  - `Startup helper readiness: ready/not_ready` (kategoria `Installation`).
+- W menu dodano pozycje:
+  - `Status helpera`
+  - `Napraw helpera`
+  - `Usun helpera`
+- To sa operacyjne wejscia diagnostyczne i naprawcze, wymagane do szybkiej obslugi problemow z rejestracja/XPC.
+
+3. `macUSB/Features/Installation/CreatorLogic.swift`
+- W `performImmediateCancellation()` najpierw idzie:
+  - `cancelHelperWorkflowIfNeeded { ... }`
+- Dopiero potem sprzatanie (`unmountDMG`, reset flag UI).
+- To zapobiega sytuacji, w ktorej UI konczy cancel, a helper dalej wykonuje workflow.
+
+4. `macUSB/Features/Installation/UniversalInstallationView.swift`
+- Flow startu przechodzi przez `startCreationProcessEntry()` (helper path + debug kill-switch fallback).
+- Dodane i utrzymywane sa stany UI dla helpera:
+  - `helperProgressPercent`
+  - `helperStageTitle`
+  - `helperStatusText`
+  - `activeHelperWorkflowID`
+- Fallback tekstow, gdy etap/status sa jeszcze puste:
+  - etap: `Rozpoczynanie...`
+  - status: `Nawiazywanie polaczenia XPC...`
+
+5. `macUSB/Resources/Localizable.xcstrings`
+- Duzy pakiet nowych kluczy lokalizacyjnych helpera (status, naprawa, approval, bledy XPC, panel naprawy, nowe komunikaty etapu/statusu).
+- Przy przenoszeniu zmian trzeba przeniesc komplet kluczy, inaczej UI bedzie mialo luki lub fallbacki.
+
+6. `.github/CONTEXT.md`
+- Dokument kontekstowy zostal zaktualizowany z modelu "Terminal + sudo" na "SMAppService + LaunchDaemon + XPC".
+- To wazne operacyjnie: nowe sesje Codex, ktore czytaja tylko CONTEXT, od razu dostaja poprawny model systemu.
+
+7. `.gitignore`
+- Dodany wpis:
+  - `/build/`
+- Cel: nie zasmiecac Gita lokalnymi artefaktami builda podczas iteracji helpera.
+
+8. `macUSB.xcodeproj/xcuserdata/.../xcschememanagement.plist`
+- Dodany wpis `macUSBHelper.xcscheme_^#shared#^_`.
+- To zmiana user-specific (porzadek schematow), nie jest krytyczna funkcjonalnie dla helpera.
+- Przy czystym odtworzeniu mozna to pominac; kluczowe sa sekcje z `project.pbxproj`.
+
+9. `macUSB.xcodeproj/project.pbxproj` (uzupelnienie do glownej sekcji konfiguracji)
+- Poza oczywistymi target/build phase trzeba dopilnowac tez:
+  - przejscia app entitlements z jednego pliku na rozdzielone:
+    - `macUSB/macUSB.debug.entitlements`
+    - `macUSB/macUSB.release.entitlements`
+  - usuniecia recznie ustawionego profilu provisioning dla app Release (`PROVISIONING_PROFILE_SPECIFIER = ""`),
+  - ustawien helpera Release na `Manual + Developer ID Application`,
+  - ustawien helpera Debug na `Automatic + Apple Development`.
+- Te punkty byly zrodlem dawnych konfliktow podpisu i niestabilnosci helpera.
+
+10. Zakres porownania, ktory warto odtworzyc przy kolejnych migracjach
+- Referencyjny diff:
+  - `git diff --name-status developing...feature/helper`
+- Referencyjna lista commitow:
+  - `git log --oneline --no-merges developing..feature/helper`
+- Pozwala to szybko sprawdzic, czy "stan helpera" zostal odtworzony 1:1.
+
+---
+
 ## Znane problemy (otwarte)
 1. Tiger/PPC (`asr`) moze nadal failowac na etapie walidacji (`Operation not permitted` podczas asr validation).
 2. To jest osobny problem od rejestracji helpera/XPC.
