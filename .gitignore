@@ -1,4 +1,5 @@
 # Xcode project and user data
+/build/
 */build/
 *.os
 *.xcodeproj/project.xcworkspace/

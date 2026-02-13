@@ -415,9 +415,9 @@ struct UniversalInstallationView: View {
                             HStack(spacing: 15) {
                                 Image(systemName: "lock.shield.fill").font(.largeTitle).foregroundColor(.accentColor)
                                 VStack(alignment: .leading, spacing: 5) {
-                                    Text(helperStageTitle.isEmpty ? String(localized: "Trwa tworzenie instalatora") : helperStageTitle)
+                                    Text(helperStageTitle.isEmpty ? String(localized: "Rozpoczynanie...") : helperStageTitle)
                                         .font(.headline)
-                                    Text(helperStatusText.isEmpty ? String(localized: "Helper wykonuje operacje uprzywilejowane.") : helperStatusText)
+                                    Text(helperStatusText.isEmpty ? String(localized: "Nawiązywanie połączenia XPC...") : helperStatusText)
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }

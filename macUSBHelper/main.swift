@@ -92,7 +92,6 @@ private final class HelperWorkflowExecutor {
     private let stateQueue = DispatchQueue(label: "macUSB.helper.executor.state")
     private var activeProcess: Process?
     private var latestPercent: Double = 0
-    private var ppcMountedSourceMountPoint: String?
 
     init(request: HelperWorkflowRequestPayload, workflowID: String, sendEvent: @escaping (HelperProgressEventPayload) -> Void) {
         self.request = request
@@ -115,10 +114,6 @@ private final class HelperWorkflowExecutor {
     }
 
     func run() -> HelperWorkflowResultPayload {
-        defer {
-            cleanupPPCMountedSourceIfNeeded()
-        }
-
         do {
             let stages = try buildStages()
             for stage in stages {
@@ -259,59 +254,18 @@ private final class HelperWorkflowExecutor {
                 )
             )
 
-            var ppcRestoreSource = request.sourcePath
-            if !request.sourcePath.hasPrefix("/Volumes/") {
-                let mountPoint = "/Volumes/macusb_ppc_source_\(workflowID)"
-                ppcMountedSourceMountPoint = mountPoint
-
-                stages.append(
-                    WorkflowStage(
-                        key: "ppc_source_prepare",
-                        title: "Przygotowanie źródła PPC",
-                        startPercent: 35,
-                        endPercent: 38,
-                        executable: "/bin/mkdir",
-                        arguments: ["-p", mountPoint],
-                        parseToolPercent: false
-                    )
-                )
-                stages.append(
-                    WorkflowStage(
-                        key: "ppc_source_attach",
-                        title: "Montowanie obrazu źródłowego PPC",
-                        startPercent: 38,
-                        endPercent: 44,
-                        executable: "/usr/bin/hdiutil",
-                        arguments: ["attach", request.sourcePath, "-readonly", "-nobrowse", "-mountpoint", mountPoint],
-                        parseToolPercent: false
-                    )
-                )
-                ppcRestoreSource = mountPoint
-            }
+            let ppcRestoreSource = resolvePPCSourceArgument(from: request.sourcePath)
             stages.append(
                 WorkflowStage(
                     key: "ppc_restore",
                     title: "Przywracanie obrazu na nośnik PPC",
-                    startPercent: ppcMountedSourceMountPoint == nil ? 35 : 44,
+                    startPercent: 35,
                     endPercent: 96,
                     executable: "/usr/sbin/asr",
                     arguments: ["restore", "--source", ppcRestoreSource, "--target", "/Volumes/PPC", "--erase", "--noverify", "--noprompt", "--verbose"],
                     parseToolPercent: true
                 )
             )
-            if let mountPoint = ppcMountedSourceMountPoint {
-                stages.append(
-                    WorkflowStage(
-                        key: "ppc_source_detach",
-                        title: "Odmontowywanie źródła PPC",
-                        startPercent: 96,
-                        endPercent: 98,
-                        executable: "/usr/bin/hdiutil",
-                        arguments: ["detach", mountPoint, "-force"],
-                        parseToolPercent: false
-                    )
-                )
-            }
 
         case .standard:
             let createinstallmediaPath = (request.sourcePath as NSString).appendingPathComponent("Contents/Resources/createinstallmedia")
@@ -456,10 +410,6 @@ private final class HelperWorkflowExecutor {
                 description: "Polecenie \(stage.executable) zakończyło się błędem (kod \(process.terminationStatus))."
             )
         }
-
-        if stage.key == "ppc_source_detach" {
-            ppcMountedSourceMountPoint = nil
-        }
     }
 
     private func handleOutputLine(_ rawLine: String, stage: WorkflowStage) {
@@ -514,23 +464,52 @@ private final class HelperWorkflowExecutor {
         return String(bsdName[range])
     }
 
+    private func resolvePPCSourceArgument(from sourcePath: String) -> String {
+        guard sourcePath.hasPrefix("/Volumes/") else {
+            return sourcePath
+        }
+
+        guard let devicePath = resolveDevicePathForMountedVolume(sourcePath) else {
+            return sourcePath
+        }
+
+        return devicePath
+    }
+
+    private func resolveDevicePathForMountedVolume(_ volumePath: String) -> String? {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/sbin/diskutil")
+        process.arguments = ["info", "-plist", volumePath]
+        let stdoutPipe = Pipe()
+        process.standardOutput = stdoutPipe
+        process.standardError = Pipe()
+
+        do {
+            try process.run()
+        } catch {
+            return nil
+        }
+        process.waitUntilExit()
+
+        guard process.terminationStatus == 0 else {
+            return nil
+        }
+
+        let data = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
+        guard let plist = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any],
+              let deviceIdentifier = plist["DeviceIdentifier"] as? String,
+              deviceIdentifier.hasPrefix("disk") else {
+            return nil
+        }
+
+        return "/dev/\(deviceIdentifier)"
+    }
+
     private func throwIfCancelled() throws {
         let cancelled = stateQueue.sync { isCancelled }
         if cancelled {
             throw HelperExecutionError.cancelled
         }
-    }
-
-    private func cleanupPPCMountedSourceIfNeeded() {
-        guard let mountPoint = ppcMountedSourceMountPoint else { return }
-
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
-        process.arguments = ["detach", mountPoint, "-force"]
-        try? process.run()
-        process.waitUntilExit()
-
-        ppcMountedSourceMountPoint = nil
     }
 }
 
@@ -602,7 +581,10 @@ private final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCPr
     }
 
     func queryHealth(_ reply: @escaping (Bool, NSString) -> Void) {
-        reply(true, "Helper odpowiada poprawnie")
+        let uid = getuid()
+        let euid = geteuid()
+        let pid = getpid()
+        reply(true, "Helper odpowiada poprawnie (uid=\(uid), euid=\(euid), pid=\(pid))" as NSString)
     }
 
     private func sendProgress(_ event: HelperProgressEventPayload) {

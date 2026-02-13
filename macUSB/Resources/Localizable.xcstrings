@@ -2478,6 +2478,9 @@
         }
       }
     },
+    "DEBUG" : {
+
+    },
     "Deutsch" : {
       "localizations" : {
         "de" : {
@@ -3628,9 +3631,6 @@
     "Helper uruchamia pierwszy etap operacji uprzywilejowanych..." : {
 
     },
-    "Helper wykonuje operacje uprzywilejowane." : {
-
-    },
     "Helper wymaga zatwierdzenia w Ustawieniach systemowych." : {
 
     },
@@ -4167,6 +4167,9 @@
 
     },
     "Lokalizacja aplikacji: poza /Applications" : {
+
+    },
+    "Lokalizacja aplikacji: środowisko Xcode (bypass DEBUG)" : {
 
     },
     "Mac OS X Tiger 10.4 (Multi DVD)" : {
@@ -6766,7 +6769,6 @@
       }
     },
     "Przejdź do podsumowania (Big Sur) (2s delay)" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6872,7 +6874,6 @@
       }
     },
     "Przejdź do podsumowania (Tiger) (2s delay)" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8031,9 +8032,6 @@
           }
         }
       }
-    },
-    "Trwa tworzenie instalatora" : {
-
     },
     "Tworzenie bootowalnych dysków USB z systemem macOS\noraz OS X nigdy nie było takie proste!" : {
       "localizations" : {

@@ -42,6 +42,19 @@ extension UniversalInstallationView {
         helperStageTitle = String(localized: "Przygotowanie")
         helperStatusText = String(localized: "Sprawdzanie gotowości helpera...")
 
+        do {
+            try preflightTargetVolumeWriteAccess(drive.url)
+        } catch {
+            withAnimation {
+                isProcessing = false
+                isTerminalWorking = false
+                isTabLocked = false
+                startUSBMonitoring()
+                errorMessage = error.localizedDescription
+            }
+            return
+        }
+
         HelperServiceManager.shared.ensureReadyForPrivilegedWork { ready, failureReason in
             guard ready else {
                 withAnimation {
@@ -202,18 +215,18 @@ extension UniversalInstallationView {
             let mountedVolumeSource = sourceAppURL.deletingLastPathComponent().path
             let restoreSource: String
 
-            if mountedVolumeSource.hasPrefix("/Volumes/"),
-               fileManager.fileExists(atPath: mountedVolumeSource) {
-                restoreSource = mountedVolumeSource
-                log("PPC helper strategy: asr restore from mounted source -> /Volumes/PPC", category: "Installation")
-            } else if let imageURL = originalImageURL, fileManager.fileExists(atPath: imageURL.path) {
+            if let imageURL = originalImageURL, fileManager.fileExists(atPath: imageURL.path) {
                 let stagedImageURL = tempWorkURL.appendingPathComponent("PPC_\(imageURL.lastPathComponent)")
                 if fileManager.fileExists(atPath: stagedImageURL.path) {
                     try fileManager.removeItem(at: stagedImageURL)
                 }
                 try fileManager.copyItem(at: imageURL, to: stagedImageURL)
                 restoreSource = stagedImageURL.path
-                log("PPC helper strategy: asr restore from staged image fallback -> /Volumes/PPC", category: "Installation")
+                log("PPC helper strategy: asr restore from staged image -> /Volumes/PPC", category: "Installation")
+            } else if mountedVolumeSource.hasPrefix("/Volumes/"),
+                      fileManager.fileExists(atPath: mountedVolumeSource) {
+                restoreSource = mountedVolumeSource
+                log("PPC helper strategy: asr restore from mounted source fallback -> /Volumes/PPC", category: "Installation")
             } else {
                 throw NSError(
                     domain: "macUSB",
@@ -294,6 +307,33 @@ extension UniversalInstallationView {
             requiresApplicationPathArg: isLegacySystem || isSierra,
             postInstallSourceAppPath: isCatalina ? sourceAppURL.resolvingSymlinksInPath().path : nil
         )
+    }
+
+    private func preflightTargetVolumeWriteAccess(_ volumeURL: URL) throws {
+        guard volumeURL.path.hasPrefix("/Volumes/") else {
+            return
+        }
+
+        let probeURL = volumeURL.appendingPathComponent(".macusb-write-probe-\(UUID().uuidString)")
+
+        do {
+            try Data("macUSB".utf8).write(to: probeURL, options: .atomic)
+            try? FileManager.default.removeItem(at: probeURL)
+        } catch {
+            let nsError = error as NSError
+            let underlyingCode = (nsError.userInfo[NSUnderlyingErrorKey] as? NSError)?.code
+            let code = underlyingCode ?? nsError.code
+            if code == Int(EPERM) || code == Int(EACCES) {
+                throw NSError(
+                    domain: "macUSB",
+                    code: code,
+                    userInfo: [
+                        NSLocalizedDescriptionKey: "Brak uprawnien do zapisu na wybranym nosniku USB. Zezwol aplikacji macUSB na dostep do Woluminow wymiennych w Ustawieniach systemowych > Prywatnosc i ochrona, a nastepnie sprobuj ponownie."
+                    ]
+                )
+            }
+            throw error
+        }
     }
 
     func cancelHelperWorkflowIfNeeded(completion: @escaping () -> Void) {
