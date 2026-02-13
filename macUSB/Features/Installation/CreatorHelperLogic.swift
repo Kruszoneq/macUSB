@@ -143,6 +143,7 @@ extension UniversalInstallationView {
 
     private func prepareHelperWorkflowRequest(for drive: USBDrive) throws -> HelperWorkflowRequestPayload {
         let fileManager = FileManager.default
+        let requesterUID = Int(getuid())
 
         if !fileManager.fileExists(atPath: tempWorkURL.path) {
             try fileManager.createDirectory(at: tempWorkURL, withIntermediateDirectories: true)
@@ -177,7 +178,8 @@ extension UniversalInstallationView {
                 needsPreformat: shouldPreformat,
                 isCatalina: false,
                 requiresApplicationPathArg: false,
-                postInstallSourceAppPath: nil
+                postInstallSourceAppPath: nil,
+                requesterUID: requesterUID
             )
         }
 
@@ -207,7 +209,8 @@ extension UniversalInstallationView {
                 needsPreformat: shouldPreformat,
                 isCatalina: false,
                 requiresApplicationPathArg: false,
-                postInstallSourceAppPath: nil
+                postInstallSourceAppPath: nil,
+                requesterUID: requesterUID
             )
         }
 
@@ -247,7 +250,8 @@ extension UniversalInstallationView {
                 needsPreformat: false,
                 isCatalina: false,
                 requiresApplicationPathArg: false,
-                postInstallSourceAppPath: nil
+                postInstallSourceAppPath: nil,
+                requesterUID: requesterUID
             )
         }
 
@@ -305,7 +309,8 @@ extension UniversalInstallationView {
             needsPreformat: shouldPreformat,
             isCatalina: isCatalina,
             requiresApplicationPathArg: isLegacySystem || isSierra,
-            postInstallSourceAppPath: isCatalina ? sourceAppURL.resolvingSymlinksInPath().path : nil
+            postInstallSourceAppPath: isCatalina ? sourceAppURL.resolvingSymlinksInPath().path : nil,
+            requesterUID: requesterUID
         )
     }
 

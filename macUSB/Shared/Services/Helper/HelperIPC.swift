@@ -18,6 +18,7 @@ struct HelperWorkflowRequestPayload: Codable {
     let isCatalina: Bool
     let requiresApplicationPathArg: Bool
     let postInstallSourceAppPath: String?
+    let requesterUID: Int?
 }
 
 struct HelperProgressEventPayload: Codable {

@@ -19,6 +19,7 @@ struct HelperWorkflowRequestPayload: Codable {
     let isCatalina: Bool
     let requiresApplicationPathArg: Bool
     let postInstallSourceAppPath: String?
+    let requesterUID: Int?
 }
 
 struct HelperProgressEventPayload: Codable {
@@ -353,8 +354,13 @@ private final class HelperWorkflowExecutor {
         }
 
         let process = Process()
-        process.executableURL = URL(fileURLWithPath: stage.executable)
-        process.arguments = stage.arguments
+        if let requesterUID = request.requesterUID, requesterUID > 0 {
+            process.executableURL = URL(fileURLWithPath: "/bin/launchctl")
+            process.arguments = ["asuser", "\(requesterUID)", stage.executable] + stage.arguments
+        } else {
+            process.executableURL = URL(fileURLWithPath: stage.executable)
+            process.arguments = stage.arguments
+        }
 
         let pipe = Pipe()
         process.standardOutput = pipe

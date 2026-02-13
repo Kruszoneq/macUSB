@@ -1698,6 +1698,9 @@
         }
       }
     },
+    "Bieżący przebieg operacji" : {
+
+    },
     "Błąd analizy" : {
       "localizations" : {
         "de" : {
@@ -2477,9 +2480,6 @@
           }
         }
       }
-    },
-    "DEBUG" : {
-
     },
     "Deutsch" : {
       "localizations" : {
@@ -4172,9 +4172,6 @@
     "Lokalizacja aplikacji: poza /Applications" : {
 
     },
-    "Lokalizacja aplikacji: środowisko Xcode (bypass DEBUG)" : {
-
-    },
     "Mac OS X Tiger 10.4 (Multi DVD)" : {
       "localizations" : {
         "de" : {
@@ -4490,7 +4487,19 @@
     "Napraw helpera" : {
 
     },
+    "Naprawa helpera" : {
+
+    },
     "Naprawa helpera zakończona" : {
+
+    },
+    "Naprawa helpera zakończona błędem" : {
+
+    },
+    "Naprawa helpera zakończona błędem." : {
+
+    },
+    "Naprawa helpera zakończona pomyślnie." : {
 
     },
     "Narzędzia" : {
@@ -6772,6 +6781,7 @@
       }
     },
     "Przejdź do podsumowania (Big Sur) (2s delay)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6877,6 +6887,7 @@
       }
     },
     "Przejdź do podsumowania (Tiger) (2s delay)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7138,6 +7149,9 @@
           }
         }
       }
+    },
+    "Przygotowanie..." : {
+
     },
     "Przygotowywanie operacji..." : {
 
@@ -8047,6 +8061,9 @@
           }
         }
       }
+    },
+    "Trwa naprawa helpera..." : {
+
     },
     "Tworzenie bootowalnych dysków USB z systemem macOS\noraz OS X nigdy nie było takie proste!" : {
       "localizations" : {
