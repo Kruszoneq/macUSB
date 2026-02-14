@@ -35,6 +35,11 @@ final class HelperServiceManager: NSObject {
     private var repairProgressSink: ((String) -> Void)?
     private let statusHealthTimeout: TimeInterval = 1.6
 
+    private struct HelperStatusSnapshot {
+        let isHealthy: Bool
+        let detailedText: String
+    }
+
     private override init() {
         super.init()
     }
@@ -68,17 +73,21 @@ final class HelperServiceManager: NSObject {
                 self.presentStatusCheckingPanelIfNeeded()
             }
 
-            self.evaluateStatus { statusText in
+            self.evaluateStatus { snapshot in
                 DispatchQueue.main.async {
                     self.dismissStatusCheckingPanelIfNeeded()
 
-                    let alert = NSAlert()
-                    alert.icon = NSApp.applicationIconImage
-                    alert.alertStyle = .informational
-                    alert.messageText = String(localized: "Status helpera")
-                    alert.informativeText = statusText
-                    alert.addButton(withTitle: String(localized: "OK"))
-                    self.presentAlert(alert)
+                    if snapshot.isHealthy {
+                        self.presentHealthyStatusAlert(detailsText: snapshot.detailedText)
+                    } else {
+                        let alert = NSAlert()
+                        alert.icon = NSApp.applicationIconImage
+                        alert.alertStyle = .informational
+                        alert.messageText = String(localized: "Status helpera")
+                        alert.informativeText = snapshot.detailedText
+                        alert.addButton(withTitle: String(localized: "OK"))
+                        self.presentAlert(alert)
+                    }
 
                     self.coordinationQueue.async {
                         self.statusCheckInProgress = false
@@ -424,31 +433,82 @@ final class HelperServiceManager: NSObject {
         }
     }
 
-    private func evaluateStatus(completion: @escaping (String) -> Void) {
-        var lines: [String] = []
+    private func evaluateStatus(completion: @escaping (HelperStatusSnapshot) -> Void) {
+        let serviceStatus = SMAppService.daemon(plistName: Self.daemonPlistName).status
+        let serviceStatusLine = "Status usługi: \(statusDescription(serviceStatus))"
+        let serviceHealthy = serviceStatus == .enabled
 
-        lines.append("Status usługi: \(statusDescription(SMAppService.daemon(plistName: Self.daemonPlistName).status))")
-        lines.append("Mach service: \(Self.machServiceName)")
-
+        let locationLine: String
+        let locationHealthy: Bool
         if isAppInstalledInApplications() {
-            lines.append(String(localized: "Lokalizacja aplikacji: /Applications (OK)"))
+            locationLine = String(localized: "Lokalizacja aplikacji: /Applications (OK)")
+            locationHealthy = true
         } else {
             #if DEBUG
             if Self.isRunningFromXcodeDevelopmentBuild() {
-                lines.append(String(localized: "Lokalizacja aplikacji: środowisko Xcode (bypass DEBUG)"))
+                locationLine = String(localized: "Lokalizacja aplikacji: środowisko Xcode (bypass DEBUG)")
+                locationHealthy = true
             } else {
-                lines.append(String(localized: "Lokalizacja aplikacji: poza /Applications"))
+                locationLine = String(localized: "Lokalizacja aplikacji: poza /Applications")
+                locationHealthy = false
             }
             #else
-            lines.append(String(localized: "Lokalizacja aplikacji: poza /Applications"))
+            locationLine = String(localized: "Lokalizacja aplikacji: poza /Applications")
+            locationHealthy = false
             #endif
         }
 
         PrivilegedOperationClient.shared.queryHealth(withTimeout: statusHealthTimeout) { ok, details in
-            lines.append("XPC health: \(ok ? "OK" : "BŁĄD")")
-            lines.append("Szczegóły: \(details)")
-            completion(lines.joined(separator: "\n"))
+            let lines: [String] = [
+                serviceStatusLine,
+                "Mach service: \(Self.machServiceName)",
+                locationLine,
+                "XPC health: \(ok ? "OK" : "BŁĄD")",
+                "Szczegóły: \(details)"
+            ]
+
+            let healthy = serviceHealthy && locationHealthy && ok
+            completion(
+                HelperStatusSnapshot(
+                    isHealthy: healthy,
+                    detailedText: lines.joined(separator: "\n")
+                )
+            )
         }
+    }
+
+    private func presentHealthyStatusAlert(detailsText: String) {
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .informational
+        alert.messageText = String(localized: "Status helpera")
+        alert.informativeText = String(localized: "Helper działa poprawnie")
+        alert.addButton(withTitle: String(localized: "OK"))
+        alert.addButton(withTitle: String(localized: "Wyświetl szczegóły"))
+
+        if let window = NSApp.keyWindow ?? NSApp.mainWindow {
+            alert.beginSheetModal(for: window) { response in
+                guard response == .alertSecondButtonReturn else { return }
+                DispatchQueue.main.async {
+                    self.presentStatusDetailsAlert(detailsText: detailsText)
+                }
+            }
+        } else {
+            let response = alert.runModal()
+            if response == .alertSecondButtonReturn {
+                presentStatusDetailsAlert(detailsText: detailsText)
+            }
+        }
+    }
+
+    private func presentStatusDetailsAlert(detailsText: String) {
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .informational
+        alert.messageText = String(localized: "Status helpera")
+        alert.informativeText = detailsText
+        alert.addButton(withTitle: String(localized: "OK"))
+        presentAlert(alert)
     }
 
     private func statusDescription(_ status: SMAppService.Status) -> String {
