@@ -618,7 +618,6 @@
 				INFOPLIST_FILE = macUSB/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = macUSB;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSAppleEventsUsageDescription = "macUSB needs to control Terminal to create your bootable drive safely.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025-2026 Krystian Pierz. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -675,7 +674,6 @@
 				INFOPLIST_FILE = macUSB/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = macUSB;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSAppleEventsUsageDescription = "macUSB needs to control Terminal to create your bootable drive safely.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025-2026 Krystian Pierz. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -7,12 +7,6 @@
 >
 > IMPORTANT RULE: **User-facing strings are authored in Polish by default.**
 > Polish is the source language for localization and is the canonical base for new UI text.
->
-> File naming note:
-> Recommended canonical name for this document is `DEVELOPMENT.md` (it covers architecture + implementation rules + operational runbook, not only architecture).
-> `ARCHITECTURE.md` is a secondary option, but it can be misleading because this file also contains process, diagnostics, and contributor conventions.
-> Practical migration path: keep a lightweight compatibility `CONTEXT.md` that points to `DEVELOPMENT.md` for AI/session bootstrapping.
-> If a community-facing contribution policy is needed, keep it separate in `CONTRIBUTING.md`.
 
 ## Table of Contents
 1. [Purpose and Scope](#purpose-and-scope)
@@ -121,7 +115,7 @@ Common status icons and their semantic colors:
 - In `SystemAnalysisView` success state, the app tries installer icons in this order: `Contents/Resources/ProductPageIcon.icns`, `Contents/Resources/InstallAssistant.icns`, then `Contents/Resources/Install Mac OS X.icns` (case-insensitive lookup). If none is found, fallback to `checkmark.circle.fill`.
 - In `UniversalInstallationView` system info panel, the app shows detected installer icon (`detectedSystemIcon`) next to the system name; if unavailable, fallback is `applelogo`.
 Frequently used SF Symbols in screens and menus include:
-- `info.circle.fill`, `doc.badge.plus`, `internaldrive`, `checkmark.circle.fill`, `xmark.circle.fill`, `xmark.octagon.fill`, `exclamationmark.triangle.fill`, `externaldrive.fill`, `externaldrive.badge.xmark`, `applelogo`, `gearshape.2`, `clock`, `lock.fill`, `hand.raised.fill`, `terminal.fill`, `arrow.right`, `arrow.right.circle.fill`, `arrow.counterclockwise`, `xmark.circle`, `xmark.circle.fill`, `globe.europe.africa.fill`, `cup.and.saucer`, `square.and.arrow.down`, `arrow.triangle.2.circlepath`, `globe`, `chevron.left.forwardslash.chevron.right`.
+- `info.circle.fill`, `doc.badge.plus`, `internaldrive`, `checkmark.circle.fill`, `xmark.circle.fill`, `xmark.octagon.fill`, `exclamationmark.triangle.fill`, `externaldrive.fill`, `externaldrive.badge.xmark`, `applelogo`, `gearshape.2`, `clock`, `lock.fill`, `arrow.right`, `arrow.right.circle.fill`, `arrow.counterclockwise`, `xmark.circle`, `xmark.circle.fill`, `globe.europe.africa.fill`, `cup.and.saucer`, `square.and.arrow.down`, `arrow.triangle.2.circlepath`, `globe`, `chevron.left.forwardslash.chevron.right`.
 
 Panels and informational blocks:
 - Most informational blocks are HStacks with icon left and text right.
@@ -229,7 +223,7 @@ Explicit unsupported case:
 ---
 
 ## 7. Installer Creation Flows
-Implemented in: `UniversalInstallationView` (UI) + `CreatorHelperLogic.swift` (primary helper path) + `CreatorLogic.swift` (legacy/debug fallback helpers)
+Implemented in: `UniversalInstallationView` (UI) + `CreatorHelperLogic.swift` (workflow orchestration) + `CreatorLogic.swift` (shared helper-only utilities)
 
 ### Standard Flow (createinstallmedia)
 Used for most modern macOS installers.
@@ -347,7 +341,7 @@ This chapter defines the privileged helper architecture as currently implemented
 
 ### 11.1 Why the helper exists
 - `macUSB` needs to run privileged operations (`diskutil`, `asr`, `createinstallmedia`, `xattr`, `ditto`, and selected cleanup steps) that cannot reliably run from a non-privileged app process.
-- In `Release`, installer creation is expected to run via helper (`SMAppService` + LaunchDaemon + XPC). Terminal fallback is allowed only behind a `DEBUG` kill-switch.
+- Installer creation runs via helper (`SMAppService` + LaunchDaemon + XPC) in both `Debug` and `Release`.
 - The helper encapsulates privileged execution while keeping the app process focused on UI/state and user interaction.
 
 ### 11.2 Core helper components and ownership
@@ -471,8 +465,7 @@ Current effective build configuration snapshot:
 - interruption/invalidation clears handlers and emits synthetic workflow failure with stage `xpc_connection`.
 
 ### 11.8 App-side request assembly (`CreatorHelperLogic`)
-- `startCreationProcessEntry()` chooses helper path by default.
-- Only in `DEBUG`, `Debug.UseLegacyTerminalFlow` can force old terminal path.
+- `startCreationProcessEntry()` always enters helper path.
 - Before helper start:
 - installation UI enters processing state and initializes progress (`Przygotowanie` / `Sprawdzanie gotowości helpera...`).
 - `preflightTargetVolumeWriteAccess` probes write access on `/Volumes/*`; EPERM/EACCES produces explicit TCC-style guidance error.
@@ -541,10 +534,29 @@ Current effective build configuration snapshot:
 
 ### 11.12 Non-negotiable helper invariants
 - Keep helper integration typed and centralized (do not introduce ad-hoc shell IPC paths).
-- Keep `Release` privileged execution on helper path; do not reintroduce terminal fallback.
+- Keep privileged execution on helper path in all configurations; do not reintroduce terminal fallback.
 - Preserve helper event fields (`stageTitle`, `statusText`, `percent`, `logLine`) and Polish user-facing messaging.
 - Keep helper status UX two-step in healthy state (`OK` primary + `Wyświetl szczegóły`).
 - Keep app bundle structure and plist placement exactly compatible with `SMAppService.daemon(plistName:)`.
+
+### 11.13 Operational Checklists
+Minimal runbook for day-to-day diagnostics and release safety:
+
+- Diagnostics quick-check:
+- Verify helper status from app menu (`Status helpera`): service enabled, location valid, `XPC health: OK`.
+- Export diagnostics logs and confirm `HelperService`, `HelperLiveLog`, and `Installation` categories are present.
+- For install failures, compare `failedStage`/`errorMessage` with helper stage stream and last tool output line.
+
+- Signing/entitlements quick-check:
+- App and helper must share the same Apple Team ID.
+- `Debug`: both targets signed with `Apple Development`.
+- `Release`: both targets signed with `Developer ID Application`, hardened runtime enabled.
+- Entitlements files used by targets must match build config (`*.debug.entitlements` vs `*.release.entitlements`).
+
+- Recovery/status quick-check:
+- If service is enabled but XPC fails: run `Napraw helpera` (it resets client connection and re-validates registration).
+- If status is `requiresApproval`: open system settings from helper alert and approve background item.
+- For unstable state during development: remove helper (`Usuń helpera`), relaunch app, then run repair/status check.
 
 ---
 
@@ -572,7 +584,7 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` — File/USB selection UI and navigation to install.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic; propagates/logs USB metadata (speed, partition scheme, filesystem format, `needsFormatting`) and exposes `selectedDriveForInstallation` (PPC override of formatting flag).
 - `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation UI state and progress.
-- `macUSB/Features/Installation/CreatorLogic.swift` — Legacy/auxiliary installation logic (including debug fallback path).
+- `macUSB/Features/Installation/CreatorLogic.swift` — Shared installation utilities used by the helper path (codesign, cancel, cleanup, monitoring).
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` — Primary installation path via privileged helper (SMAppService + XPC), helper progress mapping, and helper cancellation flow.
 - `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, cleanup, sound feedback, background-result system notification (when app is inactive), and optional cleanup overrides used by debug simulation.
 - `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
@@ -616,7 +628,7 @@ This section lists the main call relationships and data flow.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
 - `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress (stage/status/percent), renders detected system icon in system info panel (with `applelogo` fallback), starts the helper path via `startCreationProcessEntry()`, and navigates to `FinishUSBView`.
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` → builds typed helper requests, coordinates helper execution/cancellation, and maps XPC progress events into UI state.
-- `macUSB/Features/Installation/CreatorLogic.swift` → keeps shared install helpers and a `DEBUG`-only legacy fallback path (`Debug.UseLegacyTerminalFlow`).
+- `macUSB/Features/Installation/CreatorLogic.swift` → provides shared helper-path utilities (codesign, cancel/cleanup flow, USB availability monitoring, emergency unmount).
 - `macUSB/Features/Finish/FinishUSBView.swift` → cleanup (unmount + delete temp), result sound (prefers bundled `burn_complete.aif`), optional background system notification gated by permission/toggle, and reset callback.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
 - `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift`, `SystemAnalysisView`, and `NotificationPermissionManager`.
@@ -636,7 +648,7 @@ This section lists the main call relationships and data flow.
 4. Keep the window fixed: UI assumes a 550×750 fixed layout.
 5. Privileged helper operations must be observable: keep stage/status/percent progress events flowing to UI and keep `logLine` in diagnostics logs (`HelperLiveLog`) rather than screen panels.
 6. Use `AppLogging` for all important steps: keep logs helpful for diagnostics.
-7. In `Release`, privileged install flow must run through `SMAppService` + LaunchDaemon helper (no terminal fallback); legacy terminal path is allowed only behind the `DEBUG` kill-switch.
+7. Privileged install flow must run through `SMAppService` + LaunchDaemon helper in all configurations (no terminal fallback).
 8. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.
 9. Debug menu contract: top-level `DEBUG` menu is allowed only for `DEBUG` builds; it must not be available in `Release` builds.
 

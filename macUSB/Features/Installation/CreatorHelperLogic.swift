@@ -3,13 +3,6 @@ import SwiftUI
 
 extension UniversalInstallationView {
     func startCreationProcessEntry() {
-        #if DEBUG
-        if UserDefaults.standard.bool(forKey: HelperServiceManager.debugLegacyTerminalFallbackKey) {
-            startCreationProcess()
-            return
-        }
-        #endif
-
         startCreationProcessWithHelper()
     }
 
@@ -26,16 +19,11 @@ extension UniversalInstallationView {
 
         processingTitle = String(localized: "Rozpoczynanie...")
         processingSubtitle = String(localized: "Przygotowywanie operacji...")
-        isTerminalWorking = false
-        showFinishButton = false
-        processSuccess = false
+        isHelperWorking = false
         errorMessage = ""
         navigateToFinish = false
-        terminalFailed = false
+        helperOperationFailed = false
         stopUSBMonitoring()
-        showAuthWarning = false
-        isRollingBack = false
-        monitoringWarmupCounter = 0
         processingIcon = "lock.shield.fill"
         isCancelled = false
         helperProgressPercent = 0
@@ -47,7 +35,7 @@ extension UniversalInstallationView {
         } catch {
             withAnimation {
                 isProcessing = false
-                isTerminalWorking = false
+                isHelperWorking = false
                 isTabLocked = false
                 startUSBMonitoring()
                 errorMessage = error.localizedDescription
@@ -59,7 +47,7 @@ extension UniversalInstallationView {
             guard ready else {
                 withAnimation {
                     isProcessing = false
-                    isTerminalWorking = false
+                    isHelperWorking = false
                     isTabLocked = false
                     startUSBMonitoring()
                     errorMessage = failureReason ?? String(localized: "Helper nie jest gotowy do pracy.")
@@ -73,7 +61,7 @@ extension UniversalInstallationView {
                     DispatchQueue.main.async {
                         withAnimation {
                             isProcessing = false
-                            isTerminalWorking = true
+                            isHelperWorking = true
                             helperProgressPercent = 0
                             helperStageTitle = String(localized: "Uruchamianie helpera")
                             helperStatusText = String(localized: "Nawiązywanie połączenia XPC...")
@@ -91,13 +79,13 @@ extension UniversalInstallationView {
                                 guard result.workflowID == activeHelperWorkflowID else { return }
 
                                 activeHelperWorkflowID = nil
-                                isTerminalWorking = false
+                                isHelperWorking = false
 
                                 if result.isUserCancelled || isCancelled {
                                     return
                                 }
 
-                                terminalFailed = !result.success
+                                helperOperationFailed = !result.success
 
                                 if !result.success, let errorMessageText = result.errorMessage {
                                     logError("Helper zakończył się błędem: \(errorMessageText)", category: "Installation")
@@ -112,7 +100,7 @@ extension UniversalInstallationView {
                                 logError("Start helper workflow nieudany: \(message)", category: "Installation")
                                 withAnimation {
                                     isProcessing = false
-                                    isTerminalWorking = false
+                                    isHelperWorking = false
                                     isTabLocked = false
                                     startUSBMonitoring()
                                     errorMessage = message
@@ -130,7 +118,7 @@ extension UniversalInstallationView {
                     DispatchQueue.main.async {
                         withAnimation {
                             isProcessing = false
-                            isTerminalWorking = false
+                            isHelperWorking = false
                             isTabLocked = false
                             startUSBMonitoring()
                             errorMessage = error.localizedDescription
@@ -362,7 +350,7 @@ extension UniversalInstallationView {
         PrivilegedOperationClient.shared.cancelWorkflow(workflowID) { _, _ in
             PrivilegedOperationClient.shared.clearHandlers(for: workflowID)
             activeHelperWorkflowID = nil
-            isTerminalWorking = false
+            isHelperWorking = false
             completion()
         }
     }

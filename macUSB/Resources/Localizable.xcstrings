@@ -273,114 +273,8 @@
     "• Obraz systemu zostanie przywrócony przez helper systemowy" : {
 
     },
-    "• Obraz systemu zostanie przywrócony w Terminalu" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Das Systemabbild wird im Terminal wiederhergestellt"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• The system image will be restored in Terminal"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• La imagen del sistema se restaurará en el Terminal"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• L'image système sera restaurée dans le Terminal"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• システムイメージがターミナルで復元されます"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• A imagem do sistema será restaurada no Terminal"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Образ системы будет восстановлен в Терминале"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• 系统镜像将在终端中恢复"
-          }
-        }
-      }
-    },
     "• Operacja zostanie wykonana przez helper systemowy (wymagane uprawnienia administratora)" : {
 
-    },
-    "• Operacja zostanie wykonana w Terminalu (wymagane hasło administratora)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Der Vorgang wird im Terminal ausgeführt (Administratorpasswort erforderlich)"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• The operation will be performed in Terminal (administrator password required)"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• La operación se realizará en el Terminal (se requiere contraseña de administrador)"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• L'opération sera effectuée dans le Terminal (mot de passe administrateur requis)"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• 操作はターミナルで実行されます（管理者パスワードが必要です）"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• A operação será realizada no Terminal (senha de administrador necessária)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Операция будет выполнена в Терминале (требуется пароль администратора)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• 操作将在终端中执行（需要管理员密码）"
-          }
-        }
-      }
     },
     "• Pamięć USB zostanie sformatowana (dane zostaną usunięte)" : {
       "localizations" : {
@@ -749,59 +643,6 @@
     "• System może poprosić o potwierdzenie uprawnień administratora" : {
 
     },
-    "• Terminal wykona końcową weryfikację i podmianę plików" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Das Terminal führt eine abschließende Überprüfung und den Dateiaustausch durch"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Terminal will perform final verification and file replacement"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• El Terminal realizará la verificación final y el reemplazo de archivos"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Le Terminal effectuera la vérification finale et le remplacement des fichiers"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• ターミナルが最終確認とファイルの置き換えを実行します"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• O Terminal realizará a verificação final e a substituição de arquivos"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Терминал выполнит окончательную проверку и замену файлов"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• 终端将执行最终验证和文件替换"
-          }
-        }
-      }
-    },
     "• Uruchom komputer trzymając przycisk Option (⌥)" : {
       "localizations" : {
         "de" : {
@@ -1115,59 +956,6 @@
         }
       }
     },
-    "• Zapis na USB odbędzie się w nowym oknie Terminala" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Das Schreiben auf USB erfolgt in einem neuen Terminalfenster"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Writing to USB will take place in a new Terminal window"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• La escritura en USB se realizará en una nueva ventana de Terminal"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• L'écriture sur USB se fera dans une nouvelle fenêtre Terminal"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• USBへの書き込みは新しいターミナルウィンドウで行われます"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• A gravação no USB ocorrerá em uma nova janela do Terminal"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Запись на USB будет происходить в новом окне Терминала"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• 写入 USB 将在新的终端窗口中进行"
-          }
-        }
-      }
-    },
     "• Zapis na USB zostanie wykonany przez helper systemowy" : {
 
     },
@@ -1283,6 +1071,7 @@
     },
     "Aktualizacja wersji i podpisywanie..." : {
       "comment" : "Version update and code signing in progress",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1595,6 +1384,7 @@
       }
     },
     "Autoryzacja" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1647,6 +1437,7 @@
       }
     },
     "Autoryzacja anulowana. Możesz spróbować ponownie." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1806,6 +1597,7 @@
       }
     },
     "BŁĄD PROCESU: Nie udało się utworzyć instalatora." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1910,6 +1702,7 @@
       }
     },
     "Brak autoryzacji" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2066,6 +1859,7 @@
       }
     },
     "CEL:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2745,6 +2539,7 @@
       }
     },
     "Działanie wykonywane w tle, nie widać paska postępu!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3005,6 +2800,7 @@
       }
     },
     "ETAP 1/2 - FORMATOWANIE DYSKU USB" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3057,6 +2853,7 @@
       }
     },
     "ETAP 2/2 - TWORZENIE USB" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3109,6 +2906,7 @@
       }
     },
     "ETAP: Czyszczenie dysku USB" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3161,6 +2959,7 @@
       }
     },
     "ETAP: FORMATOWANIE DYSKU USB (GPT + HFS+)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3213,6 +3012,7 @@
       }
     },
     "ETAP: Przywracanie obrazu na USB" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3265,6 +3065,7 @@
       }
     },
     "ETAP: Skanowanie obrazu" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3317,6 +3118,7 @@
       }
     },
     "ETAP: Wgrywanie instalatora na dysk USB" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3369,6 +3171,7 @@
       }
     },
     "ETAP: Wgrywanie instalatora na dysk USB - etap 1/2" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3421,6 +3224,7 @@
       }
     },
     "ETAP: Wgrywanie instalatora na dysk USB - etap 2/2" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3525,6 +3329,7 @@
       }
     },
     "Gotowe!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3577,6 +3382,7 @@
       }
     },
     "GOTOWE!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3913,6 +3719,7 @@
       }
     },
     "Kopiowanie plików" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3965,6 +3772,7 @@
       }
     },
     "Kopiowanie plików..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4017,6 +3825,7 @@
       }
     },
     "Kopiowanie pliku obrazu..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4338,6 +4147,7 @@
       }
     },
     "Modyfikowanie plików" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4390,6 +4200,7 @@
       }
     },
     "Może potrwać od kilku do kilkunastu minut." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4442,6 +4253,7 @@
       }
     },
     "Naciśnij Enter, aby zamknąć..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4943,6 +4755,7 @@
       }
     },
     "Nie znaleziono pliku obrazu." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5062,6 +4875,7 @@
 
     },
     "Nośnik zostanie sformatowany do GPT + HFS+." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5114,6 +4928,7 @@
       }
     },
     "Oczekiwanie na hasło administratora..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5433,6 +5248,7 @@
 
     },
     "Operacja została anulowana przez użytkownika." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5644,6 +5460,7 @@
       }
     },
     "Podpisywanie instalatora..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5903,59 +5720,6 @@
         }
       }
     },
-    "Postępuj zgodnie z instrukcjami w oknie Terminala." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Befolgen Sie die Anweisungen im Terminalfenster."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Follow the instructions in the Terminal window."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Siga las instrucciones en la ventana de Terminal."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suivez les instructions dans la fenêtre Terminal."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ターミナルウィンドウの指示に従ってください。"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Siga as instruções na janela do Terminal."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Следуйте инструкциям в окне Терминала."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请按照终端窗口中的说明进行操作。"
-          }
-        }
-      }
-    },
     "Powiadomienia" : {
       "localizations" : {
         "de" : {
@@ -6165,6 +5929,7 @@
       }
     },
     "Proces może potrwać kilka minut." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6529,6 +6294,7 @@
       }
     },
     "Proszę zachować cierpliwość i nie zamykać okna..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6685,6 +6451,7 @@
       }
     },
     "Przejdź dalej, aby zakończyć proces..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7106,6 +6873,7 @@
 
     },
     "Przygotowanie plików" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7268,6 +7036,7 @@
       }
     },
     "Rozpoczynanie przywracania na USB..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7427,6 +7196,7 @@
       }
     },
     "Sprawdź powyższe komunikaty błędów." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7644,6 +7414,7 @@
       }
     },
     "SUKCES! Instalator został utworzony." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7699,6 +7470,7 @@
 
     },
     "Szukanie pliku obrazu..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7907,58 +7679,6 @@
         }
       }
     },
-    "Terminal zamknie się automatycznie za 3 sekundy." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Das Terminal schließt sich automatisch in 3 Sekunden."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Terminal will close automatically in 3 seconds."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La Terminal se cerrará automáticamente en 3 segundos."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Le Terminal se fermera automatiquement dans 3 secondes."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ターミナルは3秒後に自動的に閉じます。"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "O Terminal fechará automaticamente em 3 segundos."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Терминал закроется автоматически через 3 секунды."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "终端将在 3 秒后自动关闭。"
-          }
-        }
-      }
-    },
     "Trwa analizowanie pliku, proszę czekać" : {
       "localizations" : {
         "de" : {
@@ -8018,6 +7738,7 @@
 
     },
     "Trwa kopiowanie plików, proszę czekać." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8336,59 +8057,6 @@
         }
       }
     },
-    "Uruchomiono Terminal" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Terminal gestartet"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Terminal Launched"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Terminal iniciado"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Terminal lancé"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ターミナルが起動しました"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Terminal iniciado"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Терминал запущен"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "终端已启动"
-          }
-        }
-      }
-    },
     "Usuń helpera" : {
 
     },
@@ -8445,6 +8113,7 @@
       }
     },
     "UWAGA: Ten etap jest najbardziej czasochłonny." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8497,6 +8166,7 @@
       }
     },
     "UWAGA: Wszystkie dane na USB zostaną usunięte!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8653,6 +8323,7 @@
       }
     },
     "WERSJA SYSTEMU:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8705,6 +8376,7 @@
       }
     },
     "Weryfikacja sum kontrolnych..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8757,6 +8429,7 @@
       }
     },
     "Weryfikowanie plików" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8968,6 +8641,7 @@
 
     },
     "Wolumin zostanie nazwany PPC (APM + HFS+)." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9020,6 +8694,7 @@
       }
     },
     "Wpisz hasło i naciśnij Enter (hasła nie widać)." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9072,6 +8747,7 @@
       }
     },
     "Wprowadź hasło administratora, aby kontynuować." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9961,6 +9637,7 @@
 
     },
     "Wymagana autoryzacja" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -10068,6 +9745,7 @@
       }
     },
     "Wymagane uprawnienia administratora." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -10386,6 +10064,7 @@
       }
     },
     "Zakończ" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -10698,6 +10377,7 @@
       }
     },
     "ŹRÓDŁO:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

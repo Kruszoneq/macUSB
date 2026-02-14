@@ -26,29 +26,20 @@ struct UniversalInstallationView: View {
     @State var processingTitle: String = ""
     @State var processingSubtitle: String = ""
     @State var processingIcon: String = "doc.on.doc.fill"
-    
-    // NOWE STANY UI DLA AUTH
-    @State var showAuthWarning: Bool = false
-    @State var isRollingBack: Bool = false
-    
+
     @State var errorMessage: String = ""
-    @State var isTerminalWorking: Bool = false
+    @State var isHelperWorking: Bool = false
     @State var helperProgressPercent: Double = 0
     @State var helperStageTitle: String = ""
     @State var helperStatusText: String = ""
     @State var activeHelperWorkflowID: String? = nil
-    @State var showFinishButton: Bool = false
-    @State var processSuccess: Bool = false
     @State var navigateToFinish: Bool = false
     @State var isCancelled: Bool = false
     @State var isUSBDisconnectedLock: Bool = false
     @State var usbCheckTimer: Timer?
+
+    @State var helperOperationFailed: Bool = false
     
-    // New terminal failure state
-    @State var terminalFailed: Bool = false
-    
-    // Stan rozruchowy dla monitoringu
-    @State var monitoringWarmupCounter: Int = 0
     @State var isCancelling: Bool = false
     
     @State var windowHandler: UniversalWindowHandler?
@@ -209,7 +200,7 @@ struct UniversalInstallationView: View {
                 
                 VStack(spacing: 15) {
                     
-                    if !isProcessing && !isTerminalWorking && !processSuccess && !isCancelled && !isUSBDisconnectedLock && !isRollingBack && !isCancelling {
+                    if !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !isCancelling {
                         VStack(spacing: 15) {
                             Button(action: startCreationProcessEntry) {
                                 HStack {
@@ -336,15 +327,10 @@ struct UniversalInstallationView: View {
                         .tint(Color.gray.opacity(0.2))
                     }
                     
-                    // STATUS: Przetwarzanie / Ostrzeżenia
-                    if isProcessing || isRollingBack {
+                    if isProcessing {
                         VStack(spacing: 20) {
                             HStack(spacing: 15) {
-                                if isRollingBack {
-                                    Image(systemName: "xmark.octagon.fill").font(.largeTitle).foregroundColor(.red)
-                                } else {
-                                    Image(systemName: processingIcon).font(.largeTitle).foregroundColor(.accentColor)
-                                }
+                                Image(systemName: processingIcon).font(.largeTitle).foregroundColor(.accentColor)
                                 
                                 VStack(alignment: .leading, spacing: 5) {
                                     Text(processingTitle.isEmpty ? String(localized: "Rozpoczynanie...") : processingTitle)
@@ -356,72 +342,22 @@ struct UniversalInstallationView: View {
                                 Spacer()
                             }
                             
-                            // RAMKA: Autoryzacja
-                            if showAuthWarning {
-                                HStack(alignment: .center) {
-                                    Image(systemName: "lock.fill")
-                                        .font(.title2)
-                                        .foregroundColor(.orange)
-                                        .frame(width: 32)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text("Wymagana autoryzacja")
-                                            .font(.headline)
-                                            .foregroundColor(.orange)
-                                        Text("Wprowadź hasło administratora, aby kontynuować.")
-                                            .font(.caption)
-                                            .foregroundColor(.orange.opacity(0.8))
-                                    }
-                                    Spacer()
-                                }
-                                .padding(10)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color.orange.opacity(0.1))
-                                .cornerRadius(8)
-                                .transition(.scale)
-                            }
-                            
-                            // RAMKA: Brak autoryzacji / Rollback
-                            if isRollingBack {
-                                HStack(alignment: .center) {
-                                    Image(systemName: "hand.raised.fill")
-                                        .font(.title2)
-                                        .foregroundColor(.red)
-                                        .frame(width: 32)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text("Brak autoryzacji")
-                                            .font(.headline)
-                                            .foregroundColor(.red)
-                                        Text("Operacja została anulowana przez użytkownika.")
-                                            .font(.caption)
-                                            .foregroundColor(.red.opacity(0.8))
-                                    }
-                                    Spacer()
-                                }
-                                .padding(10)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color.red.opacity(0.1))
-                                .cornerRadius(8)
-                                .transition(.scale)
-                            }
-                            
                             Divider()
-                            
-                            if !isRollingBack {
-                                HStack {
-                                    ProgressView().controlSize(.small)
-                                    Text("Proces w toku...").font(.caption).foregroundColor(.secondary)
-                                    Spacer()
-                                }
+
+                            HStack {
+                                ProgressView().controlSize(.small)
+                                Text("Proces w toku...").font(.caption).foregroundColor(.secondary)
+                                Spacer()
                             }
                         }
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(isRollingBack ? Color.red.opacity(0.05) : Color.accentColor.opacity(0.1))
+                        .background(Color.accentColor.opacity(0.1))
                         .cornerRadius(10)
                         .transition(.opacity.combined(with: .move(edge: .bottom)))
                     }
                     
-                    if isTerminalWorking {
+                    if isHelperWorking {
                         VStack(spacing: 20) {
                             HStack(spacing: 15) {
                                 Image(systemName: "lock.shield.fill").font(.largeTitle).foregroundColor(.accentColor)
@@ -445,32 +381,6 @@ struct UniversalInstallationView: View {
                         .transition(.opacity)
                     }
                     
-                    if processSuccess {
-                         VStack(spacing: 20) {
-                             HStack(spacing: 15) {
-                                 Image(systemName: "checkmark.circle.fill").font(.largeTitle).foregroundColor(.green)
-                                 VStack(alignment: .leading, spacing: 5) {
-                                     Text("Gotowe!").font(.headline)
-                                     Text("Przejdź dalej, aby zakończyć proces...").font(.caption).foregroundColor(.secondary)
-                                 }
-                                 Spacer()
-                             }
-                             Divider()
-                             VStack(spacing: 10) {
-                                 Button(action: { navigateToFinish = true }) {
-                                     HStack {
-                                         Text("Zakończ")
-                                         Image(systemName: "arrow.right.circle.fill")
-                                     }
-                                     .frame(maxWidth: .infinity).padding(5)
-                                 }
-                                 .buttonStyle(.borderedProminent).controlSize(.large).tint(Color.green)
-                             }
-                         }
-                         .padding().frame(maxWidth: .infinity)
-                         .background(Color.green.opacity(0.1)).cornerRadius(10)
-                         .transition(.opacity)
-                    }
                 }
                 .padding()
                 .background(Color(NSColor.windowBackgroundColor))
@@ -486,7 +396,7 @@ struct UniversalInstallationView: View {
                 if self.windowHandler == nil {
                     let handler = UniversalWindowHandler(
                         shouldClose: {
-                            return self.showFinishButton || self.isCancelled || self.processSuccess
+                            return self.isCancelled
                         },
                         onCleanup: {
                             self.performEmergencyCleanup(mountPoint: sourceAppURL.deletingLastPathComponent(), tempURL: tempWorkURL)
@@ -510,7 +420,7 @@ struct UniversalInstallationView: View {
                         self.rootIsActive = false
                     },
                     isPPC: isPPC,
-                    didFail: terminalFailed
+                    didFail: helperOperationFailed
                 ),
                 isActive: $navigateToFinish
             ) { EmptyView() }
@@ -522,7 +432,7 @@ struct UniversalInstallationView: View {
             AppLogging.info("Przejście do kreatora", category: "Navigation")
             AppLogging.separator()
             AppLogging.separator()
-            if !isProcessing && !isTerminalWorking && !processSuccess && !isCancelled && !isUSBDisconnectedLock && !isRollingBack {
+            if !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock {
                 startUSBMonitoring()
             }
         }

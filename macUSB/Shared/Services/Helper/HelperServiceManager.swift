@@ -9,10 +9,6 @@ final class HelperServiceManager: NSObject {
     static let daemonPlistName = "com.kruszoneq.macusb.helper.plist"
     static let machServiceName = "com.kruszoneq.macusb.helper"
 
-    #if DEBUG
-    static let debugLegacyTerminalFallbackKey = "Debug.UseLegacyTerminalFlow"
-    #endif
-
     private typealias EnsureCompletion = (Bool, String?) -> Void
     private let coordinationQueue = DispatchQueue(label: "macUSB.helper.registration", qos: .userInitiated)
     private var ensureInProgress = false
