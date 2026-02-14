@@ -210,6 +210,7 @@ struct SystemAnalysisView: View {
                         targetDrive: logic.selectedDriveForInstallation,
                         targetDriveDisplayName: selectedDriveDisplayNameSnapshot,
                         systemName: logic.recognizedVersion,
+                        detectedSystemIcon: logic.detectedSystemIcon,
                         originalImageURL: logic.selectedFileUrl,
                         needsCodesign: logic.needsCodesign,
                         isLegacySystem: logic.isLegacyDetected,

@@ -279,8 +279,18 @@ struct FinishUSBView: View {
                 failSound.play()
             }
         } else {
-            // Dźwięk sukcesu (jak w instalatorach pkg)
-            if let successSound = NSSound(named: NSSound.Name("Glass")) {
+            // Preferowany dźwięk sukcesu.
+            let bundledSoundURL =
+                Bundle.main.url(forResource: "burn_complete", withExtension: "aif", subdirectory: "Sounds")
+                ?? Bundle.main.url(forResource: "burn_complete", withExtension: "aif")
+
+            if let bundledSoundURL,
+               let successSound = NSSound(contentsOf: bundledSoundURL, byReference: false) {
+                successSound.play()
+            } else if let successSound = NSSound(named: NSSound.Name("burn_success")) {
+                successSound.play()
+            } else if let successSound = NSSound(named: NSSound.Name("Glass")) {
+                // Fallback dla środowisk bez customowego dźwięku.
                 successSound.play()
             } else if let hero = NSSound(named: NSSound.Name("Hero")) {
                 hero.play()

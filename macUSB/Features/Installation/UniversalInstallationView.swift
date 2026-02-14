@@ -6,6 +6,7 @@ struct UniversalInstallationView: View {
     let targetDrive: USBDrive?
     let targetDriveDisplayName: String?
     let systemName: String
+    let detectedSystemIcon: NSImage?
     let originalImageURL: URL?
     
     // Flagi
@@ -69,7 +70,17 @@ struct UniversalInstallationView: View {
                     
                     // RAMKA: System Info
                     HStack {
-                        Image(systemName: "applelogo").font(.title2).foregroundColor(.green).frame(width: 32)
+                        if let detectedSystemIcon {
+                            Image(nsImage: detectedSystemIcon)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 32, height: 32)
+                        } else {
+                            Image(systemName: "applelogo")
+                                .font(.title2)
+                                .foregroundColor(.green)
+                                .frame(width: 32)
+                        }
                         VStack(alignment: .leading) {
                             Text("Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
                             Text(systemName).font(.headline).foregroundColor(.green).bold()

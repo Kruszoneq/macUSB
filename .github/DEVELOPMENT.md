@@ -7,6 +7,12 @@
 >
 > IMPORTANT RULE: **User-facing strings are authored in Polish by default.**
 > Polish is the source language for localization and is the canonical base for new UI text.
+>
+> File naming note:
+> Recommended canonical name for this document is `DEVELOPMENT.md` (it covers architecture + implementation rules + operational runbook, not only architecture).
+> `ARCHITECTURE.md` is a secondary option, but it can be misleading because this file also contains process, diagnostics, and contributor conventions.
+> Practical migration path: keep a lightweight compatibility `CONTEXT.md` that points to `DEVELOPMENT.md` for AI/session bootstrapping.
+> If a community-facing contribution policy is needed, keep it separate in `CONTRIBUTING.md`.
 
 ## Table of Contents
 1. [Purpose and Scope](#purpose-and-scope)
@@ -19,12 +25,13 @@
 8. [Operational Methods and External Tools Used](#operational-methods-and-external-tools-used)
 9. [Persistent State and Settings](#persistent-state-and-settings)
 10. [Logging and Diagnostics](#logging-and-diagnostics)
-11. [Complete File Reference (Every File)](#complete-file-reference-every-file)
-12. [File Relationships (Who Calls What)](#file-relationships-who-calls-what)
-13. [Contributor Rules and Patterns](#contributor-rules-and-patterns)
-14. [Potential Redundancies and Delicate Areas](#potential-redundancies-and-delicate-areas)
-15. [Notifications Chapter](#15-notifications-chapter)
-16. [DEBUG Chapter](#16-debug-chapter)
+11. [Privileged Helper Deep-Dive (LaunchDaemon + XPC)](#11-privileged-helper-deep-dive-launchdaemon--xpc)
+12. [Complete File Reference (Every File)](#12-complete-file-reference-every-file)
+13. [File Relationships (Who Calls What)](#13-file-relationships-who-calls-what)
+14. [Contributor Rules and Patterns](#14-contributor-rules-and-patterns)
+15. [Potential Redundancies and Delicate Areas](#15-potential-redundancies-and-delicate-areas)
+16. [Notifications Chapter](#16-notifications-chapter)
+17. [DEBUG Chapter](#17-debug-chapter)
 
 ---
 
@@ -54,12 +61,12 @@ Debug-only shortcut:
 - In `DEBUG` builds, the app shows a top-level `DEBUG` menu in the system menu bar.
 - `DEBUG` → `Przejdź do podsumowania (Big Sur) (2s delay)` triggers a simulated success path for `macOS Big Sur 11` and navigates to `FinishUSBView` after a 2-second delay.
 - `DEBUG` → `Przejdź do podsumowania (Tiger) (2s delay)` triggers a simulated success path for `Mac OS X Tiger 10.4` with `isPPC = true` and navigates to `FinishUSBView` after a 2-second delay.
-Detailed contract is documented in [Section 16](#16-debug-chapter).
+Detailed contract is documented in [Section 17](#17-debug-chapter).
 
 Startup permissions flow:
 - After the optional update alert on the Welcome screen, the app may show a notification-permission prompt.
 - The update alert shows both remote available version and currently running app version.
-Detailed notification behavior is documented in [Section 15](#15-notifications-chapter).
+Detailed notification behavior is documented in [Section 16](#16-notifications-chapter).
 
 Fixed window size:
 - 550 × 750, non-resizable.
@@ -78,6 +85,7 @@ Key concepts:
 - System analysis: reads `Info.plist` from the installer app inside a mounted image or `.app` bundle.
 - USB detection: enumerates mounted external volumes; optionally includes external HDD/SSD with a user option; detects USB speed, partition scheme, filesystem format, and computes the `needsFormatting` flag for later stages.
 - Privileged helper execution: a LaunchDaemon helper is registered via `SMAppService`, and privileged work is executed via typed XPC requests.
+- Helper status UX has a healthy short-form alert (`Helper działa poprawnie`) with a system button to open full diagnostics.
 
 ---
 
@@ -111,6 +119,7 @@ Common status icons and their semantic colors:
 - Info: `info.circle.fill` in gray/secondary.
 - USB: `externaldrive.fill` (blue/orange depending on state).
 - In `SystemAnalysisView` success state, the app tries installer icons in this order: `Contents/Resources/ProductPageIcon.icns`, `Contents/Resources/InstallAssistant.icns`, then `Contents/Resources/Install Mac OS X.icns` (case-insensitive lookup). If none is found, fallback to `checkmark.circle.fill`.
+- In `UniversalInstallationView` system info panel, the app shows detected installer icon (`detectedSystemIcon`) next to the system name; if unavailable, fallback is `applelogo`.
 Frequently used SF Symbols in screens and menus include:
 - `info.circle.fill`, `doc.badge.plus`, `internaldrive`, `checkmark.circle.fill`, `xmark.circle.fill`, `xmark.octagon.fill`, `exclamationmark.triangle.fill`, `externaldrive.fill`, `externaldrive.badge.xmark`, `applelogo`, `gearshape.2`, `clock`, `lock.fill`, `hand.raised.fill`, `terminal.fill`, `arrow.right`, `arrow.right.circle.fill`, `arrow.counterclockwise`, `xmark.circle`, `xmark.circle.fill`, `globe.europe.africa.fill`, `cup.and.saucer`, `square.and.arrow.down`, `arrow.triangle.2.circlepath`, `globe`, `chevron.left.forwardslash.chevron.right`.
 
@@ -139,6 +148,9 @@ Buttons:
 Alerts and dialogs:
 - `NSAlert` uses the application icon and localized strings.
 - Alerts are styled as informational or warning depending on action (updates, cancellations, external drive enablement, etc.).
+- Helper status check uses a two-step alert in healthy state:
+- first alert: `Helper działa poprawnie` with system buttons `OK` (primary) and `Wyświetl szczegóły`.
+- second alert (on details): full helper status report.
 
 Inputs and file selection:
 - The file path field is a disabled `TextField` with `.roundedBorder`.
@@ -158,6 +170,7 @@ Finish screen specifics:
 - Success/failure block uses green/red status panels.
 - Cleanup section shows a blue panel with a trash icon while cleaning.
 - Reset and exit buttons remain large, full-width, and prominent.
+- Success sound prefers bundled `burn_complete.aif` from app resources (with fallback to system sounds).
 - If `FinishUSBView` appears while the app is inactive, the app sends a macOS system notification with success/failure result text only when both system permission and app-level notification toggle are enabled.
 
 Formatting conventions:
@@ -216,7 +229,7 @@ Explicit unsupported case:
 ---
 
 ## 7. Installer Creation Flows
-Implemented in: `UniversalInstallationView` (UI) + `CreatorLogic.swift` (logic)
+Implemented in: `UniversalInstallationView` (UI) + `CreatorHelperLogic.swift` (primary helper path) + `CreatorLogic.swift` (legacy/debug fallback helpers)
 
 ### Standard Flow (createinstallmedia)
 Used for most modern macOS installers.
@@ -244,6 +257,9 @@ Used for most modern macOS installers.
 - Formats disk with `diskutil partitionDisk` using APM + HFS+.
 - Uses `asr restore` to write the image to `/Volumes/PPC`.
 - When `isPPC` is active, the drive flag `needsFormatting` is forced to `false` for installation context, because PPC formatting is already part of this flow.
+- Source selection for `asr --source` in PPC:
+- For `.iso` / `.cdr`, helper request uses mounted source (`/Volumes/...`) to avoid UDIF format error (`-5351`).
+- For other image types (e.g. `.dmg`), helper request uses staged image copy in temp (`macUSB_temp/PPC_*`).
 
 ### Sierra Special Handling
 - Always copies `.app` to TEMP.
@@ -326,7 +342,213 @@ The following requirements are mandatory for diagnostic logs:
 
 ---
 
-## 11. Complete File Reference (Every File)
+## 11. Privileged Helper Deep-Dive (LaunchDaemon + XPC)
+This chapter defines the privileged helper architecture as currently implemented, including packaging, registration, XPC contracts, runtime behavior, UI integration, and failure handling.
+
+### 11.1 Why the helper exists
+- `macUSB` needs to run privileged operations (`diskutil`, `asr`, `createinstallmedia`, `xattr`, `ditto`, and selected cleanup steps) that cannot reliably run from a non-privileged app process.
+- In `Release`, installer creation is expected to run via helper (`SMAppService` + LaunchDaemon + XPC). Terminal fallback is allowed only behind a `DEBUG` kill-switch.
+- The helper encapsulates privileged execution while keeping the app process focused on UI/state and user interaction.
+
+### 11.2 Core helper components and ownership
+- App-side orchestration:
+- `macUSB/Shared/Services/Helper/HelperServiceManager.swift` handles helper registration, readiness checks, repair, removal, status dialogs, and approval/location gating.
+- `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift` manages XPC connection lifecycle and start/cancel/health calls.
+- `macUSB/Shared/Services/Helper/HelperIPC.swift` defines shared protocol and payload contracts.
+- Installation workflow glue:
+- `macUSB/Features/Installation/CreatorHelperLogic.swift` builds typed helper requests, starts workflow, maps progress to UI state, and handles cancellation/error routing.
+- Helper target:
+- `macUSBHelper/main.swift` hosts `NSXPCListener` and executes privileged workflow stages.
+- LaunchDaemon definition:
+- `macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist` declares label, mach service, and helper binary location inside app bundle.
+
+### 11.3 Bundle layout and Xcode packaging requirements
+- The `macUSB` target has a target dependency on `macUSBHelper`.
+- The `macUSB` target contains a Copy Files phase to:
+- `Contents/Library/Helpers` for `macUSBHelper` binary.
+- `Contents/Library/LaunchDaemons` for `com.kruszoneq.macusb.helper.plist`.
+- LaunchDaemon plist currently contains:
+- `Label = com.kruszoneq.macusb.helper`
+- `MachServices` key `com.kruszoneq.macusb.helper = true`
+- `BundleProgram = Contents/Library/Helpers/macUSBHelper`
+- `AssociatedBundleIdentifiers` includes `com.kruszoneq.macUSB`
+- `RunAtLoad = true`, `KeepAlive = false`
+- Critical invariant: mach service and label naming must stay aligned across:
+- `HelperServiceManager.machServiceName`
+- LaunchDaemon plist `MachServices` and `Label`
+- helper listener `NSXPCListener(machServiceName: ...)`
+
+### 11.4 Signing, entitlements, and hardened runtime matrix
+Current effective build configuration snapshot:
+- App target (`macUSB`) Debug:
+- `CODE_SIGN_STYLE = Automatic`
+- `CODE_SIGN_IDENTITY = Apple Development`
+- entitlements: `macUSB/macUSB.debug.entitlements`
+- `ENABLE_HARDENED_RUNTIME = YES`
+- App target (`macUSB`) Release:
+- `CODE_SIGN_STYLE = Manual`
+- `CODE_SIGN_IDENTITY = Developer ID Application`
+- entitlements: `macUSB/macUSB.release.entitlements`
+- `ENABLE_HARDENED_RUNTIME = YES`
+- Helper target (`macUSBHelper`) Debug:
+- `CODE_SIGN_STYLE = Automatic`
+- `CODE_SIGN_IDENTITY = Apple Development`
+- entitlements: `macUSBHelper/macUSBHelper.debug.entitlements`
+- `CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO`
+- `ENABLE_HARDENED_RUNTIME = YES`
+- Helper target (`macUSBHelper`) Release:
+- `CODE_SIGN_STYLE = Manual`
+- `CODE_SIGN_IDENTITY = Developer ID Application`
+- entitlements: `macUSBHelper/macUSBHelper.release.entitlements`
+- `CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO`
+- `ENABLE_HARDENED_RUNTIME = YES`
+- Team ID is unified for both targets (`<TEAM_ID>` in this document; use your actual Apple Developer Team ID in project settings).
+- Entitlements currently:
+- app debug: Apple Events automation enabled, `get-task-allow = true`
+- app release: Apple Events automation enabled, `get-task-allow = false`
+- helper debug: `get-task-allow = true`
+- helper release: `get-task-allow = false`
+- Operational rule: app and helper must remain signed coherently (same Team ID and compatible signing mode per configuration) to avoid unstable registration and XPC trust failures.
+
+### 11.5 Registration and readiness lifecycle (`HelperServiceManager`)
+- Startup bootstrap:
+- `bootstrapIfNeededAtStartup` runs non-interactive readiness check from Welcome flow.
+- In `DEBUG` when app is running from Xcode/DerivedData, bootstrap returns success without forcing registration.
+- Installation gate:
+- install flow calls interactive `ensureReadyForPrivilegedWork`.
+- Before registration, location rule is evaluated:
+- Release: app must be in `/Applications`.
+- Debug: bypass is allowed when run from Xcode development build.
+- Concurrency model:
+- readiness checks are serialized in `coordinationQueue`.
+- parallel callers are coalesced (`ensureInProgress`, pending completion queue).
+- `SMAppService` status handling:
+- `.enabled` → query XPC health; optionally recover if health fails.
+- `.requiresApproval` → report failure and show approval alert (`SMAppService.openSystemSettingsLoginItems`) when interactive.
+- `.notRegistered` / `.notFound` → perform `register()` then post-register validation.
+- Registration failure nuances:
+- if `register()` throws but status is `.enabled`, flow continues with validation.
+- in Xcode sessions, `Operation not permitted` is handled specially and cross-checked via XPC health before hard-fail.
+- Recovery path on health failure:
+- reset local XPC connection,
+- retry health check,
+- if still broken: `unregister()` + short wait + `register()` + validation.
+
+### 11.6 Status and repair UX behavior
+- Status action:
+- while status check is running, app shows a small floating panel with spinner (`Sprawdzanie statusu...`).
+- if healthy: short alert `Helper działa poprawnie` with buttons `OK` and `Wyświetl szczegóły`.
+- if unhealthy: one alert with full details (`Status usługi`, `Mach service`, app location, `XPC health`, `Szczegóły`).
+- Repair action:
+- guarded against parallel repair runs (`repairInProgress`).
+- opens a dedicated floating panel (`Naprawa helpera`) with:
+- live textual progress lines (sourced from `HelperService` logs),
+- spinner and status line,
+- close button enabled only after completion.
+- flow performs XPC reset and then full `ensureReadyForPrivilegedWork(interactive: true)`.
+- Unregister action:
+- directly calls `SMAppService.daemon(...).unregister()` and reports success/failure summary.
+
+### 11.7 XPC transport contract and connection model
+- Protocol methods (`PrivilegedHelperToolXPCProtocol`):
+- `startWorkflow(requestData, reply)` returns `workflowID`.
+- `cancelWorkflow(workflowID, reply)` requests cancellation.
+- `queryHealth(reply)` confirms service responsiveness.
+- Callback protocol (`PrivilegedHelperClientXPCProtocol`):
+- `receiveProgressEvent(eventData)`
+- `finishWorkflow(resultData)`
+- Payload transport:
+- JSON encoding/decoding via `HelperXPCCodec`.
+- date encoding strategy: ISO8601.
+- App connection:
+- `NSXPCConnection(machServiceName: "com.kruszoneq.macusb.helper", options: .privileged)`
+- exported object = `PrivilegedOperationClient` for helper callbacks.
+- Timeout policy:
+- workflow start reply timeout: 10s.
+- default health query timeout: 5s.
+- helper status dialog health timeout: 1.6s.
+- Connection fault behavior:
+- interruption/invalidation clears handlers and emits synthetic workflow failure with stage `xpc_connection`.
+
+### 11.8 App-side request assembly (`CreatorHelperLogic`)
+- `startCreationProcessEntry()` chooses helper path by default.
+- Only in `DEBUG`, `Debug.UseLegacyTerminalFlow` can force old terminal path.
+- Before helper start:
+- installation UI enters processing state and initializes progress (`Przygotowanie` / `Sprawdzanie gotowości helpera...`).
+- `preflightTargetVolumeWriteAccess` probes write access on `/Volumes/*`; EPERM/EACCES produces explicit TCC-style guidance error.
+- Workflow request payload includes:
+- workflow kind (`standard`, `legacyRestore`, `mavericks`, `ppc`)
+- source/target paths and BSD name
+- target label
+- flags (`needsPreformat`, `isCatalina`, `requiresApplicationPathArg`)
+- optional `postInstallSourceAppPath` (Catalina post-copy)
+- `requesterUID = getuid()`
+- PPC source strategy:
+- `.iso` / `.cdr` use mounted volume source (`/Volumes/...`) to avoid UDIF `asr` source errors.
+- `.dmg` and other image files use staged temporary image copy.
+- UI mapping from helper events:
+- stage title, status text, and percent are updated from `HelperProgressEventPayload`.
+- `logLine` is not displayed in installer UI and is logged into diagnostics (`HelperLiveLog`).
+
+### 11.9 Helper-side workflow engine (`macUSBHelper/main.swift`)
+- Service accepts only one active workflow at a time (rejects concurrent starts with code `409`).
+- Executor model:
+- stages are predefined per workflow kind with key/title/percent-range/executable/arguments.
+- each stage emits start, streamed progress, and completion events.
+- output parser:
+- captures stdout+stderr line-by-line,
+- extracts `%` tokens with regex and maps tool percentage into stage percentage range,
+- forwards each line as `statusText` and optional `logLine`.
+- Command execution context:
+- if `requesterUID > 0`, helper runs command as user via:
+- `/bin/launchctl asuser <uid> <tool> ...`
+- otherwise executes tool directly.
+- Workflow specifics:
+- non-PPC with `needsPreformat` adds `diskutil partitionDisk ... GPT HFS+ <targetLabel> 100%`.
+- standard flow runs `createinstallmedia`, with optional Catalina cleanup/copy/xattr stages.
+- restore flows run `asr imagescan` + `asr restore`.
+- PPC flow runs `diskutil ... APM HFS+ PPC 100%` then `asr restore` to `/Volumes/PPC`.
+- Cancellation:
+- `cancelWorkflow` triggers `Process.terminate()` and escalates to `SIGKILL` after 5s if needed.
+- Error shaping:
+- non-zero exit returns stage key, exit code, and last tool output line.
+- helper adds an explicit hint when last line matches removable-volume permission failures (`operation not permitted` family).
+- Health endpoint:
+- `queryHealth` returns `Helper odpowiada poprawnie (uid=..., euid=..., pid=...)`.
+
+### 11.10 Logging and observability for helper path
+- `HelperService` category:
+- registration/status/repair lifecycle diagnostics.
+- `HelperLiveLog` category:
+- streamed helper stdout/stderr (`logLine`) and decode failures.
+- `Installation` category:
+- user-facing operation milestones and helper workflow begin/end/fail events.
+- Export behavior:
+- helper live logs are included in `AppLogging.exportedLogText()`.
+- live log panel is intentionally not rendered on installation screen.
+
+### 11.11 Common failure signatures and intended interpretation
+- `requiresApproval`:
+- helper is registered but blocked until user approval in system settings.
+- `Operation not permitted` during register/re-register:
+- often appears in Xcode-driven sessions; flow attempts health check fallback.
+- `Helper jest włączony, ale XPC nie odpowiada` or timeout:
+- service status is enabled, but app cannot complete query through XPC channel.
+- `Could not validate sizes - Operacja nie jest dozwolona` from `asr`:
+- tool-level permission/policy failure during restore validation stage.
+- `Nie udało się zarejestrować helpera`:
+- direct `SMAppService.register()` failure path (interactive alert shown).
+
+### 11.12 Non-negotiable helper invariants
+- Keep helper integration typed and centralized (do not introduce ad-hoc shell IPC paths).
+- Keep `Release` privileged execution on helper path; do not reintroduce terminal fallback.
+- Preserve helper event fields (`stageTitle`, `statusText`, `percent`, `logLine`) and Polish user-facing messaging.
+- Keep helper status UX two-step in healthy state (`OK` primary + `Wyświetl szczegóły`).
+- Keep app bundle structure and plist placement exactly compatible with `SMAppService.daemon(plistName:)`.
+
+---
+
+## 12. Complete File Reference (Every File)
 Each entry below lists a file and its role. This section is exhaustive for tracked source and config files.
 
 - `LICENSE.txt` — MIT license text.
@@ -341,7 +563,8 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `.github/ISSUE_TEMPLATE/feature_request.yml` — Feature request template.
 - `macUSB.xcodeproj/project.pbxproj` — Xcode project definition (targets, build settings).
 - `macUSB.xcodeproj/xcshareddata/xcschemes/macUSB.xcscheme` — Shared build scheme.
-- `macUSB/macUSB.entitlements` — App entitlements (currently empty).
+- `macUSB/macUSB.debug.entitlements` — App Debug entitlements.
+- `macUSB/macUSB.release.entitlements` — App Release entitlements.
 - `macUSB/Info.plist` — Bundle metadata and localization list.
 - `macUSB/App/macUSBApp.swift` — App entry point, menus, AppDelegate behavior, and debug-only top-level `DEBUG` command menu.
 - `macUSB/App/ContentView.swift` — Root view, window configuration, locale injection, and root-level debug navigation route handling.
@@ -364,6 +587,7 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Shared/Services/Logging.swift` — Central logging and log export.
 - `macUSB/Shared/Services/USBDriveLogic.swift` — USB volume enumeration plus metadata detection (speed, partition scheme, filesystem format).
 - `macUSB/Resources/Localizable.xcstrings` — Localization catalog (source language: Polish).
+- `macUSB/Resources/Sounds/burn_complete.aif` — Bundled success sound used by `FinishUSBView`.
 - `macUSB/Resources/Assets.xcassets/Contents.json` — Asset catalog index.
 - `macUSB/Resources/Assets.xcassets/AccentColor.colorset/Contents.json` — Accent color definition.
 - `macUSB/Resources/Assets.xcassets/AppIcon.appiconset/Contents.json` — App icon variants.
@@ -373,6 +597,8 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Resources/Assets.xcassets/macUSB Icon/icon.dataset/icon.json` — Icon JSON definition.
 - `macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist` — LaunchDaemon definition embedded into the app bundle for SMAppService registration.
 - `macUSB/macUSBIcon.icon/icon.json` — Original icon definition for the app icon source.
+- `macUSBHelper/macUSBHelper.debug.entitlements` — Helper Debug entitlements.
+- `macUSBHelper/macUSBHelper.release.entitlements` — Helper Release entitlements.
 - `macUSBHelper/main.swift` — Privileged helper executable entry point (LaunchDaemon XPC listener and root workflow execution).
 
 Notes on non-source items:
@@ -380,22 +606,22 @@ Notes on non-source items:
 
 ---
 
-## 12. File Relationships (Who Calls What)
+## 13. File Relationships (Who Calls What)
 This section lists the main call relationships and data flow.
 
 - `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`, `NotificationPermissionManager`, `HelperServiceManager`; in `DEBUG` also publishes `macUSBDebugGoToBigSurSummary` and `macUSBDebugGoToTigerSummary` from SwiftUI command menu actions.
 - `macUSB/App/ContentView.swift` → presents `WelcomeView`, injects `LanguageManager`, calls `AppLogging.logAppStartupOnce()`, and maps debug notifications to delayed (2s) `FinishUSBView` routes (Big Sur and Tiger/PPC).
 - `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json`, bootstraps helper readiness via `HelperServiceManager`, then triggers startup notification-permission flow.
-- `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, and forwards `selectedDriveForInstallation` to installation flow.
+- `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, and forwards `selectedDriveForInstallation` plus `detectedSystemIcon` to installation flow.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
-- `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress (stage/status/percent), starts the helper path via `startCreationProcessEntry()`, and navigates to `FinishUSBView`.
+- `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress (stage/status/percent), renders detected system icon in system info panel (with `applelogo` fallback), starts the helper path via `startCreationProcessEntry()`, and navigates to `FinishUSBView`.
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` → builds typed helper requests, coordinates helper execution/cancellation, and maps XPC progress events into UI state.
 - `macUSB/Features/Installation/CreatorLogic.swift` → keeps shared install helpers and a `DEBUG`-only legacy fallback path (`Debug.UseLegacyTerminalFlow`).
-- `macUSB/Features/Finish/FinishUSBView.swift` → cleanup (unmount + delete temp), result sound, optional background system notification gated by permission/toggle, and reset callback.
+- `macUSB/Features/Finish/FinishUSBView.swift` → cleanup (unmount + delete temp), result sound (prefers bundled `burn_complete.aif`), optional background system notification gated by permission/toggle, and reset callback.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
 - `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift`, `SystemAnalysisView`, and `NotificationPermissionManager`.
 - `macUSB/Shared/Services/NotificationPermissionManager.swift` → reads `UNUserNotificationCenter` state, updates `MenuState`, controls startup/menu alerts for notification permission, and opens system settings when blocked.
-- `macUSB/Shared/Services/Helper/HelperServiceManager.swift` → registers/repairs/removes LaunchDaemon helper via `SMAppService` and reports readiness.
+- `macUSB/Shared/Services/Helper/HelperServiceManager.swift` → registers/repairs/removes LaunchDaemon helper via `SMAppService`, reports readiness, and presents helper status alerts (healthy short-form + full details dialog).
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift` → app-side XPC client that starts/cancels helper workflows and logs `logLine` events to `HelperLiveLog`.
 - `macUSB/Shared/Services/Helper/HelperIPC.swift` → helper IPC payload contracts (request, progress event, result).
 - `macUSBHelper/main.swift` → helper-side XPC service, root workflow executor, progress event emitter, and cancellation handling.
@@ -403,7 +629,7 @@ This section lists the main call relationships and data flow.
 
 ---
 
-## 13. Contributor Rules and Patterns
+## 14. Contributor Rules and Patterns
 1. Polish-first localization: author new UI strings in Polish, then translate.
 2. Do not add hidden behavior in the UI: show warnings for destructive operations.
 3. Respect flow flags: `AnalysisLogic` flags are the source of truth for installation paths.
@@ -416,7 +642,7 @@ This section lists the main call relationships and data flow.
 
 ---
 
-## 14. Potential Redundancies and Delicate Areas
+## 15. Potential Redundancies and Delicate Areas
 - Update checking is duplicated: `WelcomeView` and `UpdateChecker` both read `version.json`.
 - Legacy detection and special cases are complex: changes in `AnalysisLogic` affect multiple installation paths.
 - Localization: some Polish strings are hard-coded in `Text("...")`; ensure keys exist in `Localizable.xcstrings`.
@@ -424,7 +650,7 @@ This section lists the main call relationships and data flow.
 
 ---
 
-## 15. Notifications Chapter
+## 16. Notifications Chapter
 This chapter defines notification permissions, UI toggles, and delivery rules.
 
 Core components:
@@ -505,7 +731,7 @@ Persistence and UX rules:
 
 ---
 
-## 16. DEBUG Chapter
+## 17. DEBUG Chapter
 This chapter defines the contract for debug-only shortcuts and behavior.
 
 Scope:

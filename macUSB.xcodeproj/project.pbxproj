@@ -12,6 +12,7 @@
 		A10000012F00000100000001 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000006 /* main.swift */; };
 		A10000012F00000100000002 /* macUSBHelper in CopyFiles */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000005 /* macUSBHelper */; };
 		A10000012F00000100000003 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000007 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist */; };
+		B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */ = {isa = PBXBuildFile; fileRef = B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		A10000012F00000100000007 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist; sourceTree = "<group>"; };
 		A10000012F00000100000013 /* macUSBHelper.debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macUSBHelper.debug.entitlements; sourceTree = "<group>"; };
 		A10000012F00000100000014 /* macUSBHelper.release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macUSBHelper.release.entitlements; sourceTree = "<group>"; };
+		B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = macUSB/Resources/Sounds/burn_complete.aif; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -210,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				A10000012F00000100000007 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist */,
+				B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F0460D42EF45FFC00C6F937 /* version.json in Resources */,
+				B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
