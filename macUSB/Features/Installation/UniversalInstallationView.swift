@@ -32,7 +32,8 @@ struct UniversalInstallationView: View {
     @State var helperProgressPercent: Double = 0
     @State var helperStageTitle: String = ""
     @State var helperStatusText: String = ""
-    @State var helperWriteSpeedText: String = "— MB/s"
+    @State var helperCurrentStageKey: String = ""
+    @State var helperWriteSpeedText: String = "- MB/s"
     @State var helperWriteSpeedTimer: Timer?
     @State var helperWriteSpeedSampleInFlight: Bool = false
     @State var activeHelperWorkflowID: String? = nil

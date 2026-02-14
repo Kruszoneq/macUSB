@@ -29,7 +29,8 @@ extension UniversalInstallationView {
         helperProgressPercent = 0
         helperStageTitle = String(localized: "Przygotowanie")
         helperStatusText = String(localized: "Sprawdzanie gotowości helpera...")
-        helperWriteSpeedText = "— MB/s"
+        helperCurrentStageKey = ""
+        helperWriteSpeedText = "- MB/s"
         stopHelperWriteSpeedMonitoring()
 
         do {
@@ -75,9 +76,17 @@ extension UniversalInstallationView {
                             request: request,
                             onEvent: { event in
                                 guard event.workflowID == activeHelperWorkflowID else { return }
+                                let previousStageKey = helperCurrentStageKey
+                                helperCurrentStageKey = event.stageKey
                                 helperProgressPercent = max(helperProgressPercent, min(event.percent, 100))
                                 helperStageTitle = event.stageTitle
                                 helperStatusText = event.statusText
+
+                                if isFormattingHelperStage(event.stageKey) {
+                                    helperWriteSpeedText = "- MB/s"
+                                } else if isFormattingHelperStage(previousStageKey) {
+                                    sampleHelperWriteSpeed(for: extractWholeDiskName(from: drive.device))
+                                }
                             },
                             onCompletion: { result in
                                 guard result.workflowID == activeHelperWorkflowID else { return }
@@ -116,6 +125,7 @@ extension UniversalInstallationView {
                                 activeHelperWorkflowID = workflowID
                                 helperStageTitle = String(localized: "Rozpoczynanie...")
                                 helperStatusText = String(localized: "Helper uruchamia pierwszy etap operacji uprzywilejowanych...")
+                                helperCurrentStageKey = ""
                                 startHelperWriteSpeedMonitoring(for: drive)
                                 log("Uruchomiono helper workflow: \(workflowID)")
                             }
@@ -366,28 +376,33 @@ extension UniversalInstallationView {
 
     private func startHelperWriteSpeedMonitoring(for drive: USBDrive) {
         stopHelperWriteSpeedMonitoring(resetText: false)
-        helperWriteSpeedText = "Pomiar..."
+        helperCurrentStageKey = ""
+        helperWriteSpeedText = "- MB/s"
 
         let wholeDisk = extractWholeDiskName(from: drive.device)
 
-        helperWriteSpeedTimer = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true) { _ in
+        helperWriteSpeedTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
             sampleHelperWriteSpeed(for: wholeDisk)
         }
-
-        sampleHelperWriteSpeed(for: wholeDisk)
     }
 
     func stopHelperWriteSpeedMonitoring(resetText: Bool = true) {
         helperWriteSpeedTimer?.invalidate()
         helperWriteSpeedTimer = nil
         helperWriteSpeedSampleInFlight = false
+        helperCurrentStageKey = ""
         if resetText {
-            helperWriteSpeedText = "— MB/s"
+            helperWriteSpeedText = "- MB/s"
         }
     }
 
     private func sampleHelperWriteSpeed(for wholeDisk: String) {
         guard isHelperWorking else { return }
+        guard !helperCurrentStageKey.isEmpty else { return }
+        guard !isFormattingHelperStage(helperCurrentStageKey) else {
+            helperWriteSpeedText = "- MB/s"
+            return
+        }
         guard !helperWriteSpeedSampleInFlight else { return }
         helperWriteSpeedSampleInFlight = true
 
@@ -399,10 +414,14 @@ extension UniversalInstallationView {
                 if let measured {
                     helperWriteSpeedText = String(format: "%.2f MB/s", measured)
                 } else {
-                    helperWriteSpeedText = "— MB/s"
+                    helperWriteSpeedText = "- MB/s"
                 }
             }
         }
+    }
+
+    private func isFormattingHelperStage(_ stageKey: String) -> Bool {
+        stageKey == "preformat" || stageKey == "ppc_format"
     }
 
     private func fetchWriteSpeedMBps(for wholeDisk: String) -> Double? {
