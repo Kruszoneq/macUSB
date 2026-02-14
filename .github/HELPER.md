@@ -16,12 +16,12 @@ Dokument obejmuje:
 ---
 
 ## Aktualny stan (na teraz)
-1. Workflow helpera dziala poprawnie dla scenariuszy `createinstallmedia` (przyklad: Yosemite).
+1. Workflow helpera dziala poprawnie dla `createinstallmedia` oraz dla restore (`asr`) na scenariuszach legacy.
 2. Helper jest pakietowany i uruchamiany jako LaunchDaemon przez `SMAppService`.
 3. Dziala obsluga statusu helpera i naprawy helpera z GUI.
 4. Dziala nowe okno postepu naprawy helpera z live logiem krokow naprawczych.
 5. Live-log techniczny z workflow helpera nie jest renderowany jako osobny panel na ekranie instalacji; jest logowany do `AppLogging` (kategoria `HelperLiveLog`) i trafia do eksportu logow.
-6. Pozostaje otwarty temat: Tiger (PPC/asr) potrafi wywalic sie na etapie walidacji `asr`.
+6. Naprawiony zostal problem PPC dla plikow `.iso/.cdr` (`asr`: "Image format is not UDIF", blad `-5351`) przez wymuszenie zrodla mounted-volume dla tych formatow.
 
 ---
 
@@ -429,6 +429,7 @@ Reguly:
 ### `ppc`
 - `diskutil partitionDisk ... APM HFS+ PPC 100%`
 - `asr restore --source ... --target /Volumes/PPC --erase --noverify --noprompt --verbose`
+- wazne: semantyka `--source` dla PPC zalezy od doboru zrodla po stronie app (opis nizej, sekcja `CreatorHelperLogic`).
 
 ## 4) Uruchamianie polecen i kontekst usera
 W `runStage`:
@@ -505,7 +506,30 @@ Komunikat ostrzegawczy:
 - blokuje rownolegly check,
 - pokazuje mini panel "Sprawdzanie statusu...",
 - czyta status SMAppService i health XPC,
-- pokazuje alert z wynikiem.
+- sklada status "healthy" tylko gdy jednoczesnie:
+  - `SMAppService.status == .enabled`,
+  - lokalizacja app jest poprawna (`/Applications`, albo bypass debug z Xcode),
+  - `queryHealth` zwraca `OK`.
+
+### Zachowanie alertu statusu
+1. Gdy helper jest healthy:
+- pokazuje sie skrocony alert:
+  - tytul: `Status helpera`
+  - tresc: `Helper działa poprawnie`
+  - przyciski systemowe: `OK` (glowny/kolorowy) oraz `Wyświetl szczegóły`.
+- Po kliknieciu `Wyświetl szczegóły`:
+  - pierwszy alert zamyka sie,
+  - otwiera sie drugi alert z pelnym raportem statusu helpera.
+
+2. Gdy helper nie jest healthy:
+- od razu pokazuje sie jeden alert z pelnym raportem (bez etapu skroconego).
+
+### Zawartosc pelnego raportu statusu
+- `Status usługi: ...`
+- `Mach service: com.kruszoneq.macusb.helper`
+- `Lokalizacja aplikacji: ...`
+- `XPC health: OK/BŁĄD`
+- `Szczegóły: ...`
 
 ## 4) Ensure-ready flow
 - kolejkuje requesty i deduplikuje rownolegly ensure,
@@ -574,6 +598,18 @@ Sekwencja:
 3. przygotowanie request payload.
 4. `PrivilegedOperationClient.startWorkflow`.
 5. aktualizacja stanu UI z eventow.
+
+### 2a) Dobor zrodla PPC (`asr --source`)
+Aktualna logika (krytyczna dla kompatybilnosci):
+- jesli `originalImageURL` ma rozszerzenie `.iso` lub `.cdr` i istnieje mounted source (`/Volumes/...`):
+  - helper request dostaje mounted-volume jako `sourcePath`.
+- w pozostalych przypadkach (np. `.dmg`):
+  - obraz jest stagingowany do `macUSB_temp/PPC_*`,
+  - helper request dostaje staged image path.
+- fallback awaryjny:
+  - gdy brak `originalImageURL`, ale istnieje mounted source -> mounted source.
+
+To odwzorowuje dzialajaca semantyke dawnego flow terminalowego dla PPC i eliminuje blad UDIF `-5351` dla `.iso/.cdr`.
 
 ## 3) UI status i progres
 - `helperStageTitle` + `helperStatusText` + `helperProgressPercent`.
@@ -654,11 +690,10 @@ W obecnym stanie ten problem jest usuniety przez minimalne entitlements helpera.
 - helper startuje workflow i zwraca eventy + final result.
 
 ## Status
-- menu "Status helpera" pokazuje:
-  - status SMAppService,
-  - Mach service,
-  - lokalizacje app,
-  - health XPC + szczegoly.
+- menu "Status helpera":
+  - przy stanie healthy pokazuje skrocony alert "Helper działa poprawnie" + przycisk "Wyświetl szczegóły",
+  - przy stanie niehealthy pokazuje od razu pelny raport diagnostyczny,
+  - pelny raport zawsze zawiera status SMAppService, Mach service, lokalizacje app, health XPC i szczegoly.
 
 ## Naprawa
 - menu "Napraw helpera":
@@ -722,6 +757,16 @@ Czesto oznacza, ze helper nie wystartowal (np. podpis/AMFI).
 5. Prompty systemowe:
    - system moze pokazac approval background item zamiast \"klasycznego\" prompta install helpera.
    - dlatego status helpera i panel naprawy sa kluczowe diagnostycznie.
+
+6. PPC restore z ISO/CDR i UDIF:
+   - objaw:
+     - `Image format is not UDIF`
+     - `Could not restore - błąd -5351`
+   - przyczyna:
+     - `asr restore --source <plik .iso/.cdr>` zamiast mounted-volume.
+   - docelowa naprawa:
+     - dla PPC, gdy rozszerzenie zrodla to `.iso` lub `.cdr`, helper path korzysta ze zrodla mounted-volume (`/Volumes/...`),
+     - staged-image pozostaje dla kompatybilnych obrazow (np. `.dmg`).
 
 ---
 
@@ -866,12 +911,24 @@ To jest lista "co jeszcze dopilnowac", niezaleznie od glownych sekcji opisanych 
   - `git log --oneline --no-merges developing..feature/helper`
 - Pozwala to szybko sprawdzic, czy "stan helpera" zostal odtworzony 1:1.
 
+11. `macUSB/Features/Installation/CreatorHelperLogic.swift` (uzupelnienie po poprawce PPC)
+- dla PPC dodano warunek formatu zrodla:
+  - `.iso/.cdr` => mounted source (`/Volumes/...`),
+  - inne => staged image.
+- to jest krytyczne dla `asr` i zgodnosci z legacy obrazami.
+
+12. `macUSB/Shared/Services/Helper/HelperServiceManager.swift` (uzupelnienie po zmianie UX statusu)
+- `Status helpera` ma teraz tryb dwuetapowy przy stanie healthy:
+  - alert skrocony (`Helper działa poprawnie`) z przyciskami systemowymi `OK` + `Wyświetl szczegóły`,
+  - drugi alert z pelnym raportem po kliknieciu `Wyświetl szczegóły`.
+- `OK` pozostaje przyciskiem glownym (pierwszy `NSAlert` button).
+
 ---
 
 ## Znane problemy (otwarte)
-1. Tiger/PPC (`asr`) moze nadal failowac na etapie walidacji (`Operation not permitted` podczas asr validation).
-2. To jest osobny problem od rejestracji helpera/XPC.
-3. Na obecnym etapie helper + createinstallmedia dziala poprawnie dla nowszych scenariuszy (np. Yosemite).
+1. Brak aktywnego blokera krytycznego dla helpera (stan po ostatnich poprawkach).
+2. Ryzyko operacyjne pozostaje glownie po stronie jakosci obrazow i roznic miedzy wydaniami installerow legacy.
+3. W razie regresji PPC najpierw weryfikowac, czy zrodlo restore dla `.iso/.cdr` jest mounted-volume (`/Volumes/...`), a nie surowy plik obrazu.
 
 ---
 
