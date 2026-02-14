@@ -29,6 +29,8 @@ extension UniversalInstallationView {
         helperProgressPercent = 0
         helperStageTitle = String(localized: "Przygotowanie")
         helperStatusText = String(localized: "Sprawdzanie gotowości helpera...")
+        helperWriteSpeedText = "— MB/s"
+        stopHelperWriteSpeedMonitoring()
 
         do {
             try preflightTargetVolumeWriteAccess(drive.url)
@@ -38,6 +40,7 @@ extension UniversalInstallationView {
                 isHelperWorking = false
                 isTabLocked = false
                 startUSBMonitoring()
+                stopHelperWriteSpeedMonitoring()
                 errorMessage = error.localizedDescription
             }
             return
@@ -50,6 +53,7 @@ extension UniversalInstallationView {
                     isHelperWorking = false
                     isTabLocked = false
                     startUSBMonitoring()
+                    stopHelperWriteSpeedMonitoring()
                     errorMessage = failureReason ?? String(localized: "Helper nie jest gotowy do pracy.")
                 }
                 return
@@ -80,6 +84,7 @@ extension UniversalInstallationView {
 
                                 activeHelperWorkflowID = nil
                                 isHelperWorking = false
+                                stopHelperWriteSpeedMonitoring()
 
                                 if result.isUserCancelled || isCancelled {
                                     return
@@ -103,6 +108,7 @@ extension UniversalInstallationView {
                                     isHelperWorking = false
                                     isTabLocked = false
                                     startUSBMonitoring()
+                                    stopHelperWriteSpeedMonitoring()
                                     errorMessage = message
                                 }
                             },
@@ -110,6 +116,7 @@ extension UniversalInstallationView {
                                 activeHelperWorkflowID = workflowID
                                 helperStageTitle = String(localized: "Rozpoczynanie...")
                                 helperStatusText = String(localized: "Helper uruchamia pierwszy etap operacji uprzywilejowanych...")
+                                startHelperWriteSpeedMonitoring(for: drive)
                                 log("Uruchomiono helper workflow: \(workflowID)")
                             }
                         )
@@ -121,6 +128,7 @@ extension UniversalInstallationView {
                             isHelperWorking = false
                             isTabLocked = false
                             startUSBMonitoring()
+                            stopHelperWriteSpeedMonitoring()
                             errorMessage = error.localizedDescription
                         }
                     }
@@ -351,8 +359,116 @@ extension UniversalInstallationView {
             PrivilegedOperationClient.shared.clearHandlers(for: workflowID)
             activeHelperWorkflowID = nil
             isHelperWorking = false
+            stopHelperWriteSpeedMonitoring()
             completion()
         }
+    }
+
+    private func startHelperWriteSpeedMonitoring(for drive: USBDrive) {
+        stopHelperWriteSpeedMonitoring(resetText: false)
+        helperWriteSpeedText = "Pomiar..."
+
+        let wholeDisk = extractWholeDiskName(from: drive.device)
+
+        helperWriteSpeedTimer = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true) { _ in
+            sampleHelperWriteSpeed(for: wholeDisk)
+        }
+
+        sampleHelperWriteSpeed(for: wholeDisk)
+    }
+
+    func stopHelperWriteSpeedMonitoring(resetText: Bool = true) {
+        helperWriteSpeedTimer?.invalidate()
+        helperWriteSpeedTimer = nil
+        helperWriteSpeedSampleInFlight = false
+        if resetText {
+            helperWriteSpeedText = "— MB/s"
+        }
+    }
+
+    private func sampleHelperWriteSpeed(for wholeDisk: String) {
+        guard isHelperWorking else { return }
+        guard !helperWriteSpeedSampleInFlight else { return }
+        helperWriteSpeedSampleInFlight = true
+
+        DispatchQueue.global(qos: .utility).async {
+            let measured = fetchWriteSpeedMBps(for: wholeDisk)
+            DispatchQueue.main.async {
+                helperWriteSpeedSampleInFlight = false
+                guard isHelperWorking else { return }
+                if let measured {
+                    helperWriteSpeedText = String(format: "%.2f MB/s", measured)
+                } else {
+                    helperWriteSpeedText = "— MB/s"
+                }
+            }
+        }
+    }
+
+    private func fetchWriteSpeedMBps(for wholeDisk: String) -> Double? {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/sbin/iostat")
+        process.arguments = ["-Id", wholeDisk, "1", "2"]
+
+        var env = ProcessInfo.processInfo.environment
+        env["LC_ALL"] = "C"
+        env["LANG"] = "C"
+        process.environment = env
+
+        let outputPipe = Pipe()
+        process.standardOutput = outputPipe
+        process.standardError = Pipe()
+
+        do {
+            try process.run()
+        } catch {
+            return nil
+        }
+
+        process.waitUntilExit()
+        guard process.terminationStatus == 0 else {
+            return nil
+        }
+
+        let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+        guard let output = String(data: outputData, encoding: .utf8) else {
+            return nil
+        }
+
+        let lines = output
+            .split(separator: "\n")
+            .map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+            .filter { $0.range(of: #"\d"#, options: .regularExpression) != nil }
+            .filter { !$0.contains("KB/t") && !$0.contains("xfrs") && !$0.lowercased().contains("disk") }
+
+        guard let lastDataLine = lines.last else {
+            return nil
+        }
+
+        guard let regex = try? NSRegularExpression(pattern: #"[0-9]+(?:[.,][0-9]+)?"#) else {
+            return nil
+        }
+        let nsRange = NSRange(lastDataLine.startIndex..<lastDataLine.endIndex, in: lastDataLine)
+        let matches = regex.matches(in: lastDataLine, options: [], range: nsRange)
+        guard let lastMatch = matches.last,
+              let range = Range(lastMatch.range, in: lastDataLine) else {
+            return nil
+        }
+
+        let rawValue = String(lastDataLine[range]).replacingOccurrences(of: ",", with: ".")
+        guard let speed = Double(rawValue) else {
+            return nil
+        }
+
+        return max(0, speed)
+    }
+
+    private func extractWholeDiskName(from device: String) -> String {
+        if let range = device.range(of: #"^disk[0-9]+"#, options: .regularExpression) {
+            return String(device[range])
+        }
+        return device
     }
 
 }

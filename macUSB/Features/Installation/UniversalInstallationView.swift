@@ -32,6 +32,9 @@ struct UniversalInstallationView: View {
     @State var helperProgressPercent: Double = 0
     @State var helperStageTitle: String = ""
     @State var helperStatusText: String = ""
+    @State var helperWriteSpeedText: String = "— MB/s"
+    @State var helperWriteSpeedTimer: Timer?
+    @State var helperWriteSpeedSampleInFlight: Bool = false
     @State var activeHelperWorkflowID: String? = nil
     @State var navigateToFinish: Bool = false
     @State var isCancelled: Bool = false
@@ -369,11 +372,16 @@ struct UniversalInstallationView: View {
                                         .foregroundColor(.secondary)
                                 }
                                 Spacer()
-                                Text("\(Int(helperProgressPercent))%")
-                                    .font(.headline)
+                                VStack(alignment: .trailing, spacing: 4) {
+                                    Text("Prędkość zapisu")
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                    Text(helperWriteSpeedText)
+                                        .font(.headline.monospacedDigit())
+                                }
                             }
                             Divider()
-                            ProgressView(value: helperProgressPercent, total: 100)
+                            ProgressView()
                                 .progressViewStyle(.linear)
                         }
                         .padding().frame(maxWidth: .infinity)
@@ -436,7 +444,10 @@ struct UniversalInstallationView: View {
                 startUSBMonitoring()
             }
         }
-        .onDisappear { stopUSBMonitoring() }
+        .onDisappear {
+            stopUSBMonitoring()
+            stopHelperWriteSpeedMonitoring()
+        }
     }
 }
 

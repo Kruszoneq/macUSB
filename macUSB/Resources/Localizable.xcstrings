@@ -4,9 +4,6 @@
     "" : {
 
     },
-    "%lld%%" : {
-
-    },
     "• Do utworzenia instalatora potrzebny jest dysk USB o pojemności minimum 16 GB" : {
       "localizations" : {
         "de" : {
@@ -5927,6 +5924,9 @@
           }
         }
       }
+    },
+    "Prędkość zapisu" : {
+
     },
     "Proces może potrwać kilka minut." : {
       "extractionState" : "stale",

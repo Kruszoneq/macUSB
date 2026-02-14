@@ -249,7 +249,7 @@ private final class HelperWorkflowExecutor {
                     key: "ppc_format",
                     title: "Formatowanie nośnika (APM + HFS+)",
                     startPercent: 0,
-                    endPercent: 35,
+                    endPercent: 20,
                     executable: "/usr/sbin/diskutil",
                     arguments: ["partitionDisk", "/dev/\(wholeDisk)", "APM", "HFS+", "PPC", "100%"],
                     parseToolPercent: false
@@ -261,11 +261,11 @@ private final class HelperWorkflowExecutor {
                 WorkflowStage(
                     key: "ppc_restore",
                     title: "Przywracanie obrazu na nośnik PPC",
-                    startPercent: 35,
-                    endPercent: 96,
+                    startPercent: 20,
+                    endPercent: 99,
                     executable: "/usr/sbin/asr",
                     arguments: ["restore", "--source", ppcRestoreSource, "--target", "/Volumes/PPC", "--erase", "--noverify", "--noprompt", "--verbose"],
-                    parseToolPercent: true
+                    parseToolPercent: false
                 )
             )
 
@@ -433,13 +433,44 @@ private final class HelperWorkflowExecutor {
         lastStageOutputLine = line
 
         var percent = latestPercent
-        if stage.parseToolPercent, let parsed = extractPercent(from: line) {
+        if stage.key == "ppc_restore", let mapped = mapPPCProgress(from: line) {
+            percent = max(percent, mapped)
+        } else if stage.parseToolPercent, let parsed = extractPercent(from: line) {
             let clamped = max(0, min(parsed, 100))
             let mapped = stage.startPercent + ((stage.endPercent - stage.startPercent) * (clamped / 100.0))
             percent = max(percent, mapped)
         }
 
         emit(stage: stage, percent: percent, status: line, logLine: line)
+    }
+
+    private func mapPPCProgress(from line: String) -> Double? {
+        let lowered = line.lowercased()
+
+        if lowered.contains("validating target...done") {
+            return 25
+        }
+
+        if lowered.contains("validating sizes...done") {
+            return 30
+        }
+
+        guard let parsedPercent = extractPercent(from: line) else {
+            return nil
+        }
+
+        let clamped = max(0, min(parsedPercent, 100))
+        if clamped >= 100 {
+            return 100
+        }
+
+        guard clamped >= 10 else {
+            return nil
+        }
+
+        let tenStep = Int(clamped / 10.0)
+        let boundedStep = min(max(tenStep, 1), 9)
+        return 35 + (Double(boundedStep - 1) * 8)
     }
 
     private func emit(stage: WorkflowStage, percent: Double, status: String, logLine: String? = nil) {
