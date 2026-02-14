@@ -216,18 +216,28 @@ extension UniversalInstallationView {
 
         if isPPC {
             let mountedVolumeSource = sourceAppURL.deletingLastPathComponent().path
+            let mountedSourceAvailable = mountedVolumeSource.hasPrefix("/Volumes/") &&
+            fileManager.fileExists(atPath: mountedVolumeSource)
             let restoreSource: String
 
             if let imageURL = originalImageURL, fileManager.fileExists(atPath: imageURL.path) {
-                let stagedImageURL = tempWorkURL.appendingPathComponent("PPC_\(imageURL.lastPathComponent)")
-                if fileManager.fileExists(atPath: stagedImageURL.path) {
-                    try fileManager.removeItem(at: stagedImageURL)
+                let sourceExt = imageURL.pathExtension.lowercased()
+
+                // asr restore with --source=<file> accepts UDIF images.
+                // ISO/CDR from legacy installers must go through mounted volume source.
+                if (sourceExt == "iso" || sourceExt == "cdr"), mountedSourceAvailable {
+                    restoreSource = mountedVolumeSource
+                    log("PPC helper strategy: asr restore from mounted source (ISO/CDR) -> /Volumes/PPC", category: "Installation")
+                } else {
+                    let stagedImageURL = tempWorkURL.appendingPathComponent("PPC_\(imageURL.lastPathComponent)")
+                    if fileManager.fileExists(atPath: stagedImageURL.path) {
+                        try fileManager.removeItem(at: stagedImageURL)
+                    }
+                    try fileManager.copyItem(at: imageURL, to: stagedImageURL)
+                    restoreSource = stagedImageURL.path
+                    log("PPC helper strategy: asr restore from staged image -> /Volumes/PPC", category: "Installation")
                 }
-                try fileManager.copyItem(at: imageURL, to: stagedImageURL)
-                restoreSource = stagedImageURL.path
-                log("PPC helper strategy: asr restore from staged image -> /Volumes/PPC", category: "Installation")
-            } else if mountedVolumeSource.hasPrefix("/Volumes/"),
-                      fileManager.fileExists(atPath: mountedVolumeSource) {
+            } else if mountedSourceAvailable {
                 restoreSource = mountedVolumeSource
                 log("PPC helper strategy: asr restore from mounted source fallback -> /Volumes/PPC", category: "Installation")
             } else {

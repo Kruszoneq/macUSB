@@ -2481,6 +2481,9 @@
         }
       }
     },
+    "DEBUG" : {
+
+    },
     "Deutsch" : {
       "localizations" : {
         "de" : {
@@ -4170,6 +4173,9 @@
 
     },
     "Lokalizacja aplikacji: poza /Applications" : {
+
+    },
+    "Lokalizacja aplikacji: środowisko Xcode (bypass DEBUG)" : {
 
     },
     "Mac OS X Tiger 10.4 (Multi DVD)" : {
@@ -6781,7 +6787,6 @@
       }
     },
     "Przejdź do podsumowania (Big Sur) (2s delay)" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6887,7 +6892,6 @@
       }
     },
     "Przejdź do podsumowania (Tiger) (2s delay)" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
