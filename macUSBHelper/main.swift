@@ -120,7 +120,12 @@ private final class HelperWorkflowExecutor {
             let stages = try buildStages()
             for stage in stages {
                 try throwIfCancelled()
-                emit(stage: stage, percent: stage.startPercent, status: "Rozpoczynanie etapu")
+                if stage.key == "catalina_copy" {
+                    let transitionMessage = "Catalina: zakończono createinstallmedia, przejście do etapu ditto."
+                    emit(stage: stage, percent: stage.startPercent, status: transitionMessage, logLine: transitionMessage)
+                } else {
+                    emit(stage: stage, percent: stage.startPercent, status: "Rozpoczynanie etapu")
+                }
                 try runStage(stage)
                 emit(stage: stage, percent: stage.endPercent, status: "Etap zakończony")
             }

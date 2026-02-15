@@ -45,6 +45,7 @@ struct UniversalInstallationView: View {
     @State var helperOperationFailed: Bool = false
     
     @State var isCancelling: Bool = false
+    @State var usbProcessStartedAt: Date?
     
     @State var windowHandler: UniversalWindowHandler?
     
@@ -429,7 +430,8 @@ struct UniversalInstallationView: View {
                         self.rootIsActive = false
                     },
                     isPPC: isPPC,
-                    didFail: helperOperationFailed
+                    didFail: helperOperationFailed,
+                    creationStartedAt: usbProcessStartedAt
                 ),
                 isActive: $navigateToFinish
             ) { EmptyView() }

@@ -152,7 +152,8 @@ Inputs and file selection:
 
 Progress indicators:
 - Inline progress uses `ProgressView().controlSize(.small)` next to status text.
-- During helper execution, the installation screen shows a dedicated progress panel with stage title, status text, numeric percent, and linear progress bar.
+- During helper execution, the installation screen shows a dedicated progress panel with stage title, status text, and an indeterminate linear progress bar (without numeric percent).
+- The same panel shows write speed (`MB/s`) on the right; during formatting stages it intentionally shows `- MB/s`.
 - Live helper log lines are not rendered in UI; they are recorded into diagnostics logs for export.
 
 Welcome screen specifics:
@@ -265,11 +266,14 @@ Used for most modern macOS installers.
 - Uses `createinstallmedia` first.
 - Then helper replaces the installer app on the USB volume using `ditto`.
 - Removes quarantine attributes on the target app.
+- When Catalina transitions into the `ditto` stage, helper emits an explicit transition log line to `HelperLiveLog`.
 
 ### Helper Monitoring Strategy
 The app tracks helper progress through XPC progress events:
 - `stageKey`, `stageTitle`, `statusText`, `percent`, and optional `logLine`.
-- UI shows stage/status/progress bar + numeric percent.
+- UI shows stage/status and an indeterminate progress bar (no numeric percent).
+- Write speed (`MB/s`) is measured during active non-formatting helper stages and shown in the panel.
+- During formatting stages (`preformat`, `ppc_format`) speed is hidden as `- MB/s`.
 - `logLine` values are recorded to diagnostics logs under `HelperLiveLog` and are exportable.
 - Live helper logs are not displayed in the installation UI.
 
@@ -322,6 +326,7 @@ Features:
 - In-memory buffer for exporting logs (max 5000 lines).
 - Exportable from the app menu into a `.txt` file.
 - Helper stdout/stderr lines are recorded under the `HelperLiveLog` category and included in diagnostics export.
+- Finish stage logs total USB process duration (`MMm SSs` and total seconds) in `Installation` category.
 
 ### Log Message Requirements
 The following requirements are mandatory for diagnostic logs:
@@ -499,6 +504,7 @@ Current effective build configuration snapshot:
 - Workflow specifics:
 - non-PPC with `needsPreformat` adds `diskutil partitionDisk ... GPT HFS+ <targetLabel> 100%`.
 - standard flow runs `createinstallmedia`, with optional Catalina cleanup/copy/xattr stages.
+- Catalina copy (`ditto`) stage emits explicit transition log: createinstallmedia completed and flow is entering `ditto`.
 - restore flows run `asr imagescan` + `asr restore`.
 - PPC flow runs `diskutil ... APM HFS+ PPC 100%` then `asr restore` to `/Volumes/PPC`.
 - Cancellation:
@@ -513,9 +519,9 @@ Current effective build configuration snapshot:
 - `HelperService` category:
 - registration/status/repair lifecycle diagnostics.
 - `HelperLiveLog` category:
-- streamed helper stdout/stderr (`logLine`) and decode failures.
+- streamed helper stdout/stderr (`logLine`) and decode failures (including Catalina transition to `ditto`).
 - `Installation` category:
-- user-facing operation milestones and helper workflow begin/end/fail events.
+- user-facing operation milestones, helper workflow begin/end/fail events, and total process duration summary from finish screen.
 - Export behavior:
 - helper live logs are included in `AppLogging.exportedLogText()`.
 - live log panel is intentionally not rendered on installation screen.
@@ -583,10 +589,10 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Features/Welcome/WelcomeView.swift` — Welcome screen and update check (update alert includes remote and current app version line).
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` — File/USB selection UI and navigation to install.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic; propagates/logs USB metadata (speed, partition scheme, filesystem format, `needsFormatting`) and exposes `selectedDriveForInstallation` (PPC override of formatting flag).
-- `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation UI state and progress.
+- `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation UI state, helper progress panel (indeterminate bar + write speed), and handoff to finish screen with process start timestamp.
 - `macUSB/Features/Installation/CreatorLogic.swift` — Shared installation utilities used by the helper path (codesign, cancel, cleanup, monitoring).
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` — Primary installation path via privileged helper (SMAppService + XPC), helper progress mapping, and helper cancellation flow.
-- `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, cleanup, sound feedback, background-result system notification (when app is inactive), and optional cleanup overrides used by debug simulation.
+- `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, cleanup, sound feedback, total process duration summary (`Ukończono w MMm SSs`), duration logging, background-result system notification (when app is inactive), and optional cleanup overrides used by debug simulation.
 - `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
 - `macUSB/Shared/Models/Item.swift` — SwiftData model stub (currently unused).
 - `macUSB/Shared/Services/LanguageManager.swift` — Language selection and locale handling.
@@ -626,10 +632,10 @@ This section lists the main call relationships and data flow.
 - `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json`, bootstraps helper readiness via `HelperServiceManager`, then triggers startup notification-permission flow.
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, and forwards `selectedDriveForInstallation` plus `detectedSystemIcon` to installation flow.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
-- `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress (stage/status/percent), renders detected system icon in system info panel (with `applelogo` fallback), starts the helper path via `startCreationProcessEntry()`, and navigates to `FinishUSBView`.
+- `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress (stage/status with indeterminate bar and write speed), renders detected system icon in system info panel (with `applelogo` fallback), starts the helper path via `startCreationProcessEntry()`, and navigates to `FinishUSBView` with process start timestamp.
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` → builds typed helper requests, coordinates helper execution/cancellation, and maps XPC progress events into UI state.
 - `macUSB/Features/Installation/CreatorLogic.swift` → provides shared helper-path utilities (codesign, cancel/cleanup flow, USB availability monitoring, emergency unmount).
-- `macUSB/Features/Finish/FinishUSBView.swift` → cleanup (unmount + delete temp), result sound (prefers bundled `burn_complete.aif`), optional background system notification gated by permission/toggle, and reset callback.
+- `macUSB/Features/Finish/FinishUSBView.swift` → cleanup (unmount + delete temp), result sound (prefers bundled `burn_complete.aif`), process duration summary/logging, optional background system notification gated by permission/toggle, and reset callback.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
 - `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift`, `SystemAnalysisView`, and `NotificationPermissionManager`.
 - `macUSB/Shared/Services/NotificationPermissionManager.swift` → reads `UNUserNotificationCenter` state, updates `MenuState`, controls startup/menu alerts for notification permission, and opens system settings when blocked.
@@ -646,7 +652,7 @@ This section lists the main call relationships and data flow.
 2. Do not add hidden behavior in the UI: show warnings for destructive operations.
 3. Respect flow flags: `AnalysisLogic` flags are the source of truth for installation paths.
 4. Keep the window fixed: UI assumes a 550×750 fixed layout.
-5. Privileged helper operations must be observable: keep stage/status/percent progress events flowing to UI and keep `logLine` in diagnostics logs (`HelperLiveLog`) rather than screen panels.
+5. Privileged helper operations must be observable: keep stage/status/progress-state updates flowing to UI and keep `logLine` in diagnostics logs (`HelperLiveLog`) rather than screen panels.
 6. Use `AppLogging` for all important steps: keep logs helpful for diagnostics.
 7. Privileged install flow must run through `SMAppService` + LaunchDaemon helper in all configurations (no terminal fallback).
 8. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.

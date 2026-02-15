@@ -12,6 +12,8 @@ extension UniversalInstallationView {
             return
         }
 
+        usbProcessStartedAt = Date()
+
         withAnimation(.easeInOut(duration: 0.4)) {
             isTabLocked = true
             isProcessing = true
@@ -42,6 +44,7 @@ extension UniversalInstallationView {
                 isTabLocked = false
                 startUSBMonitoring()
                 stopHelperWriteSpeedMonitoring()
+                usbProcessStartedAt = nil
                 errorMessage = error.localizedDescription
             }
             return
@@ -55,6 +58,7 @@ extension UniversalInstallationView {
                     isTabLocked = false
                     startUSBMonitoring()
                     stopHelperWriteSpeedMonitoring()
+                    usbProcessStartedAt = nil
                     errorMessage = failureReason ?? String(localized: "Helper nie jest gotowy do pracy.")
                 }
                 return
@@ -96,6 +100,7 @@ extension UniversalInstallationView {
                                 stopHelperWriteSpeedMonitoring()
 
                                 if result.isUserCancelled || isCancelled {
+                                    usbProcessStartedAt = nil
                                     return
                                 }
 
@@ -118,6 +123,7 @@ extension UniversalInstallationView {
                                     isTabLocked = false
                                     startUSBMonitoring()
                                     stopHelperWriteSpeedMonitoring()
+                                    usbProcessStartedAt = nil
                                     errorMessage = message
                                 }
                             },
@@ -139,6 +145,7 @@ extension UniversalInstallationView {
                             isTabLocked = false
                             startUSBMonitoring()
                             stopHelperWriteSpeedMonitoring()
+                            usbProcessStartedAt = nil
                             errorMessage = error.localizedDescription
                         }
                     }
@@ -370,6 +377,7 @@ extension UniversalInstallationView {
             activeHelperWorkflowID = nil
             isHelperWorking = false
             stopHelperWriteSpeedMonitoring()
+            usbProcessStartedAt = nil
             completion()
         }
     }
