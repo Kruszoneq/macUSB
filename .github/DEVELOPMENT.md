@@ -496,6 +496,7 @@ Current effective build configuration snapshot:
 - while status check is running, app shows a small floating panel with spinner (`Sprawdzanie statusu...`).
 - if healthy: short alert `Helper działa poprawnie` with buttons `OK` and `Wyświetl szczegóły`.
 - if unhealthy: one alert with full details (`Status usługi`, `Mach service`, app location, `XPC health`, `Szczegóły`).
+- status details are fully localized through `Localizable.xcstrings` (labels and health state values), so detail alert content follows selected app language.
 - Repair action:
 - guarded against parallel repair runs (`repairInProgress`).
 - opens a dedicated floating panel (`Naprawa helpera`) with:
@@ -524,6 +525,10 @@ Current effective build configuration snapshot:
 - workflow start reply timeout: 10s.
 - default health query timeout: 5s.
 - helper status dialog health timeout: 1.6s.
+- Health detail normalization:
+- helper daemon still returns raw health detail text.
+- app-side `PrivilegedOperationClient` normalizes known health payload (`Helper odpowiada poprawnie (uid=..., euid=..., pid=...)`) into a localized string before rendering status details.
+- XPC client-side failure messages used in status diagnostics (`Brak połączenia...`, `Timeout...`, invalidation/interruption, proxy/connection errors) are localized via string catalog keys.
 - Connection fault behavior:
 - interruption/invalidation clears handlers and emits synthetic workflow failure with stage `xpc_connection`.
 

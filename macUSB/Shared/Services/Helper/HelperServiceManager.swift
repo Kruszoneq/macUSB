@@ -449,7 +449,10 @@ final class HelperServiceManager: NSObject {
 
     private func evaluateStatus(completion: @escaping (HelperStatusSnapshot) -> Void) {
         let serviceStatus = SMAppService.daemon(plistName: Self.daemonPlistName).status
-        let serviceStatusLine = "Status usługi: \(statusDescription(serviceStatus))"
+        let serviceStatusLine = String(
+            format: String(localized: "Status usługi: %@"),
+            statusDescription(serviceStatus)
+        )
         let serviceHealthy = serviceStatus == .enabled
 
         let locationLine: String
@@ -473,12 +476,22 @@ final class HelperServiceManager: NSObject {
         }
 
         PrivilegedOperationClient.shared.queryHealth(withTimeout: statusHealthTimeout) { ok, details in
+            let xpcHealthValue = ok ? String(localized: "OK") : String(localized: "BŁĄD")
             let lines: [String] = [
                 serviceStatusLine,
-                "Mach service: \(Self.machServiceName)",
+                String(
+                    format: String(localized: "Mach service: %@"),
+                    Self.machServiceName
+                ),
                 locationLine,
-                "XPC health: \(ok ? "OK" : "BŁĄD")",
-                "Szczegóły: \(details)"
+                String(
+                    format: String(localized: "XPC health: %@"),
+                    xpcHealthValue
+                ),
+                String(
+                    format: String(localized: "Szczegóły: %@"),
+                    details
+                )
             ]
 
             let healthy = serviceHealthy && locationHealthy && ok
