@@ -10,14 +10,17 @@ enum HelperWorkflowKind: String, Codable {
 struct HelperWorkflowRequestPayload: Codable {
     let workflowKind: HelperWorkflowKind
     let systemName: String
-    let sourcePath: String
+    let sourceAppPath: String
+    let originalImagePath: String?
+    let tempWorkPath: String
     let targetVolumePath: String
     let targetBSDName: String
     let targetLabel: String
     let needsPreformat: Bool
     let isCatalina: Bool
+    let isSierra: Bool
+    let needsCodesign: Bool
     let requiresApplicationPathArg: Bool
-    let postInstallSourceAppPath: String?
     let requesterUID: Int?
 }
 

@@ -34,43 +34,6 @@ extension UniversalInstallationView {
         AppLogging.error(message, category: category)
     }
 
-    // Local codesign helper (without sudo, executed in app process)
-    func performLocalCodesign(on appURL: URL) throws {
-        log("Uruchamiam lokalny codesign (bez sudo) na pliku w TEMP...")
-        let path = appURL.path
-
-        log("   xattr -cr ...")
-        let xattrTask = Process()
-        xattrTask.launchPath = "/usr/bin/xattr"
-        xattrTask.arguments = ["-cr", path]
-        try xattrTask.run()
-        xattrTask.waitUntilExit()
-
-        let componentsToSign = [
-            "\(path)/Contents/Frameworks/OSInstallerSetup.framework/Versions/A/Frameworks/IAESD.framework/Versions/A/Frameworks/IAInstallerUtilities.framework/Versions/A/IAInstallerUtilities",
-            "\(path)/Contents/Frameworks/OSInstallerSetup.framework/Versions/A/Frameworks/IAESD.framework/Versions/A/Frameworks/IAMiniSoftwareUpdate.framework/Versions/A/IAMiniSoftwareUpdate",
-            "\(path)/Contents/Frameworks/OSInstallerSetup.framework/Versions/A/Frameworks/IAESD.framework/Versions/A/Frameworks/IAPackageKit.framework/Versions/A/IAPackageKit",
-            "\(path)/Contents/Frameworks/OSInstallerSetup.framework/Versions/A/Frameworks/IAESD.framework/Versions/A/IAESD",
-            "\(path)/Contents/Resources/createinstallmedia"
-        ]
-
-        for component in componentsToSign {
-            if FileManager.default.fileExists(atPath: component) {
-                log("   Signing: \(URL(fileURLWithPath: component).lastPathComponent)")
-                let task = Process()
-                task.launchPath = "/usr/bin/codesign"
-                task.arguments = ["-s", "-", "-f", component]
-                try task.run()
-                task.waitUntilExit()
-                if task.terminationStatus != 0 {
-                    logError("Błąd codesign dla \(component) (kod: \(task.terminationStatus)) - kontynuuję mimo to.")
-                }
-            }
-        }
-
-        log("Lokalny codesign zakończony.")
-    }
-
     func performEmergencyCleanup(mountPoint: URL, tempURL: URL) {
         log("Cleanup: odmontowuję \(mountPoint.path)")
         log("Cleanup: usuwam katalog TEMP \(tempURL.path)")

@@ -260,12 +260,18 @@ struct FinishUSBView: View {
                 try? unmountTask.run()
                 unmountTask.waitUntilExit()
             }
-            if FileManager.default.fileExists(atPath: self.tempWorkURL.path) {
+            let tempCleanupNeeded = FileManager.default.fileExists(atPath: self.tempWorkURL.path)
+            if tempCleanupNeeded {
                 do { try FileManager.default.removeItem(at: self.tempWorkURL) } catch {
                     success = false;
                     // ZMIANA: Użycie String(localized:) aby ten błąd dało się przetłumaczyć
                     errorMsg = String(localized: "Nie udało się usunąć plików tymczasowych: \(error.localizedDescription)")
                 }
+            } else {
+                AppLogging.info(
+                    "FinishUSBView: pomijam fallback cleanup TEMP, helper usunął pliki wcześniej.",
+                    category: "Installation"
+                )
             }
             
             DispatchQueue.main.async {
