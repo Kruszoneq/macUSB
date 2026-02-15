@@ -1,38 +1,6 @@
 import Foundation
 import SwiftUI
 
-private enum HelperWorkflowLocalization {
-    static let localizedValuesByKey: [String: String] = [
-        "Przygotowywanie plików instalatora": String(localized: "Przygotowywanie plików instalatora"),
-        "Przygotowywanie plików źródłowych dla bezpiecznego przebiegu procesu.": String(localized: "Przygotowywanie plików źródłowych dla bezpiecznego przebiegu procesu."),
-        "Przygotowywanie nośnika USB": String(localized: "Przygotowywanie nośnika USB"),
-        "Konfigurowanie nośnika USB do utworzenia instalatora.": String(localized: "Konfigurowanie nośnika USB do utworzenia instalatora."),
-        "Weryfikowanie obrazu instalatora": String(localized: "Weryfikowanie obrazu instalatora"),
-        "Weryfikowanie obrazu instalacyjnego przed zapisem.": String(localized: "Weryfikowanie obrazu instalacyjnego przed zapisem."),
-        "Tworzenie nośnika instalacyjnego": String(localized: "Tworzenie nośnika instalacyjnego"),
-        "Przenoszenie obrazu systemu na wybrany nośnik USB.": String(localized: "Przenoszenie obrazu systemu na wybrany nośnik USB."),
-        "Dostosowywanie nośnika USB dla instalatora PowerPC.": String(localized: "Dostosowywanie nośnika USB dla instalatora PowerPC."),
-        "Przenoszenie obrazu systemu na nośnik zgodny z PowerPC.": String(localized: "Przenoszenie obrazu systemu na nośnik zgodny z PowerPC."),
-        "Kopiowanie plików instalatora na wybrany nośnik USB.": String(localized: "Kopiowanie plików instalatora na wybrany nośnik USB."),
-        "Finalne przygotowanie instalatora": String(localized: "Finalne przygotowanie instalatora"),
-        "Przygotowywanie miejsca na finalną strukturę instalatora.": String(localized: "Przygotowywanie miejsca na finalną strukturę instalatora."),
-        "Uzupełnianie finalnej struktury aplikacji instalatora.": String(localized: "Uzupełnianie finalnej struktury aplikacji instalatora."),
-        "Finalizowanie uprawnień plików instalatora.": String(localized: "Finalizowanie uprawnień plików instalatora."),
-        "Porządkowanie plików tymczasowych": String(localized: "Porządkowanie plików tymczasowych"),
-        "Usuwanie tymczasowych plików w celu zwolnienia miejsca.": String(localized: "Usuwanie tymczasowych plików w celu zwolnienia miejsca."),
-        "Zakończenie procesu": String(localized: "Zakończenie procesu"),
-        "Finalizowanie operacji i przygotowywanie podsumowania.": String(localized: "Finalizowanie operacji i przygotowywanie podsumowania.")
-    ]
-
-    static func localizedText(for keyOrText: String) -> String {
-        if let localized = localizedValuesByKey[keyOrText] {
-            return localized
-        }
-
-        return Bundle.main.localizedString(forKey: keyOrText, value: keyOrText, table: nil)
-    }
-}
-
 extension UniversalInstallationView {
     func startCreationProcessEntry() {
         startCreationProcessWithHelper()
@@ -61,8 +29,8 @@ extension UniversalInstallationView {
         processingIcon = "lock.shield.fill"
         isCancelled = false
         helperProgressPercent = 0
-        helperStageTitle = String(localized: "Przygotowanie")
-        helperStatusText = String(localized: "Sprawdzanie gotowości helpera...")
+        helperStageTitleKey = "Przygotowanie"
+        helperStatusKey = "Sprawdzanie gotowości helpera..."
         helperCurrentStageKey = ""
         helperWriteSpeedText = "- MB/s"
         stopHelperWriteSpeedMonitoring()
@@ -104,8 +72,8 @@ extension UniversalInstallationView {
                             isProcessing = false
                             isHelperWorking = true
                             helperProgressPercent = 0
-                            helperStageTitle = String(localized: "Uruchamianie helpera")
-                            helperStatusText = String(localized: "Nawiązywanie połączenia XPC...")
+                            helperStageTitleKey = "Uruchamianie helpera"
+                            helperStatusKey = "Nawiązywanie połączenia XPC..."
                         }
 
                         let failWorkflowStart: (String) -> Void = { message in
@@ -131,8 +99,8 @@ extension UniversalInstallationView {
                                     let previousStageKey = helperCurrentStageKey
                                     helperCurrentStageKey = event.stageKey
                                     helperProgressPercent = max(helperProgressPercent, min(event.percent, 100))
-                                    helperStageTitle = localizeHelperWorkflowText(event.stageTitle)
-                                    helperStatusText = localizeHelperWorkflowText(event.statusText)
+                                    helperStageTitleKey = event.stageTitleKey
+                                    helperStatusKey = event.statusKey
 
                                     if isFormattingHelperStage(event.stageKey) {
                                         helperWriteSpeedText = "- MB/s"
@@ -169,8 +137,8 @@ extension UniversalInstallationView {
                                     }
 
                                     log("Wykryto niezgodność kontraktu IPC helpera. Rozpoczynam automatyczne przeładowanie helpera.", category: "Installation")
-                                    helperStageTitle = String(localized: "Aktualizowanie helpera")
-                                    helperStatusText = String(localized: "Wykryto starszą instancję helpera. Trwa ponowne uruchamianie usługi...")
+                                    helperStageTitleKey = "Aktualizowanie helpera"
+                                    helperStatusKey = "Wykryto starszą instancję helpera. Trwa ponowne uruchamianie usługi..."
 
                                     HelperServiceManager.shared.forceReloadForIPCContractMismatch { ready, recoveryMessage in
                                         guard ready else {
@@ -178,15 +146,15 @@ extension UniversalInstallationView {
                                             return
                                         }
 
-                                        helperStageTitle = String(localized: "Ponowne uruchamianie")
-                                        helperStatusText = String(localized: "Helper został odświeżony. Ponawiamy start procesu...")
+                                        helperStageTitleKey = "Ponowne uruchamianie"
+                                        helperStatusKey = "Helper został odświeżony. Ponawiamy start procesu..."
                                         startHelperWorkflow(false)
                                     }
                                 },
                                 onStarted: { workflowID in
                                     activeHelperWorkflowID = workflowID
-                                    helperStageTitle = String(localized: "Rozpoczynanie...")
-                                    helperStatusText = String(localized: "Helper uruchamia pierwszy etap operacji uprzywilejowanych...")
+                                    helperStageTitleKey = "Rozpoczynanie..."
+                                    helperStatusKey = "Helper uruchamia pierwszy etap operacji uprzywilejowanych..."
                                     helperCurrentStageKey = ""
                                     startHelperWriteSpeedMonitoring(for: drive)
                                     log("Uruchomiono helper workflow: \(workflowID)")
@@ -310,10 +278,6 @@ extension UniversalInstallationView {
             requiresApplicationPathArg: isLegacySystem || isSierra,
             requesterUID: requesterUID
         )
-    }
-
-    private func localizeHelperWorkflowText(_ keyOrText: String) -> String {
-        HelperWorkflowLocalization.localizedText(for: keyOrText)
     }
 
     private func isLikelyHelperIPCContractMismatch(_ message: String) -> Bool {

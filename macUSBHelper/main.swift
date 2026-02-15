@@ -28,9 +28,9 @@ struct HelperWorkflowRequestPayload: Codable {
 struct HelperProgressEventPayload: Codable {
     let workflowID: String
     let stageKey: String
-    let stageTitle: String
+    let stageTitleKey: String
     let percent: Double
-    let statusText: String
+    let statusKey: String
     let logLine: String?
     let timestamp: Date
 }
@@ -197,8 +197,8 @@ private final class HelperWorkflowExecutor {
 
     private func prepareWorkflowContext() throws -> PreparedWorkflowContext {
         let stageKey = "prepare_source"
-        let stageTitleKey = "Przygotowywanie plików instalatora"
-        let statusKey = "Przygotowywanie plików źródłowych dla bezpiecznego przebiegu procesu."
+        let stageTitleKey = HelperWorkflowLocalizationKeys.prepareSourceTitle
+        let statusKey = HelperWorkflowLocalizationKeys.prepareSourceStatus
 
         emitProgress(
             stageKey: stageKey,
@@ -366,8 +366,8 @@ private final class HelperWorkflowExecutor {
             stages.append(
                 WorkflowStage(
                     key: "preformat",
-                    titleKey: "Przygotowywanie nośnika USB",
-                    statusKey: "Konfigurowanie nośnika USB do utworzenia instalatora.",
+                    titleKey: HelperWorkflowLocalizationKeys.preformatTitle,
+                    statusKey: HelperWorkflowLocalizationKeys.preformatStatus,
                     startPercent: 10,
                     endPercent: 30,
                     executable: "/usr/sbin/diskutil",
@@ -383,8 +383,8 @@ private final class HelperWorkflowExecutor {
             stages.append(
                 WorkflowStage(
                     key: "imagescan",
-                    titleKey: "Weryfikowanie obrazu instalatora",
-                    statusKey: "Weryfikowanie obrazu instalacyjnego przed zapisem.",
+                    titleKey: HelperWorkflowLocalizationKeys.imagescanTitle,
+                    statusKey: HelperWorkflowLocalizationKeys.imagescanStatus,
                     startPercent: request.needsPreformat ? 30 : 15,
                     endPercent: request.needsPreformat ? 50 : 35,
                     executable: "/usr/sbin/asr",
@@ -395,8 +395,8 @@ private final class HelperWorkflowExecutor {
             stages.append(
                 WorkflowStage(
                     key: "restore",
-                    titleKey: "Tworzenie nośnika instalacyjnego",
-                    statusKey: "Przenoszenie obrazu systemu na wybrany nośnik USB.",
+                    titleKey: HelperWorkflowLocalizationKeys.restoreTitle,
+                    statusKey: HelperWorkflowLocalizationKeys.restoreStatus,
                     startPercent: request.needsPreformat ? 50 : 35,
                     endPercent: 98,
                     executable: "/usr/sbin/asr",
@@ -409,8 +409,8 @@ private final class HelperWorkflowExecutor {
             stages.append(
                 WorkflowStage(
                     key: "imagescan",
-                    titleKey: "Weryfikowanie obrazu instalatora",
-                    statusKey: "Weryfikowanie obrazu instalacyjnego przed zapisem.",
+                    titleKey: HelperWorkflowLocalizationKeys.imagescanTitle,
+                    statusKey: HelperWorkflowLocalizationKeys.imagescanStatus,
                     startPercent: request.needsPreformat ? 30 : 15,
                     endPercent: request.needsPreformat ? 50 : 35,
                     executable: "/usr/sbin/asr",
@@ -421,8 +421,8 @@ private final class HelperWorkflowExecutor {
             stages.append(
                 WorkflowStage(
                     key: "restore",
-                    titleKey: "Tworzenie nośnika instalacyjnego",
-                    statusKey: "Przenoszenie obrazu systemu na wybrany nośnik USB.",
+                    titleKey: HelperWorkflowLocalizationKeys.restoreTitle,
+                    statusKey: HelperWorkflowLocalizationKeys.restoreStatus,
                     startPercent: request.needsPreformat ? 50 : 35,
                     endPercent: 98,
                     executable: "/usr/sbin/asr",
@@ -435,8 +435,8 @@ private final class HelperWorkflowExecutor {
             stages.append(
                 WorkflowStage(
                     key: "ppc_format",
-                    titleKey: "Przygotowywanie nośnika USB",
-                    statusKey: "Dostosowywanie nośnika USB dla instalatora PowerPC.",
+                    titleKey: HelperWorkflowLocalizationKeys.ppcFormatTitle,
+                    statusKey: HelperWorkflowLocalizationKeys.ppcFormatStatus,
                     startPercent: 10,
                     endPercent: 25,
                     executable: "/usr/sbin/diskutil",
@@ -449,8 +449,8 @@ private final class HelperWorkflowExecutor {
             stages.append(
                 WorkflowStage(
                     key: "ppc_restore",
-                    titleKey: "Tworzenie nośnika instalacyjnego",
-                    statusKey: "Przenoszenie obrazu systemu na nośnik zgodny z PowerPC.",
+                    titleKey: HelperWorkflowLocalizationKeys.ppcRestoreTitle,
+                    statusKey: HelperWorkflowLocalizationKeys.ppcRestoreStatus,
                     startPercent: 25,
                     endPercent: 98,
                     executable: "/usr/sbin/asr",
@@ -470,8 +470,8 @@ private final class HelperWorkflowExecutor {
             stages.append(
                 WorkflowStage(
                     key: "createinstallmedia",
-                    titleKey: "Tworzenie nośnika instalacyjnego",
-                    statusKey: "Kopiowanie plików instalatora na wybrany nośnik USB.",
+                    titleKey: HelperWorkflowLocalizationKeys.createinstallmediaTitle,
+                    statusKey: HelperWorkflowLocalizationKeys.createinstallmediaStatus,
                     startPercent: request.needsPreformat ? 30 : 15,
                     endPercent: request.isCatalina ? 90 : 98,
                     executable: createinstallmediaPath,
@@ -488,8 +488,8 @@ private final class HelperWorkflowExecutor {
                 stages.append(
                     WorkflowStage(
                         key: "catalina_cleanup",
-                        titleKey: "Finalne przygotowanie instalatora",
-                        statusKey: "Przygotowywanie miejsca na finalną strukturę instalatora.",
+                        titleKey: HelperWorkflowLocalizationKeys.catalinaFinalizeTitle,
+                        statusKey: HelperWorkflowLocalizationKeys.catalinaCleanupStatus,
                         startPercent: 90,
                         endPercent: 94,
                         executable: "/bin/rm",
@@ -500,8 +500,8 @@ private final class HelperWorkflowExecutor {
                 stages.append(
                     WorkflowStage(
                         key: "catalina_copy",
-                        titleKey: "Finalne przygotowanie instalatora",
-                        statusKey: "Uzupełnianie finalnej struktury aplikacji instalatora.",
+                        titleKey: HelperWorkflowLocalizationKeys.catalinaFinalizeTitle,
+                        statusKey: HelperWorkflowLocalizationKeys.catalinaCopyStatus,
                         startPercent: 94,
                         endPercent: 98,
                         executable: "/usr/bin/ditto",
@@ -512,8 +512,8 @@ private final class HelperWorkflowExecutor {
                 stages.append(
                     WorkflowStage(
                         key: "catalina_xattr",
-                        titleKey: "Finalne przygotowanie instalatora",
-                        statusKey: "Finalizowanie uprawnień plików instalatora.",
+                        titleKey: HelperWorkflowLocalizationKeys.catalinaFinalizeTitle,
+                        statusKey: HelperWorkflowLocalizationKeys.catalinaXattrStatus,
                         startPercent: 98,
                         endPercent: 99,
                         executable: "/usr/bin/xattr",
@@ -681,9 +681,9 @@ private final class HelperWorkflowExecutor {
         let event = HelperProgressEventPayload(
             workflowID: workflowID,
             stageKey: stageKey,
-            stageTitle: titleKey,
+            stageTitleKey: titleKey,
             percent: effectivePercent,
-            statusText: statusKey,
+            statusKey: statusKey,
             logLine: logLine,
             timestamp: Date()
         )
@@ -692,8 +692,8 @@ private final class HelperWorkflowExecutor {
 
     private func runBestEffortTempCleanupStage() {
         let stageKey = "cleanup_temp"
-        let stageTitleKey = "Porządkowanie plików tymczasowych"
-        let statusKey = "Usuwanie tymczasowych plików w celu zwolnienia miejsca."
+        let stageTitleKey = HelperWorkflowLocalizationKeys.cleanupTempTitle
+        let statusKey = HelperWorkflowLocalizationKeys.cleanupTempStatus
         let stageStart = max(latestPercent, 99)
 
         emitProgress(
@@ -740,9 +740,9 @@ private final class HelperWorkflowExecutor {
     private func runFinalizeStage() {
         emitProgress(
             stageKey: "finalize",
-            titleKey: "Zakończenie procesu",
+            titleKey: HelperWorkflowLocalizationKeys.finalizeTitle,
             percent: 100,
-            statusKey: "Finalizowanie operacji i przygotowywanie podsumowania."
+            statusKey: HelperWorkflowLocalizationKeys.finalizeStatus
         )
     }
 

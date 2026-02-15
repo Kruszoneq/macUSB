@@ -211,8 +211,10 @@ Practical rules:
 - All new UI strings should be authored first in Polish.
 - Terminology standard: in Polish user-facing copy use `nośnik USB` (not `dysk USB`) for consistency.
 - Use `Text("...")` with Polish strings; SwiftUI treats these as localization keys.
-- Helper stage/status keys sent from `macUSBHelper` are resolved dynamically at runtime in app (`localizedString(forKey:)`), so they are not auto-extracted from helper code; every new/changed helper key must be added manually to `Localizable.xcstrings`.
-- To prevent helper keys from being marked as `Stale` in String Catalog, keep `HelperWorkflowLocalization.localizedValuesByKey` in `macUSB/Features/Installation/CreatorHelperLogic.swift` synchronized with helper-emitted keys.
+- Helper sends stable technical localization keys (for example `helper.workflow.prepare_source.title`) in XPC progress events.
+- Installation UI renders helper stage/status with `Text(LocalizedStringKey(...))`, so helper progress text follows app locale from SwiftUI environment.
+- Keep helper key anchors in `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift` (`HelperWorkflowLocalizationExtractionAnchors`) synchronized with emitted keys to keep String Catalog extraction stable.
+- Every helper localization key must be translated in all supported app languages (`pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`).
 Use `String(localized: "...")` when:
 - The string is not a `Text` literal.
 - The string is assigned to a variable before being shown.
@@ -334,7 +336,7 @@ Used for most modern macOS installers.
 
 ### Helper Monitoring Strategy
 The app tracks helper progress through XPC progress events:
-- `stageKey`, `stageTitle`, `statusText`, `percent`, and optional `logLine`.
+- `stageKey`, `stageTitleKey`, `statusKey`, `percent`, and optional `logLine`.
 - UI localizes helper-provided stage/status keys through `Localizable.xcstrings` and shows them in an indeterminate progress panel (no numeric percent).
 - Write speed (`MB/s`) is measured during active non-formatting helper stages and shown in the panel.
 - During formatting stages (`preformat`, `ppc_format`) speed is hidden as `- MB/s`.
@@ -554,7 +556,7 @@ Current effective build configuration snapshot:
 - `requesterUID = getuid()`
 - App no longer performs copy/patch/sign staging in TEMP; helper owns those steps.
 - UI mapping from helper events:
-- stage title key, status key, and percent are updated from `HelperProgressEventPayload`, then localized in app using `Localizable.xcstrings`.
+- stage title key, status key, and percent are updated from `HelperProgressEventPayload`; UI renders keys via `LocalizedStringKey` and `Localizable.xcstrings`.
 - `logLine` is not displayed in installer UI and is logged into diagnostics (`HelperLiveLog`).
 - If workflow start fails with an IPC request-decode signature (invalid helper request), app performs one automatic helper reload (unregister/register) and retries workflow start once.
 
@@ -568,7 +570,7 @@ Current effective build configuration snapshot:
 - output parser:
 - captures stdout+stderr line-by-line,
 - extracts `%` tokens with regex and maps tool percentage into stage percentage range,
-- keeps `statusText` as localized status key and forwards tool output as optional `logLine`.
+- keeps `statusKey` as localized status key and forwards tool output as optional `logLine`.
 - Command execution context:
 - if `requesterUID > 0`, helper runs command as user via:
 - `/bin/launchctl asuser <uid> <tool> ...`
@@ -613,7 +615,7 @@ Current effective build configuration snapshot:
 ### 11.12 Non-negotiable helper invariants
 - Keep helper integration typed and centralized (do not introduce ad-hoc shell IPC paths).
 - Keep privileged execution on helper path in all configurations; do not reintroduce terminal fallback.
-- Preserve helper event fields (`stageTitle`, `statusText`, `percent`, `logLine`) and Polish user-facing messaging.
+- Preserve helper event fields (`stageTitleKey`, `statusKey`, `percent`, `logLine`) and technical-key localization contract.
 - Keep helper status UX two-step in healthy state (`OK` primary + `Wyświetl szczegóły`).
 - Keep app bundle structure and plist placement exactly compatible with `SMAppService.daemon(plistName:)`.
 
@@ -714,6 +716,7 @@ This section lists the main call relationships and data flow.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift` → registers/repairs/removes LaunchDaemon helper via `SMAppService`, reports readiness, presents startup Background Items approval prompt when needed, and shows helper status alerts (healthy short-form + full details dialog).
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift` → app-side XPC client that starts/cancels helper workflows and logs `logLine` events to `HelperLiveLog`.
 - `macUSB/Shared/Services/Helper/HelperIPC.swift` → helper IPC payload contracts (request, progress event, result).
+- `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift` → single source of truth for helper localization key IDs and extraction anchors used by String Catalog.
 - `macUSBHelper/main.swift` → helper-side XPC service, root workflow executor, progress event emitter, and cancellation handling.
 - `macUSB/Shared/Services/UpdateChecker.swift` → called from app menu.
 
@@ -725,11 +728,12 @@ This section lists the main call relationships and data flow.
 3. Respect flow flags: `AnalysisLogic` flags are the source of truth for installation paths.
 4. Keep the window fixed: UI assumes a 550×750 fixed layout.
 5. Privileged helper operations must be observable: keep stage/status/progress-state updates flowing to UI and keep `logLine` in diagnostics logs (`HelperLiveLog`) rather than screen panels.
-6. Helper stage/status strings must stay localizable through `Localizable.xcstrings`; helper sends keys, app resolves localized text.
-7. Use `AppLogging` for all important steps: keep logs helpful for diagnostics.
-8. Privileged install flow must run through `SMAppService` + LaunchDaemon helper in all configurations (no terminal fallback).
-9. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.
-10. Debug menu contract: top-level `DEBUG` menu is allowed only for `DEBUG` builds; it must not be available in `Release` builds.
+6. Helper stage/status strings must stay localizable through `Localizable.xcstrings`; helper sends technical keys and the app renders them with `LocalizedStringKey`.
+7. Adding a new helper stage requires: new technical key IDs, translations for all supported languages, EN verification, and a full project build check.
+8. Use `AppLogging` for all important steps: keep logs helpful for diagnostics.
+9. Privileged install flow must run through `SMAppService` + LaunchDaemon helper in all configurations (no terminal fallback).
+10. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.
+11. Debug menu contract: top-level `DEBUG` menu is allowed only for `DEBUG` builds; it must not be available in `Release` builds.
 
 ---
 

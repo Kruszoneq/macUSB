@@ -30,8 +30,8 @@ struct UniversalInstallationView: View {
     @State var errorMessage: String = ""
     @State var isHelperWorking: Bool = false
     @State var helperProgressPercent: Double = 0
-    @State var helperStageTitle: String = ""
-    @State var helperStatusText: String = ""
+    @State var helperStageTitleKey: String = ""
+    @State var helperStatusKey: String = ""
     @State var helperCurrentStageKey: String = ""
     @State var helperWriteSpeedText: String = "- MB/s"
     @State var helperWriteSpeedTimer: Timer?
@@ -357,9 +357,9 @@ struct UniversalInstallationView: View {
                             HStack(spacing: 15) {
                                 Image(systemName: "lock.shield.fill").font(.largeTitle).foregroundColor(.accentColor)
                                 VStack(alignment: .leading, spacing: 5) {
-                                    Text(helperStageTitle.isEmpty ? String(localized: "Rozpoczynanie...") : helperStageTitle)
+                                    Text(LocalizedStringKey(helperStageTitleKey.isEmpty ? "Rozpoczynanie..." : helperStageTitleKey))
                                         .font(.headline)
-                                    Text(helperStatusText.isEmpty ? String(localized: "Nawiązywanie połączenia XPC...") : helperStatusText)
+                                    Text(LocalizedStringKey(helperStatusKey.isEmpty ? "Nawiązywanie połączenia XPC..." : helperStatusKey))
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
