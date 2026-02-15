@@ -119,35 +119,75 @@ struct macUSBApp: App {
                     Button {
                         languageManager.currentLanguage = "auto"
                     } label: {
-                        Label(String(localized: "Automatycznie"), systemImage: languageManager.isAuto ? "checkmark" : "")
+                        if languageManager.isAuto {
+                            Label(String(localized: "Automatycznie"), systemImage: "checkmark")
+                        } else {
+                            Text(String(localized: "Automatycznie"))
+                        }
                     }
                     Divider()
                     Button { languageManager.currentLanguage = "pl" } label: {
-                        Label("Polski", systemImage: languageManager.currentLanguage == "pl" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "pl" {
+                            Label("Polski", systemImage: "checkmark")
+                        } else {
+                            Text("Polski")
+                        }
                     }
                     Button { languageManager.currentLanguage = "en" } label: {
-                        Label("English", systemImage: languageManager.currentLanguage == "en" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "en" {
+                            Label("English", systemImage: "checkmark")
+                        } else {
+                            Text("English")
+                        }
                     }
                     Button { languageManager.currentLanguage = "de" } label: {
-                        Label("Deutsch", systemImage: languageManager.currentLanguage == "de" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "de" {
+                            Label("Deutsch", systemImage: "checkmark")
+                        } else {
+                            Text("Deutsch")
+                        }
                     }
                     Button { languageManager.currentLanguage = "fr" } label: {
-                        Label("Français", systemImage: languageManager.currentLanguage == "fr" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "fr" {
+                            Label("Français", systemImage: "checkmark")
+                        } else {
+                            Text("Français")
+                        }
                     }
                     Button { languageManager.currentLanguage = "es" } label: {
-                        Label("Español", systemImage: languageManager.currentLanguage == "es" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "es" {
+                            Label("Español", systemImage: "checkmark")
+                        } else {
+                            Text("Español")
+                        }
                     }
                     Button { languageManager.currentLanguage = "pt-BR" } label: {
-                        Label("Português (BR)", systemImage: languageManager.currentLanguage == "pt-BR" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "pt-BR" {
+                            Label("Português (BR)", systemImage: "checkmark")
+                        } else {
+                            Text("Português (BR)")
+                        }
                     }
                     Button { languageManager.currentLanguage = "ru" } label: {
-                        Label("Русский", systemImage: languageManager.currentLanguage == "ru" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "ru" {
+                            Label("Русский", systemImage: "checkmark")
+                        } else {
+                            Text("Русский")
+                        }
                     }
                     Button { languageManager.currentLanguage = "zh-Hans" } label: {
-                        Label("简体中文", systemImage: languageManager.currentLanguage == "zh-Hans" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "zh-Hans" {
+                            Label("简体中文", systemImage: "checkmark")
+                        } else {
+                            Text("简体中文")
+                        }
                     }
                     Button { languageManager.currentLanguage = "ja" } label: {
-                        Label("日本語", systemImage: languageManager.currentLanguage == "ja" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "ja" {
+                            Label("日本語", systemImage: "checkmark")
+                        } else {
+                            Text("日本語")
+                        }
                     }
                 } label: {
                     Label(String(localized: "Język"), systemImage: "globe")
