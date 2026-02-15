@@ -240,6 +240,27 @@ Start gating:
 - A warning `NSAlert` confirms data loss on the selected USB target.
 - Only explicit confirmation (`Tak`) proceeds to `startCreationProcessEntry()` and helper workflow initialization.
 
+### Installation Summary Box Copy (`Przebieg procesu`)
+The copy shown in the summary panel is intentionally simplified and differs by top-level flow flags:
+
+When `isRestoreLegacy == true`:
+- `• Obraz z systemem zostanie skopiowany i zweryfikowany`
+- `• Nośnik USB zostanie sformatowany`
+- `• Obraz systemu zostanie przywrócony`
+- `• Pliki tymczasowe zostaną automatycznie usunięte`
+
+When `isPPC == true`:
+- `• Nośnik USB zostanie odpowiednio sformatowany`
+- `• Obraz instalacyjny zostanie przywrócony`
+- `• Pliki tymczasowe zostaną automatycznie usunięte`
+
+Standard branch (`createinstallmedia` families):
+- `• Pliki systemowe zostaną przygotowane`
+- `• Nośnik USB zostanie sformatowany`
+- `• Pliki instalacyjne zostaną skopiowane`
+- `• Struktura instalatora zostanie sfinalizowana` (shown only when `isCatalina == true`)
+- `• Pliki tymczasowe zostaną automatycznie usunięte`
+
 ### Standard Flow (createinstallmedia)
 Used for most modern macOS installers.
 - `createinstallmedia` is executed by the privileged helper (LaunchDaemon) using typed XPC requests.
