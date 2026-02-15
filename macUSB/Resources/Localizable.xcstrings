@@ -2037,9 +2037,6 @@
     "Helper został zarejestrowany, ale wymaga zatwierdzenia przez użytkownika." : {
 
     },
-    "Helper został zarejestrowany, ale wymaga zatwierdzenia w Ustawieniach systemowych, aby mógł wykonywać operacje uprzywilejowane." : {
-
-    },
     "Ignoruj" : {
       "localizations" : {
         "de" : {
@@ -2519,6 +2516,9 @@
           }
         }
       }
+    },
+    "macUSB wymaga zezwolenia na działanie w tle, aby umożliwić zarządzanie nośnikami. Przejdź do ustawień systemowych, aby nadać wymagane uprawnienia" : {
+
     },
     "Napraw helpera" : {
 
@@ -3305,7 +3305,7 @@
         }
       }
     },
-    "Otwórz Ustawienia" : {
+    "Ustawienia działania w tle…" : {
 
     },
     "Pobierz" : {
@@ -5390,9 +5390,6 @@
         }
       }
     },
-    "Usuń helpera" : {
-
-    },
     "Utworzono instalator systemu" : {
       "localizations" : {
         "de" : {
@@ -6551,7 +6548,7 @@
         }
       }
     },
-    "Wymagane zatwierdzenie helpera" : {
+    "Wymagane narzędzie pomocnicze" : {
 
     },
     "Wymagania" : {

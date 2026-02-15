@@ -22,6 +22,7 @@ final class HelperServiceManager: NSObject {
     private var repairLogTextView: NSTextView?
     private var repairSpinner: NSProgressIndicator?
     private var repairCloseButton: NSButton?
+    private var didPresentStartupApprovalPrompt = false
     private let repairLogFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss"
@@ -33,6 +34,7 @@ final class HelperServiceManager: NSObject {
 
     private struct HelperStatusSnapshot {
         let isHealthy: Bool
+        let serviceStatus: SMAppService.Status
         let detailedText: String
     }
 
@@ -43,13 +45,27 @@ final class HelperServiceManager: NSObject {
     func bootstrapIfNeededAtStartup(completion: @escaping (Bool) -> Void) {
         #if DEBUG
         if Self.isRunningFromXcodeDevelopmentBuild() {
-            completion(true)
+            let service = SMAppService.daemon(plistName: Self.daemonPlistName)
+            if service.status == .requiresApproval {
+                presentStartupApprovalAlertIfNeeded {
+                    completion(false)
+                }
+            } else {
+                completion(true)
+            }
             return
         }
         #endif
 
         ensureReadyForPrivilegedWork(interactive: false) { ready, _ in
-            completion(ready)
+            guard !ready else {
+                completion(true)
+                return
+            }
+
+            self.presentStartupApprovalAlertIfNeeded {
+                completion(false)
+            }
         }
     }
 
@@ -75,6 +91,8 @@ final class HelperServiceManager: NSObject {
 
                     if snapshot.isHealthy {
                         self.presentHealthyStatusAlert(detailsText: snapshot.detailedText)
+                    } else if snapshot.serviceStatus == .requiresApproval {
+                        self.presentApprovalRequiredStatusAlert(detailsText: snapshot.detailedText)
                     } else {
                         let alert = NSAlert()
                         alert.icon = NSApp.applicationIconImage
@@ -467,6 +485,7 @@ final class HelperServiceManager: NSObject {
             completion(
                 HelperStatusSnapshot(
                     isHealthy: healthy,
+                    serviceStatus: serviceStatus,
                     detailedText: lines.joined(separator: "\n")
                 )
             )
@@ -494,6 +513,36 @@ final class HelperServiceManager: NSObject {
             if response == .alertSecondButtonReturn {
                 presentStatusDetailsAlert(detailsText: detailsText)
             }
+        }
+    }
+
+    private func presentApprovalRequiredStatusAlert(detailsText: String) {
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .informational
+        alert.messageText = String(localized: "Status helpera")
+        alert.informativeText = String(localized: "macUSB wymaga zezwolenia na działanie w tle, aby umożliwić zarządzanie nośnikami. Przejdź do ustawień systemowych, aby nadać wymagane uprawnienia")
+        alert.addButton(withTitle: String(localized: "Przejdź do ustawień systemowych"))
+        alert.addButton(withTitle: String(localized: "OK"))
+        alert.addButton(withTitle: String(localized: "Wyświetl szczegóły"))
+
+        let handleResponse: (NSApplication.ModalResponse) -> Void = { response in
+            if response == .alertFirstButtonReturn {
+                SMAppService.openSystemSettingsLoginItems()
+                return
+            }
+
+            if response == .alertThirdButtonReturn {
+                DispatchQueue.main.async {
+                    self.presentStatusDetailsAlert(detailsText: detailsText)
+                }
+            }
+        }
+
+        if let window = NSApp.keyWindow ?? NSApp.mainWindow {
+            alert.beginSheetModal(for: window, completionHandler: handleResponse)
+        } else {
+            handleResponse(alert.runModal())
         }
     }
 
@@ -562,25 +611,50 @@ final class HelperServiceManager: NSObject {
         presentAlert(alert)
     }
 
-    private func presentApprovalRequiredAlert() {
+    private func presentApprovalRequiredAlert(onDismiss: (() -> Void)? = nil) {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Wymagane zatwierdzenie helpera")
-        alert.informativeText = String(localized: "Helper został zarejestrowany, ale wymaga zatwierdzenia w Ustawieniach systemowych, aby mógł wykonywać operacje uprzywilejowane.")
-        alert.addButton(withTitle: String(localized: "Otwórz Ustawienia"))
+        alert.messageText = String(localized: "Wymagane narzędzie pomocnicze")
+        alert.informativeText = String(localized: "macUSB wymaga zezwolenia na działanie w tle, aby umożliwić zarządzanie nośnikami. Przejdź do ustawień systemowych, aby nadać wymagane uprawnienia")
+        alert.addButton(withTitle: String(localized: "Przejdź do ustawień systemowych"))
         alert.addButton(withTitle: String(localized: "Nie teraz"))
 
         let handler: (NSApplication.ModalResponse) -> Void = { response in
             if response == .alertFirstButtonReturn {
                 SMAppService.openSystemSettingsLoginItems()
             }
+            onDismiss?()
         }
 
         if let window = NSApp.keyWindow ?? NSApp.mainWindow {
             alert.beginSheetModal(for: window, completionHandler: handler)
         } else {
             handler(alert.runModal())
+        }
+    }
+
+    private func presentStartupApprovalAlertIfNeeded(completion: @escaping () -> Void) {
+        coordinationQueue.async {
+            guard !self.didPresentStartupApprovalPrompt else {
+                DispatchQueue.main.async {
+                    completion()
+                }
+                return
+            }
+
+            let service = SMAppService.daemon(plistName: Self.daemonPlistName)
+            guard service.status == .requiresApproval else {
+                DispatchQueue.main.async {
+                    completion()
+                }
+                return
+            }
+
+            self.didPresentStartupApprovalPrompt = true
+            DispatchQueue.main.async {
+                self.presentApprovalRequiredAlert(onDismiss: completion)
+            }
         }
     }
 

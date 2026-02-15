@@ -142,6 +142,12 @@ Buttons:
 Alerts and dialogs:
 - `NSAlert` uses the application icon and localized strings.
 - Alerts are styled as informational or warning depending on action (updates, cancellations, external drive enablement, etc.).
+- On startup helper bootstrap, if helper status is `requiresApproval` (Background Items permission missing), the app shows:
+- title: `Wymagane narzędzie pomocnicze`
+- message: `macUSB wymaga zezwolenia na działanie w tle, aby umożliwić zarządzanie nośnikami. Przejdź do ustawień systemowych, aby nadać wymagane uprawnienia`
+- buttons: `Przejdź do ustawień systemowych` (opens Background Items settings via `SMAppService.openSystemSettingsLoginItems()`) and `Nie teraz`.
+- This startup approval prompt is shown on every app launch while helper status remains `requiresApproval`.
+- In first-run onboarding sequence it is shown before notification-permission prompts.
 - Clicking `Rozpocznij` in `UniversalInstallationView` always shows a destructive-data warning alert before any helper workflow starts:
 - title: `Ostrzeżenie o utracie danych`
 - message: `Wszystkie dane na wybranym nośniku zostaną usunięte. Czy na pewno chcesz rozpocząć proces?`
@@ -149,6 +155,9 @@ Alerts and dialogs:
 - Helper status check uses a two-step alert in healthy state:
 - first alert: `Helper działa poprawnie` with system buttons `OK` (primary) and `Wyświetl szczegóły`.
 - second alert (on details): full helper status report.
+- Helper status check in `requiresApproval` state uses the same concise-first pattern:
+- summary text: `macUSB wymaga zezwolenia na działanie w tle, aby umożliwić zarządzanie nośnikami. Przejdź do ustawień systemowych, aby nadać wymagane uprawnienia`
+- buttons: `Przejdź do ustawień systemowych` (primary), `OK`, `Wyświetl szczegóły`.
 
 Inputs and file selection:
 - The file path field is a disabled `TextField` with `.roundedBorder`.
@@ -458,7 +467,7 @@ Current effective build configuration snapshot:
 - parallel callers are coalesced (`ensureInProgress`, pending completion queue).
 - `SMAppService` status handling:
 - `.enabled` → query XPC health; optionally recover if health fails.
-- `.requiresApproval` → report failure and show approval alert (`SMAppService.openSystemSettingsLoginItems`) when interactive.
+- `.requiresApproval` → report failure; interactive flows show approval alert, and startup bootstrap also shows approval prompt before notification onboarding.
 - `.notRegistered` / `.notFound` → perform `register()` then post-register validation.
 - Registration failure nuances:
 - if `register()` throws but status is `.enabled`, flow continues with validation.
@@ -597,7 +606,7 @@ Minimal runbook for day-to-day diagnostics and release safety:
 - Recovery/status quick-check:
 - If service is enabled but XPC fails: run `Napraw helpera` (it resets client connection and re-validates registration).
 - If status is `requiresApproval`: open system settings from helper alert and approve background item.
-- For unstable state during development: remove helper (`Usuń helpera`), relaunch app, then run repair/status check.
+- You can manually open Background Items settings from `Narzędzia` → `Ustawienia działania w tle…`.
 
 ---
 
@@ -635,7 +644,7 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Shared/Services/NotificationPermissionManager.swift` — Central notification permission and app-level toggle manager (startup prompt, menu action, system settings redirect).
 - `macUSB/Shared/Services/Helper/HelperIPC.swift` — Shared app-side helper request/result/event payloads and XPC protocol contracts.
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift` — App-side XPC client for start/cancel/health checks and progress/result routing.
-- `macUSB/Shared/Services/Helper/HelperServiceManager.swift` — Helper registration/repair/removal/status logic using `SMAppService`.
+- `macUSB/Shared/Services/Helper/HelperServiceManager.swift` — Helper registration/repair/removal/status logic using `SMAppService`, including startup prompt when Background Items approval is required.
 - `macUSB/Shared/Services/UpdateChecker.swift` — Manual update checking.
 - `macUSB/Shared/Services/Logging.swift` — Central logging and log export.
 - `macUSB/Shared/Services/USBDriveLogic.swift` — USB volume enumeration plus metadata detection (speed, partition scheme, filesystem format).
@@ -674,7 +683,7 @@ This section lists the main call relationships and data flow.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
 - `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift`, `SystemAnalysisView`, and `NotificationPermissionManager`.
 - `macUSB/Shared/Services/NotificationPermissionManager.swift` → reads `UNUserNotificationCenter` state, updates `MenuState`, controls startup/menu alerts for notification permission, and opens system settings when blocked.
-- `macUSB/Shared/Services/Helper/HelperServiceManager.swift` → registers/repairs/removes LaunchDaemon helper via `SMAppService`, reports readiness, and presents helper status alerts (healthy short-form + full details dialog).
+- `macUSB/Shared/Services/Helper/HelperServiceManager.swift` → registers/repairs/removes LaunchDaemon helper via `SMAppService`, reports readiness, presents startup Background Items approval prompt when needed, and shows helper status alerts (healthy short-form + full details dialog).
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift` → app-side XPC client that starts/cancels helper workflows and logs `logLine` events to `HelperLiveLog`.
 - `macUSB/Shared/Services/Helper/HelperIPC.swift` → helper IPC payload contracts (request, progress event, result).
 - `macUSBHelper/main.swift` → helper-side XPC service, root workflow executor, progress event emitter, and cancellation handling.
