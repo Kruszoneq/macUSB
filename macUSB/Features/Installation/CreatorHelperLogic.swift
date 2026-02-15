@@ -1,6 +1,38 @@
 import Foundation
 import SwiftUI
 
+private enum HelperWorkflowLocalization {
+    static let localizedValuesByKey: [String: String] = [
+        "Przygotowywanie plików instalatora": String(localized: "Przygotowywanie plików instalatora"),
+        "Przygotowywanie plików źródłowych dla bezpiecznego przebiegu procesu.": String(localized: "Przygotowywanie plików źródłowych dla bezpiecznego przebiegu procesu."),
+        "Przygotowywanie nośnika USB": String(localized: "Przygotowywanie nośnika USB"),
+        "Konfigurowanie nośnika USB do utworzenia instalatora.": String(localized: "Konfigurowanie nośnika USB do utworzenia instalatora."),
+        "Weryfikowanie obrazu instalatora": String(localized: "Weryfikowanie obrazu instalatora"),
+        "Weryfikowanie obrazu instalacyjnego przed zapisem.": String(localized: "Weryfikowanie obrazu instalacyjnego przed zapisem."),
+        "Tworzenie nośnika instalacyjnego": String(localized: "Tworzenie nośnika instalacyjnego"),
+        "Przenoszenie obrazu systemu na wybrany nośnik USB.": String(localized: "Przenoszenie obrazu systemu na wybrany nośnik USB."),
+        "Dostosowywanie nośnika USB dla instalatora PowerPC.": String(localized: "Dostosowywanie nośnika USB dla instalatora PowerPC."),
+        "Przenoszenie obrazu systemu na nośnik zgodny z PowerPC.": String(localized: "Przenoszenie obrazu systemu na nośnik zgodny z PowerPC."),
+        "Kopiowanie plików instalatora na wybrany nośnik USB.": String(localized: "Kopiowanie plików instalatora na wybrany nośnik USB."),
+        "Finalne przygotowanie instalatora": String(localized: "Finalne przygotowanie instalatora"),
+        "Przygotowywanie miejsca na finalną strukturę instalatora.": String(localized: "Przygotowywanie miejsca na finalną strukturę instalatora."),
+        "Uzupełnianie finalnej struktury aplikacji instalatora.": String(localized: "Uzupełnianie finalnej struktury aplikacji instalatora."),
+        "Finalizowanie uprawnień plików instalatora.": String(localized: "Finalizowanie uprawnień plików instalatora."),
+        "Porządkowanie plików tymczasowych": String(localized: "Porządkowanie plików tymczasowych"),
+        "Usuwanie tymczasowych plików w celu zwolnienia miejsca.": String(localized: "Usuwanie tymczasowych plików w celu zwolnienia miejsca."),
+        "Zakończenie procesu": String(localized: "Zakończenie procesu"),
+        "Finalizowanie operacji i przygotowywanie podsumowania.": String(localized: "Finalizowanie operacji i przygotowywanie podsumowania.")
+    ]
+
+    static func localizedText(for keyOrText: String) -> String {
+        if let localized = localizedValuesByKey[keyOrText] {
+            return localized
+        }
+
+        return Bundle.main.localizedString(forKey: keyOrText, value: keyOrText, table: nil)
+    }
+}
+
 extension UniversalInstallationView {
     func startCreationProcessEntry() {
         startCreationProcessWithHelper()
@@ -281,7 +313,7 @@ extension UniversalInstallationView {
     }
 
     private func localizeHelperWorkflowText(_ keyOrText: String) -> String {
-        Bundle.main.localizedString(forKey: keyOrText, value: keyOrText, table: nil)
+        HelperWorkflowLocalization.localizedText(for: keyOrText)
     }
 
     private func isLikelyHelperIPCContractMismatch(_ message: String) -> Bool {

@@ -2433,6 +2433,22 @@
         }
       }
     },
+    "Dostosowywanie nośnika USB dla instalatora PowerPC." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adjusting USB media for a PowerPC installer."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostosowywanie nośnika USB dla instalatora PowerPC."
+          }
+        }
+      }
+    },
     "Działanie przerwane przez użytkownika. Możesz zacząć od początku." : {
       "localizations" : {
         "de" : {
@@ -2689,6 +2705,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Español"
+          }
+        }
+      }
+    },
+    "Finalizowanie operacji i przygotowywanie podsumowania." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalizing the operation and preparing a summary."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalizowanie operacji i przygotowywanie podsumowania."
+          }
+        }
+      }
+    },
+    "Finalizowanie uprawnień plików instalatora." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalizing installer file permissions."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalizowanie uprawnień plików instalatora."
+          }
+        }
+      }
+    },
+    "Finalne przygotowanie instalatora" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Final installer preparation"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalne przygotowanie instalatora"
           }
         }
       }
@@ -3501,6 +3565,22 @@
         }
       }
     },
+    "Konfigurowanie nośnika USB do utworzenia instalatora." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuring USB media for installer creation."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konfigurowanie nośnika USB do utworzenia instalatora."
+          }
+        }
+      }
+    },
     "Kontynuuj" : {
       "localizations" : {
         "de" : {
@@ -3549,6 +3629,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "继续"
+          }
+        }
+      }
+    },
+    "Kopiowanie plików instalatora na wybrany nośnik USB." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copying installer files to the selected USB media."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopiowanie plików instalatora na wybrany nośnik USB."
           }
         }
       }
@@ -6392,6 +6488,22 @@
         }
       }
     },
+    "Porządkowanie plików tymczasowych" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cleaning up temporary files"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Porządkowanie plików tymczasowych"
+          }
+        }
+      }
+    },
     "Powiadomienia dla macUSB zostały zablokowane w ustawieniach systemowych. Aby otrzymywać informacje o zakończeniu procesów, należy zezwolić aplikacji na ich wyświetlanie w systemie." : {
       "localizations" : {
         "de" : {
@@ -7248,6 +7360,38 @@
         }
       }
     },
+    "Przenoszenie obrazu systemu na nośnik zgodny z PowerPC." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transferring the system image to PowerPC-compatible media."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przenoszenie obrazu systemu na nośnik zgodny z PowerPC."
+          }
+        }
+      }
+    },
+    "Przenoszenie obrazu systemu na wybrany nośnik USB." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transferring the system image to the selected USB media."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przenoszenie obrazu systemu na wybrany nośnik USB."
+          }
+        }
+      }
+    },
     "Przerwij i zakończ" : {
       "localizations" : {
         "de" : {
@@ -7456,6 +7600,38 @@
         }
       }
     },
+    "Przygotowywanie miejsca na finalną strukturę instalatora." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing space for the final installer structure."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przygotowywanie miejsca na finalną strukturę instalatora."
+          }
+        }
+      }
+    },
+    "Przygotowywanie nośnika USB" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing USB media"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przygotowywanie nośnika USB"
+          }
+        }
+      }
+    },
     "Przygotowywanie operacji..." : {
       "localizations" : {
         "de" : {
@@ -7504,6 +7680,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在准备操作..."
+          }
+        }
+      }
+    },
+    "Przygotowywanie plików instalatora" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing installer files"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przygotowywanie plików instalatora"
+          }
+        }
+      }
+    },
+    "Przygotowywanie plików źródłowych dla bezpiecznego przebiegu procesu." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing source files for a safe process flow."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przygotowywanie plików źródłowych dla bezpiecznego przebiegu procesu."
           }
         }
       }
@@ -8827,6 +9035,22 @@
         }
       }
     },
+    "Tworzenie nośnika instalacyjnego" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating installation media"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tworzenie nośnika instalacyjnego"
+          }
+        }
+      }
+    },
     "Tworzenie USB z Mac OS X Tiger (Multi DVD)" : {
       "localizations" : {
         "de" : {
@@ -9146,6 +9370,22 @@
         }
       }
     },
+    "Usuwanie tymczasowych plików w celu zwolnienia miejsca." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Removing temporary files to free up space."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuwanie tymczasowych plików w celu zwolnienia miejsca."
+          }
+        }
+      }
+    },
     "Utworzono instalator systemu" : {
       "localizations" : {
         "de" : {
@@ -9250,6 +9490,22 @@
         }
       }
     },
+    "Uzupełnianie finalnej struktury aplikacji instalatora." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completing the final installer app structure."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uzupełnianie finalnej struktury aplikacji instalatora."
+          }
+        }
+      }
+    },
     "W przypadku Maca z PowerPC" : {
       "localizations" : {
         "de" : {
@@ -9298,6 +9554,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "对于 PowerPC Mac"
+          }
+        }
+      }
+    },
+    "Weryfikowanie obrazu instalacyjnego przed zapisem." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifying the installer image before writing."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weryfikowanie obrazu instalacyjnego przed zapisem."
+          }
+        }
+      }
+    },
+    "Weryfikowanie obrazu instalatora" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifying installer image"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weryfikowanie obrazu instalatora"
           }
         }
       }
@@ -11038,6 +11326,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "完成并退出"
+          }
+        }
+      }
+    },
+    "Zakończenie procesu" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finishing the process"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zakończenie procesu"
           }
         }
       }

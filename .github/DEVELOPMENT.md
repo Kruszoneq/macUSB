@@ -211,6 +211,8 @@ Practical rules:
 - All new UI strings should be authored first in Polish.
 - Terminology standard: in Polish user-facing copy use `nośnik USB` (not `dysk USB`) for consistency.
 - Use `Text("...")` with Polish strings; SwiftUI treats these as localization keys.
+- Helper stage/status keys sent from `macUSBHelper` are resolved dynamically at runtime in app (`localizedString(forKey:)`), so they are not auto-extracted from helper code; every new/changed helper key must be added manually to `Localizable.xcstrings`.
+- To prevent helper keys from being marked as `Stale` in String Catalog, keep `HelperWorkflowLocalization.localizedValuesByKey` in `macUSB/Features/Installation/CreatorHelperLogic.swift` synchronized with helper-emitted keys.
 Use `String(localized: "...")` when:
 - The string is not a `Text` literal.
 - The string is assigned to a variable before being shown.
