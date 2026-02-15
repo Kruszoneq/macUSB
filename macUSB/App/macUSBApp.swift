@@ -196,10 +196,17 @@ struct macUSBApp: App {
                 Button {
                     NotificationPermissionManager.shared.handleMenuNotificationsTapped()
                 } label: {
-                    Label(
-                        String(localized: menuState.notificationsEnabled ? "Powiadomienia włączone" : "Powiadomienia wyłączone"),
-                        systemImage: menuState.notificationsEnabled ? "bell.and.waves.left.and.right" : "bell.slash"
-                    )
+                    if menuState.notificationsEnabled {
+                        Label(
+                            String(localized: "Powiadomienia włączone"),
+                            systemImage: "bell.and.waves.left.and.right"
+                        )
+                    } else {
+                        Label(
+                            String(localized: "Powiadomienia wyłączone"),
+                            systemImage: "bell.slash"
+                        )
+                    }
                 }
             }
             CommandMenu(String(localized: "Narzędzia")) {
