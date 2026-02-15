@@ -99,8 +99,13 @@ extension UniversalInstallationView {
                                     let previousStageKey = helperCurrentStageKey
                                     helperCurrentStageKey = event.stageKey
                                     helperProgressPercent = max(helperProgressPercent, min(event.percent, 100))
-                                    helperStageTitleKey = event.stageTitleKey
-                                    helperStatusKey = event.statusKey
+                                    if let localization = HelperWorkflowLocalizationKeys.presentation(for: event.stageKey) {
+                                        helperStageTitleKey = localization.titleKey
+                                        helperStatusKey = localization.statusKey
+                                    } else {
+                                        helperStageTitleKey = event.stageTitleKey
+                                        helperStatusKey = event.statusKey
+                                    }
 
                                     if isFormattingHelperStage(event.stageKey) {
                                         helperWriteSpeedText = "- MB/s"

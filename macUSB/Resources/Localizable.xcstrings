@@ -4,7 +4,7 @@
     "" : {
 
     },
-    "• Do utworzenia instalatora potrzebny jest dysk USB o pojemności minimum 16 GB" : {
+    "• Do utworzenia instalatora potrzebny jest nośnik USB o pojemności minimum 16 GB" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -524,7 +524,7 @@
         }
       }
     },
-    "• Podłącz dysk USB do docelowego komputera Mac" : {
+    "• Podłącz nośnik USB do docelowego komputera Mac" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -940,7 +940,7 @@
         }
       }
     },
-    "Aby uruchomić instalator z dysku USB na Macu z PowerPC, niezbędne jest wpisanie komendy w konsoli Open Firmware. Pełna instrukcja obsługi znajduje się na stronie internetowej aplikacji." : {
+    "Aby uruchomić instalator z nośnika USB na Macu z PowerPC, niezbędne jest wpisanie komendy w konsoli Open Firmware. Pełna instrukcja obsługi znajduje się na stronie internetowej aplikacji." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1092,23 +1092,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "要更改所有应用程序元素（包括菜单和按钮）中的界面语言，需要重启。点击下方以重启应用程序。"
-          }
-        }
-      }
-    },
-    "Aktualizowanie helpera" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Updating helper"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aktualizowanie helpera"
           }
         }
       }
@@ -2434,23 +2417,6 @@
         }
       }
     },
-    "Dostosowywanie nośnika USB dla instalatora PowerPC." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Adjusting USB media for a PowerPC installer."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dostosowywanie nośnika USB dla instalatora PowerPC."
-          }
-        }
-      }
-    },
     "Działanie przerwane przez użytkownika. Możesz zacząć od początku." : {
       "localizations" : {
         "de" : {
@@ -2707,57 +2673,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Español"
-          }
-        }
-      }
-    },
-    "Finalizowanie operacji i przygotowywanie podsumowania." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizing the operation and preparing a summary."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizowanie operacji i przygotowywanie podsumowania."
-          }
-        }
-      }
-    },
-    "Finalizowanie uprawnień plików instalatora." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizing installer file permissions."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizowanie uprawnień plików instalatora."
-          }
-        }
-      }
-    },
-    "Finalne przygotowanie instalatora" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Final installer preparation"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalne przygotowanie instalatora"
           }
         }
       }
@@ -3086,59 +3001,6 @@
         }
       }
     },
-    "Helper uruchamia pierwszy etap operacji uprzywilejowanych..." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Der Helper startet die erste Phase der privilegierten Operation..."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Helper is starting the first privileged operation stage..."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "El helper esta iniciando la primera etapa de la operacion con privilegios..."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "L outil auxiliaire demarre la premiere etape de l operation privilegiee..."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ヘルパーが特権操作の最初の段階を開始しています..."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "O helper esta iniciando a primeira etapa da operacao privilegiada..."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Helper запускает первый этап привилегированной операции..."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "辅助工具正在启动特权操作的第一阶段..."
-          }
-        }
-      }
-    },
     "Helper wymaga zatwierdzenia w Ustawieniach systemowych." : {
       "localizations" : {
         "de" : {
@@ -3187,23 +3049,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "辅助工具需要在系统设置中批准。"
-          }
-        }
-      }
-    },
-    "Helper został odświeżony. Ponawiamy start procesu..." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Helper was refreshed. Retrying process startup..."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Helper został odświeżony. Ponawiamy start procesu..."
           }
         }
       }
@@ -4692,7 +4537,7 @@
         }
       }
     },
-    "Instrukcja bootowania z dysku USB (GitHub)" : {
+    "Instrukcja bootowania z nośnika USB (GitHub)" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4848,23 +4693,6 @@
         }
       }
     },
-    "Konfigurowanie nośnika USB do utworzenia instalatora." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Configuring USB media for installer creation."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konfigurowanie nośnika USB do utworzenia instalatora."
-          }
-        }
-      }
-    },
     "Kontynuuj" : {
       "localizations" : {
         "de" : {
@@ -4913,23 +4741,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "继续"
-          }
-        }
-      }
-    },
-    "Kopiowanie plików instalatora na wybrany nośnik USB." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copying installer files to the selected USB media."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kopiowanie plików instalatora na wybrany nośnik USB."
           }
         }
       }
@@ -5723,59 +5534,6 @@
         }
       }
     },
-    "Nawiązywanie połączenia XPC..." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "XPC-Verbindung wird hergestellt..."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Establishing XPC connection..."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Estableciendo conexion XPC..."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Etablissement de la connexion XPC..."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "XPC 接続を確立中..."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Estabelecendo conexao XPC..."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Установка XPC-соединения..."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在建立 XPC 连接..."
-          }
-        }
-      }
-    },
     "Nie" : {
       "localizations" : {
         "de" : {
@@ -6446,7 +6204,7 @@
         }
       }
     },
-    "Nie wykryto dysku USB" : {
+    "Nie wykryto nośnika USB" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6966,7 +6724,7 @@
         }
       }
     },
-    "Odłączono dysk USB" : {
+    "Odłączono nośnik USB" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7382,7 +7140,7 @@
         }
       }
     },
-    "Podłącz dysk USB i poczekaj na wykrycie..." : {
+    "Podłącz nośnik USB i poczekaj na wykrycie..." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7706,23 +7464,6 @@
         }
       }
     },
-    "Ponowne uruchamianie" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Restarting"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ponowne uruchamianie"
-          }
-        }
-      }
-    },
     "Português (BR)" : {
       "localizations" : {
         "de" : {
@@ -7771,23 +7512,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Português (BR)"
-          }
-        }
-      }
-    },
-    "Porządkowanie plików tymczasowych" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cleaning up temporary files"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Porządkowanie plików tymczasowych"
           }
         }
       }
@@ -8648,40 +8372,6 @@
         }
       }
     },
-    "Przenoszenie obrazu systemu na nośnik zgodny z PowerPC." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Transferring the system image to PowerPC-compatible media."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Przenoszenie obrazu systemu na nośnik zgodny z PowerPC."
-          }
-        }
-      }
-    },
-    "Przenoszenie obrazu systemu na wybrany nośnik USB." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Transferring the system image to the selected USB media."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Przenoszenie obrazu systemu na wybrany nośnik USB."
-          }
-        }
-      }
-    },
     "Przerwij i zakończ" : {
       "localizations" : {
         "de" : {
@@ -8786,59 +8476,6 @@
         }
       }
     },
-    "Przygotowanie" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vorbereitung"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preparation"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preparacion"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preparation"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "準備"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preparacao"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Подготовка"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "准备"
-          }
-        }
-      }
-    },
     "Przygotowanie..." : {
       "localizations" : {
         "de" : {
@@ -8891,40 +8528,6 @@
         }
       }
     },
-    "Przygotowywanie miejsca na finalną strukturę instalatora." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preparing space for the final installer structure."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Przygotowywanie miejsca na finalną strukturę instalatora."
-          }
-        }
-      }
-    },
-    "Przygotowywanie nośnika USB" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preparing USB media"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Przygotowywanie nośnika USB"
-          }
-        }
-      }
-    },
     "Przygotowywanie operacji..." : {
       "localizations" : {
         "de" : {
@@ -8973,40 +8576,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在准备操作..."
-          }
-        }
-      }
-    },
-    "Przygotowywanie plików instalatora" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preparing installer files"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Przygotowywanie plików instalatora"
-          }
-        }
-      }
-    },
-    "Przygotowywanie plików źródłowych dla bezpiecznego przebiegu procesu." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preparing source files for a safe process flow."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Przygotowywanie plików źródłowych dla bezpiecznego przebiegu procesu."
           }
         }
       }
@@ -9267,59 +8836,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "检查更新"
-          }
-        }
-      }
-    },
-    "Sprawdzanie gotowości helpera..." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uberprufe Bereitschaft des Helpers..."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Checking helper readiness..."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verificando la disponibilidad del helper..."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verification de la disponibilite de l outil auxiliaire..."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ヘルパーの準備状態を確認中..."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verificando a prontidao do helper..."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Проверка готовности helper..."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在检查辅助工具就绪状态..."
           }
         }
       }
@@ -10331,23 +9847,6 @@
         }
       }
     },
-    "Tworzenie nośnika instalacyjnego" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Creating installation media"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tworzenie nośnika instalacyjnego"
-          }
-        }
-      }
-    },
     "Tworzenie USB z Mac OS X Tiger (Multi DVD)" : {
       "localizations" : {
         "de" : {
@@ -10511,59 +10010,6 @@
         }
       }
     },
-    "Uruchamianie helpera" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Helper wird gestartet"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starting helper"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Iniciando helper"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Demarrage de l outil auxiliaire"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ヘルパーを起動中"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Iniciando helper"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Запуск helper"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在启动辅助工具"
-          }
-        }
-      }
-    },
     "Uruchom aplikację ponownie" : {
       "localizations" : {
         "de" : {
@@ -10664,23 +10110,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "后台运行设置…"
-          }
-        }
-      }
-    },
-    "Usuwanie tymczasowych plików w celu zwolnienia miejsca." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Removing temporary files to free up space."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Usuwanie tymczasowych plików w celu zwolnienia miejsca."
           }
         }
       }
@@ -10789,23 +10218,6 @@
         }
       }
     },
-    "Uzupełnianie finalnej struktury aplikacji instalatora." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Completing the final installer app structure."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uzupełnianie finalnej struktury aplikacji instalatora."
-          }
-        }
-      }
-    },
     "W przypadku Maca z PowerPC" : {
       "localizations" : {
         "de" : {
@@ -10854,40 +10266,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "对于 PowerPC Mac"
-          }
-        }
-      }
-    },
-    "Weryfikowanie obrazu instalacyjnego przed zapisem." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verifying the installer image before writing."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weryfikowanie obrazu instalacyjnego przed zapisem."
-          }
-        }
-      }
-    },
-    "Weryfikowanie obrazu instalatora" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verifying installer image"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weryfikowanie obrazu instalatora"
           }
         }
       }
@@ -11152,7 +10530,7 @@
         }
       }
     },
-    "Wszystkie pliki na wybranym dysku USB zostaną bezpowrotnie usunięte!" : {
+    "Wszystkie pliki na wybranym nośniku USB zostaną bezpowrotnie usunięte!" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11256,7 +10634,7 @@
         }
       }
     },
-    "Wybierz docelowy dysk USB:" : {
+    "Wybierz docelowy nośnik USB:" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11516,7 +10894,7 @@
         }
       }
     },
-    "Wybór dysku USB" : {
+    "Wybór nośnika USB" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11672,7 +11050,59 @@
         }
       }
     },
-    "Wybrany dysk USB" : {
+    "Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces tworzenia instalatora może potrwać kilkanaście minut" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ausgewählte Laufwerk verwendet einen älteren Datenübertragungsstandard. Die Erstellung des Installers kann einige Minuten dauern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The selected drive operates on an older data transfer standard. The installer creation process may take several minutes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La unidad seleccionada utiliza un estándar de transferencia de datos más antiguo. El proceso de creación del instalador puede tardar varios minutos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le lecteur sélectionné utilise une norme de transfert de données plus ancienne. La création de l'installateur peut prendre plusieurs minutes."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択されたドライブは古いデータ転送規格を使用しています。インストーラの作成には十数分かかる場合があります。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A unidade selecionada usa um padrão de transferência de dados mais antigo. O processo de criação do instalador pode levar vários minutos."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбранный накопитель использует устаревший стандарт передачи данных. Процесс создания установщика может занять несколько минут."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所选驱动器使用的是较旧的数据传输标准。安装程序创建过程可能需要几分钟。"
+          }
+        }
+      }
+    },
+    "Wybrany nośnik USB" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11724,7 +11154,7 @@
         }
       }
     },
-    "Wybrany dysk USB ma za małą pojemność" : {
+    "Wybrany nośnik USB ma za małą pojemność" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11772,58 +11202,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "所选 U 盘容量太小"
-          }
-        }
-      }
-    },
-    "Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces tworzenia instalatora może potrwać kilkanaście minut" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Das ausgewählte Laufwerk verwendet einen älteren Datenübertragungsstandard. Die Erstellung des Installers kann einige Minuten dauern."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The selected drive operates on an older data transfer standard. The installer creation process may take several minutes."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La unidad seleccionada utiliza un estándar de transferencia de datos más antiguo. El proceso de creación del instalador puede tardar varios minutos."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Le lecteur sélectionné utilise une norme de transfert de données plus ancienne. La création de l'installateur peut prendre plusieurs minutes."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "選択されたドライブは古いデータ転送規格を使用しています。インストーラの作成には十数分かかる場合があります。"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A unidade selecionada usa um padrão de transferência de dados mais antigo. O processo de criação do instalador pode levar vários minutos."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Выбранный накопитель использует устаревший стандарт передачи данных. Процесс создания установщика может занять несколько минут."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "所选驱动器使用的是较旧的数据传输标准。安装程序创建过程可能需要几分钟。"
           }
         }
       }
@@ -11877,23 +11255,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "所选系统不受此应用支持"
-          }
-        }
-      }
-    },
-    "Wykryto starszą instancję helpera. Trwa ponowne uruchamianie usługi..." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Detected an older helper instance. Restarting the service..."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wykryto starszą instancję helpera. Trwa ponowne uruchamianie usługi..."
           }
         }
       }
@@ -12629,23 +11990,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "完成并退出"
-          }
-        }
-      }
-    },
-    "Zakończenie procesu" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finishing the process"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zakończenie procesu"
           }
         }
       }

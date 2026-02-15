@@ -72,13 +72,24 @@ struct HelperProgressEventPayload: Codable {
         logLine = try container.decodeIfPresent(String.self, forKey: .logLine)
         timestamp = try container.decode(Date.self, forKey: .timestamp)
 
-        stageTitleKey =
+        let decodedStageTitle =
             try container.decodeIfPresent(String.self, forKey: .stageTitleKey) ??
             container.decode(String.self, forKey: .stageTitle)
 
-        statusKey =
+        let decodedStatus =
             try container.decodeIfPresent(String.self, forKey: .statusKey) ??
             container.decode(String.self, forKey: .statusText)
+
+        // Compatibility bridge:
+        // older helper builds may still send user-facing strings instead of stable technical keys.
+        // Stage key is stable across versions, so prefer canonical keys when available.
+        if let localization = HelperWorkflowLocalizationKeys.presentation(for: stageKey) {
+            stageTitleKey = localization.titleKey
+            statusKey = localization.statusKey
+        } else {
+            stageTitleKey = decodedStageTitle
+            statusKey = decodedStatus
+        }
     }
 
     func encode(to encoder: Encoder) throws {

@@ -91,7 +91,7 @@ struct UniversalInstallationView: View {
                         HStack {
                             Image(systemName: "externaldrive.fill").font(.title2).foregroundColor(.blue).frame(width: 32)
                             VStack(alignment: .leading) {
-                                Text("Wybrany dysk USB").font(.caption).foregroundColor(.secondary)
+                                Text("Wybrany nośnik USB").font(.caption).foregroundColor(.secondary)
                                 Text(name).font(.headline)
                             }
                             Spacer()
@@ -290,7 +290,7 @@ struct UniversalInstallationView: View {
                                 .foregroundColor(.red)
                                 .frame(width: 32)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Odłączono dysk USB")
+                                Text("Odłączono nośnik USB")
                                     .font(.headline)
                                     .foregroundColor(.red)
                                 Text("Dalsze działanie aplikacji zostało zablokowane. Aby zacząć od nowa, uruchom ponownie aplikację.")

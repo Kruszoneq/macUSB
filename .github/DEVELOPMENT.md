@@ -72,7 +72,7 @@ The project is a SwiftUI macOS app with a pragmatic separation of views, logic e
 
 Key concepts:
 - SwiftUI + AppKit integration: menus, NSAlert dialogs, and window configuration use AppKit APIs.
-- View logic split: `UniversalInstallationView` UI lives in one file; its heavy logic lives in `CreatorLogic.swift` as an extension to keep type-checker complexity manageable.
+- View logic split: `UniversalInstallationView` UI lives in one file; helper workflow orchestration is in `CreatorHelperLogic.swift`, while shared install utilities live in `CreatorLogic.swift`.
 - State-driven UI: extensive use of `@State`, `@StateObject`, `@EnvironmentObject` and `@Published` to bind logic to UI.
 - NotificationCenter: used for flow resets, special-case actions (Tiger Multi-DVD override), and debug-only routing shortcuts.
 - Notification permissions are centrally handled by `NotificationPermissionManager` (startup prompt, menu toggle, and system settings redirection).
@@ -210,6 +210,7 @@ Source language is Polish. This is enforced in `Localizable.xcstrings` with `"so
 Practical rules:
 - All new UI strings should be authored first in Polish.
 - Terminology standard: in Polish user-facing copy use `nośnik USB` (not `dysk USB`) for consistency.
+- Immutable product slogan rule: the phrase `Tworzenie botoowalnych dysków USB z systemem macOS oraz OS X nigdy nie było takie proste` is the app’s official slogan and must remain unchanged verbatim in this exact form.
 - Use `Text("...")` with Polish strings; SwiftUI treats these as localization keys.
 - Helper sends stable technical localization keys (for example `helper.workflow.prepare_source.title`) in XPC progress events.
 - Installation UI renders helper stage/status with `Text(LocalizedStringKey(...))`, so helper progress text follows app locale from SwiftUI environment.
@@ -337,7 +338,8 @@ Used for most modern macOS installers.
 ### Helper Monitoring Strategy
 The app tracks helper progress through XPC progress events:
 - `stageKey`, `stageTitleKey`, `statusKey`, `percent`, and optional `logLine`.
-- UI localizes helper-provided stage/status keys through `Localizable.xcstrings` and shows them in an indeterminate progress panel (no numeric percent).
+- UI localizes helper stage/status through `Localizable.xcstrings` and shows them in an indeterminate progress panel (no numeric percent).
+- Compatibility rule: app canonicalizes displayed helper title/status from `stageKey` when known, so older helper builds that still send raw phrases do not break localization.
 - Write speed (`MB/s`) is measured during active non-formatting helper stages and shown in the panel.
 - During formatting stages (`preformat`, `ppc_format`) speed is hidden as `- MB/s`.
 - `logLine` values are recorded to diagnostics logs under `HelperLiveLog` and are exportable.
@@ -556,7 +558,7 @@ Current effective build configuration snapshot:
 - `requesterUID = getuid()`
 - App no longer performs copy/patch/sign staging in TEMP; helper owns those steps.
 - UI mapping from helper events:
-- stage title key, status key, and percent are updated from `HelperProgressEventPayload`; UI renders keys via `LocalizedStringKey` and `Localizable.xcstrings`.
+- stage title key, status key, and percent are updated from `HelperProgressEventPayload`; app prefers canonical key mapping from `stageKey` for compatibility, then renders via `LocalizedStringKey` and `Localizable.xcstrings`.
 - `logLine` is not displayed in installer UI and is logged into diagnostics (`HelperLiveLog`).
 - If workflow start fails with an IPC request-decode signature (invalid helper request), app performs one automatic helper reload (unregister/register) and retries workflow start once.
 
@@ -588,6 +590,62 @@ Current effective build configuration snapshot:
 - helper adds an explicit hint when last line matches removable-volume permission failures (`operation not permitted` family).
 - Health endpoint:
 - `queryHealth` returns `Helper odpowiada poprawnie (uid=..., euid=..., pid=...)`.
+
+### 11.9.1 Exact stage order and percent windows
+- Global invariant:
+- Every workflow starts with `prepare_source` (`0 → 10`).
+- Every workflow runs `cleanup_temp` near the end (`>=99 → 100`, best-effort).
+- Every workflow ends with `finalize` (`100`).
+- Standard (`workflowKind = standard`):
+- Optional `preformat` (`10 → 30`) when `needsPreformat == true` and non-PPC.
+- `createinstallmedia`:
+- with preformat: `30 → 98` (or `30 → 90` for Catalina),
+- without preformat: `15 → 98` (or `15 → 90` for Catalina).
+- Catalina post stages:
+- `catalina_cleanup` (`90 → 94`), `catalina_copy` (`94 → 98`), `catalina_xattr` (`98 → 99`).
+- Legacy restore (`workflowKind = legacyRestore`):
+- Optional `preformat` (`10 → 30`) when `needsPreformat == true`.
+- `imagescan`: `30 → 50` (with preformat) or `15 → 35` (without).
+- `restore`: `50 → 98` (with preformat) or `35 → 98` (without).
+- Mavericks (`workflowKind = mavericks`):
+- Same stage timings as `legacyRestore`: optional `preformat`, then `imagescan`, then `restore`.
+- PPC (`workflowKind = ppc`):
+- `ppc_format` (`10 → 25`), then `ppc_restore` (`25 → 98`).
+
+### 11.9.2 Exact source preparation and codesign rules (helper-owned)
+- `prepare_source` executes in helper before command stages and selects effective source according to workflow:
+- `legacyRestore`: copy `InstallESD.dmg` from selected `.app` to TEMP.
+- `mavericks`: copy selected image to TEMP as `InstallESD.dmg`.
+- `ppc`:
+- `.iso/.cdr` + mounted source available: use mounted `/Volumes/...` source.
+- other images: copy selected image to TEMP as `PPC_<filename>`.
+- fallback: use mounted source if image path missing and mount exists.
+- `standard`:
+- Sierra: copy `.app` to TEMP, patch `CFBundleShortVersionString`, clear quarantine (`xattr -dr`), sign `createinstallmedia`.
+- Catalina / `needsCodesign` / mounted source: copy `.app` to TEMP; for Catalina or `needsCodesign` run local codesign flow in helper.
+- plain standard without these conditions: use original app path directly (no staging).
+- Local codesign flow (`performLocalCodesign`) remains active in helper:
+- clears attributes (`xattr -cr`) on staged app,
+- signs key installer components and `createinstallmedia` (`codesign -s - -f`), with best-effort behavior per component (`failOnNonZeroExit = false`).
+
+### 11.9.3 Helper localization and translation pipeline (exact behavior)
+- Source of truth for helper stage localization IDs:
+- `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift`.
+- Helper emits progress payload with technical keys:
+- `stageKey`, `stageTitleKey`, `statusKey`, `percent`, optional `logLine`.
+- App-side compatibility bridge:
+- `HelperProgressEventPayload` decoder accepts both new (`stageTitleKey`/`statusKey`) and legacy (`stageTitle`/`statusText`) fields.
+- Decoder canonicalizes known stages from `stageKey` to technical keys to avoid mixed-language output from older helper instances.
+- UI mapping:
+- `CreatorHelperLogic` also prefers canonical mapping from `stageKey` before updating state.
+- `UniversalInstallationView` renders helper stage/status via `Text(LocalizedStringKey(...))`, so text follows selected app locale.
+- Diagnostics behavior:
+- `logLine` is never rendered in status panel; it is written to `HelperLiveLog` and remains exportable.
+- Maintenance contract when adding a helper stage:
+- add new key constants in `HelperWorkflowLocalizationKeys`,
+- add extraction anchors,
+- add translations in `Localizable.xcstrings` for `pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`,
+- verify EN runtime rendering and full project build.
 
 ### 11.10 Logging and observability for helper path
 - `HelperService` category:

@@ -139,7 +139,7 @@ extension UniversalInstallationView {
     func showUSBDisconnectAlert() {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
-        alert.messageText = String(localized: "Odłączono dysk USB")
+        alert.messageText = String(localized: "Odłączono nośnik USB")
         alert.informativeText = String(localized: "Dalsze działanie aplikacji zostanie zablokowane")
         alert.alertStyle = .warning
         alert.addButton(withTitle: String(localized: "Kontynuuj"))
