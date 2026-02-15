@@ -130,28 +130,18 @@ struct UniversalInstallationView: View {
                             Text("Przebieg procesu").font(.headline)
                             VStack(alignment: .leading, spacing: 5) {
                                 if isRestoreLegacy {
-                                    Text("• Plik z systemem zostanie skopiowany i zweryfikowany")
-                                    Text("• Pamięć USB zostanie wymazana")
-                                    Text("• Obraz systemu zostanie przywrócony przez helper systemowy")
-                                    Text("• System może poprosić o potwierdzenie uprawnień administratora")
+                                    Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
+                                    Text("• Nośnik USB zostanie sformatowany")
+                                    Text("• Obraz systemu zostanie przywrócony")
                                 } else if isPPC {
-                                    Text("• Dysk USB zostanie sformatowany (APM + HFS+)")
-                                    Text("• Obraz instalacyjny zostanie przywrócony na USB")
-                                    Text("• Operacja zostanie wykonana przez helper systemowy (wymagane uprawnienia administratora)")
+                                    Text("• Nośnik USB zostanie odpowiednio sformatowany")
+                                    Text("• Obraz instalacyjny zostanie przywrócony")
                                 } else {
+                                    Text("• Pliki systemowe zostaną przygotowane")
+                                    Text("• Nośnik USB zostanie sformatowany")
+                                    Text("• Pliki instalacyjne zostaną skopiowane")
                                     if isCatalina {
-                                        Text("• Plik instalacyjny zostanie skopiowany oraz podpisany")
-                                    } else {
-                                        Text("• Plik instalacyjny zostanie skopiowany")
-                                        if needsCodesign {
-                                            Text("• Instalator zostanie zmodyfikowany (podpis cyfrowy)")
-                                        }
-                                    }
-                                    
-                                    Text("• Pamięć USB zostanie sformatowana (dane zostaną usunięte)")
-                                    Text("• Zapis na USB zostanie wykonany przez helper systemowy")
-                                    if isCatalina {
-                                        Text("• Helper wykona końcową weryfikację i podmianę plików")
+                                        Text("• Struktura instalatora zostanie sfinalizowana")
                                     }
                                 }
                                 Text("• Pliki tymczasowe zostaną automatycznie usunięte")
