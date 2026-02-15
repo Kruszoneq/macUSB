@@ -2223,57 +2223,7 @@
       }
     },
     "DEBUG" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DEBUG"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DEBUG"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DEBUG"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DEBUG"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DEBUG"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DEBUG"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DEBUG"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DEBUG"
-          }
-        }
-      }
+
     },
     "Deutsch" : {
       "localizations" : {
@@ -2479,23 +2429,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "有新版本可用：%@。建议更新！"
-          }
-        }
-      }
-    },
-    "Dostosowujemy dysk USB dla instalatora PowerPC." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Adjusting the USB drive for a PowerPC installer."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dostosowujemy dysk USB dla instalatora PowerPC."
           }
         }
       }
@@ -2756,40 +2689,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Español"
-          }
-        }
-      }
-    },
-    "Finalizujemy uprawnienia plików instalatora." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizing installer file permissions."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizujemy uprawnienia plików instalatora."
-          }
-        }
-      }
-    },
-    "Finalne przygotowanie instalatora" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizing installer structure"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalne przygotowanie instalatora"
           }
         }
       }
@@ -3550,23 +3449,6 @@
         }
       }
     },
-    "Kończymy operację i przygotowujemy podsumowanie." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finalizing the operation and preparing the summary."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kończymy operację i przygotowujemy podsumowanie."
-          }
-        }
-      }
-    },
     "Konfiguracja źródła i celu" : {
       "localizations" : {
         "de" : {
@@ -3619,23 +3501,6 @@
         }
       }
     },
-    "Konfigurujemy dysk USB do utworzenia instalatora." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Configuring the USB drive for installer creation."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konfigurujemy dysk USB do utworzenia instalatora."
-          }
-        }
-      }
-    },
     "Kontynuuj" : {
       "localizations" : {
         "de" : {
@@ -3684,23 +3549,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "继续"
-          }
-        }
-      }
-    },
-    "Kopiujemy pliki instalatora na wybrany dysk USB." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copying installer files to the selected USB drive."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kopiujemy pliki instalatora na wybrany dysk USB."
           }
         }
       }
@@ -3862,57 +3710,7 @@
       }
     },
     "Lokalizacja aplikacji: środowisko Xcode (bypass DEBUG)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "App-Standort: Xcode-Umgebung (DEBUG-Bypass)"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "App location: Xcode environment (DEBUG bypass)"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ubicacion de la app: entorno de Xcode (bypass DEBUG)"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Emplacement de l app : environnement Xcode (contournement DEBUG)"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アプリの場所: Xcode環境（DEBUGバイパス）"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Localizacao do app: ambiente do Xcode (bypass DEBUG)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Расположение приложения: среда Xcode (обход DEBUG)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "应用位置：Xcode 环境（DEBUG 绕过）"
-          }
-        }
-      }
+
     },
     "Mac OS X Tiger 10.4 (Multi DVD)" : {
       "localizations" : {
@@ -5474,59 +5272,6 @@
         }
       }
     },
-    "Nie znaleziono źródła PPC do przywracania." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keine PPC-Quelle fur die Wiederherstellung gefunden."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No PPC source found for restore."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se encontro una fuente PPC para la restauracion."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aucune source PPC trouvee pour la restauration."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "復元用のPPCソースが見つかりません。"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nenhuma origem PPC encontrada para restauracao."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Источник PPC для восстановления не найден."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未找到用于恢复的 PPC 源。"
-          }
-        }
-      }
-    },
     "Nie znaleziono źródłowego pliku obrazu." : {
       "localizations" : {
         "de" : {
@@ -6647,23 +6392,6 @@
         }
       }
     },
-    "Porządkowanie plików tymczasowych" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cleaning up temporary files"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Porządkowanie plików tymczasowych"
-          }
-        }
-      }
-    },
     "Powiadomienia dla macUSB zostały zablokowane w ustawieniach systemowych. Aby otrzymywać informacje o zakończeniu procesów, należy zezwolić aplikacji na ich wyświetlanie w systemie." : {
       "localizations" : {
         "de" : {
@@ -7405,110 +7133,10 @@
       }
     },
     "Przejdź do podsumowania (Big Sur) (2s delay)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zur Zusammenfassung wechseln (Big Sur) (2s delay)"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Go to summary (Big Sur) (2s delay)"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ir al resumen (Big Sur) (2s delay)"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aller au résumé (Big Sur) (2s delay)"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "サマリーへ移動（Big Sur）(2s delay)"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ir para o resumo (Big Sur) (2s delay)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Перейти к сводке (Big Sur) (2s delay)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "前往摘要（Big Sur）(2s delay)"
-          }
-        }
-      }
+
     },
     "Przejdź do podsumowania (Tiger) (2s delay)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zur Zusammenfassung wechseln (Tiger) (2s delay)"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Go to summary (Tiger) (2s delay)"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ir al resumen (Tiger) (2s delay)"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aller au résumé (Tiger) (2s delay)"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "サマリーへ移動（Tiger）(2s delay)"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ir para o resumo (Tiger) (2s delay)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Перейти к сводке (Tiger) (2s delay)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "前往摘要（Tiger）(2s delay)"
-          }
-        }
-      }
+
     },
     "Przejdź do ustawień systemowych" : {
       "localizations" : {
@@ -7616,40 +7244,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "等待 helper XPC 响应超时。"
-          }
-        }
-      }
-    },
-    "Przenosimy obraz systemu na nośnik zgodny z PowerPC." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Writing the system image to PowerPC-compatible media."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Przenosimy obraz systemu na nośnik zgodny z PowerPC."
-          }
-        }
-      }
-    },
-    "Przenosimy obraz systemu na wybrany dysk USB." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Writing the system image to the selected USB drive."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Przenosimy obraz systemu na wybrany dysk USB."
           }
         }
       }
@@ -7862,57 +7456,6 @@
         }
       }
     },
-    "Przygotowujemy miejsce na finalną strukturę instalatora." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preparing space for the final installer structure."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Przygotowujemy miejsce na finalną strukturę instalatora."
-          }
-        }
-      }
-    },
-    "Przygotowujemy pliki źródłowe, aby proces przebiegł bezpiecznie." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preparing source files to keep the process safe."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Przygotowujemy pliki źródłowe, aby proces przebiegł bezpiecznie."
-          }
-        }
-      }
-    },
-    "Przygotowywanie dysku USB" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preparing the USB drive"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Przygotowywanie dysku USB"
-          }
-        }
-      }
-    },
     "Przygotowywanie operacji..." : {
       "localizations" : {
         "de" : {
@@ -7961,23 +7504,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在准备操作..."
-          }
-        }
-      }
-    },
-    "Przygotowywanie plików instalatora" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preparing installer files"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Przygotowywanie plików instalatora"
           }
         }
       }
@@ -8238,23 +7764,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "检查更新"
-          }
-        }
-      }
-    },
-    "Sprawdzamy obraz instalacyjny przed zapisem." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Checking the installer image before writing."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sprawdzamy obraz instalacyjny przed zapisem."
           }
         }
       }
@@ -9318,23 +8827,6 @@
         }
       }
     },
-    "Tworzenie nośnika instalacyjnego" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Creating installation media"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tworzenie nośnika instalacyjnego"
-          }
-        }
-      }
-    },
     "Tworzenie USB z Mac OS X Tiger (Multi DVD)" : {
       "localizations" : {
         "de" : {
@@ -9654,23 +9146,6 @@
         }
       }
     },
-    "Usuwamy tymczasowe pliki, aby zwolnić miejsce." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Removing temporary files to free up space."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Usuwamy tymczasowe pliki, aby zwolnić miejsce."
-          }
-        }
-      }
-    },
     "Utworzono instalator systemu" : {
       "localizations" : {
         "de" : {
@@ -9775,23 +9250,6 @@
         }
       }
     },
-    "Uzupełniamy finalną strukturę aplikacji instalatora." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Completing the final installer app structure."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uzupełniamy finalną strukturę aplikacji instalatora."
-          }
-        }
-      }
-    },
     "W przypadku Maca z PowerPC" : {
       "localizations" : {
         "de" : {
@@ -9840,23 +9298,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "对于 PowerPC Mac"
-          }
-        }
-      }
-    },
-    "Weryfikowanie obrazu instalatora" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verifying the installer image"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weryfikowanie obrazu instalatora"
           }
         }
       }
@@ -11597,23 +11038,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "完成并退出"
-          }
-        }
-      }
-    },
-    "Zakończenie procesu" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finishing the process"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zakończenie procesu"
           }
         }
       }

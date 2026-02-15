@@ -209,6 +209,7 @@ Source language is Polish. This is enforced in `Localizable.xcstrings` with `"so
 
 Practical rules:
 - All new UI strings should be authored first in Polish.
+- Terminology standard: in Polish user-facing copy use `nośnik USB` (not `dysk USB`) for consistency.
 - Use `Text("...")` with Polish strings; SwiftUI treats these as localization keys.
 Use `String(localized: "...")` when:
 - The string is not a `Text` literal.

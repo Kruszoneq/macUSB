@@ -198,7 +198,7 @@ private final class HelperWorkflowExecutor {
     private func prepareWorkflowContext() throws -> PreparedWorkflowContext {
         let stageKey = "prepare_source"
         let stageTitleKey = "Przygotowywanie plików instalatora"
-        let statusKey = "Przygotowujemy pliki źródłowe, aby proces przebiegł bezpiecznie."
+        let statusKey = "Przygotowywanie plików źródłowych dla bezpiecznego przebiegu procesu."
 
         emitProgress(
             stageKey: stageKey,
@@ -366,8 +366,8 @@ private final class HelperWorkflowExecutor {
             stages.append(
                 WorkflowStage(
                     key: "preformat",
-                    titleKey: "Przygotowywanie dysku USB",
-                    statusKey: "Konfigurujemy dysk USB do utworzenia instalatora.",
+                    titleKey: "Przygotowywanie nośnika USB",
+                    statusKey: "Konfigurowanie nośnika USB do utworzenia instalatora.",
                     startPercent: 10,
                     endPercent: 30,
                     executable: "/usr/sbin/diskutil",
@@ -384,7 +384,7 @@ private final class HelperWorkflowExecutor {
                 WorkflowStage(
                     key: "imagescan",
                     titleKey: "Weryfikowanie obrazu instalatora",
-                    statusKey: "Sprawdzamy obraz instalacyjny przed zapisem.",
+                    statusKey: "Weryfikowanie obrazu instalacyjnego przed zapisem.",
                     startPercent: request.needsPreformat ? 30 : 15,
                     endPercent: request.needsPreformat ? 50 : 35,
                     executable: "/usr/sbin/asr",
@@ -396,7 +396,7 @@ private final class HelperWorkflowExecutor {
                 WorkflowStage(
                     key: "restore",
                     titleKey: "Tworzenie nośnika instalacyjnego",
-                    statusKey: "Przenosimy obraz systemu na wybrany dysk USB.",
+                    statusKey: "Przenoszenie obrazu systemu na wybrany nośnik USB.",
                     startPercent: request.needsPreformat ? 50 : 35,
                     endPercent: 98,
                     executable: "/usr/sbin/asr",
@@ -410,7 +410,7 @@ private final class HelperWorkflowExecutor {
                 WorkflowStage(
                     key: "imagescan",
                     titleKey: "Weryfikowanie obrazu instalatora",
-                    statusKey: "Sprawdzamy obraz instalacyjny przed zapisem.",
+                    statusKey: "Weryfikowanie obrazu instalacyjnego przed zapisem.",
                     startPercent: request.needsPreformat ? 30 : 15,
                     endPercent: request.needsPreformat ? 50 : 35,
                     executable: "/usr/sbin/asr",
@@ -422,7 +422,7 @@ private final class HelperWorkflowExecutor {
                 WorkflowStage(
                     key: "restore",
                     titleKey: "Tworzenie nośnika instalacyjnego",
-                    statusKey: "Przenosimy obraz systemu na wybrany dysk USB.",
+                    statusKey: "Przenoszenie obrazu systemu na wybrany nośnik USB.",
                     startPercent: request.needsPreformat ? 50 : 35,
                     endPercent: 98,
                     executable: "/usr/sbin/asr",
@@ -435,8 +435,8 @@ private final class HelperWorkflowExecutor {
             stages.append(
                 WorkflowStage(
                     key: "ppc_format",
-                    titleKey: "Przygotowywanie dysku USB",
-                    statusKey: "Dostosowujemy dysk USB dla instalatora PowerPC.",
+                    titleKey: "Przygotowywanie nośnika USB",
+                    statusKey: "Dostosowywanie nośnika USB dla instalatora PowerPC.",
                     startPercent: 10,
                     endPercent: 25,
                     executable: "/usr/sbin/diskutil",
@@ -450,7 +450,7 @@ private final class HelperWorkflowExecutor {
                 WorkflowStage(
                     key: "ppc_restore",
                     titleKey: "Tworzenie nośnika instalacyjnego",
-                    statusKey: "Przenosimy obraz systemu na nośnik zgodny z PowerPC.",
+                    statusKey: "Przenoszenie obrazu systemu na nośnik zgodny z PowerPC.",
                     startPercent: 25,
                     endPercent: 98,
                     executable: "/usr/sbin/asr",
@@ -471,7 +471,7 @@ private final class HelperWorkflowExecutor {
                 WorkflowStage(
                     key: "createinstallmedia",
                     titleKey: "Tworzenie nośnika instalacyjnego",
-                    statusKey: "Kopiujemy pliki instalatora na wybrany dysk USB.",
+                    statusKey: "Kopiowanie plików instalatora na wybrany nośnik USB.",
                     startPercent: request.needsPreformat ? 30 : 15,
                     endPercent: request.isCatalina ? 90 : 98,
                     executable: createinstallmediaPath,
@@ -489,7 +489,7 @@ private final class HelperWorkflowExecutor {
                     WorkflowStage(
                         key: "catalina_cleanup",
                         titleKey: "Finalne przygotowanie instalatora",
-                        statusKey: "Przygotowujemy miejsce na finalną strukturę instalatora.",
+                        statusKey: "Przygotowywanie miejsca na finalną strukturę instalatora.",
                         startPercent: 90,
                         endPercent: 94,
                         executable: "/bin/rm",
@@ -501,7 +501,7 @@ private final class HelperWorkflowExecutor {
                     WorkflowStage(
                         key: "catalina_copy",
                         titleKey: "Finalne przygotowanie instalatora",
-                        statusKey: "Uzupełniamy finalną strukturę aplikacji instalatora.",
+                        statusKey: "Uzupełnianie finalnej struktury aplikacji instalatora.",
                         startPercent: 94,
                         endPercent: 98,
                         executable: "/usr/bin/ditto",
@@ -513,7 +513,7 @@ private final class HelperWorkflowExecutor {
                     WorkflowStage(
                         key: "catalina_xattr",
                         titleKey: "Finalne przygotowanie instalatora",
-                        statusKey: "Finalizujemy uprawnienia plików instalatora.",
+                        statusKey: "Finalizowanie uprawnień plików instalatora.",
                         startPercent: 98,
                         endPercent: 99,
                         executable: "/usr/bin/xattr",
@@ -693,7 +693,7 @@ private final class HelperWorkflowExecutor {
     private func runBestEffortTempCleanupStage() {
         let stageKey = "cleanup_temp"
         let stageTitleKey = "Porządkowanie plików tymczasowych"
-        let statusKey = "Usuwamy tymczasowe pliki, aby zwolnić miejsce."
+        let statusKey = "Usuwanie tymczasowych plików w celu zwolnienia miejsca."
         let stageStart = max(latestPercent, 99)
 
         emitProgress(
@@ -742,7 +742,7 @@ private final class HelperWorkflowExecutor {
             stageKey: "finalize",
             titleKey: "Zakończenie procesu",
             percent: 100,
-            statusKey: "Kończymy operację i przygotowujemy podsumowanie."
+            statusKey: "Finalizowanie operacji i przygotowywanie podsumowania."
         )
     }
 
