@@ -69,7 +69,7 @@ struct macUSBApp: App {
             CommandGroup(replacing: .newItem) { }
             
             CommandMenu(String(localized: "Opcje")) {
-                Menu(String(localized: "Pomiń analizowanie pliku")) {
+                Menu {
                     Button(String(localized: "Mac OS X Tiger 10.4 (Multi DVD)")) {
                         let alert = NSAlert()
                         alert.alertStyle = .informational
@@ -93,9 +93,11 @@ struct macUSBApp: App {
                     }
                     .keyboardShortcut("t", modifiers: [.option, .command])
                     .disabled(!menuState.skipAnalysisEnabled)
+                } label: {
+                    Label(String(localized: "Pomiń analizowanie pliku"), systemImage: "doc.text.magnifyingglass")
                 }
                 Divider()
-                Button(String(localized: "Włącz obsługę zewnętrznych dysków twardych")) {
+                Button {
                     let alert = NSAlert()
                     alert.alertStyle = .informational
                     alert.icon = NSApp.applicationIconImage
@@ -109,9 +111,11 @@ struct macUSBApp: App {
                         _ = alert.runModal()
                         menuState.enableExternalDrives()
                     }
+                } label: {
+                    Label(String(localized: "Włącz obsługę zewnętrznych dysków twardych"), systemImage: "externaldrive.badge.plus")
                 }
                 Divider()
-                Menu(String(localized: "Język")) {
+                Menu {
                     Button {
                         languageManager.currentLanguage = "auto"
                     } label: {
@@ -145,16 +149,21 @@ struct macUSBApp: App {
                     Button { languageManager.currentLanguage = "ja" } label: {
                         Label("日本語", systemImage: languageManager.currentLanguage == "ja" ? "checkmark" : "")
                     }
+                } label: {
+                    Label(String(localized: "Język"), systemImage: "globe")
                 }
                 Divider()
                 Button {
                     NotificationPermissionManager.shared.handleMenuNotificationsTapped()
                 } label: {
-                    Label(String(localized: "Powiadomienia"), systemImage: menuState.notificationsEnabled ? "checkmark" : "")
+                    Label(
+                        String(localized: menuState.notificationsEnabled ? "Powiadomienia włączone" : "Powiadomienia wyłączone"),
+                        systemImage: menuState.notificationsEnabled ? "bell.and.waves.left.and.right" : "bell.slash"
+                    )
                 }
             }
             CommandMenu(String(localized: "Narzędzia")) {
-                Button(String(localized: "Otwórz Narzędzie dyskowe")) {
+                Button {
                     if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.DiskUtility") {
                         NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration(), completionHandler: nil)
                     } else {
@@ -170,16 +179,24 @@ struct macUSBApp: App {
                             }
                         }
                     }
+                } label: {
+                    Label(String(localized: "Otwórz Narzędzie dyskowe"), systemImage: "externaldrive")
                 }
                 Divider()
-                Button(String(localized: "Status helpera")) {
+                Button {
                     HelperServiceManager.shared.presentStatusAlert()
+                } label: {
+                    Label(String(localized: "Status helpera"), systemImage: "info.circle")
                 }
-                Button(String(localized: "Napraw helpera")) {
+                Button {
                     HelperServiceManager.shared.repairRegistrationFromMenu()
+                } label: {
+                    Label(String(localized: "Napraw helpera"), systemImage: "wrench.and.screwdriver")
                 }
-                Button(String(localized: "Ustawienia działania w tle…")) {
+                Button {
                     SMAppService.openSystemSettingsLoginItems()
+                } label: {
+                    Label(String(localized: "Ustawienia działania w tle…"), systemImage: "gearshape")
                 }
             }
             CommandGroup(replacing: .windowList) { }

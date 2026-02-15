@@ -115,7 +115,7 @@ Common status icons and their semantic colors:
 - In `SystemAnalysisView` success state, the app tries installer icons in this order: `Contents/Resources/ProductPageIcon.icns`, `Contents/Resources/InstallAssistant.icns`, then `Contents/Resources/Install Mac OS X.icns` (case-insensitive lookup). If none is found, fallback to `checkmark.circle.fill`.
 - In `UniversalInstallationView` system info panel, the app shows detected installer icon (`detectedSystemIcon`) next to the system name; if unavailable, fallback is `applelogo`.
 Frequently used SF Symbols in screens and menus include:
-- `info.circle.fill`, `doc.badge.plus`, `internaldrive`, `checkmark.circle.fill`, `xmark.circle.fill`, `xmark.octagon.fill`, `exclamationmark.triangle.fill`, `externaldrive.fill`, `externaldrive.badge.xmark`, `applelogo`, `gearshape.2`, `clock`, `lock.fill`, `arrow.right`, `arrow.right.circle.fill`, `arrow.counterclockwise`, `xmark.circle`, `xmark.circle.fill`, `globe.europe.africa.fill`, `cup.and.saucer`, `square.and.arrow.down`, `arrow.triangle.2.circlepath`, `globe`, `chevron.left.forwardslash.chevron.right`.
+- `info.circle.fill`, `info.circle`, `doc.badge.plus`, `doc.text.magnifyingglass`, `internaldrive`, `checkmark.circle.fill`, `xmark.circle.fill`, `xmark.octagon.fill`, `exclamationmark.triangle.fill`, `externaldrive.fill`, `externaldrive`, `externaldrive.badge.plus`, `externaldrive.badge.xmark`, `applelogo`, `gearshape.2`, `gearshape`, `wrench.and.screwdriver`, `clock`, `lock.fill`, `arrow.right`, `arrow.right.circle.fill`, `arrow.counterclockwise`, `xmark.circle`, `xmark.circle.fill`, `globe.europe.africa.fill`, `cup.and.saucer`, `square.and.arrow.down`, `arrow.triangle.2.circlepath`, `globe`, `chevron.left.forwardslash.chevron.right`, `bell.slash`, `bell.and.waves.left.and.right`.
 
 Panels and informational blocks:
 - Most informational blocks are HStacks with icon left and text right.
@@ -167,6 +167,18 @@ Screen headline copy:
 - `SystemAnalysisView`: `Konfiguracja źródła i celu`
 - `UniversalInstallationView`: `Szczegóły operacji`
 - `FinishUSBView`: `Wynik operacji`
+
+Menu icon mapping (current):
+- `Opcje` → `Pomiń analizowanie pliku`: `doc.text.magnifyingglass`
+- `Opcje` → `Włącz obsługę zewnętrznych dysków twardych`: `externaldrive.badge.plus`
+- `Opcje` → `Język`: `globe`
+- `Opcje` → notifications item uses dynamic label/icon:
+- enabled: `Powiadomienia włączone` + `bell.and.waves.left.and.right`
+- disabled: `Powiadomienia wyłączone` + `bell.slash`
+- `Narzędzia` → `Otwórz Narzędzie dyskowe`: `externaldrive`
+- `Narzędzia` → `Status helpera`: `info.circle`
+- `Narzędzia` → `Napraw helpera`: `wrench.and.screwdriver`
+- `Narzędzia` → `Ustawienia działania w tle…`: `gearshape` (same group as helper actions; no divider between `Napraw helpera` and settings action).
 
 Progress indicators:
 - Inline progress uses `ProgressView().controlSize(.small)` next to status text.
@@ -455,8 +467,10 @@ Current effective build configuration snapshot:
 
 ### 11.5 Registration and readiness lifecycle (`HelperServiceManager`)
 - Startup bootstrap:
-- `bootstrapIfNeededAtStartup` runs non-interactive readiness check from Welcome flow.
-- In `DEBUG` when app is running from Xcode/DerivedData, bootstrap returns success without forcing registration.
+- `bootstrapIfNeededAtStartup` runs from `WelcomeView` before notification startup flow.
+- In normal path, it performs a non-interactive readiness check.
+- If helper status is `requiresApproval`, startup approval alert is shown; startup completion reports not ready until user grants Background Items permission.
+- In `DEBUG` when app runs from Xcode/DerivedData, bootstrap bypasses forced registration, but still checks `requiresApproval` and shows startup approval alert when needed.
 - Installation gate:
 - install flow calls interactive `ensureReadyForPrivilegedWork`.
 - Before registration, location rule is evaluated:
@@ -717,15 +731,15 @@ This chapter defines notification permissions, UI toggles, and delivery rules.
 
 Core components:
 - `NotificationPermissionManager` is the source of truth for notification policy.
-- `MenuState.notificationsEnabled` is the effective menu checkmark state.
-- `WelcomeView` runs startup permission flow after optional update alert.
+- `MenuState.notificationsEnabled` is the effective notifications state used by menu label/icon.
+- `WelcomeView` runs update check, then helper startup bootstrap, then notification startup flow.
 - `FinishUSBView` sends completion notification only when policy allows.
 
 State model:
 - System permission state comes from `UNUserNotificationCenter.getNotificationSettings()`.
 - App-level toggle is stored in `UserDefaults` key `NotificationsEnabledInAppV1`.
 - Startup prompt handling flag is stored in `UserDefaults` key `NotificationsStartupPromptHandledV1`.
-- Effective enabled state (menu checkmark): `systemAuthorized && appEnabledInApp`.
+- Effective enabled state (menu label/icon): `systemAuthorized && appEnabledInApp`.
 
 System status interpretation (as implemented):
 - Treated as authorized: `.authorized`, `.provisional`.
@@ -734,14 +748,16 @@ System status interpretation (as implemented):
 
 Startup flow:
 1. `WelcomeView.onAppear` runs `checkForUpdates(completion:)`.
-2. After update flow completes (including alert close), app calls `NotificationPermissionManager.handleStartupFlowIfNeeded()`.
-3. If system is authorized:
+2. After update flow completes (including alert close), app calls `HelperServiceManager.bootstrapIfNeededAtStartup(...)`.
+3. After helper startup bootstrap completion, app calls `NotificationPermissionManager.handleStartupFlowIfNeeded()`.
+4. This ordering ensures helper approval alert (`requiresApproval`) is shown before notification onboarding prompt.
+5. If system is authorized:
 - Ensure app toggle default exists (`true` if missing).
 - Mark startup prompt as handled.
-4. If system is denied:
+6. If system is denied:
 - Mark startup prompt as handled.
 - Do not show startup prompt.
-5. If system is not determined and startup prompt is not handled:
+7. If system is not determined and startup prompt is not handled:
 - Show custom alert:
 - Title: `Czy chcesz włączyć powiadomienia?`
 - Body: `Pozwoli to na otrzymanie informacji o zakończeniu procesu przygotowania nośnika instalacyjnego.`
@@ -749,7 +765,10 @@ Startup flow:
 - For startup flow, any choice marks prompt as handled.
 
 Menu behavior (`Opcje` → `Powiadomienia`):
-- Checkmark source: `MenuState.notificationsEnabled`.
+- Menu state source: `MenuState.notificationsEnabled`.
+- Dynamic label and icon:
+- enabled: label `Powiadomienia włączone`, icon `bell.and.waves.left.and.right`
+- disabled: label `Powiadomienia wyłączone`, icon `bell.slash`
 - On tap, behavior depends on system status:
 - Authorized/provisional: toggle app-level flag only (on/off in app), no redirection to system settings.
 - Not determined: show enable prompt again (same as startup prompt), without reusing startup handled lock.
@@ -766,7 +785,7 @@ System settings redirection:
 - Final fallback: open System Settings app by bundle ID (`com.apple.systempreferences` or `com.apple.SystemSettings`).
 
 Refresh rules:
-- `applicationDidFinishLaunching` and `applicationDidBecomeActive` both call `refreshState()` to keep menu checkmark aligned with real system state after returning from Settings.
+- `applicationDidFinishLaunching` and `applicationDidBecomeActive` both call `refreshState()` to keep menu notification label/icon aligned with real system state after returning from Settings.
 
 Finish screen delivery rules:
 - `FinishUSBView.sendSystemNotificationIfInactive()` is called on appear.

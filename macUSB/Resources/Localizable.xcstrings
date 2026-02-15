@@ -3305,9 +3305,6 @@
         }
       }
     },
-    "Ustawienia działania w tle…" : {
-
-    },
     "Pobierz" : {
       "localizations" : {
         "de" : {
@@ -3616,58 +3613,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Português (BR)"
-          }
-        }
-      }
-    },
-    "Powiadomienia" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Benachrichtigungen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notifications"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notificaciones"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notifications"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通知"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notificações"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Уведомления"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通知"
           }
         }
       }
@@ -5389,6 +5334,9 @@
           }
         }
       }
+    },
+    "Ustawienia działania w tle…" : {
+
     },
     "Utworzono instalator systemu" : {
       "localizations" : {
