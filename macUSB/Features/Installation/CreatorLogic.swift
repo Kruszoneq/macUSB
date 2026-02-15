@@ -3,6 +3,29 @@ import AppKit
 
 // Shared installation utilities used by the helper-only flow
 extension UniversalInstallationView {
+    func showStartCreationAlert() {
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .warning
+        alert.messageText = String(localized: "Ostrzeżenie o utracie danych")
+        alert.informativeText = String(localized: "Wszystkie dane na wybranym nośniku zostaną usunięte. Czy na pewno chcesz rozpocząć proces?")
+        alert.addButton(withTitle: String(localized: "Nie"))
+        alert.addButton(withTitle: String(localized: "Tak"))
+
+        let completionHandler = { (response: NSApplication.ModalResponse) in
+            if response == .alertSecondButtonReturn {
+                self.startCreationProcessEntry()
+            }
+        }
+
+        if let window = NSApp.windows.first {
+            alert.beginSheetModal(for: window, completionHandler: completionHandler)
+        } else {
+            let response = alert.runModal()
+            completionHandler(response)
+        }
+    }
+
     func log(_ message: String, category: String = "Installation") {
         AppLogging.info(message, category: category)
     }

@@ -142,6 +142,10 @@ Buttons:
 Alerts and dialogs:
 - `NSAlert` uses the application icon and localized strings.
 - Alerts are styled as informational or warning depending on action (updates, cancellations, external drive enablement, etc.).
+- Clicking `Rozpocznij` in `UniversalInstallationView` always shows a destructive-data warning alert before any helper workflow starts:
+- title: `Ostrzeżenie o utracie danych`
+- message: `Wszystkie dane na wybranym nośniku zostaną usunięte. Czy na pewno chcesz rozpocząć proces?`
+- buttons: `Nie` (cancel start) and `Tak` (continue and start helper flow).
 - Helper status check uses a two-step alert in healthy state:
 - first alert: `Helper działa poprawnie` with system buttons `OK` (primary) and `Wyświetl szczegóły`.
 - second alert (on details): full helper status report.
@@ -225,6 +229,11 @@ Explicit unsupported case:
 
 ## 7. Installer Creation Flows
 Implemented in: `UniversalInstallationView` (UI) + `CreatorHelperLogic.swift` (workflow orchestration) + `CreatorLogic.swift` (shared helper-only utilities)
+
+Start gating:
+- The installation process cannot start immediately from the `Rozpocznij` button.
+- A warning `NSAlert` confirms data loss on the selected USB target.
+- Only explicit confirmation (`Tak`) proceeds to `startCreationProcessEntry()` and helper workflow initialization.
 
 ### Standard Flow (createinstallmedia)
 Used for most modern macOS installers.
@@ -589,8 +598,8 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Features/Welcome/WelcomeView.swift` — Welcome screen and update check (update alert includes remote and current app version line).
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` — File/USB selection UI and navigation to install.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic; propagates/logs USB metadata (speed, partition scheme, filesystem format, `needsFormatting`) and exposes `selectedDriveForInstallation` (PPC override of formatting flag).
-- `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation UI state, helper progress panel (indeterminate bar + write speed), and handoff to finish screen with process start timestamp.
-- `macUSB/Features/Installation/CreatorLogic.swift` — Shared installation utilities used by the helper path (codesign, cancel, cleanup, monitoring).
+- `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation UI state, destructive start-confirmation trigger (`Rozpocznij`), helper progress panel (indeterminate bar + write speed), and handoff to finish screen with process start timestamp.
+- `macUSB/Features/Installation/CreatorLogic.swift` — Shared installation utilities used by the helper path (codesign, start/cancel alerts, cleanup, monitoring).
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` — Primary installation path via privileged helper (SMAppService + XPC), helper progress mapping, and helper cancellation flow.
 - `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, cleanup, sound feedback, total process duration summary (`Ukończono w MMm SSs`), duration logging, background-result system notification (when app is inactive), and optional cleanup overrides used by debug simulation.
 - `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
@@ -632,9 +641,9 @@ This section lists the main call relationships and data flow.
 - `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json`, bootstraps helper readiness via `HelperServiceManager`, then triggers startup notification-permission flow.
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, and forwards `selectedDriveForInstallation` plus `detectedSystemIcon` to installation flow.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
-- `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress (stage/status with indeterminate bar and write speed), renders detected system icon in system info panel (with `applelogo` fallback), starts the helper path via `startCreationProcessEntry()`, and navigates to `FinishUSBView` with process start timestamp.
+- `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress (stage/status with indeterminate bar and write speed), renders detected system icon in system info panel (with `applelogo` fallback), requires destructive confirmation before start, then starts the helper path via `startCreationProcessEntry()`, and navigates to `FinishUSBView` with process start timestamp.
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` → builds typed helper requests, coordinates helper execution/cancellation, and maps XPC progress events into UI state.
-- `macUSB/Features/Installation/CreatorLogic.swift` → provides shared helper-path utilities (codesign, cancel/cleanup flow, USB availability monitoring, emergency unmount).
+- `macUSB/Features/Installation/CreatorLogic.swift` → provides shared helper-path utilities (codesign, start/cancel alert flow, USB availability monitoring, emergency unmount, cleanup).
 - `macUSB/Features/Finish/FinishUSBView.swift` → cleanup (unmount + delete temp), result sound (prefers bundled `burn_complete.aif`), process duration summary/logging, optional background system notification gated by permission/toggle, and reset callback.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
 - `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift`, `SystemAnalysisView`, and `NotificationPermissionManager`.

@@ -207,7 +207,7 @@ struct UniversalInstallationView: View {
                     
                     if !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !isCancelling {
                         VStack(spacing: 15) {
-                            Button(action: startCreationProcessEntry) {
+                            Button(action: showStartCreationAlert) {
                                 HStack {
                                     Text("Rozpocznij")
                                     Image(systemName: "arrow.right.circle.fill")

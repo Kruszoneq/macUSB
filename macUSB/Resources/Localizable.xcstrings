@@ -3706,6 +3706,9 @@
     "Operacja zakończona" : {
 
     },
+    "Ostrzeżenie o utracie danych" : {
+
+    },
     "Otwórz Narzędzie dyskowe" : {
       "localizations" : {
         "de" : {
@@ -6156,6 +6159,9 @@
       }
     },
     "Włączony" : {
+
+    },
+    "Wszystkie dane na wybranym nośniku zostaną usunięte. Czy na pewno chcesz rozpocząć proces?" : {
 
     },
     "Wszystkie pliki na wybranym dysku USB zostaną bezpowrotnie usunięte!" : {
