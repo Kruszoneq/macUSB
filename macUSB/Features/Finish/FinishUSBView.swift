@@ -8,6 +8,7 @@ struct FinishUSBView: View {
     let onReset: () -> Void
     let isPPC: Bool
     let didFail: Bool
+    let creationStartedAt: Date?
     let cleanupTempWorkURL: URL?
     let shouldDetachMountPoint: Bool
     
@@ -16,6 +17,7 @@ struct FinishUSBView: View {
     @State private var cleanupErrorMessage: String? = nil
     @State private var didPlayResultSound: Bool = false
     @State private var didSendBackgroundNotification: Bool = false
+    @State private var completionDurationText: String? = nil
 
     init(
         systemName: String,
@@ -23,6 +25,7 @@ struct FinishUSBView: View {
         onReset: @escaping () -> Void,
         isPPC: Bool,
         didFail: Bool,
+        creationStartedAt: Date? = nil,
         cleanupTempWorkURL: URL? = nil,
         shouldDetachMountPoint: Bool = true
     ) {
@@ -31,6 +34,7 @@ struct FinishUSBView: View {
         self.onReset = onReset
         self.isPPC = isPPC
         self.didFail = didFail
+        self.creationStartedAt = creationStartedAt
         self.cleanupTempWorkURL = cleanupTempWorkURL
         self.shouldDetachMountPoint = shouldDetachMountPoint
     }
@@ -50,7 +54,7 @@ struct FinishUSBView: View {
             // CZĘŚĆ PRZEWIJANA (Informacje)
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Zakończono")
+                    Text("Wynik operacji")
                         .font(.title).bold()
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.bottom, 5)
@@ -173,7 +177,14 @@ struct FinishUSBView: View {
                             if cleanupSuccess {
                                 HStack(alignment: .center) {
                                     Image(systemName: "checkmark.circle.fill").font(.title2).foregroundColor(.green).frame(width: 32)
-                                    Text("Zakończono pracę!").font(.headline).foregroundColor(.green)
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("Zakończono pracę!").font(.headline).foregroundColor(.green)
+                                        if let completionDurationText {
+                                            Text(completionDurationText)
+                                                .font(.subheadline)
+                                                .foregroundColor(.green)
+                                        }
+                                    }
                                 }
                                 .padding().frame(maxWidth: .infinity, alignment: .leading)
                                 .background(Color.green.opacity(0.1)).cornerRadius(8)
@@ -258,13 +269,51 @@ struct FinishUSBView: View {
             }
             
             DispatchQueue.main.async {
+                let durationMetrics = self.currentCompletionDuration()
+                let durationText = self.makeCompletionDurationText(durationMetrics)
+                if let durationMetrics {
+                    AppLogging.info(
+                        "Czas procesu USB: \(durationMetrics.displayText) (\(durationMetrics.totalSeconds)s), wynik: \(self.didFail ? "NIEPOWODZENIE" : "SUKCES").",
+                        category: "Installation"
+                    )
+                } else {
+                    AppLogging.info(
+                        "Czas procesu USB: brak danych startu, wynik: \(self.didFail ? "NIEPOWODZENIE" : "SUKCES").",
+                        category: "Installation"
+                    )
+                }
+
                 withAnimation(.easeInOut(duration: 0.5)) {
                     self.cleanupSuccess = success
                     self.cleanupErrorMessage = errorMsg
+                    self.completionDurationText = durationText
                     self.isCleaning = false
                 }
             }
         }
+    }
+
+    private func currentCompletionDuration() -> (totalSeconds: Int, displayText: String)? {
+        guard let creationStartedAt else { return nil }
+
+        let totalSeconds = max(0, Int(Date().timeIntervalSince(creationStartedAt)))
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        let displayText = String(format: "%02dm %02ds", minutes, seconds)
+        return (totalSeconds: totalSeconds, displayText: displayText)
+    }
+
+    private func makeCompletionDurationText(_ duration: (totalSeconds: Int, displayText: String)?) -> String? {
+        guard !didFail else { return nil }
+        guard let duration else { return nil }
+
+        let minutes = duration.totalSeconds / 60
+        let seconds = duration.totalSeconds % 60
+        return String(
+            format: String(localized: "Ukończono w %02dm %02ds"),
+            minutes,
+            seconds
+        )
     }
     
     // --- DŹWIĘK WYNIKU ---
@@ -279,8 +328,18 @@ struct FinishUSBView: View {
                 failSound.play()
             }
         } else {
-            // Dźwięk sukcesu (jak w instalatorach pkg)
-            if let successSound = NSSound(named: NSSound.Name("Glass")) {
+            // Preferowany dźwięk sukcesu.
+            let bundledSoundURL =
+                Bundle.main.url(forResource: "burn_complete", withExtension: "aif", subdirectory: "Sounds")
+                ?? Bundle.main.url(forResource: "burn_complete", withExtension: "aif")
+
+            if let bundledSoundURL,
+               let successSound = NSSound(contentsOf: bundledSoundURL, byReference: false) {
+                successSound.play()
+            } else if let successSound = NSSound(named: NSSound.Name("burn_success")) {
+                successSound.play()
+            } else if let successSound = NSSound(named: NSSound.Name("Glass")) {
+                // Fallback dla środowisk bez customowego dźwięku.
                 successSound.play()
             } else if let hero = NSSound(named: NSSound.Name("Hero")) {
                 hero.play()

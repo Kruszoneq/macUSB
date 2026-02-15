@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AssociatedBundleIdentifiers</key>
+	<array>
+		<string>com.kruszoneq.macUSB</string>
+	</array>
+	<key>Label</key>
+	<string>com.kruszoneq.macusb.helper</string>
+	<key>BundleProgram</key>
+	<string>Contents/Library/Helpers/macUSBHelper</string>
+	<key>MachServices</key>
+	<dict>
+		<key>com.kruszoneq.macusb.helper</key>
+		<true/>
+	</dict>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<false/>
+</dict>
+</plist>

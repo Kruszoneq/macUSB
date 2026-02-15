@@ -6,6 +6,7 @@ struct UniversalInstallationView: View {
     let targetDrive: USBDrive?
     let targetDriveDisplayName: String?
     let systemName: String
+    let detectedSystemIcon: NSImage?
     let originalImageURL: URL?
     
     // Flagi
@@ -25,26 +26,26 @@ struct UniversalInstallationView: View {
     @State var processingTitle: String = ""
     @State var processingSubtitle: String = ""
     @State var processingIcon: String = "doc.on.doc.fill"
-    
-    // NOWE STANY UI DLA AUTH
-    @State var showAuthWarning: Bool = false
-    @State var isRollingBack: Bool = false
-    
+
     @State var errorMessage: String = ""
-    @State var isTerminalWorking: Bool = false
-    @State var showFinishButton: Bool = false
-    @State var processSuccess: Bool = false
+    @State var isHelperWorking: Bool = false
+    @State var helperProgressPercent: Double = 0
+    @State var helperStageTitle: String = ""
+    @State var helperStatusText: String = ""
+    @State var helperCurrentStageKey: String = ""
+    @State var helperWriteSpeedText: String = "- MB/s"
+    @State var helperWriteSpeedTimer: Timer?
+    @State var helperWriteSpeedSampleInFlight: Bool = false
+    @State var activeHelperWorkflowID: String? = nil
     @State var navigateToFinish: Bool = false
     @State var isCancelled: Bool = false
     @State var isUSBDisconnectedLock: Bool = false
     @State var usbCheckTimer: Timer?
+
+    @State var helperOperationFailed: Bool = false
     
-    // New terminal failure state
-    @State var terminalFailed: Bool = false
-    
-    // Stan rozruchowy dla monitoringu
-    @State var monitoringWarmupCounter: Int = 0
     @State var isCancelling: Bool = false
+    @State var usbProcessStartedAt: Date?
     
     @State var windowHandler: UniversalWindowHandler?
     
@@ -58,14 +59,24 @@ struct UniversalInstallationView: View {
             // CZĘŚĆ PRZEWIJANA
             ScrollView {
                 VStack(alignment: .leading, spacing: 15) {
-                    Text("Kreator instalatora macOS")
+                    Text("Szczegóły operacji")
                         .font(.title).bold()
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.bottom, 5)
                     
                     // RAMKA: System Info
                     HStack {
-                        Image(systemName: "applelogo").font(.title2).foregroundColor(.green).frame(width: 32)
+                        if let detectedSystemIcon {
+                            Image(nsImage: detectedSystemIcon)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 32, height: 32)
+                        } else {
+                            Image(systemName: "applelogo")
+                                .font(.title2)
+                                .foregroundColor(.green)
+                                .frame(width: 32)
+                        }
                         VStack(alignment: .leading) {
                             Text("Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
                             Text(systemName).font(.headline).foregroundColor(.green).bold()
@@ -119,28 +130,18 @@ struct UniversalInstallationView: View {
                             Text("Przebieg procesu").font(.headline)
                             VStack(alignment: .leading, spacing: 5) {
                                 if isRestoreLegacy {
-                                    Text("• Plik z systemem zostanie skopiowany i zweryfikowany")
-                                    Text("• Pamięć USB zostanie wymazana")
-                                    Text("• Obraz systemu zostanie przywrócony w Terminalu")
-                                    Text("• Wymagane podanie hasła administratora")
+                                    Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
+                                    Text("• Nośnik USB zostanie sformatowany")
+                                    Text("• Obraz systemu zostanie przywrócony")
                                 } else if isPPC {
-                                    Text("• Dysk USB zostanie sformatowany (APM + HFS+)")
-                                    Text("• Obraz instalacyjny zostanie przywrócony na USB")
-                                    Text("• Operacja zostanie wykonana w Terminalu (wymagane hasło administratora)")
+                                    Text("• Nośnik USB zostanie odpowiednio sformatowany")
+                                    Text("• Obraz instalacyjny zostanie przywrócony")
                                 } else {
+                                    Text("• Pliki systemowe zostaną przygotowane")
+                                    Text("• Nośnik USB zostanie sformatowany")
+                                    Text("• Pliki instalacyjne zostaną skopiowane")
                                     if isCatalina {
-                                        Text("• Plik instalacyjny zostanie skopiowany oraz podpisany")
-                                    } else {
-                                        Text("• Plik instalacyjny zostanie skopiowany")
-                                        if needsCodesign {
-                                            Text("• Instalator zostanie zmodyfikowany (podpis cyfrowy)")
-                                        }
-                                    }
-                                    
-                                    Text("• Pamięć USB zostanie sformatowana (dane zostaną usunięte)")
-                                    Text("• Zapis na USB odbędzie się w nowym oknie Terminala")
-                                    if isCatalina {
-                                        Text("• Terminal wykona końcową weryfikację i podmianę plików")
+                                        Text("• Struktura instalatora zostanie sfinalizowana")
                                     }
                                 }
                                 Text("• Pliki tymczasowe zostaną automatycznie usunięte")
@@ -194,9 +195,9 @@ struct UniversalInstallationView: View {
                 
                 VStack(spacing: 15) {
                     
-                    if !isProcessing && !isTerminalWorking && !processSuccess && !isCancelled && !isUSBDisconnectedLock && !isRollingBack && !isCancelling {
+                    if !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !isCancelling {
                         VStack(spacing: 15) {
-                            Button(action: startCreationProcess) {
+                            Button(action: showStartCreationAlert) {
                                 HStack {
                                     Text("Rozpocznij")
                                     Image(systemName: "arrow.right.circle.fill")
@@ -321,136 +322,65 @@ struct UniversalInstallationView: View {
                         .tint(Color.gray.opacity(0.2))
                     }
                     
-                    // STATUS: Przetwarzanie / Ostrzeżenia
-                    if isProcessing || isRollingBack {
+                    if isProcessing {
                         VStack(spacing: 20) {
                             HStack(spacing: 15) {
-                                if isRollingBack {
-                                    Image(systemName: "xmark.octagon.fill").font(.largeTitle).foregroundColor(.red)
-                                } else {
-                                    Image(systemName: processingIcon).font(.largeTitle).foregroundColor(.accentColor)
-                                }
+                                Image(systemName: processingIcon).font(.largeTitle).foregroundColor(.accentColor)
                                 
                                 VStack(alignment: .leading, spacing: 5) {
-                                    Text(processingTitle).font(.headline)
-                                    Text(processingSubtitle).font(.caption).foregroundColor(.secondary)
+                                    Text(processingTitle.isEmpty ? String(localized: "Rozpoczynanie...") : processingTitle)
+                                        .font(.headline)
+                                    Text(processingSubtitle.isEmpty ? String(localized: "Przygotowywanie operacji...") : processingSubtitle)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
                                 }
                                 Spacer()
                             }
                             
-                            // RAMKA: Autoryzacja
-                            if showAuthWarning {
-                                HStack(alignment: .center) {
-                                    Image(systemName: "lock.fill")
-                                        .font(.title2)
-                                        .foregroundColor(.orange)
-                                        .frame(width: 32)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text("Wymagana autoryzacja")
-                                            .font(.headline)
-                                            .foregroundColor(.orange)
-                                        Text("Wprowadź hasło administratora, aby kontynuować.")
-                                            .font(.caption)
-                                            .foregroundColor(.orange.opacity(0.8))
-                                    }
-                                    Spacer()
-                                }
-                                .padding(10)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color.orange.opacity(0.1))
-                                .cornerRadius(8)
-                                .transition(.scale)
-                            }
-                            
-                            // RAMKA: Brak autoryzacji / Rollback
-                            if isRollingBack {
-                                HStack(alignment: .center) {
-                                    Image(systemName: "hand.raised.fill")
-                                        .font(.title2)
-                                        .foregroundColor(.red)
-                                        .frame(width: 32)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text("Brak autoryzacji")
-                                            .font(.headline)
-                                            .foregroundColor(.red)
-                                        Text("Operacja została anulowana przez użytkownika.")
-                                            .font(.caption)
-                                            .foregroundColor(.red.opacity(0.8))
-                                    }
-                                    Spacer()
-                                }
-                                .padding(10)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color.red.opacity(0.1))
-                                .cornerRadius(8)
-                                .transition(.scale)
-                            }
-                            
                             Divider()
-                            
-                            if !isRollingBack {
-                                HStack {
-                                    ProgressView().controlSize(.small)
-                                    Text("Proces w toku...").font(.caption).foregroundColor(.secondary)
-                                    Spacer()
-                                }
+
+                            HStack {
+                                ProgressView().controlSize(.small)
+                                Text("Proces w toku...").font(.caption).foregroundColor(.secondary)
+                                Spacer()
                             }
                         }
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(isRollingBack ? Color.red.opacity(0.05) : Color.accentColor.opacity(0.1))
+                        .background(Color.accentColor.opacity(0.1))
                         .cornerRadius(10)
                         .transition(.opacity.combined(with: .move(edge: .bottom)))
                     }
                     
-                    if isTerminalWorking {
+                    if isHelperWorking {
                         VStack(spacing: 20) {
                             HStack(spacing: 15) {
-                                Image(systemName: "terminal.fill").font(.largeTitle).foregroundColor(.secondary)
+                                Image(systemName: "lock.shield.fill").font(.largeTitle).foregroundColor(.accentColor)
                                 VStack(alignment: .leading, spacing: 5) {
-                                    Text("Uruchomiono Terminal").font(.headline)
-                                    Text("Postępuj zgodnie z instrukcjami w oknie Terminala.").font(.caption).foregroundColor(.secondary)
+                                    Text(helperStageTitle.isEmpty ? String(localized: "Rozpoczynanie...") : helperStageTitle)
+                                        .font(.headline)
+                                    Text(helperStatusText.isEmpty ? String(localized: "Nawiązywanie połączenia XPC...") : helperStatusText)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
                                 }
                                 Spacer()
+                                VStack(alignment: .trailing, spacing: 4) {
+                                    Text("Prędkość zapisu")
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                    Text(helperWriteSpeedText)
+                                        .font(.headline.monospacedDigit())
+                                }
                             }
                             Divider()
-                            HStack {
-                                ProgressView().controlSize(.small)
-                                Text("Oczekiwanie na zakończenie operacji...").font(.caption).foregroundColor(.secondary)
-                                Spacer()
-                            }
+                            ProgressView()
+                                .progressViewStyle(.linear)
                         }
                         .padding().frame(maxWidth: .infinity)
                         .background(Color.accentColor.opacity(0.1)).cornerRadius(10)
                         .transition(.opacity)
                     }
                     
-                    if processSuccess {
-                         VStack(spacing: 20) {
-                             HStack(spacing: 15) {
-                                 Image(systemName: "checkmark.circle.fill").font(.largeTitle).foregroundColor(.green)
-                                 VStack(alignment: .leading, spacing: 5) {
-                                     Text("Gotowe!").font(.headline)
-                                     Text("Przejdź dalej, aby zakończyć proces...").font(.caption).foregroundColor(.secondary)
-                                 }
-                                 Spacer()
-                             }
-                             Divider()
-                             VStack(spacing: 10) {
-                                 Button(action: { navigateToFinish = true }) {
-                                     HStack {
-                                         Text("Zakończ")
-                                         Image(systemName: "arrow.right.circle.fill")
-                                     }
-                                     .frame(maxWidth: .infinity).padding(5)
-                                 }
-                                 .buttonStyle(.borderedProminent).controlSize(.large).tint(Color.green)
-                             }
-                         }
-                         .padding().frame(maxWidth: .infinity)
-                         .background(Color.green.opacity(0.1)).cornerRadius(10)
-                         .transition(.opacity)
-                    }
                 }
                 .padding()
                 .background(Color(NSColor.windowBackgroundColor))
@@ -466,7 +396,7 @@ struct UniversalInstallationView: View {
                 if self.windowHandler == nil {
                     let handler = UniversalWindowHandler(
                         shouldClose: {
-                            return self.showFinishButton || self.isCancelled || self.processSuccess
+                            return self.isCancelled
                         },
                         onCleanup: {
                             self.performEmergencyCleanup(mountPoint: sourceAppURL.deletingLastPathComponent(), tempURL: tempWorkURL)
@@ -490,7 +420,8 @@ struct UniversalInstallationView: View {
                         self.rootIsActive = false
                     },
                     isPPC: isPPC,
-                    didFail: terminalFailed
+                    didFail: helperOperationFailed,
+                    creationStartedAt: usbProcessStartedAt
                 ),
                 isActive: $navigateToFinish
             ) { EmptyView() }
@@ -502,11 +433,14 @@ struct UniversalInstallationView: View {
             AppLogging.info("Przejście do kreatora", category: "Navigation")
             AppLogging.separator()
             AppLogging.separator()
-            if !isProcessing && !isTerminalWorking && !processSuccess && !isCancelled && !isUSBDisconnectedLock && !isRollingBack {
+            if !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock {
                 startUSBMonitoring()
             }
         }
-        .onDisappear { stopUSBMonitoring() }
+        .onDisappear {
+            stopUSBMonitoring()
+            stopHelperWriteSpeedMonitoring()
+        }
     }
 }
 
@@ -554,4 +488,3 @@ class UniversalWindowHandler: NSObject, NSWindowDelegate {
         } else { return false }
     }
 }
-

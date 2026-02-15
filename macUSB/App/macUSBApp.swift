@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import ServiceManagement
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -68,7 +69,7 @@ struct macUSBApp: App {
             CommandGroup(replacing: .newItem) { }
             
             CommandMenu(String(localized: "Opcje")) {
-                Menu(String(localized: "Pomiń analizowanie pliku")) {
+                Menu {
                     Button(String(localized: "Mac OS X Tiger 10.4 (Multi DVD)")) {
                         let alert = NSAlert()
                         alert.alertStyle = .informational
@@ -92,9 +93,11 @@ struct macUSBApp: App {
                     }
                     .keyboardShortcut("t", modifiers: [.option, .command])
                     .disabled(!menuState.skipAnalysisEnabled)
+                } label: {
+                    Label(String(localized: "Pomiń analizowanie pliku"), systemImage: "doc.text.magnifyingglass")
                 }
                 Divider()
-                Button(String(localized: "Włącz obsługę zewnętrznych dysków twardych")) {
+                Button {
                     let alert = NSAlert()
                     alert.alertStyle = .informational
                     alert.icon = NSApp.applicationIconImage
@@ -108,52 +111,106 @@ struct macUSBApp: App {
                         _ = alert.runModal()
                         menuState.enableExternalDrives()
                     }
+                } label: {
+                    Label(String(localized: "Włącz obsługę zewnętrznych dysków twardych"), systemImage: "externaldrive.badge.plus")
                 }
                 Divider()
-                Menu(String(localized: "Język")) {
+                Menu {
                     Button {
                         languageManager.currentLanguage = "auto"
                     } label: {
-                        Label(String(localized: "Automatycznie"), systemImage: languageManager.isAuto ? "checkmark" : "")
+                        if languageManager.isAuto {
+                            Label(String(localized: "Automatycznie"), systemImage: "checkmark")
+                        } else {
+                            Text(String(localized: "Automatycznie"))
+                        }
                     }
                     Divider()
                     Button { languageManager.currentLanguage = "pl" } label: {
-                        Label("Polski", systemImage: languageManager.currentLanguage == "pl" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "pl" {
+                            Label("Polski", systemImage: "checkmark")
+                        } else {
+                            Text("Polski")
+                        }
                     }
                     Button { languageManager.currentLanguage = "en" } label: {
-                        Label("English", systemImage: languageManager.currentLanguage == "en" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "en" {
+                            Label("English", systemImage: "checkmark")
+                        } else {
+                            Text("English")
+                        }
                     }
                     Button { languageManager.currentLanguage = "de" } label: {
-                        Label("Deutsch", systemImage: languageManager.currentLanguage == "de" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "de" {
+                            Label("Deutsch", systemImage: "checkmark")
+                        } else {
+                            Text("Deutsch")
+                        }
                     }
                     Button { languageManager.currentLanguage = "fr" } label: {
-                        Label("Français", systemImage: languageManager.currentLanguage == "fr" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "fr" {
+                            Label("Français", systemImage: "checkmark")
+                        } else {
+                            Text("Français")
+                        }
                     }
                     Button { languageManager.currentLanguage = "es" } label: {
-                        Label("Español", systemImage: languageManager.currentLanguage == "es" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "es" {
+                            Label("Español", systemImage: "checkmark")
+                        } else {
+                            Text("Español")
+                        }
                     }
                     Button { languageManager.currentLanguage = "pt-BR" } label: {
-                        Label("Português (BR)", systemImage: languageManager.currentLanguage == "pt-BR" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "pt-BR" {
+                            Label("Português (BR)", systemImage: "checkmark")
+                        } else {
+                            Text("Português (BR)")
+                        }
                     }
                     Button { languageManager.currentLanguage = "ru" } label: {
-                        Label("Русский", systemImage: languageManager.currentLanguage == "ru" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "ru" {
+                            Label("Русский", systemImage: "checkmark")
+                        } else {
+                            Text("Русский")
+                        }
                     }
                     Button { languageManager.currentLanguage = "zh-Hans" } label: {
-                        Label("简体中文", systemImage: languageManager.currentLanguage == "zh-Hans" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "zh-Hans" {
+                            Label("简体中文", systemImage: "checkmark")
+                        } else {
+                            Text("简体中文")
+                        }
                     }
                     Button { languageManager.currentLanguage = "ja" } label: {
-                        Label("日本語", systemImage: languageManager.currentLanguage == "ja" ? "checkmark" : "")
+                        if languageManager.currentLanguage == "ja" {
+                            Label("日本語", systemImage: "checkmark")
+                        } else {
+                            Text("日本語")
+                        }
                     }
+                } label: {
+                    Label(String(localized: "Język"), systemImage: "globe")
                 }
                 Divider()
                 Button {
                     NotificationPermissionManager.shared.handleMenuNotificationsTapped()
                 } label: {
-                    Label(String(localized: "Powiadomienia"), systemImage: menuState.notificationsEnabled ? "checkmark" : "")
+                    if menuState.notificationsEnabled {
+                        Label(
+                            String(localized: "Powiadomienia włączone"),
+                            systemImage: "bell.and.waves.left.and.right"
+                        )
+                    } else {
+                        Label(
+                            String(localized: "Powiadomienia wyłączone"),
+                            systemImage: "bell.slash"
+                        )
+                    }
                 }
             }
             CommandMenu(String(localized: "Narzędzia")) {
-                Button(String(localized: "Otwórz Narzędzie dyskowe")) {
+                Button {
                     if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.DiskUtility") {
                         NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration(), completionHandler: nil)
                     } else {
@@ -169,6 +226,24 @@ struct macUSBApp: App {
                             }
                         }
                     }
+                } label: {
+                    Label(String(localized: "Otwórz Narzędzie dyskowe"), systemImage: "externaldrive")
+                }
+                Divider()
+                Button {
+                    HelperServiceManager.shared.presentStatusAlert()
+                } label: {
+                    Label(String(localized: "Status helpera"), systemImage: "info.circle")
+                }
+                Button {
+                    HelperServiceManager.shared.repairRegistrationFromMenu()
+                } label: {
+                    Label(String(localized: "Napraw helpera"), systemImage: "wrench.and.screwdriver")
+                }
+                Button {
+                    SMAppService.openSystemSettingsLoginItems()
+                } label: {
+                    Label(String(localized: "Ustawienia działania w tle…"), systemImage: "gearshape")
                 }
             }
             CommandGroup(replacing: .windowList) { }

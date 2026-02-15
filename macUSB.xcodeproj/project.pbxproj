@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		0F0460D42EF45FFC00C6F937 /* version.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F1D673B2EEF235A00EC9CA8 /* version.json */; };
 		0FB1C3B02EEC7E6700A86E0F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0FB1C3AF2EEC7E5F00A86E0F /* README.md */; };
+		A10000012F00000100000001 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000006 /* main.swift */; };
+		A10000012F00000100000002 /* macUSBHelper in CopyFiles */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000005 /* macUSBHelper */; };
+		A10000012F00000100000003 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000007 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist */; };
+		B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */ = {isa = PBXBuildFile; fileRef = B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,7 +30,37 @@
 			remoteGlobalIDString = 0F94F4A42EDE3E510019F69A;
 			remoteInfo = macUSB;
 		};
+		A10000012F00000100000004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0F94F49D2EDE3E510019F69A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A10000012F0000010000000C;
+			remoteInfo = macUSBHelper;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A10000012F00000100000008 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/Helpers;
+			dstSubfolderSpec = 1;
+			files = (
+				A10000012F00000100000002 /* macUSBHelper in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A10000012F00000100000009 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LaunchDaemons;
+			dstSubfolderSpec = 1;
+			files = (
+				A10000012F00000100000003 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0F1D673B2EEF235A00EC9CA8 /* version.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = version.json; sourceTree = "<group>"; };
@@ -36,6 +70,12 @@
 		0FB1C3772EEC7B5A00A86E0F /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		0FB1C3AC2EEC7C8D00A86E0F /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		0FB1C3AF2EEC7E5F00A86E0F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		A10000012F00000100000005 /* macUSBHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = macUSBHelper; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000012F00000100000006 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		A10000012F00000100000007 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist; sourceTree = "<group>"; };
+		A10000012F00000100000013 /* macUSBHelper.debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macUSBHelper.debug.entitlements; sourceTree = "<group>"; };
+		A10000012F00000100000014 /* macUSBHelper.release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macUSBHelper.release.entitlements; sourceTree = "<group>"; };
+		B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = macUSB/Resources/Sounds/burn_complete.aif; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -47,6 +87,7 @@
 				Features/Analysis/AnalysisLogic.swift,
 				Features/Analysis/SystemAnalysisView.swift,
 				Features/Finish/FinishUSBView.swift,
+				Features/Installation/CreatorHelperLogic.swift,
 				Features/Installation/CreatorLogic.swift,
 				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/WelcomeView.swift,
@@ -54,6 +95,9 @@
 				Resources/Localizable.xcstrings,
 				Shared/Models/Item.swift,
 				Shared/Models/Models.swift,
+				Shared/Services/Helper/HelperIPC.swift,
+				Shared/Services/Helper/HelperServiceManager.swift,
+				Shared/Services/Helper/PrivilegedOperationClient.swift,
 				Shared/Services/LanguageManager.swift,
 				Shared/Services/Logging.swift,
 				Shared/Services/MenuState.swift,
@@ -68,6 +112,7 @@
 			membershipExceptions = (
 				App/ContentView.swift,
 				App/macUSBApp.swift,
+				Features/Installation/CreatorHelperLogic.swift,
 				Features/Installation/CreatorLogic.swift,
 				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/WelcomeView.swift,
@@ -75,6 +120,9 @@
 				Resources/Localizable.xcstrings,
 				Shared/Models/Item.swift,
 				Shared/Models/Models.swift,
+				Shared/Services/Helper/HelperIPC.swift,
+				Shared/Services/Helper/HelperServiceManager.swift,
+				Shared/Services/Helper/PrivilegedOperationClient.swift,
 				Shared/Services/LanguageManager.swift,
 				Shared/Services/Logging.swift,
 				Shared/Services/MenuState.swift,
@@ -124,6 +172,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A10000012F0000010000000A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -136,7 +191,9 @@
 				0FB1C3AF2EEC7E5F00A86E0F /* README.md */,
 				0FB1C3AC2EEC7C8D00A86E0F /* .gitignore */,
 				0FA4D68E2EE4D133006211FD /* macUSB */,
+				A10000012F0000010000000B /* macUSBHelper */,
 				0F94F4A62EDE3E510019F69A /* Products */,
+				0FC49EED2F3E823C00F847B1 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -144,10 +201,30 @@
 			isa = PBXGroup;
 			children = (
 				0F94F4A52EDE3E510019F69A /* macUSB.app */,
+				A10000012F00000100000005 /* macUSBHelper */,
 				0F94F4B42EDE3E520019F69A /* macUSBTests.xctest */,
 				0F94F4BE2EDE3E520019F69A /* macUSBUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		0FC49EED2F3E823C00F847B1 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				A10000012F00000100000007 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist */,
+				B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		A10000012F0000010000000B /* macUSBHelper */ = {
+			isa = PBXGroup;
+			children = (
+				A10000012F00000100000006 /* main.swift */,
+				A10000012F00000100000013 /* macUSBHelper.debug.entitlements */,
+				A10000012F00000100000014 /* macUSBHelper.release.entitlements */,
+			);
+			path = macUSBHelper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -160,10 +237,13 @@
 				0F94F4A12EDE3E510019F69A /* Sources */,
 				0F94F4A22EDE3E510019F69A /* Frameworks */,
 				0F94F4A32EDE3E510019F69A /* Resources */,
+				A10000012F00000100000008 /* CopyFiles */,
+				A10000012F00000100000009 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A10000012F0000010000000F /* PBXTargetDependency */,
 			);
 			name = macUSB;
 			packageProductDependencies = (
@@ -216,6 +296,25 @@
 			productReference = 0F94F4BE2EDE3E520019F69A /* macUSBUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		A10000012F0000010000000C /* macUSBHelper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10000012F00000100000012 /* Build configuration list for PBXNativeTarget "macUSBHelper" */;
+			buildPhases = (
+				A10000012F0000010000000E /* Sources */,
+				A10000012F0000010000000A /* Frameworks */,
+				A10000012F0000010000000D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = macUSBHelper;
+			packageProductDependencies = (
+			);
+			productName = macUSBHelper;
+			productReference = A10000012F00000100000005 /* macUSBHelper */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -236,6 +335,9 @@
 					0F94F4BD2EDE3E520019F69A = {
 						CreatedOnToolsVersion = 26.1.1;
 						TestTargetID = 0F94F4A42EDE3E510019F69A;
+					};
+					A10000012F0000010000000C = {
+						CreatedOnToolsVersion = 26.2;
 					};
 				};
 			};
@@ -262,6 +364,7 @@
 			projectRoot = "";
 			targets = (
 				0F94F4A42EDE3E510019F69A /* macUSB */,
+				A10000012F0000010000000C /* macUSBHelper */,
 				0F94F4B32EDE3E520019F69A /* macUSBTests */,
 				0F94F4BD2EDE3E520019F69A /* macUSBUITests */,
 			);
@@ -274,6 +377,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F0460D42EF45FFC00C6F937 /* version.json in Resources */,
+				B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,6 +393,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				0FB1C3B02EEC7E6700A86E0F /* README.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A10000012F0000010000000D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,6 +427,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A10000012F0000010000000E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000012F00000100000001 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -328,6 +447,11 @@
 			isa = PBXTargetDependency;
 			target = 0F94F4A42EDE3E510019F69A /* macUSB */;
 			targetProxy = 0F94F4BF2EDE3E520019F69A /* PBXContainerItemProxy */;
+		};
+		A10000012F0000010000000F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A10000012F0000010000000C /* macUSBHelper */;
+			targetProxy = A10000012F00000100000004 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -367,7 +491,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -436,8 +560,8 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -472,12 +596,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				AUTOMATION_APPLE_EVENTS = YES;
-				CODE_SIGN_ENTITLEMENTS = macUSB/macUSB.entitlements;
+				CODE_SIGN_ENTITLEMENTS = macUSB/macUSB.debug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 11;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -494,14 +618,13 @@
 				INFOPLIST_FILE = macUSB/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = macUSB;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSAppleEventsUsageDescription = "macUSB needs to control Terminal to create your bootable drive safely.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025-2026 Krystian Pierz. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -529,15 +652,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				AUTOMATION_APPLE_EVENTS = YES;
-				CODE_SIGN_ENTITLEMENTS = macUSB/macUSB.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_ENTITLEMENTS = macUSB/macUSB.release.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 11;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=macosx*]" = 27NC66L8P2;
+				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -552,18 +674,16 @@
 				INFOPLIST_FILE = macUSB/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = macUSB;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSAppleEventsUsageDescription = "macUSB needs to control Terminal to create your bootable drive safely.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025-2026 Krystian Pierz. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "macUSB Direct Distribution Profile";
 				REGISTER_APP_GROUPS = YES;
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
@@ -660,6 +780,56 @@
 			};
 			name = Release;
 		};
+		A10000012F00000100000010 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = macUSBHelper/macUSBHelper.debug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 27NC66L8P2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENTITLEMENTS_REQUIRED = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macusb.helper;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A10000012F00000100000011 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = macUSBHelper/macUSBHelper.release.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Manual;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 27NC66L8P2;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = 27NC66L8P2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENTITLEMENTS_REQUIRED = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macusb.helper;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -695,6 +865,15 @@
 			buildConfigurations = (
 				0F94F4CF2EDE3E520019F69A /* Debug */,
 				0F94F4D02EDE3E520019F69A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10000012F00000100000012 /* Build configuration list for PBXNativeTarget "macUSBHelper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000012F00000100000010 /* Debug */,
+				A10000012F00000100000011 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
