@@ -54,7 +54,7 @@ struct FinishUSBView: View {
             // CZĘŚĆ PRZEWIJANA (Informacje)
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Zakończono")
+                    Text("Wynik operacji")
                         .font(.title).bold()
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.bottom, 5)

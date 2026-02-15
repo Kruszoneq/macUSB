@@ -59,7 +59,7 @@ struct UniversalInstallationView: View {
             // CZĘŚĆ PRZEWIJANA
             ScrollView {
                 VStack(alignment: .leading, spacing: 15) {
-                    Text("Kreator instalatora macOS")
+                    Text("Szczegóły operacji")
                         .font(.title).bold()
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.bottom, 5)

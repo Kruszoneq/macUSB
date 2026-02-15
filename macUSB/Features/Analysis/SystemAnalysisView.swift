@@ -51,7 +51,7 @@ struct SystemAnalysisView: View {
     
     // MARK: - Subviews split to help the type-checker
     private var headerSection: some View {
-        Text("Wybór systemu macOS")
+        Text("Konfiguracja źródła i celu")
             .font(.title)
             .bold()
             .frame(maxWidth: .infinity, alignment: .center)

@@ -154,6 +154,11 @@ Inputs and file selection:
 - The file path field is a disabled `TextField` with `.roundedBorder`.
 - Drag-and-drop target highlights with an accent-colored stroke (line width 3) and accent background at `0.1` opacity, with corner radius 12.
 
+Screen headline copy:
+- `SystemAnalysisView`: `Konfiguracja źródła i celu`
+- `UniversalInstallationView`: `Szczegóły operacji`
+- `FinishUSBView`: `Wynik operacji`
+
 Progress indicators:
 - Inline progress uses `ProgressView().controlSize(.small)` next to status text.
 - During helper execution, the installation screen shows a dedicated progress panel with stage title, status text, and an indeterminate linear progress bar (without numeric percent).

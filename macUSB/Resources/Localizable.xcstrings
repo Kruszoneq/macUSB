@@ -2655,6 +2655,9 @@
         }
       }
     },
+    "Konfiguracja źródła i celu" : {
+
+    },
     "Kontynuuj" : {
       "localizations" : {
         "de" : {
@@ -2760,6 +2763,7 @@
       }
     },
     "Kreator instalatora macOS" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5351,6 +5355,9 @@
     "System zablokował rejestrację helpera z uruchomienia Xcode. Uruchom raz aplikację z katalogu Applications, zatwierdź działanie helpera w tle, a następnie wróć do testów w Xcode. Szczegóły XPC: %@" : {
 
     },
+    "Szczegóły operacji" : {
+
+    },
     "Ta funkcja umożliwia tworzenie instalatora na zewnętrznych dyskach twardych i SSD. Zachowaj szczególną ostrożność przy wyborze dysku docelowego z listy, aby uniknąć przypadkowej utraty danych!" : {
       "localizations" : {
         "de" : {
@@ -6581,6 +6588,7 @@
       }
     },
     "Wybór systemu macOS" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7215,6 +7223,9 @@
         }
       }
     },
+    "Wynik operacji" : {
+
+    },
     "Wystąpił błąd" : {
       "localizations" : {
         "de" : {
@@ -7375,6 +7386,7 @@
       }
     },
     "Zakończono" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
