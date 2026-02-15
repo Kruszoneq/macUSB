@@ -331,13 +331,13 @@ struct SystemAnalysisView: View {
     
     var usbSelectionSection: some View {
         VStack(alignment: .leading, spacing: 15) {
-            Text("Wybór dysku USB").font(.headline)
+            Text("Wybór nośnika USB").font(.headline)
             HStack(alignment: .top) {
                 Image(systemName: "externaldrive.fill").font(.title2).foregroundColor(.secondary).frame(width: 32)
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Wymagania sprzętowe").font(.headline)
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("• Do utworzenia instalatora potrzebny jest dysk USB o pojemności minimum 16 GB").font(.subheadline).foregroundColor(.secondary)
+                        Text("• Do utworzenia instalatora potrzebny jest nośnik USB o pojemności minimum 16 GB").font(.subheadline).foregroundColor(.secondary)
                         Text("• Zalecane jest użycie dysku w standardzie USB 3.0 lub szybszym").font(.subheadline).foregroundColor(.secondary)
                     }
                 }
@@ -345,13 +345,13 @@ struct SystemAnalysisView: View {
             .padding().frame(maxWidth: .infinity, alignment: .leading).background(Color.gray.opacity(0.1)).cornerRadius(8)
             
             VStack(alignment: .leading, spacing: 10) {
-                Text("Wybierz docelowy dysk USB:").font(.subheadline)
+                Text("Wybierz docelowy nośnik USB:").font(.subheadline)
                 if logic.availableDrives.isEmpty {
                     HStack {
                         Image(systemName: "externaldrive.badge.xmark").font(.title2).foregroundColor(.red).frame(width: 32)
                         VStack(alignment: .leading) {
-                            Text("Nie wykryto dysku USB").font(.headline).foregroundColor(.red)
-                            Text("Podłącz dysk USB i poczekaj na wykrycie...").font(.caption).foregroundColor(.red.opacity(0.8))
+                            Text("Nie wykryto nośnika USB").font(.headline).foregroundColor(.red)
+                            Text("Podłącz nośnik USB i poczekaj na wykrycie...").font(.caption).foregroundColor(.red.opacity(0.8))
                         }
                     }
                     .padding().frame(maxWidth: .infinity, alignment: .leading).background(Color.red.opacity(0.1)).cornerRadius(8)
@@ -373,7 +373,7 @@ struct SystemAnalysisView: View {
                     HStack {
                         Image(systemName: "xmark.circle.fill").font(.title2).foregroundColor(.red).frame(width: 32)
                         VStack(alignment: .leading) {
-                            Text("Wybrany dysk USB ma za małą pojemność").font(.headline).foregroundColor(.red)
+                            Text("Wybrany nośnik USB ma za małą pojemność").font(.headline).foregroundColor(.red)
                             Text("Wymagane jest minimum 16 GB.").font(.caption).foregroundColor(.red.opacity(0.8))
                         }
                     }
@@ -385,7 +385,7 @@ struct SystemAnalysisView: View {
                             Image(systemName: "exclamationmark.triangle.fill").font(.title2).foregroundColor(.orange).frame(width: 32)
                             VStack(alignment: .leading) {
                                 Text("UWAGA!").font(.headline).foregroundColor(.orange)
-                                Text("Wszystkie pliki na wybranym dysku USB zostaną bezpowrotnie usunięte!").font(.subheadline).foregroundColor(.orange.opacity(0.8))
+                                Text("Wszystkie pliki na wybranym nośniku USB zostaną bezpowrotnie usunięte!").font(.subheadline).foregroundColor(.orange.opacity(0.8))
                             }
                         }
                         .padding().frame(maxWidth: .infinity, alignment: .leading).background(Color.orange.opacity(0.1)).cornerRadius(8)

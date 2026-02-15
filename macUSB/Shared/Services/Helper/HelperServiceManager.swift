@@ -73,6 +73,50 @@ final class HelperServiceManager: NSObject {
         ensureReadyForPrivilegedWork(interactive: true, completion: completion)
     }
 
+    func forceReloadForIPCContractMismatch(completion: @escaping (Bool, String?) -> Void) {
+        reportHelperServiceEvent("Wykryto potencjalną niezgodność kontraktu IPC helpera. Wymuszam przeładowanie usługi.")
+        coordinationQueue.async {
+            let service = SMAppService.daemon(plistName: Self.daemonPlistName)
+            PrivilegedOperationClient.shared.resetConnectionForRecovery()
+
+            do {
+                switch service.status {
+                case .enabled, .requiresApproval:
+                    do {
+                        try service.unregister()
+                        self.reportHelperServiceEvent("Helper wyrejestrowany przed wymuszonym przeładowaniem.")
+                    } catch {
+                        self.reportHelperServiceEvent("Nie udało się wyrejestrować helpera przed przeładowaniem: \(error.localizedDescription)")
+                    }
+                    Thread.sleep(forTimeInterval: 0.3)
+                case .notRegistered, .notFound:
+                    break
+                @unknown default:
+                    break
+                }
+
+                try service.register()
+                self.reportHelperServiceEvent("Helper ponownie zarejestrowany po wykryciu niezgodności IPC.")
+
+                self.handlePostRegistrationStatus(interactive: true) { ready, message in
+                    if ready {
+                        PrivilegedOperationClient.shared.resetConnectionForRecovery()
+                    }
+                    DispatchQueue.main.async {
+                        completion(ready, message)
+                    }
+                }
+            } catch {
+                self.reportHelperServiceEvent("Wymuszone przeładowanie helpera nieudane: \(error.localizedDescription)")
+                let fallback = String(localized: "Nie udało się automatycznie odświeżyć helpera. Otwórz Narzędzia → Napraw helpera i spróbuj ponownie.")
+                let mergedMessage = "\(fallback) (\(error.localizedDescription))"
+                DispatchQueue.main.async {
+                    completion(false, mergedMessage)
+                }
+            }
+        }
+    }
+
     func presentStatusAlert() {
         coordinationQueue.async {
             guard !self.statusCheckInProgress else {

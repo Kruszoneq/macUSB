@@ -45,8 +45,8 @@ Core goals:
 Navigation flow (SwiftUI):
 1. Welcome screen → start button.
 2. System analysis → user selects file, app analyzes it, then user selects a USB target.
-3. Installer creation → app prepares files locally and delegates privileged operations to a LaunchDaemon helper via XPC.
-4. Finish screen → cleanup, success/failure feedback, optional PPC instructions.
+3. Installer creation → app delegates the full write pipeline (source staging in TEMP, USB creation stages, and TEMP cleanup) to a LaunchDaemon helper via XPC.
+4. Finish screen → success/failure feedback, optional PPC instructions, and fallback TEMP cleanup only if helper cleanup failed or was skipped.
 
 Main UI screens (in order):
 - `WelcomeView` → `SystemAnalysisView` → `UniversalInstallationView` → `FinishUSBView`
@@ -72,7 +72,7 @@ The project is a SwiftUI macOS app with a pragmatic separation of views, logic e
 
 Key concepts:
 - SwiftUI + AppKit integration: menus, NSAlert dialogs, and window configuration use AppKit APIs.
-- View logic split: `UniversalInstallationView` UI lives in one file; its heavy logic lives in `CreatorLogic.swift` as an extension to keep type-checker complexity manageable.
+- View logic split: `UniversalInstallationView` UI lives in one file; helper workflow orchestration is in `CreatorHelperLogic.swift`, while shared install utilities live in `CreatorLogic.swift`.
 - State-driven UI: extensive use of `@State`, `@StateObject`, `@EnvironmentObject` and `@Published` to bind logic to UI.
 - NotificationCenter: used for flow resets, special-case actions (Tiger Multi-DVD override), and debug-only routing shortcuts.
 - Notification permissions are centrally handled by `NotificationPermissionManager` (startup prompt, menu toggle, and system settings redirection).
@@ -209,7 +209,13 @@ Source language is Polish. This is enforced in `Localizable.xcstrings` with `"so
 
 Practical rules:
 - All new UI strings should be authored first in Polish.
+- Terminology standard: in Polish user-facing copy use `nośnik USB` (not `dysk USB`) for consistency.
+- Immutable product slogan rule: the phrase `Tworzenie botoowalnych dysków USB z systemem macOS oraz OS X nigdy nie było takie proste` is the app’s official slogan and must remain unchanged verbatim in this exact form.
 - Use `Text("...")` with Polish strings; SwiftUI treats these as localization keys.
+- Helper sends stable technical localization keys (for example `helper.workflow.prepare_source.title`) in XPC progress events.
+- Installation UI renders helper stage/status with `Text(LocalizedStringKey(...))`, so helper progress text follows app locale from SwiftUI environment.
+- Keep helper key anchors in `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift` (`HelperWorkflowLocalizationExtractionAnchors`) synchronized with emitted keys to keep String Catalog extraction stable.
+- Every helper localization key must be translated in all supported app languages (`pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`).
 Use `String(localized: "...")` when:
 - The string is not a `Text` literal.
 - The string is assigned to a variable before being shown.
@@ -286,21 +292,21 @@ Standard branch (`createinstallmedia` families):
 Used for most modern macOS installers.
 - `createinstallmedia` is executed by the privileged helper (LaunchDaemon) using typed XPC requests.
 - If the selected drive has `needsFormatting == true` and flow is non-PPC, helper first formats the whole disk to `GPT + HFS+`, then continues to USB creation.
-- In standard flow, preformatting runs after copy/patch/sign preparation steps and before `createinstallmedia`.
+- In standard flow, helper performs copy/patch/sign preparation steps first, then runs preformat (if needed), then `createinstallmedia`.
 - The effective target path is resolved by helper (`TARGET_USB_PATH` equivalent), including mountpoint refresh after preformat.
-- The app may copy the `.app` to a TEMP directory first when:
+- Source staging to TEMP is performed by helper (not app) when:
 - the source is mounted from `/Volumes` (image), or
 - Catalina requires post-processing, or
 - codesign fixes are required.
 
 ### Legacy Restore Flow (Lion / Mountain Lion)
-- Copies `InstallESD.dmg` to TEMP.
+- Helper copies `InstallESD.dmg` to TEMP.
 - Runs `asr imagescan` in helper context (root).
 - If `needsFormatting == true` (non-PPC), a `GPT + HFS+` preformat stage runs in helper before restore.
 - Then `asr restore` runs to helper-resolved target path after optional preformat.
 
 ### Mavericks Flow
-- Copies the source image to TEMP.
+- Helper copies the source image to TEMP.
 - If `needsFormatting == true` (non-PPC), a `GPT + HFS+` preformat stage runs in helper before restore.
 - Runs `asr imagescan`, then `asr restore` in helper (restore target resolved by helper).
 
@@ -313,7 +319,7 @@ Used for most modern macOS installers.
 - For other image types (e.g. `.dmg`), helper request uses staged image copy in temp (`macUSB_temp/PPC_*`).
 
 ### Sierra Special Handling
-- Always copies `.app` to TEMP.
+- Helper always copies `.app` to TEMP.
 - Modifies `CFBundleShortVersionString` to `12.6.03`.
 - Removes quarantine with `xattr`.
 - Re-signs `createinstallmedia`.
@@ -324,10 +330,16 @@ Used for most modern macOS installers.
 - Removes quarantine attributes on the target app.
 - When Catalina transitions into the `ditto` stage, helper emits an explicit transition log line to `HelperLiveLog`.
 
+### Cleanup Ownership
+- TEMP cleanup (`macUSB_temp`) is executed by helper as the final operational step (best-effort, including failure/cancel paths).
+- `FinishUSBView` keeps fallback cleanup as a safety net only when TEMP still exists.
+- Mounting/unmounting the selected source image for analysis remains app-side and is not moved to helper.
+
 ### Helper Monitoring Strategy
 The app tracks helper progress through XPC progress events:
-- `stageKey`, `stageTitle`, `statusText`, `percent`, and optional `logLine`.
-- UI shows stage/status and an indeterminate progress bar (no numeric percent).
+- `stageKey`, `stageTitleKey`, `statusKey`, `percent`, and optional `logLine`.
+- UI localizes helper stage/status through `Localizable.xcstrings` and shows them in an indeterminate progress panel (no numeric percent).
+- Compatibility rule: app canonicalizes displayed helper title/status from `stageKey` when known, so older helper builds that still send raw phrases do not break localization.
 - Write speed (`MB/s`) is measured during active non-formatting helper stages and shown in the panel.
 - During formatting stages (`preformat`, `ppc_format`) speed is hidden as `- MB/s`.
 - `logLine` values are recorded to diagnostics logs under `HelperLiveLog` and are exportable.
@@ -347,6 +359,7 @@ Command-line tools:
 - `xattr` (quarantine and extended attribute cleanup)
 - `plutil` (modify Info.plist for Sierra)
 - `ditto` (Catalina post-copy)
+- `rm` (Catalina target app cleanup stage)
 
 AppKit/Swift APIs:
 - `NSAlert`, `NSOpenPanel`, `NSSavePanel`
@@ -401,7 +414,7 @@ The following requirements are mandatory for diagnostic logs:
 This chapter defines the privileged helper architecture as currently implemented, including packaging, registration, XPC contracts, runtime behavior, UI integration, and failure handling.
 
 ### 11.1 Why the helper exists
-- `macUSB` needs to run privileged operations (`diskutil`, `asr`, `createinstallmedia`, `xattr`, `ditto`, and selected cleanup steps) that cannot reliably run from a non-privileged app process.
+- `macUSB` needs to run privileged operations (`diskutil`, `asr`, `createinstallmedia`, `xattr`, `ditto`, `plutil`, `codesign`, and cleanup steps) that cannot reliably run from a non-privileged app process.
 - Installer creation runs via helper (`SMAppService` + LaunchDaemon + XPC) in both `Debug` and `Release`.
 - The helper encapsulates privileged execution while keeping the app process focused on UI/state and user interaction.
 
@@ -539,27 +552,27 @@ Current effective build configuration snapshot:
 - `preflightTargetVolumeWriteAccess` probes write access on `/Volumes/*`; EPERM/EACCES produces explicit TCC-style guidance error.
 - Workflow request payload includes:
 - workflow kind (`standard`, `legacyRestore`, `mavericks`, `ppc`)
-- source/target paths and BSD name
+- source app path, optional original image path, temp work path, target paths, and BSD name
 - target label
-- flags (`needsPreformat`, `isCatalina`, `requiresApplicationPathArg`)
-- optional `postInstallSourceAppPath` (Catalina post-copy)
+- flags (`needsPreformat`, `isCatalina`, `isSierra`, `needsCodesign`, `requiresApplicationPathArg`)
 - `requesterUID = getuid()`
-- PPC source strategy:
-- `.iso` / `.cdr` use mounted volume source (`/Volumes/...`) to avoid UDIF `asr` source errors.
-- `.dmg` and other image files use staged temporary image copy.
+- App no longer performs copy/patch/sign staging in TEMP; helper owns those steps.
 - UI mapping from helper events:
-- stage title, status text, and percent are updated from `HelperProgressEventPayload`.
+- stage title key, status key, and percent are updated from `HelperProgressEventPayload`; app prefers canonical key mapping from `stageKey` for compatibility, then renders via `LocalizedStringKey` and `Localizable.xcstrings`.
 - `logLine` is not displayed in installer UI and is logged into diagnostics (`HelperLiveLog`).
+- If workflow start fails with an IPC request-decode signature (invalid helper request), app performs one automatic helper reload (unregister/register) and retries workflow start once.
 
 ### 11.9 Helper-side workflow engine (`macUSBHelper/main.swift`)
 - Service accepts only one active workflow at a time (rejects concurrent starts with code `409`).
 - Executor model:
-- stages are predefined per workflow kind with key/title/percent-range/executable/arguments.
+- helper performs a dedicated preparation stage first (staging to TEMP + required patch/sign tasks).
+- main command stages are predefined per workflow kind with key/title/status/percent-range/executable/arguments.
+- helper executes best-effort TEMP cleanup stage after success and also on failure/cancel paths.
 - each stage emits start, streamed progress, and completion events.
 - output parser:
 - captures stdout+stderr line-by-line,
 - extracts `%` tokens with regex and maps tool percentage into stage percentage range,
-- forwards each line as `statusText` and optional `logLine`.
+- keeps `statusKey` as localized status key and forwards tool output as optional `logLine`.
 - Command execution context:
 - if `requesterUID > 0`, helper runs command as user via:
 - `/bin/launchctl asuser <uid> <tool> ...`
@@ -578,11 +591,67 @@ Current effective build configuration snapshot:
 - Health endpoint:
 - `queryHealth` returns `Helper odpowiada poprawnie (uid=..., euid=..., pid=...)`.
 
+### 11.9.1 Exact stage order and percent windows
+- Global invariant:
+- Every workflow starts with `prepare_source` (`0 → 10`).
+- Every workflow runs `cleanup_temp` near the end (`>=99 → 100`, best-effort).
+- Every workflow ends with `finalize` (`100`).
+- Standard (`workflowKind = standard`):
+- Optional `preformat` (`10 → 30`) when `needsPreformat == true` and non-PPC.
+- `createinstallmedia`:
+- with preformat: `30 → 98` (or `30 → 90` for Catalina),
+- without preformat: `15 → 98` (or `15 → 90` for Catalina).
+- Catalina post stages:
+- `catalina_cleanup` (`90 → 94`), `catalina_copy` (`94 → 98`), `catalina_xattr` (`98 → 99`).
+- Legacy restore (`workflowKind = legacyRestore`):
+- Optional `preformat` (`10 → 30`) when `needsPreformat == true`.
+- `imagescan`: `30 → 50` (with preformat) or `15 → 35` (without).
+- `restore`: `50 → 98` (with preformat) or `35 → 98` (without).
+- Mavericks (`workflowKind = mavericks`):
+- Same stage timings as `legacyRestore`: optional `preformat`, then `imagescan`, then `restore`.
+- PPC (`workflowKind = ppc`):
+- `ppc_format` (`10 → 25`), then `ppc_restore` (`25 → 98`).
+
+### 11.9.2 Exact source preparation and codesign rules (helper-owned)
+- `prepare_source` executes in helper before command stages and selects effective source according to workflow:
+- `legacyRestore`: copy `InstallESD.dmg` from selected `.app` to TEMP.
+- `mavericks`: copy selected image to TEMP as `InstallESD.dmg`.
+- `ppc`:
+- `.iso/.cdr` + mounted source available: use mounted `/Volumes/...` source.
+- other images: copy selected image to TEMP as `PPC_<filename>`.
+- fallback: use mounted source if image path missing and mount exists.
+- `standard`:
+- Sierra: copy `.app` to TEMP, patch `CFBundleShortVersionString`, clear quarantine (`xattr -dr`), sign `createinstallmedia`.
+- Catalina / `needsCodesign` / mounted source: copy `.app` to TEMP; for Catalina or `needsCodesign` run local codesign flow in helper.
+- plain standard without these conditions: use original app path directly (no staging).
+- Local codesign flow (`performLocalCodesign`) remains active in helper:
+- clears attributes (`xattr -cr`) on staged app,
+- signs key installer components and `createinstallmedia` (`codesign -s - -f`), with best-effort behavior per component (`failOnNonZeroExit = false`).
+
+### 11.9.3 Helper localization and translation pipeline (exact behavior)
+- Source of truth for helper stage localization IDs:
+- `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift`.
+- Helper emits progress payload with technical keys:
+- `stageKey`, `stageTitleKey`, `statusKey`, `percent`, optional `logLine`.
+- App-side compatibility bridge:
+- `HelperProgressEventPayload` decoder accepts both new (`stageTitleKey`/`statusKey`) and legacy (`stageTitle`/`statusText`) fields.
+- Decoder canonicalizes known stages from `stageKey` to technical keys to avoid mixed-language output from older helper instances.
+- UI mapping:
+- `CreatorHelperLogic` also prefers canonical mapping from `stageKey` before updating state.
+- `UniversalInstallationView` renders helper stage/status via `Text(LocalizedStringKey(...))`, so text follows selected app locale.
+- Diagnostics behavior:
+- `logLine` is never rendered in status panel; it is written to `HelperLiveLog` and remains exportable.
+- Maintenance contract when adding a helper stage:
+- add new key constants in `HelperWorkflowLocalizationKeys`,
+- add extraction anchors,
+- add translations in `Localizable.xcstrings` for `pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`,
+- verify EN runtime rendering and full project build.
+
 ### 11.10 Logging and observability for helper path
 - `HelperService` category:
 - registration/status/repair lifecycle diagnostics.
 - `HelperLiveLog` category:
-- streamed helper stdout/stderr (`logLine`) and decode failures (including Catalina transition to `ditto`).
+- streamed helper stdout/stderr (`logLine`) from command execution and decode failures (including Catalina transition to `ditto`).
 - `Installation` category:
 - user-facing operation milestones, helper workflow begin/end/fail events, and total process duration summary from finish screen.
 - Export behavior:
@@ -604,7 +673,7 @@ Current effective build configuration snapshot:
 ### 11.12 Non-negotiable helper invariants
 - Keep helper integration typed and centralized (do not introduce ad-hoc shell IPC paths).
 - Keep privileged execution on helper path in all configurations; do not reintroduce terminal fallback.
-- Preserve helper event fields (`stageTitle`, `statusText`, `percent`, `logLine`) and Polish user-facing messaging.
+- Preserve helper event fields (`stageTitleKey`, `statusKey`, `percent`, `logLine`) and technical-key localization contract.
 - Keep helper status UX two-step in healthy state (`OK` primary + `Wyświetl szczegóły`).
 - Keep app bundle structure and plist placement exactly compatible with `SMAppService.daemon(plistName:)`.
 
@@ -653,9 +722,9 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` — File/USB selection UI and navigation to install.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic; propagates/logs USB metadata (speed, partition scheme, filesystem format, `needsFormatting`) and exposes `selectedDriveForInstallation` (PPC override of formatting flag).
 - `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation UI state, destructive start-confirmation trigger (`Rozpocznij`), helper progress panel (indeterminate bar + write speed), and handoff to finish screen with process start timestamp.
-- `macUSB/Features/Installation/CreatorLogic.swift` — Shared installation utilities used by the helper path (codesign, start/cancel alerts, cleanup, monitoring).
+- `macUSB/Features/Installation/CreatorLogic.swift` — Shared installation utilities used by the helper path (start/cancel alerts, cleanup, monitoring).
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` — Primary installation path via privileged helper (SMAppService + XPC), helper progress mapping, and helper cancellation flow.
-- `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, cleanup, sound feedback, total process duration summary (`Ukończono w MMm SSs`), duration logging, background-result system notification (when app is inactive), and optional cleanup overrides used by debug simulation.
+- `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, fallback cleanup safety net (only if TEMP still exists), sound feedback, total process duration summary (`Ukończono w MMm SSs`), duration logging, background-result system notification (when app is inactive), and optional cleanup overrides used by debug simulation.
 - `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
 - `macUSB/Shared/Models/Item.swift` — SwiftData model stub (currently unused).
 - `macUSB/Shared/Services/LanguageManager.swift` — Language selection and locale handling.
@@ -697,14 +766,15 @@ This section lists the main call relationships and data flow.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
 - `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress (stage/status with indeterminate bar and write speed), renders detected system icon in system info panel (with `applelogo` fallback), requires destructive confirmation before start, then starts the helper path via `startCreationProcessEntry()`, and navigates to `FinishUSBView` with process start timestamp.
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` → builds typed helper requests, coordinates helper execution/cancellation, and maps XPC progress events into UI state.
-- `macUSB/Features/Installation/CreatorLogic.swift` → provides shared helper-path utilities (codesign, start/cancel alert flow, USB availability monitoring, emergency unmount, cleanup).
-- `macUSB/Features/Finish/FinishUSBView.swift` → cleanup (unmount + delete temp), result sound (prefers bundled `burn_complete.aif`), process duration summary/logging, optional background system notification gated by permission/toggle, and reset callback.
+- `macUSB/Features/Installation/CreatorLogic.swift` → provides shared helper-path utilities (start/cancel alert flow, USB availability monitoring, emergency unmount, cleanup).
+- `macUSB/Features/Finish/FinishUSBView.swift` → fallback cleanup safety net (unmount + conditional temp delete), result sound (prefers bundled `burn_complete.aif`), process duration summary/logging, optional background system notification gated by permission/toggle, and reset callback.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
 - `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift`, `SystemAnalysisView`, and `NotificationPermissionManager`.
 - `macUSB/Shared/Services/NotificationPermissionManager.swift` → reads `UNUserNotificationCenter` state, updates `MenuState`, controls startup/menu alerts for notification permission, and opens system settings when blocked.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift` → registers/repairs/removes LaunchDaemon helper via `SMAppService`, reports readiness, presents startup Background Items approval prompt when needed, and shows helper status alerts (healthy short-form + full details dialog).
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift` → app-side XPC client that starts/cancels helper workflows and logs `logLine` events to `HelperLiveLog`.
 - `macUSB/Shared/Services/Helper/HelperIPC.swift` → helper IPC payload contracts (request, progress event, result).
+- `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift` → single source of truth for helper localization key IDs and extraction anchors used by String Catalog.
 - `macUSBHelper/main.swift` → helper-side XPC service, root workflow executor, progress event emitter, and cancellation handling.
 - `macUSB/Shared/Services/UpdateChecker.swift` → called from app menu.
 
@@ -716,10 +786,12 @@ This section lists the main call relationships and data flow.
 3. Respect flow flags: `AnalysisLogic` flags are the source of truth for installation paths.
 4. Keep the window fixed: UI assumes a 550×750 fixed layout.
 5. Privileged helper operations must be observable: keep stage/status/progress-state updates flowing to UI and keep `logLine` in diagnostics logs (`HelperLiveLog`) rather than screen panels.
-6. Use `AppLogging` for all important steps: keep logs helpful for diagnostics.
-7. Privileged install flow must run through `SMAppService` + LaunchDaemon helper in all configurations (no terminal fallback).
-8. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.
-9. Debug menu contract: top-level `DEBUG` menu is allowed only for `DEBUG` builds; it must not be available in `Release` builds.
+6. Helper stage/status strings must stay localizable through `Localizable.xcstrings`; helper sends technical keys and the app renders them with `LocalizedStringKey`.
+7. Adding a new helper stage requires: new technical key IDs, translations for all supported languages, EN verification, and a full project build check.
+8. Use `AppLogging` for all important steps: keep logs helpful for diagnostics.
+9. Privileged install flow must run through `SMAppService` + LaunchDaemon helper in all configurations (no terminal fallback).
+10. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.
+11. Debug menu contract: top-level `DEBUG` menu is allowed only for `DEBUG` builds; it must not be available in `Release` builds.
 
 ---
 
@@ -727,7 +799,7 @@ This section lists the main call relationships and data flow.
 - Update checking is duplicated: `WelcomeView` and `UpdateChecker` both read `version.json`.
 - Legacy detection and special cases are complex: changes in `AnalysisLogic` affect multiple installation paths.
 - Localization: some Polish strings are hard-coded in `Text("...")`; ensure keys exist in `Localizable.xcstrings`.
-- Cleanup logic is scattered: window close handlers, cancel flows, and finish view all attempt cleanup.
+- Cleanup logic still has multiple safety nets (helper final stage, cancel/window emergency paths, `FinishUSBView` fallback); preserve their non-destructive intent when refactoring.
 
 ---
 

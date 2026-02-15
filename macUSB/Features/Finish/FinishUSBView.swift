@@ -101,7 +101,7 @@ struct FinishUSBView: View {
                             VStack(alignment: .leading, spacing: 10) {
                                 Text("Co teraz?").font(.headline).foregroundColor(.primary)
                                 VStack(alignment: .leading, spacing: 5) {
-                                    Text("• Podłącz dysk USB do docelowego komputera Mac")
+                                    Text("• Podłącz nośnik USB do docelowego komputera Mac")
                                     Text("• Uruchom komputer trzymając przycisk Option (⌥)")
                                     Text("• Wybierz instalator systemu macOS lub OS X z listy")
                                 }
@@ -118,7 +118,7 @@ struct FinishUSBView: View {
                                 Image(systemName: "globe.europe.africa.fill").font(.title2).foregroundColor(.gray).frame(width: 32)
                                 VStack(alignment: .leading, spacing: 10) {
                                     Text("W przypadku Maca z PowerPC").font(.headline).foregroundColor(.primary)
-                                    Text("Aby uruchomić instalator z dysku USB na Macu z PowerPC, niezbędne jest wpisanie komendy w konsoli Open Firmware. Pełna instrukcja obsługi znajduje się na stronie internetowej aplikacji.")
+                                    Text("Aby uruchomić instalator z nośnika USB na Macu z PowerPC, niezbędne jest wpisanie komendy w konsoli Open Firmware. Pełna instrukcja obsługi znajduje się na stronie internetowej aplikacji.")
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                 }
@@ -131,7 +131,7 @@ struct FinishUSBView: View {
                                     }
                                 }) {
                                     HStack(spacing: 6) {
-                                        Text("Instrukcja bootowania z dysku USB (GitHub)")
+                                        Text("Instrukcja bootowania z nośnika USB (GitHub)")
                                         Image(systemName: "arrow.up.right.square")
                                     }
                                 }
@@ -260,12 +260,18 @@ struct FinishUSBView: View {
                 try? unmountTask.run()
                 unmountTask.waitUntilExit()
             }
-            if FileManager.default.fileExists(atPath: self.tempWorkURL.path) {
+            let tempCleanupNeeded = FileManager.default.fileExists(atPath: self.tempWorkURL.path)
+            if tempCleanupNeeded {
                 do { try FileManager.default.removeItem(at: self.tempWorkURL) } catch {
                     success = false;
                     // ZMIANA: Użycie String(localized:) aby ten błąd dało się przetłumaczyć
                     errorMsg = String(localized: "Nie udało się usunąć plików tymczasowych: \(error.localizedDescription)")
                 }
+            } else {
+                AppLogging.info(
+                    "FinishUSBView: pomijam fallback cleanup TEMP, helper usunął pliki wcześniej.",
+                    category: "Installation"
+                )
             }
             
             DispatchQueue.main.async {

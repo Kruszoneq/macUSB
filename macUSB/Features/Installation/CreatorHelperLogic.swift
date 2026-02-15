@@ -29,8 +29,8 @@ extension UniversalInstallationView {
         processingIcon = "lock.shield.fill"
         isCancelled = false
         helperProgressPercent = 0
-        helperStageTitle = String(localized: "Przygotowanie")
-        helperStatusText = String(localized: "Sprawdzanie gotowości helpera...")
+        helperStageTitleKey = "Przygotowanie"
+        helperStatusKey = "Sprawdzanie gotowości helpera..."
         helperCurrentStageKey = ""
         helperWriteSpeedText = "- MB/s"
         stopHelperWriteSpeedMonitoring()
@@ -72,70 +72,102 @@ extension UniversalInstallationView {
                             isProcessing = false
                             isHelperWorking = true
                             helperProgressPercent = 0
-                            helperStageTitle = String(localized: "Uruchamianie helpera")
-                            helperStatusText = String(localized: "Nawiązywanie połączenia XPC...")
+                            helperStageTitleKey = "Uruchamianie helpera"
+                            helperStatusKey = "Nawiązywanie połączenia XPC..."
                         }
 
-                        PrivilegedOperationClient.shared.startWorkflow(
-                            request: request,
-                            onEvent: { event in
-                                guard event.workflowID == activeHelperWorkflowID else { return }
-                                let previousStageKey = helperCurrentStageKey
-                                helperCurrentStageKey = event.stageKey
-                                helperProgressPercent = max(helperProgressPercent, min(event.percent, 100))
-                                helperStageTitle = event.stageTitle
-                                helperStatusText = event.statusText
-
-                                if isFormattingHelperStage(event.stageKey) {
-                                    helperWriteSpeedText = "- MB/s"
-                                } else if isFormattingHelperStage(previousStageKey) {
-                                    sampleHelperWriteSpeed(for: extractWholeDiskName(from: drive.device))
-                                }
-                            },
-                            onCompletion: { result in
-                                guard result.workflowID == activeHelperWorkflowID else { return }
-
-                                activeHelperWorkflowID = nil
+                        let failWorkflowStart: (String) -> Void = { message in
+                            activeHelperWorkflowID = nil
+                            logError("Start helper workflow nieudany: \(message)", category: "Installation")
+                            withAnimation {
+                                isProcessing = false
                                 isHelperWorking = false
+                                isTabLocked = false
+                                startUSBMonitoring()
                                 stopHelperWriteSpeedMonitoring()
-
-                                if result.isUserCancelled || isCancelled {
-                                    usbProcessStartedAt = nil
-                                    return
-                                }
-
-                                helperOperationFailed = !result.success
-
-                                if !result.success, let errorMessageText = result.errorMessage {
-                                    logError("Helper zakończył się błędem: \(errorMessageText)", category: "Installation")
-                                }
-
-                                withAnimation {
-                                    navigateToFinish = true
-                                }
-                            },
-                            onStartError: { message in
-                                activeHelperWorkflowID = nil
-                                logError("Start helper workflow nieudany: \(message)", category: "Installation")
-                                withAnimation {
-                                    isProcessing = false
-                                    isHelperWorking = false
-                                    isTabLocked = false
-                                    startUSBMonitoring()
-                                    stopHelperWriteSpeedMonitoring()
-                                    usbProcessStartedAt = nil
-                                    errorMessage = message
-                                }
-                            },
-                            onStarted: { workflowID in
-                                activeHelperWorkflowID = workflowID
-                                helperStageTitle = String(localized: "Rozpoczynanie...")
-                                helperStatusText = String(localized: "Helper uruchamia pierwszy etap operacji uprzywilejowanych...")
-                                helperCurrentStageKey = ""
-                                startHelperWriteSpeedMonitoring(for: drive)
-                                log("Uruchomiono helper workflow: \(workflowID)")
+                                usbProcessStartedAt = nil
+                                errorMessage = message
                             }
-                        )
+                        }
+
+                        var startHelperWorkflow: ((Bool) -> Void)!
+                        startHelperWorkflow = { allowCompatibilityRecovery in
+                            PrivilegedOperationClient.shared.startWorkflow(
+                                request: request,
+                                onEvent: { event in
+                                    guard event.workflowID == activeHelperWorkflowID else { return }
+                                    let previousStageKey = helperCurrentStageKey
+                                    helperCurrentStageKey = event.stageKey
+                                    helperProgressPercent = max(helperProgressPercent, min(event.percent, 100))
+                                    if let localization = HelperWorkflowLocalizationKeys.presentation(for: event.stageKey) {
+                                        helperStageTitleKey = localization.titleKey
+                                        helperStatusKey = localization.statusKey
+                                    } else {
+                                        helperStageTitleKey = event.stageTitleKey
+                                        helperStatusKey = event.statusKey
+                                    }
+
+                                    if isFormattingHelperStage(event.stageKey) {
+                                        helperWriteSpeedText = "- MB/s"
+                                    } else if isFormattingHelperStage(previousStageKey) {
+                                        sampleHelperWriteSpeed(for: extractWholeDiskName(from: drive.device))
+                                    }
+                                },
+                                onCompletion: { result in
+                                    guard result.workflowID == activeHelperWorkflowID else { return }
+
+                                    activeHelperWorkflowID = nil
+                                    isHelperWorking = false
+                                    stopHelperWriteSpeedMonitoring()
+
+                                    if result.isUserCancelled || isCancelled {
+                                        usbProcessStartedAt = nil
+                                        return
+                                    }
+
+                                    helperOperationFailed = !result.success
+
+                                    if !result.success, let errorMessageText = result.errorMessage {
+                                        logError("Helper zakończył się błędem: \(errorMessageText)", category: "Installation")
+                                    }
+
+                                    withAnimation {
+                                        navigateToFinish = true
+                                    }
+                                },
+                                onStartError: { message in
+                                    guard allowCompatibilityRecovery, isLikelyHelperIPCContractMismatch(message) else {
+                                        failWorkflowStart(message)
+                                        return
+                                    }
+
+                                    log("Wykryto niezgodność kontraktu IPC helpera. Rozpoczynam automatyczne przeładowanie helpera.", category: "Installation")
+                                    helperStageTitleKey = "Aktualizowanie helpera"
+                                    helperStatusKey = "Wykryto starszą instancję helpera. Trwa ponowne uruchamianie usługi..."
+
+                                    HelperServiceManager.shared.forceReloadForIPCContractMismatch { ready, recoveryMessage in
+                                        guard ready else {
+                                            failWorkflowStart(recoveryMessage ?? message)
+                                            return
+                                        }
+
+                                        helperStageTitleKey = "Ponowne uruchamianie"
+                                        helperStatusKey = "Helper został odświeżony. Ponawiamy start procesu..."
+                                        startHelperWorkflow(false)
+                                    }
+                                },
+                                onStarted: { workflowID in
+                                    activeHelperWorkflowID = workflowID
+                                    helperStageTitleKey = "Rozpoczynanie..."
+                                    helperStatusKey = "Helper uruchamia pierwszy etap operacji uprzywilejowanych..."
+                                    helperCurrentStageKey = ""
+                                    startHelperWriteSpeedMonitoring(for: drive)
+                                    log("Uruchomiono helper workflow: \(workflowID)")
+                                }
+                            )
+                        }
+
+                        startHelperWorkflow(true)
                     }
                 } catch {
                     DispatchQueue.main.async {
@@ -158,12 +190,7 @@ extension UniversalInstallationView {
         let fileManager = FileManager.default
         let requesterUID = Int(getuid())
 
-        if !fileManager.fileExists(atPath: tempWorkURL.path) {
-            try fileManager.createDirectory(at: tempWorkURL, withIntermediateDirectories: true)
-        }
-
         let shouldPreformat = drive.needsFormatting && !isPPC
-        let sourceIsMountedVolume = sourceAppURL.path.hasPrefix("/Volumes/")
 
         if isRestoreLegacy {
             let sourceESD = sourceAppURL.appendingPathComponent("Contents/SharedSupport/InstallESD.dmg")
@@ -175,23 +202,20 @@ extension UniversalInstallationView {
                 )
             }
 
-            let targetESD = tempWorkURL.appendingPathComponent("InstallESD.dmg")
-            if fileManager.fileExists(atPath: targetESD.path) {
-                try fileManager.removeItem(at: targetESD)
-            }
-            try fileManager.copyItem(at: sourceESD, to: targetESD)
-
             return HelperWorkflowRequestPayload(
                 workflowKind: .legacyRestore,
                 systemName: systemName,
-                sourcePath: targetESD.path,
+                sourceAppPath: sourceAppURL.path,
+                originalImagePath: nil,
+                tempWorkPath: tempWorkURL.path,
                 targetVolumePath: drive.url.path,
                 targetBSDName: drive.device,
                 targetLabel: drive.url.lastPathComponent,
                 needsPreformat: shouldPreformat,
                 isCatalina: false,
+                isSierra: false,
+                needsCodesign: false,
                 requiresApplicationPathArg: false,
-                postInstallSourceAppPath: nil,
                 requesterUID: requesterUID
             )
         }
@@ -206,135 +230,67 @@ extension UniversalInstallationView {
                 )
             }
 
-            let targetImage = tempWorkURL.appendingPathComponent("InstallESD.dmg")
-            if fileManager.fileExists(atPath: targetImage.path) {
-                try fileManager.removeItem(at: targetImage)
-            }
-            try fileManager.copyItem(at: sourceImage, to: targetImage)
-
             return HelperWorkflowRequestPayload(
                 workflowKind: .mavericks,
                 systemName: systemName,
-                sourcePath: targetImage.path,
+                sourceAppPath: sourceAppURL.path,
+                originalImagePath: sourceImage.path,
+                tempWorkPath: tempWorkURL.path,
                 targetVolumePath: drive.url.path,
                 targetBSDName: drive.device,
                 targetLabel: drive.url.lastPathComponent,
                 needsPreformat: shouldPreformat,
                 isCatalina: false,
+                isSierra: false,
+                needsCodesign: false,
                 requiresApplicationPathArg: false,
-                postInstallSourceAppPath: nil,
                 requesterUID: requesterUID
             )
         }
 
         if isPPC {
-            let mountedVolumeSource = sourceAppURL.deletingLastPathComponent().path
-            let mountedSourceAvailable = mountedVolumeSource.hasPrefix("/Volumes/") &&
-            fileManager.fileExists(atPath: mountedVolumeSource)
-            let restoreSource: String
-
-            if let imageURL = originalImageURL, fileManager.fileExists(atPath: imageURL.path) {
-                let sourceExt = imageURL.pathExtension.lowercased()
-
-                // asr restore with --source=<file> accepts UDIF images.
-                // ISO/CDR from legacy installers must go through mounted volume source.
-                if (sourceExt == "iso" || sourceExt == "cdr"), mountedSourceAvailable {
-                    restoreSource = mountedVolumeSource
-                    log("PPC helper strategy: asr restore from mounted source (ISO/CDR) -> /Volumes/PPC", category: "Installation")
-                } else {
-                    let stagedImageURL = tempWorkURL.appendingPathComponent("PPC_\(imageURL.lastPathComponent)")
-                    if fileManager.fileExists(atPath: stagedImageURL.path) {
-                        try fileManager.removeItem(at: stagedImageURL)
-                    }
-                    try fileManager.copyItem(at: imageURL, to: stagedImageURL)
-                    restoreSource = stagedImageURL.path
-                    log("PPC helper strategy: asr restore from staged image -> /Volumes/PPC", category: "Installation")
-                }
-            } else if mountedSourceAvailable {
-                restoreSource = mountedVolumeSource
-                log("PPC helper strategy: asr restore from mounted source fallback -> /Volumes/PPC", category: "Installation")
-            } else {
-                throw NSError(
-                    domain: "macUSB",
-                    code: 404,
-                    userInfo: [NSLocalizedDescriptionKey: String(localized: "Nie znaleziono źródła PPC do przywracania.")]
-                )
-            }
-
-            log("PPC helper source: \(restoreSource)", category: "Installation")
-
             return HelperWorkflowRequestPayload(
                 workflowKind: .ppc,
                 systemName: systemName,
-                sourcePath: restoreSource,
+                sourceAppPath: sourceAppURL.path,
+                originalImagePath: originalImageURL?.path,
+                tempWorkPath: tempWorkURL.path,
                 targetVolumePath: drive.url.path,
                 targetBSDName: drive.device,
                 targetLabel: drive.url.lastPathComponent,
                 needsPreformat: false,
                 isCatalina: false,
+                isSierra: false,
+                needsCodesign: false,
                 requiresApplicationPathArg: false,
-                postInstallSourceAppPath: nil,
                 requesterUID: requesterUID
             )
-        }
-
-        var effectiveAppURL = sourceAppURL
-
-        if isSierra {
-            let destinationAppURL = tempWorkURL.appendingPathComponent(sourceAppURL.lastPathComponent)
-            if fileManager.fileExists(atPath: destinationAppURL.path) {
-                try fileManager.removeItem(at: destinationAppURL)
-            }
-            try fileManager.copyItem(at: sourceAppURL, to: destinationAppURL)
-
-            let plistPath = destinationAppURL.appendingPathComponent("Contents/Info.plist").path
-            let plutilTask = Process()
-            plutilTask.launchPath = "/usr/bin/plutil"
-            plutilTask.arguments = ["-replace", "CFBundleShortVersionString", "-string", "12.6.03", plistPath]
-            try plutilTask.run()
-            plutilTask.waitUntilExit()
-
-            let xattrTask = Process()
-            xattrTask.launchPath = "/usr/bin/xattr"
-            xattrTask.arguments = ["-dr", "com.apple.quarantine", destinationAppURL.path]
-            try xattrTask.run()
-            xattrTask.waitUntilExit()
-
-            let createInstallMediaPath = destinationAppURL.appendingPathComponent("Contents/Resources/createinstallmedia").path
-            let codesignTask = Process()
-            codesignTask.launchPath = "/usr/bin/codesign"
-            codesignTask.arguments = ["-s", "-", "-f", createInstallMediaPath]
-            try codesignTask.run()
-            codesignTask.waitUntilExit()
-
-            effectiveAppURL = destinationAppURL
-        } else if sourceIsMountedVolume || isCatalina || needsCodesign {
-            let destinationAppURL = tempWorkURL.appendingPathComponent(sourceAppURL.lastPathComponent)
-            if fileManager.fileExists(atPath: destinationAppURL.path) {
-                try fileManager.removeItem(at: destinationAppURL)
-            }
-            try fileManager.copyItem(at: sourceAppURL, to: destinationAppURL)
-
-            if isCatalina || needsCodesign {
-                try performLocalCodesign(on: destinationAppURL)
-            }
-
-            effectiveAppURL = destinationAppURL
         }
 
         return HelperWorkflowRequestPayload(
             workflowKind: .standard,
             systemName: systemName,
-            sourcePath: effectiveAppURL.path,
+            sourceAppPath: sourceAppURL.path,
+            originalImagePath: originalImageURL?.path,
+            tempWorkPath: tempWorkURL.path,
             targetVolumePath: drive.url.path,
             targetBSDName: drive.device,
             targetLabel: drive.url.lastPathComponent,
             needsPreformat: shouldPreformat,
             isCatalina: isCatalina,
+            isSierra: isSierra,
+            needsCodesign: needsCodesign,
             requiresApplicationPathArg: isLegacySystem || isSierra,
-            postInstallSourceAppPath: isCatalina ? sourceAppURL.resolvingSymlinksInPath().path : nil,
             requesterUID: requesterUID
         )
+    }
+
+    private func isLikelyHelperIPCContractMismatch(_ message: String) -> Bool {
+        let lowered = message.lowercased()
+        return lowered.contains("nieprawidłowe żądanie helpera")
+            || lowered.contains("nieprawidłowe zadanie helpera")
+            || lowered.contains("couldn’t be read because it is missing")
+            || lowered.contains("keynotfound")
     }
 
     private func preflightTargetVolumeWriteAccess(_ volumeURL: URL) throws {
