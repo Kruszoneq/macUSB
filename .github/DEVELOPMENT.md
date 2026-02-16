@@ -225,6 +225,7 @@ Practical rules:
 - All new UI strings should be authored first in Polish.
 - Terminology standard: in Polish user-facing copy use `nośnik USB` (not `dysk USB`) for consistency.
 - Keep message style consistent with existing in-app forms; for progress/status copy prefer nominal process forms already used in the app (for example `Przygotowywanie...`, `Rozpoczynanie...`) instead of mixing with direct-action forms.
+- Translations in `Localizable.xcstrings` must match the real UI context where the phrase appears (button, alert title, warning body, progress status, etc.); avoid overly literal translation when it harms clarity, tone, or UX.
 - Immutable product slogan rule: the phrase `Tworzenie botoowalnych dysków USB z systemem macOS oraz OS X nigdy nie było takie proste` is the app’s official slogan and must remain unchanged verbatim in this exact form.
 - Use `Text("...")` with Polish strings; SwiftUI treats these as localization keys.
 - Helper sends stable technical localization keys (for example `helper.workflow.prepare_source.title`) in XPC progress events.
