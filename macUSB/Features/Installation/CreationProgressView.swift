@@ -151,7 +151,8 @@ struct CreationProgressView: View {
                     isPPC: isPPC,
                     didFail: helperOperationFailed,
                     didCancel: didCancelCreation,
-                    creationStartedAt: creationStartedAt
+                    creationStartedAt: creationStartedAt,
+                    detectedSystemIcon: detectedSystemIcon
                 ),
                 isActive: $navigateToFinish
             ) { EmptyView() }
@@ -190,7 +191,7 @@ struct CreationProgressView: View {
                         .font(.headline)
                     Spacer()
                 }
-                Text(LocalizedStringKey(helperStatusKey.isEmpty ? "Nawiązywanie połączenia XPC..." : helperStatusKey))
+                Text(LocalizedStringKey(helperStatusKey.isEmpty ? "Rozpoczynanie..." : helperStatusKey))
                     .font(.caption)
                     .foregroundColor(.secondary)
                 ProgressView()
@@ -278,7 +279,9 @@ struct CreationProgressView: View {
             return "doc.on.doc.fill"
         case "createinstallmedia":
             return "externaldrive.badge.plus"
-        case "catalina_cleanup", "cleanup_temp":
+        case "catalina_cleanup":
+            return "doc.badge.gearshape"
+        case "cleanup_temp":
             return "trash.fill"
         case "catalina_xattr":
             return "checkmark.shield.fill"
@@ -303,17 +306,26 @@ struct CreationProgressView: View {
         let rawValue = normalized.split(separator: " ").first.map(String.init) ?? ""
 
         guard let measured = Double(rawValue), measured.isFinite else {
-            return "Szybkość zapisu: - MB/s"
+            return String(localized: "Szybkość zapisu: - MB/s")
         }
 
         let rounded = max(0, Int(measured.rounded()))
-        return "Szybkość zapisu: \(rounded) MB/s"
+        return String(
+            format: String(localized: "Szybkość zapisu: %d MB/s"),
+            rounded
+        )
     }
 
     private func normalizedStageKey(_ rawStageKey: String) -> String {
         switch rawStageKey {
-        case "catalina_ditto", "ditto", "catalina_finalize":
+        case "catalina_ditto", "ditto":
             return "catalina_copy"
+        case "catalina_finalize":
+            return "catalina_cleanup"
+        case "asr_imagescan":
+            return "imagescan"
+        case "asr_restore":
+            return "restore"
         default:
             return rawStageKey
         }

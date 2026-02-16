@@ -488,7 +488,7 @@ private final class HelperWorkflowExecutor {
                 stages.append(
                     WorkflowStage(
                         key: "catalina_cleanup",
-                        titleKey: HelperWorkflowLocalizationKeys.catalinaFinalizeTitle,
+                        titleKey: HelperWorkflowLocalizationKeys.catalinaCleanupTitle,
                         statusKey: HelperWorkflowLocalizationKeys.catalinaCleanupStatus,
                         startPercent: 90,
                         endPercent: 94,
@@ -500,7 +500,7 @@ private final class HelperWorkflowExecutor {
                 stages.append(
                     WorkflowStage(
                         key: "catalina_copy",
-                        titleKey: HelperWorkflowLocalizationKeys.catalinaFinalizeTitle,
+                        titleKey: HelperWorkflowLocalizationKeys.catalinaCopyTitle,
                         statusKey: HelperWorkflowLocalizationKeys.catalinaCopyStatus,
                         startPercent: 94,
                         endPercent: 98,
@@ -512,7 +512,7 @@ private final class HelperWorkflowExecutor {
                 stages.append(
                     WorkflowStage(
                         key: "catalina_xattr",
-                        titleKey: HelperWorkflowLocalizationKeys.catalinaFinalizeTitle,
+                        titleKey: HelperWorkflowLocalizationKeys.catalinaXattrTitle,
                         statusKey: HelperWorkflowLocalizationKeys.catalinaXattrStatus,
                         startPercent: 98,
                         endPercent: 99,

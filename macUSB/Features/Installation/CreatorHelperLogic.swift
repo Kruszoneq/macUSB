@@ -33,7 +33,7 @@ extension UniversalInstallationView {
         isCancelled = false
         helperProgressPercent = 0
         helperStageTitleKey = "Przygotowanie"
-        helperStatusKey = "Sprawdzanie gotowości procesu..."
+        helperStatusKey = "Przygotowywanie operacji..."
         helperCurrentStageKey = ""
         helperWriteSpeedText = "- MB/s"
         stopHelperWriteSpeedMonitoring()
@@ -86,7 +86,7 @@ extension UniversalInstallationView {
                             isHelperWorking = true
                             helperProgressPercent = 0
                             helperStageTitleKey = "Uruchamianie procesu"
-                            helperStatusKey = "Nawiązywanie połączenia XPC..."
+                            helperStatusKey = "Rozpoczynanie..."
                         }
 
                         let failWorkflowStart: (String) -> Void = { message in
@@ -114,10 +114,11 @@ extension UniversalInstallationView {
                                 request: request,
                                 onEvent: { event in
                                     guard event.workflowID == activeHelperWorkflowID else { return }
+                                    let normalizedStageKey = canonicalStageKeyForPresentation(event.stageKey)
                                     let previousStageKey = helperCurrentStageKey
-                                    helperCurrentStageKey = event.stageKey
+                                    helperCurrentStageKey = normalizedStageKey
                                     helperProgressPercent = max(helperProgressPercent, min(event.percent, 100))
-                                    if let localization = HelperWorkflowLocalizationKeys.presentation(for: event.stageKey) {
+                                    if let localization = HelperWorkflowLocalizationKeys.presentation(for: normalizedStageKey) {
                                         helperStageTitleKey = localization.titleKey
                                         helperStatusKey = localization.statusKey
                                     } else {
@@ -125,7 +126,7 @@ extension UniversalInstallationView {
                                         helperStatusKey = event.statusKey
                                     }
 
-                                    if isFormattingHelperStage(event.stageKey) {
+                                    if isFormattingHelperStage(normalizedStageKey) {
                                         helperWriteSpeedText = "- MB/s"
                                     } else if isFormattingHelperStage(previousStageKey) {
                                         sampleHelperWriteSpeed(for: extractWholeDiskName(from: drive.device))
@@ -160,8 +161,8 @@ extension UniversalInstallationView {
                                     }
 
                                     log("Wykryto niezgodność kontraktu IPC helpera. Rozpoczynam automatyczne przeładowanie helpera.", category: "Installation")
-                                    helperStageTitleKey = "Aktualizowanie helpera"
-                                    helperStatusKey = "Wykryto starszą instancję helpera. Trwa ponowne uruchamianie usługi..."
+                                    helperStageTitleKey = "Rozpoczynanie..."
+                                    helperStatusKey = "Przygotowywanie operacji..."
 
                                     HelperServiceManager.shared.forceReloadForIPCContractMismatch { ready, recoveryMessage in
                                         guard ready else {
@@ -169,8 +170,8 @@ extension UniversalInstallationView {
                                             return
                                         }
 
-                                        helperStageTitleKey = "Ponowne uruchamianie"
-                                        helperStatusKey = "Helper został odświeżony. Ponawiamy start procesu..."
+                                        helperStageTitleKey = "Rozpoczynanie..."
+                                        helperStatusKey = "Przygotowywanie operacji..."
                                         startHelperWorkflow(false)
                                     }
                                 },
@@ -183,7 +184,7 @@ extension UniversalInstallationView {
                                         return
                                     }
                                     helperStageTitleKey = "Rozpoczynanie..."
-                                    helperStatusKey = "Rozpoczynanie pierwszego etapu tworzenia nośnika..."
+                                    helperStatusKey = "Rozpoczynanie..."
                                     helperCurrentStageKey = ""
                                     startHelperWriteSpeedMonitoring(for: drive)
                                     log("Uruchomiono helper workflow: \(workflowID)")
@@ -415,6 +416,21 @@ extension UniversalInstallationView {
 
     private func isFormattingHelperStage(_ stageKey: String) -> Bool {
         stageKey == "preformat" || stageKey == "ppc_format"
+    }
+
+    private func canonicalStageKeyForPresentation(_ stageKey: String) -> String {
+        switch stageKey {
+        case "ditto", "catalina_ditto":
+            return "catalina_copy"
+        case "catalina_finalize":
+            return "catalina_cleanup"
+        case "asr_imagescan":
+            return "imagescan"
+        case "asr_restore":
+            return "restore"
+        default:
+            return stageKey
+        }
     }
 
     private func fetchWriteSpeedMBps(for wholeDisk: String) -> Double? {

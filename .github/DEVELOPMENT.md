@@ -120,7 +120,7 @@ Common status icons and their semantic colors:
 - In `SystemAnalysisView` success state, the app tries installer icons in this order: `Contents/Resources/ProductPageIcon.icns`, `Contents/Resources/InstallAssistant.icns`, then `Contents/Resources/Install Mac OS X.icns` (case-insensitive lookup). If none is found, fallback to `checkmark.circle.fill`.
 - In `UniversalInstallationView` system info panel, the app shows detected installer icon (`detectedSystemIcon`) next to the system name; if unavailable, fallback is `applelogo`.
 Frequently used SF Symbols in screens and menus include:
-- `info.circle.fill`, `info.circle`, `doc.badge.plus`, `doc.text.magnifyingglass`, `internaldrive`, `checkmark.circle.fill`, `xmark.circle.fill`, `xmark.octagon.fill`, `exclamationmark.triangle.fill`, `externaldrive.fill`, `externaldrive`, `externaldrive.badge.plus`, `externaldrive.badge.xmark`, `applelogo`, `gearshape.2`, `gearshape`, `wrench.and.screwdriver`, `clock`, `lock.fill`, `arrow.right`, `arrow.right.circle.fill`, `arrow.counterclockwise`, `xmark.circle`, `xmark.circle.fill`, `globe.europe.africa.fill`, `cup.and.saucer`, `square.and.arrow.down`, `arrow.triangle.2.circlepath`, `globe`, `chevron.left.forwardslash.chevron.right`, `bell.slash`, `bell.and.waves.left.and.right`.
+- `info.circle.fill`, `info.circle`, `doc.badge.plus`, `doc.badge.gearshape`, `doc.text.magnifyingglass`, `internaldrive`, `checkmark.circle.fill`, `xmark.circle.fill`, `xmark.octagon.fill`, `exclamationmark.triangle.fill`, `externaldrive.fill`, `externaldrive`, `externaldrive.badge.plus`, `externaldrive.badge.xmark`, `applelogo`, `gearshape.2`, `gearshape`, `wrench.and.screwdriver`, `clock`, `lock.fill`, `arrow.right`, `arrow.right.circle.fill`, `arrow.counterclockwise`, `xmark.circle`, `xmark.circle.fill`, `globe.europe.africa.fill`, `cup.and.saucer`, `square.and.arrow.down`, `arrow.triangle.2.circlepath`, `globe`, `chevron.left.forwardslash.chevron.right`, `bell.slash`, `bell.and.waves.left.and.right`.
 
 Panels and informational blocks:
 - Most informational blocks are HStacks with icon left and text right.
@@ -196,6 +196,7 @@ Progress indicators:
 - pending stages are gray cards (title + stage icon),
 - the currently active stage is a blue card (title + status + indeterminate linear progress bar),
 - completed stages are green cards (title + success icon).
+- Catalina stage icon mapping in `CreationProgressView`: `catalina_cleanup` uses `doc.badge.gearshape` (file-structure adjustments), `catalina_copy` uses `doc.on.doc.fill`, `catalina_xattr` uses `checkmark.shield.fill`.
 - For active USB-write stages (`restore`, `ppc_restore`, `createinstallmedia`, and Catalina `catalina_copy`/`ditto` stage), `CreationProgressView` shows write speed below the progress bar as `Szybkość zapisu: xx MB/s` (rounded integer, no decimals).
 - Live helper log lines are not rendered in UI; they are recorded into diagnostics logs for export.
 
@@ -206,6 +207,7 @@ Welcome screen specifics:
 
 Finish screen specifics:
 - Success/failure/cancelled block uses green/red/orange status panels (`Sukces!`, `Niepowodzenie!`, or `Przerwano`).
+- In success mode, the installer summary row uses detected system icon in the main left icon slot (instead of USB disk icon); fallback remains `externaldrive.fill` when icon is unavailable.
 - Cleanup section shows a blue panel with a trash icon while cleaning.
 - Reset and exit buttons remain large, full-width, and prominent.
 - Success sound prefers bundled `burn_complete.aif` from app resources (with fallback to system sounds).
@@ -230,6 +232,7 @@ Practical rules:
 - Use `Text("...")` with Polish strings; SwiftUI treats these as localization keys.
 - Helper sends stable technical localization keys (for example `helper.workflow.prepare_source.title`) in XPC progress events.
 - Installation UI renders helper stage/status with `Text(LocalizedStringKey(...))`, so helper progress text follows app locale from SwiftUI environment.
+- Non-`Text` runtime labels (for example speed text) must use `String(localized:)` with localized format keys (currently `Szybkość zapisu: %d MB/s` and `Szybkość zapisu: - MB/s`).
 - Keep helper key anchors in `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift` (`HelperWorkflowLocalizationExtractionAnchors`) synchronized with emitted keys to keep String Catalog extraction stable.
 - Every helper localization key must be translated in all supported app languages (`pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`).
 Use `String(localized: "...")` when:
@@ -344,13 +347,17 @@ Used for most modern macOS installers.
 
 ### Catalina Special Handling
 - Uses `createinstallmedia` first.
+- Then helper performs three post stages with distinct UI titles:
+- `catalina_cleanup` → title key `helper.workflow.catalina_cleanup.title` (`Przygotowanie struktury instalatora`),
+- `catalina_copy` (`ditto`) → title key `helper.workflow.catalina_copy.title` (`Kopiowanie plików na nośnik instalacyjny`),
+- `catalina_xattr` → title key `helper.workflow.catalina_xattr.title` (`Nadawanie uprawnień plikom instalatora`).
 - Then helper replaces the installer app on the USB volume using `ditto`.
 - Removes quarantine attributes on the target app.
 - When Catalina transitions into the `ditto` stage, helper emits an explicit transition log line to `HelperLiveLog`.
 
 ### Cleanup Ownership
 - TEMP cleanup (`macUSB_temp`) is executed by helper as the final operational step (best-effort, including failure/cancel paths).
-- `FinishUSBView` keeps fallback cleanup as a safety net only when TEMP still exists.
+- `FinishUSBView` keeps fallback cleanup as a safety net; if TEMP was already removed by helper (or vanishes in a race), fallback treats it as success and does not show false cleanup error.
 - Mounting/unmounting the selected source image for analysis remains app-side and is not moved to helper.
 - Helper stage `finalize` is technical-only and is intentionally not rendered in `CreationProgressView`.
 
@@ -361,7 +368,8 @@ The app tracks helper progress through XPC progress events:
 - Compatibility rule: app canonicalizes displayed helper title/status from `stageKey` when known, so older helper builds that still send raw phrases do not break localization.
 - Write speed (`MB/s`) is measured during active non-formatting helper stages.
 - In `CreationProgressView`, speed is rendered only for active USB-write stages (`restore`, `ppc_restore`, `createinstallmedia`, `catalina_copy`) in format `Szybkość zapisu: xx MB/s` with rounded integer values.
-- During formatting stages (`preformat`, `ppc_format`) speed is hidden as `- MB/s`.
+- Speed label is localized via `String(localized:)` format key (`Szybkość zapisu: %d MB/s`), and non-measured state uses localized `Szybkość zapisu: - MB/s`.
+- During formatting stages (`preformat`, `ppc_format`) speed label is not displayed in UI (internal value remains `- MB/s`).
 - `logLine` values are recorded to diagnostics logs under `HelperLiveLog` and are exportable.
 - Live helper logs are not displayed in installer UI.
 
@@ -568,7 +576,7 @@ Current effective build configuration snapshot:
 ### 11.8 App-side request assembly (`CreatorHelperLogic`)
 - `startCreationProcessEntry()` always enters helper path.
 - Before helper start:
-- app initializes helper state (`Przygotowanie` / `Sprawdzanie gotowości helpera...`) and, after destructive confirmation, routes to `CreationProgressView`.
+- app initializes helper state (`Przygotowanie` / `Przygotowywanie operacji...`) and, after destructive confirmation, routes to `CreationProgressView`.
 - `preflightTargetVolumeWriteAccess` probes write access on `/Volumes/*`; EPERM/EACCES produces explicit TCC-style guidance error.
 - Workflow request payload includes:
 - workflow kind (`standard`, `legacyRestore`, `mavericks`, `ppc`)
@@ -589,6 +597,7 @@ Current effective build configuration snapshot:
 - helper performs a dedicated preparation stage first (staging to TEMP + required patch/sign tasks).
 - main command stages are predefined per workflow kind with key/title/status/percent-range/executable/arguments.
 - helper executes best-effort TEMP cleanup stage after success and also on failure/cancel paths.
+- `FinishUSBView` fallback cleanup treats "already removed / no such file" temp race as non-error (no false `Błąd czyszczenia` when helper cleaned first).
 - each stage emits start, streamed progress, and completion events.
 - output parser:
 - captures stdout+stderr line-by-line,
@@ -650,23 +659,22 @@ Current effective build configuration snapshot:
 - signs key installer components and `createinstallmedia` (`codesign -s - -f`), with best-effort behavior per component (`failOnNonZeroExit = false`).
 
 ### 11.9.3 Helper localization and translation pipeline (exact behavior)
-- Source of truth for helper stage localization IDs:
-- `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift`.
-- Helper emits progress payload with technical keys:
-- `stageKey`, `stageTitleKey`, `statusKey`, `percent`, optional `logLine`.
-- App-side compatibility bridge:
-- `HelperProgressEventPayload` decoder accepts both new (`stageTitleKey`/`statusKey`) and legacy (`stageTitle`/`statusText`) fields.
-- Decoder canonicalizes known stages from `stageKey` to technical keys to avoid mixed-language output from older helper instances.
-- UI mapping:
-- `CreatorHelperLogic` also prefers canonical mapping from `stageKey` before updating state.
-- `CreationProgressView` renders helper stage/status via `Text(LocalizedStringKey(...))`, so text follows selected app locale.
-- Diagnostics behavior:
-- `logLine` is never rendered in status panel; it is written to `HelperLiveLog` and remains exportable.
-- Maintenance contract when adding a helper stage:
-- add new key constants in `HelperWorkflowLocalizationKeys`,
-- add extraction anchors,
-- add translations in `Localizable.xcstrings` for `pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`,
-- verify EN runtime rendering and full project build.
+- Source of truth for helper localization IDs is `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift`.
+- Exact translation path at runtime:
+1. `macUSBHelper/main.swift` defines each workflow stage with technical keys (`titleKey`, `statusKey`) from `HelperWorkflowLocalizationKeys`.
+2. Helper emits XPC progress event payload: `stageKey`, `stageTitleKey`, `statusKey`, `percent`, optional `logLine`.
+3. `HelperProgressEventPayload` decoder (`macUSB/Shared/Services/Helper/HelperIPC.swift`) accepts both modern fields (`stageTitleKey`/`statusKey`) and legacy fields (`stageTitle`/`statusText`) for backward compatibility.
+4. Decoder canonicalizes known `stageKey` values to app-side technical keys via `HelperWorkflowLocalizationKeys.presentation(for:)`, so legacy/raw helper text does not leak into UI when stage is known.
+5. `CreatorHelperLogic` performs additional alias canonicalization for runtime compatibility (`ditto`/`catalina_ditto` → `catalina_copy`, `catalina_finalize` → `catalina_cleanup`, `asr_imagescan` → `imagescan`, `asr_restore` → `restore`) before setting UI state.
+6. `CreationProgressView` renders title/status with `Text(LocalizedStringKey(...))`; resolved value comes from `Localizable.xcstrings` in currently selected app language.
+7. `logLine` is never rendered in stage UI; it is logged to `HelperLiveLog` for diagnostics/export.
+- Non-helper but related runtime labels (for example speed text) use `String(localized:)` keys, not hardcoded literals.
+- Maintenance contract when adding or changing helper stage phrases:
+1. Add/adjust key constants and `presentation(for:)` mapping in `HelperWorkflowLocalizationKeys`.
+2. Keep `HelperWorkflowLocalizationExtractionAnchors.anchoredValues` synchronized with all runtime helper keys.
+3. Update helper stage definitions in `macUSBHelper/main.swift` to use those keys.
+4. Add translations in `Localizable.xcstrings` for all supported languages (`pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`) for both title and status keys.
+5. Build and verify runtime in at least EN + PL to ensure no raw key or source-language fallback appears.
 
 ### 11.10 Logging and observability for helper path
 - `HelperService` category:
@@ -746,7 +754,7 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Features/Installation/CreationProgressView.swift` — Runtime helper progress UI (staged list, active-stage description + linear progress bar, stage-scoped write-speed label, cancel-in-progress action), and handoff to `FinishUSBView`.
 - `macUSB/Features/Installation/CreatorLogic.swift` — Shared installation utilities used by the helper path (start/cancel alerts, cleanup, monitoring, flow reset/back helpers).
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` — Primary installation path via privileged helper (SMAppService + XPC), helper progress mapping, and helper cancellation flow.
-- `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, fallback cleanup safety net (only if TEMP still exists), supports success/failure/cancelled result mode (`Przerwano`), total process duration summary (`Ukończono w MMm SSs` for success), duration logging, background-result system notification (disabled for cancelled mode), and optional cleanup overrides used by debug simulation.
+- `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, fallback cleanup safety net (race-safe when TEMP was already removed), supports success/failure/cancelled result mode (`Przerwano`), shows detected system icon in success summary row left slot (fallback to `externaldrive.fill`), total process duration summary (`Ukończono w MMm SSs` for success), duration logging, background-result system notification (disabled for cancelled mode), and optional cleanup overrides used by debug simulation.
 - `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
 - `macUSB/Shared/Models/Item.swift` — SwiftData model stub (currently unused).
 - `macUSB/Shared/Services/LanguageManager.swift` — Language selection and locale handling.
@@ -953,7 +961,7 @@ Simulation payload:
 
 Safety constraints:
 - Debug routes use isolated temp paths (`macUSB_debug_*`) and pass `shouldDetachMountPoint = false` to avoid side effects on real workflow mounts.
-- Existing production flow (`UniversalInstallationView` → `FinishUSBView`) remains unchanged.
+- Existing production flow remains `WelcomeView` → `SystemAnalysisView` → `UniversalInstallationView` → `CreationProgressView` → `FinishUSBView`.
 
 Rules:
 - Do not expose debug actions to end users in `Release`.

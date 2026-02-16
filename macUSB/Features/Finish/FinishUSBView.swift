@@ -12,6 +12,7 @@ struct FinishUSBView: View {
     let creationStartedAt: Date?
     let cleanupTempWorkURL: URL?
     let shouldDetachMountPoint: Bool
+    let detectedSystemIcon: NSImage?
     
     @State private var isCleaning: Bool = true
     @State private var cleanupSuccess: Bool = false
@@ -29,7 +30,8 @@ struct FinishUSBView: View {
         didCancel: Bool = false,
         creationStartedAt: Date? = nil,
         cleanupTempWorkURL: URL? = nil,
-        shouldDetachMountPoint: Bool = true
+        shouldDetachMountPoint: Bool = true,
+        detectedSystemIcon: NSImage? = nil
     ) {
         self.systemName = systemName
         self.mountPoint = mountPoint
@@ -40,6 +42,7 @@ struct FinishUSBView: View {
         self.creationStartedAt = creationStartedAt
         self.cleanupTempWorkURL = cleanupTempWorkURL
         self.shouldDetachMountPoint = shouldDetachMountPoint
+        self.detectedSystemIcon = detectedSystemIcon
     }
     
     private var isSnowLeopard: Bool {
@@ -99,7 +102,17 @@ struct FinishUSBView: View {
                     }
                     
                     HStack(alignment: .center) {
-                        Image(systemName: "externaldrive.fill").font(.title2).foregroundColor(isCancelledResult ? .orange : ((isFailedResult || isCancelledResult) ? .red : .blue)).frame(width: 32)
+                        if isSuccessResult, let detectedSystemIcon {
+                            Image(nsImage: detectedSystemIcon)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 32, height: 32)
+                        } else {
+                            Image(systemName: "externaldrive.fill")
+                                .font(.title2)
+                                .foregroundColor(isCancelledResult ? .orange : (isFailedResult ? .red : .blue))
+                                .frame(width: 32)
+                        }
                         VStack(alignment: .leading, spacing: 2) {
                             if isCancelledResult {
                                 Text("Tworzenie nośnika zostało przerwane").font(.headline).foregroundColor(.orange)
@@ -109,7 +122,9 @@ struct FinishUSBView: View {
                                 Text(verbatim: systemName).font(.headline).foregroundColor(.primary)
                             } else {
                                 Text("Utworzono instalator systemu").font(.headline).foregroundColor(.blue)
-                                Text(verbatim: systemName).font(.headline).foregroundColor(.primary)
+                                Text(verbatim: systemName)
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
                             }
                         }
                     }
@@ -283,10 +298,23 @@ struct FinishUSBView: View {
             }
             let tempCleanupNeeded = FileManager.default.fileExists(atPath: self.tempWorkURL.path)
             if tempCleanupNeeded {
-                do { try FileManager.default.removeItem(at: self.tempWorkURL) } catch {
-                    success = false;
-                    // ZMIANA: Użycie String(localized:) aby ten błąd dało się przetłumaczyć
-                    errorMsg = String(localized: "Nie udało się usunąć plików tymczasowych: \(error.localizedDescription)")
+                do {
+                    try FileManager.default.removeItem(at: self.tempWorkURL)
+                } catch {
+                    let stillExists = FileManager.default.fileExists(atPath: self.tempWorkURL.path)
+                    let nsError = error as NSError
+                    let isNoSuchFile = nsError.domain == NSCocoaErrorDomain
+                        && (nsError.code == NSFileNoSuchFileError || nsError.code == NSFileReadNoSuchFileError)
+
+                    if !stillExists || isNoSuchFile {
+                        AppLogging.info(
+                            "FinishUSBView: cleanup fallback pominięty, pliki TEMP zostały już usunięte wcześniej.",
+                            category: "Installation"
+                        )
+                    } else {
+                        success = false
+                        errorMsg = String(localized: "Nie udało się usunąć plików tymczasowych: \(error.localizedDescription)")
+                    }
                 }
             } else {
                 AppLogging.info(

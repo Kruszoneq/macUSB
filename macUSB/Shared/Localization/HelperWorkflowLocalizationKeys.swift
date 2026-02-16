@@ -27,9 +27,11 @@ enum HelperWorkflowLocalizationKeys {
     static let createinstallmediaTitle = "helper.workflow.createinstallmedia.title"
     static let createinstallmediaStatus = "helper.workflow.createinstallmedia.status"
 
-    static let catalinaFinalizeTitle = "helper.workflow.catalina_finalize.title"
+    static let catalinaCleanupTitle = "helper.workflow.catalina_cleanup.title"
     static let catalinaCleanupStatus = "helper.workflow.catalina_cleanup.status"
+    static let catalinaCopyTitle = "helper.workflow.catalina_copy.title"
     static let catalinaCopyStatus = "helper.workflow.catalina_copy.status"
+    static let catalinaXattrTitle = "helper.workflow.catalina_xattr.title"
     static let catalinaXattrStatus = "helper.workflow.catalina_xattr.status"
 
     static let cleanupTempTitle = "helper.workflow.cleanup_temp.title"
@@ -55,11 +57,11 @@ enum HelperWorkflowLocalizationKeys {
         case "createinstallmedia":
             return HelperWorkflowStageLocalization(titleKey: createinstallmediaTitle, statusKey: createinstallmediaStatus)
         case "catalina_cleanup":
-            return HelperWorkflowStageLocalization(titleKey: catalinaFinalizeTitle, statusKey: catalinaCleanupStatus)
+            return HelperWorkflowStageLocalization(titleKey: catalinaCleanupTitle, statusKey: catalinaCleanupStatus)
         case "catalina_copy":
-            return HelperWorkflowStageLocalization(titleKey: catalinaFinalizeTitle, statusKey: catalinaCopyStatus)
+            return HelperWorkflowStageLocalization(titleKey: catalinaCopyTitle, statusKey: catalinaCopyStatus)
         case "catalina_xattr":
-            return HelperWorkflowStageLocalization(titleKey: catalinaFinalizeTitle, statusKey: catalinaXattrStatus)
+            return HelperWorkflowStageLocalization(titleKey: catalinaXattrTitle, statusKey: catalinaXattrStatus)
         case "cleanup_temp":
             return HelperWorkflowStageLocalization(titleKey: cleanupTempTitle, statusKey: cleanupTempStatus)
         case "finalize":
@@ -87,9 +89,11 @@ enum HelperWorkflowLocalizationExtractionAnchors {
         String(localized: "helper.workflow.ppc_restore.status"),
         String(localized: "helper.workflow.createinstallmedia.title"),
         String(localized: "helper.workflow.createinstallmedia.status"),
-        String(localized: "helper.workflow.catalina_finalize.title"),
+        String(localized: "helper.workflow.catalina_cleanup.title"),
         String(localized: "helper.workflow.catalina_cleanup.status"),
+        String(localized: "helper.workflow.catalina_copy.title"),
         String(localized: "helper.workflow.catalina_copy.status"),
+        String(localized: "helper.workflow.catalina_xattr.title"),
         String(localized: "helper.workflow.catalina_xattr.status"),
         String(localized: "helper.workflow.cleanup_temp.title"),
         String(localized: "helper.workflow.cleanup_temp.status"),
