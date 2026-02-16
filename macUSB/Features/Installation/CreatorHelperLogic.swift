@@ -33,7 +33,7 @@ extension UniversalInstallationView {
         isCancelled = false
         helperProgressPercent = 0
         helperStageTitleKey = "Przygotowanie"
-        helperStatusKey = "Sprawdzanie gotowości helpera..."
+        helperStatusKey = "Sprawdzanie gotowości procesu..."
         helperCurrentStageKey = ""
         helperWriteSpeedText = "- MB/s"
         stopHelperWriteSpeedMonitoring()
@@ -85,7 +85,7 @@ extension UniversalInstallationView {
                             isProcessing = false
                             isHelperWorking = true
                             helperProgressPercent = 0
-                            helperStageTitleKey = "Uruchamianie helpera"
+                            helperStageTitleKey = "Uruchamianie procesu"
                             helperStatusKey = "Nawiązywanie połączenia XPC..."
                         }
 
@@ -183,7 +183,7 @@ extension UniversalInstallationView {
                                         return
                                     }
                                     helperStageTitleKey = "Rozpoczynanie..."
-                                    helperStatusKey = "Helper uruchamia pierwszy etap operacji uprzywilejowanych..."
+                                    helperStatusKey = "Rozpoczynanie pierwszego etapu tworzenia nośnika..."
                                     helperCurrentStageKey = ""
                                     startHelperWriteSpeedMonitoring(for: drive)
                                     log("Uruchomiono helper workflow: \(workflowID)")

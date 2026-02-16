@@ -236,7 +236,9 @@ struct CreationProgressView: View {
             return .completed
         }
 
-        if let currentIndex = stageDescriptors.firstIndex(where: { $0.key == helperCurrentStageKey }) {
+        let currentStageKey = normalizedStageKey(helperCurrentStageKey)
+
+        if let currentIndex = stageDescriptors.firstIndex(where: { $0.key == currentStageKey }) {
             if index < currentIndex {
                 return .completed
             }
@@ -246,7 +248,18 @@ struct CreationProgressView: View {
             return .pending
         }
 
-        if (isHelperWorking || isCancelling) && helperCurrentStageKey.isEmpty {
+        if !helperStageTitleKey.isEmpty,
+           let titleIndex = stageDescriptors.firstIndex(where: { $0.titleKey == helperStageTitleKey }) {
+            if index < titleIndex {
+                return .completed
+            }
+            if index == titleIndex {
+                return .active
+            }
+            return .pending
+        }
+
+        if helperCurrentStageKey.isEmpty && (!helperStatusKey.isEmpty || isHelperWorking || isCancelling) {
             return index == 0 ? .active : .pending
         }
 
@@ -276,7 +289,7 @@ struct CreationProgressView: View {
 
     private func shouldShowWriteSpeed(for stageKey: String) -> Bool {
         switch stageKey {
-        case "imagescan", "restore", "ppc_restore", "createinstallmedia", "catalina_copy":
+        case "restore", "ppc_restore", "createinstallmedia", "catalina_copy":
             return true
         default:
             return false
@@ -295,5 +308,14 @@ struct CreationProgressView: View {
 
         let rounded = max(0, Int(measured.rounded()))
         return "Szybkość zapisu: \(rounded) MB/s"
+    }
+
+    private func normalizedStageKey(_ rawStageKey: String) -> String {
+        switch rawStageKey {
+        case "catalina_ditto", "ditto", "catalina_finalize":
+            return "catalina_copy"
+        default:
+            return rawStageKey
+        }
     }
 }

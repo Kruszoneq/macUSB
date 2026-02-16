@@ -196,7 +196,7 @@ Progress indicators:
 - pending stages are gray cards (title + stage icon),
 - the currently active stage is a blue card (title + status + indeterminate linear progress bar),
 - completed stages are green cards (title + success icon).
-- For active write-heavy stages (`imagescan`, `restore`, `ppc_restore`, `createinstallmedia`, and Catalina `catalina_copy`/`ditto` stage), `CreationProgressView` shows write speed below the progress bar as `Szybkość zapisu: xx MB/s` (rounded integer, no decimals).
+- For active USB-write stages (`restore`, `ppc_restore`, `createinstallmedia`, and Catalina `catalina_copy`/`ditto` stage), `CreationProgressView` shows write speed below the progress bar as `Szybkość zapisu: xx MB/s` (rounded integer, no decimals).
 - Live helper log lines are not rendered in UI; they are recorded into diagnostics logs for export.
 
 Welcome screen specifics:
@@ -224,6 +224,7 @@ Source language is Polish. This is enforced in `Localizable.xcstrings` with `"so
 Practical rules:
 - All new UI strings should be authored first in Polish.
 - Terminology standard: in Polish user-facing copy use `nośnik USB` (not `dysk USB`) for consistency.
+- Keep message style consistent with existing in-app forms; for progress/status copy prefer nominal process forms already used in the app (for example `Przygotowywanie...`, `Rozpoczynanie...`) instead of mixing with direct-action forms.
 - Immutable product slogan rule: the phrase `Tworzenie botoowalnych dysków USB z systemem macOS oraz OS X nigdy nie było takie proste` is the app’s official slogan and must remain unchanged verbatim in this exact form.
 - Use `Text("...")` with Polish strings; SwiftUI treats these as localization keys.
 - Helper sends stable technical localization keys (for example `helper.workflow.prepare_source.title`) in XPC progress events.
@@ -358,7 +359,7 @@ The app tracks helper progress through XPC progress events:
 - `CreationProgressView` localizes helper stage/status through `Localizable.xcstrings` and renders stage cards plus active-stage progress bar (no numeric percent).
 - Compatibility rule: app canonicalizes displayed helper title/status from `stageKey` when known, so older helper builds that still send raw phrases do not break localization.
 - Write speed (`MB/s`) is measured during active non-formatting helper stages.
-- In `CreationProgressView`, speed is rendered only for active write-heavy stages (`imagescan`, `restore`, `ppc_restore`, `createinstallmedia`, `catalina_copy`) in format `Szybkość zapisu: xx MB/s` with rounded integer values.
+- In `CreationProgressView`, speed is rendered only for active USB-write stages (`restore`, `ppc_restore`, `createinstallmedia`, `catalina_copy`) in format `Szybkość zapisu: xx MB/s` with rounded integer values.
 - During formatting stages (`preformat`, `ppc_format`) speed is hidden as `- MB/s`.
 - `logLine` values are recorded to diagnostics logs under `HelperLiveLog` and are exportable.
 - Live helper logs are not displayed in installer UI.
