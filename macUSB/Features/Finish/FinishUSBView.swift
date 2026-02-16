@@ -8,6 +8,7 @@ struct FinishUSBView: View {
     let onReset: () -> Void
     let isPPC: Bool
     let didFail: Bool
+    let didCancel: Bool
     let creationStartedAt: Date?
     let cleanupTempWorkURL: URL?
     let shouldDetachMountPoint: Bool
@@ -25,6 +26,7 @@ struct FinishUSBView: View {
         onReset: @escaping () -> Void,
         isPPC: Bool,
         didFail: Bool,
+        didCancel: Bool = false,
         creationStartedAt: Date? = nil,
         cleanupTempWorkURL: URL? = nil,
         shouldDetachMountPoint: Bool = true
@@ -34,6 +36,7 @@ struct FinishUSBView: View {
         self.onReset = onReset
         self.isPPC = isPPC
         self.didFail = didFail
+        self.didCancel = didCancel
         self.creationStartedAt = creationStartedAt
         self.cleanupTempWorkURL = cleanupTempWorkURL
         self.shouldDetachMountPoint = shouldDetachMountPoint
@@ -47,6 +50,10 @@ struct FinishUSBView: View {
     var tempWorkURL: URL {
         return cleanupTempWorkURL ?? FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_temp")
     }
+
+    private var isCancelledResult: Bool { didCancel }
+    private var isFailedResult: Bool { didFail && !didCancel }
+    private var isSuccessResult: Bool { !didFail && !didCancel }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -59,7 +66,18 @@ struct FinishUSBView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.bottom, 5)
                     
-                    if didFail {
+                    if isCancelledResult {
+                        HStack(alignment: .center) {
+                            Image(systemName: "xmark.octagon.fill").font(.title2).foregroundColor(.red).frame(width: 32)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Przerwano").font(.headline).foregroundColor(.red)
+                                Text("Proces został zatrzymany przez użytkownika").font(.caption).foregroundColor(.red)
+                            }
+                            Spacer()
+                        }
+                        .padding().frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.red.opacity(0.1)).cornerRadius(8)
+                    } else if isFailedResult {
                         HStack(alignment: .center) {
                             Image(systemName: "xmark.octagon.fill").font(.title2).foregroundColor(.red).frame(width: 32)
                             VStack(alignment: .leading, spacing: 2) {
@@ -81,9 +99,12 @@ struct FinishUSBView: View {
                     }
                     
                     HStack(alignment: .center) {
-                        Image(systemName: "externaldrive.fill").font(.title2).foregroundColor(didFail ? .red : .blue).frame(width: 32)
+                        Image(systemName: "externaldrive.fill").font(.title2).foregroundColor((isFailedResult || isCancelledResult) ? .red : .blue).frame(width: 32)
                         VStack(alignment: .leading, spacing: 2) {
-                            if didFail {
+                            if isCancelledResult {
+                                Text("Tworzenie nośnika zostało przerwane").font(.headline).foregroundColor(.red)
+                                Text(verbatim: systemName).font(.headline).foregroundColor(.primary)
+                            } else if isFailedResult {
                                 Text("Tworzenie instalatora nie powiodło się").font(.headline).foregroundColor(.red)
                                 Text(verbatim: systemName).font(.headline).foregroundColor(.primary)
                             } else {
@@ -93,9 +114,9 @@ struct FinishUSBView: View {
                         }
                     }
                     .padding().frame(maxWidth: .infinity, alignment: .leading)
-                    .background((didFail ? Color.red.opacity(0.1) : Color.blue.opacity(0.1))).cornerRadius(8)
+                    .background(((isFailedResult || isCancelledResult) ? Color.red.opacity(0.1) : Color.blue.opacity(0.1))).cornerRadius(8)
                     
-                    if !didFail {
+                    if isSuccessResult {
                         HStack(alignment: .top) {
                             Image(systemName: "info.circle.fill").font(.title2).foregroundColor(.gray).frame(width: 32)
                             VStack(alignment: .leading, spacing: 10) {
@@ -112,7 +133,7 @@ struct FinishUSBView: View {
                         .background(Color.gray.opacity(0.1)).cornerRadius(8)
                     }
                     
-                    if !didFail && isPPC && !isSnowLeopard {
+                    if isSuccessResult && isPPC && !isSnowLeopard {
                         VStack(alignment: .leading, spacing: 10) {
                             HStack(alignment: .top) {
                                 Image(systemName: "globe.europe.africa.fill").font(.title2).foregroundColor(.gray).frame(width: 32)
@@ -277,14 +298,15 @@ struct FinishUSBView: View {
             DispatchQueue.main.async {
                 let durationMetrics = self.currentCompletionDuration()
                 let durationText = self.makeCompletionDurationText(durationMetrics)
+                let resultState = self.didCancel ? "PRZERWANO" : (self.didFail ? "NIEPOWODZENIE" : "SUKCES")
                 if let durationMetrics {
                     AppLogging.info(
-                        "Czas procesu USB: \(durationMetrics.displayText) (\(durationMetrics.totalSeconds)s), wynik: \(self.didFail ? "NIEPOWODZENIE" : "SUKCES").",
+                        "Czas procesu USB: \(durationMetrics.displayText) (\(durationMetrics.totalSeconds)s), wynik: \(resultState).",
                         category: "Installation"
                     )
                 } else {
                     AppLogging.info(
-                        "Czas procesu USB: brak danych startu, wynik: \(self.didFail ? "NIEPOWODZENIE" : "SUKCES").",
+                        "Czas procesu USB: brak danych startu, wynik: \(resultState).",
                         category: "Installation"
                     )
                 }
@@ -310,7 +332,7 @@ struct FinishUSBView: View {
     }
 
     private func makeCompletionDurationText(_ duration: (totalSeconds: Int, displayText: String)?) -> String? {
-        guard !didFail else { return nil }
+        guard !didFail && !didCancel else { return nil }
         guard let duration else { return nil }
 
         let minutes = duration.totalSeconds / 60
@@ -327,6 +349,10 @@ struct FinishUSBView: View {
         // Zabezpieczenie przed wielokrotnym odtworzeniem
         if didPlayResultSound { return }
         didPlayResultSound = true
+
+        if didCancel {
+            return
+        }
         
         if didFail {
             // Dźwięk niepowodzenia
@@ -357,10 +383,11 @@ struct FinishUSBView: View {
     func sendSystemNotificationIfInactive() {
         guard !didSendBackgroundNotification else { return }
         guard !NSApp.isActive else { return }
+        guard !didCancel else { return }
         didSendBackgroundNotification = true
 
-        let title = didFail ? String(localized: "Wystąpił błąd") : String(localized: "Instalator gotowy")
-        let body = didFail
+        let title = isFailedResult ? String(localized: "Wystąpił błąd") : String(localized: "Instalator gotowy")
+        let body = isFailedResult
             ? String(localized: "Proces tworzenia instalatora na wybranym nośniku zakończył się niepowodzeniem.")
             : String(localized: "Proces zapisu na nośniku zakończył się pomyślnie.")
 

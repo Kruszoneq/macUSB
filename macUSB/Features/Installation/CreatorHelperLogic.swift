@@ -8,6 +8,7 @@ extension UniversalInstallationView {
 
     private func startCreationProcessWithHelper() {
         guard let drive = targetDrive else {
+            navigateToCreationProgress = false
             errorMessage = String(localized: "Błąd: Nie wybrano dysku.")
             return
         }
@@ -24,6 +25,8 @@ extension UniversalInstallationView {
         isHelperWorking = false
         errorMessage = ""
         navigateToFinish = false
+        didCancelCreation = false
+        cancellationRequestedBeforeWorkflowStart = false
         helperOperationFailed = false
         stopUSBMonitoring()
         processingIcon = "lock.shield.fill"
@@ -38,10 +41,15 @@ extension UniversalInstallationView {
         do {
             try preflightTargetVolumeWriteAccess(drive.url)
         } catch {
+            if cancellationRequestedBeforeWorkflowStart {
+                completeCancellationFlow()
+                return
+            }
             withAnimation {
                 isProcessing = false
                 isHelperWorking = false
                 isTabLocked = false
+                navigateToCreationProgress = false
                 startUSBMonitoring()
                 stopHelperWriteSpeedMonitoring()
                 usbProcessStartedAt = nil
@@ -52,10 +60,15 @@ extension UniversalInstallationView {
 
         HelperServiceManager.shared.ensureReadyForPrivilegedWork { ready, failureReason in
             guard ready else {
+                if cancellationRequestedBeforeWorkflowStart {
+                    completeCancellationFlow()
+                    return
+                }
                 withAnimation {
                     isProcessing = false
                     isHelperWorking = false
                     isTabLocked = false
+                    navigateToCreationProgress = false
                     startUSBMonitoring()
                     stopHelperWriteSpeedMonitoring()
                     usbProcessStartedAt = nil
@@ -78,11 +91,16 @@ extension UniversalInstallationView {
 
                         let failWorkflowStart: (String) -> Void = { message in
                             activeHelperWorkflowID = nil
+                            if cancellationRequestedBeforeWorkflowStart {
+                                completeCancellationFlow()
+                                return
+                            }
                             logError("Start helper workflow nieudany: \(message)", category: "Installation")
                             withAnimation {
                                 isProcessing = false
                                 isHelperWorking = false
                                 isTabLocked = false
+                                navigateToCreationProgress = false
                                 startUSBMonitoring()
                                 stopHelperWriteSpeedMonitoring()
                                 usbProcessStartedAt = nil
@@ -158,6 +176,12 @@ extension UniversalInstallationView {
                                 },
                                 onStarted: { workflowID in
                                     activeHelperWorkflowID = workflowID
+                                    if cancellationRequestedBeforeWorkflowStart {
+                                        cancelHelperWorkflowIfNeeded {
+                                            completeCancellationFlow()
+                                        }
+                                        return
+                                    }
                                     helperStageTitleKey = "Rozpoczynanie..."
                                     helperStatusKey = "Helper uruchamia pierwszy etap operacji uprzywilejowanych..."
                                     helperCurrentStageKey = ""
@@ -171,10 +195,15 @@ extension UniversalInstallationView {
                     }
                 } catch {
                     DispatchQueue.main.async {
+                        if cancellationRequestedBeforeWorkflowStart {
+                            completeCancellationFlow()
+                            return
+                        }
                         withAnimation {
                             isProcessing = false
                             isHelperWorking = false
                             isTabLocked = false
+                            navigateToCreationProgress = false
                             startUSBMonitoring()
                             stopHelperWriteSpeedMonitoring()
                             usbProcessStartedAt = nil

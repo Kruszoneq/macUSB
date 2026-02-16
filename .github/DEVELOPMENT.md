@@ -45,11 +45,12 @@ Core goals:
 Navigation flow (SwiftUI):
 1. Welcome screen → start button.
 2. System analysis → user selects file, app analyzes it, then user selects a USB target.
-3. Installer creation → app delegates the full write pipeline (source staging in TEMP, USB creation stages, and TEMP cleanup) to a LaunchDaemon helper via XPC.
-4. Finish screen → success/failure feedback, optional PPC instructions, and fallback TEMP cleanup only if helper cleanup failed or was skipped.
+3. Installation summary/start screen (`UniversalInstallationView`) → user reviews selected system/USB and confirms destructive start.
+4. Creation progress (`CreationProgressView`) → app delegates the full write pipeline (source staging in TEMP, USB creation stages, and TEMP cleanup) to a LaunchDaemon helper via XPC and renders per-stage progress.
+5. Finish screen → success/failure feedback, optional PPC instructions, and fallback TEMP cleanup only if helper cleanup failed or was skipped.
 
 Main UI screens (in order):
-- `WelcomeView` → `SystemAnalysisView` → `UniversalInstallationView` → `FinishUSBView`
+- `WelcomeView` → `SystemAnalysisView` → `UniversalInstallationView` → `CreationProgressView` → `FinishUSBView`
 
 Debug-only shortcut:
 - In `DEBUG` builds, the app shows a top-level `DEBUG` menu in the system menu bar.
@@ -152,6 +153,10 @@ Alerts and dialogs:
 - title: `Ostrzeżenie o utracie danych`
 - message: `Wszystkie dane na wybranym nośniku zostaną usunięte. Czy na pewno chcesz rozpocząć proces?`
 - buttons: `Nie` (cancel start) and `Tak` (continue and start helper flow).
+- Clicking `Przerwij` in `CreationProgressView` shows a dedicated cancellation warning:
+- title: `Czy przerwać tworzenie nośnika?`
+- message: `Nośnik USB nie będzie zdatny do rozruchu, jeśli proces zostanie zatrzymany przed zakończeniem. Konieczne będzie ponowne przygotowanie urządzenia.`
+- buttons: `Kontynuuj` (primary, keeps process running) and `Przerwij` (cancels helper workflow and routes to finish with `Przerwano` status).
 - Helper status check uses a two-step alert in healthy state:
 - first alert: `Helper działa poprawnie` with system buttons `OK` (primary) and `Wyświetl szczegóły`.
 - second alert (on details): full helper status report.
@@ -166,6 +171,7 @@ Inputs and file selection:
 Screen headline copy:
 - `SystemAnalysisView`: `Konfiguracja źródła i celu`
 - `UniversalInstallationView`: `Szczegóły operacji`
+- `CreationProgressView`: `Tworzenie nośnika`
 - `FinishUSBView`: `Wynik operacji`
 
 Menu icon mapping (current):
@@ -182,8 +188,11 @@ Menu icon mapping (current):
 
 Progress indicators:
 - Inline progress uses `ProgressView().controlSize(.small)` next to status text.
-- During helper execution, the installation screen shows a dedicated progress panel with stage title, status text, and an indeterminate linear progress bar (without numeric percent).
-- The same panel shows write speed (`MB/s`) on the right; during formatting stages it intentionally shows `- MB/s`.
+- During helper execution, `CreationProgressView` shows a stage list where:
+- pending stages are gray cards (title + stage icon),
+- the currently active stage is a blue card (title + status + indeterminate linear progress bar),
+- completed stages are green cards (title + success icon).
+- `CreationProgressView` footer always shows write speed (`MB/s`), with `- MB/s` during formatting stages.
 - Live helper log lines are not rendered in UI; they are recorded into diagnostics logs for export.
 
 Welcome screen specifics:
@@ -192,11 +201,12 @@ Welcome screen specifics:
 - Start button is prominent, with `arrow.right` icon.
 
 Finish screen specifics:
-- Success/failure block uses green/red status panels.
+- Success/failure/cancelled block uses green/red status panels (`Sukces!`, `Niepowodzenie!`, or `Przerwano`).
 - Cleanup section shows a blue panel with a trash icon while cleaning.
 - Reset and exit buttons remain large, full-width, and prominent.
 - Success sound prefers bundled `burn_complete.aif` from app resources (with fallback to system sounds).
 - If `FinishUSBView` appears while the app is inactive, the app sends a macOS system notification with success/failure result text only when both system permission and app-level notification toggle are enabled.
+- In cancelled mode (`Przerwano`), `FinishUSBView` intentionally does not play any result sound and does not send a background notification.
 
 Formatting conventions:
 - Bullet lists in UI are rendered as literal `Text("• ...")` lines, not as SwiftUI `List` or `Text` with markdown.
@@ -260,12 +270,13 @@ Explicit unsupported case:
 ---
 
 ## 7. Installer Creation Flows
-Implemented in: `UniversalInstallationView` (UI) + `CreatorHelperLogic.swift` (workflow orchestration) + `CreatorLogic.swift` (shared helper-only utilities)
+Implemented in: `UniversalInstallationView` (summary/start UI) + `CreationProgressView` (runtime stage UI) + `CreatorHelperLogic.swift` (workflow orchestration) + `CreatorLogic.swift` (shared helper-only utilities)
 
 Start gating:
 - The installation process cannot start immediately from the `Rozpocznij` button.
 - A warning `NSAlert` confirms data loss on the selected USB target.
-- Only explicit confirmation (`Tak`) proceeds to `startCreationProcessEntry()` and helper workflow initialization.
+- Only explicit confirmation (`Tak`) proceeds to helper workflow initialization.
+- On `Tak`, navigation immediately moves to `CreationProgressView`, then helper startup continues in background.
 
 ### Installation Summary Box Copy (`Przebieg procesu`)
 The copy shown in the summary panel is intentionally simplified and differs by top-level flow flags:
@@ -334,16 +345,17 @@ Used for most modern macOS installers.
 - TEMP cleanup (`macUSB_temp`) is executed by helper as the final operational step (best-effort, including failure/cancel paths).
 - `FinishUSBView` keeps fallback cleanup as a safety net only when TEMP still exists.
 - Mounting/unmounting the selected source image for analysis remains app-side and is not moved to helper.
+- Helper stage `finalize` is technical-only and is intentionally not rendered in `CreationProgressView`.
 
 ### Helper Monitoring Strategy
 The app tracks helper progress through XPC progress events:
 - `stageKey`, `stageTitleKey`, `statusKey`, `percent`, and optional `logLine`.
-- UI localizes helper stage/status through `Localizable.xcstrings` and shows them in an indeterminate progress panel (no numeric percent).
+- `CreationProgressView` localizes helper stage/status through `Localizable.xcstrings` and renders stage cards plus active-stage progress bar (no numeric percent).
 - Compatibility rule: app canonicalizes displayed helper title/status from `stageKey` when known, so older helper builds that still send raw phrases do not break localization.
-- Write speed (`MB/s`) is measured during active non-formatting helper stages and shown in the panel.
+- Write speed (`MB/s`) is measured during active non-formatting helper stages and shown in the `CreationProgressView` footer.
 - During formatting stages (`preformat`, `ppc_format`) speed is hidden as `- MB/s`.
 - `logLine` values are recorded to diagnostics logs under `HelperLiveLog` and are exportable.
-- Live helper logs are not displayed in the installation UI.
+- Live helper logs are not displayed in installer UI.
 
 ---
 
@@ -548,7 +560,7 @@ Current effective build configuration snapshot:
 ### 11.8 App-side request assembly (`CreatorHelperLogic`)
 - `startCreationProcessEntry()` always enters helper path.
 - Before helper start:
-- installation UI enters processing state and initializes progress (`Przygotowanie` / `Sprawdzanie gotowości helpera...`).
+- app initializes helper state (`Przygotowanie` / `Sprawdzanie gotowości helpera...`) and, after destructive confirmation, routes to `CreationProgressView`.
 - `preflightTargetVolumeWriteAccess` probes write access on `/Volumes/*`; EPERM/EACCES produces explicit TCC-style guidance error.
 - Workflow request payload includes:
 - workflow kind (`standard`, `legacyRestore`, `mavericks`, `ppc`)
@@ -558,8 +570,9 @@ Current effective build configuration snapshot:
 - `requesterUID = getuid()`
 - App no longer performs copy/patch/sign staging in TEMP; helper owns those steps.
 - UI mapping from helper events:
-- stage title key, status key, and percent are updated from `HelperProgressEventPayload`; app prefers canonical key mapping from `stageKey` for compatibility, then renders via `LocalizedStringKey` and `Localizable.xcstrings`.
+- stage title key, status key, and percent are updated from `HelperProgressEventPayload`; app prefers canonical key mapping from `stageKey` for compatibility, then renders via `LocalizedStringKey` and `Localizable.xcstrings` in `CreationProgressView`.
 - `logLine` is not displayed in installer UI and is logged into diagnostics (`HelperLiveLog`).
+- If helper startup fails before active workflow, app automatically pops back from `CreationProgressView` to `UniversalInstallationView` and surfaces the error there.
 - If workflow start fails with an IPC request-decode signature (invalid helper request), app performs one automatic helper reload (unregister/register) and retries workflow start once.
 
 ### 11.9 Helper-side workflow engine (`macUSBHelper/main.swift`)
@@ -638,7 +651,7 @@ Current effective build configuration snapshot:
 - Decoder canonicalizes known stages from `stageKey` to technical keys to avoid mixed-language output from older helper instances.
 - UI mapping:
 - `CreatorHelperLogic` also prefers canonical mapping from `stageKey` before updating state.
-- `UniversalInstallationView` renders helper stage/status via `Text(LocalizedStringKey(...))`, so text follows selected app locale.
+- `CreationProgressView` renders helper stage/status via `Text(LocalizedStringKey(...))`, so text follows selected app locale.
 - Diagnostics behavior:
 - `logLine` is never rendered in status panel; it is written to `HelperLiveLog` and remains exportable.
 - Maintenance contract when adding a helper stage:
@@ -721,10 +734,11 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Features/Welcome/WelcomeView.swift` — Welcome screen and update check (update alert includes remote and current app version line).
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` — File/USB selection UI and navigation to install.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic; propagates/logs USB metadata (speed, partition scheme, filesystem format, `needsFormatting`) and exposes `selectedDriveForInstallation` (PPC override of formatting flag).
-- `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation UI state, destructive start-confirmation trigger (`Rozpocznij`), helper progress panel (indeterminate bar + write speed), and handoff to finish screen with process start timestamp.
-- `macUSB/Features/Installation/CreatorLogic.swift` — Shared installation utilities used by the helper path (start/cancel alerts, cleanup, monitoring).
+- `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation summary/start screen, destructive start-confirmation trigger (`Rozpocznij`), immediate navigation to `CreationProgressView`, and pre-start fast reset (`Przerwij i zakończ`).
+- `macUSB/Features/Installation/CreationProgressView.swift` — Runtime helper progress UI (staged list, active-stage description + linear progress bar, write speed footer, cancel-in-progress action), and handoff to `FinishUSBView`.
+- `macUSB/Features/Installation/CreatorLogic.swift` — Shared installation utilities used by the helper path (start/cancel alerts, cleanup, monitoring, flow reset helpers).
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` — Primary installation path via privileged helper (SMAppService + XPC), helper progress mapping, and helper cancellation flow.
-- `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, fallback cleanup safety net (only if TEMP still exists), sound feedback, total process duration summary (`Ukończono w MMm SSs`), duration logging, background-result system notification (when app is inactive), and optional cleanup overrides used by debug simulation.
+- `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, fallback cleanup safety net (only if TEMP still exists), supports success/failure/cancelled result mode (`Przerwano`), total process duration summary (`Ukończono w MMm SSs` for success), duration logging, background-result system notification (disabled for cancelled mode), and optional cleanup overrides used by debug simulation.
 - `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
 - `macUSB/Shared/Models/Item.swift` — SwiftData model stub (currently unused).
 - `macUSB/Shared/Services/LanguageManager.swift` — Language selection and locale handling.
@@ -764,10 +778,11 @@ This section lists the main call relationships and data flow.
 - `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json`, bootstraps helper readiness via `HelperServiceManager`, then triggers startup notification-permission flow.
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, and forwards `selectedDriveForInstallation` plus `detectedSystemIcon` to installation flow.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
-- `macUSB/Features/Installation/UniversalInstallationView.swift` → displays install progress (stage/status with indeterminate bar and write speed), renders detected system icon in system info panel (with `applelogo` fallback), requires destructive confirmation before start, then starts the helper path via `startCreationProcessEntry()`, and navigates to `FinishUSBView` with process start timestamp.
+- `macUSB/Features/Installation/UniversalInstallationView.swift` → renders detected system icon in system info panel (with `applelogo` fallback), requires destructive confirmation before start, then starts helper path via `startCreationProcessEntry()` and routes to `CreationProgressView`.
+- `macUSB/Features/Installation/CreationProgressView.swift` → renders helper runtime progress (pending/active/completed stage cards, status text, speed footer), exposes cancel alert flow, and navigates to `FinishUSBView`.
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` → builds typed helper requests, coordinates helper execution/cancellation, and maps XPC progress events into UI state.
-- `macUSB/Features/Installation/CreatorLogic.swift` → provides shared helper-path utilities (start/cancel alert flow, USB availability monitoring, emergency unmount, cleanup).
-- `macUSB/Features/Finish/FinishUSBView.swift` → fallback cleanup safety net (unmount + conditional temp delete), result sound (prefers bundled `burn_complete.aif`), process duration summary/logging, optional background system notification gated by permission/toggle, and reset callback.
+- `macUSB/Features/Installation/CreatorLogic.swift` → provides shared helper-path utilities (start/cancel alert flow, USB availability monitoring, emergency unmount, cleanup, immediate reset flow).
+- `macUSB/Features/Finish/FinishUSBView.swift` → fallback cleanup safety net (unmount + conditional temp delete), result sound (prefers bundled `burn_complete.aif`), process duration summary/logging, optional background system notification gated by permission/toggle, reset callback, and dedicated cancelled-mode UX.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
 - `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift`, `SystemAnalysisView`, and `NotificationPermissionManager`.
 - `macUSB/Shared/Services/NotificationPermissionManager.swift` → reads `UNUserNotificationCenter` state, updates `MenuState`, controls startup/menu alerts for notification permission, and opens system settings when blocked.
@@ -800,6 +815,7 @@ This section lists the main call relationships and data flow.
 - Legacy detection and special cases are complex: changes in `AnalysisLogic` affect multiple installation paths.
 - Localization: some Polish strings are hard-coded in `Text("...")`; ensure keys exist in `Localizable.xcstrings`.
 - Cleanup logic still has multiple safety nets (helper final stage, cancel/window emergency paths, `FinishUSBView` fallback); preserve their non-destructive intent when refactoring.
+- `FinishUSBView` has a dedicated cancelled mode (`Przerwano`) that intentionally suppresses finish sound/background notification; preserve this distinction from success/failure.
 
 ---
 

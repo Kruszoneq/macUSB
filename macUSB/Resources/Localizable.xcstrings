@@ -1999,6 +1999,7 @@
       }
     },
     "Czy na pewno chcesz przerwać?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2049,6 +2050,9 @@
           }
         }
       }
+    },
+    "Czy przerwać tworzenie nośnika?" : {
+
     },
     "Czyszczenie plików tymczasowych" : {
       "localizations" : {
@@ -6672,6 +6676,9 @@
         }
       }
     },
+    "Nośnik USB nie będzie zdatny do rozruchu, jeśli proces zostanie zatrzymany przed zakończeniem. Konieczne będzie ponowne przygotowanie urządzenia." : {
+
+    },
     "Oczekiwanie na plik .dmg, .iso, .cdr lub .app..." : {
       "localizations" : {
         "de" : {
@@ -7945,6 +7952,7 @@
       }
     },
     "Proces w toku..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8047,6 +8055,9 @@
           }
         }
       }
+    },
+    "Proces został zatrzymany przez użytkownika" : {
+
     },
     "Proszę czekać" : {
       "localizations" : {
@@ -8372,6 +8383,12 @@
         }
       }
     },
+    "Przerwano" : {
+
+    },
+    "Przerwij" : {
+
+    },
     "Przerwij i zakończ" : {
       "localizations" : {
         "de" : {
@@ -8475,6 +8492,9 @@
           }
         }
       }
+    },
+    "Przerywanie..." : {
+
     },
     "Przygotowanie..." : {
       "localizations" : {
@@ -9847,6 +9867,12 @@
         }
       }
     },
+    "Tworzenie nośnika" : {
+
+    },
+    "Tworzenie nośnika zostało przerwane" : {
+
+    },
     "Tworzenie USB z Mac OS X Tiger (Multi DVD)" : {
       "localizations" : {
         "de" : {
@@ -11205,6 +11231,9 @@
           }
         }
       }
+    },
+    "Wybrany system" : {
+
     },
     "Wybrany system nie jest wspierany przez aplikację" : {
       "comment" : "Generic unsupported system message",
