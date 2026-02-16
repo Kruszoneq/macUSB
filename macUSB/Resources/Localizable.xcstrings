@@ -7043,6 +7043,9 @@
         }
       }
     },
+    "Otwórz macUSB_temp" : {
+
+    },
     "Otwórz Narzędzie dyskowe" : {
       "localizations" : {
         "de" : {
@@ -7796,6 +7799,7 @@
       }
     },
     "Prędkość zapisu" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8390,6 +8394,7 @@
 
     },
     "Przerwij i zakończ" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -10504,6 +10509,9 @@
         }
       }
     },
+    "Wróć" : {
+
+    },
     "Wszystkie dane na wybranym nośniku zostaną usunięte. Czy na pewno chcesz rozpocząć proces?" : {
       "localizations" : {
         "de" : {
@@ -11075,6 +11083,9 @@
           }
         }
       }
+    },
+    "Wybrany folder nie istnieje" : {
+
     },
     "Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces tworzenia instalatora może potrwać kilkanaście minut" : {
       "localizations" : {

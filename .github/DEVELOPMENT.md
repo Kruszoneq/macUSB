@@ -7,6 +7,9 @@
 >
 > IMPORTANT RULE: **User-facing strings are authored in Polish by default.**
 > Polish is the source language for localization and is the canonical base for new UI text.
+>
+> IMPORTANT RULE FOR AI AGENTS: Reading this document is mandatory, but not sufficient on its own.
+> Before proposing or implementing changes, AI agents must also analyze the current codebase to build accurate runtime and architecture context.
 
 ## Table of Contents
 1. [Purpose and Scope](#purpose-and-scope)
@@ -56,6 +59,7 @@ Debug-only shortcut:
 - In `DEBUG` builds, the app shows a top-level `DEBUG` menu in the system menu bar.
 - `DEBUG` → `Przejdź do podsumowania (Big Sur) (2s delay)` triggers a simulated success path for `macOS Big Sur 11` and navigates to `FinishUSBView` after a 2-second delay.
 - `DEBUG` → `Przejdź do podsumowania (Tiger) (2s delay)` triggers a simulated success path for `Mac OS X Tiger 10.4` with `isPPC = true` and navigates to `FinishUSBView` after a 2-second delay.
+- `DEBUG` → `Otwórz macUSB_temp` opens `${TMPDIR}/macUSB_temp` in Finder; if folder does not exist, app shows an alert titled `Wybrany folder nie istnieje`.
 Detailed contract is documented in [Section 17](#17-debug-chapter).
 
 Startup permissions flow:
@@ -192,7 +196,7 @@ Progress indicators:
 - pending stages are gray cards (title + stage icon),
 - the currently active stage is a blue card (title + status + indeterminate linear progress bar),
 - completed stages are green cards (title + success icon).
-- `CreationProgressView` footer always shows write speed (`MB/s`), with `- MB/s` during formatting stages.
+- For active write-heavy stages (`imagescan`, `restore`, `ppc_restore`, `createinstallmedia`, and Catalina `catalina_copy`/`ditto` stage), `CreationProgressView` shows write speed below the progress bar as `Szybkość zapisu: xx MB/s` (rounded integer, no decimals).
 - Live helper log lines are not rendered in UI; they are recorded into diagnostics logs for export.
 
 Welcome screen specifics:
@@ -201,7 +205,7 @@ Welcome screen specifics:
 - Start button is prominent, with `arrow.right` icon.
 
 Finish screen specifics:
-- Success/failure/cancelled block uses green/red status panels (`Sukces!`, `Niepowodzenie!`, or `Przerwano`).
+- Success/failure/cancelled block uses green/red/orange status panels (`Sukces!`, `Niepowodzenie!`, or `Przerwano`).
 - Cleanup section shows a blue panel with a trash icon while cleaning.
 - Reset and exit buttons remain large, full-width, and prominent.
 - Success sound prefers bundled `burn_complete.aif` from app resources (with fallback to system sounds).
@@ -277,6 +281,7 @@ Start gating:
 - A warning `NSAlert` confirms data loss on the selected USB target.
 - Only explicit confirmation (`Tak`) proceeds to helper workflow initialization.
 - On `Tak`, navigation immediately moves to `CreationProgressView`, then helper startup continues in background.
+- Before helper start, secondary action `Wróć` returns to `SystemAnalysisView` and preserves the currently selected source file and USB target.
 
 ### Installation Summary Box Copy (`Przebieg procesu`)
 The copy shown in the summary panel is intentionally simplified and differs by top-level flow flags:
@@ -352,7 +357,8 @@ The app tracks helper progress through XPC progress events:
 - `stageKey`, `stageTitleKey`, `statusKey`, `percent`, and optional `logLine`.
 - `CreationProgressView` localizes helper stage/status through `Localizable.xcstrings` and renders stage cards plus active-stage progress bar (no numeric percent).
 - Compatibility rule: app canonicalizes displayed helper title/status from `stageKey` when known, so older helper builds that still send raw phrases do not break localization.
-- Write speed (`MB/s`) is measured during active non-formatting helper stages and shown in the `CreationProgressView` footer.
+- Write speed (`MB/s`) is measured during active non-formatting helper stages.
+- In `CreationProgressView`, speed is rendered only for active write-heavy stages (`imagescan`, `restore`, `ppc_restore`, `createinstallmedia`, `catalina_copy`) in format `Szybkość zapisu: xx MB/s` with rounded integer values.
 - During formatting stages (`preformat`, `ppc_format`) speed is hidden as `- MB/s`.
 - `logLine` values are recorded to diagnostics logs under `HelperLiveLog` and are exportable.
 - Live helper logs are not displayed in installer UI.
@@ -734,9 +740,9 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Features/Welcome/WelcomeView.swift` — Welcome screen and update check (update alert includes remote and current app version line).
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` — File/USB selection UI and navigation to install.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` — System detection and USB enumeration logic; propagates/logs USB metadata (speed, partition scheme, filesystem format, `needsFormatting`) and exposes `selectedDriveForInstallation` (PPC override of formatting flag).
-- `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation summary/start screen, destructive start-confirmation trigger (`Rozpocznij`), immediate navigation to `CreationProgressView`, and pre-start fast reset (`Przerwij i zakończ`).
-- `macUSB/Features/Installation/CreationProgressView.swift` — Runtime helper progress UI (staged list, active-stage description + linear progress bar, write speed footer, cancel-in-progress action), and handoff to `FinishUSBView`.
-- `macUSB/Features/Installation/CreatorLogic.swift` — Shared installation utilities used by the helper path (start/cancel alerts, cleanup, monitoring, flow reset helpers).
+- `macUSB/Features/Installation/UniversalInstallationView.swift` — Installer creation summary/start screen, destructive start-confirmation trigger (`Rozpocznij`), immediate navigation to `CreationProgressView`, and pre-start back action (`Wróć`) that preserves selected source/USB context.
+- `macUSB/Features/Installation/CreationProgressView.swift` — Runtime helper progress UI (staged list, active-stage description + linear progress bar, stage-scoped write-speed label, cancel-in-progress action), and handoff to `FinishUSBView`.
+- `macUSB/Features/Installation/CreatorLogic.swift` — Shared installation utilities used by the helper path (start/cancel alerts, cleanup, monitoring, flow reset/back helpers).
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` — Primary installation path via privileged helper (SMAppService + XPC), helper progress mapping, and helper cancellation flow.
 - `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, fallback cleanup safety net (only if TEMP still exists), supports success/failure/cancelled result mode (`Przerwano`), total process duration summary (`Ukończono w MMm SSs` for success), duration logging, background-result system notification (disabled for cancelled mode), and optional cleanup overrides used by debug simulation.
 - `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
@@ -773,15 +779,15 @@ Notes on non-source items:
 ## 13. File Relationships (Who Calls What)
 This section lists the main call relationships and data flow.
 
-- `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`, `NotificationPermissionManager`, `HelperServiceManager`; in `DEBUG` also publishes `macUSBDebugGoToBigSurSummary` and `macUSBDebugGoToTigerSummary` from SwiftUI command menu actions.
+- `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`, `NotificationPermissionManager`, `HelperServiceManager`; in `DEBUG` also publishes `macUSBDebugGoToBigSurSummary` and `macUSBDebugGoToTigerSummary`, and opens `${TMPDIR}/macUSB_temp` in Finder.
 - `macUSB/App/ContentView.swift` → presents `WelcomeView`, injects `LanguageManager`, calls `AppLogging.logAppStartupOnce()`, and maps debug notifications to delayed (2s) `FinishUSBView` routes (Big Sur and Tiger/PPC).
 - `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json`, bootstraps helper readiness via `HelperServiceManager`, then triggers startup notification-permission flow.
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, and forwards `selectedDriveForInstallation` plus `detectedSystemIcon` to installation flow.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
 - `macUSB/Features/Installation/UniversalInstallationView.swift` → renders detected system icon in system info panel (with `applelogo` fallback), requires destructive confirmation before start, then starts helper path via `startCreationProcessEntry()` and routes to `CreationProgressView`.
-- `macUSB/Features/Installation/CreationProgressView.swift` → renders helper runtime progress (pending/active/completed stage cards, status text, speed footer), exposes cancel alert flow, and navigates to `FinishUSBView`.
+- `macUSB/Features/Installation/CreationProgressView.swift` → renders helper runtime progress (pending/active/completed stage cards, status text, stage-scoped write-speed label), exposes cancel alert flow, and navigates to `FinishUSBView`.
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` → builds typed helper requests, coordinates helper execution/cancellation, and maps XPC progress events into UI state.
-- `macUSB/Features/Installation/CreatorLogic.swift` → provides shared helper-path utilities (start/cancel alert flow, USB availability monitoring, emergency unmount, cleanup, immediate reset flow).
+- `macUSB/Features/Installation/CreatorLogic.swift` → provides shared helper-path utilities (start/cancel alert flow, USB availability monitoring, emergency unmount, cleanup, immediate reset/back flow).
 - `macUSB/Features/Finish/FinishUSBView.swift` → fallback cleanup safety net (unmount + conditional temp delete), result sound (prefers bundled `burn_complete.aif`), process duration summary/logging, optional background system notification gated by permission/toggle, reset callback, and dedicated cancelled-mode UX.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
 - `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift`, `SystemAnalysisView`, and `NotificationPermissionManager`.
@@ -807,6 +813,7 @@ This section lists the main call relationships and data flow.
 9. Privileged install flow must run through `SMAppService` + LaunchDaemon helper in all configurations (no terminal fallback).
 10. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.
 11. Debug menu contract: top-level `DEBUG` menu is allowed only for `DEBUG` builds; it must not be available in `Release` builds.
+12. Git commit messages must be written in English, including both the commit summary line and the extended description/body.
 
 ---
 
@@ -917,11 +924,14 @@ Menu entry:
 - Menu actions (localized labels):
 - `Przejdź do podsumowania (Big Sur) (2s delay)`
 - `Przejdź do podsumowania (Tiger) (2s delay)`
+- `Otwórz macUSB_temp`
 
 Action behavior:
-- Both actions are immediate triggers that publish NotificationCenter events from `macUSBApp.swift`.
+- Summary actions are immediate triggers that publish NotificationCenter events from `macUSBApp.swift`.
 - Big Sur action publishes `macUSBDebugGoToBigSurSummary`.
 - Tiger action publishes `macUSBDebugGoToTigerSummary`.
+- `Otwórz macUSB_temp` opens `${TMPDIR}/macUSB_temp` in Finder when the folder exists.
+- If `${TMPDIR}/macUSB_temp` does not exist, app presents warning `NSAlert` with title `Wybrany folder nie istnieje`.
 
 Navigation behavior (root-level):
 - `ContentView` listens for both debug notifications.

@@ -68,15 +68,15 @@ struct FinishUSBView: View {
                     
                     if isCancelledResult {
                         HStack(alignment: .center) {
-                            Image(systemName: "xmark.octagon.fill").font(.title2).foregroundColor(.red).frame(width: 32)
+                            Image(systemName: "exclamationmark.triangle.fill").font(.title2).foregroundColor(.orange).frame(width: 32)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Przerwano").font(.headline).foregroundColor(.red)
-                                Text("Proces został zatrzymany przez użytkownika").font(.caption).foregroundColor(.red)
+                                Text("Przerwano").font(.headline).foregroundColor(.orange)
+                                Text("Proces został zatrzymany przez użytkownika").font(.caption).foregroundColor(.orange)
                             }
                             Spacer()
                         }
                         .padding().frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.red.opacity(0.1)).cornerRadius(8)
+                        .background(Color.orange.opacity(0.1)).cornerRadius(8)
                     } else if isFailedResult {
                         HStack(alignment: .center) {
                             Image(systemName: "xmark.octagon.fill").font(.title2).foregroundColor(.red).frame(width: 32)
@@ -99,10 +99,10 @@ struct FinishUSBView: View {
                     }
                     
                     HStack(alignment: .center) {
-                        Image(systemName: "externaldrive.fill").font(.title2).foregroundColor((isFailedResult || isCancelledResult) ? .red : .blue).frame(width: 32)
+                        Image(systemName: "externaldrive.fill").font(.title2).foregroundColor(isCancelledResult ? .orange : ((isFailedResult || isCancelledResult) ? .red : .blue)).frame(width: 32)
                         VStack(alignment: .leading, spacing: 2) {
                             if isCancelledResult {
-                                Text("Tworzenie nośnika zostało przerwane").font(.headline).foregroundColor(.red)
+                                Text("Tworzenie nośnika zostało przerwane").font(.headline).foregroundColor(.orange)
                                 Text(verbatim: systemName).font(.headline).foregroundColor(.primary)
                             } else if isFailedResult {
                                 Text("Tworzenie instalatora nie powiodło się").font(.headline).foregroundColor(.red)
@@ -114,7 +114,7 @@ struct FinishUSBView: View {
                         }
                     }
                     .padding().frame(maxWidth: .infinity, alignment: .leading)
-                    .background(((isFailedResult || isCancelledResult) ? Color.red.opacity(0.1) : Color.blue.opacity(0.1))).cornerRadius(8)
+                    .background(isCancelledResult ? Color.orange.opacity(0.1) : ((isFailedResult || isCancelledResult) ? Color.red.opacity(0.1) : Color.blue.opacity(0.1))).cornerRadius(8)
                     
                     if isSuccessResult {
                         HStack(alignment: .top) {

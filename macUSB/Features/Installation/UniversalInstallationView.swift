@@ -209,10 +209,10 @@ struct UniversalInstallationView: View {
                             }
                             .buttonStyle(.borderedProminent).controlSize(.large).tint(Color.accentColor)
                             
-                            Button(action: resetFlowToStartImmediately) {
+                            Button(action: returnToAnalysisViewPreservingSelection) {
                                 HStack {
-                                    Text("Przerwij i zakończ")
-                                    Image(systemName: "xmark.circle")
+                                    Text("Wróć")
+                                    Image(systemName: "arrow.left.circle")
                                 }
                                 .frame(maxWidth: .infinity).padding(8)
                             }

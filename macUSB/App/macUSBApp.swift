@@ -335,8 +335,29 @@ struct macUSBApp: App {
                 Button(String(localized: "Przejdź do podsumowania (Tiger) (2s delay)")) {
                     NotificationCenter.default.post(name: .macUSBDebugGoToTigerSummary, object: nil)
                 }
+                Divider()
+                Button(String(localized: "Otwórz macUSB_temp")) {
+                    openMacUSBTempFolderInFinder()
+                }
             }
             #endif
         }
     }
+
+    #if DEBUG
+    private func openMacUSBTempFolderInFinder() {
+        let tempFolderURL = FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_temp", isDirectory: true)
+        guard FileManager.default.fileExists(atPath: tempFolderURL.path) else {
+            let alert = NSAlert()
+            alert.icon = NSApp.applicationIconImage
+            alert.alertStyle = .warning
+            alert.messageText = String(localized: "Wybrany folder nie istnieje")
+            alert.addButton(withTitle: String(localized: "OK"))
+            alert.runModal()
+            return
+        }
+
+        NSWorkspace.shared.open(tempFolderURL)
+    }
+    #endif
 }

@@ -121,25 +121,6 @@ struct CreationProgressView: View {
                 Divider()
 
                 VStack(spacing: 12) {
-                    HStack(alignment: .center, spacing: 15) {
-                        Image(systemName: "speedometer")
-                            .font(.title2)
-                            .foregroundColor(.secondary)
-                            .frame(width: 32)
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Prędkość zapisu")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            Text(helperWriteSpeedText)
-                                .font(.headline.monospacedDigit())
-                        }
-                        Spacer()
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(8)
-
                     Button(action: onCancelRequested) {
                         HStack {
                             Text(isCancelling ? "Przerywanie..." : "Przerwij")
@@ -214,6 +195,11 @@ struct CreationProgressView: View {
                     .foregroundColor(.secondary)
                 ProgressView()
                     .progressViewStyle(.linear)
+                if shouldShowWriteSpeed(for: stage.key) {
+                    Text(verbatim: writeSpeedLabelText())
+                        .font(.caption.monospacedDigit())
+                        .foregroundColor(.secondary)
+                }
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -286,5 +272,28 @@ struct CreationProgressView: View {
         default:
             return "gearshape.2"
         }
+    }
+
+    private func shouldShowWriteSpeed(for stageKey: String) -> Bool {
+        switch stageKey {
+        case "imagescan", "restore", "ppc_restore", "createinstallmedia", "catalina_copy":
+            return true
+        default:
+            return false
+        }
+    }
+
+    private func writeSpeedLabelText() -> String {
+        let normalized = helperWriteSpeedText
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: ",", with: ".")
+        let rawValue = normalized.split(separator: " ").first.map(String.init) ?? ""
+
+        guard let measured = Double(rawValue), measured.isFinite else {
+            return "Szybkość zapisu: - MB/s"
+        }
+
+        let rounded = max(0, Int(measured.rounded()))
+        return "Szybkość zapisu: \(rounded) MB/s"
     }
 }

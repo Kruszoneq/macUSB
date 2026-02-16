@@ -58,6 +58,12 @@ extension UniversalInstallationView {
         rootIsActive = false
     }
 
+    func returnToAnalysisViewPreservingSelection() {
+        stopUSBMonitoring()
+        isTabLocked = false
+        rootIsActive = false
+    }
+
     func showCreationProgressCancelAlert() {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
