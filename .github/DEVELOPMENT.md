@@ -206,7 +206,11 @@ Menu icon mapping (current):
 
 Progress indicators:
 - Inline progress uses `ProgressView().controlSize(.small)` next to status text.
-- In `UniversalInstallationView`, configuration summary (system + selected USB) and process-description block are separated by a subtle in-content section divider (`Przebieg tworzenia`).
+- In `UniversalInstallationView`, configuration summary is rendered as one combined neutral card:
+- row 1: selected system,
+- row 2: selected USB target (when available),
+- rows are separated by an internal subtle divider.
+- The combined summary card and process-description block are separated by a subtle in-content section divider (`Przebieg tworzenia`).
 - In `CreationProgressView`, the selected-system summary and stage list are separated by a subtle in-content section divider (`Etapy tworzenia`) using hairline capsules + secondary caption.
 - During helper execution, `CreationProgressView` shows a stage list where:
 - pending stages are subtle/low-emphasis cards (title + stage icon),
@@ -281,7 +285,7 @@ Practical rules:
 - Terminology standard: in Polish user-facing copy use `nośnik USB` (not `dysk USB`) for consistency.
 - Keep message style consistent with existing in-app forms; for progress/status copy prefer nominal process forms already used in the app (for example `Przygotowywanie...`, `Rozpoczynanie...`) instead of mixing with direct-action forms.
 - Translations in `Localizable.xcstrings` must match the real UI context where the phrase appears (button, alert title, warning body, progress status, etc.); avoid overly literal translation when it harms clarity, tone, or UX.
-- Immutable product slogan rule: the phrase `Tworzenie botoowalnych dysków USB z systemem macOS oraz OS X nigdy nie było takie proste` is the app’s official slogan and must remain unchanged verbatim in this exact form.
+- Immutable product slogan rule: the phrase `Tworzenie bootowalnych dysków USB z systemem macOS oraz OS X nigdy nie było takie proste!` is the app’s official slogan and must remain unchanged verbatim in this exact form.
 - Use `Text("...")` with Polish strings; SwiftUI treats these as localization keys.
 - Helper sends stable technical localization keys (for example `helper.workflow.prepare_source.title`) in XPC progress events.
 - Installation UI renders helper stage/status with `Text(LocalizedStringKey(...))`, so helper progress text follows app locale from SwiftUI environment.

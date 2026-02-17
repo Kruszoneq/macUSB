@@ -94,36 +94,45 @@ struct UniversalInstallationView: View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
-                    StatusCard(tone: .neutral, cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode())) {
-                        HStack {
-                            if let detectedSystemIcon {
-                                Image(nsImage: detectedSystemIcon)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 32, height: 32)
-                            } else {
-                                Image(systemName: "applelogo")
-                                    .font(sectionIconFont)
-                                    .foregroundColor(.accentColor)
-                                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
-                            }
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text("Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
-                                Text(systemName).font(.headline).foregroundColor(.primary).bold()
-                            }
-                            Spacer()
-                        }
-                    }
-
-                    if let name = targetDriveDisplayName ?? targetDrive?.displayName {
-                        StatusCard(tone: .neutral, density: .compact) {
+                    StatusCard(
+                        tone: .neutral,
+                        cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode())
+                    ) {
+                        VStack(alignment: .leading, spacing: 12) {
                             HStack {
-                                Image(systemName: "externaldrive.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                if let detectedSystemIcon {
+                                    Image(nsImage: detectedSystemIcon)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 32, height: 32)
+                                } else {
+                                    Image(systemName: "applelogo")
+                                        .font(sectionIconFont)
+                                        .foregroundColor(.accentColor)
+                                        .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                }
                                 VStack(alignment: .leading, spacing: 3) {
-                                    Text("Wybrany nośnik USB").font(.caption).foregroundColor(.secondary)
-                                    Text(name).font(.headline)
+                                    Text("Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
+                                    Text(systemName).font(.headline).foregroundColor(.primary).bold()
                                 }
                                 Spacer()
+                            }
+
+                            if let name = targetDriveDisplayName ?? targetDrive?.displayName {
+                                Divider()
+                                    .overlay(Color.secondary.opacity(0.18))
+
+                                HStack {
+                                    Image(systemName: "externaldrive.fill")
+                                        .font(sectionIconFont)
+                                        .foregroundColor(.secondary)
+                                        .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                    VStack(alignment: .leading, spacing: 3) {
+                                        Text("Wybrany nośnik USB").font(.caption).foregroundColor(.secondary)
+                                        Text(name).font(.headline)
+                                    }
+                                    Spacer()
+                                }
                             }
                         }
                     }

@@ -108,7 +108,7 @@ struct CreationProgressView: View {
                                     .foregroundColor(.secondary)
                                 Text(systemName)
                                     .font(.headline)
-                                    .foregroundColor(.green)
+                                    .foregroundColor(.primary)
                                     .bold()
                             }
                             Spacer()
