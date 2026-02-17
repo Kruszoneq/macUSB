@@ -624,13 +624,24 @@ private final class HelperWorkflowExecutor {
         var percent = latestPercent
         if stage.key == "ppc_restore", let mapped = mapPPCProgress(from: line) {
             percent = max(percent, mapped)
-        } else if stage.parseToolPercent, let parsed = extractPercent(from: line) {
+        } else if stage.parseToolPercent, let parsed = extractToolPercent(from: line, stageKey: stage.key) {
             let clamped = max(0, min(parsed, 100))
             let mapped = stage.startPercent + ((stage.endPercent - stage.startPercent) * (clamped / 100.0))
             percent = max(percent, mapped)
         }
 
         emit(stage: stage, percent: percent, statusKey: stage.statusKey, logLine: line)
+    }
+
+    private func extractToolPercent(from line: String, stageKey: String) -> Double? {
+        if stageKey == "createinstallmedia" {
+            let lowered = line.lowercased()
+            if lowered.contains("erasing disk") {
+                return nil
+            }
+        }
+
+        return extractPercent(from: line)
     }
 
     private func mapPPCProgress(from line: String) -> Double? {

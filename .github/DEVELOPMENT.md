@@ -370,10 +370,11 @@ The app tracks helper progress through XPC progress events:
 - `stageKey`, `stageTitleKey`, `statusKey`, `percent`, and optional `logLine`.
 - `CreationProgressView` localizes helper stage/status through `Localizable.xcstrings` and renders stage cards plus active-stage progress bar.
 - Compatibility rule: app canonicalizes displayed helper title/status from `stageKey` when known, so older helper builds that still send raw phrases do not break localization.
-- App-side transfer monitor computes source sizes (`restore` source image, `ppc_restore` source image file, `createinstallmedia` app bundle, Catalina `ditto` source app bundle), samples copied bytes on target USB volume every 2 seconds, and derives tracked stage percent from copied/total ratio.
+- App-side transfer monitor computes source sizes (`restore` source image, `ppc_restore` source image file, `createinstallmedia` app bundle, Catalina `ditto` source app bundle), then estimates copied bytes every 2 seconds from measured write speed (`MB/s * elapsed`), and derives tracked stage percent from copied/total ratio.
+- Transfer monitor follows helper-resolved target identity (`request.targetBSDName` resolved to whole-disk), not only the original UI drive snapshot, so speed sampling stays aligned after APFS/container remap or post-format remount changes.
+- For `createinstallmedia`, estimation starts from the beginning of the stage (speed-based integration over elapsed time), independent of helper text output timing.
 - Tracked stage percent in UI is clamped to `99%` while stage remains active; stage completion is represented by transition into completed card state.
-- App-side transfer monitor has diagnostic fallback logging: after repeated read failures, it emits `HelperLiveLog` entries with `stage`, selected disk id, chosen measurement path, failure counter, speed snapshot, stage-percent snapshot, and stage-based fallback estimate snapshot; on first successful read after degraded period, it emits a recovery log.
-- When volume-usage reads fail, copied-data progress uses a best-effort fallback estimate derived from measured write speed (`MB/s`) and elapsed sample time; if speed sampling is unavailable, fallback additionally derives copied bytes from current helper stage percent window (`startPercent → endPercent`), still clamped to `99%` while stage remains active.
+- App-side transfer monitor has diagnostic fallback logging: after repeated missing speed samples, it emits `HelperLiveLog` entries with `stage`, requested BSD id, failure counter, speed snapshot, stage-percent snapshot, and copied/total bytes snapshot; on first successful sample after degraded period, it emits a recovery log.
 - Write speed (`MB/s`) is measured during active non-formatting helper stages.
 - In `CreationProgressView`, speed is rendered only for active USB-write stages (`restore`, `ppc_restore`, `createinstallmedia`, `catalina_copy`) in format `Szybkość zapisu: xx MB/s` with rounded integer values.
 - Speed label is localized via `String(localized:)` format key (`Szybkość zapisu: %d MB/s`), and non-measured state uses localized `Szybkość zapisu: - MB/s`.
@@ -612,6 +613,7 @@ Current effective build configuration snapshot:
 - captures stdout+stderr line-by-line,
 - treats both `\n` and `\r` as streamed line separators (important for interactive tool output such as `asr restore`),
 - extracts standard `%` tokens and dotted `asr` progress markers (`....10....20...`) via regex, taking the latest token and mapping tool percentage into stage percentage range,
+- for `createinstallmedia`, parser ignores `Erasing Disk` percent lines so erase-phase output does not artificially advance copy-stage progress,
 - keeps `statusKey` as localized status key and forwards tool output as optional `logLine`.
 - Command execution context:
 - if `requesterUID > 0`, helper runs command as user via:
@@ -693,7 +695,7 @@ Current effective build configuration snapshot:
 - `HelperLiveLog` category:
 - streamed helper stdout/stderr (`logLine`) from command execution and decode failures (including Catalina transition to `ditto`).
 - format-target diagnostics (`requested`, `fallbackWhole`, `resolvedWhole`, `targetVolumePath`) emitted before formatting stages.
-- app-side transfer monitor fallback diagnostics/recovery events and speed-based copied-data estimation when mountpoint/volume-usage reads fail.
+- app-side transfer monitor fallback diagnostics/recovery events and speed-based copied-data estimation when speed samples are temporarily unavailable.
 - `Installation` category:
 - user-facing operation milestones, helper workflow begin/end/fail events, and total process duration summary from finish screen.
 - Export behavior:
@@ -836,7 +838,7 @@ This section lists the main call relationships and data flow.
 9. Privileged install flow must run through `SMAppService` + LaunchDaemon helper in all configurations (no terminal fallback).
 10. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.
 11. Debug menu contract: top-level `DEBUG` menu is allowed only for `DEBUG` builds; it must not be available in `Release` builds.
-12. Git commit messages must be written in English, including both the commit summary line and the extended description/body.
+12. AI agents must write git commit messages in English: a clear title/summary line plus a concise body describing key changes. Do not use escaped newline sequences like `\n` in commit text; use normal multi-line commit formatting only.
 
 ---
 
