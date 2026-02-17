@@ -816,13 +816,12 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `version.json` — Remote version metadata for update checks.
 - `docs/documents/DEVELOPMENT.md` — Repository-local mirror of development contract documentation.
 - `docs/readme-assets/images/macUSBreadmepreview.png` — Current README hero preview image.
+- `docs/readme-assets/images/macUSBicon.png` — Current README app icon image.
 - `docs/readme-assets/app-screens/welcome-view.png` — README workflow screenshot: Welcome screen.
 - `docs/readme-assets/app-screens/source-target-configuration.png` — README workflow screenshot: source/target configuration.
 - `docs/readme-assets/app-screens/operation-details.png` — README workflow screenshot: operation details.
 - `docs/readme-assets/app-screens/creating-usb-media.png` — README workflow screenshot: creation progress.
 - `docs/readme-assets/app-screens/operation-result.png` — README workflow screenshot: finish/result screen.
-- `screenshots/macUSBtheme.png` — UI preview image used by README.
-- `screenshots/macUSBiconPNG.png` — App icon preview used by README.
 - `.gitignore` — Git ignore rules.
 - `.github/FUNDING.yml` — Funding/support metadata.
 - `.github/PPC_BOOT_INSTRUCTIONS.md` — PowerPC Open Firmware USB boot guide.

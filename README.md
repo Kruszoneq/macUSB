@@ -1,4 +1,4 @@
-# <img src="screenshots/macUSBiconPNG.png" alt="macUSB" width="64" height="64" style="vertical-align: middle;"> macUSB
+# <img src="docs/readme-assets/images/macUSBicon.png" alt="macUSB" width="64" height="64" style="vertical-align: middle;"> macUSB
 
 ### Creating bootable macOS and OS X USB drives has never been easier!
 
