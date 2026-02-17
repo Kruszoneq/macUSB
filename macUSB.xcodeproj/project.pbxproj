@@ -89,15 +89,14 @@
 				Features/Analysis/AnalysisLogic.swift,
 				Features/Analysis/SystemAnalysisView.swift,
 				Features/Finish/FinishUSBView.swift,
+				Features/Installation/CreationProgressView.swift,
 				Features/Installation/CreatorHelperLogic.swift,
 				Features/Installation/CreatorLogic.swift,
-				Features/Installation/CreationProgressView.swift,
 				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/WelcomeView.swift,
 				macUSBIcon.icon,
 				Resources/Localizable.xcstrings,
 				Shared/Localization/HelperWorkflowLocalizationKeys.swift,
-				Shared/Models/Item.swift,
 				Shared/Models/Models.swift,
 				Shared/Services/Helper/HelperIPC.swift,
 				Shared/Services/Helper/HelperServiceManager.swift,
@@ -108,6 +107,10 @@
 				Shared/Services/NotificationPermissionManager.swift,
 				Shared/Services/UpdateChecker.swift,
 				Shared/Services/USBDriveLogic.swift,
+				Shared/UI/BottomActionBar.swift,
+				Shared/UI/DesignTokens.swift,
+				Shared/UI/LiquidGlassCompatibility.swift,
+				Shared/UI/StatusCard.swift,
 			);
 			target = 0F94F4A42EDE3E510019F69A /* macUSB */;
 		};
@@ -116,15 +119,14 @@
 			membershipExceptions = (
 				App/ContentView.swift,
 				App/macUSBApp.swift,
+				Features/Installation/CreationProgressView.swift,
 				Features/Installation/CreatorHelperLogic.swift,
 				Features/Installation/CreatorLogic.swift,
-				Features/Installation/CreationProgressView.swift,
 				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/WelcomeView.swift,
 				macUSBIcon.icon,
 				Resources/Localizable.xcstrings,
 				Shared/Localization/HelperWorkflowLocalizationKeys.swift,
-				Shared/Models/Item.swift,
 				Shared/Models/Models.swift,
 				Shared/Services/Helper/HelperIPC.swift,
 				Shared/Services/Helper/HelperServiceManager.swift,
@@ -134,6 +136,10 @@
 				Shared/Services/MenuState.swift,
 				Shared/Services/NotificationPermissionManager.swift,
 				Shared/Services/UpdateChecker.swift,
+				Shared/UI/BottomActionBar.swift,
+				Shared/UI/DesignTokens.swift,
+				Shared/UI/LiquidGlassCompatibility.swift,
+				Shared/UI/StatusCard.swift,
 			);
 			target = 0F94F4BD2EDE3E520019F69A /* macUSBUITests */;
 		};

@@ -13,9 +13,11 @@ struct WelcomeView: View {
     
     // Pusty inicjalizator (wymagany dla ContentView)
     init() {}
+
+    private var visualMode: VisualSystemMode { currentVisualMode() }
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: MacUSBDesignTokens.contentSectionSpacing) {
             
             Spacer()
             
@@ -26,16 +28,17 @@ struct WelcomeView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 128, height: 128)
             }
-            
+
             Text("macUSB")
-                .font(.system(size: 40, weight: .bold))
+                .font(.system(size: 40 * MacUSBDesignTokens.headlineScale(for: visualMode), weight: .semibold))
             
             // Opis z obsługą tłumaczeń
-            Text("Tworzenie bootowalnych dysków USB z systemem macOS\noraz OS X nigdy nie było takie proste!")
-                .font(.title3)
+            Text("Tworzenie bootowalnych dysków USB z systemem macOS oraz OS X nigdy nie było takie proste!")
+                .font(.system(size: 17 * MacUSBDesignTokens.subheadlineScale(for: visualMode), weight: .regular))
                 .multilineTextAlignment(.center)
-                .foregroundColor(.secondary)
-                .padding(.horizontal, 40)
+                .foregroundStyle(.secondary)
+                .lineSpacing(2)
+                .padding(.horizontal, 72)
                 .fixedSize(horizontal: false, vertical: true)
             
             Spacer()
@@ -50,9 +53,7 @@ struct WelcomeView: View {
                     Image(systemName: "arrow.right")
                 }
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            .tint(Color.accentColor)
+            .macUSBPrimaryButtonStyle()
             
             Spacer()
             
@@ -68,6 +69,7 @@ struct WelcomeView: View {
             .padding(.bottom, 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .navigationTitle("Start")
         .onAppear {
             guard !didRunStartupFlow else { return }
             didRunStartupFlow = true
@@ -129,12 +131,4 @@ struct WelcomeView: View {
         }.resume()
     }
     
-    private func restartApp() {
-        let path = Bundle.main.bundlePath
-        let task = Process()
-        task.launchPath = "/usr/bin/open"
-        task.arguments = [path]
-        try? task.run()
-        NSApp.terminate(nil)
-    }
 }
