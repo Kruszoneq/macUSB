@@ -17,7 +17,7 @@
 ## 🖼️ Preview
 
 <p align="center">
-  <img src="screenshots/macUSBtheme.png" alt="macUSB – UI preview" width="980">
+  <img src="docs/readme-assets/images/macUSBreadmepreview.png" alt="macUSB – UI preview" width="980">
 </p>
 
 ## 🚀 About the Project
@@ -41,6 +41,57 @@ The application automates the entire process of creating a bootable USB drive. Y
 ---
 
 **Fun Fact:** The application was created using the "Vibe Coding" method. Every single function has been rigorously verified for correct operation to ensure full stability. This project proves that programming barriers (even cross-architectural ones) can be overcome with determination and AI support while maintaining the highest standards of code quality.
+
+---
+
+## 🧭 App Workflow
+
+<p align="center">
+  Click any screenshot to open full size.
+</p>
+
+<table align="center">
+  <tr>
+    <td align="center" valign="top">
+      <strong>1. Welcome</strong><br>
+      <a href="docs/readme-assets/app-screens/welcome-view.png">
+        <img src="docs/readme-assets/app-screens/welcome-view.png" alt="Welcome view" width="190">
+      </a><br>
+      <sub>Start the workflow.</sub>
+    </td>
+    <td align="center" valign="top">
+      <strong>2. Source & Target</strong><br>
+      <a href="docs/readme-assets/app-screens/source-target-configuration.png">
+        <img src="docs/readme-assets/app-screens/source-target-configuration.png" alt="Source and target configuration" width="190">
+      </a><br>
+      <sub>Select installer and USB drive.</sub>
+    </td>
+    <td align="center" valign="top">
+      <strong>3. Operation Details</strong><br>
+      <a href="docs/readme-assets/app-screens/operation-details.png">
+        <img src="docs/readme-assets/app-screens/operation-details.png" alt="Operation details" width="190">
+      </a><br>
+      <sub>Review process before start.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" valign="top">
+      <strong>4. Creating USB Media</strong><br>
+      <a href="docs/readme-assets/app-screens/creating-usb-media.png">
+        <img src="docs/readme-assets/app-screens/creating-usb-media.png" alt="Creation progress" width="190">
+      </a><br>
+      <sub>Track stage-by-stage progress.</sub>
+    </td>
+    <td align="center" valign="top">
+      <strong>5. Operation Result</strong><br>
+      <a href="docs/readme-assets/app-screens/operation-result.png">
+        <img src="docs/readme-assets/app-screens/operation-result.png" alt="Operation result" width="190">
+      </a><br>
+      <sub>Finish with next-step guidance.</sub>
+    </td>
+    <td></td>
+  </tr>
+</table>
 
 ---
 
@@ -111,6 +162,10 @@ The application interface automatically adapts to the system language:
 * 🇧🇷 Portuguese (PT-BR)
 * 🇨🇳 Simplified Chinese (ZH-Hans)
 * 🇷🇺 Russian (RU)
+* 🇮🇹 Italian (IT)
+* 🇺🇦 Ukrainian (UK)
+* 🇻🇳 Vietnamese (VI)
+* 🇹🇷 Turkish (TR)
 
 ---
 
