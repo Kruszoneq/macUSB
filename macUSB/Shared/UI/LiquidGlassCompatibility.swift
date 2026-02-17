@@ -147,16 +147,6 @@ private struct MacUSBPanelSurfaceModifier: ViewModifier {
     }
 }
 
-private struct MacUSBFloatingBarSurfaceModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        let radius = MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode())
-
-        content
-            .macUSBPanelSurface(.subtle, cornerRadius: radius)
-            .shadow(color: Color.black.opacity(currentVisualMode() == .liquidGlass ? 0.10 : 0.06), radius: 8, y: 1)
-    }
-}
-
 private struct MacUSBDockedBarSurfaceModifier: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
 
@@ -221,16 +211,8 @@ extension View {
         modifier(MacUSBPanelSurfaceModifier(tone: tone, cornerRadius: cornerRadius))
     }
 
-    func macUSBFloatingBarSurface() -> some View {
-        modifier(MacUSBFloatingBarSurfaceModifier())
-    }
-
     func macUSBDockedBarSurface() -> some View {
         modifier(MacUSBDockedBarSurfaceModifier())
-    }
-
-    func macUSBLowEmphasisPanelSurface(cornerRadius: CGFloat? = nil) -> some View {
-        modifier(MacUSBPanelSurfaceModifier(tone: .subtle, cornerRadius: cornerRadius))
     }
 
     func macUSBPrimaryButtonStyle(isEnabled: Bool = true) -> some View {

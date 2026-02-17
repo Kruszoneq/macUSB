@@ -67,11 +67,6 @@ struct SystemAnalysisView: View {
         }
     }
     
-    // MARK: - Subviews split to help the type-checker
-    private var headerSection: some View {
-        EmptyView()
-    }
-
     private var fileRequirementsBox: some View {
         StatusCard(tone: .neutral, density: .compact) {
             HStack(alignment: .top) {
@@ -286,7 +281,6 @@ struct SystemAnalysisView: View {
             ScrollViewReader { _ in
                 ScrollView {
                     VStack(alignment: .leading, spacing: MacUSBDesignTokens.contentSectionSpacing) {
-                        headerSection
                         fileSelectionSection
 
                         if logic.selectedFilePath.isEmpty {

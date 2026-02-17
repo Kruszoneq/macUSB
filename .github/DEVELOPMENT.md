@@ -137,7 +137,6 @@ Panels, surfaces, and tinting:
 - Shared compatibility wrappers live in `macUSB/Shared/UI/LiquidGlassCompatibility.swift`.
 - Use `StatusCard` for status/info cards (`macUSB/Shared/UI/StatusCard.swift`), not repeated custom stacks.
 - Use `macUSBPanelSurface` / `macUSBDockedBarSurface` instead of ad-hoc background stacks.
-- Use `macUSBLowEmphasisPanelSurface` for low-emphasis helper panels when a softer structural layer is needed.
 - Semantic surface tones are:
 - `.neutral`, `.subtle` for structural grouping
 - `.info`, `.success`, `.warning`, `.error`, `.active` for state meaning
@@ -255,7 +254,7 @@ Formatting conventions:
 - bottom action zones in flow screens must use `BottomActionBar` with `safeAreaInset(edge: .bottom)`.
 - `BottomActionBar` uses `macUSBDockedBarSurface` and fixed min height from tokens; do not recreate custom docked bar containers.
 - Liquid Glass wrapper contract:
-- all flow surfaces and CTAs must route through wrappers in `LiquidGlassCompatibility.swift` (`macUSBPanelSurface`, `macUSBLowEmphasisPanelSurface`, `macUSBDockedBarSurface`, `macUSBPrimaryButtonStyle`, `macUSBSecondaryButtonStyle`).
+- all flow surfaces and CTAs must route through wrappers in `LiquidGlassCompatibility.swift` (`macUSBPanelSurface`, `macUSBDockedBarSurface`, `macUSBPrimaryButtonStyle`, `macUSBSecondaryButtonStyle`).
 - Direct usage of 26-only glass APIs in feature views is not allowed.
 
 ### 4.2 Liquid Glass Compatibility Contract
@@ -824,7 +823,6 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` — Primary installation path via privileged helper (SMAppService + XPC), helper progress mapping, and helper cancellation flow.
 - `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, fallback cleanup safety net (race-safe when TEMP was already removed), supports success/failure/cancelled result mode (`Przerwano`), shows detected system icon in success summary row left slot (fallback to `externaldrive.fill`), total process duration summary (`Ukończono w MMm SSs` for success), duration logging, background-result system notification (disabled for cancelled mode), and optional cleanup overrides used by debug simulation.
 - `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
-- `macUSB/Shared/Models/Item.swift` — SwiftData model stub (currently unused).
 - `macUSB/Shared/UI/DesignTokens.swift` — Shared visual token definitions (window size, spacing, icon column, corner-radius hierarchy).
 - `macUSB/Shared/UI/LiquidGlassCompatibility.swift` — Cross-version UI compatibility layer (`VisualSystemMode`, glass/fallback panel surfaces, primary/secondary button style wrappers).
 - `macUSB/Shared/UI/BottomActionBar.swift` — Shared bottom action/status container used with `safeAreaInset(edge: .bottom)`.

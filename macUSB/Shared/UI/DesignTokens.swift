@@ -10,7 +10,6 @@ enum MacUSBDesignTokens {
     static let sectionGroupSpacing: CGFloat = 20
 
     static let panelInnerPadding: CGFloat = 14
-    static let compactPanelInnerPadding: CGFloat = 10
     static let statusCardCompactPadding: CGFloat = 10
 
     static let bottomBarHorizontalPadding: CGFloat = 16
