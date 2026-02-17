@@ -14,6 +14,9 @@ extension UniversalInstallationView {
 
         let completionHandler = { (response: NSApplication.ModalResponse) in
             if response == .alertSecondButtonReturn {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    self.navigateToCreationProgress = true
+                }
                 self.startCreationProcessEntry()
             }
         }
@@ -49,19 +52,33 @@ extension UniversalInstallationView {
         }
     }
 
-    func showCancelAlert() {
+    func resetFlowToStartImmediately() {
+        NotificationCenter.default.post(name: .macUSBResetToStart, object: nil)
+        isTabLocked = false
+        rootIsActive = false
+    }
+
+    func returnToAnalysisViewPreservingSelection() {
+        stopUSBMonitoring()
+        isTabLocked = false
+        rootIsActive = false
+    }
+
+    func showCreationProgressCancelAlert() {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
-        alert.messageText = String(localized: "Czy na pewno chcesz przerwać?")
-        alert.addButton(withTitle: String(localized: "Nie"))
-        alert.addButton(withTitle: String(localized: "Tak"))
+        alert.alertStyle = .warning
+        alert.messageText = String(localized: "Czy przerwać tworzenie nośnika?")
+        alert.informativeText = String(localized: "Nośnik USB nie będzie zdatny do rozruchu, jeśli proces zostanie zatrzymany przed zakończeniem. Konieczne będzie ponowne przygotowanie urządzenia.")
+        alert.addButton(withTitle: String(localized: "Kontynuuj"))
+        alert.addButton(withTitle: String(localized: "Przerwij"))
 
         let completionHandler = { (response: NSApplication.ModalResponse) in
             if response == .alertSecondButtonReturn {
                 withAnimation(.easeInOut(duration: 0.35)) {
                     self.isCancelling = true
                 }
-                self.performImmediateCancellation()
+                self.performCancellationAndNavigateToFinish()
             }
         }
 
@@ -73,19 +90,30 @@ extension UniversalInstallationView {
         }
     }
 
-    func performImmediateCancellation() {
+    func performCancellationAndNavigateToFinish() {
         stopUSBMonitoring()
+
+        if activeHelperWorkflowID == nil {
+            cancellationRequestedBeforeWorkflowStart = true
+            return
+        }
+
         cancelHelperWorkflowIfNeeded {
-            DispatchQueue.global(qos: .userInitiated).async {
-                self.unmountDMG()
-                DispatchQueue.main.async {
-                    withAnimation(.easeInOut(duration: 0.5)) {
-                        self.isCancelled = true
-                        self.navigateToFinish = false
-                        self.isCancelling = false
-                    }
-                }
+            DispatchQueue.main.async {
+                self.completeCancellationFlow()
             }
+        }
+    }
+
+    func completeCancellationFlow() {
+        withAnimation(.easeInOut(duration: 0.4)) {
+            didCancelCreation = true
+            cancellationRequestedBeforeWorkflowStart = false
+            helperOperationFailed = false
+            isProcessing = false
+            isHelperWorking = false
+            isCancelling = false
+            navigateToFinish = true
         }
     }
 
@@ -107,7 +135,8 @@ extension UniversalInstallationView {
               !isHelperWorking,
               !isCancelled,
               !isUSBDisconnectedLock,
-              !navigateToFinish
+              !navigateToFinish,
+              !navigateToCreationProgress
         else {
             return
         }
@@ -123,7 +152,7 @@ extension UniversalInstallationView {
     }
 
     func checkDriveAvailability() {
-        if isProcessing || isHelperWorking || isCancelled || isUSBDisconnectedLock || navigateToFinish {
+        if isProcessing || isHelperWorking || isCancelled || isUSBDisconnectedLock || navigateToFinish || navigateToCreationProgress {
             stopUSBMonitoring()
             return
         }

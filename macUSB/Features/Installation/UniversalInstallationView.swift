@@ -34,10 +34,27 @@ struct UniversalInstallationView: View {
     @State var helperStatusKey: String = ""
     @State var helperCurrentStageKey: String = ""
     @State var helperWriteSpeedText: String = "- MB/s"
+    @State var helperCopyProgressPercent: Double = 0
+    @State var helperCopiedBytes: Int64 = 0
+    @State var helperTransferStageTotals: [String: Int64] = [:]
+    @State var helperTransferBaselineBytes: Int64 = -1
+    @State var helperTransferStageForBaseline: String = ""
+    @State var helperTransferMonitorFailureCount: Int = 0
+    @State var helperTransferMonitorFailureStageKey: String = ""
+    @State var helperTransferFallbackBytes: Int64 = 0
+    @State var helperTransferFallbackStageKey: String = ""
+    @State var helperTransferFallbackLastSampleAt: Date?
+    @State var helperTransferMonitoringRequestedBSDName: String = ""
+    @State var helperTransferMonitoringWholeDiskBSDName: String = ""
+    @State var helperTransferMonitoringTargetVolumePath: String = ""
+    @State var helperTransferMonitoringLastKnownPath: String = ""
     @State var helperWriteSpeedTimer: Timer?
     @State var helperWriteSpeedSampleInFlight: Bool = false
     @State var activeHelperWorkflowID: String? = nil
+    @State var navigateToCreationProgress: Bool = false
     @State var navigateToFinish: Bool = false
+    @State var didCancelCreation: Bool = false
+    @State var cancellationRequestedBeforeWorkflowStart: Bool = false
     @State var isCancelled: Bool = false
     @State var isUSBDisconnectedLock: Bool = false
     @State var usbCheckTimer: Timer?
@@ -206,10 +223,10 @@ struct UniversalInstallationView: View {
                             }
                             .buttonStyle(.borderedProminent).controlSize(.large).tint(Color.accentColor)
                             
-                            Button(action: showCancelAlert) {
+                            Button(action: returnToAnalysisViewPreservingSelection) {
                                 HStack {
-                                    Text("Przerwij i zakończ")
-                                    Image(systemName: "xmark.circle")
+                                    Text("Wróć")
+                                    Image(systemName: "arrow.left.circle")
                                 }
                                 .frame(maxWidth: .infinity).padding(8)
                             }
@@ -322,65 +339,6 @@ struct UniversalInstallationView: View {
                         .tint(Color.gray.opacity(0.2))
                     }
                     
-                    if isProcessing {
-                        VStack(spacing: 20) {
-                            HStack(spacing: 15) {
-                                Image(systemName: processingIcon).font(.largeTitle).foregroundColor(.accentColor)
-                                
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text(processingTitle.isEmpty ? String(localized: "Rozpoczynanie...") : processingTitle)
-                                        .font(.headline)
-                                    Text(processingSubtitle.isEmpty ? String(localized: "Przygotowywanie operacji...") : processingSubtitle)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                                Spacer()
-                            }
-                            
-                            Divider()
-
-                            HStack {
-                                ProgressView().controlSize(.small)
-                                Text("Proces w toku...").font(.caption).foregroundColor(.secondary)
-                                Spacer()
-                            }
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.accentColor.opacity(0.1))
-                        .cornerRadius(10)
-                        .transition(.opacity.combined(with: .move(edge: .bottom)))
-                    }
-                    
-                    if isHelperWorking {
-                        VStack(spacing: 20) {
-                            HStack(spacing: 15) {
-                                Image(systemName: "lock.shield.fill").font(.largeTitle).foregroundColor(.accentColor)
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text(LocalizedStringKey(helperStageTitleKey.isEmpty ? "Rozpoczynanie..." : helperStageTitleKey))
-                                        .font(.headline)
-                                    Text(LocalizedStringKey(helperStatusKey.isEmpty ? "Nawiązywanie połączenia XPC..." : helperStatusKey))
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                                Spacer()
-                                VStack(alignment: .trailing, spacing: 4) {
-                                    Text("Prędkość zapisu")
-                                        .font(.caption2)
-                                        .foregroundColor(.secondary)
-                                    Text(helperWriteSpeedText)
-                                        .font(.headline.monospacedDigit())
-                                }
-                            }
-                            Divider()
-                            ProgressView()
-                                .progressViewStyle(.linear)
-                        }
-                        .padding().frame(maxWidth: .infinity)
-                        .background(Color.accentColor.opacity(0.1)).cornerRadius(10)
-                        .transition(.opacity)
-                    }
-                    
                 }
                 .padding()
                 .background(Color(NSColor.windowBackgroundColor))
@@ -409,21 +367,35 @@ struct UniversalInstallationView: View {
         )
         .background(
             NavigationLink(
-                destination: FinishUSBView(
+                destination: CreationProgressView(
                     systemName: systemName,
                     mountPoint: sourceAppURL.deletingLastPathComponent(),
+                    detectedSystemIcon: detectedSystemIcon,
+                    isCatalina: isCatalina,
+                    isRestoreLegacy: isRestoreLegacy,
+                    isMavericks: isMavericks,
+                    isPPC: isPPC,
+                    needsPreformat: (targetDrive?.needsFormatting ?? false) && !isPPC,
                     onReset: {
-                        // Post reset signal and pop to the beginning
                         NotificationCenter.default.post(name: .macUSBResetToStart, object: nil)
-                        // Unlock and navigate back to root
                         self.isTabLocked = false
                         self.rootIsActive = false
                     },
-                    isPPC: isPPC,
-                    didFail: helperOperationFailed,
-                    creationStartedAt: usbProcessStartedAt
+                    onCancelRequested: showCreationProgressCancelAlert,
+                    canCancelWorkflow: !didCancelCreation && !navigateToFinish,
+                    helperStageTitleKey: $helperStageTitleKey,
+                    helperStatusKey: $helperStatusKey,
+                    helperCurrentStageKey: $helperCurrentStageKey,
+                    helperWriteSpeedText: $helperWriteSpeedText,
+                    helperCopyProgressPercent: $helperCopyProgressPercent,
+                    isHelperWorking: $isHelperWorking,
+                    isCancelling: $isCancelling,
+                    navigateToFinish: $navigateToFinish,
+                    helperOperationFailed: $helperOperationFailed,
+                    didCancelCreation: $didCancelCreation,
+                    creationStartedAt: $usbProcessStartedAt
                 ),
-                isActive: $navigateToFinish
+                isActive: $navigateToCreationProgress
             ) { EmptyView() }
             .hidden()
         )
@@ -433,13 +405,15 @@ struct UniversalInstallationView: View {
             AppLogging.info("Przejście do kreatora", category: "Navigation")
             AppLogging.separator()
             AppLogging.separator()
-            if !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock {
+            if !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !navigateToCreationProgress {
                 startUSBMonitoring()
             }
         }
         .onDisappear {
             stopUSBMonitoring()
-            stopHelperWriteSpeedMonitoring()
+            if !navigateToCreationProgress && !isHelperWorking {
+                stopHelperWriteSpeedMonitoring()
+            }
         }
     }
 }
