@@ -39,6 +39,21 @@ struct CreationProgressView: View {
     @Binding var didCancelCreation: Bool
     @Binding var creationStartedAt: Date?
     private var sectionIconFont: Font { .title3 }
+    private var stageSectionDivider: some View {
+        HStack(spacing: 10) {
+            Capsule()
+                .fill(Color.secondary.opacity(0.20))
+                .frame(height: 1)
+            Text("Etapy tworzenia")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Capsule()
+                .fill(Color.secondary.opacity(0.20))
+                .frame(height: 1)
+        }
+        .padding(.horizontal, 2)
+        .padding(.vertical, 2)
+    }
 
     private var stageDescriptors: [CreationStageDescriptor] {
         var stageKeys: [String] = ["prepare_source"]
@@ -99,6 +114,8 @@ struct CreationProgressView: View {
                             Spacer()
                         }
                     }
+
+                    stageSectionDivider
 
                     VStack(spacing: 10) {
                         ForEach(Array(stageDescriptors.enumerated()), id: \.element.id) { index, stage in
@@ -180,7 +197,7 @@ struct CreationProgressView: View {
                         Spacer()
                         if shouldShowCopyProgress(for: stage.key) {
                             Text(copyProgressText())
-                                .font(.subheadline.monospacedDigit())
+                                .font(.title3.monospacedDigit())
                                 .fontWeight(.semibold)
                                 .foregroundColor(.accentColor)
                         }

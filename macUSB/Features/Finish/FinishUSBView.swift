@@ -94,37 +94,41 @@ struct FinishUSBView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
                     StatusCard(tone: primaryResultTone) {
-                        HStack(alignment: .center) {
-                            Image(systemName: primaryResultIconName)
-                                .font(sectionIconFont)
-                                .foregroundColor(primaryResultColor)
-                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(primaryResultTitle).font(.headline).foregroundColor(primaryResultColor)
-                                Text(primaryResultSubtitle).font(.caption).foregroundColor(primaryResultColor.opacity(0.9))
-                            }
-                            Spacer()
-                        }
-                    }
-
-                    StatusCard(tone: .subtle, density: .compact) {
-                        HStack(alignment: .center) {
-                            if isSuccessResult, let detectedSystemIcon {
-                                Image(nsImage: detectedSystemIcon)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 32, height: 32)
-                            } else {
-                                Image(systemName: "externaldrive.fill")
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack(alignment: .center) {
+                                Image(systemName: primaryResultIconName)
                                     .font(sectionIconFont)
                                     .foregroundColor(primaryResultColor)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(primaryResultTitle).font(.headline).foregroundColor(primaryResultColor)
+                                    Text(primaryResultSubtitle).font(.caption).foregroundColor(primaryResultColor.opacity(0.9))
+                                }
+                                Spacer()
                             }
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(summaryTitleText).font(.headline).foregroundColor(primaryResultColor)
-                                Text(verbatim: systemName)
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
+
+                            Divider()
+                                .overlay(Color.secondary.opacity(0.18))
+
+                            HStack(alignment: .center) {
+                                if isSuccessResult, let detectedSystemIcon {
+                                    Image(nsImage: detectedSystemIcon)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 32, height: 32)
+                                } else {
+                                    Image(systemName: "externaldrive.fill")
+                                        .font(sectionIconFont)
+                                        .foregroundColor(primaryResultColor)
+                                        .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                }
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text(summaryTitleText).font(.headline).foregroundColor(primaryResultColor)
+                                    Text(verbatim: systemName)
+                                        .font(.headline)
+                                        .foregroundColor(.primary)
+                                }
+                                Spacer()
                             }
                         }
                     }

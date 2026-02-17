@@ -19,6 +19,21 @@ struct SystemAnalysisView: View {
     let driveRefreshTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     private var visualMode: VisualSystemMode { currentVisualMode() }
     private var sectionIconFont: Font { .title3 }
+    private func sectionDivider(_ title: LocalizedStringKey) -> some View {
+        HStack(spacing: 10) {
+            Capsule()
+                .fill(Color.secondary.opacity(0.20))
+                .frame(height: 1)
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Capsule()
+                .fill(Color.secondary.opacity(0.20))
+                .frame(height: 1)
+        }
+        .padding(.horizontal, 2)
+        .padding(.vertical, 2)
+    }
     
     private func updateMenuState() {
         // Enable only when analysis has finished with a file that is NOT supported by the app.
@@ -89,7 +104,7 @@ struct SystemAnalysisView: View {
 
     private var fileSelectionSection: some View {
         VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
-            Text("Wybierz plik").font(.headline)
+            sectionDivider("Wybór pliku")
             fileRequirementsBox
             fileSelectionControls
         }
@@ -351,7 +366,7 @@ struct SystemAnalysisView: View {
     
     var usbSelectionSection: some View {
         VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
-            Text("Wybór nośnika USB").font(.headline)
+            sectionDivider("Wybór nośnika USB")
             StatusCard(tone: .neutral, density: .compact) {
                 HStack(alignment: .top) {
                     Image(systemName: "externaldrive.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)

@@ -74,6 +74,21 @@ struct UniversalInstallationView: View {
         !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !isCancelling
     }
     private var sectionIconFont: Font { .title3 }
+    private var processSectionDivider: some View {
+        HStack(spacing: 10) {
+            Capsule()
+                .fill(Color.secondary.opacity(0.20))
+                .frame(height: 1)
+            Text("Przebieg tworzenia")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Capsule()
+                .fill(Color.secondary.opacity(0.20))
+                .frame(height: 1)
+        }
+        .padding(.horizontal, 2)
+        .padding(.vertical, 2)
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -133,6 +148,8 @@ struct UniversalInstallationView: View {
                         }
                         .transition(.opacity)
                     }
+
+                    processSectionDivider
 
                     StatusCard(tone: .neutral, density: .compact) {
                         HStack(alignment: .top) {

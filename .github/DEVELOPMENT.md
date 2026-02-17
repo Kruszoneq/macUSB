@@ -186,6 +186,9 @@ Alerts and dialogs:
 - buttons: `Przejdź do ustawień systemowych` (primary), `OK`, `Wyświetl szczegóły`.
 
 Inputs and file selection:
+- In `SystemAnalysisView`, top-level content groups use section dividers (hairline + caption):
+- `Wybór pliku` above source selection requirements/controls,
+- `Wybór nośnika USB` above target media requirements/selection.
 - The file path field is a disabled `TextField` with `.roundedBorder`.
 - Drag-and-drop target highlights with an accent-colored stroke (line width 3) and accent background at `0.1` opacity, with corner radius 12.
 
@@ -203,6 +206,8 @@ Menu icon mapping (current):
 
 Progress indicators:
 - Inline progress uses `ProgressView().controlSize(.small)` next to status text.
+- In `UniversalInstallationView`, configuration summary (system + selected USB) and process-description block are separated by a subtle in-content section divider (`Przebieg tworzenia`).
+- In `CreationProgressView`, the selected-system summary and stage list are separated by a subtle in-content section divider (`Etapy tworzenia`) using hairline capsules + secondary caption.
 - During helper execution, `CreationProgressView` shows a stage list where:
 - pending stages are subtle/low-emphasis cards (title + stage icon),
 - the currently active stage is semantic active card (title + status + linear progress bar; for tracked copy stages it is determinate),
@@ -222,7 +227,10 @@ Welcome screen specifics:
 - Start button is prominent and uses shared primary style wrapper with `arrow.right` icon.
 
 Finish screen specifics:
-- Success/failure/cancelled state uses one primary semantic result panel (`Sukces!`, `Niepowodzenie!`, or `Przerwano`) plus a lighter summary panel.
+- Success/failure/cancelled state uses one combined primary semantic result panel with two rows:
+- row 1: result state (`Sukces!`, `Niepowodzenie!`, or `Przerwano`) and contextual subtitle,
+- row 2: installer summary (`Utworzono instalator systemu` / failure/cancel equivalent + system name),
+- rows are separated by an internal subtle divider.
 - In success mode, the installer summary row uses detected system icon in the main left icon slot (instead of USB disk icon); fallback remains `externaldrive.fill` when icon is unavailable.
 - Cleanup section is rendered inside the shared bottom action layer while cleaning.
 - Reset and exit actions remain large and full-width; reset is secondary, exit is primary.
@@ -233,6 +241,7 @@ Finish screen specifics:
 Formatting conventions:
 - Bullet lists in UI are rendered as literal `Text("• ...")` lines, not as SwiftUI `List` or `Text` with markdown.
 - Sections are separated by spacing and surfaces; avoid decorative separators unless semantically necessary.
+- When a semantic section boundary is needed inside one screen, use low-emphasis in-content section separators (hairline + caption), not heavy boxed containers.
 
 ### 4.1 Component Contract (Shared UI Primitives)
 - `StatusCard` contract:

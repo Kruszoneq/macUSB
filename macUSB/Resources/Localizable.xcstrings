@@ -2738,6 +2738,9 @@
         }
       }
     },
+    "Etapy tworzenia" : {
+
+    },
     "Français" : {
       "localizations" : {
         "de" : {
@@ -8608,6 +8611,9 @@
         }
       }
     },
+    "Przebieg tworzenia" : {
+
+    },
     "Przejdź dalej" : {
       "localizations" : {
         "de" : {
@@ -11772,6 +11778,7 @@
       }
     },
     "Wybierz plik" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11926,6 +11933,9 @@
           }
         }
       }
+    },
+    "Wybór pliku" : {
+
     },
     "Wybrana wersja systemu" : {
       "localizations" : {
