@@ -357,6 +357,19 @@ private final class HelperWorkflowExecutor {
 
     private func buildStages(using context: PreparedWorkflowContext) throws -> [WorkflowStage] {
         let wholeDisk = try extractWholeDiskName(from: request.targetBSDName)
+        let formatTargetWholeDisk = resolvePartitionTargetWholeDisk(
+            fromRequestedBSDName: request.targetBSDName,
+            targetVolumePath: request.targetVolumePath,
+            fallbackWholeDisk: wholeDisk
+        )
+        emitProgress(
+            stageKey: "prepare_source",
+            titleKey: HelperWorkflowLocalizationKeys.prepareSourceTitle,
+            percent: latestPercent,
+            statusKey: HelperWorkflowLocalizationKeys.prepareSourceStatus,
+            logLine: "Format target resolution: requested=\(request.targetBSDName), fallbackWhole=\(wholeDisk), resolvedWhole=\(formatTargetWholeDisk), targetVolumePath=\(request.targetVolumePath)",
+            shouldAdvancePercent: false
+        )
         let rawTargetPath = request.targetVolumePath
         var effectiveTargetPath = rawTargetPath
 
@@ -371,7 +384,7 @@ private final class HelperWorkflowExecutor {
                     startPercent: 10,
                     endPercent: 30,
                     executable: "/usr/sbin/diskutil",
-                    arguments: ["partitionDisk", "/dev/\(wholeDisk)", "GPT", "HFS+", request.targetLabel, "100%"],
+                    arguments: ["partitionDisk", "/dev/\(formatTargetWholeDisk)", "GPT", "HFS+", request.targetLabel, "100%"],
                     parseToolPercent: false
                 )
             )
@@ -440,7 +453,7 @@ private final class HelperWorkflowExecutor {
                     startPercent: 10,
                     endPercent: 25,
                     executable: "/usr/sbin/diskutil",
-                    arguments: ["partitionDisk", "/dev/\(wholeDisk)", "APM", "HFS+", "PPC", "100%"],
+                    arguments: ["partitionDisk", "/dev/\(formatTargetWholeDisk)", "APM", "HFS+", "PPC", "100%"],
                     parseToolPercent: false
                 )
             )
@@ -567,17 +580,15 @@ private final class HelperWorkflowExecutor {
                 break
             }
             buffer.append(chunk)
-
-            while let newlineRange = buffer.firstRange(of: Data([0x0A])) {
-                let lineData = buffer.subdata(in: 0..<newlineRange.lowerBound)
-                buffer.removeSubrange(0..<newlineRange.upperBound)
-                if let line = String(data: lineData, encoding: .utf8) {
-                    handleOutputLine(line, stage: stage)
-                }
+            drainBufferedOutputLines(from: &buffer) { line in
+                handleOutputLine(line, stage: stage)
             }
         }
 
-        if !buffer.isEmpty, let line = String(data: buffer, encoding: .utf8) {
+        if !buffer.isEmpty,
+           let line = String(data: buffer, encoding: .utf8)?
+            .trimmingCharacters(in: .whitespacesAndNewlines),
+           !line.isEmpty {
             handleOutputLine(line, stage: stage)
         }
 
@@ -845,23 +856,16 @@ private final class HelperWorkflowExecutor {
                 break
             }
             buffer.append(chunk)
-
-            while let newlineRange = buffer.firstRange(of: Data([0x0A])) {
-                let lineData = buffer.subdata(in: 0..<newlineRange.lowerBound)
-                buffer.removeSubrange(0..<newlineRange.upperBound)
-                if let line = String(data: lineData, encoding: .utf8) {
-                    let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
-                    guard !trimmed.isEmpty else { continue }
-                    lastStageOutputLine = trimmed
-                    emitProgress(
-                        stageKey: stageKey,
-                        titleKey: stageTitleKey,
-                        percent: latestPercent,
-                        statusKey: statusKey,
-                        logLine: trimmed,
-                        shouldAdvancePercent: false
-                    )
-                }
+            drainBufferedOutputLines(from: &buffer) { line in
+                lastStageOutputLine = line
+                emitProgress(
+                    stageKey: stageKey,
+                    titleKey: stageTitleKey,
+                    percent: latestPercent,
+                    statusKey: statusKey,
+                    logLine: line,
+                    shouldAdvancePercent: false
+                )
             }
         }
 
@@ -911,20 +915,216 @@ private final class HelperWorkflowExecutor {
         lowered.contains("could not validate sizes - operacja nie jest dozwolona")
     }
 
+    private func drainBufferedOutputLines(from buffer: inout Data, handleLine: (String) -> Void) {
+        while let separatorIndex = buffer.firstIndex(where: { $0 == 0x0A || $0 == 0x0D }) {
+            let lineData = buffer.subdata(in: buffer.startIndex..<separatorIndex)
+            var removeUpperBound = separatorIndex + 1
+
+            if buffer[separatorIndex] == 0x0D,
+               removeUpperBound < buffer.endIndex,
+               buffer[removeUpperBound] == 0x0A {
+                removeUpperBound += 1
+            }
+
+            buffer.removeSubrange(buffer.startIndex..<removeUpperBound)
+
+            guard let line = String(data: lineData, encoding: .utf8)?
+                .trimmingCharacters(in: .whitespacesAndNewlines),
+                  !line.isEmpty else {
+                continue
+            }
+
+            handleLine(line)
+        }
+    }
+
     private func extractPercent(from line: String) -> Double? {
-        let pattern = #"([0-9]{1,3}(?:\.[0-9]+)?)%"#
+        if let standardPercent = extractLastNumberToken(
+            from: line,
+            pattern: #"([0-9]{1,3}(?:\.[0-9]+)?)%"#
+        ) {
+            return standardPercent
+        }
+
+        // asr restore can emit progress in dotted form: "....10....20...."
+        return extractLastNumberToken(
+            from: line,
+            pattern: #"\.{2,}\s*([0-9]{1,3})(?=\s*\.{2,})"#
+        )
+    }
+
+    private func extractLastNumberToken(from line: String, pattern: String) -> Double? {
         guard let regex = try? NSRegularExpression(pattern: pattern) else {
             return nil
         }
 
         let range = NSRange(location: 0, length: line.utf16.count)
-        guard let match = regex.firstMatch(in: line, options: [], range: range),
-              match.numberOfRanges > 1,
-              let valueRange = Range(match.range(at: 1), in: line) else {
+        let matches = regex.matches(in: line, options: [], range: range)
+        guard let lastMatch = matches.last,
+              lastMatch.numberOfRanges > 1,
+              let valueRange = Range(lastMatch.range(at: 1), in: line) else {
             return nil
         }
 
-        return Double(line[valueRange])
+        let rawValue = String(line[valueRange]).replacingOccurrences(of: ",", with: ".")
+        return Double(rawValue)
+    }
+
+    private func resolvePartitionTargetWholeDisk(
+        fromRequestedBSDName requestedBSDName: String,
+        targetVolumePath: String,
+        fallbackWholeDisk: String
+    ) -> String {
+        let requestedWhole = (try? extractWholeDiskName(from: requestedBSDName)) ?? fallbackWholeDisk
+        var containerReferences: [String] = []
+        let candidateArguments: [[String]] = [
+            ["info", "-plist", targetVolumePath],
+            ["info", "-plist", "/dev/\(requestedBSDName)"],
+            ["info", "-plist", "/dev/\(requestedWhole)"],
+            ["list", "-plist", "/dev/\(requestedWhole)"]
+        ]
+
+        for arguments in candidateArguments {
+            guard let plist = runDiskutilPlistCommand(arguments: arguments) else { continue }
+            containerReferences.append(contentsOf: extractAPFSContainerReferences(from: plist))
+            if let physicalWhole = extractAPFSPhysicalStoreWholeDisk(from: plist) {
+                return physicalWhole
+            }
+            if let parentWhole = extractParentWholeDisk(from: plist),
+               parentWhole != requestedWhole {
+                return parentWhole
+            }
+        }
+
+        let uniqueContainerReferences = Array(Set(containerReferences))
+        for containerRef in uniqueContainerReferences {
+            let normalizedContainerRef = (try? extractWholeDiskName(from: containerRef)) ?? requestedWhole
+            let apfsCandidates: [[String]] = [
+                ["apfs", "list", "-plist", "/dev/\(normalizedContainerRef)"],
+                ["info", "-plist", "/dev/\(normalizedContainerRef)"]
+            ]
+
+            for arguments in apfsCandidates {
+                guard let plist = runDiskutilPlistCommand(arguments: arguments) else { continue }
+                if let physicalWhole = extractAPFSPhysicalStoreWholeDisk(from: plist) {
+                    return physicalWhole
+                }
+                if let parentWhole = extractParentWholeDisk(from: plist),
+                   parentWhole != requestedWhole {
+                    return parentWhole
+                }
+            }
+        }
+
+        return fallbackWholeDisk
+    }
+
+    private func runDiskutilPlistCommand(arguments: [String]) -> [String: Any]? {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/sbin/diskutil")
+        process.arguments = arguments
+
+        let outputPipe = Pipe()
+        process.standardOutput = outputPipe
+        process.standardError = Pipe()
+
+        do {
+            try process.run()
+        } catch {
+            return nil
+        }
+
+        process.waitUntilExit()
+        guard process.terminationStatus == 0 else {
+            return nil
+        }
+
+        let data = outputPipe.fileHandleForReading.readDataToEndOfFile()
+        return try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any]
+    }
+
+    private func extractParentWholeDisk(from plist: [String: Any]) -> String? {
+        if let parent = plist["ParentWholeDisk"] as? String,
+           let normalized = try? extractWholeDiskName(from: parent) {
+            return normalized
+        }
+
+        for value in plist.values {
+            if let childPlist = value as? [String: Any],
+               let found = extractParentWholeDisk(from: childPlist) {
+                return found
+            }
+
+            if let childArray = value as? [[String: Any]] {
+                for child in childArray {
+                    if let found = extractParentWholeDisk(from: child) {
+                        return found
+                    }
+                }
+            }
+        }
+
+        return nil
+    }
+
+    private func extractAPFSPhysicalStoreWholeDisk(from plist: [String: Any]) -> String? {
+        if let stores = plist["APFSPhysicalStores"] as? [[String: Any]] {
+            for store in stores {
+                if let identifier = store["DeviceIdentifier"] as? String,
+                   let whole = try? extractWholeDiskName(from: identifier) {
+                    return whole
+                }
+            }
+        }
+
+        if let stores = plist["APFSPhysicalStores"] as? [String] {
+            for identifier in stores {
+                if let whole = try? extractWholeDiskName(from: identifier) {
+                    return whole
+                }
+            }
+        }
+
+        for value in plist.values {
+            if let childPlist = value as? [String: Any],
+               let found = extractAPFSPhysicalStoreWholeDisk(from: childPlist) {
+                return found
+            }
+
+            if let childArray = value as? [[String: Any]] {
+                for child in childArray {
+                    if let found = extractAPFSPhysicalStoreWholeDisk(from: child) {
+                        return found
+                    }
+                }
+            }
+        }
+
+        return nil
+    }
+
+    private func extractAPFSContainerReferences(from plist: [String: Any]) -> [String] {
+        var result: [String] = []
+
+        if let containerRef = plist["APFSContainerReference"] as? String {
+            result.append(containerRef)
+        }
+
+        if let containerRefs = plist["APFSContainerReference"] as? [String] {
+            result.append(contentsOf: containerRefs)
+        }
+
+        for value in plist.values {
+            if let childPlist = value as? [String: Any] {
+                result.append(contentsOf: extractAPFSContainerReferences(from: childPlist))
+            } else if let childArray = value as? [[String: Any]] {
+                for child in childArray {
+                    result.append(contentsOf: extractAPFSContainerReferences(from: child))
+                }
+            }
+        }
+
+        return result
     }
 
     private func extractWholeDiskName(from bsdName: String) throws -> String {

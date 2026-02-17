@@ -31,6 +31,7 @@ struct CreationProgressView: View {
     @Binding var helperStatusKey: String
     @Binding var helperCurrentStageKey: String
     @Binding var helperWriteSpeedText: String
+    @Binding var helperCopyProgressPercent: Double
     @Binding var isHelperWorking: Bool
     @Binding var isCancelling: Bool
     @Binding var navigateToFinish: Bool
@@ -190,12 +191,22 @@ struct CreationProgressView: View {
                     Text(LocalizedStringKey(stage.titleKey))
                         .font(.headline)
                     Spacer()
+                    if shouldShowCopyProgress(for: stage.key) {
+                        Text(copyProgressText())
+                            .font(.headline.monospacedDigit())
+                            .foregroundColor(.accentColor)
+                    }
                 }
                 Text(LocalizedStringKey(helperStatusKey.isEmpty ? "Rozpoczynanie..." : helperStatusKey))
                     .font(.caption)
                     .foregroundColor(.secondary)
-                ProgressView()
-                    .progressViewStyle(.linear)
+                if shouldShowCopyProgress(for: stage.key) {
+                    ProgressView(value: boundedCopyProgressPercent() / 100.0)
+                        .progressViewStyle(.linear)
+                } else {
+                    ProgressView()
+                        .progressViewStyle(.linear)
+                }
                 if shouldShowWriteSpeed(for: stage.key) {
                     Text(verbatim: writeSpeedLabelText())
                         .font(.caption.monospacedDigit())
@@ -297,6 +308,23 @@ struct CreationProgressView: View {
         default:
             return false
         }
+    }
+
+    private func shouldShowCopyProgress(for stageKey: String) -> Bool {
+        switch stageKey {
+        case "restore", "ppc_restore", "createinstallmedia", "catalina_copy":
+            return true
+        default:
+            return false
+        }
+    }
+
+    private func boundedCopyProgressPercent() -> Double {
+        min(max(helperCopyProgressPercent, 0), 99)
+    }
+
+    private func copyProgressText() -> String {
+        "\(Int(boundedCopyProgressPercent().rounded()))%"
     }
 
     private func writeSpeedLabelText() -> String {

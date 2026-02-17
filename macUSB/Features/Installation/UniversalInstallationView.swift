@@ -34,6 +34,16 @@ struct UniversalInstallationView: View {
     @State var helperStatusKey: String = ""
     @State var helperCurrentStageKey: String = ""
     @State var helperWriteSpeedText: String = "- MB/s"
+    @State var helperCopyProgressPercent: Double = 0
+    @State var helperCopiedBytes: Int64 = 0
+    @State var helperTransferStageTotals: [String: Int64] = [:]
+    @State var helperTransferBaselineBytes: Int64 = 0
+    @State var helperTransferStageForBaseline: String = ""
+    @State var helperTransferMonitorFailureCount: Int = 0
+    @State var helperTransferMonitorFailureStageKey: String = ""
+    @State var helperTransferFallbackBytes: Int64 = 0
+    @State var helperTransferFallbackStageKey: String = ""
+    @State var helperTransferFallbackLastSampleAt: Date?
     @State var helperWriteSpeedTimer: Timer?
     @State var helperWriteSpeedSampleInFlight: Bool = false
     @State var activeHelperWorkflowID: String? = nil
@@ -373,6 +383,7 @@ struct UniversalInstallationView: View {
                     helperStatusKey: $helperStatusKey,
                     helperCurrentStageKey: $helperCurrentStageKey,
                     helperWriteSpeedText: $helperWriteSpeedText,
+                    helperCopyProgressPercent: $helperCopyProgressPercent,
                     isHelperWorking: $isHelperWorking,
                     isCancelling: $isCancelling,
                     navigateToFinish: $navigateToFinish,

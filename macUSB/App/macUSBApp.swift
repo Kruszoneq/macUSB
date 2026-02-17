@@ -339,6 +339,9 @@ struct macUSBApp: App {
                 Button(String(localized: "Otwórz macUSB_temp")) {
                     openMacUSBTempFolderInFinder()
                 }
+                Divider()
+                Text(String(localized: "Informacje"))
+                Text(verbatim: menuState.debugCopiedDataLabel)
             }
             #endif
         }

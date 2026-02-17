@@ -158,6 +158,167 @@ struct USBDriveLogic {
         } ?? "unknown"
     }
 
+    /// Resolves a mounted target volume to a physical whole-disk BSD name used for destructive formatting.
+    /// For APFS selections this maps container/volume identifiers to the underlying physical store disk.
+    static func resolveFormattingWholeDiskBSDName(forVolumeURL url: URL, fallbackBSDName: String) -> String? {
+        let requestedWhole = wholeDiskName(from: fallbackBSDName)
+        var containerReferences: [String] = []
+        let candidateArguments: [[String]] = [
+            ["info", "-plist", url.path],
+            ["info", "-plist", "/dev/\(fallbackBSDName)"],
+            ["info", "-plist", "/dev/\(requestedWhole)"],
+            ["list", "-plist", "/dev/\(requestedWhole)"]
+        ]
+
+        for arguments in candidateArguments {
+            guard let plist = runDiskutilPlistCommand(arguments: arguments) else { continue }
+            containerReferences.append(contentsOf: extractAPFSContainerReferences(from: plist))
+            if let physicalWhole = extractAPFSPhysicalStoreWholeDisk(from: plist) {
+                return physicalWhole
+            }
+            if let parentWhole = extractParentWholeDisk(from: plist),
+               parentWhole != requestedWhole {
+                return parentWhole
+            }
+        }
+
+        for containerRef in Set(containerReferences) {
+            let normalizedContainer = normalizeBSDIdentifier(containerRef) ?? requestedWhole
+            let apfsCandidates: [[String]] = [
+                ["apfs", "list", "-plist", "/dev/\(normalizedContainer)"],
+                ["info", "-plist", "/dev/\(normalizedContainer)"]
+            ]
+            for arguments in apfsCandidates {
+                guard let plist = runDiskutilPlistCommand(arguments: arguments) else { continue }
+                if let physicalWhole = extractAPFSPhysicalStoreWholeDisk(from: plist) {
+                    return physicalWhole
+                }
+                if let parentWhole = extractParentWholeDisk(from: plist),
+                   parentWhole != requestedWhole {
+                    return parentWhole
+                }
+            }
+        }
+
+        return requestedWhole
+    }
+
+    private static func runDiskutilPlistCommand(arguments: [String]) -> [String: Any]? {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/sbin/diskutil")
+        process.arguments = arguments
+
+        let outputPipe = Pipe()
+        process.standardOutput = outputPipe
+        process.standardError = Pipe()
+
+        do {
+            try process.run()
+        } catch {
+            return nil
+        }
+
+        process.waitUntilExit()
+        guard process.terminationStatus == 0 else { return nil }
+
+        let data = outputPipe.fileHandleForReading.readDataToEndOfFile()
+        return try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any]
+    }
+
+    private static func extractAPFSPhysicalStoreWholeDisk(from plist: [String: Any]) -> String? {
+        if let stores = plist["APFSPhysicalStores"] as? [[String: Any]] {
+            for store in stores {
+                if let identifier = store["DeviceIdentifier"] as? String,
+                   let normalized = normalizeBSDIdentifier(identifier) {
+                    return wholeDiskName(from: normalized)
+                }
+            }
+        }
+
+        if let stores = plist["APFSPhysicalStores"] as? [String] {
+            for identifier in stores {
+                if let normalized = normalizeBSDIdentifier(identifier) {
+                    return wholeDiskName(from: normalized)
+                }
+            }
+        }
+
+        for value in plist.values {
+            if let dict = value as? [String: Any],
+               let found = extractAPFSPhysicalStoreWholeDisk(from: dict) {
+                return found
+            }
+            if let array = value as? [[String: Any]] {
+                for dict in array {
+                    if let found = extractAPFSPhysicalStoreWholeDisk(from: dict) {
+                        return found
+                    }
+                }
+            }
+        }
+
+        return nil
+    }
+
+    private static func extractParentWholeDisk(from plist: [String: Any]) -> String? {
+        if let parent = plist["ParentWholeDisk"] as? String,
+           let normalized = normalizeBSDIdentifier(parent) {
+            return wholeDiskName(from: normalized)
+        }
+
+        for value in plist.values {
+            if let dict = value as? [String: Any],
+               let found = extractParentWholeDisk(from: dict) {
+                return found
+            }
+            if let array = value as? [[String: Any]] {
+                for dict in array {
+                    if let found = extractParentWholeDisk(from: dict) {
+                        return found
+                    }
+                }
+            }
+        }
+
+        return nil
+    }
+
+    private static func extractAPFSContainerReferences(from plist: [String: Any]) -> [String] {
+        var result: [String] = []
+
+        if let containerRef = plist["APFSContainerReference"] as? String,
+           let normalized = normalizeBSDIdentifier(containerRef) {
+            result.append(normalized)
+        }
+
+        if let containerRefs = plist["APFSContainerReference"] as? [String] {
+            for ref in containerRefs {
+                if let normalized = normalizeBSDIdentifier(ref) {
+                    result.append(normalized)
+                }
+            }
+        }
+
+        for value in plist.values {
+            if let dict = value as? [String: Any] {
+                result.append(contentsOf: extractAPFSContainerReferences(from: dict))
+            } else if let array = value as? [[String: Any]] {
+                for dict in array {
+                    result.append(contentsOf: extractAPFSContainerReferences(from: dict))
+                }
+            }
+        }
+
+        return result
+    }
+
+    private static func normalizeBSDIdentifier(_ value: String) -> String? {
+        if let range = value.range(of: #"disk\d+(?:s\d+)?"#, options: .regularExpression) {
+            return String(value[range])
+        }
+        return nil
+    }
+
     /// Enumerates external, non-internal, non-network removable mounted volumes and returns them as USBDrive models.
     static func enumerateAvailableDrives() -> [USBDrive] {
         let keys: [URLResourceKey] = [

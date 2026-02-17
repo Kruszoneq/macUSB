@@ -10,6 +10,7 @@ struct SystemAnalysisView: View {
     @State private var shouldResetToStart: Bool = false
     
     @State private var selectedDriveDisplayNameSnapshot: String? = nil
+    @State private var selectedDriveForInstallationSnapshot: USBDrive? = nil
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
     @State private var analysisWindowHandler: AnalysisWindowHandler?
@@ -207,7 +208,7 @@ struct SystemAnalysisView: View {
                 NavigationLink(
                     destination: UniversalInstallationView(
                         sourceAppURL: appURL,
-                        targetDrive: logic.selectedDriveForInstallation,
+                        targetDrive: selectedDriveForInstallationSnapshot,
                         targetDriveDisplayName: selectedDriveDisplayNameSnapshot,
                         systemName: logic.recognizedVersion,
                         detectedSystemIcon: logic.detectedSystemIcon,
@@ -281,6 +282,7 @@ struct SystemAnalysisView: View {
                 HStack {
                     Button(action: {
                         selectedDriveDisplayNameSnapshot = logic.selectedDrive?.displayName
+                        selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
                         isTabLocked = true
                         navigateToInstall = true
                     }) {
@@ -305,6 +307,7 @@ struct SystemAnalysisView: View {
             isTabLocked = false
             navigateToInstall = false
             selectedDriveDisplayNameSnapshot = nil
+            selectedDriveForInstallationSnapshot = nil
             MenuState.shared.skipAnalysisEnabled = false
         }
         .onChange(of: logic.showUnsupportedMessage) { _ in updateMenuState() }

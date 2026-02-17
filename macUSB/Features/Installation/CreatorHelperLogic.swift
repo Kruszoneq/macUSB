@@ -36,6 +36,17 @@ extension UniversalInstallationView {
         helperStatusKey = "Przygotowywanie operacji..."
         helperCurrentStageKey = ""
         helperWriteSpeedText = "- MB/s"
+        helperCopyProgressPercent = 0
+        helperCopiedBytes = 0
+        helperTransferStageTotals = [:]
+        helperTransferBaselineBytes = 0
+        helperTransferStageForBaseline = ""
+        helperTransferMonitorFailureCount = 0
+        helperTransferMonitorFailureStageKey = ""
+        helperTransferFallbackBytes = 0
+        helperTransferFallbackStageKey = ""
+        helperTransferFallbackLastSampleAt = nil
+        MenuState.shared.updateDebugCopiedData(bytes: 0)
         stopHelperWriteSpeedMonitoring()
 
         do {
@@ -80,6 +91,7 @@ extension UniversalInstallationView {
             DispatchQueue.global(qos: .userInitiated).async {
                 do {
                     let request = try prepareHelperWorkflowRequest(for: drive)
+                    let transferTotals = calculateTransferStageTotals(for: request)
                     DispatchQueue.main.async {
                         withAnimation {
                             isProcessing = false
@@ -87,6 +99,7 @@ extension UniversalInstallationView {
                             helperProgressPercent = 0
                             helperStageTitleKey = "Uruchamianie procesu"
                             helperStatusKey = "Rozpoczynanie..."
+                            helperTransferStageTotals = transferTotals
                         }
 
                         let failWorkflowStart: (String) -> Void = { message in
@@ -126,10 +139,16 @@ extension UniversalInstallationView {
                                         helperStatusKey = event.statusKey
                                     }
 
+                                    handleTransferStageTransition(
+                                        from: previousStageKey,
+                                        to: normalizedStageKey,
+                                        drive: drive
+                                    )
+
                                     if isFormattingHelperStage(normalizedStageKey) {
                                         helperWriteSpeedText = "- MB/s"
                                     } else if isFormattingHelperStage(previousStageKey) {
-                                        sampleHelperWriteSpeed(for: extractWholeDiskName(from: drive.device))
+                                        sampleHelperStageMetrics(for: drive)
                                     }
                                 },
                                 onCompletion: { result in
@@ -186,6 +205,16 @@ extension UniversalInstallationView {
                                     helperStageTitleKey = "Rozpoczynanie..."
                                     helperStatusKey = "Rozpoczynanie..."
                                     helperCurrentStageKey = ""
+                                    helperCopyProgressPercent = 0
+                                    helperCopiedBytes = 0
+                                    helperTransferBaselineBytes = 0
+                                    helperTransferStageForBaseline = ""
+                                    helperTransferMonitorFailureCount = 0
+                                    helperTransferMonitorFailureStageKey = ""
+                                    helperTransferFallbackBytes = 0
+                                    helperTransferFallbackStageKey = ""
+                                    helperTransferFallbackLastSampleAt = nil
+                                    MenuState.shared.updateDebugCopiedData(bytes: 0)
                                     startHelperWriteSpeedMonitoring(for: drive)
                                     log("Uruchomiono helper workflow: \(workflowID)")
                                 }
@@ -221,6 +250,7 @@ extension UniversalInstallationView {
         let requesterUID = Int(getuid())
 
         let shouldPreformat = drive.needsFormatting && !isPPC
+        let helperTargetBSDName = resolveHelperTargetBSDName(for: drive)
 
         if isRestoreLegacy {
             let sourceESD = sourceAppURL.appendingPathComponent("Contents/SharedSupport/InstallESD.dmg")
@@ -239,7 +269,7 @@ extension UniversalInstallationView {
                 originalImagePath: nil,
                 tempWorkPath: tempWorkURL.path,
                 targetVolumePath: drive.url.path,
-                targetBSDName: drive.device,
+                targetBSDName: helperTargetBSDName,
                 targetLabel: drive.url.lastPathComponent,
                 needsPreformat: shouldPreformat,
                 isCatalina: false,
@@ -267,7 +297,7 @@ extension UniversalInstallationView {
                 originalImagePath: sourceImage.path,
                 tempWorkPath: tempWorkURL.path,
                 targetVolumePath: drive.url.path,
-                targetBSDName: drive.device,
+                targetBSDName: helperTargetBSDName,
                 targetLabel: drive.url.lastPathComponent,
                 needsPreformat: shouldPreformat,
                 isCatalina: false,
@@ -286,7 +316,7 @@ extension UniversalInstallationView {
                 originalImagePath: originalImageURL?.path,
                 tempWorkPath: tempWorkURL.path,
                 targetVolumePath: drive.url.path,
-                targetBSDName: drive.device,
+                targetBSDName: helperTargetBSDName,
                 targetLabel: drive.url.lastPathComponent,
                 needsPreformat: false,
                 isCatalina: false,
@@ -304,7 +334,7 @@ extension UniversalInstallationView {
             originalImagePath: originalImageURL?.path,
             tempWorkPath: tempWorkURL.path,
             targetVolumePath: drive.url.path,
-            targetBSDName: drive.device,
+            targetBSDName: helperTargetBSDName,
             targetLabel: drive.url.lastPathComponent,
             needsPreformat: shouldPreformat,
             isCatalina: isCatalina,
@@ -313,6 +343,16 @@ extension UniversalInstallationView {
             requiresApplicationPathArg: isLegacySystem || isSierra,
             requesterUID: requesterUID
         )
+    }
+
+    private func resolveHelperTargetBSDName(for drive: USBDrive) -> String {
+        if let resolved = USBDriveLogic.resolveFormattingWholeDiskBSDName(
+            forVolumeURL: drive.url,
+            fallbackBSDName: drive.device
+        ) {
+            return resolved
+        }
+        return extractWholeDiskName(from: drive.device)
     }
 
     private func isLikelyHelperIPCContractMismatch(_ message: String) -> Bool {
@@ -372,11 +412,19 @@ extension UniversalInstallationView {
         stopHelperWriteSpeedMonitoring(resetText: false)
         helperCurrentStageKey = ""
         helperWriteSpeedText = "- MB/s"
-
-        let wholeDisk = extractWholeDiskName(from: drive.device)
+        helperCopyProgressPercent = 0
+        helperCopiedBytes = 0
+        helperTransferBaselineBytes = 0
+        helperTransferStageForBaseline = ""
+        helperTransferMonitorFailureCount = 0
+        helperTransferMonitorFailureStageKey = ""
+        helperTransferFallbackBytes = 0
+        helperTransferFallbackStageKey = ""
+        helperTransferFallbackLastSampleAt = nil
+        MenuState.shared.updateDebugCopiedData(bytes: 0)
 
         helperWriteSpeedTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
-            sampleHelperWriteSpeed(for: wholeDisk)
+            sampleHelperStageMetrics(for: drive)
         }
     }
 
@@ -385,9 +433,26 @@ extension UniversalInstallationView {
         helperWriteSpeedTimer = nil
         helperWriteSpeedSampleInFlight = false
         helperCurrentStageKey = ""
+        helperCopyProgressPercent = 0
+        helperCopiedBytes = 0
+        helperTransferBaselineBytes = 0
+        helperTransferStageForBaseline = ""
+        helperTransferMonitorFailureCount = 0
+        helperTransferMonitorFailureStageKey = ""
+        helperTransferFallbackBytes = 0
+        helperTransferFallbackStageKey = ""
+        helperTransferFallbackLastSampleAt = nil
+        MenuState.shared.updateDebugCopiedData(bytes: 0)
         if resetText {
             helperWriteSpeedText = "- MB/s"
         }
+    }
+
+    private func sampleHelperStageMetrics(for drive: USBDrive) {
+        guard isHelperWorking else { return }
+        guard !helperCurrentStageKey.isEmpty else { return }
+        sampleHelperWriteSpeed(for: extractWholeDiskName(from: drive.device))
+        sampleHelperTransferProgress(for: drive)
     }
 
     private func sampleHelperWriteSpeed(for wholeDisk: String) {
@@ -414,8 +479,457 @@ extension UniversalInstallationView {
         }
     }
 
+    private func sampleHelperTransferProgress(for drive: USBDrive) {
+        guard isHelperWorking else { return }
+        let stageKey = helperCurrentStageKey
+        guard isTransferTrackedStage(stageKey) else {
+            helperCopyProgressPercent = 0
+            helperCopiedBytes = 0
+            helperTransferMonitorFailureCount = 0
+            helperTransferMonitorFailureStageKey = ""
+            helperTransferFallbackBytes = 0
+            helperTransferFallbackStageKey = ""
+            helperTransferFallbackLastSampleAt = nil
+            MenuState.shared.updateDebugCopiedData(bytes: 0)
+            return
+        }
+
+        let wholeDisk = extractWholeDiskName(from: drive.device)
+        let measurementPath = resolveActiveMountPoint(for: wholeDisk, stageKey: stageKey)
+            ?? drive.url.path
+
+        guard let totalBytes = helperTransferStageTotals[stageKey], totalBytes > 0 else {
+            helperCopyProgressPercent = 0
+            helperCopiedBytes = 0
+            recordTransferMonitorFailure(
+                stageKey: stageKey,
+                wholeDisk: wholeDisk,
+                measurementPath: measurementPath,
+                drive: drive,
+                reason: "brak rozmiaru danych źródłowych dla etapu transferu",
+                totalBytes: nil
+            )
+            MenuState.shared.updateDebugCopiedData(bytes: 0)
+            return
+        }
+
+        if helperTransferStageForBaseline != stageKey {
+            helperTransferBaselineBytes = usedBytesOnVolume(for: measurementPath) ?? 0
+            helperTransferStageForBaseline = stageKey
+        }
+
+        guard let usedBytes = usedBytesOnVolume(for: measurementPath) else {
+            recordTransferMonitorFailure(
+                stageKey: stageKey,
+                wholeDisk: wholeDisk,
+                measurementPath: measurementPath,
+                drive: drive,
+                reason: "nie udało się odczytać zajętości danych na aktywnym woluminie docelowym",
+                totalBytes: totalBytes
+            )
+            advanceTransferUsingFallbackEstimate(
+                stageKey: stageKey,
+                totalBytes: totalBytes,
+                measuredSpeedMBps: currentMeasuredWriteSpeedMBps()
+            )
+            return
+        }
+
+        recordTransferMonitorRecoveryIfNeeded(
+            stageKey: stageKey,
+            wholeDisk: wholeDisk,
+            measurementPath: measurementPath
+        )
+
+        let delta = max(0, usedBytes - helperTransferBaselineBytes)
+        helperCopiedBytes = max(helperCopiedBytes, delta)
+        let calculatedPercent = (Double(helperCopiedBytes) / Double(totalBytes)) * 100.0
+        helperCopyProgressPercent = max(helperCopyProgressPercent, min(max(calculatedPercent, 0), 99))
+        helperTransferFallbackBytes = helperCopiedBytes
+        helperTransferFallbackStageKey = stageKey
+        helperTransferFallbackLastSampleAt = Date()
+        MenuState.shared.updateDebugCopiedData(bytes: helperCopiedBytes)
+    }
+
+    private func handleTransferStageTransition(from previousStage: String, to currentStage: String, drive: USBDrive) {
+        guard previousStage != currentStage else { return }
+
+        if isTransferTrackedStage(currentStage) {
+            helperCopyProgressPercent = 0
+            helperCopiedBytes = 0
+            helperTransferMonitorFailureCount = 0
+            helperTransferMonitorFailureStageKey = ""
+            helperTransferFallbackBytes = 0
+            helperTransferFallbackStageKey = currentStage
+            helperTransferFallbackLastSampleAt = Date()
+            let wholeDisk = extractWholeDiskName(from: drive.device)
+            let measurementPath = resolveActiveMountPoint(for: wholeDisk, stageKey: currentStage)
+                ?? drive.url.path
+            helperTransferBaselineBytes = usedBytesOnVolume(for: measurementPath) ?? 0
+            helperTransferStageForBaseline = currentStage
+            MenuState.shared.updateDebugCopiedData(bytes: 0)
+            sampleHelperTransferProgress(for: drive)
+            return
+        }
+
+        if isTransferTrackedStage(previousStage) {
+            helperCopyProgressPercent = 0
+            helperCopiedBytes = 0
+            helperTransferBaselineBytes = 0
+            helperTransferStageForBaseline = ""
+            helperTransferMonitorFailureCount = 0
+            helperTransferMonitorFailureStageKey = ""
+            helperTransferFallbackBytes = 0
+            helperTransferFallbackStageKey = ""
+            helperTransferFallbackLastSampleAt = nil
+            MenuState.shared.updateDebugCopiedData(bytes: 0)
+        }
+    }
+
     private func isFormattingHelperStage(_ stageKey: String) -> Bool {
         stageKey == "preformat" || stageKey == "ppc_format"
+    }
+
+    private func isTransferTrackedStage(_ stageKey: String) -> Bool {
+        switch stageKey {
+        case "restore", "ppc_restore", "createinstallmedia", "catalina_copy":
+            return true
+        default:
+            return false
+        }
+    }
+
+    private func calculateTransferStageTotals(for request: HelperWorkflowRequestPayload) -> [String: Int64] {
+        var totals: [String: Int64] = [:]
+
+        switch request.workflowKind {
+        case .legacyRestore:
+            let restorePath = URL(fileURLWithPath: request.sourceAppPath)
+                .appendingPathComponent("Contents/SharedSupport/InstallESD.dmg")
+                .path
+            if let bytes = sizeInBytes(at: restorePath) {
+                totals["restore"] = bytes
+            }
+
+        case .mavericks:
+            let restorePath = request.originalImagePath ?? request.sourceAppPath
+            if let bytes = sizeInBytes(at: restorePath) {
+                totals["restore"] = bytes
+            }
+
+        case .ppc:
+            let ppcSourceCandidates = [request.originalImagePath, request.sourceAppPath]
+                .compactMap { $0 }
+
+            for candidatePath in ppcSourceCandidates {
+                guard !candidatePath.hasPrefix("/Volumes/") else { continue }
+                if let bytes = sizeInBytes(at: candidatePath) {
+                    totals["ppc_restore"] = bytes
+                    break
+                }
+            }
+
+        case .standard:
+            if let appBytes = sizeInBytes(at: request.sourceAppPath) {
+                totals["createinstallmedia"] = appBytes
+                if request.isCatalina {
+                    totals["catalina_copy"] = appBytes
+                }
+            }
+        }
+
+        return totals
+    }
+
+    private func sizeInBytes(at path: String) -> Int64? {
+        guard FileManager.default.fileExists(atPath: path) else { return nil }
+
+        var isDirectory = ObjCBool(false)
+        guard FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) else {
+            return nil
+        }
+
+        if isDirectory.boolValue {
+            return directorySizeInBytes(at: path)
+        }
+
+        guard let attributes = try? FileManager.default.attributesOfItem(atPath: path),
+              let size = attributes[.size] as? NSNumber else {
+            return nil
+        }
+
+        return size.int64Value
+    }
+
+    private func directorySizeInBytes(at path: String) -> Int64? {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/du")
+        process.arguments = ["-sk", path]
+
+        let outputPipe = Pipe()
+        process.standardOutput = outputPipe
+        process.standardError = Pipe()
+
+        do {
+            try process.run()
+        } catch {
+            return nil
+        }
+
+        process.waitUntilExit()
+        guard process.terminationStatus == 0 else {
+            return nil
+        }
+
+        let data = outputPipe.fileHandleForReading.readDataToEndOfFile()
+        guard let output = String(data: data, encoding: .utf8),
+              let firstLine = output.split(separator: "\n").first,
+              let firstToken = firstLine.split(separator: "\t").first,
+              let kilobytes = Int64(String(firstToken)) else {
+            return nil
+        }
+
+        return kilobytes * 1024
+    }
+
+    private func resolveActiveMountPoint(for wholeDisk: String, stageKey: String) -> String? {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/sbin/diskutil")
+        process.arguments = ["list", "-plist", "/dev/\(wholeDisk)"]
+
+        let outputPipe = Pipe()
+        process.standardOutput = outputPipe
+        process.standardError = Pipe()
+
+        do {
+            try process.run()
+        } catch {
+            return nil
+        }
+
+        process.waitUntilExit()
+        guard process.terminationStatus == 0 else {
+            return nil
+        }
+
+        let data = outputPipe.fileHandleForReading.readDataToEndOfFile()
+        guard let plist = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any],
+              let diskEntries = plist["AllDisksAndPartitions"] as? [[String: Any]] else {
+            return nil
+        }
+
+        let mountedPaths = collectMountedVolumePaths(from: diskEntries)
+            .filter { $0.hasPrefix("/Volumes/") }
+
+        guard !mountedPaths.isEmpty else {
+            return nil
+        }
+
+        if stageKey == "ppc_restore",
+           let ppcPath = mountedPaths.first(where: { $0 == "/Volumes/PPC" }) {
+            return ppcPath
+        }
+
+        if stageKey == "catalina_copy",
+           let catalinaPath = mountedPaths.first(where: { $0 == "/Volumes/Install macOS Catalina" }) {
+            return catalinaPath
+        }
+
+        return mountedPaths.first
+    }
+
+    private func collectMountedVolumePaths(from entries: [[String: Any]]) -> [String] {
+        var result: [String] = []
+
+        for entry in entries {
+            if let mountPoint = entry["MountPoint"] as? String {
+                result.append(mountPoint)
+            }
+
+            if let partitions = entry["Partitions"] as? [[String: Any]] {
+                result.append(contentsOf: collectMountedVolumePaths(from: partitions))
+            }
+        }
+
+        return result
+    }
+
+    private func currentMeasuredWriteSpeedMBps() -> Double? {
+        let normalized = helperWriteSpeedText
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: ",", with: ".")
+        let rawValue = normalized.split(separator: " ").first.map(String.init) ?? ""
+
+        guard let measured = Double(rawValue), measured.isFinite, measured > 0 else {
+            return nil
+        }
+        return measured
+    }
+
+    private func transferStagePercentBounds(for stageKey: String) -> (start: Double, end: Double)? {
+        let needsPreformat = (targetDrive?.needsFormatting ?? false) && !isPPC
+
+        switch stageKey {
+        case "restore":
+            if isRestoreLegacy || isMavericks {
+                return (needsPreformat ? 50 : 35, 98)
+            }
+            return nil
+        case "ppc_restore":
+            return (25, 98)
+        case "createinstallmedia":
+            return (needsPreformat ? 30 : 15, isCatalina ? 90 : 98)
+        case "catalina_copy":
+            return (94, 98)
+        default:
+            return nil
+        }
+    }
+
+    private func estimatedCopiedBytesFromStageProgress(stageKey: String, totalBytes: Int64) -> Int64? {
+        guard totalBytes > 0 else { return nil }
+        guard let bounds = transferStagePercentBounds(for: stageKey) else { return nil }
+
+        let stageSpan = bounds.end - bounds.start
+        guard stageSpan > 0 else { return nil }
+
+        let clampedGlobalPercent = min(max(helperProgressPercent, bounds.start), bounds.end)
+        let stageRatio = (clampedGlobalPercent - bounds.start) / stageSpan
+        guard stageRatio > 0 else { return nil }
+
+        let estimated = Int64((Double(totalBytes) * stageRatio).rounded(.towardZero))
+        return min(totalBytes, max(0, estimated))
+    }
+
+    private func advanceTransferUsingFallbackEstimate(
+        stageKey: String,
+        totalBytes: Int64,
+        measuredSpeedMBps: Double?
+    ) {
+        guard totalBytes > 0 else { return }
+        let now = Date()
+
+        if helperTransferFallbackStageKey != stageKey {
+            helperTransferFallbackStageKey = stageKey
+            helperTransferFallbackBytes = helperCopiedBytes
+            helperTransferFallbackLastSampleAt = now
+        }
+
+        let previousSampleAt = helperTransferFallbackLastSampleAt ?? now.addingTimeInterval(-2)
+        helperTransferFallbackLastSampleAt = now
+
+        if let measuredSpeedMBps {
+            let elapsedSeconds = max(0, now.timeIntervalSince(previousSampleAt))
+            let bytesIncrement = Int64(measuredSpeedMBps * elapsedSeconds * 1_048_576)
+            if bytesIncrement > 0 {
+                helperTransferFallbackBytes = min(totalBytes, helperTransferFallbackBytes + bytesIncrement)
+            }
+        }
+
+        if let stageBasedEstimate = estimatedCopiedBytesFromStageProgress(stageKey: stageKey, totalBytes: totalBytes) {
+            helperTransferFallbackBytes = max(helperTransferFallbackBytes, stageBasedEstimate)
+        }
+
+        helperCopiedBytes = max(helperCopiedBytes, helperTransferFallbackBytes)
+        let calculatedPercent = (Double(helperCopiedBytes) / Double(totalBytes)) * 100.0
+        helperCopyProgressPercent = max(helperCopyProgressPercent, min(max(calculatedPercent, 0), 99))
+        MenuState.shared.updateDebugCopiedData(bytes: helperCopiedBytes)
+    }
+
+    private func recordTransferMonitorFailure(
+        stageKey: String,
+        wholeDisk: String,
+        measurementPath: String,
+        drive: USBDrive,
+        reason: String,
+        totalBytes: Int64?
+    ) {
+        if helperTransferMonitorFailureStageKey != stageKey {
+            helperTransferMonitorFailureStageKey = stageKey
+            helperTransferMonitorFailureCount = 0
+        }
+
+        helperTransferMonitorFailureCount += 1
+        let failureCount = helperTransferMonitorFailureCount
+        guard failureCount == 3 || failureCount % 10 == 0 else {
+            return
+        }
+
+        let speedSnapshot = currentMeasuredWriteSpeedMBps()
+            .map { String(format: "%.2f", $0) }
+            ?? "n/a"
+        let stagePercentSnapshot = String(format: "%.2f", helperProgressPercent)
+        let stageFallbackEstimate = totalBytes.flatMap {
+            estimatedCopiedBytesFromStageProgress(stageKey: stageKey, totalBytes: $0)
+        }
+        let stageFallbackSnapshot = stageFallbackEstimate.map(String.init) ?? "n/a"
+
+        AppLogging.info(
+            "Transfer monitor fallback (\(reason)); stage=\(stageKey), wholeDisk=\(wholeDisk), device=\(drive.device), targetPath=\(drive.url.path), measurementPath=\(measurementPath), failures=\(failureCount), speedSnapshotMBps=\(speedSnapshot), stagePercentSnapshot=\(stagePercentSnapshot), stageFallbackEstimateBytes=\(stageFallbackSnapshot)",
+            category: "HelperLiveLog"
+        )
+    }
+
+    private func recordTransferMonitorRecoveryIfNeeded(
+        stageKey: String,
+        wholeDisk: String,
+        measurementPath: String
+    ) {
+        guard helperTransferMonitorFailureStageKey == stageKey else {
+            helperTransferMonitorFailureCount = 0
+            helperTransferMonitorFailureStageKey = ""
+            return
+        }
+
+        let previousFailures = helperTransferMonitorFailureCount
+        guard previousFailures >= 3 else {
+            helperTransferMonitorFailureCount = 0
+            helperTransferMonitorFailureStageKey = ""
+            return
+        }
+
+        AppLogging.info(
+            "Transfer monitor recovery; stage=\(stageKey), wholeDisk=\(wholeDisk), measurementPath=\(measurementPath), previousFailures=\(previousFailures)",
+            category: "HelperLiveLog"
+        )
+
+        helperTransferMonitorFailureCount = 0
+        helperTransferMonitorFailureStageKey = ""
+    }
+
+    private func usedBytesOnVolume(for path: String) -> Int64? {
+        guard let volumePath = volumeRootPath(for: path) else { return nil }
+
+        let volumeURL = URL(fileURLWithPath: volumePath, isDirectory: true)
+        let keys: Set<URLResourceKey> = [
+            .volumeTotalCapacityKey,
+            .volumeAvailableCapacityForImportantUsageKey,
+            .volumeAvailableCapacityKey
+        ]
+
+        guard let values = try? volumeURL.resourceValues(forKeys: keys),
+              let totalCapacity = values.volumeTotalCapacity else {
+            return nil
+        }
+
+        let availableCapacity = values.volumeAvailableCapacityForImportantUsage
+            ?? values.volumeAvailableCapacity.map(Int64.init)
+
+        guard let availableCapacity else {
+            return nil
+        }
+
+        let totalCapacity64 = Int64(totalCapacity)
+        return max(0, totalCapacity64 - availableCapacity)
+    }
+
+    private func volumeRootPath(for path: String) -> String? {
+        guard path.hasPrefix("/Volumes/") else { return nil }
+        let components = path.split(separator: "/", omittingEmptySubsequences: true)
+        guard components.count >= 2, components[0] == "Volumes" else {
+            return nil
+        }
+        return "/Volumes/\(components[1])"
     }
 
     private func canonicalStageKeyForPresentation(_ stageKey: String) -> String {

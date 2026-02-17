@@ -60,6 +60,7 @@ Debug-only shortcut:
 - `DEBUG` → `Przejdź do podsumowania (Big Sur) (2s delay)` triggers a simulated success path for `macOS Big Sur 11` and navigates to `FinishUSBView` after a 2-second delay.
 - `DEBUG` → `Przejdź do podsumowania (Tiger) (2s delay)` triggers a simulated success path for `Mac OS X Tiger 10.4` with `isPPC = true` and navigates to `FinishUSBView` after a 2-second delay.
 - `DEBUG` → `Otwórz macUSB_temp` opens `${TMPDIR}/macUSB_temp` in Finder; if folder does not exist, app shows an alert titled `Wybrany folder nie istnieje`.
+- `DEBUG` menu footer contains informational rows: `Informacje` and live `Przekopiowane dane: xx.xGB`, refreshed every 2 seconds during helper workflow.
 Detailed contract is documented in [Section 17](#17-debug-chapter).
 
 Startup permissions flow:
@@ -194,9 +195,11 @@ Progress indicators:
 - Inline progress uses `ProgressView().controlSize(.small)` next to status text.
 - During helper execution, `CreationProgressView` shows a stage list where:
 - pending stages are gray cards (title + stage icon),
-- the currently active stage is a blue card (title + status + indeterminate linear progress bar),
+- the currently active stage is a blue card (title + status + linear progress bar; for tracked copy stages it is determinate),
 - completed stages are green cards (title + success icon).
 - Catalina stage icon mapping in `CreationProgressView`: `catalina_cleanup` uses `doc.badge.gearshape` (file-structure adjustments), `catalina_copy` uses `doc.on.doc.fill`, `catalina_xattr` uses `checkmark.shield.fill`.
+- Tracked copy stages (`restore`, `ppc_restore`, `createinstallmedia`, `catalina_copy`) show a numeric percent badge on the right side of active stage row.
+- For tracked copy stages, the percent is derived from copied-data bytes against source-size bytes and is clamped to `99%` while the stage is still running; completion to `100%` is implied only by stage transition to completed state.
 - For active USB-write stages (`restore`, `ppc_restore`, `createinstallmedia`, and Catalina `catalina_copy`/`ditto` stage), `CreationProgressView` shows write speed below the progress bar as `Szybkość zapisu: xx MB/s` (rounded integer, no decimals).
 - Live helper log lines are not rendered in UI; they are recorded into diagnostics logs for export.
 
@@ -232,7 +235,7 @@ Practical rules:
 - Use `Text("...")` with Polish strings; SwiftUI treats these as localization keys.
 - Helper sends stable technical localization keys (for example `helper.workflow.prepare_source.title`) in XPC progress events.
 - Installation UI renders helper stage/status with `Text(LocalizedStringKey(...))`, so helper progress text follows app locale from SwiftUI environment.
-- Non-`Text` runtime labels (for example speed text) must use `String(localized:)` with localized format keys (currently `Szybkość zapisu: %d MB/s` and `Szybkość zapisu: - MB/s`).
+- Non-`Text` runtime labels (for example speed/debug metrics text) must use `String(localized:)` with localized format keys (currently `Szybkość zapisu: %d MB/s`, `Szybkość zapisu: - MB/s`, and `Przekopiowane dane: %.1f GB`).
 - Keep helper key anchors in `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift` (`HelperWorkflowLocalizationExtractionAnchors`) synchronized with emitted keys to keep String Catalog extraction stable.
 - Every helper localization key must be translated in all supported app languages (`pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`).
 Use `String(localized: "...")` when:
@@ -333,6 +336,7 @@ Used for most modern macOS installers.
 
 ### PowerPC Flow
 - Formats disk with `diskutil partitionDisk` using APM + HFS+.
+- For APFS-selected targets, helper first resolves APFS container selection to physical whole-disk media (APFS physical store / parent whole disk) before running `partitionDisk`.
 - Uses `asr restore` to write the image to `/Volumes/PPC`.
 - When `isPPC` is active, the drive flag `needsFormatting` is forced to `false` for installation context, because PPC formatting is already part of this flow.
 - Source selection for `asr --source` in PPC:
@@ -364,12 +368,17 @@ Used for most modern macOS installers.
 ### Helper Monitoring Strategy
 The app tracks helper progress through XPC progress events:
 - `stageKey`, `stageTitleKey`, `statusKey`, `percent`, and optional `logLine`.
-- `CreationProgressView` localizes helper stage/status through `Localizable.xcstrings` and renders stage cards plus active-stage progress bar (no numeric percent).
+- `CreationProgressView` localizes helper stage/status through `Localizable.xcstrings` and renders stage cards plus active-stage progress bar.
 - Compatibility rule: app canonicalizes displayed helper title/status from `stageKey` when known, so older helper builds that still send raw phrases do not break localization.
+- App-side transfer monitor computes source sizes (`restore` source image, `ppc_restore` source image file, `createinstallmedia` app bundle, Catalina `ditto` source app bundle), samples copied bytes on target USB volume every 2 seconds, and derives tracked stage percent from copied/total ratio.
+- Tracked stage percent in UI is clamped to `99%` while stage remains active; stage completion is represented by transition into completed card state.
+- App-side transfer monitor has diagnostic fallback logging: after repeated read failures, it emits `HelperLiveLog` entries with `stage`, selected disk id, chosen measurement path, failure counter, speed snapshot, stage-percent snapshot, and stage-based fallback estimate snapshot; on first successful read after degraded period, it emits a recovery log.
+- When volume-usage reads fail, copied-data progress uses a best-effort fallback estimate derived from measured write speed (`MB/s`) and elapsed sample time; if speed sampling is unavailable, fallback additionally derives copied bytes from current helper stage percent window (`startPercent → endPercent`), still clamped to `99%` while stage remains active.
 - Write speed (`MB/s`) is measured during active non-formatting helper stages.
 - In `CreationProgressView`, speed is rendered only for active USB-write stages (`restore`, `ppc_restore`, `createinstallmedia`, `catalina_copy`) in format `Szybkość zapisu: xx MB/s` with rounded integer values.
 - Speed label is localized via `String(localized:)` format key (`Szybkość zapisu: %d MB/s`), and non-measured state uses localized `Szybkość zapisu: - MB/s`.
 - During formatting stages (`preformat`, `ppc_format`) speed label is not displayed in UI (internal value remains `- MB/s`).
+- During helper workflow, `MenuState` exposes debug copied-data label (`Przekopiowane dane: xx.xGB`) updated every 2 seconds.
 - `logLine` values are recorded to diagnostics logs under `HelperLiveLog` and are exportable.
 - Live helper logs are not displayed in installer UI.
 
@@ -580,7 +589,7 @@ Current effective build configuration snapshot:
 - `preflightTargetVolumeWriteAccess` probes write access on `/Volumes/*`; EPERM/EACCES produces explicit TCC-style guidance error.
 - Workflow request payload includes:
 - workflow kind (`standard`, `legacyRestore`, `mavericks`, `ppc`)
-- source app path, optional original image path, temp work path, target paths, and BSD name
+- source app path, optional original image path, temp work path, target paths, and target BSD name resolved to whole-disk media for formatting (including APFS volume/container to physical-store fallback)
 - target label
 - flags (`needsPreformat`, `isCatalina`, `isSierra`, `needsCodesign`, `requiresApplicationPathArg`)
 - `requesterUID = getuid()`
@@ -601,7 +610,8 @@ Current effective build configuration snapshot:
 - each stage emits start, streamed progress, and completion events.
 - output parser:
 - captures stdout+stderr line-by-line,
-- extracts `%` tokens with regex and maps tool percentage into stage percentage range,
+- treats both `\n` and `\r` as streamed line separators (important for interactive tool output such as `asr restore`),
+- extracts standard `%` tokens and dotted `asr` progress markers (`....10....20...`) via regex, taking the latest token and mapping tool percentage into stage percentage range,
 - keeps `statusKey` as localized status key and forwards tool output as optional `logLine`.
 - Command execution context:
 - if `requesterUID > 0`, helper runs command as user via:
@@ -609,6 +619,7 @@ Current effective build configuration snapshot:
 - otherwise executes tool directly.
 - Workflow specifics:
 - non-PPC with `needsPreformat` adds `diskutil partitionDisk ... GPT HFS+ <targetLabel> 100%`.
+- `preformat` / `ppc_format` resolve selected target (especially APFS container selections) to physical whole-disk device before `diskutil partitionDisk`.
 - standard flow runs `createinstallmedia`, with optional Catalina cleanup/copy/xattr stages.
 - Catalina copy (`ditto`) stage emits explicit transition log: createinstallmedia completed and flow is entering `ditto`.
 - restore flows run `asr imagescan` + `asr restore`.
@@ -681,6 +692,8 @@ Current effective build configuration snapshot:
 - registration/status/repair lifecycle diagnostics.
 - `HelperLiveLog` category:
 - streamed helper stdout/stderr (`logLine`) from command execution and decode failures (including Catalina transition to `ditto`).
+- format-target diagnostics (`requested`, `fallbackWhole`, `resolvedWhole`, `targetVolumePath`) emitted before formatting stages.
+- app-side transfer monitor fallback diagnostics/recovery events and speed-based copied-data estimation when mountpoint/volume-usage reads fail.
 - `Installation` category:
 - user-facing operation milestones, helper workflow begin/end/fail events, and total process duration summary from finish screen.
 - Export behavior:
@@ -758,7 +771,7 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
 - `macUSB/Shared/Models/Item.swift` — SwiftData model stub (currently unused).
 - `macUSB/Shared/Services/LanguageManager.swift` — Language selection and locale handling.
-- `macUSB/Shared/Services/MenuState.swift` — Shared menu state (skip analysis, external drives).
+- `macUSB/Shared/Services/MenuState.swift` — Shared menu state (skip analysis, external drives, notifications state, DEBUG copied-data label).
 - `macUSB/Shared/Services/NotificationPermissionManager.swift` — Central notification permission and app-level toggle manager (startup prompt, menu action, system settings redirect).
 - `macUSB/Shared/Services/Helper/HelperIPC.swift` — Shared app-side helper request/result/event payloads and XPC protocol contracts.
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift` — App-side XPC client for start/cancel/health checks and progress/result routing.
@@ -789,10 +802,10 @@ Notes on non-source items:
 ## 13. File Relationships (Who Calls What)
 This section lists the main call relationships and data flow.
 
-- `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`, `NotificationPermissionManager`, `HelperServiceManager`; in `DEBUG` also publishes `macUSBDebugGoToBigSurSummary` and `macUSBDebugGoToTigerSummary`, and opens `${TMPDIR}/macUSB_temp` in Finder.
+- `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`, `NotificationPermissionManager`, `HelperServiceManager`; in `DEBUG` also publishes `macUSBDebugGoToBigSurSummary` and `macUSBDebugGoToTigerSummary`, opens `${TMPDIR}/macUSB_temp` in Finder, and renders live copied-data informational rows.
 - `macUSB/App/ContentView.swift` → presents `WelcomeView`, injects `LanguageManager`, calls `AppLogging.logAppStartupOnce()`, and maps debug notifications to delayed (2s) `FinishUSBView` routes (Big Sur and Tiger/PPC).
 - `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json`, bootstraps helper readiness via `HelperServiceManager`, then triggers startup notification-permission flow.
-- `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, and forwards `selectedDriveForInstallation` plus `detectedSystemIcon` to installation flow.
+- `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, snapshots selected drive (`selectedDriveForInstallationSnapshot`) on navigation, and forwards that stable target plus `detectedSystemIcon` to installation flow.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
 - `macUSB/Features/Installation/UniversalInstallationView.swift` → renders detected system icon in system info panel (with `applelogo` fallback), requires destructive confirmation before start, then starts helper path via `startCreationProcessEntry()` and routes to `CreationProgressView`.
 - `macUSB/Features/Installation/CreationProgressView.swift` → renders helper runtime progress (pending/active/completed stage cards, status text, stage-scoped write-speed label), exposes cancel alert flow, and navigates to `FinishUSBView`.
@@ -931,10 +944,13 @@ Scope:
 
 Menu entry:
 - Top-level menu name: `DEBUG`.
-- Menu actions (localized labels):
+- Menu actions and informational rows (localized labels):
 - `Przejdź do podsumowania (Big Sur) (2s delay)`
 - `Przejdź do podsumowania (Tiger) (2s delay)`
 - `Otwórz macUSB_temp`
+- Divider
+- `Informacje`
+- `Przekopiowane dane: xx.xGB` (read-only informational row)
 
 Action behavior:
 - Summary actions are immediate triggers that publish NotificationCenter events from `macUSBApp.swift`.
@@ -942,6 +958,7 @@ Action behavior:
 - Tiger action publishes `macUSBDebugGoToTigerSummary`.
 - `Otwórz macUSB_temp` opens `${TMPDIR}/macUSB_temp` in Finder when the folder exists.
 - If `${TMPDIR}/macUSB_temp` does not exist, app presents warning `NSAlert` with title `Wybrany folder nie istnieje`.
+- Copied-data informational row is backed by `MenuState.debugCopiedDataLabel` and refreshed every 2 seconds while helper workflow runs.
 
 Navigation behavior (root-level):
 - `ContentView` listens for both debug notifications.
