@@ -3297,6 +3297,7 @@
       }
     },
     "DEBUG" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6879,6 +6880,7 @@
       }
     },
     "Informacje" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7645,6 +7647,7 @@
       }
     },
     "Lokalizacja aplikacji: środowisko Xcode (bypass DEBUG)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11195,6 +11198,7 @@
       }
     },
     "Otwórz macUSB_temp" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -13049,6 +13053,7 @@
       }
     },
     "Przejdź do podsumowania (Big Sur) (2s delay)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -13131,6 +13136,7 @@
       }
     },
     "Przejdź do podsumowania (Tiger) (2s delay)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -18291,6 +18297,7 @@
       }
     },
     "Wybrany folder nie istnieje" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
