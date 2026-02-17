@@ -395,7 +395,7 @@ extension UniversalInstallationView {
                     domain: "macUSB",
                     code: code,
                     userInfo: [
-                        NSLocalizedDescriptionKey: "Brak uprawnien do zapisu na wybranym nosniku USB. Zezwol aplikacji macUSB na dostep do Woluminow wymiennych w Ustawieniach systemowych > Prywatnosc i ochrona, a nastepnie sprobuj ponownie."
+                        NSLocalizedDescriptionKey: String(localized: "Brak uprawnień do zapisu na wybranym nośniku USB. Zresetuj uprawnienia aplikacji w menu Opcje → Resetuj uprawnienia dostępu do dysków zewnętrznych, a następnie spróbuj ponownie.")
                     ]
                 )
             }

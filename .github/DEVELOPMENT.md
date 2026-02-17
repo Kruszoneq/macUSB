@@ -194,6 +194,8 @@ Inputs and file selection:
 Menu icon mapping (current):
 - `Opcje` → `Pomiń analizowanie pliku`: `doc.text.magnifyingglass`
 - `Opcje` → `Włącz obsługę zewnętrznych dysków twardych`: `externaldrive.badge.plus`
+- `Opcje` → `Resetuj uprawnienia dostępu do dysków zewnętrznych`: `arrow.clockwise.circle`
+- reset action runs `tccutil reset SystemPolicyRemovableVolumes <bundleID>` and shows an app-branded success/failure alert.
 - `Opcje` → `Język`: `globe`
 - `Opcje` → notifications item uses dynamic label/icon:
 - enabled: `Powiadomienia włączone` + `bell.and.waves.left.and.right`
@@ -201,7 +203,7 @@ Menu icon mapping (current):
 - `Narzędzia` → `Otwórz Narzędzie dyskowe`: `externaldrive`
 - `Narzędzia` → `Status helpera`: `info.circle`
 - `Narzędzia` → `Napraw helpera`: `wrench.and.screwdriver`
-- `Narzędzia` → `Ustawienia działania w tle…`: `gearshape` (same group as helper actions; no divider between `Napraw helpera` and settings action).
+- `Narzędzia` → `Ustawienia działania w tle…`: `gearshape` (same group as helper actions; no divider between `Napraw helpera` and background-settings action).
 
 Progress indicators:
 - Inline progress uses `ProgressView().controlSize(.small)` next to status text.
@@ -286,18 +288,19 @@ Practical rules:
 - Translations in `Localizable.xcstrings` must match the real UI context where the phrase appears (button, alert title, warning body, progress status, etc.); avoid overly literal translation when it harms clarity, tone, or UX.
 - Immutable product slogan rule: the phrase `Tworzenie bootowalnych dysków USB z systemem macOS oraz OS X nigdy nie było takie proste!` is the app’s official slogan and must remain unchanged verbatim in this exact form.
 - Use `Text("...")` with Polish strings; SwiftUI treats these as localization keys.
+- All user-facing strings returned or stored as `String` (for example computed properties, variables, alerts, status labels, menu labels) must use `String(localized:)` instead of hardcoded literals, to keep full translation compatibility.
 - Helper sends stable technical localization keys (for example `helper.workflow.prepare_source.title`) in XPC progress events.
 - Installation UI renders helper stage/status with `Text(LocalizedStringKey(...))`, so helper progress text follows app locale from SwiftUI environment.
 - Non-`Text` runtime labels (for example speed/debug metrics text) must use `String(localized:)` with localized format keys (currently `Szybkość zapisu: %d MB/s`, `Szybkość zapisu: - MB/s`, and `Przekopiowane dane: %.1f GB`).
 - Keep helper key anchors in `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift` (`HelperWorkflowLocalizationExtractionAnchors`) synchronized with emitted keys to keep String Catalog extraction stable.
-- Every helper localization key must be translated in all supported app languages (`pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`).
+- Every helper localization key must be translated in all supported app languages (`pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`, `it`, `uk`, `vi`, `tr`).
 Use `String(localized: "...")` when:
 - The string is not a `Text` literal.
 - The string is assigned to a variable before being shown.
 - You want to force string extraction into the `.xcstrings` file.
 
 Supported languages are defined in `LanguageManager.supportedLanguages`:
-- `pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`
+- `pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`, `it`, `uk`, `vi`, `tr`
 
 The language selection logic:
 - `LanguageManager` stores the user’s selection in `selected_language_v2`.
@@ -738,7 +741,7 @@ Current effective build configuration snapshot:
 1. Add/adjust key constants and `presentation(for:)` mapping in `HelperWorkflowLocalizationKeys`.
 2. Keep `HelperWorkflowLocalizationExtractionAnchors.anchoredValues` synchronized with all runtime helper keys.
 3. Update helper stage definitions in `macUSBHelper/main.swift` to use those keys.
-4. Add translations in `Localizable.xcstrings` for all supported languages (`pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`) for both title and status keys.
+4. Add translations in `Localizable.xcstrings` for all supported languages (`pl`, `en`, `de`, `ja`, `fr`, `es`, `pt-BR`, `zh-Hans`, `ru`, `it`, `uk`, `vi`, `tr`) for both title and status keys.
 5. Build and verify runtime in at least EN + PL to ensure no raw key or source-language fallback appears.
 
 ### 11.10 Logging and observability for helper path
@@ -790,6 +793,7 @@ Minimal runbook for day-to-day diagnostics and release safety:
 - Recovery/status quick-check:
 - If service is enabled but XPC fails: run `Napraw helpera` (it resets client connection and re-validates registration).
 - If status is `requiresApproval`: open system settings from helper alert and approve background item.
+- If write access to external USB media is denied: run `Opcje` → `Resetuj uprawnienia dostępu do dysków zewnętrznych`, then retry installer creation so macOS can request permission again.
 - You can manually open Background Items settings from `Narzędzia` → `Ustawienia działania w tle…`.
 
 ---

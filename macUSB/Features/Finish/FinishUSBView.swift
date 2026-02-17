@@ -74,19 +74,19 @@ struct FinishUSBView: View {
         return .green
     }
     private var primaryResultTitle: String {
-        if isCancelledResult { return "Przerwano" }
-        if isFailedResult { return "Niepowodzenie!" }
-        return "Sukces!"
+        if isCancelledResult { return String(localized: "Przerwano") }
+        if isFailedResult { return String(localized: "Niepowodzenie!") }
+        return String(localized: "Sukces!")
     }
     private var primaryResultSubtitle: String {
-        if isCancelledResult { return "Proces został zatrzymany przez użytkownika" }
-        if isFailedResult { return "Spróbuj ponownie od początku" }
-        return "Nośnik został przygotowany poprawnie"
+        if isCancelledResult { return String(localized: "Proces został zatrzymany przez użytkownika") }
+        if isFailedResult { return String(localized: "Spróbuj ponownie od początku") }
+        return String(localized: "Nośnik został przygotowany poprawnie")
     }
     private var summaryTitleText: String {
-        if isCancelledResult { return "Tworzenie nośnika zostało przerwane" }
-        if isFailedResult { return "Tworzenie instalatora nie powiodło się" }
-        return "Utworzono instalator systemu"
+        if isCancelledResult { return String(localized: "Tworzenie nośnika zostało przerwane") }
+        if isFailedResult { return String(localized: "Tworzenie instalatora nie powiodło się") }
+        return String(localized: "Utworzono instalator systemu")
     }
     
     var body: some View {
