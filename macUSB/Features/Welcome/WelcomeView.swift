@@ -33,7 +33,7 @@ struct WelcomeView: View {
                 .font(.system(size: 40 * MacUSBDesignTokens.headlineScale(for: visualMode), weight: .semibold))
             
             // Opis z obsługą tłumaczeń
-            Text("Tworzenie bootowalnych dysków USB z systemem macOS\noraz OS X nigdy nie było takie proste!")
+            Text("Tworzenie bootowalnych dysków USB z systemem macOS oraz OS X nigdy nie było takie proste!")
                 .font(.system(size: 17 * MacUSBDesignTokens.subheadlineScale(for: visualMode), weight: .regular))
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)

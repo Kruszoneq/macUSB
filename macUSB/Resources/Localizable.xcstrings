@@ -10423,54 +10423,54 @@
         }
       }
     },
-    "Tworzenie bootowalnych dysków USB z systemem macOS\noraz OS X nigdy nie było takie proste!" : {
+    "Tworzenie bootowalnych dysków USB z systemem macOS oraz OS X nigdy nie było takie proste!" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das Erstellen von bootfähigen macOS- und OS X-USB-Laufwerken\nwar noch nie so einfach!"
+            "value" : "Das Erstellen von bootfähigen macOS- und OS X-USB-Laufwerken war noch nie so einfach!"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Creating bootable macOS and OS X USB drives\nhas never been easier!"
+            "value" : "Creating bootable macOS and OS X USB drives has never been easier!"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¡Crear memorias USB de arranque con macOS y OS X\nnunca fue tan fácil!"
+            "value" : "¡Crear memorias USB de arranque con macOS y OS X nunca fue tan fácil!"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Créer des clés USB amorçables macOS et OS X\nn'a jamais été aussi simple !"
+            "value" : "Créer des clés USB amorçables macOS et OS X n'a jamais été aussi simple !"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macOSおよびOS Xの起動可能なUSBメモリの作成が\nかつてないほど簡単になりました！"
+            "value" : "macOSおよびOS Xの起動可能なUSBメモリの作成がかつてないほど簡単になりました！"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Criar pen drives inicializáveis do macOS e OS X\nnunca foi tão fácil!"
+            "value" : "Criar pen drives inicializáveis do macOS e OS X nunca foi tão fácil!"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Создание загрузочных USB-дисков macOS и OS X\nеще никогда не было таким простым!"
+            "value" : "Создание загрузочных USB-дисков macOS и OS X еще никогда не было таким простым!"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "创建可引导的 macOS 和 OS X U 盘\n从未如此简单！"
+            "value" : "创建可引导的 macOS 和 OS X U 盘从未如此简单！"
           }
         }
       }
