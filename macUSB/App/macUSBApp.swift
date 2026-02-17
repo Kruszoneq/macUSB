@@ -121,6 +121,12 @@ struct macUSBApp: App {
                     Label(String(localized: "Włącz obsługę zewnętrznych dysków twardych"), systemImage: "externaldrive.badge.plus")
                 }
                 Divider()
+                Button {
+                    resetExternalVolumeAccessPermissions()
+                } label: {
+                    Label(String(localized: "Resetuj uprawnienia dostępu do dysków zewnętrznych"), systemImage: "arrow.clockwise.circle")
+                }
+                Divider()
                 Menu {
                     Button {
                         languageManager.currentLanguage = "auto"
@@ -193,6 +199,34 @@ struct macUSBApp: App {
                             Label("日本語", systemImage: "checkmark")
                         } else {
                             Text("日本語")
+                        }
+                    }
+                    Button { languageManager.currentLanguage = "it" } label: {
+                        if languageManager.currentLanguage == "it" {
+                            Label("Italiano", systemImage: "checkmark")
+                        } else {
+                            Text("Italiano")
+                        }
+                    }
+                    Button { languageManager.currentLanguage = "uk" } label: {
+                        if languageManager.currentLanguage == "uk" {
+                            Label("Українська", systemImage: "checkmark")
+                        } else {
+                            Text("Українська")
+                        }
+                    }
+                    Button { languageManager.currentLanguage = "vi" } label: {
+                        if languageManager.currentLanguage == "vi" {
+                            Label("Tiếng Việt", systemImage: "checkmark")
+                        } else {
+                            Text("Tiếng Việt")
+                        }
+                    }
+                    Button { languageManager.currentLanguage = "tr" } label: {
+                        if languageManager.currentLanguage == "tr" {
+                            Label("Türkçe", systemImage: "checkmark")
+                        } else {
+                            Text("Türkçe")
                         }
                     }
                 } label: {
@@ -351,6 +385,58 @@ struct macUSBApp: App {
             }
             #endif
         }
+    }
+
+    private func resetExternalVolumeAccessPermissions() {
+        let bundleId = Bundle.main.bundleIdentifier ?? "com.kruszoneq.macUSB"
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/usr/bin/tccutil")
+        task.arguments = ["reset", "SystemPolicyRemovableVolumes", bundleId]
+        let pipe = Pipe()
+        task.standardOutput = pipe
+        task.standardError = pipe
+
+        do {
+            try task.run()
+            task.waitUntilExit()
+            let outputData = pipe.fileHandleForReading.readDataToEndOfFile()
+            let output = String(data: outputData, encoding: .utf8)?
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            if task.terminationStatus == 0 {
+                presentExternalVolumePermissionsResetSuccessAlert()
+            } else {
+                presentExternalVolumePermissionsResetFailureAlert(bundleId: bundleId, details: output)
+            }
+        } catch {
+            presentExternalVolumePermissionsResetFailureAlert(bundleId: bundleId, details: error.localizedDescription)
+        }
+    }
+
+    private func presentExternalVolumePermissionsResetSuccessAlert() {
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .informational
+        alert.messageText = String(localized: "Wyczyszczono uprawnienia dostępu do dysków zewnętrznych")
+        alert.informativeText = String(localized: "Uprawnienia aplikacji macUSB do nośników zewnętrznych zostały zresetowane. Przy kolejnej próbie tworzenia nośnika system poprosi ponownie o zgodę.")
+        alert.addButton(withTitle: String(localized: "OK"))
+        alert.runModal()
+    }
+
+    private func presentExternalVolumePermissionsResetFailureAlert(bundleId: String, details: String?) {
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .warning
+        alert.messageText = String(localized: "Nie udało się wyczyścić uprawnień dostępu do dysków zewnętrznych")
+        var informativeText = String.localizedStringWithFormat(
+            String(localized: "Nie udało się zresetować uprawnień dostępu do nośników zewnętrznych. Spróbuj ponownie lub uruchom ręcznie w Terminalu: tccutil reset SystemPolicyRemovableVolumes %@"),
+            bundleId
+        )
+        if let details, !details.isEmpty {
+            informativeText += "\n\n\(details)"
+        }
+        alert.informativeText = informativeText
+        alert.addButton(withTitle: String(localized: "OK"))
+        alert.runModal()
     }
 
     #if DEBUG

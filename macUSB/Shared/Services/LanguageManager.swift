@@ -13,7 +13,11 @@ class LanguageManager: ObservableObject {
         "es",       // Hiszpański
         "pt-BR",    // Portugalski (Brazylia)
         "zh-Hans",  // Chiński Uproszczony
-        "ru"        // Rosyjski
+        "ru",       // Rosyjski
+        "it",       // Włoski
+        "uk",       // Ukraiński
+        "vi",       // Wietnamski
+        "tr"        // Turecki
     ]
 
     // Sprawdza, czy dany identyfikator jest wspierany (dokładnie lub po prefiksie języka)
