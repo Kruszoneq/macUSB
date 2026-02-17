@@ -5,7 +5,6 @@ import UserNotifications
 final class NotificationPermissionManager {
     static let shared = NotificationPermissionManager()
 
-    private let startupPromptHandledKey = "NotificationsStartupPromptHandledV1"
     private let notificationsEnabledInAppKey = "NotificationsEnabledInAppV1"
 
     private init() {}
@@ -21,34 +20,10 @@ final class NotificationPermissionManager {
     }
 
     func handleStartupFlowIfNeeded() {
-        UNUserNotificationCenter.current().getNotificationSettings { settings in
-            let status = settings.authorizationStatus
-
-            if self.isSystemAuthorized(status) {
-                self.ensureInAppToggleDefault()
-                UserDefaults.standard.set(true, forKey: self.startupPromptHandledKey)
-                UserDefaults.standard.synchronize()
-                self.refreshState()
-                return
-            }
-
-            if status == .denied {
-                UserDefaults.standard.set(true, forKey: self.startupPromptHandledKey)
-                UserDefaults.standard.synchronize()
-                self.refreshState()
-                return
-            }
-
-            let startupHandled = UserDefaults.standard.bool(forKey: self.startupPromptHandledKey)
-            guard !startupHandled else {
-                self.refreshState()
-                return
-            }
-
-            DispatchQueue.main.async {
-                self.presentEnableNotificationsPrompt(markStartupHandled: true)
-            }
-        }
+        // No startup notification prompt. First launch defaults to disabled,
+        // and permission request is user-initiated from menu action.
+        ensureInAppToggleDefault()
+        refreshState()
     }
 
     func handleMenuNotificationsTapped() {
@@ -64,7 +39,7 @@ final class NotificationPermissionManager {
 
             if status == .notDetermined {
                 DispatchQueue.main.async {
-                    self.presentEnableNotificationsPrompt(markStartupHandled: false)
+                    self.presentEnableNotificationsPrompt()
                 }
                 return
             }
@@ -85,7 +60,7 @@ final class NotificationPermissionManager {
         }
     }
 
-    private func presentEnableNotificationsPrompt(markStartupHandled: Bool) {
+    private func presentEnableNotificationsPrompt() {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
@@ -95,11 +70,6 @@ final class NotificationPermissionManager {
         alert.addButton(withTitle: String(localized: "Nie teraz"))
 
         let handleResponse: (NSApplication.ModalResponse) -> Void = { response in
-            if markStartupHandled {
-                UserDefaults.standard.set(true, forKey: self.startupPromptHandledKey)
-                UserDefaults.standard.synchronize()
-            }
-
             if response == .alertFirstButtonReturn {
                 self.setEnabledInApp(true)
                 self.requestSystemAuthorization()
@@ -175,7 +145,7 @@ final class NotificationPermissionManager {
     private func ensureInAppToggleDefault() {
         let defaults = UserDefaults.standard
         if defaults.object(forKey: notificationsEnabledInAppKey) == nil {
-            defaults.set(true, forKey: notificationsEnabledInAppKey)
+            defaults.set(false, forKey: notificationsEnabledInAppKey)
             defaults.synchronize()
         }
     }
@@ -183,7 +153,7 @@ final class NotificationPermissionManager {
     private func isEnabledInApp() -> Bool {
         let defaults = UserDefaults.standard
         if defaults.object(forKey: notificationsEnabledInAppKey) == nil {
-            return true
+            return false
         }
         return defaults.bool(forKey: notificationsEnabledInAppKey)
     }

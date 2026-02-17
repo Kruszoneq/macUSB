@@ -64,7 +64,8 @@ Debug-only shortcut:
 Detailed contract is documented in [Section 17](#17-debug-chapter).
 
 Startup permissions flow:
-- After the optional update alert on the Welcome screen, the app may show a notification-permission prompt.
+- After the optional update alert on the Welcome screen, the app does not auto-prompt for notification permission.
+- Notification permission prompt is user-initiated from `Opcje` → `Powiadomienia` when system status is `.notDetermined`.
 - The update alert shows both remote available version and currently running app version.
 Detailed notification behavior is documented in [Section 16](#16-notifications-chapter).
 
@@ -81,7 +82,7 @@ Key concepts:
 - View logic split: `UniversalInstallationView` UI lives in one file; helper workflow orchestration is in `CreatorHelperLogic.swift`, while shared install utilities live in `CreatorLogic.swift`.
 - State-driven UI: extensive use of `@State`, `@StateObject`, `@EnvironmentObject` and `@Published` to bind logic to UI.
 - NotificationCenter: used for flow resets, special-case actions (Tiger Multi-DVD override), and debug-only routing shortcuts.
-- Notification permissions are centrally handled by `NotificationPermissionManager` (startup prompt, menu toggle, and system settings redirection).
+- Notification permissions are centrally handled by `NotificationPermissionManager` (default-off app toggle, menu-initiated prompt/toggle, and system settings redirection).
 - System analysis: reads `Info.plist` from the installer app inside a mounted image or `.app` bundle.
 - USB detection: enumerates mounted external volumes; optionally includes external HDD/SSD with a user option; detects USB speed, partition scheme, filesystem format, and computes the `needsFormatting` flag for later stages.
 - Privileged helper execution: a LaunchDaemon helper is registered via `SMAppService`, and privileged work is executed via typed XPC requests.
@@ -415,7 +416,6 @@ Stored in `UserDefaults`:
 - `selected_language_v2`: user’s preferred language (`auto` or fixed language).
 - `AppleLanguages`: system override for app language selection.
 - `DiagnosticsExportLastDirectory`: last folder used to export logs.
-- `NotificationsStartupPromptHandledV1`: whether startup notification prompt has already been handled.
 - `NotificationsEnabledInAppV1`: app-level toggle for notifications (independent from system permission).
 
 Reset behavior:
@@ -774,7 +774,7 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Shared/Models/Item.swift` — SwiftData model stub (currently unused).
 - `macUSB/Shared/Services/LanguageManager.swift` — Language selection and locale handling.
 - `macUSB/Shared/Services/MenuState.swift` — Shared menu state (skip analysis, external drives, notifications state, DEBUG copied-data label).
-- `macUSB/Shared/Services/NotificationPermissionManager.swift` — Central notification permission and app-level toggle manager (startup prompt, menu action, system settings redirect).
+- `macUSB/Shared/Services/NotificationPermissionManager.swift` — Central notification permission and app-level toggle manager (default-off at first run, menu action, system settings redirect).
 - `macUSB/Shared/Services/Helper/HelperIPC.swift` — Shared app-side helper request/result/event payloads and XPC protocol contracts.
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift` — App-side XPC client for start/cancel/health checks and progress/result routing.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift` — Helper registration/repair/removal/status logic using `SMAppService`, including startup prompt when Background Items approval is required.
@@ -838,7 +838,18 @@ This section lists the main call relationships and data flow.
 9. Privileged install flow must run through `SMAppService` + LaunchDaemon helper in all configurations (no terminal fallback).
 10. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.
 11. Debug menu contract: top-level `DEBUG` menu is allowed only for `DEBUG` builds; it must not be available in `Release` builds.
-12. AI agents must write git commit messages in English: a clear title/summary line plus a concise body describing key changes. Do not use escaped newline sequences like `\n` in commit text; use normal multi-line commit formatting only.
+
+### 14.1 AI Agent Instructions
+- IMPORTANT RULE FOR AI AGENTS: Reading this document is mandatory, but not sufficient on its own.
+- Before proposing or implementing changes, AI agents must also analyze the current codebase to build accurate runtime and architecture context.
+- AI agents must write git commit messages in English: a clear title/summary line plus a concise body describing key changes.
+- Do not use escaped newline sequences like `\n` in commit message text; use normal multi-line commit formatting only.
+- AI agents should commit changes comprehensively (include all modified project files) by default.
+- Exceptions to comprehensive commits:
+- user explicitly requests a narrower commit scope, or
+- modified files appear to be build artifacts/temporary/unnecessary outputs (for example Xcode build products).
+- In artifact/temporary-output cases, the agent must explicitly report those files before committing and ask the user what to do.
+- If a requested change is not uniform and multiple valid implementation variants exist, the agent must explain the differences/tradeoffs and ask the user to choose the direction before finalizing.
 
 ---
 
@@ -857,14 +868,14 @@ This chapter defines notification permissions, UI toggles, and delivery rules.
 Core components:
 - `NotificationPermissionManager` is the source of truth for notification policy.
 - `MenuState.notificationsEnabled` is the effective notifications state used by menu label/icon.
-- `WelcomeView` runs update check, then helper startup bootstrap, then notification startup flow.
+- `WelcomeView` runs update check, then helper startup bootstrap, then notification state refresh/default initialization flow.
 - `FinishUSBView` sends completion notification only when policy allows.
 
 State model:
 - System permission state comes from `UNUserNotificationCenter.getNotificationSettings()`.
 - App-level toggle is stored in `UserDefaults` key `NotificationsEnabledInAppV1`.
-- Startup prompt handling flag is stored in `UserDefaults` key `NotificationsStartupPromptHandledV1`.
 - Effective enabled state (menu label/icon): `systemAuthorized && appEnabledInApp`.
+- First-run default: app-level toggle is initialized to `false` when missing.
 
 System status interpretation (as implemented):
 - Treated as authorized: `.authorized`, `.provisional`.
@@ -875,19 +886,11 @@ Startup flow:
 1. `WelcomeView.onAppear` runs `checkForUpdates(completion:)`.
 2. After update flow completes (including alert close), app calls `HelperServiceManager.bootstrapIfNeededAtStartup(...)`.
 3. After helper startup bootstrap completion, app calls `NotificationPermissionManager.handleStartupFlowIfNeeded()`.
-4. This ordering ensures helper approval alert (`requiresApproval`) is shown before notification onboarding prompt.
-5. If system is authorized:
-- Ensure app toggle default exists (`true` if missing).
-- Mark startup prompt as handled.
-6. If system is denied:
-- Mark startup prompt as handled.
-- Do not show startup prompt.
-7. If system is not determined and startup prompt is not handled:
-- Show custom alert:
-- Title: `Czy chcesz włączyć powiadomienia?`
-- Body: `Pozwoli to na otrzymanie informacji o zakończeniu procesu przygotowania nośnika instalacyjnego.`
-- Buttons: primary `Włącz powiadomienia`, secondary `Nie teraz`
-- For startup flow, any choice marks prompt as handled.
+4. This ordering ensures helper approval alert (`requiresApproval`) is handled first, while notifications stay non-intrusive.
+5. Startup notification behavior:
+- no custom notification-permission prompt is shown automatically on first launch,
+- app toggle is initialized to disabled (`false`) if missing,
+- menu state is refreshed to reflect `systemAuthorized && appEnabledInApp`.
 
 Menu behavior (`Opcje` → `Powiadomienia`):
 - Menu state source: `MenuState.notificationsEnabled`.
@@ -896,7 +899,11 @@ Menu behavior (`Opcje` → `Powiadomienia`):
 - disabled: label `Powiadomienia wyłączone`, icon `bell.slash`
 - On tap, behavior depends on system status:
 - Authorized/provisional: toggle app-level flag only (on/off in app), no redirection to system settings.
-- Not determined: show enable prompt again (same as startup prompt), without reusing startup handled lock.
+- Not determined: show enable prompt:
+- Title: `Czy chcesz włączyć powiadomienia?`
+- Body: `Pozwoli to na otrzymanie informacji o zakończeniu procesu przygotowania nośnika instalacyjnego.`
+- Buttons: primary `Włącz powiadomienia`, secondary `Nie teraz`
+- This prompt appears only after intentional user action from menu.
 - Denied: show blocked alert:
 - Title: `Powiadomienia są wyłączone`
 - Body: `Powiadomienia dla macUSB zostały zablokowane w ustawieniach systemowych. Aby otrzymywać informacje o zakończeniu procesów, należy zezwolić aplikacji na ich wyświetlanie w systemie.`
@@ -931,7 +938,8 @@ Completion notification content:
 - Body: `Proces tworzenia instalatora na wybranym nośniku zakończył się niepowodzeniem.`
 
 Persistence and UX rules:
-- `Nie teraz` in startup prompt suppresses only startup auto-prompt; user can still re-open permission prompt from menu when status is `.notDetermined`.
+- No startup notification prompt is shown.
+- Notification permission request is user-initiated from menu when status is `.notDetermined`.
 - App-level toggle persists across app restarts.
 - Effective enablement always requires both system permission and app toggle.
 
