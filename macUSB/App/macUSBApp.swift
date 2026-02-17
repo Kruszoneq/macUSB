@@ -61,10 +61,16 @@ struct macUSBApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(languageManager)
-                .frame(width: 550, height: 750)
-                .frame(minWidth: 550, maxWidth: 550, minHeight: 750, maxHeight: 750)
+                .frame(width: MacUSBDesignTokens.windowWidth, height: MacUSBDesignTokens.windowHeight)
+                .frame(
+                    minWidth: MacUSBDesignTokens.windowWidth,
+                    maxWidth: MacUSBDesignTokens.windowWidth,
+                    minHeight: MacUSBDesignTokens.windowHeight,
+                    maxHeight: MacUSBDesignTokens.windowHeight
+                )
         }
         .windowResizability(.contentSize)
+        .windowToolbarStyle(.unifiedCompact(showsTitle: true))
         .commands {
             CommandGroup(replacing: .newItem) { }
             

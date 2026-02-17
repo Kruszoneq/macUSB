@@ -69,178 +69,166 @@ struct UniversalInstallationView: View {
     var tempWorkURL: URL {
         return FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_temp")
     }
+
+    private var showsIdleActions: Bool {
+        !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !isCancelling
+    }
     
     var body: some View {
         VStack(spacing: 0) {
-            
-            // CZĘŚĆ PRZEWIJANA
             ScrollView {
-                VStack(alignment: .leading, spacing: 15) {
-                    Text("Szczegóły operacji")
-                        .font(.title).bold()
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.bottom, 5)
-                    
-                    // RAMKA: System Info
-                    HStack {
-                        if let detectedSystemIcon {
-                            Image(nsImage: detectedSystemIcon)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 32, height: 32)
-                        } else {
-                            Image(systemName: "applelogo")
-                                .font(.title2)
-                                .foregroundColor(.green)
-                                .frame(width: 32)
-                        }
-                        VStack(alignment: .leading) {
-                            Text("Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
-                            Text(systemName).font(.headline).foregroundColor(.green).bold()
-                        }
-                        Spacer()
-                    }
-                    .padding().frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.green.opacity(0.1)).cornerRadius(8)
-                    
-                    // RAMKA: Dysk USB
-                    if let name = targetDriveDisplayName ?? targetDrive?.displayName {
+                VStack(alignment: .leading, spacing: MacUSBDesignTokens.contentSectionSpacing) {
+                    StatusCard(tone: .success) {
                         HStack {
-                            Image(systemName: "externaldrive.fill").font(.title2).foregroundColor(.blue).frame(width: 32)
+                            if let detectedSystemIcon {
+                                Image(nsImage: detectedSystemIcon)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 32, height: 32)
+                            } else {
+                                Image(systemName: "applelogo")
+                                    .font(.title2)
+                                    .foregroundColor(.green)
+                                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            }
                             VStack(alignment: .leading) {
-                                Text("Wybrany nośnik USB").font(.caption).foregroundColor(.secondary)
-                                Text(name).font(.headline)
+                                Text("Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
+                                Text(systemName).font(.headline).foregroundColor(.green).bold()
                             }
                             Spacer()
                         }
-                        .padding().frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.blue.opacity(0.1)).cornerRadius(8)
+                    }
+
+                    if let name = targetDriveDisplayName ?? targetDrive?.displayName {
+                        StatusCard(tone: .info) {
+                            HStack {
+                                Image(systemName: "externaldrive.fill").font(.title2).foregroundColor(.blue).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                VStack(alignment: .leading) {
+                                    Text("Wybrany nośnik USB").font(.caption).foregroundColor(.secondary)
+                                    Text(name).font(.headline)
+                                }
+                                Spacer()
+                            }
+                        }
                     }
 
                     if let drive = targetDrive, drive.usbSpeed == .usb2 {
-                        HStack(alignment: .center) {
-                            Image(systemName: "externaldrive.fill")
-                                .font(.title2)
-                                .foregroundColor(.orange)
-                                .frame(width: 32)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Wybrano nośnik USB 2.0")
-                                    .font(.headline)
+                        StatusCard(tone: .warning) {
+                            HStack(alignment: .center) {
+                                Image(systemName: "externaldrive.fill")
+                                    .font(.title2)
                                     .foregroundColor(.orange)
-                                Text("Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces tworzenia instalatora może potrwać kilkanaście minut")
-                                    .font(.subheadline)
-                                    .foregroundColor(.orange.opacity(0.8))
+                                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Wybrano nośnik USB 2.0")
+                                        .font(.headline)
+                                        .foregroundColor(.orange)
+                                    Text("Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces tworzenia instalatora może potrwać kilkanaście minut")
+                                        .font(.subheadline)
+                                        .foregroundColor(.orange.opacity(0.8))
+                                }
+                                Spacer()
                             }
-                            Spacer()
                         }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.orange.opacity(0.1))
-                        .cornerRadius(8)
                         .transition(.opacity)
                     }
-                    
-                    // RAMKA: Przebieg
-                    HStack(alignment: .top) {
-                        Image(systemName: "gearshape.2").font(.title2).foregroundColor(.secondary).frame(width: 32)
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("Przebieg procesu").font(.headline)
-                            VStack(alignment: .leading, spacing: 5) {
-                                if isRestoreLegacy {
-                                    Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
-                                    Text("• Nośnik USB zostanie sformatowany")
-                                    Text("• Obraz systemu zostanie przywrócony")
-                                } else if isPPC {
-                                    Text("• Nośnik USB zostanie odpowiednio sformatowany")
-                                    Text("• Obraz instalacyjny zostanie przywrócony")
-                                } else {
-                                    Text("• Pliki systemowe zostaną przygotowane")
-                                    Text("• Nośnik USB zostanie sformatowany")
-                                    Text("• Pliki instalacyjne zostaną skopiowane")
-                                    if isCatalina {
-                                        Text("• Struktura instalatora zostanie sfinalizowana")
+
+                    StatusCard(tone: .neutral) {
+                        HStack(alignment: .top) {
+                            Image(systemName: "gearshape.2").font(.title2).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text("Przebieg procesu").font(.headline)
+                                VStack(alignment: .leading, spacing: 5) {
+                                    if isRestoreLegacy {
+                                        Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
+                                        Text("• Nośnik USB zostanie sformatowany")
+                                        Text("• Obraz systemu zostanie przywrócony")
+                                    } else if isPPC {
+                                        Text("• Nośnik USB zostanie odpowiednio sformatowany")
+                                        Text("• Obraz instalacyjny zostanie przywrócony")
+                                    } else {
+                                        Text("• Pliki systemowe zostaną przygotowane")
+                                        Text("• Nośnik USB zostanie sformatowany")
+                                        Text("• Pliki instalacyjne zostaną skopiowane")
+                                        if isCatalina {
+                                            Text("• Struktura instalatora zostanie sfinalizowana")
+                                        }
                                     }
+                                    Text("• Pliki tymczasowe zostaną automatycznie usunięte")
                                 }
-                                Text("• Pliki tymczasowe zostaną automatycznie usunięte")
-                            }
-                            .font(.subheadline).foregroundColor(.secondary)
-                        }
-                        Spacer()
-                    }
-                    .padding().frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.gray.opacity(0.1)).cornerRadius(8)
-                    
-                    // RAMKA: Czas trwania
-                    HStack(alignment: .center, spacing: 15) {
-                        Image(systemName: "clock").font(.title2).foregroundColor(.secondary).frame(width: 32)
-                        Text("Cały proces może potrwać kilka minut.").font(.subheadline).foregroundColor(.secondary)
-                        Spacer()
-                    }
-                    .padding().frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.gray.opacity(0.1)).cornerRadius(8)
-                    
-                    // RAMKA: Globalny Błąd
-                    if !errorMessage.isEmpty {
-                        HStack(alignment: .center) {
-                            Image(systemName: "xmark.octagon.fill")
-                                .font(.title2)
-                                .foregroundColor(.red)
-                                .frame(width: 32)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Wystąpił błąd")
-                                    .font(.headline)
-                                    .foregroundColor(.red)
-                                Text(errorMessage)
-                                    .font(.subheadline)
-                                    .foregroundColor(.red.opacity(0.8))
+                                .font(.subheadline).foregroundColor(.secondary)
                             }
                             Spacer()
                         }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.red.opacity(0.1))
-                        .cornerRadius(8)
+                    }
+
+                    StatusCard(tone: .neutral) {
+                        HStack(alignment: .center, spacing: 15) {
+                            Image(systemName: "clock").font(.title2).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            Text("Cały proces może potrwać kilka minut.").font(.subheadline).foregroundColor(.secondary)
+                            Spacer()
+                        }
+                    }
+
+                    if !errorMessage.isEmpty {
+                        StatusCard(tone: .error) {
+                            HStack(alignment: .center) {
+                                Image(systemName: "xmark.octagon.fill")
+                                    .font(.title2)
+                                    .foregroundColor(.red)
+                                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Wystąpił błąd")
+                                        .font(.headline)
+                                        .foregroundColor(.red)
+                                    Text(errorMessage)
+                                        .font(.subheadline)
+                                        .foregroundColor(.red.opacity(0.8))
+                                }
+                                Spacer()
+                            }
+                        }
                         .transition(.scale)
                     }
                 }
-                .padding()
+                .padding(.horizontal, MacUSBDesignTokens.contentHorizontalPadding)
+                .padding(.vertical, MacUSBDesignTokens.contentVerticalPadding)
             }
-            
-            // STICKY FOOTER
-            VStack(spacing: 0) {
-                Divider()
-                
-                VStack(spacing: 15) {
-                    
-                    if !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !isCancelling {
-                        VStack(spacing: 15) {
-                            Button(action: showStartCreationAlert) {
-                                HStack {
-                                    Text("Rozpocznij")
-                                    Image(systemName: "arrow.right.circle.fill")
-                                }
-                                .frame(maxWidth: .infinity).padding(8)
+        }
+        .safeAreaInset(edge: .bottom) {
+            BottomActionBar {
+                if showsIdleActions {
+                    VStack(spacing: MacUSBDesignTokens.bottomBarContentSpacing) {
+                        Button(action: showStartCreationAlert) {
+                            HStack {
+                                Text("Rozpocznij")
+                                Image(systemName: "arrow.right.circle.fill")
                             }
-                            .buttonStyle(.borderedProminent).controlSize(.large).tint(Color.accentColor)
-                            
-                            Button(action: returnToAnalysisViewPreservingSelection) {
-                                HStack {
-                                    Text("Wróć")
-                                    Image(systemName: "arrow.left.circle")
-                                }
-                                .frame(maxWidth: .infinity).padding(8)
-                            }
-                            .buttonStyle(.borderedProminent).controlSize(.large).tint(Color.gray.opacity(0.2))
+                            .frame(maxWidth: .infinity)
+                            .padding(8)
                         }
-                        .transition(.opacity)
+                        .macUSBPrimaryButtonStyle()
+
+                        Button(action: returnToAnalysisViewPreservingSelection) {
+                            HStack {
+                                Text("Wróć")
+                                Image(systemName: "arrow.left.circle")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(8)
+                        }
+                        .macUSBSecondaryButtonStyle()
                     }
-                    
-                    if isCancelling {
+                    .transition(.opacity)
+                }
+
+                if isCancelling {
+                    StatusCard(tone: .warning) {
                         HStack(alignment: .center) {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .font(.title2)
                                 .foregroundColor(.orange)
-                                .frame(width: 32)
+                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Przerywanie działania")
                                     .font(.headline)
@@ -252,20 +240,17 @@ struct UniversalInstallationView: View {
                             Spacer()
                             ProgressView().controlSize(.small)
                         }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.orange.opacity(0.1))
-                        .cornerRadius(8)
-                        .transition(.opacity)
                     }
-                    
-                    // RAMKA: Anulowano przez użytkownika
-                    if isCancelled {
+                    .transition(.opacity)
+                }
+
+                if isCancelled {
+                    StatusCard(tone: .warning) {
                         HStack(alignment: .center) {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .font(.title2)
                                 .foregroundColor(.orange)
-                                .frame(width: 32)
+                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Proces przerwany")
                                     .font(.headline)
@@ -276,36 +261,31 @@ struct UniversalInstallationView: View {
                             }
                             Spacer()
                         }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.orange.opacity(0.1))
-                        .cornerRadius(8)
-                        .transition(.opacity)
-                        
-                        Button(action: {
-                            NotificationCenter.default.post(name: .macUSBResetToStart, object: nil)
-                            self.isTabLocked = false
-                            self.rootIsActive = false
-                        }) {
-                            HStack {
-                                Text("Zacznij od początku")
-                                Image(systemName: "arrow.counterclockwise")
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(8)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.large)
-                        .tint(Color.gray.opacity(0.2))
                     }
-                    
-                    // RAMKA: Odłączono USB
-                    if isUSBDisconnectedLock {
+                    .transition(.opacity)
+
+                    Button(action: {
+                        NotificationCenter.default.post(name: .macUSBResetToStart, object: nil)
+                        self.isTabLocked = false
+                        self.rootIsActive = false
+                    }) {
+                        HStack {
+                            Text("Zacznij od początku")
+                            Image(systemName: "arrow.counterclockwise")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(8)
+                    }
+                    .macUSBSecondaryButtonStyle()
+                }
+
+                if isUSBDisconnectedLock {
+                    StatusCard(tone: .error) {
                         HStack(alignment: .center) {
                             Image(systemName: "xmark.octagon.fill")
                                 .font(.title2)
                                 .foregroundColor(.red)
-                                .frame(width: 32)
+                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Odłączono nośnik USB")
                                     .font(.headline)
@@ -316,36 +296,27 @@ struct UniversalInstallationView: View {
                             }
                             Spacer()
                         }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.red.opacity(0.1))
-                        .cornerRadius(8)
-                        .transition(.opacity)
-                        
-                        Button(action: {
-                            NotificationCenter.default.post(name: .macUSBResetToStart, object: nil)
-                            self.isTabLocked = false
-                            self.rootIsActive = false
-                        }) {
-                            HStack {
-                                Text("Zacznij od początku")
-                                Image(systemName: "arrow.counterclockwise")
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(8)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.large)
-                        .tint(Color.gray.opacity(0.2))
                     }
-                    
+                    .transition(.opacity)
+
+                    Button(action: {
+                        NotificationCenter.default.post(name: .macUSBResetToStart, object: nil)
+                        self.isTabLocked = false
+                        self.rootIsActive = false
+                    }) {
+                        HStack {
+                            Text("Zacznij od początku")
+                            Image(systemName: "arrow.counterclockwise")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(8)
+                    }
+                    .macUSBSecondaryButtonStyle()
                 }
-                .padding()
-                .background(Color(NSColor.windowBackgroundColor))
             }
         }
-        .frame(width: 550, height: 750)
-        .navigationTitle("macUSB")
+        .frame(width: MacUSBDesignTokens.windowWidth, height: MacUSBDesignTokens.windowHeight)
+        .navigationTitle("Szczegóły operacji")
         .navigationBarBackButtonHidden(isTabLocked)
         .background(
             WindowAccessor_Universal { window in

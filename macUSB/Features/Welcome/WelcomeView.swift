@@ -15,7 +15,7 @@ struct WelcomeView: View {
     init() {}
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: MacUSBDesignTokens.contentSectionSpacing) {
             
             Spacer()
             
@@ -26,16 +26,16 @@ struct WelcomeView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 128, height: 128)
             }
-            
+
             Text("macUSB")
-                .font(.system(size: 40, weight: .bold))
+                .font(.system(size: 44, weight: .bold))
             
             // Opis z obsługą tłumaczeń
             Text("Tworzenie bootowalnych dysków USB z systemem macOS\noraz OS X nigdy nie było takie proste!")
                 .font(.title3)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.secondary)
-                .padding(.horizontal, 40)
+                .padding(.horizontal, 60)
                 .fixedSize(horizontal: false, vertical: true)
             
             Spacer()
@@ -50,9 +50,7 @@ struct WelcomeView: View {
                     Image(systemName: "arrow.right")
                 }
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            .tint(Color.accentColor)
+            .macUSBPrimaryButtonStyle()
             
             Spacer()
             
@@ -68,6 +66,7 @@ struct WelcomeView: View {
             .padding(.bottom, 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .navigationTitle("Start")
         .onAppear {
             guard !didRunStartupFlow else { return }
             didRunStartupFlow = true

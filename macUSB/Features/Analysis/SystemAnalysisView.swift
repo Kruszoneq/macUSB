@@ -52,28 +52,24 @@ struct SystemAnalysisView: View {
     
     // MARK: - Subviews split to help the type-checker
     private var headerSection: some View {
-        Text("Konfiguracja źródła i celu")
-            .font(.title)
-            .bold()
-            .frame(maxWidth: .infinity, alignment: .center)
-            .padding(.bottom, 5)
+        EmptyView()
     }
 
     private var fileRequirementsBox: some View {
-        HStack(alignment: .top) {
-            Image(systemName: "info.circle.fill").font(.title2).foregroundColor(.secondary).frame(width: 32)
-            VStack(alignment: .leading, spacing: 5) {
-                Text("Wymagania").font(.headline).foregroundColor(.primary)
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("• Wybrany plik musi zawierać instalator systemu macOS lub Mac OS X")
-                    Text("• Dozwolone formaty plików to .dmg, .iso, .cdr oraz .app")
-                    Text("• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym")
+        StatusCard(tone: .neutral) {
+            HStack(alignment: .top) {
+                Image(systemName: "info.circle.fill").font(.title2).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("Wymagania").font(.headline).foregroundColor(.primary)
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("• Wybrany plik musi zawierać instalator systemu macOS lub Mac OS X")
+                        Text("• Dozwolone formaty plików to .dmg, .iso, .cdr oraz .app")
+                        Text("• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym")
+                    }
+                    .font(.subheadline).foregroundColor(.secondary)
                 }
-                .font(.subheadline).foregroundColor(.secondary)
             }
         }
-        .padding().frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.gray.opacity(0.1)).cornerRadius(8)
     }
 
     private var fileSelectionControls: some View {
@@ -108,34 +104,34 @@ struct SystemAnalysisView: View {
     }
 
     private var waitingForFileHint: some View {
-        HStack(alignment: .center) {
-            Image(systemName: "doc.badge.plus").font(.title2).foregroundColor(.secondary).frame(width: 32)
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Oczekiwanie na plik .dmg, .iso, .cdr lub .app...").font(.subheadline).foregroundColor(.secondary)
-                Text("Wybierz go ręcznie lub przeciągnij powyżej").font(.caption).foregroundColor(.secondary.opacity(0.8))
+        StatusCard(tone: .subtle) {
+            HStack(alignment: .center) {
+                Image(systemName: "doc.badge.plus").font(.title2).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Oczekiwanie na plik .dmg, .iso, .cdr lub .app...").font(.subheadline).foregroundColor(.secondary)
+                    Text("Wybierz go ręcznie lub przeciągnij powyżej").font(.caption).foregroundColor(.secondary.opacity(0.8))
+                }
+                Spacer()
             }
-            Spacer()
         }
-        .padding().frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.gray.opacity(0.05)).cornerRadius(8)
         .transition(.opacity)
     }
 
     private var analyzingStatusView: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            HStack(spacing: 15) {
-                Image(systemName: "internaldrive").font(.title2).foregroundColor(.accentColor).frame(width: 32)
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("Analizowanie").font(.headline)
-                    HStack(spacing: 8) {
-                        Text("Trwa analizowanie pliku, proszę czekać").font(.subheadline).foregroundColor(.secondary)
-                        ProgressView().controlSize(.small)
+        StatusCard(tone: .active) {
+            VStack(alignment: .leading, spacing: 20) {
+                HStack(spacing: 15) {
+                    Image(systemName: "internaldrive").font(.title2).foregroundColor(.accentColor).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Analizowanie").font(.headline)
+                        HStack(spacing: 8) {
+                            Text("Trwa analizowanie pliku, proszę czekać").font(.subheadline).foregroundColor(.secondary)
+                            ProgressView().controlSize(.small)
+                        }
                     }
                 }
             }
         }
-        .padding().frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.accentColor.opacity(0.1)).cornerRadius(10)
         .transition(.opacity)
     }
 
@@ -153,7 +149,7 @@ struct SystemAnalysisView: View {
                         Image(systemName: "checkmark.circle.fill")
                             .font(.title2)
                             .foregroundColor(.green)
-                            .frame(width: 32)
+                            .frame(width: MacUSBDesignTokens.iconColumnWidth)
                     }
                     VStack(alignment: .leading) {
                         Text("Pomyślnie wykryto system").font(.caption).foregroundColor(.secondary)
@@ -171,17 +167,17 @@ struct SystemAnalysisView: View {
                     }
                 }
                 .padding().frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.green.opacity(0.1)).cornerRadius(8)
+                .macUSBPanelSurface(.success)
             } else {
                 HStack(alignment: .center) {
-                    Image(systemName: "xmark.circle.fill").font(.title2).foregroundColor(.red).frame(width: 32)
+                    Image(systemName: "xmark.circle.fill").font(.title2).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
                     VStack(alignment: .leading) {
                         Text("Błąd analizy").font(.caption).foregroundColor(.secondary)
                         Text(logic.isUnsupportedSierra ? String(localized: "Ta wersja systemu macOS Sierra nie jest wspierana przez aplikację. Potrzebna jest nowsza wersja instalatora.", comment: "Unsupported Sierra (not 12.6.06) message") : String(localized: "Wybrany system nie jest wspierany przez aplikację", comment: "Generic unsupported system message")).foregroundColor(.orange).font(.headline)
                     }
                 }
                 .padding().frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.red.opacity(0.1)).cornerRadius(8)
+                .macUSBPanelSurface(.error)
             }
 
             if isValid {
@@ -190,11 +186,12 @@ struct SystemAnalysisView: View {
                 } else {
                     if logic.showUnsupportedMessage {
                         HStack(alignment: .center) {
-                            Image(systemName: "exclamationmark.triangle.fill").font(.title2).foregroundColor(.orange).frame(width: 32)
+                            Image(systemName: "exclamationmark.triangle.fill").font(.title2).foregroundColor(.orange).frame(width: MacUSBDesignTokens.iconColumnWidth)
                             Text(logic.isUnsupportedSierra ? String(localized: "Ta wersja systemu macOS Sierra nie jest wspierana przez aplikację. Potrzebna jest nowsza wersja instalatora.", comment: "Unsupported Sierra (not 12.6.06) message") : String(localized: "Wybrany system nie jest wspierany przez aplikację", comment: "Generic unsupported system message")).foregroundColor(.orange).font(.headline)
                         }
                         .padding().frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.orange.opacity(0.1)).cornerRadius(8).transition(.opacity)
+                        .macUSBPanelSurface(.warning)
+                        .transition(.opacity)
                     }
                 }
             }
@@ -246,12 +243,20 @@ struct SystemAnalysisView: View {
             }
         }
     }
+
+    private var canUseUSBSelection: Bool {
+        ((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC || logic.isMavericks)
+    }
+
+    private var canProceedToInstall: Bool {
+        canUseUSBSelection && logic.selectedDrive != nil && logic.capacityCheckFinished && logic.isCapacitySufficient
+    }
     
     var body: some View {
         VStack(spacing: 0) {
             ScrollViewReader { _ in
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 15) {
+                    VStack(alignment: .leading, spacing: MacUSBDesignTokens.contentSectionSpacing) {
                         headerSection
                         fileSelectionSection
 
@@ -270,30 +275,28 @@ struct SystemAnalysisView: View {
                         Spacer().frame(height: 12)
                         usbSelectionSection
                             .id("usbSection")
-                            .disabled(!(((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC || logic.isMavericks)))
-                            .opacity((((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC || logic.isMavericks)) ? 1.0 : 0.5)
+                            .disabled(!canUseUSBSelection)
+                            .opacity(canUseUSBSelection ? 1.0 : 0.5)
                     }
-                    .padding()
+                    .padding(.horizontal, MacUSBDesignTokens.contentHorizontalPadding)
+                    .padding(.vertical, MacUSBDesignTokens.contentVerticalPadding)
                 }
             }
-
-            VStack(spacing: 0) {
-                Divider()
-                HStack {
-                    Button(action: {
-                        selectedDriveDisplayNameSnapshot = logic.selectedDrive?.displayName
-                        selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
-                        isTabLocked = true
-                        navigateToInstall = true
-                    }) {
-                        HStack { Text("Przejdź dalej"); Image(systemName: "arrow.right.circle.fill") }
-                            .frame(maxWidth: .infinity).padding(8)
-                    }
-                    .buttonStyle(.borderedProminent).controlSize(.large).tint(Color.accentColor)
-                    .disabled(!(((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC || logic.isMavericks) && logic.selectedDrive != nil && logic.capacityCheckFinished && logic.isCapacitySufficient))
-                    .opacity((((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC || logic.isMavericks) && logic.selectedDrive != nil && logic.capacityCheckFinished && logic.isCapacitySufficient) ? 1.0 : 0.5)
+        }
+        .safeAreaInset(edge: .bottom) {
+            BottomActionBar {
+                Button(action: {
+                    selectedDriveDisplayNameSnapshot = logic.selectedDrive?.displayName
+                    selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
+                    isTabLocked = true
+                    navigateToInstall = true
+                }) {
+                    HStack { Text("Przejdź dalej"); Image(systemName: "arrow.right.circle.fill") }
+                        .frame(maxWidth: .infinity)
+                        .padding(8)
                 }
-                .padding().background(Color(NSColor.windowBackgroundColor))
+                .macUSBPrimaryButtonStyle(isEnabled: canProceedToInstall)
+                .disabled(!canProceedToInstall)
             }
         }
         .background(navigationBackgroundLink)
@@ -328,7 +331,7 @@ struct SystemAnalysisView: View {
             updateMenuState()
             if logic.shouldShowMavericksDialog { presentMavericksDialog() }
         }
-        .navigationTitle("macUSB")
+        .navigationTitle("Konfiguracja źródła i celu")
         .navigationBarBackButtonHidden(true)
     }
     
@@ -336,7 +339,7 @@ struct SystemAnalysisView: View {
         VStack(alignment: .leading, spacing: 15) {
             Text("Wybór nośnika USB").font(.headline)
             HStack(alignment: .top) {
-                Image(systemName: "externaldrive.fill").font(.title2).foregroundColor(.secondary).frame(width: 32)
+                Image(systemName: "externaldrive.fill").font(.title2).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Wymagania sprzętowe").font(.headline)
                     VStack(alignment: .leading, spacing: 3) {
@@ -345,19 +348,19 @@ struct SystemAnalysisView: View {
                     }
                 }
             }
-            .padding().frame(maxWidth: .infinity, alignment: .leading).background(Color.gray.opacity(0.1)).cornerRadius(8)
+            .padding().frame(maxWidth: .infinity, alignment: .leading).macUSBPanelSurface(.neutral)
             
             VStack(alignment: .leading, spacing: 10) {
                 Text("Wybierz docelowy nośnik USB:").font(.subheadline)
                 if logic.availableDrives.isEmpty {
                     HStack {
-                        Image(systemName: "externaldrive.badge.xmark").font(.title2).foregroundColor(.red).frame(width: 32)
+                        Image(systemName: "externaldrive.badge.xmark").font(.title2).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
                         VStack(alignment: .leading) {
                             Text("Nie wykryto nośnika USB").font(.headline).foregroundColor(.red)
                             Text("Podłącz nośnik USB i poczekaj na wykrycie...").font(.caption).foregroundColor(.red.opacity(0.8))
                         }
                     }
-                    .padding().frame(maxWidth: .infinity, alignment: .leading).background(Color.red.opacity(0.1)).cornerRadius(8)
+                    .padding().frame(maxWidth: .infinity, alignment: .leading).macUSBPanelSurface(.error)
                 } else {
                     HStack {
                         Picker("", selection: $logic.selectedDrive) {
@@ -374,24 +377,24 @@ struct SystemAnalysisView: View {
             if logic.selectedDrive != nil {
                 if logic.capacityCheckFinished && !logic.isCapacitySufficient {
                     HStack {
-                        Image(systemName: "xmark.circle.fill").font(.title2).foregroundColor(.red).frame(width: 32)
+                        Image(systemName: "xmark.circle.fill").font(.title2).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
                         VStack(alignment: .leading) {
                             Text("Wybrany nośnik USB ma za małą pojemność").font(.headline).foregroundColor(.red)
                             Text("Wymagane jest minimum 16 GB.").font(.caption).foregroundColor(.red.opacity(0.8))
                         }
                     }
-                    .padding().frame(maxWidth: .infinity, alignment: .leading).background(Color.red.opacity(0.1)).cornerRadius(8).transition(.opacity)
+                    .padding().frame(maxWidth: .infinity, alignment: .leading).macUSBPanelSurface(.error).transition(.opacity)
                 }
                 if logic.capacityCheckFinished && logic.isCapacitySufficient {
                     VStack(alignment: .leading, spacing: 15) {
                         HStack(alignment: .center) {
-                            Image(systemName: "exclamationmark.triangle.fill").font(.title2).foregroundColor(.orange).frame(width: 32)
+                            Image(systemName: "exclamationmark.triangle.fill").font(.title2).foregroundColor(.orange).frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading) {
                                 Text("UWAGA!").font(.headline).foregroundColor(.orange)
                                 Text("Wszystkie pliki na wybranym nośniku USB zostaną bezpowrotnie usunięte!").font(.subheadline).foregroundColor(.orange.opacity(0.8))
                             }
                         }
-                        .padding().frame(maxWidth: .infinity, alignment: .leading).background(Color.orange.opacity(0.1)).cornerRadius(8)
+                        .padding().frame(maxWidth: .infinity, alignment: .leading).macUSBPanelSurface(.warning)
                     }
                     .transition(.opacity)
                 }

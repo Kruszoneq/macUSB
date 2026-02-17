@@ -30,6 +30,17 @@ struct ContentView: View {
     }
     
     var body: some View {
+        Group {
+            if #available(macOS 15.0, *) {
+                rootView
+                    .toolbarBackgroundVisibility(.automatic, for: .windowToolbar)
+            } else {
+                rootView
+            }
+        }
+    }
+
+    private var rootView: some View {
         NavigationStack(path: $path) {
             WelcomeView()
                 .navigationDestination(for: AppRoute.self) { route in
@@ -64,7 +75,7 @@ struct ContentView: View {
                 }
         }
         // Sztywny rozmiar kontentu
-        .frame(width: 550, height: 750)
+        .frame(width: MacUSBDesignTokens.windowWidth, height: MacUSBDesignTokens.windowHeight)
         // Podpięcie konfiguratora okna
         .background(WindowConfigurator())
         // Wstrzyknięcie języka
@@ -150,11 +161,18 @@ struct WindowConfigurator: NSViewRepresentable {
         DispatchQueue.main.async {
             if let window = view.window {
                 // 1. Ustawienie sztywnych wymiarów
-                let fixedSize = NSSize(width: 550, height: 750)
+                let fixedSize = NSSize(width: MacUSBDesignTokens.windowWidth, height: MacUSBDesignTokens.windowHeight)
                 window.minSize = fixedSize
                 window.maxSize = fixedSize
                 // Wyłączenie możliwości zmiany rozmiaru na poziomie systemu
                 window.styleMask.remove(.resizable)
+
+                if window.toolbar == nil {
+                    window.toolbar = NSToolbar(identifier: "com.kruszoneq.macusb.window.toolbar")
+                }
+                if #available(macOS 11.0, *) {
+                    window.toolbarStyle = .unifiedCompact
+                }
                 
                 // 2. Wyśrodkowanie i konfiguracja przycisków
                 window.center()

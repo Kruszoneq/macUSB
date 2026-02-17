@@ -99,52 +99,58 @@ Window and layout:
 - Window title is `macUSB`.
 - Window zoom button is disabled; close and minimize remain enabled.
 - Window is centered and uses `.fullScreenNone` and `.managed` behavior.
-- Primary screens use a ScrollView for content with a sticky footer for actions and status panels.
+- Primary screens use a `ScrollView` for content and `safeAreaInset(edge: .bottom)` for action/status bars.
+- Shared bottom action layer uses `BottomActionBar` (`macUSB/Shared/UI/BottomActionBar.swift`) and not ad-hoc `Divider + background` footers.
 - Navigation back buttons are hidden on key screens; navigation is driven by custom buttons and state.
 
+Toolbar-first chrome:
+- Top-level flow screens use contextual `navigationTitle` in the native title/toolbar area:
+- `WelcomeView`: `Start`
+- `SystemAnalysisView`: `Konfiguracja źródła i celu`
+- `UniversalInstallationView`: `Szczegóły operacji`
+- `CreationProgressView`: `Tworzenie nośnika`
+- `FinishUSBView`: `Wynik operacji`
+- Do not duplicate these top-level screen titles as large in-content headings.
+- Window toolbar style is unified compact and should stay system-driven.
+
 Typography:
-- Main screen titles use `.title` and `.bold()`.
-- The Welcome screen title uses a custom system font size 40, weight bold.
-- Section headers typically use `.headline`.
-- Secondary text uses `.subheadline` and `.foregroundColor(.secondary)`.
-- Small helper text uses `.caption` and `.secondary` color.
+- Section headers use `.headline`.
+- Secondary content uses `.subheadline` + `.foregroundColor(.secondary)`.
+- Helper/detail text uses `.caption`.
+- The Welcome screen renders `macUSB` under the app icon as a moderately emphasized title (visually larger than the subtitle, but not dominant like a page heading).
 
-Iconography and sizes:
-- SF Symbols are used throughout the UI.
-- Informational panels use icons with `.font(.title2)` and a fixed width of 32.
-- Major process/status blocks use `.font(.largeTitle)`.
-Common status icons and their semantic colors:
-- Success: `checkmark.circle.fill` in green.
-- Error: `xmark.circle.fill` or `xmark.octagon.fill` in red.
-- Warning: `exclamationmark.triangle.fill` in orange.
-- Info: `info.circle.fill` in gray/secondary.
-- USB: `externaldrive.fill` (blue/orange depending on state).
-- In `SystemAnalysisView` success state, the app tries installer icons in this order: `Contents/Resources/ProductPageIcon.icns`, `Contents/Resources/InstallAssistant.icns`, then `Contents/Resources/Install Mac OS X.icns` (case-insensitive lookup). If none is found, fallback to `checkmark.circle.fill`.
-- In `UniversalInstallationView` system info panel, the app shows detected installer icon (`detectedSystemIcon`) next to the system name; if unavailable, fallback is `applelogo`.
-Frequently used SF Symbols in screens and menus include:
-- `info.circle.fill`, `info.circle`, `doc.badge.plus`, `doc.badge.gearshape`, `doc.text.magnifyingglass`, `internaldrive`, `checkmark.circle.fill`, `xmark.circle.fill`, `xmark.octagon.fill`, `exclamationmark.triangle.fill`, `externaldrive.fill`, `externaldrive`, `externaldrive.badge.plus`, `externaldrive.badge.xmark`, `applelogo`, `gearshape.2`, `gearshape`, `wrench.and.screwdriver`, `clock`, `lock.fill`, `arrow.right`, `arrow.right.circle.fill`, `arrow.counterclockwise`, `xmark.circle`, `xmark.circle.fill`, `globe.europe.africa.fill`, `cup.and.saucer`, `square.and.arrow.down`, `arrow.triangle.2.circlepath`, `globe`, `chevron.left.forwardslash.chevron.right`, `bell.slash`, `bell.and.waves.left.and.right`.
+Design tokens and concentricity:
+- Shared geometry tokens live in `macUSB/Shared/UI/DesignTokens.swift`.
+- Use `MacUSBDesignTokens` values for window size, paddings, spacing, icon column width, and radii.
+- Corner-radius hierarchy must remain concentric and predictable:
+- standard panel radius from `panelCornerRadius(for:)`
+- prominent/floating layer radius from `prominentPanelCornerRadius(for:)`
+- Avoid arbitrary per-screen radii that break visual rhythm.
 
-Panels and informational blocks:
-- Most informational blocks are HStacks with icon left and text right.
-- Standard padding is applied around panel content; corner radius is 8 (sometimes 10 for process panels).
-- Color coding is consistent:
-- Neutral info: `Color.gray.opacity(0.1)` (or `0.05` for subtle hints).
-- Success: `Color.green.opacity(0.1)`.
-- Warning: `Color.orange.opacity(0.1)`.
-- Error: `Color.red.opacity(0.1)`.
-- USB info: `Color.blue.opacity(0.1)`.
-- Processing highlight: `Color.accentColor.opacity(0.1)`.
-- Rollback/failure background: `Color.red.opacity(0.05)`.
-- A `Divider()` separates the scrollable content from sticky footer actions.
+Panels, surfaces, and tinting:
+- Shared compatibility wrappers live in `macUSB/Shared/UI/LiquidGlassCompatibility.swift`.
+- Use `StatusCard` for status/info cards (`macUSB/Shared/UI/StatusCard.swift`), not repeated custom stacks.
+- Use `macUSBPanelSurface` / `macUSBFloatingBarSurface` instead of ad-hoc background stacks.
+- Semantic surface tones are:
+- `.neutral`, `.subtle` for structural grouping
+- `.info`, `.success`, `.warning`, `.error`, `.active` for state meaning
+- Strong tinting is reserved for semantic states; neutral containers stay subtle.
+- Use spacing/layering for separation; do not add `Divider()` as a default panel separator.
 
 Buttons:
-- Primary actions use `.buttonStyle(.borderedProminent)` and `.controlSize(.large)`.
-- Primary actions are tinted with `Color.accentColor` (or green for success).
-- Secondary or cancel actions use `.tint(Color.gray.opacity(0.2))`.
-- Full-width CTAs use `.frame(maxWidth: .infinity)` and padding around 8.
-- Disabled actions reduce opacity to `0.5`.
+- Primary CTA styling must go through `macUSBPrimaryButtonStyle(...)`.
+- Secondary/cancel styling must go through `macUSBSecondaryButtonStyle(...)`.
+- Full-width CTAs use `.frame(maxWidth: .infinity)` and `padding(8)`.
+- Disabled actions use `.disabled(...)` and reduced opacity from shared style wrappers.
+- Each screen should have one visually dominant primary action.
 - PPC instruction link uses `.buttonStyle(.bordered)` with `.controlSize(.regular)`.
-- Buttons usually pair a text label with a right-side SF Symbol icon.
+
+Iconography:
+- SF Symbols remain the default icon system.
+- Panel icon column uses `MacUSBDesignTokens.iconColumnWidth` (32 pt).
+- Keep toolbar/navigation icons mostly monochrome; use color to encode semantic state (success/warning/error/active) and primary CTA emphasis only.
+- In `SystemAnalysisView` success state, the app tries installer icons in this order: `Contents/Resources/ProductPageIcon.icns`, `Contents/Resources/InstallAssistant.icns`, then `Contents/Resources/Install Mac OS X.icns` (case-insensitive lookup). If none is found, fallback to `checkmark.circle.fill`.
+- In `UniversalInstallationView` and `CreationProgressView`, the system panel uses `detectedSystemIcon` when available; fallback is `applelogo`.
 
 Alerts and dialogs:
 - `NSAlert` uses the application icon and localized strings.
@@ -174,12 +180,6 @@ Inputs and file selection:
 - The file path field is a disabled `TextField` with `.roundedBorder`.
 - Drag-and-drop target highlights with an accent-colored stroke (line width 3) and accent background at `0.1` opacity, with corner radius 12.
 
-Screen headline copy:
-- `SystemAnalysisView`: `Konfiguracja źródła i celu`
-- `UniversalInstallationView`: `Szczegóły operacji`
-- `CreationProgressView`: `Tworzenie nośnika`
-- `FinishUSBView`: `Wynik operacji`
-
 Menu icon mapping (current):
 - `Opcje` → `Pomiń analizowanie pliku`: `doc.text.magnifyingglass`
 - `Opcje` → `Włącz obsługę zewnętrznych dysków twardych`: `externaldrive.badge.plus`
@@ -195,32 +195,50 @@ Menu icon mapping (current):
 Progress indicators:
 - Inline progress uses `ProgressView().controlSize(.small)` next to status text.
 - During helper execution, `CreationProgressView` shows a stage list where:
-- pending stages are gray cards (title + stage icon),
-- the currently active stage is a blue card (title + status + linear progress bar; for tracked copy stages it is determinate),
-- completed stages are green cards (title + success icon).
+- pending stages are neutral cards (title + stage icon),
+- the currently active stage is semantic active card (title + status + linear progress bar; for tracked copy stages it is determinate),
+- completed stages are success cards (title + success icon).
 - Catalina stage icon mapping in `CreationProgressView`: `catalina_cleanup` uses `doc.badge.gearshape` (file-structure adjustments), `catalina_copy` uses `doc.on.doc.fill`, `catalina_xattr` uses `checkmark.shield.fill`.
 - Tracked copy stages (`restore`, `ppc_restore`, `createinstallmedia`, `catalina_copy`) show a numeric percent badge on the right side of active stage row.
 - For tracked copy stages, the percent is derived from copied-data bytes against source-size bytes and is clamped to `99%` while the stage is still running; completion to `100%` is implied only by stage transition to completed state.
 - For active USB-write stages (`restore`, `ppc_restore`, `createinstallmedia`, and Catalina `catalina_copy`/`ditto` stage), `CreationProgressView` shows write speed below the progress bar as `Szybkość zapisu: xx MB/s` (rounded integer, no decimals).
 - Live helper log lines are not rendered in UI; they are recorded into diagnostics logs for export.
+- Motion should stay short and semantic (state-change transitions such as fade/slide), without decorative animations.
 
 Welcome screen specifics:
 - App icon is shown at 128 × 128.
+- App name `macUSB` is shown directly below the icon.
 - Description text is centered, uses `.title3`, and is padded horizontally.
-- Start button is prominent, with `arrow.right` icon.
+- Start button is prominent and uses shared primary style wrapper with `arrow.right` icon.
 
 Finish screen specifics:
 - Success/failure/cancelled block uses green/red/orange status panels (`Sukces!`, `Niepowodzenie!`, or `Przerwano`).
 - In success mode, the installer summary row uses detected system icon in the main left icon slot (instead of USB disk icon); fallback remains `externaldrive.fill` when icon is unavailable.
-- Cleanup section shows a blue panel with a trash icon while cleaning.
-- Reset and exit buttons remain large, full-width, and prominent.
+- Cleanup section is rendered inside the shared bottom action layer while cleaning.
+- Reset and exit actions remain large and full-width; reset is secondary, exit is primary.
 - Success sound prefers bundled `burn_complete.aif` from app resources (with fallback to system sounds).
 - If `FinishUSBView` appears while the app is inactive, the app sends a macOS system notification with success/failure result text only when both system permission and app-level notification toggle are enabled.
 - In cancelled mode (`Przerwano`), `FinishUSBView` intentionally does not play any result sound and does not send a background notification.
 
 Formatting conventions:
 - Bullet lists in UI are rendered as literal `Text("• ...")` lines, not as SwiftUI `List` or `Text` with markdown.
-- Sections are separated by spacing rather than heavy borders; visual grouping is achieved by panels and background colors.
+- Sections are separated by spacing and surfaces; avoid decorative separators unless semantically necessary.
+
+### 4.1 Liquid Glass Compatibility Contract
+- Compatibility mode helper:
+- `VisualSystemMode` and `currentVisualMode()` in `macUSB/Shared/UI/LiquidGlassCompatibility.swift`.
+- On macOS 26+ (Tahoe):
+- Use native Liquid Glass APIs through wrappers (`glassEffect`, `glass`, `glassProminent`) for panels and button styles.
+- Keep toolbar and window chrome system-driven; avoid custom painted titlebar backgrounds.
+- On macOS 14/15 (Sonoma/Sequoia):
+- Use fallback materials/colors/strokes from the same wrappers.
+- Preserve hierarchy, spacing, and action order; do not emulate Tahoe glass with custom heavy effects.
+- Availability rules:
+- Every 26-only API must be guarded with `if #available(macOS 26.0, *)`.
+- App-level calls requiring newer APIs (for example toolbar background behaviors) must also be guarded.
+- Deployment target remains `MACOSX_DEPLOYMENT_TARGET = 14.6`.
+- UX consistency requirement:
+- Functional hierarchy and interaction behavior must match across macOS 14/15/26 even if rendering differs per OS.
 
 ---
 
@@ -772,6 +790,10 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, fallback cleanup safety net (race-safe when TEMP was already removed), supports success/failure/cancelled result mode (`Przerwano`), shows detected system icon in success summary row left slot (fallback to `externaldrive.fill`), total process duration summary (`Ukończono w MMm SSs` for success), duration logging, background-result system notification (disabled for cancelled mode), and optional cleanup overrides used by debug simulation.
 - `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
 - `macUSB/Shared/Models/Item.swift` — SwiftData model stub (currently unused).
+- `macUSB/Shared/UI/DesignTokens.swift` — Shared visual token definitions (window size, spacing, icon column, corner-radius hierarchy).
+- `macUSB/Shared/UI/LiquidGlassCompatibility.swift` — Cross-version UI compatibility layer (`VisualSystemMode`, glass/fallback panel surfaces, primary/secondary button style wrappers).
+- `macUSB/Shared/UI/BottomActionBar.swift` — Shared bottom action/status container used with `safeAreaInset(edge: .bottom)`.
+- `macUSB/Shared/UI/StatusCard.swift` — Shared semantic status/info card wrapper.
 - `macUSB/Shared/Services/LanguageManager.swift` — Language selection and locale handling.
 - `macUSB/Shared/Services/MenuState.swift` — Shared menu state (skip analysis, external drives, notifications state, DEBUG copied-data label).
 - `macUSB/Shared/Services/NotificationPermissionManager.swift` — Central notification permission and app-level toggle manager (default-off at first run, menu action, system settings redirect).
@@ -805,15 +827,19 @@ Notes on non-source items:
 This section lists the main call relationships and data flow.
 
 - `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`, `NotificationPermissionManager`, `HelperServiceManager`; in `DEBUG` also publishes `macUSBDebugGoToBigSurSummary` and `macUSBDebugGoToTigerSummary`, opens `${TMPDIR}/macUSB_temp` in Finder, and renders live copied-data informational rows.
-- `macUSB/App/ContentView.swift` → presents `WelcomeView`, injects `LanguageManager`, calls `AppLogging.logAppStartupOnce()`, and maps debug notifications to delayed (2s) `FinishUSBView` routes (Big Sur and Tiger/PPC).
+- `macUSB/App/ContentView.swift` → presents `WelcomeView`, injects `LanguageManager`, applies window/toolbar configuration, calls `AppLogging.logAppStartupOnce()`, and maps debug notifications to delayed (2s) `FinishUSBView` routes (Big Sur and Tiger/PPC).
 - `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json`, bootstraps helper readiness via `HelperServiceManager`, then triggers startup notification-permission flow.
-- `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, snapshots selected drive (`selectedDriveForInstallationSnapshot`) on navigation, and forwards that stable target plus `detectedSystemIcon` to installation flow.
+- `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, snapshots selected drive (`selectedDriveForInstallationSnapshot`) on navigation, forwards that stable target plus `detectedSystemIcon` to installation flow, and renders CTA layer through `BottomActionBar`.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
-- `macUSB/Features/Installation/UniversalInstallationView.swift` → renders detected system icon in system info panel (with `applelogo` fallback), requires destructive confirmation before start, then starts helper path via `startCreationProcessEntry()` and routes to `CreationProgressView`.
-- `macUSB/Features/Installation/CreationProgressView.swift` → renders helper runtime progress (pending/active/completed stage cards, status text, stage-scoped write-speed label), exposes cancel alert flow, and navigates to `FinishUSBView`.
+- `macUSB/Features/Installation/UniversalInstallationView.swift` → renders detected system icon in system info panel (with `applelogo` fallback), requires destructive confirmation before start, then starts helper path via `startCreationProcessEntry()` and routes to `CreationProgressView`; uses shared `StatusCard` and `BottomActionBar`.
+- `macUSB/Features/Installation/CreationProgressView.swift` → renders helper runtime progress (pending/active/completed stage cards, status text, stage-scoped write-speed label), exposes cancel alert flow, navigates to `FinishUSBView`, and uses shared surfaces/buttons from UI compatibility layer.
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` → builds typed helper requests, coordinates helper execution/cancellation, and maps XPC progress events into UI state.
 - `macUSB/Features/Installation/CreatorLogic.swift` → provides shared helper-path utilities (start/cancel alert flow, USB availability monitoring, emergency unmount, cleanup, immediate reset/back flow).
-- `macUSB/Features/Finish/FinishUSBView.swift` → fallback cleanup safety net (unmount + conditional temp delete), result sound (prefers bundled `burn_complete.aif`), process duration summary/logging, optional background system notification gated by permission/toggle, reset callback, and dedicated cancelled-mode UX.
+- `macUSB/Features/Finish/FinishUSBView.swift` → fallback cleanup safety net (unmount + conditional temp delete), result sound (prefers bundled `burn_complete.aif`), process duration summary/logging, optional background system notification gated by permission/toggle, reset callback, dedicated cancelled-mode UX, and shared bottom action/status layer.
+- `macUSB/Shared/UI/DesignTokens.swift` → consumed by all primary flow views and window setup for consistent spacing/radii/window size.
+- `macUSB/Shared/UI/LiquidGlassCompatibility.swift` → consumed by views for availability-safe panel and button styling (`macOS 26` glass vs `macOS 14/15` fallback).
+- `macUSB/Shared/UI/BottomActionBar.swift` → consumed by `SystemAnalysisView`, `UniversalInstallationView`, `CreationProgressView`, and `FinishUSBView`.
+- `macUSB/Shared/UI/StatusCard.swift` → consumed by feature screens for semantic cards.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
 - `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift`, `SystemAnalysisView`, and `NotificationPermissionManager`.
 - `macUSB/Shared/Services/NotificationPermissionManager.swift` → reads `UNUserNotificationCenter` state, updates `MenuState`, controls startup/menu alerts for notification permission, and opens system settings when blocked.
@@ -831,13 +857,26 @@ This section lists the main call relationships and data flow.
 2. Do not add hidden behavior in the UI: show warnings for destructive operations.
 3. Respect flow flags: `AnalysisLogic` flags are the source of truth for installation paths.
 4. Keep the window fixed: UI assumes a 550×750 fixed layout.
-5. Privileged helper operations must be observable: keep stage/status/progress-state updates flowing to UI and keep `logLine` in diagnostics logs (`HelperLiveLog`) rather than screen panels.
-6. Helper stage/status strings must stay localizable through `Localizable.xcstrings`; helper sends technical keys and the app renders them with `LocalizedStringKey`.
-7. Adding a new helper stage requires: new technical key IDs, translations for all supported languages, EN verification, and a full project build check.
-8. Use `AppLogging` for all important steps: keep logs helpful for diagnostics.
-9. Privileged install flow must run through `SMAppService` + LaunchDaemon helper in all configurations (no terminal fallback).
-10. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.
-11. Debug menu contract: top-level `DEBUG` menu is allowed only for `DEBUG` builds; it must not be available in `Release` builds.
+5. Keep UI compatibility wrappers as the only entry point for cross-version visual styling:
+- `macUSBPanelSurface`, `macUSBFloatingBarSurface`, `macUSBPrimaryButtonStyle`, `macUSBSecondaryButtonStyle`.
+6. Use shared UI primitives in the main flow:
+- status/info panels via `StatusCard`,
+- bottom action/status areas via `BottomActionBar`.
+7. Concentricity is mandatory: spacing/radii must come from `MacUSBDesignTokens` unless a documented exception exists.
+8. UI refactors must not change USB creation/helper behavior:
+- do not alter helper workflow semantics, XPC request/response contracts, or stage transition logic in UI-only iterations.
+9. Privileged helper operations must be observable: keep stage/status/progress-state updates flowing to UI and keep `logLine` in diagnostics logs (`HelperLiveLog`) rather than screen panels.
+10. Helper stage/status strings must stay localizable through `Localizable.xcstrings`; helper sends technical keys and the app renders them with `LocalizedStringKey`.
+11. Adding a new helper stage requires: new technical key IDs, translations for all supported languages, EN verification, and a full project build check.
+12. Use `AppLogging` for all important steps: keep logs helpful for diagnostics.
+13. Privileged install flow must run through `SMAppService` + LaunchDaemon helper in all configurations (no terminal fallback).
+14. Do not break the Tiger Multi-DVD override: menu option triggers a specific fallback flow.
+15. Debug menu contract: top-level `DEBUG` menu is allowed only for `DEBUG` builds; it must not be available in `Release` builds.
+16. Required UI verification matrix for UX changes:
+- compile and smoke-test on macOS 14 (Sonoma), macOS 15 (Sequoia), and macOS 26 (Tahoe),
+- verify full flow (`Welcome → Analysis → UniversalInstallation → CreationProgress → Finish`),
+- verify empty/analyzing/warning/in-progress/success/fail/cancelled states,
+- verify keyboard navigation, focus ring visibility, and VoiceOver labels.
 
 ### 14.1 AI Agent Instructions
 - IMPORTANT RULE FOR AI AGENTS: Reading this document is mandatory, but not sufficient on its own.

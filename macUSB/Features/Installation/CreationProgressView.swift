@@ -72,42 +72,32 @@ struct CreationProgressView: View {
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
-                VStack(alignment: .leading, spacing: 15) {
-                    Text("Tworzenie nośnika")
-                        .font(.title)
-                        .bold()
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.bottom, 5)
-
-                    HStack {
-                        if let detectedSystemIcon {
-                            Image(nsImage: detectedSystemIcon)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 32, height: 32)
-                        } else {
-                            Image(systemName: "applelogo")
-                                .font(.title2)
-                                .foregroundColor(.green)
-                                .frame(width: 32)
+                VStack(alignment: .leading, spacing: MacUSBDesignTokens.contentSectionSpacing) {
+                    StatusCard(tone: .success) {
+                        HStack {
+                            if let detectedSystemIcon {
+                                Image(nsImage: detectedSystemIcon)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 32, height: 32)
+                            } else {
+                                Image(systemName: "applelogo")
+                                    .font(.title2)
+                                    .foregroundColor(.green)
+                                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            }
+                            VStack(alignment: .leading) {
+                                Text("Wybrany system")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Text(systemName)
+                                    .font(.headline)
+                                    .foregroundColor(.green)
+                                    .bold()
+                            }
+                            Spacer()
                         }
-                        VStack(alignment: .leading) {
-                            Text("Wybrany system")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            Text(systemName)
-                                .font(.headline)
-                                .foregroundColor(.green)
-                                .bold()
-                        }
-                        Spacer()
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.green.opacity(0.1))
-                    .cornerRadius(8)
-
-                    Divider()
 
                     VStack(spacing: 10) {
                         ForEach(Array(stageDescriptors.enumerated()), id: \.element.id) { index, stage in
@@ -115,33 +105,26 @@ struct CreationProgressView: View {
                         }
                     }
                 }
-                .padding()
-            }
-
-            VStack(spacing: 0) {
-                Divider()
-
-                VStack(spacing: 12) {
-                    Button(action: onCancelRequested) {
-                        HStack {
-                            Text(isCancelling ? "Przerywanie..." : "Przerwij")
-                            Image(systemName: "xmark.circle")
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(8)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
-                    .tint(Color.gray.opacity(0.2))
-                    .disabled(isCancelling || !canCancelWorkflow)
-                    .opacity((isCancelling || !canCancelWorkflow) ? 0.5 : 1.0)
-                }
-                .padding()
-                .background(Color(NSColor.windowBackgroundColor))
+                .padding(.horizontal, MacUSBDesignTokens.contentHorizontalPadding)
+                .padding(.vertical, MacUSBDesignTokens.contentVerticalPadding)
             }
         }
-        .frame(width: 550, height: 750)
-        .navigationTitle("macUSB")
+        .safeAreaInset(edge: .bottom) {
+            BottomActionBar {
+                Button(action: onCancelRequested) {
+                    HStack {
+                        Text(isCancelling ? "Przerywanie..." : "Przerwij")
+                        Image(systemName: "xmark.circle")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(8)
+                }
+                .macUSBSecondaryButtonStyle(isEnabled: !(isCancelling || !canCancelWorkflow))
+                .disabled(isCancelling || !canCancelWorkflow)
+            }
+        }
+        .frame(width: MacUSBDesignTokens.windowWidth, height: MacUSBDesignTokens.windowHeight)
+        .navigationTitle("Tworzenie nośnika")
         .navigationBarBackButtonHidden(true)
         .background(
             NavigationLink(
@@ -178,8 +161,7 @@ struct CreationProgressView: View {
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.gray.opacity(0.1))
-            .cornerRadius(8)
+            .macUSBPanelSurface(.neutral)
 
         case .active:
             VStack(alignment: .leading, spacing: 10) {
@@ -215,8 +197,7 @@ struct CreationProgressView: View {
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.accentColor.opacity(0.1))
-            .cornerRadius(8)
+            .macUSBPanelSurface(.active)
 
         case .completed:
             HStack(spacing: 12) {
@@ -231,8 +212,7 @@ struct CreationProgressView: View {
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.green.opacity(0.1))
-            .cornerRadius(8)
+            .macUSBPanelSurface(.success)
         }
     }
 
