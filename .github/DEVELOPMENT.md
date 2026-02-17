@@ -122,20 +122,27 @@ Typography:
 Design tokens and concentricity:
 - Shared geometry tokens live in `macUSB/Shared/UI/DesignTokens.swift`.
 - Use `MacUSBDesignTokens` values for window size, paddings, spacing, icon column width, and radii.
+- Core spacing/scale tokens for flow screens:
+- `contentSectionSpacing`, `sectionGroupSpacing`,
+- `panelInnerPadding`, `statusCardCompactPadding`,
+- `headlineScale(for:)`, `subheadlineScale(for:)`.
 - Corner-radius hierarchy must remain concentric and predictable:
 - standard panel radius from `panelCornerRadius(for:)`
 - prominent panel radius from `prominentPanelCornerRadius(for:)`
 - docked bottom bar top radius from `dockedBarTopCornerRadius(for:)`
+- Docked bottom bar minimum height must use `dockedBarMinHeight`.
 - Avoid arbitrary per-screen radii that break visual rhythm.
 
 Panels, surfaces, and tinting:
 - Shared compatibility wrappers live in `macUSB/Shared/UI/LiquidGlassCompatibility.swift`.
 - Use `StatusCard` for status/info cards (`macUSB/Shared/UI/StatusCard.swift`), not repeated custom stacks.
 - Use `macUSBPanelSurface` / `macUSBDockedBarSurface` instead of ad-hoc background stacks.
+- Use `macUSBLowEmphasisPanelSurface` for low-emphasis helper panels when a softer structural layer is needed.
 - Semantic surface tones are:
 - `.neutral`, `.subtle` for structural grouping
 - `.info`, `.success`, `.warning`, `.error`, `.active` for state meaning
 - Strong tinting is reserved for semantic states; neutral containers stay subtle.
+- Per screen, prefer one primary semantic status card and keep helper/instructional blocks neutral/subtle.
 - Use spacing/layering for separation; do not add `Divider()` as a default panel separator.
 
 Buttons:
@@ -145,6 +152,7 @@ Buttons:
 - Disabled actions use `.disabled(...)` and reduced opacity from shared style wrappers.
 - Each screen should have one visually dominant primary action.
 - PPC instruction link uses `.buttonStyle(.bordered)` with `.controlSize(.regular)`.
+- In docked bottom bars, avoid a visual "double rounding" effect: bar radius is larger context, controls are visually subordinate.
 
 Iconography:
 - SF Symbols remain the default icon system.
@@ -196,24 +204,25 @@ Menu icon mapping (current):
 Progress indicators:
 - Inline progress uses `ProgressView().controlSize(.small)` next to status text.
 - During helper execution, `CreationProgressView` shows a stage list where:
-- pending stages are neutral cards (title + stage icon),
+- pending stages are subtle/low-emphasis cards (title + stage icon),
 - the currently active stage is semantic active card (title + status + linear progress bar; for tracked copy stages it is determinate),
-- completed stages are success cards (title + success icon).
+- completed stages are compact neutral cards with success icon accent.
 - Catalina stage icon mapping in `CreationProgressView`: `catalina_cleanup` uses `doc.badge.gearshape` (file-structure adjustments), `catalina_copy` uses `doc.on.doc.fill`, `catalina_xattr` uses `checkmark.shield.fill`.
 - Tracked copy stages (`restore`, `ppc_restore`, `createinstallmedia`, `catalina_copy`) show a numeric percent badge on the right side of active stage row.
 - For tracked copy stages, the percent is derived from copied-data bytes against source-size bytes and is clamped to `99%` while the stage is still running; completion to `100%` is implied only by stage transition to completed state.
-- For active USB-write stages (`restore`, `ppc_restore`, `createinstallmedia`, and Catalina `catalina_copy`/`ditto` stage), `CreationProgressView` shows write speed below the progress bar as `Szybkość zapisu: xx MB/s` (rounded integer, no decimals).
+- For active USB-write stages (`restore`, `ppc_restore`, `createinstallmedia`, and Catalina `catalina_copy`/`ditto` stage), `CreationProgressView` shows write speed below the progress bar as `Szybkość zapisu: xx MB/s` (rounded integer, no decimals) in monospaced-digit secondary typography.
 - Live helper log lines are not rendered in UI; they are recorded into diagnostics logs for export.
 - Motion should stay short and semantic (state-change transitions such as fade/slide), without decorative animations.
 
 Welcome screen specifics:
 - App icon is shown at 128 × 128.
 - App name `macUSB` is shown directly below the icon.
-- Description text is centered, uses `.title3`, and is padded horizontally.
+- Description text is centered, visually secondary, and scaled through `subheadlineScale(for:)` (not as a dominant heading).
+- Welcome title scale is controlled through `headlineScale(for:)` and must remain clearly larger than subtitle without becoming page-header sized.
 - Start button is prominent and uses shared primary style wrapper with `arrow.right` icon.
 
 Finish screen specifics:
-- Success/failure/cancelled block uses green/red/orange status panels (`Sukces!`, `Niepowodzenie!`, or `Przerwano`).
+- Success/failure/cancelled state uses one primary semantic result panel (`Sukces!`, `Niepowodzenie!`, or `Przerwano`) plus a lighter summary panel.
 - In success mode, the installer summary row uses detected system icon in the main left icon slot (instead of USB disk icon); fallback remains `externaldrive.fill` when icon is unavailable.
 - Cleanup section is rendered inside the shared bottom action layer while cleaning.
 - Reset and exit actions remain large and full-width; reset is secondary, exit is primary.
@@ -225,7 +234,18 @@ Formatting conventions:
 - Bullet lists in UI are rendered as literal `Text("• ...")` lines, not as SwiftUI `List` or `Text` with markdown.
 - Sections are separated by spacing and surfaces; avoid decorative separators unless semantically necessary.
 
-### 4.1 Liquid Glass Compatibility Contract
+### 4.1 Component Contract (Shared UI Primitives)
+- `StatusCard` contract:
+- `StatusCard(tone:cornerRadius:density:content:)` where `density` is `StatusCardDensity.regular` or `.compact`.
+- Compact density is for helper/instructional/supporting blocks; regular density is for primary semantic blocks.
+- `BottomActionBar` contract:
+- bottom action zones in flow screens must use `BottomActionBar` with `safeAreaInset(edge: .bottom)`.
+- `BottomActionBar` uses `macUSBDockedBarSurface` and fixed min height from tokens; do not recreate custom docked bar containers.
+- Liquid Glass wrapper contract:
+- all flow surfaces and CTAs must route through wrappers in `LiquidGlassCompatibility.swift` (`macUSBPanelSurface`, `macUSBLowEmphasisPanelSurface`, `macUSBDockedBarSurface`, `macUSBPrimaryButtonStyle`, `macUSBSecondaryButtonStyle`).
+- Direct usage of 26-only glass APIs in feature views is not allowed.
+
+### 4.2 Liquid Glass Compatibility Contract
 - Compatibility mode helper:
 - `VisualSystemMode` and `currentVisualMode()` in `macUSB/Shared/UI/LiquidGlassCompatibility.swift`.
 - On macOS 26+ (Tahoe):
@@ -233,6 +253,7 @@ Formatting conventions:
 - Keep toolbar and window chrome system-driven; avoid custom painted titlebar backgrounds.
 - On macOS 14/15 (Sonoma/Sequoia):
 - Use fallback materials/colors/strokes from the same wrappers.
+- Keep subtle panels lower-contrast than neutral panels (lighter fallback stroke/fill for `.subtle`).
 - Preserve hierarchy, spacing, and action order; do not emulate Tahoe glass with custom heavy effects.
 - Availability rules:
 - Every 26-only API must be guarded with `if #available(macOS 26.0, *)`.
@@ -876,7 +897,8 @@ This section lists the main call relationships and data flow.
 16. Required UI verification matrix for UX changes:
 - compile and smoke-test on macOS 14 (Sonoma), macOS 15 (Sequoia), and macOS 26 (Tahoe),
 - verify full flow (`Welcome → Analysis → UniversalInstallation → CreationProgress → Finish`),
-- verify empty/analyzing/warning/in-progress/success/fail/cancelled states,
+- verify empty/analyzing/unsupported/warning/in-progress/success/fail/cancelled states,
+- verify primary-action dominance and no tint conflicts between semantic cards and neutral helper cards,
 - verify keyboard navigation, focus ring visibility, and VoiceOver labels.
 
 ### 14.1 AI Agent Instructions

@@ -13,6 +13,8 @@ struct WelcomeView: View {
     
     // Pusty inicjalizator (wymagany dla ContentView)
     init() {}
+
+    private var visualMode: VisualSystemMode { currentVisualMode() }
     
     var body: some View {
         VStack(spacing: MacUSBDesignTokens.contentSectionSpacing) {
@@ -28,14 +30,15 @@ struct WelcomeView: View {
             }
 
             Text("macUSB")
-                .font(.system(size: 44, weight: .bold))
+                .font(.system(size: 40 * MacUSBDesignTokens.headlineScale(for: visualMode), weight: .semibold))
             
             // Opis z obsługą tłumaczeń
             Text("Tworzenie bootowalnych dysków USB z systemem macOS\noraz OS X nigdy nie było takie proste!")
-                .font(.title3)
+                .font(.system(size: 19 * MacUSBDesignTokens.subheadlineScale(for: visualMode), weight: .regular))
                 .multilineTextAlignment(.center)
-                .foregroundColor(.secondary)
-                .padding(.horizontal, 60)
+                .foregroundStyle(.secondary)
+                .lineSpacing(2)
+                .padding(.horizontal, 72)
                 .fixedSize(horizontal: false, vertical: true)
             
             Spacer()

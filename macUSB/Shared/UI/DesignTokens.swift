@@ -7,13 +7,16 @@ enum MacUSBDesignTokens {
     static let contentHorizontalPadding: CGFloat = 16
     static let contentVerticalPadding: CGFloat = 16
     static let contentSectionSpacing: CGFloat = 14
+    static let sectionGroupSpacing: CGFloat = 20
 
     static let panelInnerPadding: CGFloat = 14
     static let compactPanelInnerPadding: CGFloat = 10
+    static let statusCardCompactPadding: CGFloat = 10
 
     static let bottomBarHorizontalPadding: CGFloat = 16
-    static let bottomBarVerticalPadding: CGFloat = 14
+    static let bottomBarVerticalPadding: CGFloat = 12
     static let bottomBarContentSpacing: CGFloat = 12
+    static let dockedBarMinHeight: CGFloat = 84
 
     static let iconColumnWidth: CGFloat = 32
 
@@ -29,18 +32,36 @@ enum MacUSBDesignTokens {
     static func prominentPanelCornerRadius(for mode: VisualSystemMode) -> CGFloat {
         switch mode {
         case .liquidGlass:
-            return 16
+            return 15
         case .legacy:
-            return 12
+            return 11
         }
     }
 
     static func dockedBarTopCornerRadius(for mode: VisualSystemMode) -> CGFloat {
         switch mode {
         case .liquidGlass:
-            return 14
+            return 12
         case .legacy:
-            return 10
+            return 9
+        }
+    }
+
+    static func headlineScale(for mode: VisualSystemMode) -> CGFloat {
+        switch mode {
+        case .liquidGlass:
+            return 1.0
+        case .legacy:
+            return 0.97
+        }
+    }
+
+    static func subheadlineScale(for mode: VisualSystemMode) -> CGFloat {
+        switch mode {
+        case .liquidGlass:
+            return 1.0
+        case .legacy:
+            return 0.96
         }
     }
 }

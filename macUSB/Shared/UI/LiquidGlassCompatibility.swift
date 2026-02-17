@@ -23,12 +23,25 @@ enum MacUSBSurfaceTone {
 }
 
 private extension MacUSBSurfaceTone {
-    var fallbackFillColor: Color {
+    var usesStableSurfaceOnLiquidGlass: Bool {
+        switch self {
+        case .neutral, .subtle:
+            return true
+        case .info, .success, .warning, .error, .active:
+            return false
+        }
+    }
+
+    func fallbackFillColor(for colorScheme: ColorScheme) -> Color {
         switch self {
         case .neutral:
-            return Color.gray.opacity(0.10)
+            return colorScheme == .dark
+                ? Color.white.opacity(0.065)
+                : Color.black.opacity(0.038)
         case .subtle:
-            return Color(NSColor.windowBackgroundColor).opacity(0.85)
+            return colorScheme == .dark
+                ? Color.white.opacity(0.060)
+                : Color.black.opacity(0.032)
         case .info:
             return Color.blue.opacity(0.10)
         case .success:
@@ -42,10 +55,16 @@ private extension MacUSBSurfaceTone {
         }
     }
 
-    var fallbackStrokeColor: Color {
+    func fallbackStrokeColor(for colorScheme: ColorScheme) -> Color {
         switch self {
-        case .neutral, .subtle:
-            return Color.secondary.opacity(0.15)
+        case .neutral:
+            return colorScheme == .dark
+                ? Color.white.opacity(0.11)
+                : Color.black.opacity(0.09)
+        case .subtle:
+            return colorScheme == .dark
+                ? Color.white.opacity(0.10)
+                : Color.black.opacity(0.08)
         case .info:
             return Color.blue.opacity(0.25)
         case .success:
@@ -105,22 +124,24 @@ private struct MacUSBTopRoundedRectangle: Shape {
 private struct MacUSBPanelSurfaceModifier: ViewModifier {
     let tone: MacUSBSurfaceTone
     let cornerRadius: CGFloat?
+    @Environment(\.colorScheme) private var colorScheme
 
     func body(content: Content) -> some View {
         let radius = cornerRadius ?? MacUSBDesignTokens.panelCornerRadius(for: currentVisualMode())
+        let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
 
-        if #available(macOS 26.0, *) {
+        if #available(macOS 26.0, *), !tone.usesStableSurfaceOnLiquidGlass {
             content
-                .glassEffect(tone.glass, in: RoundedRectangle(cornerRadius: radius, style: .continuous))
+                .glassEffect(tone.glass, in: shape)
         } else {
             content
                 .background(
-                    RoundedRectangle(cornerRadius: radius, style: .continuous)
-                        .fill(tone.fallbackFillColor)
+                    shape
+                        .fill(tone.fallbackFillColor(for: colorScheme))
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: radius, style: .continuous)
-                        .stroke(tone.fallbackStrokeColor, lineWidth: 0.5)
+                    shape
+                        .stroke(tone.fallbackStrokeColor(for: colorScheme), lineWidth: 0.5)
                 )
         }
     }
@@ -137,6 +158,8 @@ private struct MacUSBFloatingBarSurfaceModifier: ViewModifier {
 }
 
 private struct MacUSBDockedBarSurfaceModifier: ViewModifier {
+    @Environment(\.colorScheme) private var colorScheme
+
     func body(content: Content) -> some View {
         let mode = currentVisualMode()
         let shape = MacUSBTopRoundedRectangle(
@@ -148,9 +171,9 @@ private struct MacUSBDockedBarSurfaceModifier: ViewModifier {
                 .glassEffect(.regular.interactive(false), in: shape)
         } else {
             content
-                .background(shape.fill(MacUSBSurfaceTone.subtle.fallbackFillColor))
+                .background(shape.fill(MacUSBSurfaceTone.subtle.fallbackFillColor(for: colorScheme)))
                 .overlay(
-                    shape.stroke(MacUSBSurfaceTone.subtle.fallbackStrokeColor, lineWidth: 0.5)
+                    shape.stroke(MacUSBSurfaceTone.subtle.fallbackStrokeColor(for: colorScheme), lineWidth: 0.5)
                 )
         }
     }
@@ -204,6 +227,10 @@ extension View {
 
     func macUSBDockedBarSurface() -> some View {
         modifier(MacUSBDockedBarSurfaceModifier())
+    }
+
+    func macUSBLowEmphasisPanelSurface(cornerRadius: CGFloat? = nil) -> some View {
+        modifier(MacUSBPanelSurfaceModifier(tone: .subtle, cornerRadius: cornerRadius))
     }
 
     func macUSBPrimaryButtonStyle(isEnabled: Bool = true) -> some View {

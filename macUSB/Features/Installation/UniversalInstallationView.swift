@@ -73,12 +73,13 @@ struct UniversalInstallationView: View {
     private var showsIdleActions: Bool {
         !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !isCancelling
     }
+    private var sectionIconFont: Font { .title3 }
     
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
-                VStack(alignment: .leading, spacing: MacUSBDesignTokens.contentSectionSpacing) {
-                    StatusCard(tone: .success) {
+                VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
+                    StatusCard(tone: .neutral, cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode())) {
                         HStack {
                             if let detectedSystemIcon {
                                 Image(nsImage: detectedSystemIcon)
@@ -87,23 +88,23 @@ struct UniversalInstallationView: View {
                                     .frame(width: 32, height: 32)
                             } else {
                                 Image(systemName: "applelogo")
-                                    .font(.title2)
-                                    .foregroundColor(.green)
+                                    .font(sectionIconFont)
+                                    .foregroundColor(.accentColor)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             }
-                            VStack(alignment: .leading) {
+                            VStack(alignment: .leading, spacing: 3) {
                                 Text("Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
-                                Text(systemName).font(.headline).foregroundColor(.green).bold()
+                                Text(systemName).font(.headline).foregroundColor(.primary).bold()
                             }
                             Spacer()
                         }
                     }
 
                     if let name = targetDriveDisplayName ?? targetDrive?.displayName {
-                        StatusCard(tone: .info) {
+                        StatusCard(tone: .neutral, density: .compact) {
                             HStack {
-                                Image(systemName: "externaldrive.fill").font(.title2).foregroundColor(.blue).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                                VStack(alignment: .leading) {
+                                Image(systemName: "externaldrive.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                VStack(alignment: .leading, spacing: 3) {
                                     Text("Wybrany nośnik USB").font(.caption).foregroundColor(.secondary)
                                     Text(name).font(.headline)
                                 }
@@ -113,10 +114,10 @@ struct UniversalInstallationView: View {
                     }
 
                     if let drive = targetDrive, drive.usbSpeed == .usb2 {
-                        StatusCard(tone: .warning) {
+                        StatusCard(tone: .warning, density: .compact) {
                             HStack(alignment: .center) {
                                 Image(systemName: "externaldrive.fill")
-                                    .font(.title2)
+                                    .font(sectionIconFont)
                                     .foregroundColor(.orange)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
@@ -133,12 +134,12 @@ struct UniversalInstallationView: View {
                         .transition(.opacity)
                     }
 
-                    StatusCard(tone: .neutral) {
+                    StatusCard(tone: .neutral, density: .compact) {
                         HStack(alignment: .top) {
-                            Image(systemName: "gearshape.2").font(.title2).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                            VStack(alignment: .leading, spacing: 10) {
+                            Image(systemName: "gearshape.2").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            VStack(alignment: .leading, spacing: 8) {
                                 Text("Przebieg procesu").font(.headline)
-                                VStack(alignment: .leading, spacing: 5) {
+                                VStack(alignment: .leading, spacing: 4) {
                                     if isRestoreLegacy {
                                         Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
                                         Text("• Nośnik USB zostanie sformatowany")
@@ -162,9 +163,9 @@ struct UniversalInstallationView: View {
                         }
                     }
 
-                    StatusCard(tone: .neutral) {
+                    StatusCard(tone: .neutral, density: .compact) {
                         HStack(alignment: .center, spacing: 15) {
-                            Image(systemName: "clock").font(.title2).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            Image(systemName: "clock").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
                             Text("Cały proces może potrwać kilka minut.").font(.subheadline).foregroundColor(.secondary)
                             Spacer()
                         }
@@ -174,7 +175,7 @@ struct UniversalInstallationView: View {
                         StatusCard(tone: .error) {
                             HStack(alignment: .center) {
                                 Image(systemName: "xmark.octagon.fill")
-                                    .font(.title2)
+                                    .font(sectionIconFont)
                                     .foregroundColor(.red)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
@@ -223,10 +224,10 @@ struct UniversalInstallationView: View {
                 }
 
                 if isCancelling {
-                    StatusCard(tone: .warning) {
+                    StatusCard(tone: .warning, density: .compact) {
                         HStack(alignment: .center) {
                             Image(systemName: "exclamationmark.triangle.fill")
-                                .font(.title2)
+                                .font(sectionIconFont)
                                 .foregroundColor(.orange)
                                 .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 2) {
@@ -245,10 +246,10 @@ struct UniversalInstallationView: View {
                 }
 
                 if isCancelled {
-                    StatusCard(tone: .warning) {
+                    StatusCard(tone: .warning, density: .compact) {
                         HStack(alignment: .center) {
                             Image(systemName: "exclamationmark.triangle.fill")
-                                .font(.title2)
+                                .font(sectionIconFont)
                                 .foregroundColor(.orange)
                                 .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 2) {
@@ -280,10 +281,10 @@ struct UniversalInstallationView: View {
                 }
 
                 if isUSBDisconnectedLock {
-                    StatusCard(tone: .error) {
+                    StatusCard(tone: .error, density: .compact) {
                         HStack(alignment: .center) {
                             Image(systemName: "xmark.octagon.fill")
-                                .font(.title2)
+                                .font(sectionIconFont)
                                 .foregroundColor(.red)
                                 .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 2) {

@@ -38,6 +38,7 @@ struct CreationProgressView: View {
     @Binding var helperOperationFailed: Bool
     @Binding var didCancelCreation: Bool
     @Binding var creationStartedAt: Date?
+    private var sectionIconFont: Font { .title3 }
 
     private var stageDescriptors: [CreationStageDescriptor] {
         var stageKeys: [String] = ["prepare_source"]
@@ -72,8 +73,8 @@ struct CreationProgressView: View {
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
-                VStack(alignment: .leading, spacing: MacUSBDesignTokens.contentSectionSpacing) {
-                    StatusCard(tone: .success) {
+                VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
+                    StatusCard(tone: .subtle, density: .compact) {
                         HStack {
                             if let detectedSystemIcon {
                                 Image(nsImage: detectedSystemIcon)
@@ -82,8 +83,8 @@ struct CreationProgressView: View {
                                     .frame(width: 32, height: 32)
                             } else {
                                 Image(systemName: "applelogo")
-                                    .font(.title2)
-                                    .foregroundColor(.green)
+                                    .font(sectionIconFont)
+                                    .foregroundColor(.secondary)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             }
                             VStack(alignment: .leading) {
@@ -150,69 +151,70 @@ struct CreationProgressView: View {
 
         switch stageState {
         case .pending:
-            HStack(spacing: 12) {
-                Image(systemName: iconForStage(stage.key))
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-                    .frame(width: 24)
-                Text(LocalizedStringKey(stage.titleKey))
-                    .font(.headline)
-                Spacer()
-            }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .macUSBPanelSurface(.neutral)
-
-        case .active:
-            VStack(alignment: .leading, spacing: 10) {
+            StatusCard(tone: .subtle, density: .compact) {
                 HStack(spacing: 12) {
                     Image(systemName: iconForStage(stage.key))
-                        .font(.title3)
-                        .foregroundColor(.accentColor)
+                        .font(sectionIconFont)
+                        .foregroundColor(.secondary)
                         .frame(width: 24)
                     Text(LocalizedStringKey(stage.titleKey))
-                        .font(.headline)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                     Spacer()
-                    if shouldShowCopyProgress(for: stage.key) {
-                        Text(copyProgressText())
-                            .font(.headline.monospacedDigit())
+                }
+            }
+
+        case .active:
+            StatusCard(
+                tone: .active,
+                cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode())
+            ) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack(spacing: 12) {
+                        Image(systemName: iconForStage(stage.key))
+                            .font(sectionIconFont)
                             .foregroundColor(.accentColor)
+                            .frame(width: 24)
+                        Text(LocalizedStringKey(stage.titleKey))
+                            .font(.headline)
+                        Spacer()
+                        if shouldShowCopyProgress(for: stage.key) {
+                            Text(copyProgressText())
+                                .font(.subheadline.monospacedDigit())
+                                .fontWeight(.semibold)
+                                .foregroundColor(.accentColor)
+                        }
+                    }
+                    Text(LocalizedStringKey(helperStatusKey.isEmpty ? "Rozpoczynanie..." : helperStatusKey))
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    if shouldShowCopyProgress(for: stage.key) {
+                        ProgressView(value: boundedCopyProgressPercent() / 100.0)
+                            .progressViewStyle(.linear)
+                    } else {
+                        ProgressView()
+                            .progressViewStyle(.linear)
+                    }
+                    if shouldShowWriteSpeed(for: stage.key) {
+                        Text(verbatim: writeSpeedLabelText())
+                            .font(.subheadline.monospacedDigit())
+                            .foregroundColor(.secondary)
                     }
                 }
-                Text(LocalizedStringKey(helperStatusKey.isEmpty ? "Rozpoczynanie..." : helperStatusKey))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                if shouldShowCopyProgress(for: stage.key) {
-                    ProgressView(value: boundedCopyProgressPercent() / 100.0)
-                        .progressViewStyle(.linear)
-                } else {
-                    ProgressView()
-                        .progressViewStyle(.linear)
-                }
-                if shouldShowWriteSpeed(for: stage.key) {
-                    Text(verbatim: writeSpeedLabelText())
-                        .font(.caption.monospacedDigit())
-                        .foregroundColor(.secondary)
-                }
             }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .macUSBPanelSurface(.active)
 
         case .completed:
-            HStack(spacing: 12) {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.title3)
-                    .foregroundColor(.green)
-                    .frame(width: 24)
-                Text(LocalizedStringKey(stage.titleKey))
-                    .font(.headline)
-                    .foregroundColor(.green)
-                Spacer()
+            StatusCard(tone: .neutral, density: .compact) {
+                HStack(spacing: 12) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(sectionIconFont)
+                        .foregroundColor(.green)
+                        .frame(width: 24)
+                    Text(LocalizedStringKey(stage.titleKey))
+                        .font(.subheadline)
+                    Spacer()
+                }
             }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .macUSBPanelSurface(.success)
         }
     }
 

@@ -6797,6 +6797,7 @@
       }
     },
     "Niepowodzenie!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8393,6 +8394,7 @@
       }
     },
     "Proces został zatrzymany przez użytkownika" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8943,6 +8945,7 @@
       }
     },
     "Przerwano" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9585,6 +9588,7 @@
       }
     },
     "Spróbuj ponownie od początku" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9802,6 +9806,7 @@
       }
     },
     "Sukces!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -10595,6 +10600,7 @@
       }
     },
     "Tworzenie instalatora nie powiodło się" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -10705,6 +10711,7 @@
       }
     },
     "Tworzenie nośnika zostało przerwane" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11030,6 +11037,7 @@
       }
     },
     "Utworzono instalator systemu" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12347,6 +12355,9 @@
           }
         }
       }
+    },
+    "Wykryto kompatybilny instalator" : {
+
     },
     "Wykryto system OS X Mavericks" : {
       "comment" : "Mavericks detected alert title",
