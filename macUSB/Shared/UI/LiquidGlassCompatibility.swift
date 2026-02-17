@@ -78,6 +78,30 @@ private extension MacUSBSurfaceTone {
     }
 }
 
+private struct MacUSBTopRoundedRectangle: Shape {
+    let cornerRadius: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        let radius = min(cornerRadius, min(rect.width / 2, rect.height))
+
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.minY + radius))
+        path.addQuadCurve(
+            to: CGPoint(x: rect.minX + radius, y: rect.minY),
+            control: CGPoint(x: rect.minX, y: rect.minY)
+        )
+        path.addLine(to: CGPoint(x: rect.maxX - radius, y: rect.minY))
+        path.addQuadCurve(
+            to: CGPoint(x: rect.maxX, y: rect.minY + radius),
+            control: CGPoint(x: rect.maxX, y: rect.minY)
+        )
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.closeSubpath()
+        return path
+    }
+}
+
 private struct MacUSBPanelSurfaceModifier: ViewModifier {
     let tone: MacUSBSurfaceTone
     let cornerRadius: CGFloat?
@@ -109,6 +133,26 @@ private struct MacUSBFloatingBarSurfaceModifier: ViewModifier {
         content
             .macUSBPanelSurface(.subtle, cornerRadius: radius)
             .shadow(color: Color.black.opacity(currentVisualMode() == .liquidGlass ? 0.10 : 0.06), radius: 8, y: 1)
+    }
+}
+
+private struct MacUSBDockedBarSurfaceModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        let mode = currentVisualMode()
+        let shape = MacUSBTopRoundedRectangle(
+            cornerRadius: MacUSBDesignTokens.dockedBarTopCornerRadius(for: mode)
+        )
+
+        if #available(macOS 26.0, *) {
+            content
+                .glassEffect(.regular.interactive(false), in: shape)
+        } else {
+            content
+                .background(shape.fill(MacUSBSurfaceTone.subtle.fallbackFillColor))
+                .overlay(
+                    shape.stroke(MacUSBSurfaceTone.subtle.fallbackStrokeColor, lineWidth: 0.5)
+                )
+        }
     }
 }
 
@@ -156,6 +200,10 @@ extension View {
 
     func macUSBFloatingBarSurface() -> some View {
         modifier(MacUSBFloatingBarSurfaceModifier())
+    }
+
+    func macUSBDockedBarSurface() -> some View {
+        modifier(MacUSBDockedBarSurfaceModifier())
     }
 
     func macUSBPrimaryButtonStyle(isEnabled: Bool = true) -> some View {

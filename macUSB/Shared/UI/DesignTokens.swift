@@ -34,4 +34,13 @@ enum MacUSBDesignTokens {
             return 12
         }
     }
+
+    static func dockedBarTopCornerRadius(for mode: VisualSystemMode) -> CGFloat {
+        switch mode {
+        case .liquidGlass:
+            return 14
+        case .legacy:
+            return 10
+        }
+    }
 }

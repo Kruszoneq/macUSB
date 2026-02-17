@@ -14,8 +14,6 @@ struct BottomActionBar<Content: View>: View {
         .padding(.horizontal, MacUSBDesignTokens.bottomBarHorizontalPadding)
         .padding(.vertical, MacUSBDesignTokens.bottomBarVerticalPadding)
         .frame(maxWidth: .infinity)
-        .macUSBFloatingBarSurface()
-        .padding(.horizontal, MacUSBDesignTokens.contentHorizontalPadding)
-        .padding(.bottom, 8)
+        .macUSBDockedBarSurface()
     }
 }

@@ -124,13 +124,14 @@ Design tokens and concentricity:
 - Use `MacUSBDesignTokens` values for window size, paddings, spacing, icon column width, and radii.
 - Corner-radius hierarchy must remain concentric and predictable:
 - standard panel radius from `panelCornerRadius(for:)`
-- prominent/floating layer radius from `prominentPanelCornerRadius(for:)`
+- prominent panel radius from `prominentPanelCornerRadius(for:)`
+- docked bottom bar top radius from `dockedBarTopCornerRadius(for:)`
 - Avoid arbitrary per-screen radii that break visual rhythm.
 
 Panels, surfaces, and tinting:
 - Shared compatibility wrappers live in `macUSB/Shared/UI/LiquidGlassCompatibility.swift`.
 - Use `StatusCard` for status/info cards (`macUSB/Shared/UI/StatusCard.swift`), not repeated custom stacks.
-- Use `macUSBPanelSurface` / `macUSBFloatingBarSurface` instead of ad-hoc background stacks.
+- Use `macUSBPanelSurface` / `macUSBDockedBarSurface` instead of ad-hoc background stacks.
 - Semantic surface tones are:
 - `.neutral`, `.subtle` for structural grouping
 - `.info`, `.success`, `.warning`, `.error`, `.active` for state meaning
@@ -858,7 +859,7 @@ This section lists the main call relationships and data flow.
 3. Respect flow flags: `AnalysisLogic` flags are the source of truth for installation paths.
 4. Keep the window fixed: UI assumes a 550×750 fixed layout.
 5. Keep UI compatibility wrappers as the only entry point for cross-version visual styling:
-- `macUSBPanelSurface`, `macUSBFloatingBarSurface`, `macUSBPrimaryButtonStyle`, `macUSBSecondaryButtonStyle`.
+- `macUSBPanelSurface`, `macUSBDockedBarSurface`, `macUSBPrimaryButtonStyle`, `macUSBSecondaryButtonStyle`.
 6. Use shared UI primitives in the main flow:
 - status/info panels via `StatusCard`,
 - bottom action/status areas via `BottomActionBar`.
