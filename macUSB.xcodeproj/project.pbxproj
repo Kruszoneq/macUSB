@@ -151,6 +151,11 @@
 			path = .github;
 			sourceTree = "<group>";
 		};
+		0FD6AAEC2F5A9D1A00D0C5A1 /* docs */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = docs;
+			sourceTree = "<group>";
+		};
 		0FA4D68E2EE4D133006211FD /* macUSB */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -198,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				0F7852D92F0977F700FCE876 /* .github */,
+				0FD6AAEC2F5A9D1A00D0C5A1 /* docs */,
 				0F1D673B2EEF235A00EC9CA8 /* version.json */,
 				0FB1C3772EEC7B5A00A86E0F /* LICENSE.txt */,
 				0FB1C3AF2EEC7E5F00A86E0F /* README.md */,
