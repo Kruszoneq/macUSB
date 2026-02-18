@@ -20,8 +20,6 @@ If the project helps you, you can support ongoing development:
 
 ---
 
-## 🖼️ Preview
-
 <p align="center">
   <img src="docs/readme-assets/images/macUSBreadmepreview.png" alt="macUSB UI preview" width="980">
 </p>
@@ -42,16 +40,6 @@ The app wraps that work into a guided, safer workflow so users can prepare media
 
 ---
 
-## ✨ What’s New in v2.0
-
-- Native privileged helper via **SMAppService** for a more stable, terminal-free creation workflow.
-- New creation progress UX: per-stage status + real-time write speed.
-- Better completion feedback: finish sound and optional system notifications.
-- Safer media handling: USB 2.0 throughput warning and automatic partition/filesystem preparation.
-- Better supportability and localization: diagnostic log export plus new UI languages (IT, UK, VI, TR).
-
----
-
 ## ✅ Key Features
 
 - **One guided flow:** from source analysis to final bootable media.
@@ -60,6 +48,16 @@ The app wraps that work into a guided, safer workflow so users can prepare media
 - **Automatic media prep:** partition and format checks with conversion when required.
 - **PowerPC-ready paths:** dedicated support for Tiger/Leopard-era scenarios.
 - **Notarized build:** Apple-notarized app for safer first launch.
+
+---
+
+## ✨ What’s New in v2.0
+
+- Native privileged helper via **SMAppService** for a more stable, terminal-free creation workflow.
+- New creation progress flow with per-stage status and real-time write speed.
+- Stronger safety and diagnostics: USB/media pre-checks, optional completion notifications, and built-in log export.
+
+Full change list: [Releases](https://github.com/Kruszoneq/macUSB/releases)
 
 ---
 
