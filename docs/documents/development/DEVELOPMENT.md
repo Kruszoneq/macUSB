@@ -810,11 +810,10 @@ Minimal runbook for day-to-day diagnostics and release safety:
 ## 12. Complete File Reference (Every File)
 Each entry below lists a file and its role. This section is exhaustive for tracked source and config files.
 
-- `.github/DEVELOPMENT.md` — Internal architecture/runtime contract for contributors and AI agents.
 - `LICENSE.txt` — MIT license text.
 - `README.md` — Public project overview, requirements, supported versions, languages.
 - `version.json` — Remote version metadata for update checks.
-- `docs/documents/DEVELOPMENT.md` — Repository-local mirror of development contract documentation.
+- `docs/documents/development/DEVELOPMENT.md` — Internal architecture/runtime contract for contributors and AI agents.
 - `docs/readme-assets/images/macUSBreadmepreview.png` — Current README hero preview image.
 - `docs/readme-assets/images/macUSBicon.png` — Current README app icon image.
 - `docs/readme-assets/app-screens/welcome-view.png` — README workflow screenshot: Welcome screen.
