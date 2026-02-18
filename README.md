@@ -2,7 +2,7 @@
 
 ### Creating bootable macOS and OS X USB drives has never been easier!
 
-![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) ![Security](https://img.shields.io/badge/Security-Notarized-success) ![Vibe Coded](https://img.shields.io/badge/Vibe%20Coded%20-gray) [![Website](https://img.shields.io/badge/Website-macUSB-blueviolet)](https://kruszoneq.github.io/macUSB/)
+![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) ![Security](https://img.shields.io/badge/Security-Notarized-success) [![Website](https://img.shields.io/badge/Website-macUSB-blueviolet)](https://kruszoneq.github.io/macUSB/) ![Vibe Coded](https://img.shields.io/badge/Vibe%20Coded%20-gray)
 
 **macUSB** is a guided macOS app for creating bootable USB installers from `.dmg`, `.iso`, `.cdr`, and `.app` sources.
 
@@ -28,15 +28,14 @@ If the project helps you, you can support ongoing development:
 
 ## 🔍 Why macUSB Exists
 
-As Apple Silicon Macs became the default host machines, preparing bootable USB installers for **macOS Catalina and older** became a common pain point.
+As Apple Silicon Macs became the default host machines, preparing bootable USB installers for **macOS Catalina and older** turned into a frequent support issue.
 
 Common issues reported across forums and guides include:
 - codesign and certificate validation failures on legacy installer paths,
 - version-dependent compatibility constraints and tooling differences on newer hosts,
 - manual terminal workflows that are easy to misconfigure and hard to verify.
 
-**macUSB was built from practical research and tested fixes** gathered during repeated troubleshooting of those legacy installer paths.  
-The app wraps that work into a guided, safer workflow so users can prepare media without manually stitching together fragile commands.
+**macUSB was built from practical research and tested fixes** gathered during repeated troubleshooting of these legacy installer scenarios.
 
 ---
 
@@ -103,6 +102,9 @@ Full change list: [Releases](https://github.com/Kruszoneq/macUSB/releases)
       <sub>Review process before start.</sub>
     </td>
   </tr>
+</table>
+
+<table align="center">
   <tr>
     <td align="center" valign="top">
       <strong>4. Creating USB Media</strong><br>
@@ -118,7 +120,6 @@ Full change list: [Releases](https://github.com/Kruszoneq/macUSB/releases)
       </a><br>
       <sub>Finish with next-step guidance.</sub>
     </td>
-    <td></td>
   </tr>
 </table>
 
@@ -134,7 +135,7 @@ Full change list: [Releases](https://github.com/Kruszoneq/macUSB/releases)
 ### USB Media
 - **Capacity:** at least **16 GB**; use **32 GB minimum** for **macOS 15 Sequoia** and **macOS 26 Tahoe** installers.
 - **Performance:** USB 3.0+ is recommended.
-- **External HDD/SSD support:** installer creation on external hard drives is disabled by default on every app launch to improve safety and reduce the risk of accidental target selection. You can enable it in **Options** -> **Enable external drives support**.
+- **External HDD/SSD support:** installer creation on external hard drives is disabled by default on every app launch to improve safety and reduce the risk of accidental target selection. You can enable it in **Options** → **Enable external drives support**.
 
 ### Installer Source Files
 Accepted source types:
@@ -184,15 +185,14 @@ Systems recognized and supported for USB creation:
 
 ## 🧩 Legacy & PowerPC Notes
 
-During research and real boot-testing for PowerPC USB workflows, a dedicated Open Firmware guide was created and published on the project website.
+A dedicated Open Firmware guide is available on the project website, based on real boot-testing of PowerPC USB workflows with installers created by macUSB.
 
-The guide is based on practical tests of USB installers created with macUSB, including:
+Test coverage includes:
 - **Mac OS X Tiger** and **Mac OS X Leopard** boot scenarios,
 - **Single DVD** editions, and for Tiger also the **Multi-DVD** path,
 - Open Firmware boot command usage verified on an **iMac G5** test machine.
 
-If you are reviving a PowerPC Mac, this is the recommended starting point:
-- [Step-by-step: Booting from USB on PowerPC Macs](https://kruszoneq.github.io/macUSB/pages/guides/ppc_boot_instructions.html)
+If you are reviving a PowerPC Mac, use this [step-by-step guide](https://kruszoneq.github.io/macUSB/pages/guides/ppc_boot_instructions.html).
 
 ---
 
@@ -218,9 +218,9 @@ The interface follows system language automatically:
 
 ## 🛠️ Diagnostics & Support
 
+- Before opening an issue, export logs from **Help** → **Export diagnostic logs...** and attach them.
 - Report bugs and feature requests via [GitHub Issues](https://github.com/Kruszoneq/macUSB/issues).
 - Use issue templates to speed up triage and reproducibility.
-- Export logs from **Help** -> **Export diagnostic logs...** when reporting technical problems.
 
 Helpful details in bug reports:
 - Host macOS version
