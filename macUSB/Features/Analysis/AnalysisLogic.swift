@@ -10,6 +10,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var selectedFileUrl: URL?
     @Published var recognizedVersion: String = ""
     @Published var sourceAppURL: URL?
+    @Published var detectedSystemIcon: NSImage?
     @Published var mountedDMGPath: String? = nil
 
     @Published var isAnalyzing: Bool = false
@@ -36,10 +37,42 @@ final class AnalysisLogic: ObservableObject {
         didSet {
             // Log only when the detected/selected drive actually changes
             if oldValue?.url != selectedDrive?.url {
-                let selectedPath = selectedDrive?.url.path ?? "brak"
-                self.log("Wybrano dysk: \(selectedPath)")
+                let id = selectedDrive?.device ?? "unknown"
+                let speed = selectedDrive?.usbSpeed?.rawValue ?? "USB"
+                let partitionScheme = selectedDrive?.partitionScheme?.rawValue ?? "unknown"
+                let fileSystem = selectedDrive?.fileSystemFormat?.rawValue ?? "unknown"
+                if isPPC {
+                    self.log(
+                        "Wybrano nośnik: \(id) (\(speed)) — Pojemność: \(self.selectedDrive?.size ?? "?"), Schemat: \(partitionScheme), Format: \(fileSystem), Tryb: PPC, APM",
+                        category: "USBSelection"
+                    )
+                } else {
+                    let needsFormattingText = (selectedDrive?.needsFormatting ?? true) ? "TAK" : "NIE"
+                    self.log(
+                        "Wybrano nośnik: \(id) (\(speed)) — Pojemność: \(self.selectedDrive?.size ?? "?"), Schemat: \(partitionScheme), Format: \(fileSystem), Wymaga formatowania w kolejnych etapach: \(needsFormattingText)",
+                        category: "USBSelection"
+                    )
+                }
             }
         }
+    }
+
+    /// Nośnik przekazywany do etapu instalacji. W trybie PPC flaga
+    /// needsFormatting jest wymuszana na false, ponieważ
+    /// formatowanie (APM + HFS+) jest już wbudowane w dalszy proces.
+    var selectedDriveForInstallation: USBDrive? {
+        guard let drive = selectedDrive else { return nil }
+        guard isPPC else { return drive }
+        return USBDrive(
+            name: drive.name,
+            device: drive.device,
+            size: drive.size,
+            url: drive.url,
+            usbSpeed: drive.usbSpeed,
+            partitionScheme: drive.partitionScheme,
+            fileSystemFormat: drive.fileSystemFormat,
+            needsFormatting: false
+        )
     }
 
     @Published var isCapacitySufficient: Bool = false
@@ -79,17 +112,32 @@ final class AnalysisLogic: ObservableObject {
             guard !bsd.isEmpty && bsd != "unknown" else { return nil }
             let totalCapacity = Int64(v.volumeTotalCapacity ?? 0)
             let size = ByteCountFormatter.string(fromByteCount: totalCapacity, countStyle: .file)
-            return USBDrive(name: name, device: bsd, size: size, url: url)
+            let whole = USBDriveLogic.wholeDiskName(from: bsd)
+            let speed = USBDriveLogic.detectUSBSpeed(forBSDName: whole)
+            let partitionScheme = USBDriveLogic.detectPartitionScheme(forBSDName: whole)
+            let fileSystemFormat = USBDriveLogic.detectFileSystemFormat(forVolumeURL: url)
+            return USBDrive(
+                name: name,
+                device: bsd,
+                size: size,
+                url: url,
+                usbSpeed: speed,
+                partitionScheme: partitionScheme,
+                fileSystemFormat: fileSystemFormat
+            )
         }
         return candidates
     }
 
     // MARK: - Logging
-    private func log(_ message: String) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
-        print("----------")
-        print("[\(formatter.string(from: Date()))] \(message)")
+    private func log(_ message: String, category: String = "FileAnalysis") {
+        AppLogging.info(message, category: category)
+    }
+    private func logError(_ message: String, category: String = "FileAnalysis") {
+        AppLogging.error(message, category: category)
+    }
+    private func stage(_ title: String) {
+        AppLogging.stage(title)
     }
 
     // MARK: - Logic (moved from SystemAnalysisView)
@@ -98,14 +146,14 @@ final class AnalysisLogic: ObservableObject {
         if let provider = providers.first(where: { $0.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) }) {
             provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { (item, error) in
                 if let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) {
-                    self.log("Przeciągnięto plik: \(url.path) (ext: \(url.pathExtension.lowercased()))")
+                    self.log("Przeciągnięto plik w formacie .\(url.pathExtension.lowercased())")
                     let ext = url.pathExtension.lowercased()
                     if ext == "dmg" || ext == "app" || ext == "iso" || ext == "cdr" {
                         self.processDroppedURL(url)
                     }
                 }
                 else if let url = item as? URL {
-                    self.log("Przeciągnięto plik: \(url.path) (ext: \(url.pathExtension.lowercased()))")
+                    self.log("Przeciągnięto plik w formacie .\(url.pathExtension.lowercased())")
                     let ext = url.pathExtension.lowercased()
                     if ext == "dmg" || ext == "app" || ext == "iso" || ext == "cdr" {
                         self.processDroppedURL(url)
@@ -120,7 +168,7 @@ final class AnalysisLogic: ObservableObject {
     func processDroppedURL(_ url: URL) {
         DispatchQueue.main.async {
             let ext = url.pathExtension.lowercased()
-            self.log("Wybrano plik: \(url.path) (ext: \(ext)). Resetuję stan i przygotowuję analizę.")
+            self.log("Wybrano plik w formacie .\(ext). Resetuję stan i przygotowuję analizę.")
             if ext == "dmg" || ext == "app" || ext == "iso" || ext == "cdr" {
                 withAnimation {
                     self.selectedFilePath = url.path
@@ -128,6 +176,7 @@ final class AnalysisLogic: ObservableObject {
                     self.recognizedVersion = ""
                     self.isSystemDetected = false
                     self.sourceAppURL = nil
+                    self.detectedSystemIcon = nil
                     self.selectedDrive = nil
                     self.capacityCheckFinished = false
                     self.showUSBSection = false
@@ -140,6 +189,8 @@ final class AnalysisLogic: ObservableObject {
                     self.userSkippedAnalysis = false
                     self.shouldShowMavericksDialog = false
                 }
+                self.log("Lokalizacja wybranego pliku: \(url.path)")
+                self.log("Źródło do rozpoznania wersji: \(url.path)")
             }
         }
     }
@@ -160,6 +211,7 @@ final class AnalysisLogic: ObservableObject {
                 self.recognizedVersion = ""
                 self.isSystemDetected = false
                 self.sourceAppURL = nil
+                self.detectedSystemIcon = nil
                 self.selectedDrive = nil
                 self.capacityCheckFinished = false
                 self.showUSBSection = false
@@ -172,7 +224,9 @@ final class AnalysisLogic: ObservableObject {
                 self.userSkippedAnalysis = false
                 self.shouldShowMavericksDialog = false
             }
-            self.log("Wybrano plik z panelu: \(url.path) (ext: \(ext))")
+            self.log("Wybrano plik w formacie .\(ext)")
+            self.log("Lokalizacja wybranego pliku: \(url.path)")
+            self.log("Źródło do rozpoznania wersji: \(url.path)")
         } else {
             self.log("Anulowano wybór pliku")
         } }
@@ -180,8 +234,11 @@ final class AnalysisLogic: ObservableObject {
 
     func startAnalysis() {
         guard let url = selectedFileUrl else { return }
-        self.log("Rozpoczynam analizę pliku: \(url.path)")
+        self.stage("Analiza pliku — start")
+        self.log("Rozpoczynam analizę pliku")
+        self.log("Źródło pliku do odczytu wersji: \(url.path)")
         withAnimation { isAnalyzing = true }
+        detectedSystemIcon = nil
         selectedDrive = nil; capacityCheckFinished = false
         showUSBSection = false; showUnsupportedMessage = false
         isUnsupportedSierra = false
@@ -189,7 +246,9 @@ final class AnalysisLogic: ObservableObject {
         isMavericks = false
 
         let ext = url.pathExtension.lowercased()
+        self.log("Wykryto rozszerzenie: \(ext)")
         if ext == "dmg" || ext == "iso" || ext == "cdr" {
+            self.stage("Analiza obrazu (DMG/ISO/CDR) — start")
             self.log("Analiza obrazu (DMG/ISO/CDR): montowanie obrazu przez hdiutil (attach -plist -nobrowse -readonly), odczyt Info.plist z aplikacji oraz wykrywanie wersji i trybu instalacji.")
             let oldMountPath = self.mountedDMGPath
             DispatchQueue.global(qos: .userInitiated).async {
@@ -212,6 +271,7 @@ final class AnalysisLogic: ObservableObject {
 
                             self.recognizedVersion = "\(prefix) \(cleanName) \(friendlyVer)"
                             self.sourceAppURL = appURL
+                            self.updateDetectedSystemIcon(from: appURL)
 
                             // Try to read ProductUserVisibleVersion from mounted image (Tiger/Leopard)
                             var userVisibleVersionFromMounted: String? = nil
@@ -259,6 +319,7 @@ final class AnalysisLogic: ObservableObject {
                                 }
                             }
                             if isPanther {
+                                self.logError("Wykryto niewspierany system: Mac OS X Panther (10.3). Przerywam analizę.")
                                 if let userVisible = userVisibleVersionFromMounted {
                                     self.recognizedVersion = "Mac OS X Panther \(userVisible)"
                                 } else if rawVer.starts(with: "10.3") {
@@ -306,6 +367,8 @@ final class AnalysisLogic: ObservableObject {
                             let isSierra = (rawVer == "12.6.06")
                             let isSierraName = nameLower.contains("sierra") && !nameLower.contains("high")
                             let isUnsupportedSierraVersion = isSierraName && !isSierra
+                            self.isUnsupportedSierra = isUnsupportedSierraVersion
+                            if isUnsupportedSierraVersion { self.logError("Ta wersja systemu macOS Sierra nie jest wspierana (wymagana 12.6.06).") }
 
                             let isMavericks = nameLower.contains("mavericks") || rawVer.starts(with: "10.9")
 
@@ -360,7 +423,6 @@ final class AnalysisLogic: ObservableObject {
                             if isMavericks {
                                 self.shouldShowMavericksDialog = true
                             }
-                            self.isUnsupportedSierra = isUnsupportedSierraVersion
                             if isSierra {
                                 self.recognizedVersion = "macOS Sierra 10.12"
                                 self.needsCodesign = false
@@ -368,23 +430,38 @@ final class AnalysisLogic: ObservableObject {
                             // Dla Leoparda/Tigera już ustawione na true powyżej, pozostaw
                             self.isPPC = self.isPPC || false
 
+                            let trueFlags = [
+                                self.isCatalina ? "isCatalina" : nil,
+                                self.isSierra ? "isSierra" : nil,
+                                self.isLegacyDetected ? "isLegacyDetected" : nil,
+                                self.isRestoreLegacy ? "isRestoreLegacy" : nil,
+                                self.isPPC ? "isPPC" : nil,
+                                self.isUnsupportedSierra ? "isUnsupportedSierra" : nil,
+                                self.isMavericks ? "isMavericks" : nil
+                            ].compactMap { $0 }.joined(separator: ", ")
+                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion)")
+                            self.log("Przypisane flagi: \(trueFlags.isEmpty ? "brak" : trueFlags)")
+                            AppLogging.separator()
+                            
                             if self.isSystemDetected {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUSBSection = true } }
                             } else {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUnsupportedMessage = true } }
                             }
-                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion). Flagi: isCatalina=\(self.isCatalina), isSierra=\(self.isSierra), isLegacyDetected=\(self.isLegacyDetected), isRestoreLegacy=\(self.isRestoreLegacy), isPPC=\(self.isPPC), isUnsupportedSierra=\(self.isUnsupportedSierra), isMavericks=\(self.isMavericks), Mount=\(self.mountedDMGPath ?? "brak")")
                         } else {
                             // Użyto String(localized:) aby ten ciąg został wykryty, mimo że jest przypisywany do zmiennej
                             self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
                             self.log("Analiza zakończona: nie rozpoznano instalatora.")
+                            AppLogging.separator()
                         }
                     }
                 }
             }
         }
         else if ext == "app" {
+            self.stage("Analiza aplikacji (.app) — start")
             self.log("Analiza aplikacji (.app): odczyt Info.plist (CFBundleDisplayName, CFBundleShortVersionString) oraz wykrywanie wersji i trybu instalacji.")
+            self.log("Źródło pliku do odczytu wersji: \(url.path)")
             DispatchQueue.global(qos: .userInitiated).async {
                 let result = self.readAppInfo(appUrl: url)
                 DispatchQueue.main.async {
@@ -402,6 +479,7 @@ final class AnalysisLogic: ObservableObject {
 
                             self.recognizedVersion = "\(prefix) \(cleanName) \(friendlyVer)"
                             self.sourceAppURL = appURL
+                            self.updateDetectedSystemIcon(from: appURL)
 
                             let nameLower = name.lowercased()
 
@@ -423,6 +501,7 @@ final class AnalysisLogic: ObservableObject {
                                 let isExact = rawVer.starts(with: "10.3") || rawVer.starts(with: "10.4") || rawVer.starts(with: "10.5") || rawVer.starts(with: "10.6")
                                 let exactSuffix = isExact ? " \(rawVer)" : ""
                                 if isPanther {
+                                    self.logError("Wykryto niewspierany system: Mac OS X Panther (10.3). Przerywam analizę.")
                                     self.recognizedVersion = "Mac OS X Panther\(exactSuffix)"
                                 } else if isTiger {
                                     self.recognizedVersion = "Mac OS X Tiger\(exactSuffix)"
@@ -462,6 +541,8 @@ final class AnalysisLogic: ObservableObject {
                             let isSierra = (rawVer == "12.6.06")
                             let isSierraName = nameLower.contains("sierra") && !nameLower.contains("high")
                             let isUnsupportedSierraVersion = isSierraName && !isSierra
+                            self.isUnsupportedSierra = isUnsupportedSierraVersion
+                            if isUnsupportedSierraVersion { self.logError("Ta wersja systemu macOS Sierra nie jest wspierana (wymagana 12.6.06).") }
 
                             let isMavericks = nameLower.contains("mavericks") || rawVer.starts(with: "10.9")
 
@@ -514,7 +595,6 @@ final class AnalysisLogic: ObservableObject {
                             if isMavericks {
                                 self.shouldShowMavericksDialog = true
                             }
-                            self.isUnsupportedSierra = isUnsupportedSierraVersion
                             if isSierra {
                                 self.recognizedVersion = "macOS Sierra 10.12"
                                 self.needsCodesign = false
@@ -522,15 +602,28 @@ final class AnalysisLogic: ObservableObject {
                             // isPPC zostało ustawione wcześniej dla Snow Leoparda/Leoparda/Tigera; dla pozostałych pozostaje false
                             self.isPPC = self.isPPC || false
 
+                            let trueFlags = [
+                                self.isCatalina ? "isCatalina" : nil,
+                                self.isSierra ? "isSierra" : nil,
+                                self.isLegacyDetected ? "isLegacyDetected" : nil,
+                                self.isRestoreLegacy ? "isRestoreLegacy" : nil,
+                                self.isPPC ? "isPPC" : nil,
+                                self.isUnsupportedSierra ? "isUnsupportedSierra" : nil,
+                                self.isMavericks ? "isMavericks" : nil
+                            ].compactMap { $0 }.joined(separator: ", ")
+                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion)")
+                            self.log("Przypisane flagi: \(trueFlags.isEmpty ? "brak" : trueFlags)")
+                            AppLogging.separator()
+
                             if self.isSystemDetected {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUSBSection = true } }
                             } else {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUnsupportedMessage = true } }
                             }
-                            self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion). Flagi: isCatalina=\(self.isCatalina), isSierra=\(self.isSierra), isLegacyDetected=\(self.isLegacyDetected), isRestoreLegacy=\(self.isRestoreLegacy), isPPC=\(self.isPPC), isUnsupportedSierra=\(self.isUnsupportedSierra), isMavericks=\(self.isMavericks)")
                         } else {
                             self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
                             self.log("Analiza zakończona: nie rozpoznano instalatora.")
+                            AppLogging.separator()
                         }
                     }
                 }
@@ -563,6 +656,7 @@ final class AnalysisLogic: ObservableObject {
                     self.userSkippedAnalysis = true
                     self.recognizedVersion = "Mac OS X Tiger 10.4"
                     self.sourceAppURL = effectiveSourceAppURL
+                    self.updateDetectedSystemIcon(from: effectiveSourceAppURL)
                     self.mountedDMGPath = mountPoint
                     self.isSystemDetected = true
                     self.showUnsupportedMessage = false
@@ -579,7 +673,8 @@ final class AnalysisLogic: ObservableObject {
                     self.selectedDrive = nil
                     self.capacityCheckFinished = false
                 }
-                self.log("Ustawiono Tiger Multi DVD: recognizedVersion=\(self.recognizedVersion), mount=\(self.mountedDMGPath ?? "brak"), isPPC=\(self.isPPC)")
+                let flags = [self.isPPC ? "isPPC" : nil].compactMap { $0 }.joined(separator: ", ")
+                self.log("Ustawiono Tiger Multi DVD: recognizedVersion=\(self.recognizedVersion). Flagi: \(flags.isEmpty ? "brak" : flags)")
             }
         }
     }
@@ -608,46 +703,215 @@ final class AnalysisLogic: ObservableObject {
 
     func readAppInfo(appUrl: URL) -> (String, String, URL)? {
         let plistUrl = appUrl.appendingPathComponent("Contents/Info.plist")
+        self.log("Odczyt Info.plist: \(plistUrl.path)")
         if let d = try? Data(contentsOf: plistUrl),
            let dict = try? PropertyListSerialization.propertyList(from: d, format: nil) as? [String: Any] {
             let name = (dict["CFBundleDisplayName"] as? String) ?? appUrl.lastPathComponent
             let ver = (dict["CFBundleShortVersionString"] as? String) ?? "?"
+            self.log("Odczytano Info.plist: name=\(name), version=\(ver)")
             return (name, ver, appUrl)
         }
+        self.logError("Nie udało się odczytać Info.plist")
+        return nil
+    }
+
+    private func updateDetectedSystemIcon(from appURL: URL?) {
+        guard let appURL = appURL else {
+            self.detectedSystemIcon = nil
+            return
+        }
+
+        let iconFileCandidates = [
+            "ProductPageIcon.icns",
+            "InstallAssistant.icns",
+            "Install Mac OS X.icns"
+        ]
+
+        for installerURL in self.candidateInstallerLocations(from: appURL) {
+            let resourcesURL = installerURL.appendingPathComponent("Contents/Resources", isDirectory: true)
+            self.log("Próba odczytu ikony systemu z katalogu: \(resourcesURL.path)")
+            guard let iconURL = self.findIconURL(in: resourcesURL, preferredFileNames: iconFileCandidates),
+                  let icon = NSImage(contentsOf: iconURL) else {
+                continue
+            }
+
+            self.detectedSystemIcon = icon
+            self.log("Odczytano ikonę systemu z pliku: \(iconURL.path)")
+            return
+        }
+
+        self.detectedSystemIcon = nil
+        self.log("Nie znaleziono ikony instalatora (\(iconFileCandidates.joined(separator: ", "))) dla: \(appURL.path)")
+    }
+
+    private func candidateInstallerLocations(from url: URL) -> [URL] {
+        var result: [URL] = []
+        let fm = FileManager.default
+
+        func appendUnique(_ candidate: URL) {
+            let normalized = candidate.standardizedFileURL
+            guard !result.contains(where: { $0.standardizedFileURL == normalized }) else { return }
+            result.append(candidate)
+        }
+
+        appendUnique(url)
+
+        if url.pathExtension.lowercased() != "app" {
+            // Część starych obrazów ma instalator pod klasyczną nazwą "Install Mac OS X".
+            appendUnique(url.appendingPathComponent("Install Mac OS X.app", isDirectory: true))
+            appendUnique(url.appendingPathComponent("Install OS X.app", isDirectory: true))
+            appendUnique(url.appendingPathComponent("Install macOS.app", isDirectory: true))
+
+            if let children = try? fm.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) {
+                for child in children where child.pathExtension.lowercased() == "app" {
+                    appendUnique(child)
+                }
+            }
+        }
+
+        return result.filter { fm.fileExists(atPath: $0.path) }
+    }
+
+    private func findIconURL(in resourcesURL: URL, preferredFileNames: [String]) -> URL? {
+        let fm = FileManager.default
+        guard fm.fileExists(atPath: resourcesURL.path),
+              let files = try? fm.contentsOfDirectory(at: resourcesURL, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) else {
+            return nil
+        }
+
+        var byLowercasedName: [String: URL] = [:]
+        for file in files {
+            byLowercasedName[file.lastPathComponent.lowercased()] = file
+        }
+
+        for fileName in preferredFileNames {
+            if let match = byLowercasedName[fileName.lowercased()] {
+                return match
+            }
+        }
+
+        return nil
+    }
+
+    private func readLegacyInstallMacOSXInfo(from mountURL: URL) -> (String, String, URL)? {
+        let legacyInstallers = [
+            "Install Mac OS X",
+            "Install Mac OS X.app"
+        ]
+
+        var foundLegacyPath = false
+        for installerName in legacyInstallers {
+            let installerURL = mountURL.appendingPathComponent(installerName, isDirectory: true)
+            let plistURL = installerURL.appendingPathComponent("Contents/Info.plist")
+            guard FileManager.default.fileExists(atPath: plistURL.path) else {
+                continue
+            }
+
+            foundLegacyPath = true
+            self.log("Znaleziono legacy installer path: \(installerURL.path)")
+            self.log("Odczyt Info.plist (legacy): \(plistURL.path)")
+
+            guard let data = try? Data(contentsOf: plistURL),
+                  let dict = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] else {
+                self.logError("Nie udało się odczytać Info.plist (legacy): \(plistURL.path)")
+                continue
+            }
+
+            let name = (dict["CFBundleDisplayName"] as? String) ?? installerURL.lastPathComponent
+            let version = (dict["CFBundleShortVersionString"] as? String) ?? "?"
+            self.log("Odczytano Info.plist (legacy): name=\(name), version=\(version)")
+            return (name, version, installerURL)
+        }
+
+        if !foundLegacyPath {
+            self.log("Nie znaleziono legacy path instalatora 'Install Mac OS X' w: \(mountURL.path)")
+        }
+
         return nil
     }
 
     func mountAndReadInfo(dmgUrl: URL) -> (String, String, URL, String)? {
+        self.log("Montowanie obrazu (DMG/ISO/CDR)")
         let task = Process(); task.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
         task.arguments = ["attach", dmgUrl.path, "-plist", "-nobrowse", "-readonly"]
         let pipe = Pipe(); task.standardOutput = pipe; try? task.run(); task.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        guard let plist = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any], let entities = plist["system-entities"] as? [[String: Any]] else { return nil }
+        guard let plist = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any], let entities = plist["system-entities"] as? [[String: Any]] else {
+            self.logError("Nie udało się odczytać informacji z obrazu")
+            return nil
+        }
+        self.log("Przetwarzanie wyników hdiutil attach (\(entities.count) encji)")
         for e in entities {
             if let mp = e["mount-point"] as? String {
+                let devEntry = (e["dev-entry"] as? String) ?? (e["devname"] as? String)
+                var mountId = "unknown"
+                if let dev = devEntry {
+                    let bsd = URL(fileURLWithPath: dev).lastPathComponent // e.g. disk9s1
+                    if let range = bsd.range(of: #"s\d+$"#, options: .regularExpression) {
+                        mountId = String(bsd[..<range.lowerBound]) // e.g. disk9
+                    } else {
+                        mountId = bsd // e.g. disk9
+                    }
+                }
+
+                self.log("Zamontowano obraz: \(mp) [id: \(mountId)]")
                 let mUrl = URL(fileURLWithPath: mp)
-                if let item = try? FileManager.default.contentsOfDirectory(at: mUrl, includingPropertiesForKeys: nil).first(where: { $0.pathExtension == "app" }) {
+                if let (legacyName, legacyVersion, legacyInstallerURL) = self.readLegacyInstallMacOSXInfo(from: mUrl) {
+                    self.log("Rozpoznano instalator legacy z obrazu: name=\(legacyName), version=\(legacyVersion)")
+                    return (legacyName, legacyVersion, legacyInstallerURL, mp)
+                }
+                let dirContents = try? FileManager.default.contentsOfDirectory(at: mUrl, includingPropertiesForKeys: nil)
+                if let item = dirContents?.first(where: { $0.pathExtension == "app" }) {
                     let plistUrl = item.appendingPathComponent("Contents/Info.plist")
+                    self.log("Odczyt Info.plist: \(plistUrl.path)")
                     if let d = try? Data(contentsOf: plistUrl), let dict = try? PropertyListSerialization.propertyList(from: d, format: nil) as? [String: Any] {
                         let name = (dict["CFBundleDisplayName"] as? String) ?? item.lastPathComponent
                         let ver = (dict["CFBundleShortVersionString"] as? String) ?? "?"
+                        self.log("Odczytano Info.plist z obrazu: name=\(name), version=\(ver)")
                         return (name, ver, item, mp)
+                    } else {
+                        self.logError("Nie udało się odczytać Info.plist z obrazu: \(plistUrl.path)")
+                    }
+                } else {
+                    self.log("Nie znaleziono pakietu .app w zamontowanym obrazie: \(mp)")
+                    if let names = dirContents?.map({ $0.lastPathComponent }).prefix(10) {
+                        self.log("Zawartość katalogu (\(mp)) [pierwsze 10]: \(names.joined(separator: ", "))")
                     }
                 }
             }
         }
+        self.log("Próbowano zamontować obraz i znaleźć pakiet .app oraz plik Info.plist, ale nie zostały odnalezione.")
+        self.logError("Nie udało się odczytać informacji z obrazu")
         return nil
     }
 
     func mountImageForPPC(dmgUrl: URL) -> String? {
+        self.log("Montowanie obrazu (PPC)")
         let task = Process(); task.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
         task.arguments = ["attach", dmgUrl.path, "-plist", "-nobrowse", "-readonly"]
         let pipe = Pipe(); task.standardOutput = pipe; try? task.run(); task.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        guard let plist = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any], let entities = plist["system-entities"] as? [[String: Any]] else { return nil }
-        for e in entities {
-            if let mp = e["mount-point"] as? String { return mp }
+        guard let plist = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any], let entities = plist["system-entities"] as? [[String: Any]] else {
+            self.logError("Nie udało się zamontować obrazu (PPC)")
+            return nil
         }
+        for e in entities {
+            if let mp = e["mount-point"] as? String {
+                let devEntry = (e["dev-entry"] as? String) ?? (e["devname"] as? String)
+                var mountId = "unknown"
+                if let dev = devEntry {
+                    let bsd = URL(fileURLWithPath: dev).lastPathComponent
+                    if let range = bsd.range(of: #"s\d+$"#, options: .regularExpression) {
+                        mountId = String(bsd[..<range.lowerBound])
+                    } else {
+                        mountId = bsd
+                    }
+                }
+                self.log("Zamontowano obraz (PPC): \(mp) [id: \(mountId)]")
+                return mp
+            }
+        }
+        self.logError("Nie udało się zamontować obrazu (PPC)")
         return nil
     }
 
@@ -703,6 +967,7 @@ final class AnalysisLogic: ObservableObject {
                 self.selectedFileUrl = nil
                 self.recognizedVersion = ""
                 self.sourceAppURL = nil
+                self.detectedSystemIcon = nil
                 self.mountedDMGPath = nil
 
                 self.isAnalyzing = false
@@ -733,12 +998,13 @@ final class AnalysisLogic: ObservableObject {
 
     // Call this from the UI when the user presses the "Przejdź dalej" button
     func recordProceedPressed() {
-        self.log("Użytkownik nacisnął przycisk 'Przejdź dalej'. Wybrany dysk: \(self.selectedDrive?.url.path ?? "brak"), źródło: \(self.sourceAppURL?.path ?? "brak"), rozpoznano: \(self.recognizedVersion)")
+        self.log("Użytkownik nacisnął przycisk 'Przejdź dalej'. Wybrany nośnik: \(self.selectedDrive?.url.path ?? "brak"), źródło: \(self.sourceAppURL?.path ?? "brak"), rozpoznano: \(self.recognizedVersion)")
     }
 }
 
 extension Notification.Name {
     static let macUSBResetToStart = Notification.Name("macUSB.resetToStart")
     static let macUSBStartTigerMultiDVD = Notification.Name("macUSB.startTigerMultiDVD")
+    static let macUSBDebugGoToBigSurSummary = Notification.Name("macUSB.debugGoToBigSurSummary")
+    static let macUSBDebugGoToTigerSummary = Notification.Name("macUSB.debugGoToTigerSummary")
 }
-

@@ -9,10 +9,7 @@ final class UpdateChecker {
     private let versionURL = URL(string: "https://raw.githubusercontent.com/Kruszoneq/macUSB/main/version.json")!
 
     public func checkFromMenu() {
-        guard let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
-            presentNoUpdateAlert()
-            return
-        }
+        let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
 
         URLSession.shared.dataTask(with: versionURL) { data, response, error in
             guard error == nil,
@@ -21,25 +18,27 @@ final class UpdateChecker {
                   let remoteVersion = json["version"] as? String,
                   let downloadURLString = json["url"] as? String,
                   let downloadURL = URL(string: downloadURLString) else {
-                self.presentNoUpdateAlert()
+                self.presentNoUpdateAlert(currentVersion: currentVersion)
                 return
             }
 
-            if remoteVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
-                self.presentUpdateAlert(remoteVersion: remoteVersion, downloadURL: downloadURL)
+            if let currentVersion, remoteVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+                self.presentUpdateAlert(remoteVersion: remoteVersion, downloadURL: downloadURL, currentVersion: currentVersion)
             } else {
-                self.presentNoUpdateAlert()
+                self.presentNoUpdateAlert(currentVersion: currentVersion)
             }
         }.resume()
     }
 
-    private func presentUpdateAlert(remoteVersion: String, downloadURL: URL) {
+    private func presentUpdateAlert(remoteVersion: String, downloadURL: URL, currentVersion: String) {
         DispatchQueue.main.async {
             let alert = NSAlert()
             alert.icon = NSApplication.shared.applicationIconImage
             alert.alertStyle = .informational
             alert.messageText = String(localized: "Dostępna aktualizacja!")
-            alert.informativeText = String(localized: "Dostępna jest nowa wersja: \(remoteVersion). Zalecamy aktualizację!")
+            let remoteVersionLine = String(localized: "Dostępna jest nowa wersja: \(remoteVersion). Zalecamy aktualizację!")
+            let currentVersionLine = String(localized: "Aktualnie uruchomiona wersja: \(currentVersion)")
+            alert.informativeText = "\(remoteVersionLine)\n\(currentVersionLine)"
             alert.addButton(withTitle: String(localized: "Pobierz"))
             alert.addButton(withTitle: String(localized: "Ignoruj"))
             let response = alert.runModal()
@@ -49,16 +48,21 @@ final class UpdateChecker {
         }
     }
 
-    private func presentNoUpdateAlert() {
+    private func presentNoUpdateAlert(currentVersion: String?) {
         DispatchQueue.main.async {
             let alert = NSAlert()
             alert.icon = NSApplication.shared.applicationIconImage
             alert.alertStyle = .informational
             alert.messageText = String(localized: "Brak dostępnych aktualizacji")
-            alert.informativeText = String(localized: "Korzystasz z najnowszej dostępnej wersji aplikacji")
+            let baseLine = String(localized: "Korzystasz z najnowszej dostępnej wersji aplikacji")
+            if let currentVersion {
+                let currentVersionLine = String(localized: "Aktualnie uruchomiona wersja: \(currentVersion)")
+                alert.informativeText = "\(baseLine)\n\(currentVersionLine)"
+            } else {
+                alert.informativeText = baseLine
+            }
             alert.addButton(withTitle: String(localized: "Zamknij"))
             alert.runModal()
         }
     }
 }
-

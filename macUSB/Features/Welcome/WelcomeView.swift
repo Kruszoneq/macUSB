@@ -7,14 +7,17 @@ struct WelcomeView: View {
     @EnvironmentObject var languageManager: LanguageManager
     
     @State private var dummyLock: Bool = false
+    @State private var didRunStartupFlow: Bool = false
     
     let versionCheckURL = URL(string: "https://raw.githubusercontent.com/Kruszoneq/macUSB/main/version.json")!
     
     // Pusty inicjalizator (wymagany dla ContentView)
     init() {}
+
+    private var visualMode: VisualSystemMode { currentVisualMode() }
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: MacUSBDesignTokens.contentSectionSpacing) {
             
             Spacer()
             
@@ -25,16 +28,17 @@ struct WelcomeView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 128, height: 128)
             }
-            
+
             Text("macUSB")
-                .font(.system(size: 40, weight: .bold))
+                .font(.system(size: 40 * MacUSBDesignTokens.headlineScale(for: visualMode), weight: .semibold))
             
             // Opis z obsługą tłumaczeń
-            Text("Tworzenie bootowalnych dysków USB z systemem macOS\noraz OS X nigdy nie było takie proste!")
-                .font(.title3)
+            Text("Tworzenie bootowalnych dysków USB z systemem macOS oraz OS X nigdy nie było takie proste!")
+                .font(.system(size: 17 * MacUSBDesignTokens.subheadlineScale(for: visualMode), weight: .regular))
                 .multilineTextAlignment(.center)
-                .foregroundColor(.secondary)
-                .padding(.horizontal, 40)
+                .foregroundStyle(.secondary)
+                .lineSpacing(2)
+                .padding(.horizontal, 72)
                 .fixedSize(horizontal: false, vertical: true)
             
             Spacer()
@@ -49,95 +53,48 @@ struct WelcomeView: View {
                     Image(systemName: "arrow.right")
                 }
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            .tint(Color.accentColor)
+            .macUSBPrimaryButtonStyle()
             
             Spacer()
             
             // --- STOPKA (Bottom Bar) ---
             HStack {
-                // LEWA STRONA: Autor
+                Spacer()
                 Text("macUSB by Kruszoneq")
                     .font(.caption)
                     .foregroundColor(.secondary.opacity(0.6))
-                
                 Spacer()
-                
-                // PRAWA STRONA: Wybór języka
-                Menu {
-                    // Sekcja: Wybierz język
-                    // 🇵🇱 Polish
-                    Button { languageManager.currentLanguage = "pl" } label: {
-                        Label("Polski 🇵🇱", systemImage: languageManager.currentLanguage == "pl" ? "checkmark" : "")
-                    }
-                    
-                    // 🇺🇸 English
-                    Button { languageManager.currentLanguage = "en" } label: {
-                        Label("English 🇺🇸", systemImage: languageManager.currentLanguage == "en" ? "checkmark" : "")
-                    }
-                    
-                    // 🇩🇪 German
-                    Button { languageManager.currentLanguage = "de" } label: {
-                        Label("Deutsch 🇩🇪", systemImage: languageManager.currentLanguage == "de" ? "checkmark" : "")
-                    }
-                    
-                    // 🇫🇷 French
-                    Button { languageManager.currentLanguage = "fr" } label: {
-                        Label("Français 🇫🇷", systemImage: languageManager.currentLanguage == "fr" ? "checkmark" : "")
-                    }
-                    
-                    // 🇪🇸 Spanish
-                    Button { languageManager.currentLanguage = "es" } label: {
-                        Label("Español 🇪🇸", systemImage: languageManager.currentLanguage == "es" ? "checkmark" : "")
-                    }
-                    
-                    // 🇧🇷 Portuguese (Brazil)
-                    Button { languageManager.currentLanguage = "pt-BR" } label: {
-                        Label("Português (BR) 🇧🇷", systemImage: languageManager.currentLanguage == "pt-BR" ? "checkmark" : "")
-                    }
-                    
-                    // 🇷🇺 Russian
-                    Button { languageManager.currentLanguage = "ru" } label: {
-                        Label("Русский 🇷🇺", systemImage: languageManager.currentLanguage == "ru" ? "checkmark" : "")
-                    }
-                    
-                    // 🇨🇳 Simplified Chinese
-                    Button { languageManager.currentLanguage = "zh-Hans" } label: {
-                        Label("简体中文 🇨🇳", systemImage: languageManager.currentLanguage == "zh-Hans" ? "checkmark" : "")
-                    }
-                    
-                    // 🇯🇵 Japanese
-                    Button { languageManager.currentLanguage = "ja" } label: {
-                        Label("日本語 🇯🇵", systemImage: languageManager.currentLanguage == "ja" ? "checkmark" : "")
-                    }
-                    
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "globe")
-                        Text("Zmień język") // Klucz do tłumaczenia (np. "Change Language")
-                            .font(.caption)
-                            .fontWeight(.medium)
-                    }
-                    .foregroundColor(.secondary)
-                }
-                .menuStyle(.borderlessButton)
-                .fixedSize() // Zapobiega ucinaniu tekstu
             }
             .padding(.horizontal, 25)
             .padding(.bottom, 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .navigationTitle("Start")
         .onAppear {
-            checkForUpdates()
+            guard !didRunStartupFlow else { return }
+            didRunStartupFlow = true
+            checkForUpdates {
+                HelperServiceManager.shared.bootstrapIfNeededAtStartup { _ in
+                    NotificationPermissionManager.shared.handleStartupFlowIfNeeded()
+                }
+            }
         }
     }
     
-    func checkForUpdates() {
+    func checkForUpdates(completion: @escaping () -> Void) {
         let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
         
         URLSession.shared.dataTask(with: versionCheckURL) { data, response, error in
-            guard let data = data, error == nil else { return }
+            let finishOnMain: () -> Void = {
+                DispatchQueue.main.async {
+                    completion()
+                }
+            }
+
+            guard let data = data, error == nil else {
+                finishOnMain()
+                return
+            }
             
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String],
@@ -150,20 +107,28 @@ struct WelcomeView: View {
                             alert.icon = NSApplication.shared.applicationIconImage
                             alert.alertStyle = .informational
                             alert.messageText = String(localized: "Dostępna aktualizacja!")
-                            alert.informativeText = String(localized: "Dostępna jest nowa wersja: \(remoteVersion). Zalecamy aktualizację!")
+                            let remoteVersionLine = String(localized: "Dostępna jest nowa wersja: \(remoteVersion). Zalecamy aktualizację!")
+                            let currentVersionLine = String(localized: "Aktualnie uruchomiona wersja: \(currentVersion)")
+                            alert.informativeText = "\(remoteVersionLine)\n\(currentVersionLine)"
                             alert.addButton(withTitle: String(localized: "Pobierz"))
                             alert.addButton(withTitle: String(localized: "Ignoruj"))
                             let response = alert.runModal()
                             if response == .alertFirstButtonReturn, let url = URL(string: downloadLink) {
                                 NSWorkspace.shared.open(url)
                             }
+                            completion()
                         }
+                    } else {
+                        finishOnMain()
                     }
+                } else {
+                    finishOnMain()
                 }
             } catch {
                 print("Błąd sprawdzania aktualizacji: \(error)")
+                finishOnMain()
             }
         }.resume()
     }
+    
 }
-

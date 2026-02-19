@@ -1,24 +1,144 @@
 import Foundation
+import IOKit
+import IOKit.storage
+import IOKit.usb
 
 struct USBDriveLogic {
+    /// Zwraca nazwę dysku bazowego (np. z "disk2s1" -> "disk2")
+    static func wholeDiskName(from bsd: String) -> String {
+        if let range = bsd.range(of: #"^disk\d+"#, options: .regularExpression) {
+            return String(bsd[range])
+        }
+        return bsd
+    }
+
+    /// Odczytuje właściwość z IORegistry jako Any
+    private static func ioRegistryProperty(_ entry: io_registry_entry_t, key: String) -> Any? {
+        let cfKey = key as CFString
+        if let cfProp = IORegistryEntryCreateCFProperty(entry, cfKey, kCFAllocatorDefault, 0)?.takeRetainedValue() {
+            return cfProp
+        }
+        return nil
+    }
+
+    /// Wykrywa schemat partycji dla whole-disk o nazwie BSD (np. disk2)
+    static func detectPartitionScheme(forBSDName bsdWholeName: String) -> PartitionScheme? {
+        var iterator: io_iterator_t = 0
+        guard let match = IOServiceMatching("IOMedia") else { return nil }
+        if IOServiceGetMatchingServices(0, match, &iterator) != KERN_SUCCESS { return nil }
+        defer { IOObjectRelease(iterator) }
+
+        while case let service = IOIteratorNext(iterator), service != IO_OBJECT_NULL {
+            defer { IOObjectRelease(service) }
+
+            let bsdName = ioRegistryProperty(service, key: kIOBSDNameKey as String) as? String
+            let isWhole = (ioRegistryProperty(service, key: kIOMediaWholeKey as String) as? NSNumber)?.boolValue ?? false
+            guard bsdName == bsdWholeName, isWhole else { continue }
+
+            let content = (ioRegistryProperty(service, key: kIOMediaContentKey as String) as? String)?.lowercased()
+            switch content {
+            case "guid_partition_scheme":
+                return .gpt
+            case "apple_partition_scheme":
+                return .apm
+            case "fdisk_partition_scheme":
+                return .mbr
+            case .some:
+                return .unknown
+            case .none:
+                return nil
+            }
+        }
+        return nil
+    }
+
+    /// Przechodzi po rodzicach w płaszczyźnie kIOServicePlane aż do korzenia, zwracając wykryty standard USB
+    static func detectUSBSpeed(forBSDName bsdWholeName: String) -> USBPortSpeed? {
+        // Wyszukaj w IORegistry węzeł IOMedia odpowiadający whole disk o nazwie BSD
+        var iterator: io_iterator_t = 0
+        guard let match = IOServiceMatching("IOMedia") else { return nil }
+        // Pobierz wszystkie IOMedia i przefiltruj we własnym zakresie
+        if IOServiceGetMatchingServices(0, match, &iterator) != KERN_SUCCESS { return nil }
+        defer { IOObjectRelease(iterator) }
+
+        var media: io_object_t = IO_OBJECT_NULL
+        while case let service = IOIteratorNext(iterator), service != IO_OBJECT_NULL {
+            defer { IOObjectRelease(service) }
+            // Sprawdź nazwę BSD i czy to whole media
+            let bsdName = ioRegistryProperty(service, key: kIOBSDNameKey as String) as? String
+            let isWhole = (ioRegistryProperty(service, key: kIOMediaWholeKey as String) as? NSNumber)?.boolValue ?? false
+            if bsdName == bsdWholeName && isWhole {
+                // Wspinaj się po rodzicach i szukaj węzłów USB
+                var current: io_registry_entry_t = service
+                while true {
+                    var parent: io_registry_entry_t = IO_OBJECT_NULL
+                    let kr = IORegistryEntryGetParentEntry(current, kIOServicePlane, &parent)
+                    if kr != KERN_SUCCESS || parent == IO_OBJECT_NULL { break }
+
+                    // Spróbuj odczytać bcdUSB
+                    if let bcd = ioRegistryProperty(parent, key: "bcdUSB") as? NSNumber {
+                        let value = bcd.intValue
+                        if value >= 0x0400 { IOObjectRelease(parent); return .usb4 }
+                        if value >= 0x0320 { IOObjectRelease(parent); return .usb32 }
+                        if value >= 0x0310 { IOObjectRelease(parent); return .usb31 }
+                        if value >= 0x0300 { IOObjectRelease(parent); return .usb3 }
+                        if value >= 0x0200 { IOObjectRelease(parent); return .usb2 }
+                    }
+                    // Spróbuj odczytać PortSpeed (np. "High Speed", "SuperSpeed")
+                    if let speedStr = ioRegistryProperty(parent, key: "PortSpeed") as? String {
+                        let s = speedStr.lowercased()
+                        if s.contains("superspeed") { IOObjectRelease(parent); return .usb3 }
+                        if s.contains("high speed") { IOObjectRelease(parent); return .usb2 }
+                    }
+
+                    IOObjectRelease(current)
+                    current = parent
+                }
+                if current != IO_OBJECT_NULL { IOObjectRelease(current) }
+                break
+            }
+        }
+        return nil
+    }
+
     /// Returns true if the mounted volume at the given URL is a network filesystem.
     private static func isNetworkVolume(url: URL) -> Bool {
+        guard let fsName = fileSystemTypeName(url: url) else { return false }
+        let networkTypes: Set<String> = ["smbfs", "afpfs", "webdav", "nfs", "cifs"]
+        return networkTypes.contains(fsName)
+    }
+
+    /// Returns a normalized filesystem type name from statfs (e.g. apfs, hfs, exfat).
+    private static func fileSystemTypeName(url: URL) -> String? {
         return url.withUnsafeFileSystemRepresentation { ptr in
-            guard let ptr = ptr else { return false }
+            guard let ptr = ptr else { return nil }
             var stat = statfs()
-            if statfs(ptr, &stat) == 0 {
-                // Extract filesystem type name (e.g., "apfs", "smbfs", "webdav", "afpfs")
-                let fsName = withUnsafePointer(to: &stat.f_fstypename) {
-                    $0.withMemoryRebound(to: CChar.self, capacity: Int(MFSTYPENAMELEN)) {
-                        String(cString: $0)
-                    }
-                }.lowercased()
-                // Common network filesystem types
-                let networkTypes: Set<String> = ["smbfs", "afpfs", "webdav", "nfs", "cifs"]
-                return networkTypes.contains(fsName)
-            }
-            return false
-        } ?? false
+            guard statfs(ptr, &stat) == 0 else { return nil }
+            return withUnsafePointer(to: &stat.f_fstypename) {
+                $0.withMemoryRebound(to: CChar.self, capacity: Int(MFSTYPENAMELEN)) {
+                    String(cString: $0)
+                }
+            }.lowercased()
+        } ?? nil
+    }
+
+    /// Wykrywa format systemu plików dla zamontowanego woluminu.
+    static func detectFileSystemFormat(forVolumeURL url: URL) -> FileSystemFormat? {
+        guard let fsName = fileSystemTypeName(url: url) else { return nil }
+        switch fsName {
+        case "apfs":
+            return .apfs
+        case "hfs":
+            return .hfsPlus
+        case "exfat":
+            return .exfat
+        case "msdos":
+            return .fat
+        case "ntfs":
+            return .ntfs
+        default:
+            return .unknown
+        }
     }
 
     /// Returns the BSD device name (e.g., "disk2s1") for a mounted volume URL.
@@ -36,6 +156,167 @@ struct USBDriveLogic {
             }
             return "unknown"
         } ?? "unknown"
+    }
+
+    /// Resolves a mounted target volume to a physical whole-disk BSD name used for destructive formatting.
+    /// For APFS selections this maps container/volume identifiers to the underlying physical store disk.
+    static func resolveFormattingWholeDiskBSDName(forVolumeURL url: URL, fallbackBSDName: String) -> String? {
+        let requestedWhole = wholeDiskName(from: fallbackBSDName)
+        var containerReferences: [String] = []
+        let candidateArguments: [[String]] = [
+            ["info", "-plist", url.path],
+            ["info", "-plist", "/dev/\(fallbackBSDName)"],
+            ["info", "-plist", "/dev/\(requestedWhole)"],
+            ["list", "-plist", "/dev/\(requestedWhole)"]
+        ]
+
+        for arguments in candidateArguments {
+            guard let plist = runDiskutilPlistCommand(arguments: arguments) else { continue }
+            containerReferences.append(contentsOf: extractAPFSContainerReferences(from: plist))
+            if let physicalWhole = extractAPFSPhysicalStoreWholeDisk(from: plist) {
+                return physicalWhole
+            }
+            if let parentWhole = extractParentWholeDisk(from: plist),
+               parentWhole != requestedWhole {
+                return parentWhole
+            }
+        }
+
+        for containerRef in Set(containerReferences) {
+            let normalizedContainer = normalizeBSDIdentifier(containerRef) ?? requestedWhole
+            let apfsCandidates: [[String]] = [
+                ["apfs", "list", "-plist", "/dev/\(normalizedContainer)"],
+                ["info", "-plist", "/dev/\(normalizedContainer)"]
+            ]
+            for arguments in apfsCandidates {
+                guard let plist = runDiskutilPlistCommand(arguments: arguments) else { continue }
+                if let physicalWhole = extractAPFSPhysicalStoreWholeDisk(from: plist) {
+                    return physicalWhole
+                }
+                if let parentWhole = extractParentWholeDisk(from: plist),
+                   parentWhole != requestedWhole {
+                    return parentWhole
+                }
+            }
+        }
+
+        return requestedWhole
+    }
+
+    private static func runDiskutilPlistCommand(arguments: [String]) -> [String: Any]? {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/sbin/diskutil")
+        process.arguments = arguments
+
+        let outputPipe = Pipe()
+        process.standardOutput = outputPipe
+        process.standardError = Pipe()
+
+        do {
+            try process.run()
+        } catch {
+            return nil
+        }
+
+        process.waitUntilExit()
+        guard process.terminationStatus == 0 else { return nil }
+
+        let data = outputPipe.fileHandleForReading.readDataToEndOfFile()
+        return try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any]
+    }
+
+    private static func extractAPFSPhysicalStoreWholeDisk(from plist: [String: Any]) -> String? {
+        if let stores = plist["APFSPhysicalStores"] as? [[String: Any]] {
+            for store in stores {
+                if let identifier = store["DeviceIdentifier"] as? String,
+                   let normalized = normalizeBSDIdentifier(identifier) {
+                    return wholeDiskName(from: normalized)
+                }
+            }
+        }
+
+        if let stores = plist["APFSPhysicalStores"] as? [String] {
+            for identifier in stores {
+                if let normalized = normalizeBSDIdentifier(identifier) {
+                    return wholeDiskName(from: normalized)
+                }
+            }
+        }
+
+        for value in plist.values {
+            if let dict = value as? [String: Any],
+               let found = extractAPFSPhysicalStoreWholeDisk(from: dict) {
+                return found
+            }
+            if let array = value as? [[String: Any]] {
+                for dict in array {
+                    if let found = extractAPFSPhysicalStoreWholeDisk(from: dict) {
+                        return found
+                    }
+                }
+            }
+        }
+
+        return nil
+    }
+
+    private static func extractParentWholeDisk(from plist: [String: Any]) -> String? {
+        if let parent = plist["ParentWholeDisk"] as? String,
+           let normalized = normalizeBSDIdentifier(parent) {
+            return wholeDiskName(from: normalized)
+        }
+
+        for value in plist.values {
+            if let dict = value as? [String: Any],
+               let found = extractParentWholeDisk(from: dict) {
+                return found
+            }
+            if let array = value as? [[String: Any]] {
+                for dict in array {
+                    if let found = extractParentWholeDisk(from: dict) {
+                        return found
+                    }
+                }
+            }
+        }
+
+        return nil
+    }
+
+    private static func extractAPFSContainerReferences(from plist: [String: Any]) -> [String] {
+        var result: [String] = []
+
+        if let containerRef = plist["APFSContainerReference"] as? String,
+           let normalized = normalizeBSDIdentifier(containerRef) {
+            result.append(normalized)
+        }
+
+        if let containerRefs = plist["APFSContainerReference"] as? [String] {
+            for ref in containerRefs {
+                if let normalized = normalizeBSDIdentifier(ref) {
+                    result.append(normalized)
+                }
+            }
+        }
+
+        for value in plist.values {
+            if let dict = value as? [String: Any] {
+                result.append(contentsOf: extractAPFSContainerReferences(from: dict))
+            } else if let array = value as? [[String: Any]] {
+                for dict in array {
+                    result.append(contentsOf: extractAPFSContainerReferences(from: dict))
+                }
+            }
+        }
+
+        return result
+    }
+
+    private static func normalizeBSDIdentifier(_ value: String) -> String? {
+        if let range = value.range(of: #"disk\d+(?:s\d+)?"#, options: .regularExpression) {
+            return String(value[range])
+        }
+        return nil
     }
 
     /// Enumerates external, non-internal, non-network removable mounted volumes and returns them as USBDrive models.
@@ -64,7 +345,19 @@ struct USBDriveLogic {
             let totalCapacity = Int64(v.volumeTotalCapacity ?? 0)
             let size = ByteCountFormatter.string(fromByteCount: totalCapacity, countStyle: .file)
             let deviceName = getBSDName(from: url)
-            return USBDrive(name: name, device: deviceName, size: size, url: url)
+            let whole = wholeDiskName(from: deviceName)
+            let speed = detectUSBSpeed(forBSDName: whole)
+            let partitionScheme = detectPartitionScheme(forBSDName: whole)
+            let fileSystemFormat = detectFileSystemFormat(forVolumeURL: url)
+            return USBDrive(
+                name: name,
+                device: deviceName,
+                size: size,
+                url: url,
+                usbSpeed: speed,
+                partitionScheme: partitionScheme,
+                fileSystemFormat: fileSystemFormat
+            )
         }
         return drives
     }

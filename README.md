@@ -1,75 +1,162 @@
-# <img src="screenshots/macUSBiconPNG.png" alt="macUSB" width="64" height="64" style="vertical-align: middle;"> macUSB
+# <img src="docs/readme-assets/images/macUSBicon.png" alt="macUSB" width="64" height="64" style="vertical-align: middle;"> macUSB
 
 ### Creating bootable macOS and OS X USB drives has never been easier!
 
-![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) ![Security](https://img.shields.io/badge/Security-Notarized-success) ![Vibe Coded](https://img.shields.io/badge/Vibe%20Coded%20-gray) [![Website](https://img.shields.io/badge/Website-macUSB-blueviolet)](https://kruszoneq.github.io/macUSB/)
+![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) ![Security](https://img.shields.io/badge/Security-Notarized-success) [![Website](https://img.shields.io/badge/Website-macUSB-blueviolet)](https://kruszoneq.github.io/macUSB/) ![Vibe Coded](https://img.shields.io/badge/Vibe%20Coded%20-gray)
 
+**macUSB** is a guided macOS app for creating bootable USB installers from `.dmg`, `.iso`, `.cdr`, and `.app` sources.
 
-**macUSB** is a one-click tool that transforms your modern Mac (Apple Silicon) into a service machine capable of reviving older Apple computers.
+**Primary download:** [Download latest release](https://github.com/Kruszoneq/macUSB/releases/latest)  
+**Project website:** [kruszoneq.github.io/macUSB](https://kruszoneq.github.io/macUSB/)
 
 ---
-## ☕ Support
 
-If you’d like to support the project, here’s a simple way.
+## ☕ Support the Project
+
+**macUSB is and will always remain completely free.** Every update and feature is available to everyone.  
+If the project helps you, you can support ongoing development:
 
 <a href="https://www.buymeacoffee.com/kruszoneq" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
-## 🖼️ Preview
+---
 
 <p align="center">
-  <img src="screenshots/macUSBtheme.png" alt="macUSB – UI preview" width="980">
+  <img src="docs/readme-assets/images/macUSBreadmepreview.png" alt="macUSB UI preview" width="980">
 </p>
-
-## 🚀 About the Project
-
-With Apple's transition to its own silicon (M1, M2, M3...), preparing installation media for older Intel- and PowerPC-based computers has become a challenge. Many people encounter Terminal errors, issues with expired certificates in old installers, or simply a lack of compatibility with system tools.
-
-**macUSB solves this problem.**
-
-The application automates the entire process of creating a bootable USB drive. You don't need to search for commands online, worry about disk formatting, or manually fix validation errors in old installation files.
-
-### What do you gain?
-* **Legacy Support:** The ability to create installers for systems over a decade old (e.g., OS X Lion) directly on the latest Mac on Apple Silicon.
-* **Time Saving:** The app detects the system version in the **`.dmg`**, **`.iso`**, **`.cdr`** or **`.app`** file, formats the drive, and copies files automatically.
-* **Auto Fixes:** For certain systems (e.g., High Sierra/Mojave), the app automatically applies necessary fixes so the installer works despite expired Apple certificates.
-* **PowerPC Revival:** The app formats USB drives to the Apple Partition Map (APM) scheme required by PowerPC Macs and transfers the installer directly from **`.iso`**, **`.cdr`** or **`.dmg`** files. This allows for installation without the need for physical CDs/DVDs or FireWire drives.
-  
-  > 📖 **Guide:** [Step-by-step: Booting from USB on PowerPC Macs using Open Firmware](https://kruszoneq.github.io/macUSB/pages/guides/ppc_boot_instructions.html)
-
-* **Security:** Starting with version **v1.1.2**, the application is officially **notarized by Apple**. This guarantees that the software is free from malicious code and ensures a seamless, secure first launch on macOS without requiring any extra security workarounds.
 
 ---
 
-**Fun Fact:** The application was created using the "Vibe Coding" method. Every single function has been rigorously verified for correct operation to ensure full stability. This project proves that programming barriers (even cross-architectural ones) can be overcome with determination and AI support while maintaining the highest standards of code quality.
+## 🔍 Why macUSB Exists
+
+As Apple Silicon Macs became the default host machines, preparing bootable USB installers for **macOS Catalina and older** turned into a frequent support issue.
+
+Common issues reported across forums and guides include:
+- codesign and certificate validation failures on legacy installer paths,
+- version-dependent compatibility constraints and tooling differences on newer hosts,
+- manual terminal workflows that are easy to misconfigure and hard to verify.
+
+**macUSB was built from practical research and tested fixes** gathered during repeated troubleshooting of these legacy installer scenarios.
+
+---
+
+## ✅ Key Features
+
+- **One guided flow:** from source analysis to final bootable media.
+- **Broad source support:** `.dmg`, `.iso`, `.cdr`, and `.app`.
+- **Legacy compatibility focus:** supports modern macOS plus older OS X / Mac OS X generations.
+- **Automatic media prep:** partition and format checks with conversion when required.
+- **PowerPC-ready paths:** dedicated support for Tiger/Leopard-era scenarios.
+- **Notarized build:** Apple-notarized app for safer first launch.
+
+---
+
+## ✨ What’s New in v2.0
+
+- Native privileged helper via **SMAppService** for a more stable, terminal-free creation workflow.
+- New creation progress flow with per-stage status and real-time write speed.
+- Stronger safety and diagnostics: USB/media pre-checks, optional completion notifications, and built-in log export.
+
+Full change list: [Releases](https://github.com/Kruszoneq/macUSB/releases)
+
+---
+
+## ⚡ Quick Start
+
+1. Download the app from [latest releases](https://github.com/Kruszoneq/macUSB/releases/latest).
+2. Open macUSB and select an installer source file (`.dmg`, `.iso`, `.cdr`, or `.app`).
+3. Select the target USB drive and review operation details.
+4. Start creation and monitor stage-by-stage progress.
+5. Use the final result screen for next steps.
+
+> First launch note: macUSB will prompt you to allow background operation required by the privileged helper. This permission is mandatory — without it, installer creation cannot run.
+
+> Warning: All data on the selected USB drive will be erased.
+
+---
+
+## 🧭 App Workflow
+
+<p align="center">
+  Click any screenshot to open full size.
+</p>
+
+<table align="center">
+  <tr>
+    <td align="center" valign="top">
+      <strong>1. Welcome</strong><br>
+      <a href="docs/readme-assets/app-screens/welcome-view.png">
+        <img src="docs/readme-assets/app-screens/welcome-view.png" alt="Welcome view" width="190">
+      </a><br>
+      <sub>Start the workflow.</sub>
+    </td>
+    <td align="center" valign="top">
+      <strong>2. Source &amp; Target</strong><br>
+      <a href="docs/readme-assets/app-screens/source-target-configuration.png">
+        <img src="docs/readme-assets/app-screens/source-target-configuration.png" alt="Source and target configuration" width="190">
+      </a><br>
+      <sub>Select installer and USB drive.</sub>
+    </td>
+    <td align="center" valign="top">
+      <strong>3. Operation Details</strong><br>
+      <a href="docs/readme-assets/app-screens/operation-details.png">
+        <img src="docs/readme-assets/app-screens/operation-details.png" alt="Operation details" width="190">
+      </a><br>
+      <sub>Review process before start.</sub>
+    </td>
+  </tr>
+</table>
+
+<table align="center">
+  <tr>
+    <td align="center" valign="top">
+      <strong>4. Creating USB Media</strong><br>
+      <a href="docs/readme-assets/app-screens/creating-usb-media.png">
+        <img src="docs/readme-assets/app-screens/creating-usb-media.png" alt="Creation progress" width="190">
+      </a><br>
+      <sub>Track stage-by-stage progress.</sub>
+    </td>
+    <td align="center" valign="top">
+      <strong>5. Operation Result</strong><br>
+      <a href="docs/readme-assets/app-screens/operation-result.png">
+        <img src="docs/readme-assets/app-screens/operation-result.png" alt="Operation result" width="190">
+      </a><br>
+      <sub>Finish with next-step guidance.</sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
 ## ⚙️ Requirements
 
-### Host Computer (where you run the app):
-* **Processor:** Both Apple Silicon and Intel are supported.
-* **System:** **macOS Sonoma 14.6** or newer.
-* **Storage:** Minimum of **15 GB** of free disk space is required **to create the installers**.
+### Host Computer
+- **Processor:** Apple Silicon or Intel.
+- **System:** **macOS 14.6 Sonoma** or newer.
+- **Free disk space:** at least **15 GB** available for installer preparation.
 
-### USB Drives & External Storage
-* **Capacity:** A minimum of **16 GB** is required.
-* **Speed:** USB 3.0 or newer is highly recommended for faster installation times.
-* **External Drives (HDD/SSD):** By default, only USB flash drives are detected for safety. To use external disks, enable **Options** → **Enable external drives support**.
+### USB Media
+- **Capacity:** at least **16 GB**; use **32 GB minimum** for **macOS 15 Sequoia** and **macOS 26 Tahoe** installers.
+- **Performance:** USB 3.0+ is recommended.
+- **External HDD/SSD support:** installer creation on external hard drives is disabled by default on every app launch to improve safety and reduce the risk of accidental target selection. You can enable it in **Options** → **Enable external drives support**.
 
-### Installation Files:
-The program supports **`.dmg`**, **`.cdr`** and **`.iso`** disk images, as well as raw **`.app`** installer files.
+### Installer Source Files
+Accepted source types:
+- `.dmg`
+- `.cdr`
+- `.iso`
+- `.app`
 
-> **Pro Tip:** Where to get valid files?
-> * **OS X 10.7 - 10.8** and **10.10 – macOS 26:** The most convenient solution is downloading via the free app **[Mist](https://github.com/ninxsoft/Mist)**.
-> * **OS X 10.9:** The recommended source is **[Mavericks Forever](https://mavericksforever.com/)** (macUSB support was developed based on the image from this site).
-> * **Mac OS X 10.4 – 10.6 (Intel):** Disk images are available on the **Internet Archive**.
-> * **Mac OS X 10.4 – 10.5 (PowerPC):** Images for PPC architecture can be found on **Macintosh Garden**.
+Recommended installer sources:
+- **OS X 10.7-10.8** and **10.10 through macOS 26:** [the **Mist app**](https://github.com/ninxsoft/Mist)
+- **OS X 10.9 Mavericks:** recommended and verified source is [Mavericks Forever](https://mavericksforever.com/). Images from other sources may not work correctly.
+- **Mac OS X 10.4-10.6 (Intel):** Internet Archive
+- **Mac OS X 10.4-10.5 (PowerPC):** Macintosh Garden
 
 ---
 
 ## 💿 Supported Versions
 
-The table lists systems supported by the application that are successfully recognized and written to a USB drive.
+Systems recognized and supported for USB creation:
 
 | System | Version | Supported |
 | :--- | :--- | :---: |
@@ -92,47 +179,62 @@ The table lists systems supported by the application that are successfully recog
 | **Mac OS X Leopard** | 10.5 | ✅ |
 | **Mac OS X Tiger**[^3] | 10.4 | ✅ |
 
-[^1]: Only version **10.12.6** is supported.
-[^2]: Fully works with the image downloaded from [Mavericks Forever](https://mavericksforever.com/). Images from other sources have not been verified and may cause errors.
-[^3]: The **Single DVD** edition is recognized automatically. Instructions for the **Multi-DVD** edition are available on the application's website: [Tiger Multi-DVD Guide](https://kruszoneq.github.io/macUSB/pages/guides/multidvd_tiger.html).
+[^1]: Only **10.12.6** is supported.
+[^2]: Fully verified with the image from [Mavericks Forever](https://mavericksforever.com/). Other sources may fail.
+[^3]: **Single DVD** is auto-detected. **Multi-DVD** guide: [Tiger Multi-DVD Guide](https://kruszoneq.github.io/macUSB/pages/guides/multidvd_tiger.html).
 
 ---
- 
+
+## 🧩 Legacy & PowerPC Notes
+
+A dedicated Open Firmware guide is available on the project website, based on real boot-testing of PowerPC USB workflows with installers created by macUSB.
+
+Test coverage includes:
+- **Mac OS X Tiger** and **Mac OS X Leopard** boot scenarios,
+- **Single DVD** editions, and for Tiger also the **Multi-DVD** path,
+- Open Firmware boot command usage verified on an **iMac G5** test machine.
+
+If you are reviving a PowerPC Mac, use this [step-by-step guide](https://kruszoneq.github.io/macUSB/pages/guides/ppc_boot_instructions.html).
+
+---
+
 ## 🌍 Available Languages
 
-The application interface automatically adapts to the system language:
+The interface follows system language automatically:
 
-* 🇵🇱 Polish (PL)
-* 🇺🇸 English (EN)
-* 🇩🇪 German (DE)
-* 🇯🇵 Japanese (JA)
-* 🇫🇷 French (FR)
-* 🇪🇸 Spanish (ES)
-* 🇧🇷 Portuguese (PT-BR)
-* 🇨🇳 Simplified Chinese (ZH-Hans)
-* 🇷🇺 Russian (RU)
+- 🇵🇱 Polish (PL)
+- 🇺🇸 English (EN)
+- 🇩🇪 German (DE)
+- 🇯🇵 Japanese (JA)
+- 🇫🇷 French (FR)
+- 🇪🇸 Spanish (ES)
+- 🇧🇷 Portuguese (PT-BR)
+- 🇨🇳 Simplified Chinese (ZH-Hans)
+- 🇷🇺 Russian (RU)
+- 🇮🇹 Italian (IT)
+- 🇺🇦 Ukrainian (UK)
+- 🇻🇳 Vietnamese (VI)
+- 🇹🇷 Turkish (TR)
 
 ---
 
-## 🛠️ Support & Bug Reports
+## 🛠️ Diagnostics & Support
 
-Any technical issues or suggestions for new features should be reported via [GitHub Issues](https://github.com/Kruszoneq/macUSB/issues). To simplify the diagnostic process and expedite issue handling, it is highly recommended to use the available reporting templates whenever possible:
+- Before opening an issue, export logs from **Help** → **Export diagnostic logs...** and attach them.
+- Report bugs and feature requests via [GitHub Issues](https://github.com/Kruszoneq/macUSB/issues).
+- Use issue templates to speed up triage and reproducibility.
 
-* **Bug Report**: Recommended for reporting technical errors. If possible, details such as **Host OS Version**, **Target OS Version**, file format (e.g., **.dmg**, **.app**), and the installer source and link should be provided.
-* **Feature Request**: Recommended for suggesting new ideas or improvements for the application.
-
-Including screenshots of the error or the application window is highly helpful and allows for a faster analysis of the reported issue.
+Helpful details in bug reports:
+- Host macOS version
+- Target installer version
+- Source format (`.dmg`, `.iso`, `.cdr`, `.app`)
+- Installer source link
+- Screenshot of error/result state
 
 ---
 
 ## ⚖️ License
 
-This project is licensed under the **MIT License**.
-
-This means you are free to use, copy, modify, and distribute this code, provided you keep the author information. The software is provided "as is", without warranty of any kind.
+Licensed under the **MIT License**.
 
 Copyright © 2025-2026 Krystian Pierz
-
----
-
-**Note:** The application interface and this README file were translated using Gemini 3 Pro. Please excuse any potential translation errors.
