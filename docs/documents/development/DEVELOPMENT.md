@@ -99,8 +99,8 @@ Window and layout:
 - Window title is `macUSB`.
 - Window zoom button is disabled; close and minimize remain enabled.
 - Window is centered and uses `.fullScreenNone` and `.managed` behavior.
-- Primary screens use a `ScrollView` for content and `safeAreaInset(edge: .bottom)` for action/status bars.
-- Shared bottom action layer uses `BottomActionBar` (`macUSB/Shared/UI/BottomActionBar.swift`) and not ad-hoc `Divider + background` footers.
+- Main workflow screens after Welcome (`SystemAnalysisView`, `UniversalInstallationView`, `CreationProgressView`, `FinishUSBView`) use a `ScrollView` for content and `safeAreaInset(edge: .bottom)` for action/status bars.
+- In those workflow screens, shared bottom action layer uses `BottomActionBar` (`macUSB/Shared/UI/BottomActionBar.swift`) and not ad-hoc `Divider + background` footers.
 - Navigation back buttons are hidden on key screens; navigation is driven by custom buttons and state.
 
 Toolbar-first chrome:
@@ -288,7 +288,8 @@ Practical rules:
 - Translations in `Localizable.xcstrings` must match the real UI context where the phrase appears (button, alert title, warning body, progress status, etc.); avoid overly literal translation when it harms clarity, tone, or UX.
 - Immutable product slogan rule: the phrase `Tworzenie bootowalnych dysków USB z systemem macOS oraz OS X nigdy nie było takie proste!` is the app’s official slogan and must remain unchanged verbatim in this exact form.
 - Use `Text("...")` with Polish strings; SwiftUI treats these as localization keys.
-- All user-facing strings returned or stored as `String` (for example computed properties, variables, alerts, status labels, menu labels) must use `String(localized:)` instead of hardcoded literals, to keep full translation compatibility.
+- User-facing strings returned or stored as `String` (for example alerts, menu labels, dynamic status text) should use `String(localized:)` for full translation compatibility.
+- Exception: technical localization keys and compatibility bridge values (for helper stage/status mapping via `LocalizedStringKey`) can remain as raw key strings in runtime state.
 - Helper sends stable technical localization keys (for example `helper.workflow.prepare_source.title`) in XPC progress events.
 - Installation UI renders helper stage/status with `Text(LocalizedStringKey(...))`, so helper progress text follows app locale from SwiftUI environment.
 - Non-`Text` runtime labels (for example speed/debug metrics text) must use `String(localized:)` with localized format keys (currently `Szybkość zapisu: %d MB/s`, `Szybkość zapisu: - MB/s`, and `Przekopiowane dane: %.1f GB`).
@@ -331,6 +332,7 @@ Key flags set by analysis:
 - `isPPC`: PowerPC-era flows (Tiger/Leopard/Snow Leopard; detected via version/name)
 - `isUnsupportedSierra`: Sierra installer version is not `12.6.06`
 - `showUnsupportedMessage`: used for UI warnings
+- Current implementation detail: in `.app` analysis branch, `isMavericks` is computed and stored, but `isSystemDetected` does not include `isMavericks`; practical Mavericks install path is therefore image-driven (`.dmg/.iso/.cdr`).
 
 Explicit unsupported case:
 - Mac OS X Panther (10.3) triggers unsupported flow immediately.
@@ -346,6 +348,7 @@ Start gating:
 - Only explicit confirmation (`Tak`) proceeds to helper workflow initialization.
 - On `Tak`, navigation immediately moves to `CreationProgressView`, then helper startup continues in background.
 - Before helper start, secondary action `Wróć` returns to `SystemAnalysisView` and preserves the currently selected source file and USB target.
+- Capacity gate before `Przejdź dalej`: UI copy says minimum 16 GB, while internal check currently uses `15_000_000_000` bytes threshold (decimal, practical consumer 16 GB floor).
 
 ### Installation Summary Box Copy (`Przebieg procesu`)
 The copy shown in the summary panel is intentionally simplified and differs by top-level flow flags:
@@ -396,7 +399,7 @@ Used for most modern macOS installers.
 - Uses `asr restore` to write the image to `/Volumes/PPC`.
 - When `isPPC` is active, the drive flag `needsFormatting` is forced to `false` for installation context, because PPC formatting is already part of this flow.
 - Source selection for `asr --source` in PPC:
-- For `.iso` / `.cdr`, helper request uses mounted source (`/Volumes/...`) to avoid UDIF format error (`-5351`).
+- For `.iso` / `.cdr`, helper preparation uses mounted source context, then resolves it to concrete device path (`/dev/diskXsY`) for `asr --source` to avoid UDIF format error (`-5351`).
 - For other image types (e.g. `.dmg`), helper request uses staged image copy in temp (`macUSB_temp/PPC_*`).
 
 ### Sierra Special Handling
@@ -454,6 +457,10 @@ Command-line tools:
 - `plutil` (modify Info.plist for Sierra)
 - `ditto` (Catalina post-copy)
 - `rm` (Catalina target app cleanup stage)
+- `du` (app-side source-size estimation for transfer-progress monitor)
+- `iostat` (app-side live write-speed sampling)
+- `launchctl` (helper executes tools as requester user context via `asuser`)
+- `tccutil` (menu action for removable-volume permission reset)
 
 AppKit/Swift APIs:
 - `NSAlert`, `NSOpenPanel`, `NSSavePanel`
@@ -491,8 +498,9 @@ Features:
 - Finish stage logs total USB process duration (`MMm SSs` and total seconds) in `Installation` category.
 
 ### Log Message Requirements
-The following requirements are mandatory for diagnostic logs:
-- All application-authored diagnostic logs (existing and future) must be written in Polish.
+The following rules describe current conventions and expected direction for diagnostic logs:
+- Preferred convention: application-authored diagnostic logs should be written in Polish.
+- Current implementation includes some technical English diagnostics (for example transfer-monitor fallback/recovery labels) and raw tool output from helper processes in `HelperLiveLog`; this is expected in exported logs.
 - Keep logs human-readable first. Prefer descriptive labels over raw key/value fragments.
 - For USB metadata, use explicit labels in messages, e.g. `Schemat: GPT, Format: HFS+`, instead of `scheme=GPT, fs=HFS+`.
 - Keep boolean diagnostics readable for non-technical support checks (prefer `TAK` / `NIE` in Polish logs).
@@ -693,7 +701,8 @@ Current effective build configuration snapshot:
 - Global invariant:
 - Every workflow starts with `prepare_source` (`0 → 10`).
 - Every workflow runs `cleanup_temp` near the end (`>=99 → 100`, best-effort).
-- Every workflow ends with `finalize` (`100`).
+- Successful workflows emit `finalize` (`100`) after `cleanup_temp`.
+- Failure/cancel paths end after best-effort `cleanup_temp` and return result without `finalize`.
 - Standard (`workflowKind = standard`):
 - Optional `preformat` (`10 → 30`) when `needsPreformat == true` and non-PPC.
 - `createinstallmedia`:
@@ -715,7 +724,7 @@ Current effective build configuration snapshot:
 - `legacyRestore`: copy `InstallESD.dmg` from selected `.app` to TEMP.
 - `mavericks`: copy selected image to TEMP as `InstallESD.dmg`.
 - `ppc`:
-- `.iso/.cdr` + mounted source available: use mounted `/Volumes/...` source.
+- `.iso/.cdr` + mounted source available: use mounted source context first, then resolve to `/dev/diskXsY` argument for `asr`.
 - other images: copy selected image to TEMP as `PPC_<filename>`.
 - fallback: use mounted source if image path missing and mount exists.
 - `standard`:
@@ -804,16 +813,24 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `LICENSE.txt` — MIT license text.
 - `README.md` — Public project overview, requirements, supported versions, languages.
 - `version.json` — Remote version metadata for update checks.
-- `screenshots/macUSBtheme.png` — UI preview image used by README.
-- `screenshots/macUSBiconPNG.png` — App icon preview used by README.
+- `docs/documents/development/DEVELOPMENT.md` — Internal architecture/runtime contract for contributors and AI agents.
+- `docs/readme-assets/images/macUSBreadmepreview.png` — Current README hero preview image.
+- `docs/readme-assets/images/macUSBicon.png` — Current README app icon image.
+- `docs/readme-assets/app-screens/welcome-view.png` — README workflow screenshot: Welcome screen.
+- `docs/readme-assets/app-screens/source-target-configuration.png` — README workflow screenshot: source/target configuration.
+- `docs/readme-assets/app-screens/operation-details.png` — README workflow screenshot: operation details.
+- `docs/readme-assets/app-screens/creating-usb-media.png` — README workflow screenshot: creation progress.
+- `docs/readme-assets/app-screens/operation-result.png` — README workflow screenshot: finish/result screen.
 - `.gitignore` — Git ignore rules.
 - `.github/FUNDING.yml` — Funding/support metadata.
 - `.github/PPC_BOOT_INSTRUCTIONS.md` — PowerPC Open Firmware USB boot guide.
 - `.github/ISSUE_TEMPLATE/bug_report.yml` — Bug report template.
 - `.github/ISSUE_TEMPLATE/feature_request.yml` — Feature request template.
 - `macUSB.xcodeproj/project.pbxproj` — Xcode project definition (targets, build settings).
+- `macUSB.xcodeproj/project.xcworkspace/contents.xcworkspacedata` — Workspace metadata used by Xcode.
 - `macUSB.xcodeproj/xcshareddata/xcschemes/macUSB.xcscheme` — Shared build scheme.
 - `macUSB/macUSB.debug.entitlements` — App Debug entitlements.
+- `macUSB/macUSB.entitlements` — Base entitlements file kept in repo (current build configs use debug/release-specific entitlements files).
 - `macUSB/macUSB.release.entitlements` — App Release entitlements.
 - `macUSB/Info.plist` — Bundle metadata and localization list.
 - `macUSB/App/macUSBApp.swift` — App entry point, menus, AppDelegate behavior, and debug-only top-level `DEBUG` command menu.
@@ -837,6 +854,7 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Shared/Services/Helper/HelperIPC.swift` — Shared app-side helper request/result/event payloads and XPC protocol contracts.
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift` — App-side XPC client for start/cancel/health checks and progress/result routing.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift` — Helper registration/repair/removal/status logic using `SMAppService`, including startup prompt when Background Items approval is required.
+- `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift` — Shared helper stage localization key map and String Catalog extraction anchors.
 - `macUSB/Shared/Services/UpdateChecker.swift` — Manual update checking.
 - `macUSB/Shared/Services/Logging.swift` — Central logging and log export.
 - `macUSB/Shared/Services/USBDriveLogic.swift` — USB volume enumeration plus metadata detection (speed, partition scheme, filesystem format).
@@ -847,9 +865,12 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Resources/Assets.xcassets/AppIcon.appiconset/Contents.json` — App icon variants.
 - `macUSB/Resources/Assets.xcassets/macUSB Icon/Contents.json` — “macUSB Icon” asset catalog.
 - `macUSB/Resources/Assets.xcassets/macUSB Icon/Assets/Contents.json` — Sub-asset container metadata.
+- `macUSB/Resources/Assets.xcassets/macUSB Icon/Assets/usb-drive-svgrepo-com-2.imageset/Contents.json` — Image-set metadata for SVG icon source.
+- `macUSB/Resources/Assets.xcassets/macUSB Icon/Assets/usb-drive-svgrepo-com-2.imageset/usb-drive-svgrepo-com-2.svg` — SVG source asset for app icon set.
 - `macUSB/Resources/Assets.xcassets/macUSB Icon/icon.dataset/Contents.json` — Icon dataset metadata.
 - `macUSB/Resources/Assets.xcassets/macUSB Icon/icon.dataset/icon.json` — Icon JSON definition.
 - `macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist` — LaunchDaemon definition embedded into the app bundle for SMAppService registration.
+- `macUSB/macUSBIcon.icon/Assets/usb-drive-svgrepo-com-2.svg` — Original SVG source used by the icon tool bundle.
 - `macUSB/macUSBIcon.icon/icon.json` — Original icon definition for the app icon source.
 - `macUSBHelper/macUSBHelper.debug.entitlements` — Helper Debug entitlements.
 - `macUSBHelper/macUSBHelper.release.entitlements` — Helper Release entitlements.
