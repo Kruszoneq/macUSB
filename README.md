@@ -68,6 +68,8 @@ Full change list: [Releases](https://github.com/Kruszoneq/macUSB/releases)
 4. Start creation and monitor stage-by-stage progress.
 5. Use the final result screen for next steps.
 
+> First launch note: macUSB will prompt you to allow background operation required by the privileged helper. This permission is mandatory — without it, installer creation cannot run.
+
 > Warning: All data on the selected USB drive will be erased.
 
 ---
