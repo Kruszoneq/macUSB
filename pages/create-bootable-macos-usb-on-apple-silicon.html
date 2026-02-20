@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>How to Create a Bootable macOS USB on Apple Silicon - macUSB</title>
+  <meta name="description" content="Create a bootable macOS USB installer on Apple Silicon, including legacy Intel and PowerPC workflows for Tiger and Leopard, with macUSB.">
+  <meta name="keywords" content="how to make a bootable macOS USB, create bootable macOS installer Apple Silicon, bootable USB for older macOS versions, Tiger Leopard bootable USB PowerPC">
+  <link rel="canonical" href="https://kruszoneq.github.io/macUSB/pages/create-bootable-macos-usb-on-apple-silicon.html">
+
+  <meta property="og:title" content="How to Create a Bootable macOS USB on Apple Silicon | macUSB">
+  <meta property="og:description" content="A practical guide to creating modern and legacy bootable macOS USB installers on Apple Silicon and Intel Macs.">
+  <meta property="og:url" content="https://kruszoneq.github.io/macUSB/pages/create-bootable-macos-usb-on-apple-silicon.html">
+  <meta property="og:image" content="https://kruszoneq.github.io/macUSB/assets/screenshots/app-v2/04-progress.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Create a Bootable macOS USB on Apple Silicon | macUSB">
+  <meta name="twitter:description" content="Build bootable USB installers for modern and legacy macOS from one guided workflow.">
+  <meta name="twitter:image" content="https://kruszoneq.github.io/macUSB/assets/screenshots/app-v2/04-progress.png">
+
+  <link rel="icon" type="image/png" href="../assets/icon/macUSBicon-v2.png" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <main class="page" id="top">
+    <header class="page-header">
+      <h1 class="page-title">Create a bootable macOS USB on Apple Silicon - without legacy setup pain</h1>
+      <p class="page-lead">
+        If you are trying to create a bootable macOS USB installer from a modern Mac and keep hitting compatibility issues,
+        macUSB provides a guided workflow for both current macOS and legacy recovery scenarios.
+      </p>
+    </header>
+
+    <section class="page-section reveal" id="why-compatibility-breaks">
+      <h2>Why this is difficult on modern Macs</h2>
+      <p>
+        Apple Silicon hosts are excellent for day-to-day development, but legacy macOS installer preparation can be inconsistent.
+        A major blocker is certificate and signature validity in older installer copies: Apple documents that expired-signature installers
+        can fail validation and appear as damaged or invalid, which can break normal USB installer creation on modern Macs.
+      </p>
+      <p>
+        macUSB completely solves that friction in its workflow by automating source handling, media preparation, and compatibility steps,
+        so certificate-related installer issues do not block normal USB creation.
+      </p>
+    </section>
+
+    <section class="page-section reveal" id="how-to-make-bootable-usb">
+      <h2>How to make a bootable macOS USB installer with macUSB</h2>
+      <ol class="page-list">
+        <li>Select your installer source file (<code>.dmg</code>, <code>.iso</code>, <code>.cdr</code>, or <code>.app</code>).</li>
+        <li>Pick the target USB drive and review the operation summary.</li>
+        <li>Start creation and monitor live stage progress until completion.</li>
+        <li>Use post-creation guidance to boot the target machine correctly.</li>
+      </ol>
+      <figure class="img-figure">
+        <img
+          class="guide-image"
+          src="../assets/screenshots/app-v2/04-progress.png"
+          alt="macUSB creation dashboard with live progress and stage status"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption class="img-hint" aria-hidden="true">Click to zoom</figcaption>
+      </figure>
+    </section>
+
+    <section class="page-section reveal" id="legacy-support">
+      <h2>Bootable USB for older macOS versions on modern hardware</h2>
+      <p>
+        macUSB supports workflows where you need installers for older Intel-era systems and legacy Mac OS X releases,
+        while still working from a current Apple Silicon or Intel host.
+      </p>
+      <div class="page-grid">
+        <article class="page-card">
+          <h3>Intel recovery workflows</h3>
+          <p>Prepare installers for machines that need older systems but are now serviced from newer Macs.</p>
+        </article>
+        <article class="page-card">
+          <h3>Tiger and Leopard paths</h3>
+          <p>Create media for Mac OS X Tiger and Leopard scenarios, including PowerPC-focused restoration.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="page-section reveal" id="powerpc-links">
+      <h2>PowerPC and Multi-DVD documentation</h2>
+      <p>
+        For PowerPC USB booting, Open Firmware commands are still required.
+        The exact instruction set is documented here:
+      </p>
+      <p class="section-actions">
+        <a class="card-button" href="guides/ppc_boot_instructions.html">PowerPC USB Boot Instructions</a>
+        <a class="card-button" href="guides/multidvd_tiger.html">Tiger Multi-DVD USB Guide</a>
+      </p>
+    </section>
+
+    <section class="page-section reveal" id="faq">
+      <h2>FAQ (long-tail queries this page addresses)</h2>
+      <div class="page-grid">
+        <article class="page-card">
+          <h3>How do I create a bootable macOS USB on Apple Silicon?</h3>
+          <p>Use macUSB to select installer source, prepare target media, and complete the write workflow with guided status tracking.</p>
+        </article>
+        <article class="page-card">
+          <h3>Can I build USB installers for old macOS versions from a modern Mac?</h3>
+          <p>Yes. macUSB is designed for that compatibility gap, including legacy Intel and PowerPC restoration paths.</p>
+        </article>
+        <article class="page-card">
+          <h3>How can I create a Tiger or Leopard bootable USB for PowerPC?</h3>
+          <p>Create media in macUSB, then follow the Open Firmware steps in the dedicated PowerPC guide linked above.</p>
+        </article>
+        <article class="page-card">
+          <h3>Do these topics match queries like "jak zrobic bootowalny pendrive z macOS"?</h3>
+          <p>Yes. This page covers equivalent intents in English for creating bootable macOS USB media on modern and legacy hardware workflows.</p>
+        </article>
+      </div>
+    </section>
+
+    <div class="page-actions">
+      <div class="page-actions-left">
+        <a class="cta-button" href="https://github.com/Kruszoneq/macUSB/releases">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 3v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M8.5 10.5 12 13.9l3.5-3.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M5 17.5v2.5h14V17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>Download for macOS</span>
+        </a>
+        <span id="latest-version" class="version-info">Latest release</span>
+      </div>
+      <a class="page-link" href="#top">Back to top</a>
+    </div>
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="../assets/js/main.js" defer></script>
+</body>
+</html>
