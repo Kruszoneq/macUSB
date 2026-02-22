@@ -119,57 +119,11 @@
   function runScripts(mount) {
     const scripts = Array.from(mount.querySelectorAll('script'));
     scripts.forEach((script) => {
-      const parent = script.parentNode;
-      if (!parent) return;
-
       const fresh = document.createElement('script');
       Array.from(script.attributes).forEach((attr) => fresh.setAttribute(attr.name, attr.value));
       if (script.textContent) fresh.textContent = script.textContent;
-
-      const isBmcButton =
-        script.getAttribute('data-name') === 'bmc-button' ||
-        (fresh.src && fresh.src.includes('buymeacoffee.com'));
-
-      if (isBmcButton) {
-        const originalWrite = document.write;
-        const writer = (html) => parent.insertAdjacentHTML('beforeend', html);
-        const restore = () => {
-          if (document.write === writer) {
-            document.write = originalWrite;
-          }
-        };
-
-        document.write = writer;
-        fresh.addEventListener('load', restore, { once: true });
-        fresh.addEventListener('error', restore, { once: true });
-        setTimeout(restore, 4000);
-      }
-
       script.replaceWith(fresh);
     });
-  }
-
-  function setupBmcFallback(mount) {
-    const fallback = mount.querySelector('.bmc-fallback-wrap');
-    if (!fallback) return;
-
-    const selectors = ['.bmc-button', '.bmc-btn', '.bmc-btn-container', '.bmc-widget'];
-    const hasWidget = () => selectors.some((selector) => mount.querySelector(selector));
-
-    const hideFallback = () => {
-      if (!hasWidget()) return false;
-      fallback.style.display = 'none';
-      return true;
-    };
-
-    if (hideFallback()) return;
-
-    const observer = new MutationObserver(() => {
-      if (hideFallback()) observer.disconnect();
-    });
-
-    observer.observe(mount, { childList: true, subtree: true });
-    setTimeout(() => observer.disconnect(), 8000);
   }
 
   function injectPartial(mount, url, onLoad, label) {
@@ -184,7 +138,6 @@
         const resolved = html.replaceAll('{{BASE}}', basePrefix);
         mount.innerHTML = resolved;
         runScripts(mount);
-        setupBmcFallback(mount);
         if (onLoad) onLoad();
       })
       .catch((error) => console.error(`${label} load error:`, error));

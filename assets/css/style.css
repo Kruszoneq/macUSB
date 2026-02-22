@@ -478,6 +478,10 @@ body.scrolled .logo {
   gap: 10px;
 }
 
+.section-actions.after-guide-image {
+  margin-top: 40px;
+}
+
 /* Homepage */
 .hero {
   min-height: calc(var(--vh, 1vh) * 100);
@@ -542,6 +546,13 @@ h1 {
   gap: 6px;
 }
 
+.cta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .cta-button {
   background: var(--accent-color);
   color: #fff;
@@ -562,6 +573,34 @@ h1 {
 }
 
 .cta-button svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+
+.support-button {
+  border: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--surface-1) 88%, transparent);
+  color: var(--text-main);
+  padding: 12px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.support-button:hover {
+  background: var(--surface-2);
+  transform: translateY(-1px);
+}
+
+.support-button svg {
   width: 16px;
   height: 16px;
   flex: 0 0 auto;
@@ -749,12 +788,13 @@ body.scrolled .scroll-cue {
 
 .screenshot-frame {
   border-radius: 16px;
-  border: 1px solid var(--border-color);
-  background: var(--surface-3);
+  border: none;
+  background: transparent;
   width: min(100%, 360px);
   aspect-ratio: 55 / 79;
   overflow: hidden;
   justify-self: center;
+  box-shadow: none;
 }
 
 .screenshot-frame img {
@@ -763,6 +803,7 @@ body.scrolled .scroll-cue {
   object-fit: contain;
   object-position: center;
   display: block;
+  filter: drop-shadow(0 20px 44px rgba(0, 0, 0, 0.45));
 }
 
 .zoom-image {
@@ -793,9 +834,10 @@ body.scrolled .scroll-cue {
   display: block;
   border-radius: 18px;
   cursor: zoom-in;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 16px 34px var(--shadow-color);
-  background: var(--bg-elevated);
+  border: none;
+  box-shadow: none;
+  filter: drop-shadow(0 24px 52px rgba(0, 0, 0, 0.48));
+  background: transparent;
 }
 
 .img-figure {
@@ -824,6 +866,16 @@ body.scrolled .scroll-cue {
 .img-figure:hover .img-hint {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+/* Tiger guide screenshots: shadow should follow screenshot shape, not rectangular image box */
+.page-layout .guide-image {
+  border-radius: 0;
+  box-shadow: none;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.24))
+          drop-shadow(0 18px 30px rgba(0, 0, 0, 0.2));
+  -webkit-filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.24))
+                  drop-shadow(0 18px 30px rgba(0, 0, 0, 0.2));
 }
 
 .code-block {
@@ -1035,28 +1087,8 @@ footer a {
   color: var(--text-secondary);
 }
 
-.bmc-fallback-wrap {
+.footer-support-wrap {
   margin-bottom: 16px;
-}
-
-.bmc-fallback {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 999px;
-  background-color: var(--accent-color);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.bmc-fallback:hover {
-  background-color: var(--accent-hover);
-  transform: scale(1.01);
 }
 
 /* Responsive */
@@ -1188,7 +1220,18 @@ footer a {
     font-size: 17px;
   }
 
+  .cta-row {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .cta-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .support-button {
     width: 100%;
     justify-content: center;
   }

@@ -52,8 +52,8 @@ Primary objectives:
 - `/pages/footer.html` - shared footer (single source of truth)
 
 ### Main pages
-- `/pages/about.html` - project intent and product narrative page
-- `/pages/create-bootable-macos-usb-on-apple-silicon.html` - SEO landing page (long-tail compatibility page)
+- `/pages/create-bootable-macos-usb-on-apple-silicon.html` - merged Why/About product + SEO page
+- `/pages/about.html` - legacy URL redirect page to the merged Why page
 
 ### Guides
 - `/pages/guides/ppc_boot_instructions.html` - PowerPC Open Firmware boot guide
@@ -91,6 +91,22 @@ Primary objectives:
 - High-contrast headings with clear hierarchy.
 - Max content width around `980px` for docs pages and up to ~`1040-1120px` for homepage sections.
 
+### Buttons and actions
+- Use `cta-button` only for primary download actions.
+- Use `card-button` for internal guide links and secondary page actions.
+- Use `support-button` for voluntary Buy Me a Coffee support actions (non-primary CTA).
+- `card-button` visual contract:
+  - pill shape (`border-radius: 999px`)
+  - subtle surface background (`--surface-1`)
+  - 1px border (`--border-color`)
+  - hover lift (`translateY(-1px)`) with `--surface-2`
+- `support-button` visual contract:
+  - secondary frosted-glass style with subtle blur
+  - icon + text inline layout
+  - must stay visually subordinate to the primary download `cta-button`
+- Group secondary actions inside `.section-actions`.
+- In Tiger Multi-DVD, the cross-link button under the final screenshot uses `.section-actions.after-guide-image` to keep extra spacing below image shadows.
+
 ### Motion
 - Use smooth, subtle motion (`Balanced modern`): reveal and gentle transforms.
 - Must support `prefers-reduced-motion: reduce` (disable non-essential transitions and animations).
@@ -105,11 +121,12 @@ Primary objectives:
 - Scrolled state applies frosted background + blur + subtle divider.
 
 ### B) Shared navbar/footer injection
-- Every page uses `<div id="navbar"></div>` and `<div id="footer"></div>`.
+- All primary content pages use `<div id="navbar"></div>` and `<div id="footer"></div>`.
 - `main.js` injects:
   - `${basePrefix}/pages/partials.html`
   - `${basePrefix}/pages/footer.html`
 - Do not duplicate navbar/footer markup into each page.
+- Exception: `/pages/about.html` is a minimal legacy redirect page and intentionally does not mount shared partials.
 
 ### C) Base path compatibility
 - `main.js` must support both:
@@ -139,7 +156,8 @@ Primary objectives:
   - images with `object-fit: contain`
 
 ### H) Footer behavior
-- Footer remains shared and includes Buy Me a Coffee script + fallback support button.
+- Footer remains shared and includes a static `support-button` Buy Me a Coffee link matching the homepage support button style.
+- Footer does not rely on the Buy Me a Coffee widget script or JS fallback logic.
 
 ### I) PPC guide content lock
 - Do not change Open Firmware command content in `/pages/guides/ppc_boot_instructions.html`.
@@ -149,13 +167,17 @@ Primary objectives:
 - Keep left sticky TOC only where content is long enough (Tiger guide).
 - PPC guide remains without left TOC unless scope is explicitly changed.
 
+### K) About legacy redirect contract
+- `/pages/about.html` must remain a lightweight legacy redirect.
+- Redirect target: `/pages/create-bootable-macos-usb-on-apple-silicon.html`.
+- Keep canonical on `about.html` pointing to the merged page.
+
 ---
 
 ## 5) Navbar information architecture
 
 Top-level navigation currently includes:
 - `Why macUSB` (SEO page)
-- `About`
 - `Guides` dropdown
 - `GitHub`
 
@@ -169,7 +191,7 @@ Guides dropdown groups:
 
 ### Homepage (`/index.html`)
 Must include:
-- Product hero with icon, headline, subtitle, download CTA.
+- Product hero with icon, headline, subtitle, primary download CTA, and secondary `Support macUSB` CTA.
 - Latest version and minimum requirement (macOS 14.6+).
 - No hero badge.
 - Value section (what app does and benefits).
@@ -177,26 +199,30 @@ Must include:
 - Compatibility + guide bridge links.
 - Browser title format: `macUSB - <text>`.
 
-### About (`/pages/about.html`)
-- Focus on product intent, ecosystem problem, and macUSB value.
-- Keep v2.0 capability highlights concise and user-oriented.
-- Preserve strong CTA to releases.
+### Legacy About URL (`/pages/about.html`)
+- This page is a legacy redirect only.
+- It must not contain competing long-form content.
+- Required elements: canonical to merged page, redirect behavior, and fallback link.
 
 ### SEO page (`/pages/create-bootable-macos-usb-on-apple-silicon.html`)
-- English page with long-tail targeting.
+- English-only merged product + SEO page (single source for Why/About content).
 - Must semantically cover intents equivalent to:
   - "how to make a bootable macOS USB"
   - "create bootable macOS installer on Apple Silicon"
   - "bootable USB for older macOS versions"
   - "Tiger/Leopard bootable USB for PowerPC"
-  - Polish-equivalent intent coverage (e.g., "jak zrobic bootowalny pendrive z macOS")
 - Include metadata: title, description, canonical, OG, Twitter.
+- Include structured data: `SoftwareApplication` and `FAQPage`.
 - Include FAQ block and internal links to guides/releases.
+- Copy rules: describe current app capabilities only; do not use changelog-style sections such as "What's new", "Added", "Changed", or "Improved".
 
 ### Guides
 - Preserve procedural clarity and direct language.
 - Keep screenshot zoom support.
 - Keep Tiger guide TOC auto-generated + scrollspy behavior.
+- Reciprocal cross-guide links must be rendered as `card-button` actions (not plain inline links/callout text):
+  - Tiger guide -> PowerPC USB boot instructions button
+  - PowerPC guide -> Tiger Multi-DVD creation button
 - Tiger Multi-DVD guide flow must keep the current screenshot narrative:
   - Disc files prepared (Finder view)
   - CD1 auto-detection success
@@ -265,18 +291,22 @@ When making changes, verify:
 
 ## 10) Acceptance checklist (required before shipping)
 
-- [ ] Navbar renders on index/about/SEO/guides via partial injection.
-- [ ] Footer renders on index/about/SEO/guides via partial injection.
+- [ ] Navbar renders on index/SEO/guides via partial injection.
+- [ ] Footer renders on index/SEO/guides via partial injection.
 - [ ] Sticky/frosted navbar behavior works and remains readable in the default fixed theme.
 - [ ] No theme toggle is rendered in navbar.
 - [ ] No system theme switching changes page appearance.
 - [ ] Guides dropdown works on desktop hover, mobile click, and keyboard.
 - [ ] Latest release fetch updates `#latest-version`.
+- [ ] Homepage hero includes both CTAs: primary `Download for macOS` and secondary `Support macUSB`.
 - [ ] Homepage hero carousel works smoothly and screenshots are not cropped.
 - [ ] `#screenshots` anchor and scroll cue behavior work.
 - [ ] PPC guide command content remains unchanged.
+- [ ] Cross-guide links in Tiger/PPC guides are rendered as `card-button` actions.
 - [ ] Tiger guide TOC auto-generation and scrollspy remain stable.
 - [ ] SEO page has complete metadata and internal links.
+- [ ] SEO page includes `SoftwareApplication` and `FAQPage` structured data.
+- [ ] `/pages/about.html` redirects to the merged SEO page and keeps canonical to that URL.
 - [ ] Mobile layouts pass 360/390/414 width checks without overflow.
 - [ ] `prefers-reduced-motion` fallback is respected.
 
