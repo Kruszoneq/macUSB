@@ -146,7 +146,8 @@ Primary objectives:
 ### F) Latest release fetch
 - Fetch from: `https://api.github.com/repos/Kruszoneq/macUSB/releases/latest`
 - Render in `#latest-version` as `Latest version: <tag>`.
-- Resolve primary download CTAs (`a.cta-button` pointing to GitHub releases) to the latest `.dmg` asset URL when API data is available.
+- Resolve primary download CTAs (`a.cta-button` pointing to GitHub releases) to the latest `.dmg` asset URL on desktop devices when API data is available.
+- On mobile/tablet devices, keep download CTAs pointing to the GitHub releases page (no direct automatic `.dmg` link).
 - Fallback behavior: if API fetch fails, keep default release page links.
 
 ### G) Hero behavior (homepage)
@@ -287,6 +288,7 @@ When making changes, verify:
 - All commit messages must be written in English.
 - Use a clear title plus a concise description focused on the most important changes.
 - The description may be multi-line when needed.
+- Do not use literal `\n` escape sequences in commit messages; use real multi-line commit bodies instead.
 - Minor or non-essential details can be omitted from the commit description.
 
 ---
@@ -300,7 +302,8 @@ When making changes, verify:
 - [ ] No system theme switching changes page appearance.
 - [ ] Guides dropdown works on desktop hover, mobile click, and keyboard.
 - [ ] Latest release fetch updates `#latest-version`.
-- [ ] Download CTAs (`.cta-button`) resolve to the latest GitHub `.dmg` asset when API response includes it.
+- [ ] On desktop, download CTAs (`.cta-button`) resolve to the latest GitHub `.dmg` asset when API response includes it.
+- [ ] On mobile/tablet, download CTAs keep linking to the GitHub releases page.
 - [ ] Homepage hero includes both CTAs: primary `Download for macOS` and secondary `Support macUSB`.
 - [ ] Homepage hero carousel works smoothly and screenshots are not cropped.
 - [ ] `#screenshots` anchor and scroll cue behavior work.

@@ -263,6 +263,11 @@
     document.querySelectorAll('a.cta-button[href*="github.com/Kruszoneq/macUSB/releases"]')
   );
   if (!releaseTargets.length && !downloadButtons.length) return;
+  const userAgent = navigator.userAgent || '';
+  const isIPadDesktopMode = /Macintosh/.test(userAgent) && navigator.maxTouchPoints > 1;
+  const isMobileOrTablet =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet/i.test(userAgent) ||
+    isIPadDesktopMode;
 
   fetch('https://api.github.com/repos/Kruszoneq/macUSB/releases/latest')
     .then((response) => {
@@ -279,7 +284,7 @@
         ? data.assets.find((asset) => /\.dmg$/i.test(asset.name || ''))
         : null;
 
-      if (latestDmgAsset && latestDmgAsset.browser_download_url) {
+      if (!isMobileOrTablet && latestDmgAsset && latestDmgAsset.browser_download_url) {
         downloadButtons.forEach((button) => {
           button.href = latestDmgAsset.browser_download_url;
         });
