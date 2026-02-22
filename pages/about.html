@@ -1,190 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About macUSB</title>
-    <meta name="description" content="Learn what macUSB is, why it exists, what it supports, and how to get started.">
-
-    <link rel="icon" type="image/png" href="../assets/icon/macUSBiconPNG.png">
-    <link rel="stylesheet" href="../assets/css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redirecting to Why macUSB - macUSB</title>
+  <meta name="description" content="Redirecting to the main why macUSB page." />
+  <meta http-equiv="refresh" content="0; url=./create-bootable-macos-usb-on-apple-silicon.html" />
+  <link rel="canonical" href="https://kruszoneq.github.io/macUSB/pages/create-bootable-macos-usb-on-apple-silicon.html" />
+  <script>
+    window.location.replace('./create-bootable-macos-usb-on-apple-silicon.html');
+  </script>
+  <link rel="icon" type="image/png" href="../assets/icon/macUSBicon-v2.png" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
 </head>
 <body>
-
-    <div id="navbar"></div>
-
-    <main class="page" id="top">
-        <header class="page-header">
-            <h1 class="page-title">About macUSB</h1>
-            <p class="page-lead">
-                macUSB is a one-click tool that turns your modern Mac (Apple Silicon or Intel) into a service machine capable of reviving older Apple computers —
-                without Terminal commands, disk-format guessing, or wrestling with legacy installer quirks.
-            </p>
-        </header>
-
-        <section class="page-section">
-            <h2>Why it exists</h2>
-            <p>
-                With Apple’s transition to Apple Silicon, preparing installation media for older Intel- and PowerPC-based Macs became increasingly painful.
-                Users often run into Terminal errors, expired certificates in older installers, or toolchain incompatibilities.
-                macUSB automates the full USB creation flow so you can focus on installing the system, not debugging the process.
-            </p>
-        </section>
-
-        <section class="page-section">
-            <h2>What you get</h2>
-            <div class="page-grid">
-                <div class="page-card">
-                    <h3>Legacy support</h3>
-                    <p>Create installers for systems over a decade old directly on a modern Mac.</p>
-                </div>
-                <div class="page-card">
-                    <h3>Time saving</h3>
-                    <p>macUSB detects the system version in your installer file, formats the drive, and copies everything automatically.</p>
-                </div>
-                <div class="page-card">
-                    <h3>Auto fixes</h3>
-                    <p>For selected installers (e.g., High Sierra / Mojave), macUSB applies fixes so they keep working despite expired Apple certificates.</p>
-                </div>
-                <div class="page-card">
-                    <h3>Security</h3>
-                    <p>The application is officially notarized by Apple. This guarantees that the software is free from malicious code and ensures a seamless, secure first launch on macOS without requiring any extra security workarounds.</p>
-                </div>
-                <div class="page-card page-card-wide">
-                    <h3>PowerPC revival</h3>
-                    <p>macUSB can format USB drives using Apple Partition Map (APM) and transfer installers for PowerPC Macs — no CD/DVD or FireWire required.</p>
-                    <p class="card-link">
-                        <a class="card-button" href="guides/ppc_boot_instructions.html"><strong>Guide:</strong> &nbsp;Booting from USB on PowerPC Macs</a>
-                    </p>
-                </div>
-            </div>
-
-        </section>
-
-        <section class="page-section">
-            <h2>Requirements</h2>
-            <div class="page-split">
-                <div>
-                    <h3 class="minor">Host Mac</h3>
-                    <ul class="page-list">
-                        <li><strong>Processor:</strong> Apple Silicon or Intel</li>
-                        <li><strong>System:</strong> macOS Sonoma 14.6 or newer</li>
-                        <li><strong>Free storage:</strong> at least 15 GB to build installers</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="minor">External USB drive</h3>
-                    <ul class="page-list">
-                        <li><strong>Capacity:</strong> minimum 16 GB</li>
-                        <li><strong>Speed:</strong> USB 3.0+ recommended</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="page-subsection">
-                <h3 class="minor">External HDD/SSD Drives</h3>
-                <p class="muted">
-                    By default, the application filters devices to display only flash drives, preventing the accidental selection of an incorrect storage device.
-                    If you wish to create an installer on an external hard drive (HDD or SSD), please follow these steps:
-                </p>
-                <ol class="page-list">
-                    <li>Navigate to the menu bar.</li>
-                    <li>Select <span class="kbd">Options</span> &gt; <span class="kbd">Enable external drives support</span>.</li>
-                    <li>Once enabled, all detected external hard drives will be visible and available in the drive list.</li>
-                </ol>
-            </div>
-
-            <h3 class="minor">Supported installer file formats</h3>
-            <p class="muted">macUSB supports disk images (<span class="kbd">.dmg</span>, <span class="kbd">.cdr</span>, <span class="kbd">.iso</span>) and raw installer apps (<span class="kbd">.app</span>).</p>
-        </section>
-
-        <section class="page-section">
-            <h2>Supported versions</h2>
-            <p class="muted">Systems successfully recognized and written to a USB drive:</p>
-            <ul class="page-list two-col">
-                <li>macOS Tahoe 26</li>
-                <li>macOS Sequoia 15</li>
-                <li>macOS Sonoma 14</li>
-                <li>macOS Ventura 13</li>
-                <li>macOS Monterey 12</li>
-                <li>macOS Big Sur 11</li>
-                <li>macOS Catalina 10.15</li>
-                <li>macOS Mojave 10.14</li>
-                <li>macOS High Sierra 10.13</li>
-                <li>macOS Sierra 10.12<sup><a href="#fn1" id="fnref1" aria-label="Footnote 1">1</a></sup></li>
-                <li>OS X El Capitan 10.11</li>
-                <li>OS X Yosemite 10.10</li>
-                <li>OS X Mavericks 10.9<sup><a href="#fn2" id="fnref2" aria-label="Footnote 2">2</a></sup></li>
-                <li>OS X Mountain Lion 10.8</li>
-                <li>OS X Lion 10.7</li>
-                <li>Mac OS X Snow Leopard 10.6</li>
-                <li>Mac OS X Leopard 10.5</li>
-                <li>Mac OS X Tiger 10.4<sup><a href="#fn3" id="fnref3" aria-label="Footnote 3">3</a></sup></li>
-            </ul>
-            <div class="callout" aria-label="Footnotes">
-                <h3 class="minor" style="margin:0 0 8px;">Footnotes</h3>
-                <ol class="page-list" style="margin-top:0;">
-                    <li id="fn1">
-                    Only version 10.12.6 is supported.
-                    <a href="#fnref1" aria-label="Back to reference 1">↩</a>
-                    </li>
-
-                    <li id="fn2">
-                    Fully works with the image downloaded from <a href="https://mavericksforever.com">Mavericks Forever</a>.
-                    Images from other sources have not been verified and may cause errors.
-                    <a href="#fnref2" aria-label="Back to reference 2">↩</a>
-                    </li>
-
-                    <li id="fn3">
-                      The Single DVD edition is recognized automatically. Detailed instructions for the Multi‑DVD edition are available here: <a href="guides/multidvd_tiger.html">Tiger Multi‑DVD Guide</a>.
-                      <a href="#fnref3" aria-label="Back to reference 3">↩</a>
-                    </li>
-                </ol>
-            </div>
-        </section>
-
-        <section class="page-section">
-            <h2>Languages</h2>
-            <p class="muted">The interface adapts automatically to your system language:</p>
-            <ul class="page-list two-col">
-                <li>Polish (PL)</li>
-                <li>English (EN)</li>
-                <li>German (DE)</li>
-                <li>Japanese (JA)</li>
-                <li>French (FR)</li>
-                <li>Spanish (ES)</li>
-                <li>Portuguese (PT-BR)</li>
-                <li>Simplified Chinese (ZH-Hans)</li>
-                <li>Russian (RU)</li>
-            </ul>
-        </section>
-
-        <section class="page-section">
-            <h2>License</h2>
-            <p>
-                macUSB is licensed under the MIT License. You are free to use, copy, modify, and distribute the code, provided you keep the author information.
-                The software is provided “as is”, without warranty of any kind.
-            </p>
-        </section>
-
-        <div class="page-actions">
-            <div class="page-actions-left">
-                <a class="cta-button" href="https://github.com/Kruszoneq/macUSB/releases">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path d="M12 3v9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M8.5 10.5 12 13.9l3.5-3.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M5 17.5v2.5h14V17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span>Download macUSB</span>
-                </a>
-                <span id="latest-version" class="version-info">Latest release</span>
-            </div>
-            <a class="page-link" href="#top">Back to top</a>
-        </div>
-    </main>
-
-    <div id="footer"></div>
-
-    <script src="../assets/js/main.js" defer></script>
+  <main class="page" id="top">
+    <section class="page-section">
+      <h1 class="page-title">Redirecting...</h1>
+      <p class="page-lead">If you are not redirected, <a href="./create-bootable-macos-usb-on-apple-silicon.html">click here</a>.</p>
+    </section>
+  </main>
 </body>
 </html>

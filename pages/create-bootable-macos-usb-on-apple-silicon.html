@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Why macUSB: Bootable macOS USB workflows on modern Macs - macUSB</title>
+  <meta name="description" content="Why macUSB exists: create bootable macOS and Mac OS X USB installers from modern Macs with one guided workflow, including legacy Intel and PowerPC scenarios.">
+  <meta name="keywords" content="why macUSB, how to make a bootable macOS USB, create bootable macOS installer Apple Silicon, bootable USB for older macOS versions, Tiger Leopard bootable USB PowerPC">
+  <link rel="canonical" href="https://kruszoneq.github.io/macUSB/pages/create-bootable-macos-usb-on-apple-silicon.html">
+
+  <meta property="og:title" content="Why macUSB: Bootable macOS USB workflows on modern Macs">
+  <meta property="og:description" content="Build modern and legacy bootable macOS USB installers from one guided workflow on Apple Silicon and Intel hosts.">
+  <meta property="og:url" content="https://kruszoneq.github.io/macUSB/pages/create-bootable-macos-usb-on-apple-silicon.html">
+  <meta property="og:image" content="https://kruszoneq.github.io/macUSB/assets/screenshots/app-v2/04-progress.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Why macUSB: Bootable macOS USB workflows on modern Macs">
+  <meta name="twitter:description" content="Create bootable macOS and Mac OS X USB installers from one clear workflow, including legacy Intel and PowerPC paths.">
+  <meta name="twitter:image" content="https://kruszoneq.github.io/macUSB/assets/screenshots/app-v2/04-progress.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "macUSB",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "macOS 14.6 or newer",
+    "url": "https://kruszoneq.github.io/macUSB/",
+    "downloadUrl": "https://github.com/Kruszoneq/macUSB/releases/latest",
+    "softwareVersion": "2.0",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "macUSB is a guided app for creating bootable macOS and Mac OS X USB installers from .dmg, .iso, .cdr, and .app sources on modern Macs.",
+    "publisher": {
+      "@type": "Person",
+      "name": "Krystian Pierz"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I create a bootable macOS USB on Apple Silicon?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Open macUSB, select an installer source file, choose your target USB drive, review operation details, and start creation. The app guides each stage until completion."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I build USB installers for older macOS versions from a modern Mac?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. macUSB supports modern macOS plus legacy workflows, including older Intel-era systems and Mac OS X scenarios."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does macUSB support Tiger and Leopard recovery workflows?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. macUSB supports Tiger and Leopard installer creation paths and provides direct links to dedicated guides for Tiger Multi-DVD and PowerPC USB boot steps."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What source file formats are supported?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "macUSB supports .dmg, .iso, .cdr, and .app installer sources."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="icon" type="image/png" href="../assets/icon/macUSBicon-v2.png" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <main class="page" id="top">
+    <header class="page-header">
+      <h1 class="page-title">Why macUSB: one guided way to build bootable macOS and Mac OS X USB installers</h1>
+      <p class="page-lead">
+        macUSB is built for people who need reliable installer media from modern Macs.
+        It turns mixed compatibility paths into one clear workflow for current macOS, legacy Intel, and PowerPC restoration scenarios.
+      </p>
+    </header>
+
+    <section class="page-section reveal" id="why-this-matters">
+      <h2>Why this matters on modern Macs</h2>
+      <p>
+        Apple Silicon hosts are excellent daily machines, but legacy installer preparation can be inconsistent.
+        Older installer copies often run into signature-era validation issues, mixed media requirements, and host-to-target compatibility gaps.
+      </p>
+      <p>
+        macUSB removes that friction by handling source analysis, media preparation, and guided execution in one place,
+        so the process is focused on results rather than trial-and-error setup.
+      </p>
+    </section>
+
+    <section class="page-section reveal" id="what-macusb-does">
+      <h2>What macUSB does today</h2>
+      <div class="page-grid">
+        <article class="page-card">
+          <h3>Guided end-to-end flow</h3>
+          <p>Move from source selection to finished installer media with clear stage-by-stage status.</p>
+        </article>
+        <article class="page-card">
+          <h3>Broad source support</h3>
+          <p>Use installer sources in <code>.dmg</code>, <code>.iso</code>, <code>.cdr</code>, and <code>.app</code> formats.</p>
+        </article>
+        <article class="page-card">
+          <h3>Automatic media preparation</h3>
+          <p>macUSB verifies target drive setup before writing, so workflows stay consistent and predictable.</p>
+        </article>
+        <article class="page-card">
+          <h3>Operational clarity</h3>
+          <p>Track progress states, live write speed, completion timing, and diagnostics for support use.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="page-section reveal" id="supported-scenarios">
+      <h2>Supported recovery scenarios</h2>
+      <div class="page-grid">
+        <article class="page-card">
+          <h3>Current macOS installers</h3>
+          <p>Create installers for current releases from a modern host Mac with a stable workflow.</p>
+        </article>
+        <article class="page-card">
+          <h3>Legacy Intel workflows</h3>
+          <p>Prepare media for older Intel Macs from Apple Silicon or Intel hosts without manual process juggling.</p>
+        </article>
+        <article class="page-card page-card-wide">
+          <h3>Tiger, Leopard, and PowerPC paths</h3>
+          <p>Build media for legacy Mac OS X recovery scenarios and continue with dedicated PowerPC boot guidance where required.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="page-section reveal" id="how-it-works">
+      <h2>How it works</h2>
+      <ol class="page-list">
+        <li>Select your installer source file.</li>
+        <li>Choose the target USB drive and confirm operation details.</li>
+        <li>Start creation and monitor progress in real time.</li>
+        <li>Finish with post-creation guidance for your target machine generation.</li>
+      </ol>
+      <figure class="img-figure">
+        <img
+          class="guide-image"
+          src="../assets/screenshots/app-v2/04-progress.png"
+          alt="macUSB creation dashboard with live stage status"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption class="img-hint" aria-hidden="true">Click to zoom</figcaption>
+      </figure>
+    </section>
+
+    <section class="page-section reveal" id="guides">
+      <h2>Guides for legacy workflows</h2>
+      <p>
+        For Tiger Multi-DVD and PowerPC USB boot scenarios, use the dedicated step-by-step documentation.
+      </p>
+      <p class="section-actions">
+        <a class="card-button" href="guides/multidvd_tiger.html">Tiger Multi-DVD USB Guide</a>
+        <a class="card-button" href="guides/ppc_boot_instructions.html">PowerPC USB Boot Instructions</a>
+      </p>
+    </section>
+
+    <section class="page-section reveal" id="trust-support">
+      <h2>Trust, transparency, and support</h2>
+      <p>
+        macUSB is open-source, released under the MIT License, and distributed as an Apple-notarized app.
+        Built-in diagnostic logging supports troubleshooting when needed.
+      </p>
+      <p class="section-actions">
+        <a class="card-button" href="https://github.com/Kruszoneq/macUSB">View repository</a>
+        <a class="card-button" href="https://github.com/Kruszoneq/macUSB/issues">Report an issue</a>
+      </p>
+    </section>
+
+    <section class="page-section reveal" id="faq">
+      <h2>FAQ</h2>
+      <div class="page-grid">
+        <article class="page-card">
+          <h3>How do I create a bootable macOS USB on Apple Silicon?</h3>
+          <p>Select source, pick target USB, review details, and run creation in macUSB.</p>
+        </article>
+        <article class="page-card">
+          <h3>Can I create installers for older macOS versions from modern Macs?</h3>
+          <p>Yes. macUSB supports current and legacy recovery paths, including older Intel-focused scenarios.</p>
+        </article>
+        <article class="page-card">
+          <h3>Does macUSB support Tiger and Leopard workflows?</h3>
+          <p>Yes. It supports those installer paths and links directly to Tiger Multi-DVD and PowerPC guides.</p>
+        </article>
+        <article class="page-card">
+          <h3>Which installer source formats can I use?</h3>
+          <p>Use <code>.dmg</code>, <code>.iso</code>, <code>.cdr</code>, or <code>.app</code> files.</p>
+        </article>
+      </div>
+    </section>
+
+    <div class="page-actions">
+      <div class="page-actions-left">
+        <a class="cta-button" href="https://github.com/Kruszoneq/macUSB/releases">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 3v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M8.5 10.5 12 13.9l3.5-3.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M5 17.5v2.5h14V17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>Download for macOS</span>
+        </a>
+        <span id="latest-version" class="version-info">Latest release</span>
+      </div>
+      <a class="page-link" href="#top">Back to top</a>
+    </div>
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="../assets/js/main.js" defer></script>
+</body>
+</html>
