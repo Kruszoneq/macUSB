@@ -62,7 +62,14 @@ Primary objectives:
 ### Primary assets
 - `/assets/icon/macUSBicon-v2.png` - current icon for nav/favicon/branding
 - `/assets/screenshots/app-v2/*` - v2 app screenshots used on homepage and SEO page
-- `/assets/screenshots/multidvd_tiger/*` - guide screenshots
+- `/assets/screenshots/multidvd_tiger/*` - Tiger Multi-DVD guide screenshots (canonical sequence):
+  - `01-files.png`
+  - `02-cd1.png`
+  - `03-cd2.png`
+  - `04-info.png`
+  - `05-cd2ok.png`
+  - `06-creation.png`
+  - `07-finish.png`
 
 ---
 
@@ -190,6 +197,14 @@ Must include:
 - Preserve procedural clarity and direct language.
 - Keep screenshot zoom support.
 - Keep Tiger guide TOC auto-generated + scrollspy behavior.
+- Tiger Multi-DVD guide flow must keep the current screenshot narrative:
+  - Disc files prepared (Finder view)
+  - CD1 auto-detection success
+  - CD2+ detection issue state
+  - skip-analysis warning modal
+  - forced Tiger recognition state
+  - operation details/start screen
+  - completion screen with PowerPC instructions link
 
 ### Browser title convention (all pages)
 - Homepage must use: `macUSB - <text>`.
@@ -252,7 +267,7 @@ When making changes, verify:
 
 - [ ] Navbar renders on index/about/SEO/guides via partial injection.
 - [ ] Footer renders on index/about/SEO/guides via partial injection.
-- [ ] Sticky/frosted navbar behavior works and remains readable in dark mode.
+- [ ] Sticky/frosted navbar behavior works and remains readable in the default fixed theme.
 - [ ] No theme toggle is rendered in navbar.
 - [ ] No system theme switching changes page appearance.
 - [ ] Guides dropdown works on desktop hover, mobile click, and keyboard.
