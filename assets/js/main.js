@@ -259,7 +259,10 @@
 /* --- Latest release fetch --- */
 (function () {
   const releaseTargets = Array.from(document.querySelectorAll('#latest-version'));
-  if (!releaseTargets.length) return;
+  const downloadButtons = Array.from(
+    document.querySelectorAll('a.cta-button[href*="github.com/Kruszoneq/macUSB/releases"]')
+  );
+  if (!releaseTargets.length && !downloadButtons.length) return;
 
   fetch('https://api.github.com/repos/Kruszoneq/macUSB/releases/latest')
     .then((response) => {
@@ -271,6 +274,16 @@
         node.textContent = `Latest version: ${data.tag_name}`;
         node.style.opacity = '1';
       });
+
+      const latestDmgAsset = Array.isArray(data.assets)
+        ? data.assets.find((asset) => /\.dmg$/i.test(asset.name || ''))
+        : null;
+
+      if (latestDmgAsset && latestDmgAsset.browser_download_url) {
+        downloadButtons.forEach((button) => {
+          button.href = latestDmgAsset.browser_download_url;
+        });
+      }
     })
     .catch((error) => {
       console.log('Version fetch error:', error);
