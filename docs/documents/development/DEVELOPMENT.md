@@ -811,7 +811,7 @@ Minimal runbook for day-to-day diagnostics and release safety:
 Each entry below lists a file and its role. This section is exhaustive for tracked source and config files.
 
 - `LICENSE.txt` — MIT license text.
-- `README.md` — Public project overview, requirements, supported versions, languages.
+- `README.md` — Public project overview, download methods, requirements, supported versions, languages.
 - `version.json` — Remote version metadata for update checks.
 - `docs/documents/development/DEVELOPMENT.md` — Internal architecture/runtime contract for contributors and AI agents.
 - `docs/readme-assets/images/macUSBreadmepreview.png` — Current README hero preview image.
@@ -826,6 +826,7 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `.github/PPC_BOOT_INSTRUCTIONS.md` — PowerPC Open Firmware USB boot guide.
 - `.github/ISSUE_TEMPLATE/bug_report.yml` — Bug report template.
 - `.github/ISSUE_TEMPLATE/feature_request.yml` — Feature request template.
+- `.github/workflows/homebrew-bump.yml` — Release-triggered workflow that opens a Homebrew Cask bump PR for `macusb`.
 - `macUSB.xcodeproj/project.pbxproj` — Xcode project definition (targets, build settings).
 - `macUSB.xcodeproj/project.xcworkspace/contents.xcworkspacedata` — Workspace metadata used by Xcode.
 - `macUSB.xcodeproj/xcshareddata/xcschemes/macUSB.xcscheme` — Shared build scheme.

@@ -1,0 +1,22 @@
+name: Bump Homebrew Cask
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  bump:
+    runs-on: macos-latest
+    steps:
+      - name: Configure Git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump macusb Cask
+        env:
+          HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_TOKEN }}
+        run: |
+          VERSION="${{ github.event.release.tag_name }}"
+          VERSION="${VERSION#v}"
+          brew bump-cask-pr --version="$VERSION" --no-browse macusb
