@@ -6,8 +6,18 @@
 
 **macUSB** is a guided macOS app for creating bootable USB installers from `.dmg`, `.iso`, `.cdr`, and `.app` sources.
 
-**Primary download:** [Download latest release](https://github.com/Kruszoneq/macUSB/releases/latest)  
-**Project website:** [kruszoneq.github.io/macUSB](https://kruszoneq.github.io/macUSB/)
+## 📥 How to Download macUSB
+
+Choose one installation method:
+
+1. **GitHub Releases:** [Download latest release](https://github.com/Kruszoneq/macUSB/releases/latest)
+2. **Homebrew:**
+
+```bash
+brew install --cask macusb
+```
+
+**Project website:** [macUSB](https://kruszoneq.github.io/macUSB/)
 
 ---
 
@@ -62,7 +72,7 @@ Full change list: [Releases](https://github.com/Kruszoneq/macUSB/releases)
 
 ## ⚡ Quick Start
 
-1. Download the app from [latest releases](https://github.com/Kruszoneq/macUSB/releases/latest).
+1. Install macUSB using one of the methods listed in **How to Download macUSB**.
 2. Open macUSB and select an installer source file (`.dmg`, `.iso`, `.cdr`, or `.app`).
 3. Select the target USB drive and review operation details.
 4. Start creation and monitor stage-by-stage progress.
