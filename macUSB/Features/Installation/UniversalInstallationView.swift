@@ -60,6 +60,10 @@ struct UniversalInstallationView: View {
     @State var usbCheckTimer: Timer?
 
     @State var helperOperationFailed: Bool = false
+    @State var finishFailureMessage: String = ""
+    @State var finishFailureCode: Int? = nil
+    @State var finishFailedStage: String = ""
+    @State var finishIsPermissionFailure: Bool = false
     
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
@@ -391,7 +395,11 @@ struct UniversalInstallationView: View {
                     navigateToFinish: $navigateToFinish,
                     helperOperationFailed: $helperOperationFailed,
                     didCancelCreation: $didCancelCreation,
-                    creationStartedAt: $usbProcessStartedAt
+                    creationStartedAt: $usbProcessStartedAt,
+                    finishFailureMessage: $finishFailureMessage,
+                    finishFailureCode: $finishFailureCode,
+                    finishFailedStage: $finishFailedStage,
+                    finishIsPermissionFailure: $finishIsPermissionFailure
                 ),
                 isActive: $navigateToCreationProgress
             ) { EmptyView() }

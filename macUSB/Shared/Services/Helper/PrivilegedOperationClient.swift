@@ -15,6 +15,7 @@ final class PrivilegedOperationClient: NSObject {
     private var completionHandlers: [String: CompletionHandler] = [:]
     private let startReplyTimeout: TimeInterval = 10
     private let healthReplyTimeout: TimeInterval = 5
+    private let probeReplyTimeout: TimeInterval = 8
 
     private override init() {
         super.init()
@@ -185,6 +186,92 @@ final class PrivilegedOperationClient: NSObject {
         }
     }
 
+    func probeExternalVolumeAccess(
+        payload: HelperExternalVolumeProbePayload,
+        completion: @escaping (HelperExternalVolumeProbeResultPayload?, String?) -> Void
+    ) {
+        let stateLock = NSLock()
+        var didFinish = false
+        let finishOnce: (_ result: HelperExternalVolumeProbeResultPayload?, _ errorMessage: String?) -> Void = { result, errorMessage in
+            stateLock.lock()
+            let shouldRun = !didFinish
+            if shouldRun {
+                didFinish = true
+            }
+            stateLock.unlock()
+            guard shouldRun else { return }
+            completion(result, errorMessage)
+        }
+
+        var timeoutWorkItem: DispatchWorkItem?
+        let failProbe: (String) -> Void = { [weak self] message in
+            DispatchQueue.main.async {
+                timeoutWorkItem?.cancel()
+                self?.resetConnection()
+                finishOnce(nil, message)
+            }
+        }
+
+        guard let proxy = helperProxy(onError: { message in
+            failProbe(message)
+        }) else {
+            failProbe(String(localized: "Nie udało się uzyskać połączenia XPC z helperem."))
+            return
+        }
+
+        let payloadData: Data
+        do {
+            payloadData = try HelperXPCCodec.encode(payload)
+        } catch {
+            failProbe(
+                String(
+                    format: String(localized: "Nie udało się zakodować probe helpera: %@"),
+                    error.localizedDescription
+                )
+            )
+            return
+        }
+
+        timeoutWorkItem = DispatchWorkItem { [weak self] in
+            self?.resetConnection()
+            DispatchQueue.main.async {
+                finishOnce(nil, String(localized: "Przekroczono czas oczekiwania na odpowiedź helper probe."))
+            }
+        }
+        if let timeoutWorkItem {
+            DispatchQueue.global(qos: .userInitiated).asyncAfter(
+                deadline: .now() + probeReplyTimeout,
+                execute: timeoutWorkItem
+            )
+        }
+
+        proxy.probeExternalVolumeAccess(payloadData as NSData) { resultData, error in
+            DispatchQueue.main.async {
+                timeoutWorkItem?.cancel()
+                if let error {
+                    finishOnce(nil, error.localizedDescription)
+                    return
+                }
+                guard let resultData = resultData as Data? else {
+                    finishOnce(nil, String(localized: "Helper probe nie zwrócił danych."))
+                    return
+                }
+                do {
+                    let result = try HelperXPCCodec.decode(HelperExternalVolumeProbeResultPayload.self, from: resultData)
+                    finishOnce(result, nil)
+                } catch {
+                    finishOnce(
+                        nil,
+                        String(
+                            format: String(localized: "Nie udało się zdekodować wyniku probe helpera: %@"),
+                            error.localizedDescription
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     func clearHandlers(for workflowID: String) {
         lock.lock()
         eventHandlers.removeValue(forKey: workflowID)
@@ -267,7 +354,9 @@ final class PrivilegedOperationClient: NSObject {
                         failedStage: "xpc_connection",
                         errorCode: nil,
                         errorMessage: message,
-                        isUserCancelled: false
+                        isUserCancelled: false,
+                        isPermissionDenied: nil,
+                        permissionFailureKind: nil
                     )
                 )
             }

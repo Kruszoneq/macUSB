@@ -1296,6 +1296,36 @@
         }
       }
     },
+    "1. Wybierz w menu Opcje → Resetuj uprawnienia dostępu do dysków zewnętrznych." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1. In the menu, choose Options → Reset External Drive Access Permissions."
+          }
+        }
+      }
+    },
+    "2. Uruchom ponownie tworzenie nośnika." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2. Start creating the installer again."
+          }
+        }
+      }
+    },
+    "3. Jeśli błąd wraca, sprawdź pełny dostęp do dysku dla macUSB i spróbuj ponownie." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3. If the error returns, verify Full Disk Access for macUSB and try again."
+          }
+        }
+      }
+    },
     "Aby uruchomić helper systemowy, aplikacja musi znajdować się w katalogu Applications." : {
       "localizations" : {
         "de" : {
@@ -4063,6 +4093,16 @@
         }
       }
     },
+    "Etap: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stage: %@"
+          }
+        }
+      }
+    },
     "Etapy tworzenia" : {
       "localizations" : {
         "de" : {
@@ -4443,6 +4483,9 @@
         }
       }
     },
+    "Helper nie jest gotowy po przeładowaniu." : {
+
+    },
     "Helper nie zwrócił identyfikatora zadania." : {
       "localizations" : {
         "de" : {
@@ -4603,6 +4646,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "helper 响应正常 (uid=%@, euid=%@, pid=%@)"
+          }
+        }
+      }
+    },
+    "Helper probe nie zwrócił danych." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper probe returned no data."
           }
         }
       }
@@ -7190,6 +7243,16 @@
         }
       }
     },
+    "Jak naprawić problem" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How to fix this problem"
+          }
+        }
+      }
+    },
     "Język" : {
       "localizations" : {
         "de" : {
@@ -7262,6 +7325,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "语言"
+          }
+        }
+      }
+    },
+    "Kod błędu: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error code: %@"
           }
         }
       }
@@ -9033,6 +9106,9 @@
         }
       }
     },
+    "Nie udało się ponownie zarejestrować helpera." : {
+
+    },
     "Nie udało się usunąć plików tymczasowych: %@" : {
       "localizations" : {
         "de" : {
@@ -9345,6 +9421,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法清除外部驱动器访问权限"
+          }
+        }
+      }
+    },
+    "Nie udało się zakodować probe helpera: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not encode helper probe payload: %@"
           }
         }
       }
@@ -9665,6 +9751,16 @@
         }
       }
     },
+    "Nie udało się zdekodować wyniku probe helpera: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not decode helper probe result: %@"
+          }
+        }
+      }
+    },
     "Nie udało się zdekodować zdarzenia helpera: %@" : {
       "localizations" : {
         "de" : {
@@ -9747,7 +9843,8 @@
         }
       }
     },
-    "Nie udało się zresetować uprawnień dostępu do nośników zewnętrznych. Spróbuj ponownie lub uruchom ręcznie w Terminalu: tccutil reset SystemPolicyRemovableVolumes %@" : {
+    "Nie udało się zresetować uprawnień dostępu do nośników zewnętrznych dla aplikacji macUSB. Spróbuj ponownie lub uruchom ręcznie w Terminalu: tccutil reset SystemPolicyRemovableVolumes %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9819,6 +9916,93 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法重置外部介质访问权限。请重试，或在“终端”中手动运行以下命令：tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        }
+      }
+    },
+    "Nie udało się zresetować uprawnień dostępu do nośników zewnętrznych. Spróbuj ponownie lub uruchom ręcznie w Terminalu: tccutil reset SystemPolicyRemovableVolumes %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Zugriffsberechtigungen für externe Datenträger konnten nicht zurückgesetzt werden. Versuchen Sie es erneut oder führen Sie diesen Befehl manuell im Terminal aus: tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not reset external-media access permissions. Try again, or run this command manually in Terminal: tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudieron restablecer los permisos de acceso a medios externos. Inténtalo de nuevo o ejecuta manualmente este comando en Terminal: tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de réinitialiser les autorisations d’accès aux supports externes. Réessayez ou exécutez manuellement cette commande dans le Terminal : tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile reimpostare i permessi di accesso ai supporti esterni. Riprova oppure esegui manualmente questo comando in Terminale: tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "外部メディアへのアクセス権をリセットできませんでした。再試行するか、次のコマンドをターミナルで手動実行してください: tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível redefinir as permissões de acesso a mídias externas. Tente novamente ou execute este comando manualmente no Terminal: tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сбросить разрешения доступа к внешним носителям. Попробуйте снова или выполните эту команду вручную в Терминале: tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Harici ortam erişim izinleri sıfırlanamadı. Yeniden deneyin veya şu komutu Terminal'de manuel olarak çalıştırın: tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося скинути дозволи доступу до зовнішніх носіїв. Спробуйте ще раз або виконайте цю команду вручну в Терміналі: tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể đặt lại quyền truy cập thiết bị lưu trữ ngoài. Hãy thử lại hoặc chạy thủ công lệnh sau trong Terminal: tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法重置外部介质访问权限。请重试，或在“终端”中手动运行以下命令：tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        }
+      }
+    },
+    "Nie uruchomiono tworzenia nośnika: helper nie ma uprawnień do nośników zewnętrznych." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installer creation was not started: helper has no permission for external media."
           }
         }
       }
@@ -13376,6 +13560,16 @@
         }
       }
     },
+    "Przekroczono czas oczekiwania na odpowiedź helper probe." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timed out waiting for helper probe response."
+          }
+        }
+      }
+    },
     "Przekroczono czas oczekiwania na odpowiedź helpera XPC." : {
       "localizations" : {
         "de" : {
@@ -13998,6 +14192,94 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSB 的 GitHub 仓库"
+          }
+        }
+      }
+    },
+    "Reset dotyczy wyłącznie aplikacji macUSB (bundle: com.kruszoneq.macUSB). Helper nie jest resetowany osobnym bundle ID. Przy kolejnej próbie tworzenia nośnika system ponownie oceni zgodę dla aplikacji." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This reset applies only to the macUSB app bundle (com.kruszoneq.macUSB). The helper is not reset via a separate bundle ID. On the next installer attempt, macOS will re-evaluate app permission."
+          }
+        }
+      }
+    },
+    "Reset dotyczy wyłącznie aplikacji macUSB. Przy kolejnej próbie tworzenia nośnika system poprosi ponownie o zgodę." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die macUSB-Berechtigungen für externe Datenträger wurden zurückgesetzt. Beim nächsten Versuch, einen USB-Installer zu erstellen, fragt das System erneut nach der Erlaubnis."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB permissions for external media have been reset. The system will ask for permission again the next time you try to create a USB installer."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se restablecieron los permisos de macUSB para medios externos. La próxima vez que intentes crear un instalador USB, el sistema volverá a pedir permiso."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les autorisations de macUSB pour les supports externes ont été réinitialisées. Lors de la prochaine tentative de création d’un installateur USB, le système demandera de nouveau l’autorisation."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I permessi di macUSB per i supporti esterni sono stati reimpostati. Al prossimo tentativo di creare un installer USB, il sistema richiederà nuovamente il consenso."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB の外部メディアに対する権限をリセットしました。次回 USB インストーラを作成するときに、システムが再度許可を求めます。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As permissões do macUSB para mídias externas foram redefinidas. Na próxima tentativa de criar um instalador USB, o sistema solicitará a permissão novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разрешения macUSB для внешних носителей были сброшены. При следующей попытке создать USB-установщик система снова запросит доступ."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB’nin harici ortamlar için izinleri sıfırlandı. Bir sonraki USB yükleyici oluşturma denemesinde sistem izni yeniden isteyecek."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дозволи macUSB для зовнішніх носіїв було скинуто. Під час наступної спроби створити USB-інсталятор система знову попросить дозвіл."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quyền của macUSB đối với thiết bị lưu trữ ngoài đã được đặt lại. Ở lần tiếp theo khi bạn tạo bộ cài USB, hệ thống sẽ yêu cầu cấp quyền lại."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB 对外部介质的权限已重置。下次尝试创建 USB 安装器时，系统会再次请求授权。"
           }
         }
       }
@@ -14920,6 +15202,16 @@
         }
       }
     },
+    "System zablokował helperowi dostęp do nośnika USB (System Policy / TCC)." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The system blocked helper access to the USB media (System Policy / TCC)."
+          }
+        }
+      }
+    },
     "System zablokował rejestrację helpera z uruchomienia Xcode. Uruchom raz aplikację z katalogu Applications, zatwierdź działanie helpera w tle, a następnie wróć do testów w Xcode. Szczegóły XPC: %@" : {
       "localizations" : {
         "de" : {
@@ -15068,6 +15360,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "操作详情"
+          }
+        }
+      }
+    },
+    "Szczegóły techniczne błędu" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Technical error details"
           }
         }
       }
@@ -18914,6 +19216,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "检测到兼容的安装器"
+          }
+        }
+      }
+    },
+    "Wykryto problem z uprawnieniami do dysków zewnętrznych" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "External drive permission issue detected"
           }
         }
       }

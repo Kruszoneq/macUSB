@@ -405,10 +405,20 @@ struct macUSBApp: App {
             if task.terminationStatus == 0 {
                 presentExternalVolumePermissionsResetSuccessAlert()
             } else {
-                presentExternalVolumePermissionsResetFailureAlert(bundleId: bundleId, details: output)
+                if let output, !output.isEmpty {
+                    AppLogging.error(
+                        "Reset uprawnień nośników zewnętrznych nieudany: \(output)",
+                        category: "HelperService"
+                    )
+                }
+                presentExternalVolumePermissionsResetFailureAlert()
             }
         } catch {
-            presentExternalVolumePermissionsResetFailureAlert(bundleId: bundleId, details: error.localizedDescription)
+            AppLogging.error(
+                "Reset uprawnień nośników zewnętrznych nieudany: \(error.localizedDescription)",
+                category: "HelperService"
+            )
+            presentExternalVolumePermissionsResetFailureAlert()
         }
     }
 
@@ -422,19 +432,12 @@ struct macUSBApp: App {
         alert.runModal()
     }
 
-    private func presentExternalVolumePermissionsResetFailureAlert(bundleId: String, details: String?) {
+    private func presentExternalVolumePermissionsResetFailureAlert() {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
         alert.messageText = String(localized: "Nie udało się wyczyścić uprawnień dostępu do dysków zewnętrznych")
-        var informativeText = String.localizedStringWithFormat(
-            String(localized: "Nie udało się zresetować uprawnień dostępu do nośników zewnętrznych. Spróbuj ponownie lub uruchom ręcznie w Terminalu: tccutil reset SystemPolicyRemovableVolumes %@"),
-            bundleId
-        )
-        if let details, !details.isEmpty {
-            informativeText += "\n\n\(details)"
-        }
-        alert.informativeText = informativeText
+        alert.informativeText = String(localized: "Spróbuj ponownie od początku")
         alert.addButton(withTitle: String(localized: "OK"))
         alert.runModal()
     }

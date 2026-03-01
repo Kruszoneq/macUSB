@@ -12,6 +12,10 @@ struct FinishUSBView: View {
     let creationStartedAt: Date?
     let cleanupTempWorkURL: URL?
     let shouldDetachMountPoint: Bool
+    let failureMessage: String
+    let failureCode: Int?
+    let failedStage: String
+    let isPermissionFailure: Bool
     let detectedSystemIcon: NSImage?
     
     @State private var isCleaning: Bool = true
@@ -31,6 +35,10 @@ struct FinishUSBView: View {
         creationStartedAt: Date? = nil,
         cleanupTempWorkURL: URL? = nil,
         shouldDetachMountPoint: Bool = true,
+        failureMessage: String = "",
+        failureCode: Int? = nil,
+        failedStage: String = "",
+        isPermissionFailure: Bool = false,
         detectedSystemIcon: NSImage? = nil
     ) {
         self.systemName = systemName
@@ -42,6 +50,10 @@ struct FinishUSBView: View {
         self.creationStartedAt = creationStartedAt
         self.cleanupTempWorkURL = cleanupTempWorkURL
         self.shouldDetachMountPoint = shouldDetachMountPoint
+        self.failureMessage = failureMessage
+        self.failureCode = failureCode
+        self.failedStage = failedStage
+        self.isPermissionFailure = isPermissionFailure
         self.detectedSystemIcon = detectedSystemIcon
     }
     
@@ -146,6 +158,69 @@ struct FinishUSBView: View {
                                     }
                                     .font(.subheadline).foregroundColor(.secondary)
                                 }
+                            }
+                        }
+                    }
+
+                    if isFailedResult && isPermissionFailure {
+                        StatusCard(tone: .error, density: .compact) {
+                            HStack(alignment: .top) {
+                                Image(systemName: "externaldrive.badge.xmark")
+                                    .font(sectionIconFont)
+                                    .foregroundColor(.red)
+                                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text(String(localized: "Wykryto problem z uprawnieniami do dysków zewnętrznych"))
+                                        .font(.headline)
+                                        .foregroundColor(.red)
+                                    Text(String(localized: "System zablokował helperowi dostęp do nośnika USB (System Policy / TCC)."))
+                                        .font(.subheadline)
+                                        .foregroundColor(.red.opacity(0.9))
+
+                                    Text(String(localized: "Jak naprawić problem"))
+                                        .font(.subheadline.weight(.semibold))
+                                        .foregroundColor(.red)
+                                    VStack(alignment: .leading, spacing: 3) {
+                                        Text(String(localized: "1. Wybierz w menu Opcje → Resetuj uprawnienia dostępu do dysków zewnętrznych."))
+                                        Text(String(localized: "2. Uruchom ponownie tworzenie nośnika."))
+                                        Text(String(localized: "3. Jeśli błąd wraca, sprawdź pełny dostęp do dysku dla macUSB i spróbuj ponownie."))
+                                    }
+                                    .font(.caption)
+                                    .foregroundColor(.red.opacity(0.9))
+
+                                    if !failedStage.isEmpty || failureCode != nil {
+                                        Text(String(localized: "Szczegóły techniczne błędu"))
+                                            .font(.subheadline.weight(.semibold))
+                                            .foregroundColor(.red)
+                                        if !failedStage.isEmpty {
+                                            Text(
+                                                String(
+                                                    format: String(localized: "Etap: %@"),
+                                                    failedStage
+                                                )
+                                            )
+                                                .font(.caption.monospaced())
+                                                .foregroundColor(.red.opacity(0.9))
+                                        }
+                                        if let failureCode {
+                                            Text(
+                                                String(
+                                                    format: String(localized: "Kod błędu: %@"),
+                                                    String(failureCode)
+                                                )
+                                            )
+                                                .font(.caption.monospaced())
+                                                .foregroundColor(.red.opacity(0.9))
+                                        }
+                                    }
+
+                                    if !failureMessage.isEmpty {
+                                        Text(failureMessage)
+                                            .font(.caption)
+                                            .foregroundColor(.red.opacity(0.85))
+                                    }
+                                }
+                                Spacer()
                             }
                         }
                     }

@@ -42,6 +42,21 @@ struct HelperWorkflowResultPayload: Codable {
     let errorCode: Int?
     let errorMessage: String?
     let isUserCancelled: Bool
+    let isPermissionDenied: Bool?
+    let permissionFailureKind: String?
+}
+
+struct HelperExternalVolumeProbePayload: Codable {
+    let targetVolumePath: String
+    let targetBSDName: String
+    let requiresDeviceReadProbe: Bool
+}
+
+struct HelperExternalVolumeProbeResultPayload: Codable {
+    let success: Bool
+    let isPermissionDenied: Bool
+    let failureMessage: String?
+    let details: String?
 }
 
 @objc(MacUSBPrivilegedHelperToolXPCProtocol)
@@ -49,6 +64,7 @@ protocol PrivilegedHelperToolXPCProtocol {
     func startWorkflow(_ requestData: NSData, reply: @escaping (NSString?, NSError?) -> Void)
     func cancelWorkflow(_ workflowID: String, reply: @escaping (Bool, NSError?) -> Void)
     func queryHealth(_ reply: @escaping (Bool, NSString) -> Void)
+    func probeExternalVolumeAccess(_ probeData: NSData, reply: @escaping (NSData?, NSError?) -> Void)
 }
 
 @objc(MacUSBPrivilegedHelperClientXPCProtocol)
@@ -93,6 +109,25 @@ private struct PreparedWorkflowContext {
     let postInstallSourceAppPath: String?
 }
 
+private enum HelperCommandExecutionContext {
+    case directRoot
+    case asUser(Int)
+
+    var logLabel: String {
+        switch self {
+        case .directRoot:
+            return "direct_root"
+        case .asUser(let uid):
+            return "asuser_\(uid)"
+        }
+    }
+}
+
+private struct PermissionFailureSignature {
+    let kind: String
+    let pattern: String
+}
+
 private final class HelperWorkflowExecutor {
     private let request: HelperWorkflowRequestPayload
     private let workflowID: String
@@ -104,6 +139,8 @@ private final class HelperWorkflowExecutor {
     private var activeProcess: Process?
     private var latestPercent: Double = 0
     private var lastStageOutputLine: String?
+    private var lastExecutionContextLabel: String = "direct_root"
+    private var lastPermissionSignature: PermissionFailureSignature?
 
     init(request: HelperWorkflowRequestPayload, workflowID: String, sendEvent: @escaping (HelperProgressEventPayload) -> Void) {
         self.request = request
@@ -150,7 +187,9 @@ private final class HelperWorkflowExecutor {
                 failedStage: nil,
                 errorCode: nil,
                 errorMessage: nil,
-                isUserCancelled: false
+                isUserCancelled: false,
+                isPermissionDenied: nil,
+                permissionFailureKind: nil
             )
         } catch HelperExecutionError.cancelled {
             runBestEffortTempCleanupStage()
@@ -160,17 +199,26 @@ private final class HelperWorkflowExecutor {
                 failedStage: "cancelled",
                 errorCode: nil,
                 errorMessage: "Operacja została anulowana przez użytkownika.",
-                isUserCancelled: true
+                isUserCancelled: true,
+                isPermissionDenied: nil,
+                permissionFailureKind: nil
             )
         } catch HelperExecutionError.failed(let stage, let exitCode, let description) {
             runBestEffortTempCleanupStage()
+            let signature = lastPermissionSignature ?? permissionFailureSignature(
+                line: lastStageOutputLine,
+                exitCode: exitCode,
+                description: description
+            )
             return HelperWorkflowResultPayload(
                 workflowID: workflowID,
                 success: false,
                 failedStage: stage,
                 errorCode: Int(exitCode),
                 errorMessage: description,
-                isUserCancelled: false
+                isUserCancelled: false,
+                isPermissionDenied: signature != nil,
+                permissionFailureKind: signature?.kind
             )
         } catch HelperExecutionError.invalidRequest(let message) {
             runBestEffortTempCleanupStage()
@@ -180,7 +228,9 @@ private final class HelperWorkflowExecutor {
                 failedStage: "request",
                 errorCode: nil,
                 errorMessage: message,
-                isUserCancelled: false
+                isUserCancelled: false,
+                isPermissionDenied: nil,
+                permissionFailureKind: nil
             )
         } catch {
             runBestEffortTempCleanupStage()
@@ -190,7 +240,9 @@ private final class HelperWorkflowExecutor {
                 failedStage: "unknown",
                 errorCode: nil,
                 errorMessage: error.localizedDescription,
-                isUserCancelled: false
+                isUserCancelled: false,
+                isPermissionDenied: nil,
+                permissionFailureKind: nil
             )
         }
     }
@@ -543,15 +595,17 @@ private final class HelperWorkflowExecutor {
     private func runStage(_ stage: WorkflowStage) throws {
         try throwIfCancelled()
         lastStageOutputLine = nil
+        lastPermissionSignature = nil
 
         let process = Process()
-        if let requesterUID = request.requesterUID, requesterUID > 0 {
-            process.executableURL = URL(fileURLWithPath: "/bin/launchctl")
-            process.arguments = ["asuser", "\(requesterUID)", stage.executable] + stage.arguments
-        } else {
-            process.executableURL = URL(fileURLWithPath: stage.executable)
-            process.arguments = stage.arguments
-        }
+        try configureProcess(
+            process,
+            executable: stage.executable,
+            arguments: stage.arguments,
+            stageKey: stage.key,
+            stageTitleKey: stage.titleKey,
+            statusKey: stage.statusKey
+        )
 
         let pipe = Pipe()
         process.standardOutput = pipe
@@ -608,6 +662,22 @@ private final class HelperWorkflowExecutor {
                     description += " System zablokował dostęp procesu uprzywilejowanego do woluminu wymiennego (TCC/System Policy). Upewnij się, że aplikacja i helper są podpisane tym samym Team ID i zainstalowane od nowa."
                 }
             }
+            let signature = permissionFailureSignature(
+                line: lastStageOutputLine,
+                exitCode: process.terminationStatus,
+                description: description
+            )
+            if let signature {
+                lastPermissionSignature = signature
+                emitProgress(
+                    stageKey: stage.key,
+                    titleKey: stage.titleKey,
+                    percent: latestPercent,
+                    statusKey: stage.statusKey,
+                    logLine: "PERMISSION_DENY_SIGNATURE stage=\(stage.key) code=\(process.terminationStatus) pattern=\(signature.pattern) exec_context=\(lastExecutionContextLabel)",
+                    shouldAdvancePercent: false
+                )
+            }
             throw HelperExecutionError.failed(
                 stage: stage.key,
                 exitCode: process.terminationStatus,
@@ -620,6 +690,17 @@ private final class HelperWorkflowExecutor {
         let line = rawLine.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !line.isEmpty else { return }
         lastStageOutputLine = line
+        if let signature = permissionFailureSignature(line: line, exitCode: nil, description: line) {
+            lastPermissionSignature = signature
+            emitProgress(
+                stageKey: stage.key,
+                titleKey: stage.titleKey,
+                percent: latestPercent,
+                statusKey: stage.statusKey,
+                logLine: "PERMISSION_DENY_SIGNATURE stage=\(stage.key) code=n/a pattern=\(signature.pattern) exec_context=\(lastExecutionContextLabel)",
+                shouldAdvancePercent: false
+            )
+        }
 
         var percent = latestPercent
         if stage.key == "ppc_restore", let mapped = mapPPCProgress(from: line) {
@@ -828,14 +909,16 @@ private final class HelperWorkflowExecutor {
         statusKey: String,
         failOnNonZeroExit: Bool = true
     ) throws -> Int32 {
+        lastPermissionSignature = nil
         let process = Process()
-        if let requesterUID = request.requesterUID, requesterUID > 0 {
-            process.executableURL = URL(fileURLWithPath: "/bin/launchctl")
-            process.arguments = ["asuser", "\(requesterUID)", executable] + arguments
-        } else {
-            process.executableURL = URL(fileURLWithPath: executable)
-            process.arguments = arguments
-        }
+        try configureProcess(
+            process,
+            executable: executable,
+            arguments: arguments,
+            stageKey: stageKey,
+            stageTitleKey: stageTitleKey,
+            statusKey: statusKey
+        )
 
         let pipe = Pipe()
         process.standardOutput = pipe
@@ -909,6 +992,22 @@ private final class HelperWorkflowExecutor {
             if let lastLine = lastStageOutputLine {
                 description += " Ostatni komunikat: \(lastLine)"
             }
+            let signature = permissionFailureSignature(
+                line: lastStageOutputLine,
+                exitCode: terminationStatus,
+                description: description
+            )
+            if let signature {
+                lastPermissionSignature = signature
+                emitProgress(
+                    stageKey: stageKey,
+                    titleKey: stageTitleKey,
+                    percent: latestPercent,
+                    statusKey: statusKey,
+                    logLine: "PERMISSION_DENY_SIGNATURE stage=\(stageKey) code=\(terminationStatus) pattern=\(signature.pattern) exec_context=\(lastExecutionContextLabel)",
+                    shouldAdvancePercent: false
+                )
+            }
             throw HelperExecutionError.failed(
                 stage: stageKey,
                 exitCode: terminationStatus,
@@ -919,11 +1018,125 @@ private final class HelperWorkflowExecutor {
         return terminationStatus
     }
 
+    private func configureProcess(
+        _ process: Process,
+        executable: String,
+        arguments: [String],
+        stageKey: String,
+        stageTitleKey: String,
+        statusKey: String
+    ) throws {
+        let context = commandExecutionContext(for: executable)
+        switch context {
+        case .directRoot:
+            process.executableURL = URL(fileURLWithPath: executable)
+            process.arguments = arguments
+        case .asUser(let requesterUID):
+            if shouldRunDirectlyInHelper(executable) {
+                let message = "Naruszenie polityki wykonania: polecenie storage trafiło do asuser (\(executable))."
+                emitProgress(
+                    stageKey: stageKey,
+                    titleKey: stageTitleKey,
+                    percent: latestPercent,
+                    statusKey: statusKey,
+                    logLine: message,
+                    shouldAdvancePercent: false
+                )
+                throw HelperExecutionError.failed(
+                    stage: stageKey,
+                    exitCode: 251,
+                    description: message
+                )
+            }
+            process.executableURL = URL(fileURLWithPath: "/bin/launchctl")
+            process.arguments = ["asuser", "\(requesterUID)", executable] + arguments
+        }
+
+        lastExecutionContextLabel = context.logLabel
+
+        emitProgress(
+            stageKey: stageKey,
+            titleKey: stageTitleKey,
+            percent: latestPercent,
+            statusKey: statusKey,
+            logLine: "Execution context: \(context.logLabel); command=\(executable)",
+            shouldAdvancePercent: false
+        )
+    }
+
+    private func commandExecutionContext(for executable: String) -> HelperCommandExecutionContext {
+        if shouldRunDirectlyInHelper(executable) {
+            return .directRoot
+        }
+
+        if let requesterUID = request.requesterUID, requesterUID > 0 {
+            return .asUser(requesterUID)
+        }
+
+        return .directRoot
+    }
+
+    private func shouldRunDirectlyInHelper(_ executable: String) -> Bool {
+        let normalizedExecutable = executable.lowercased()
+        if normalizedExecutable == "/usr/sbin/asr" || normalizedExecutable == "/usr/sbin/diskutil" {
+            return true
+        }
+
+        return normalizedExecutable.hasSuffix("/createinstallmedia")
+    }
+
     private func isRemovableVolumePermissionFailure(_ line: String) -> Bool {
         let lowered = line.lowercased()
         return lowered.contains("operation not permitted") ||
         lowered.contains("operacja nie jest dozwolona") ||
         lowered.contains("could not validate sizes - operacja nie jest dozwolona")
+    }
+
+    private func permissionFailureSignature(
+        line: String?,
+        exitCode: Int32?,
+        description: String
+    ) -> PermissionFailureSignature? {
+        if let line, let signature = permissionFailureSignatureFromText(line) {
+            return signature
+        }
+
+        let loweredDescription = description.lowercased()
+        if loweredDescription.contains("system policy") && loweredDescription.contains("deny") {
+            return PermissionFailureSignature(kind: "system_policy_deny", pattern: "system_policy_deny")
+        }
+        if loweredDescription.contains("operation not permitted") ||
+            loweredDescription.contains("operacja nie jest dozwolona") {
+            return PermissionFailureSignature(kind: "asr_permission", pattern: "operation_not_permitted")
+        }
+
+        if let exitCode, exitCode == 250 || exitCode == 251 {
+            return PermissionFailureSignature(kind: "createinstallmedia_\(exitCode)", pattern: "exit_code_\(exitCode)")
+        }
+
+        return nil
+    }
+
+    private func permissionFailureSignatureFromText(_ text: String) -> PermissionFailureSignature? {
+        let lowered = text.lowercased()
+
+        if lowered.contains("system policy") && lowered.contains("deny") {
+            return PermissionFailureSignature(kind: "system_policy_deny", pattern: "system_policy_deny")
+        }
+        if lowered.contains("could not validate sizes - operacja nie jest dozwolona") {
+            return PermissionFailureSignature(kind: "asr_permission", pattern: "asr_validate_sizes_operation_not_permitted")
+        }
+        if lowered.contains("operation not permitted") || lowered.contains("operacja nie jest dozwolona") {
+            return PermissionFailureSignature(kind: "asr_permission", pattern: "operation_not_permitted")
+        }
+        if lowered.contains("ia app name cookie write failed") {
+            return PermissionFailureSignature(kind: "createinstallmedia_250", pattern: "ia_cookie_write_failed")
+        }
+        if lowered.contains("bless") && lowered.contains("failed") {
+            return PermissionFailureSignature(kind: "createinstallmedia_250", pattern: "bless_failed")
+        }
+
+        return nil
     }
 
     private func drainBufferedOutputLines(from buffer: inout Data, handleLine: (String) -> Void) {
@@ -1268,6 +1481,36 @@ private final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCPr
         reply(true, "Helper odpowiada poprawnie (uid=\(uid), euid=\(euid), pid=\(pid))" as NSString)
     }
 
+    func probeExternalVolumeAccess(_ probeData: NSData, reply: @escaping (NSData?, NSError?) -> Void) {
+        queue.async {
+            let payload: HelperExternalVolumeProbePayload
+            do {
+                payload = try HelperXPCCodec.decode(HelperExternalVolumeProbePayload.self, from: probeData as Data)
+            } catch {
+                let err = NSError(
+                    domain: "macUSBHelper",
+                    code: 400,
+                    userInfo: [NSLocalizedDescriptionKey: "Nieprawidłowe żądanie probe helpera: \(error.localizedDescription)"]
+                )
+                reply(nil, err)
+                return
+            }
+
+            let result = self.performExternalVolumeProbe(payload)
+            do {
+                let encoded = try HelperXPCCodec.encode(result)
+                reply(encoded as NSData, nil)
+            } catch {
+                let err = NSError(
+                    domain: "macUSBHelper",
+                    code: 500,
+                    userInfo: [NSLocalizedDescriptionKey: "Nie udało się zakodować wyniku probe helpera: \(error.localizedDescription)"]
+                )
+                reply(nil, err)
+            }
+        }
+    }
+
     private func sendProgress(_ event: HelperProgressEventPayload) {
         guard let client = connection?.remoteObjectProxyWithErrorHandler({ _ in }) as? PrivilegedHelperClientXPCProtocol else {
             return
@@ -1288,6 +1531,67 @@ private final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCPr
             return
         }
         client.finishWorkflow(encoded as NSData)
+    }
+
+    private func performExternalVolumeProbe(_ payload: HelperExternalVolumeProbePayload) -> HelperExternalVolumeProbeResultPayload {
+        if payload.targetVolumePath.hasPrefix("/Volumes/") {
+            let probeURL = URL(fileURLWithPath: payload.targetVolumePath)
+                .appendingPathComponent(".macusb-helper-write-probe-\(UUID().uuidString)")
+
+            do {
+                try Data("macUSBHelper".utf8).write(to: probeURL, options: .atomic)
+                try? FileManager.default.removeItem(at: probeURL)
+            } catch {
+                let nsError = error as NSError
+                let underlyingCode = (nsError.userInfo[NSUnderlyingErrorKey] as? NSError)?.code
+                let code = underlyingCode ?? nsError.code
+                return HelperExternalVolumeProbeResultPayload(
+                    success: false,
+                    isPermissionDenied: code == Int(EPERM) || code == Int(EACCES),
+                    failureMessage: "Helper probe: błąd zapisu testowego na nośniku.",
+                    details: "\(error.localizedDescription) (code=\(code))"
+                )
+            }
+        }
+
+        if payload.requiresDeviceReadProbe {
+            guard let wholeDisk = extractWholeDiskName(from: payload.targetBSDName) else {
+                return HelperExternalVolumeProbeResultPayload(
+                    success: false,
+                    isPermissionDenied: false,
+                    failureMessage: "Helper probe: nieprawidłowy identyfikator nośnika.",
+                    details: payload.targetBSDName
+                )
+            }
+
+            let rawDevicePath = "/dev/r\(wholeDisk)"
+            let fd = open(rawDevicePath, O_RDONLY)
+            if fd < 0 {
+                let code = errno
+                let details = "\(String(cString: strerror(code))) (code=\(code), path=\(rawDevicePath))"
+                return HelperExternalVolumeProbeResultPayload(
+                    success: false,
+                    isPermissionDenied: code == EPERM || code == EACCES,
+                    failureMessage: "Helper probe: błąd odczytu urządzenia blokowego.",
+                    details: details
+                )
+            }
+            close(fd)
+        }
+
+        return HelperExternalVolumeProbeResultPayload(
+            success: true,
+            isPermissionDenied: false,
+            failureMessage: nil,
+            details: nil
+        )
+    }
+
+    private func extractWholeDiskName(from bsdName: String) -> String? {
+        guard let range = bsdName.range(of: #"^disk[0-9]+"#, options: .regularExpression) else {
+            return nil
+        }
+        return String(bsdName[range])
     }
 }
 

@@ -163,6 +163,7 @@ Iconography:
 Alerts and dialogs:
 - `NSAlert` uses the application icon and localized strings.
 - Alerts are styled as informational or warning depending on action (updates, cancellations, external drive enablement, etc.).
+- User-facing alert copy must stay clear and friendly for non-technical users; avoid bundle IDs, shell commands, and raw diagnostics in default alert text.
 - On startup helper bootstrap, if helper status is `requiresApproval` (Background Items permission missing), the app shows:
 - title: `Wymagane narzędzie pomocnicze`
 - message: `macUSB wymaga zezwolenia na działanie w tle, aby umożliwić zarządzanie nośnikami. Przejdź do ustawień systemowych, aby nadać wymagane uprawnienia`
@@ -195,7 +196,8 @@ Menu icon mapping (current):
 - `Opcje` → `Pomiń analizowanie pliku`: `doc.text.magnifyingglass`
 - `Opcje` → `Włącz obsługę zewnętrznych dysków twardych`: `externaldrive.badge.plus`
 - `Opcje` → `Resetuj uprawnienia dostępu do dysków zewnętrznych`: `arrow.clockwise.circle`
-- reset action runs `tccutil reset SystemPolicyRemovableVolumes <bundleID>` and shows an app-branded success/failure alert.
+- reset action runs `tccutil reset SystemPolicyRemovableVolumes <bundleID>` (scoped to app bundle only) and shows an app-branded success/failure alert.
+- reset-permissions alert copy is intentionally concise and non-technical; command output and low-level errors are written to diagnostics logs instead of default UI alerts.
 - `Opcje` → `Język`: `globe`
 - `Opcje` → notifications item uses dynamic label/icon:
 - enabled: `Powiadomienia włączone` + `bell.and.waves.left.and.right`
@@ -242,6 +244,7 @@ Finish screen specifics:
 - Success sound prefers bundled `burn_complete.aif` from app resources (with fallback to system sounds).
 - If `FinishUSBView` appears while the app is inactive, the app sends a macOS system notification with success/failure result text only when both system permission and app-level notification toggle are enabled.
 - In cancelled mode (`Przerwano`), `FinishUSBView` intentionally does not play any result sound and does not send a background notification.
+- In failed mode, when the error is classified as permission/policy-related, `FinishUSBView` renders an additional permission-repair card with remediation steps and technical stage/code details.
 
 Formatting conventions:
 - Bullet lists in UI are rendered as literal `Text("• ...")` lines, not as SwiftUI `List` or `Text` with markdown.
@@ -459,7 +462,7 @@ Command-line tools:
 - `rm` (Catalina target app cleanup stage)
 - `du` (app-side source-size estimation for transfer-progress monitor)
 - `iostat` (app-side live write-speed sampling)
-- `launchctl` (helper executes tools as requester user context via `asuser`)
+- `launchctl` (helper executes selected non-storage tools in requester user bootstrap context via `asuser`)
 - `tccutil` (menu action for removable-volume permission reset)
 
 AppKit/Swift APIs:
@@ -617,7 +620,12 @@ Current effective build configuration snapshot:
 - live textual progress lines (sourced from `HelperService` logs),
 - spinner and status line,
 - close button enabled only after completion.
-- flow performs XPC reset and then full `ensureReadyForPrivilegedWork(interactive: true)`.
+- flow performs full helper reload sequence:
+- reset local XPC connection,
+- `unregister()` for active helper states (`enabled` / `requiresApproval`) and wait for post-unregister status stabilization,
+- `register()` with bounded retry/backoff (up to 3 attempts) to absorb transient `Operation not permitted` after immediate reload,
+- post-registration status validation (`handlePostRegistrationStatus`),
+- final XPC health verification and summary report.
 - Unregister action:
 - directly calls `SMAppService.daemon(...).unregister()` and reports success/failure summary.
 
@@ -626,6 +634,7 @@ Current effective build configuration snapshot:
 - `startWorkflow(requestData, reply)` returns `workflowID`.
 - `cancelWorkflow(workflowID, reply)` requests cancellation.
 - `queryHealth(reply)` confirms service responsiveness.
+- `probeExternalVolumeAccess(probeData, reply)` validates helper-effective access to target media before workflow start.
 - Callback protocol (`PrivilegedHelperClientXPCProtocol`):
 - `receiveProgressEvent(eventData)`
 - `finishWorkflow(resultData)`
@@ -651,12 +660,16 @@ Current effective build configuration snapshot:
 - Before helper start:
 - app initializes helper state (`Przygotowanie` / `Przygotowywanie operacji...`) and, after destructive confirmation, routes to `CreationProgressView`.
 - `preflightTargetVolumeWriteAccess` probes write access on `/Volumes/*`; EPERM/EACCES produces explicit TCC-style guidance error.
+- before `startWorkflow`, app performs helper-side preflight probe (`probeExternalVolumeAccess`) for target volume:
+- helper write probe on target mount path,
+- optional raw-device read probe (`/dev/rdisk*`) for restore/preformat-related paths,
+- probe failure blocks workflow start and logs `permission_denied_preflight ...`.
 - Workflow request payload includes:
 - workflow kind (`standard`, `legacyRestore`, `mavericks`, `ppc`)
 - source app path, optional original image path, temp work path, target paths, and target BSD name resolved to whole-disk media for formatting (including APFS volume/container to physical-store fallback)
 - target label
 - flags (`needsPreformat`, `isCatalina`, `isSierra`, `needsCodesign`, `requiresApplicationPathArg`)
-- `requesterUID = getuid()`
+- `requesterUID = getuid()` (kept for compatibility and for non-storage helper commands that still run in user bootstrap context)
 - App no longer performs copy/patch/sign staging in TEMP; helper owns those steps.
 - UI mapping from helper events:
 - stage title key, status key, and percent are updated from `HelperProgressEventPayload`; app prefers canonical key mapping from `stageKey` for compatibility, then renders via `LocalizedStringKey` and `Localizable.xcstrings` in `CreationProgressView`.
@@ -679,9 +692,14 @@ Current effective build configuration snapshot:
 - for `createinstallmedia`, parser ignores `Erasing Disk` percent lines so erase-phase output does not artificially advance copy-stage progress,
 - keeps `statusKey` as localized status key and forwards tool output as optional `logLine`.
 - Command execution context:
-- if `requesterUID > 0`, helper runs command as user via:
-- `/bin/launchctl asuser <uid> <tool> ...`
-- otherwise executes tool directly.
+- helper routes command execution by tool category:
+- `direct_root` (no `asuser`) for storage/installer-write tools:
+- `/usr/sbin/asr`
+- `/usr/sbin/diskutil`
+- `*/createinstallmedia`
+- `asuser` for remaining helper commands when `requesterUID > 0`.
+- helper enforces policy at runtime: if storage command ever resolves to `asuser`, stage fails immediately with policy-violation error (`251`).
+- helper emits execution-context diagnostics to `HelperLiveLog` (`Execution context: direct_root|asuser_<uid>; command=...`).
 - Workflow specifics:
 - non-PPC with `needsPreformat` adds `diskutil partitionDisk ... GPT HFS+ <targetLabel> 100%`.
 - `preformat` / `ppc_format` resolve selected target (especially APFS container selections) to physical whole-disk device before `diskutil partitionDisk`.
@@ -694,8 +712,15 @@ Current effective build configuration snapshot:
 - Error shaping:
 - non-zero exit returns stage key, exit code, and last tool output line.
 - helper adds an explicit hint when last line matches removable-volume permission failures (`operation not permitted` family).
+- helper classifies permission-style signatures and includes optional result flags:
+- `isPermissionDenied`
+- `permissionFailureKind` (`system_policy_deny`, `createinstallmedia_250`, `createinstallmedia_251`, `asr_permission`, ...)
+- helper emits explicit signature marker logs:
+- `PERMISSION_DENY_SIGNATURE stage=<...> code=<...> pattern=<...> exec_context=<...>`.
 - Health endpoint:
 - `queryHealth` returns `Helper odpowiada poprawnie (uid=..., euid=..., pid=...)`.
+- Probe endpoint:
+- `probeExternalVolumeAccess` validates helper-effective access to target volume/device before workflow start.
 
 ### 11.9.1 Exact stage order and percent windows
 - Global invariant:
@@ -759,9 +784,12 @@ Current effective build configuration snapshot:
 - `HelperLiveLog` category:
 - streamed helper stdout/stderr (`logLine`) from command execution and decode failures (including Catalina transition to `ditto`).
 - format-target diagnostics (`requested`, `fallbackWhole`, `resolvedWhole`, `targetVolumePath`) emitted before formatting stages.
+- permission signature markers (`PERMISSION_DENY_SIGNATURE ...`) emitted on detected deny patterns and `250/251`.
 - app-side transfer monitor fallback diagnostics/recovery events and speed-based copied-data estimation when speed samples are temporarily unavailable.
 - `Installation` category:
 - user-facing operation milestones, helper workflow begin/end/fail events, and total process duration summary from finish screen.
+- app logs explicit permission block marker when classification matches:
+- `INSTALL_PERMISSION_BLOCK stage=<...> code=<...> reason=<...>`.
 - Export behavior:
 - helper live logs are included in `AppLogging.exportedLogText()`.
 - live log panel is intentionally not rendered on installation screen.
@@ -775,6 +803,8 @@ Current effective build configuration snapshot:
 - service status is enabled, but app cannot complete query through XPC channel.
 - `Could not validate sizes - Operacja nie jest dozwolona` from `asr`:
 - tool-level permission/policy failure during restore validation stage.
+- `createinstallmedia` code `250` / `251` with `IA app name cookie write failed` / `bless ... failed`:
+- treated as permission/policy-class failure and surfaced with permission repair guidance.
 - `Nie udało się zarejestrować helpera`:
 - direct `SMAppService.register()` failure path (interactive alert shown).
 
@@ -800,9 +830,10 @@ Minimal runbook for day-to-day diagnostics and release safety:
 - Entitlements files used by targets must match build config (`*.debug.entitlements` vs `*.release.entitlements`).
 
 - Recovery/status quick-check:
-- If service is enabled but XPC fails: run `Napraw helpera` (it resets client connection and re-validates registration).
+- If service is enabled but XPC fails: run `Napraw helpera` (it performs full helper reload: unregister/register + status + XPC health validation).
 - If status is `requiresApproval`: open system settings from helper alert and approve background item.
-- If write access to external USB media is denied: run `Opcje` → `Resetuj uprawnienia dostępu do dysków zewnętrznych`, then retry installer creation so macOS can request permission again.
+- If write access to external USB media is denied: run `Opcje` → `Resetuj uprawnienia dostępu do dysków zewnętrznych` (app-scoped reset for current bundle), then retry installer creation so macOS can request permission again.
+- Reset action scope is app-only (`com.kruszoneq.macUSB`); helper is not reset through a separate bundle identifier.
 - You can manually open Background Items settings from `Narzędzia` → `Ustawienia działania w tle…`.
 
 ---
@@ -843,7 +874,7 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Features/Installation/CreationProgressView.swift` — Runtime helper progress UI (staged list, active-stage description + linear progress bar, stage-scoped write-speed label, cancel-in-progress action), and handoff to `FinishUSBView`.
 - `macUSB/Features/Installation/CreatorLogic.swift` — Shared installation utilities used by the helper path (start/cancel alerts, cleanup, monitoring, flow reset/back helpers).
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` — Primary installation path via privileged helper (SMAppService + XPC), helper progress mapping, and helper cancellation flow.
-- `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, fallback cleanup safety net (race-safe when TEMP was already removed), supports success/failure/cancelled result mode (`Przerwano`), shows detected system icon in success summary row left slot (fallback to `externaldrive.fill`), total process duration summary (`Ukończono w MMm SSs` for success), duration logging, background-result system notification (disabled for cancelled mode), and optional cleanup overrides used by debug simulation.
+- `macUSB/Features/Finish/FinishUSBView.swift` — Final screen, fallback cleanup safety net (race-safe when TEMP was already removed), supports success/failure/cancelled result mode (`Przerwano`), shows detected system icon in success summary row left slot (fallback to `externaldrive.fill`), renders dedicated permission-repair error card for classified `System Policy/TCC` failures (with stage/code details), total process duration summary (`Ukończono w MMm SSs` for success), duration logging, background-result system notification (disabled for cancelled mode), and optional cleanup overrides used by debug simulation.
 - `macUSB/Shared/Models/Models.swift` — `USBDrive` (including `needsFormatting`), `USBPortSpeed`, `PartitionScheme`, `FileSystemFormat`, and `SidebarItem` definitions.
 - `macUSB/Shared/UI/DesignTokens.swift` — Shared visual token definitions (window size, spacing, icon column, corner-radius hierarchy).
 - `macUSB/Shared/UI/LiquidGlassCompatibility.swift` — Cross-version UI compatibility layer (`VisualSystemMode`, glass/fallback panel surfaces, primary/secondary button style wrappers).
@@ -894,7 +925,7 @@ This section lists the main call relationships and data flow.
 - `macUSB/Features/Installation/CreationProgressView.swift` → renders helper runtime progress (pending/active/completed stage cards, status text, stage-scoped write-speed label), exposes cancel alert flow, navigates to `FinishUSBView`, and uses shared surfaces/buttons from UI compatibility layer.
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` → builds typed helper requests, coordinates helper execution/cancellation, and maps XPC progress events into UI state.
 - `macUSB/Features/Installation/CreatorLogic.swift` → provides shared helper-path utilities (start/cancel alert flow, USB availability monitoring, emergency unmount, cleanup, immediate reset/back flow).
-- `macUSB/Features/Finish/FinishUSBView.swift` → fallback cleanup safety net (unmount + conditional temp delete), result sound (prefers bundled `burn_complete.aif`), process duration summary/logging, optional background system notification gated by permission/toggle, reset callback, dedicated cancelled-mode UX, and shared bottom action/status layer.
+- `macUSB/Features/Finish/FinishUSBView.swift` → fallback cleanup safety net (unmount + conditional temp delete), result sound (prefers bundled `burn_complete.aif`), process duration summary/logging, optional background system notification gated by permission/toggle, permission-specific remediation panel for classified helper access failures, reset callback, dedicated cancelled-mode UX, and shared bottom action/status layer.
 - `macUSB/Shared/UI/DesignTokens.swift` → consumed by all primary flow views and window setup for consistent spacing/radii/window size.
 - `macUSB/Shared/UI/LiquidGlassCompatibility.swift` → consumed by views for availability-safe panel and button styling (`macOS 26` glass vs `macOS 14/15` fallback).
 - `macUSB/Shared/UI/BottomActionBar.swift` → consumed by `SystemAnalysisView`, `UniversalInstallationView`, `CreationProgressView`, and `FinishUSBView`.
@@ -942,6 +973,7 @@ This section lists the main call relationships and data flow.
 - IMPORTANT RULE FOR AI AGENTS: Reading this document is mandatory, but not sufficient on its own.
 - Before proposing or implementing changes, AI agents must also analyze the current codebase to build accurate runtime and architecture context.
 - AI agents must write git commit messages in English: a clear title/summary line plus a concise body describing key changes.
+- In commit titles and descriptions for product/code changes, do not mention internal documentation-only updates to `docs/documents/development/DEVELOPMENT.md`, `docs/documents/changelog/CHANGELOG.md`, or `docs/documents/changelog/CHANGELOG_RULES.md`.
 - Do not use escaped newline sequences like `\n` in commit message text; use normal multi-line commit formatting only.
 - AI agents should commit changes comprehensively (include all modified project files) by default.
 - Exceptions to comprehensive commits:

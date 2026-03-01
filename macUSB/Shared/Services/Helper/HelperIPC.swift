@@ -111,6 +111,21 @@ struct HelperWorkflowResultPayload: Codable {
     let errorCode: Int?
     let errorMessage: String?
     let isUserCancelled: Bool
+    let isPermissionDenied: Bool?
+    let permissionFailureKind: String?
+}
+
+struct HelperExternalVolumeProbePayload: Codable {
+    let targetVolumePath: String
+    let targetBSDName: String
+    let requiresDeviceReadProbe: Bool
+}
+
+struct HelperExternalVolumeProbeResultPayload: Codable {
+    let success: Bool
+    let isPermissionDenied: Bool
+    let failureMessage: String?
+    let details: String?
 }
 
 @objc(MacUSBPrivilegedHelperToolXPCProtocol)
@@ -118,6 +133,7 @@ protocol PrivilegedHelperToolXPCProtocol {
     func startWorkflow(_ requestData: NSData, reply: @escaping (NSString?, NSError?) -> Void)
     func cancelWorkflow(_ workflowID: String, reply: @escaping (Bool, NSError?) -> Void)
     func queryHealth(_ reply: @escaping (Bool, NSString) -> Void)
+    func probeExternalVolumeAccess(_ probeData: NSData, reply: @escaping (NSData?, NSError?) -> Void)
 }
 
 @objc(MacUSBPrivilegedHelperClientXPCProtocol)

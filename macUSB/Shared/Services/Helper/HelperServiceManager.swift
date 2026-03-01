@@ -168,7 +168,7 @@ final class HelperServiceManager: NSObject {
         PrivilegedOperationClient.shared.resetConnectionForRecovery()
         reportHelperServiceEvent("Zresetowano lokalne połączenie XPC przed naprawą.")
 
-        ensureReadyForPrivilegedWork(interactive: true) { ready, message in
+        performFullReloadForRepair { ready, message in
             self.finishRepairFlow()
             let summary = message ?? (ready
                                       ? String(localized: "Naprawa helpera zakończona")
@@ -178,6 +178,132 @@ final class HelperServiceManager: NSObject {
                 self.finishRepairPresentation(success: ready, message: summary)
             }
         }
+    }
+
+    private func performFullReloadForRepair(completion: @escaping (Bool, String?) -> Void) {
+        coordinationQueue.async {
+            let service = SMAppService.daemon(plistName: Self.daemonPlistName)
+            self.reportHelperServiceEvent("Naprawa helpera: rozpoczynam pełny reload usługi.")
+
+            PrivilegedOperationClient.shared.resetConnectionForRecovery()
+            self.reportHelperServiceEvent("Naprawa helpera: reset połączenia XPC przed przeładowaniem.")
+
+            let statusBeforeReload = service.status
+            self.reportHelperServiceEvent("Naprawa helpera: status przed reloadem: \(self.statusDescription(statusBeforeReload)).")
+
+            var diagnosticNotes: [String] = []
+            let shouldUnregister = statusBeforeReload == .enabled || statusBeforeReload == .requiresApproval
+            if shouldUnregister {
+                do {
+                    try service.unregister()
+                    self.reportHelperServiceEvent("Naprawa helpera: unregister() zakończone.")
+                } catch {
+                    let note = "Naprawa helpera: unregister() zwróciło błąd: \(error.localizedDescription)"
+                    diagnosticNotes.append(note)
+                    self.reportHelperServiceEvent(note)
+                }
+                let statusAfterUnregister = self.waitForPostUnregisterState(service, timeout: 1.4)
+                self.reportHelperServiceEvent("Naprawa helpera: status po unregister(): \(self.statusDescription(statusAfterUnregister)).")
+            } else {
+                self.reportHelperServiceEvent("Naprawa helpera: pomijam unregister() dla statusu \(self.statusDescription(statusBeforeReload)).")
+            }
+
+            PrivilegedOperationClient.shared.resetConnectionForRecovery()
+            self.reportHelperServiceEvent("Naprawa helpera: reset połączenia XPC po unregister().")
+
+            let registerSucceeded = self.registerWithRepairRetries(service, diagnosticNotes: &diagnosticNotes)
+            guard registerSucceeded else {
+                let summary = diagnosticNotes.isEmpty
+                    ? String(localized: "Nie udało się ponownie zarejestrować helpera.")
+                    : diagnosticNotes.joined(separator: "\n")
+                DispatchQueue.main.async {
+                    completion(false, summary)
+                }
+                return
+            }
+
+            let statusAfterReload = service.status
+            self.reportHelperServiceEvent("Naprawa helpera: status po reloadzie: \(self.statusDescription(statusAfterReload)).")
+
+            self.handlePostRegistrationStatus(interactive: true) { ready, message in
+                guard ready else {
+                    var summaryParts = diagnosticNotes
+                    if let message, !message.isEmpty {
+                        summaryParts.append(message)
+                    }
+                    let summary = summaryParts.isEmpty
+                        ? String(localized: "Helper nie jest gotowy po przeładowaniu.")
+                        : summaryParts.joined(separator: "\n")
+                    DispatchQueue.main.async {
+                        completion(false, summary)
+                    }
+                    return
+                }
+
+                PrivilegedOperationClient.shared.queryHealth { ok, details in
+                    if ok {
+                        let successSummary = "Pełny reload helpera zakończony pomyślnie. Status: \(self.statusDescription(statusAfterReload)). XPC: \(details)."
+                        DispatchQueue.main.async {
+                            completion(true, successSummary)
+                        }
+                        return
+                    }
+
+                    var summaryParts = diagnosticNotes
+                    summaryParts.append("Health XPC po reloadzie nieudany: \(details)")
+                    let summary = summaryParts.joined(separator: "\n")
+                    DispatchQueue.main.async {
+                        completion(false, summary)
+                    }
+                }
+            }
+        }
+    }
+
+    private func waitForPostUnregisterState(_ service: SMAppService, timeout: TimeInterval) -> SMAppService.Status {
+        let deadline = Date().addingTimeInterval(timeout)
+        var observedStatus = service.status
+        while Date() < deadline {
+            observedStatus = service.status
+            if observedStatus == .notRegistered || observedStatus == .notFound {
+                return observedStatus
+            }
+            Thread.sleep(forTimeInterval: 0.12)
+        }
+        return observedStatus
+    }
+
+    private func registerWithRepairRetries(_ service: SMAppService, diagnosticNotes: inout [String]) -> Bool {
+        let maxAttempts = 3
+        for attempt in 1...maxAttempts {
+            do {
+                try service.register()
+                self.reportHelperServiceEvent("Naprawa helpera: register() zakończone (próba \(attempt)/\(maxAttempts)).")
+                return true
+            } catch {
+                let statusAfterRegisterError = service.status
+                let note = "Naprawa helpera: register() zwróciło błąd (próba \(attempt)/\(maxAttempts)): \(error.localizedDescription). Status po błędzie: \(self.statusDescription(statusAfterRegisterError))."
+                diagnosticNotes.append(note)
+                self.reportHelperServiceEvent(note)
+
+                if statusAfterRegisterError == .enabled || statusAfterRegisterError == .requiresApproval {
+                    self.reportHelperServiceEvent("Naprawa helpera: mimo błędu register() status wskazuje aktywną usługę. Kontynuuję walidację.")
+                    return true
+                }
+
+                guard attempt < maxAttempts else { break }
+                let backoffMs = 350 * (attempt + 1)
+                if self.isOperationNotPermitted(error) {
+                    self.reportHelperServiceEvent("Naprawa helpera: wykryto przejściowy błąd EPERM. Ponawiam register() za \(backoffMs) ms.")
+                } else {
+                    self.reportHelperServiceEvent("Naprawa helpera: ponawiam register() za \(backoffMs) ms.")
+                }
+                Thread.sleep(forTimeInterval: Double(backoffMs) / 1000.0)
+                PrivilegedOperationClient.shared.resetConnectionForRecovery()
+                self.reportHelperServiceEvent("Naprawa helpera: reset połączenia XPC przed kolejną próbą register().")
+            }
+        }
+        return false
     }
 
     func unregisterFromMenu() {

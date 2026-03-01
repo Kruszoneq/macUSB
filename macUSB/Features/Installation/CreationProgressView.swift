@@ -38,6 +38,10 @@ struct CreationProgressView: View {
     @Binding var helperOperationFailed: Bool
     @Binding var didCancelCreation: Bool
     @Binding var creationStartedAt: Date?
+    @Binding var finishFailureMessage: String
+    @Binding var finishFailureCode: Int?
+    @Binding var finishFailedStage: String
+    @Binding var finishIsPermissionFailure: Bool
     private var sectionIconFont: Font { .title3 }
     private var stageSectionDivider: some View {
         HStack(spacing: 10) {
@@ -154,6 +158,10 @@ struct CreationProgressView: View {
                     didFail: helperOperationFailed,
                     didCancel: didCancelCreation,
                     creationStartedAt: creationStartedAt,
+                    failureMessage: finishFailureMessage,
+                    failureCode: finishFailureCode,
+                    failedStage: finishFailedStage,
+                    isPermissionFailure: finishIsPermissionFailure,
                     detectedSystemIcon: detectedSystemIcon
                 ),
                 isActive: $navigateToFinish

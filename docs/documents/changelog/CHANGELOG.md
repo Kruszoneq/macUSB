@@ -1,19 +1,19 @@
 # macUSB Release Changelog
 
-This document stores changelogs for released macUSB versions.
-Each release entry must reflect shipped behavior and stay consistent with the current codebase and `docs/documents/development/DEVELOPMENT.md`.
+## v2.0.1
 
-## Changelog Writing Guidelines
+macUSB v2.0.1 focuses on stabilizing helper recovery and improving how permission-related USB creation failures are communicated to users.
 
-- Write changelogs in English.
-- Use one clear intro paragraph for each release.
-- Keep the intro as one coherent block (not split into disconnected lines).
-- Use section order: `ADDED`, `CHANGES`, `IMPROVEMENTS`.
-- Keep bullets factual and implementation-based; avoid unverifiable marketing claims.
-- When a feature is conditional, state the condition explicitly (for example permissions, toggles, runtime state).
-- Use consistent menu path formatting in release notes: `Options → ...`, `Help → ...`, `Tools → ...`.
-- Keep naming consistent with the app and documentation (for example `SMAppService`, `Liquid Glass`, system version names).
-- Before publishing, verify that entries match actual implemented behavior and `DEVELOPMENT.md`.
+### ADDED
+- A dedicated permission guidance card on the summary screen when USB creation fails due to removable-media access restrictions.
+- Additional permission-failure context in exported diagnostic logs to simplify support analysis.
+
+### CHANGES
+- **Tools → Repair helper** now runs a more robust full reload flow with stabilization and retry logic.
+
+### IMPROVEMENTS
+- Improved first-attempt reliability of helper repair in cases that previously required running repair twice.
+- Permission-related USB creation failures are now explained in a clearer, more user-friendly way.
 
 ---
 

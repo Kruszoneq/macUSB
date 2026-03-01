@@ -1,6 +1,10 @@
 import Foundation
 import SwiftUI
 
+private struct PermissionFailureDescriptor {
+    let reason: String
+}
+
 extension UniversalInstallationView {
     func startCreationProcessEntry() {
         startCreationProcessWithHelper()
@@ -28,6 +32,10 @@ extension UniversalInstallationView {
         didCancelCreation = false
         cancellationRequestedBeforeWorkflowStart = false
         helperOperationFailed = false
+        finishFailureMessage = ""
+        finishFailureCode = nil
+        finishFailedStage = ""
+        finishIsPermissionFailure = false
         stopUSBMonitoring()
         processingIcon = "lock.shield.fill"
         isCancelled = false
@@ -96,6 +104,65 @@ extension UniversalInstallationView {
                 do {
                     let request = try prepareHelperWorkflowRequest(for: drive)
                     let transferTotals = calculateTransferStageTotals(for: request)
+                    let probePayload = HelperExternalVolumeProbePayload(
+                        targetVolumePath: request.targetVolumePath,
+                        targetBSDName: request.targetBSDName,
+                        requiresDeviceReadProbe: request.needsPreformat || request.workflowKind != .standard
+                    )
+                    let (probeResult, probeErrorMessage) = performHelperExternalVolumeProbe(probePayload)
+
+                    if let probeErrorMessage {
+                        DispatchQueue.main.async {
+                            if cancellationRequestedBeforeWorkflowStart {
+                                completeCancellationFlow()
+                                return
+                            }
+                            logError("permission_denied_preflight transport_error=\(probeErrorMessage)", category: "Installation")
+                            withAnimation {
+                                isProcessing = false
+                                isHelperWorking = false
+                                isTabLocked = false
+                                navigateToCreationProgress = false
+                                startUSBMonitoring()
+                                stopHelperWriteSpeedMonitoring()
+                                usbProcessStartedAt = nil
+                                errorMessage = probeErrorMessage
+                            }
+                        }
+                        return
+                    }
+
+                    if let probeResult, !probeResult.success {
+                        let probeMessage: String
+                        if probeResult.isPermissionDenied {
+                            probeMessage = String(localized: "Nie uruchomiono tworzenia nośnika: helper nie ma uprawnień do nośników zewnętrznych.")
+                        } else {
+                            probeMessage = probeResult.failureMessage ?? String(localized: "Nie uruchomiono tworzenia nośnika: helper nie ma uprawnień do nośników zewnętrznych.")
+                        }
+                        let probeDetails = probeResult.details ?? "n/a"
+                        DispatchQueue.main.async {
+                            if cancellationRequestedBeforeWorkflowStart {
+                                completeCancellationFlow()
+                                return
+                            }
+                            logError(
+                                "permission_denied_preflight target=\(request.targetVolumePath) bsd=\(request.targetBSDName) permission=\(probeResult.isPermissionDenied ? "yes" : "no") details=\(probeDetails)",
+                                category: "Installation"
+                            )
+                            withAnimation {
+                                isProcessing = false
+                                isHelperWorking = false
+                                isTabLocked = false
+                                navigateToCreationProgress = false
+                                startUSBMonitoring()
+                                stopHelperWriteSpeedMonitoring()
+                                usbProcessStartedAt = nil
+                                errorMessage = probeMessage
+                            }
+                        }
+                        return
+                    }
+
                     DispatchQueue.main.async {
                         helperTransferMonitoringRequestedBSDName = request.targetBSDName
                         helperTransferMonitoringWholeDiskBSDName = extractWholeDiskName(from: request.targetBSDName)
@@ -173,9 +240,22 @@ extension UniversalInstallationView {
                                     }
 
                                     helperOperationFailed = !result.success
+                                    finishFailureMessage = result.errorMessage ?? ""
+                                    finishFailureCode = result.errorCode
+                                    finishFailedStage = result.failedStage ?? ""
+                                    let permissionFailureDescriptor = classifyPermissionFailure(result)
+                                    finishIsPermissionFailure = permissionFailureDescriptor != nil
 
                                     if !result.success, let errorMessageText = result.errorMessage {
                                         logError("Helper zakończył się błędem: \(errorMessageText)", category: "Installation")
+                                    }
+                                    if let permissionFailureDescriptor {
+                                        let stage = result.failedStage ?? "unknown"
+                                        let code = result.errorCode.map(String.init) ?? "n/a"
+                                        logError(
+                                            "INSTALL_PERMISSION_BLOCK stage=\(stage) code=\(code) reason=\(permissionFailureDescriptor.reason)",
+                                            category: "Installation"
+                                        )
                                     }
 
                                     withAnimation {
@@ -401,6 +481,50 @@ extension UniversalInstallationView {
             }
             throw error
         }
+    }
+
+    private func performHelperExternalVolumeProbe(
+        _ payload: HelperExternalVolumeProbePayload
+    ) -> (result: HelperExternalVolumeProbeResultPayload?, errorMessage: String?) {
+        let semaphore = DispatchSemaphore(value: 0)
+        var probeResult: HelperExternalVolumeProbeResultPayload?
+        var probeErrorMessage: String?
+
+        PrivilegedOperationClient.shared.probeExternalVolumeAccess(payload: payload) { result, errorMessage in
+            probeResult = result
+            probeErrorMessage = errorMessage
+            semaphore.signal()
+        }
+
+        let waitResult = semaphore.wait(timeout: .now() + 12)
+        if waitResult == .timedOut {
+            return (nil, String(localized: "Przekroczono czas oczekiwania na odpowiedź helper probe."))
+        }
+
+        return (probeResult, probeErrorMessage)
+    }
+
+    private func classifyPermissionFailure(_ result: HelperWorkflowResultPayload) -> PermissionFailureDescriptor? {
+        if result.isPermissionDenied == true {
+            return PermissionFailureDescriptor(reason: result.permissionFailureKind ?? "helper_reported_permission_denied")
+        }
+
+        guard !result.success else { return nil }
+        let loweredMessage = (result.errorMessage ?? "").lowercased()
+        if let code = result.errorCode, code == 250 || code == 251 {
+            return PermissionFailureDescriptor(reason: "createinstallmedia_\(code)")
+        }
+        if loweredMessage.contains("system policy") && loweredMessage.contains("deny") {
+            return PermissionFailureDescriptor(reason: "system_policy_deny")
+        }
+        if loweredMessage.contains("operation not permitted")
+            || loweredMessage.contains("operacja nie jest dozwolona")
+            || loweredMessage.contains("ia app name cookie write failed")
+            || (loweredMessage.contains("bless") && loweredMessage.contains("failed")) {
+            return PermissionFailureDescriptor(reason: "permission_signature_fallback")
+        }
+
+        return nil
     }
 
     func cancelHelperWorkflowIfNeeded(completion: @escaping () -> Void) {
