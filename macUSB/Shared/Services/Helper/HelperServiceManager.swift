@@ -43,6 +43,7 @@ final class HelperServiceManager: NSObject {
     }
 
     func bootstrapIfNeededAtStartup(completion: @escaping (Bool) -> Void) {
+        refreshBackgroundApprovalState()
         #if DEBUG
         if Self.isRunningFromXcodeDevelopmentBuild() {
             let service = SMAppService.daemon(plistName: Self.daemonPlistName)
@@ -66,6 +67,19 @@ final class HelperServiceManager: NSObject {
             self.presentStartupApprovalAlertIfNeeded {
                 completion(false)
             }
+        }
+    }
+
+    func requiresBackgroundApproval() -> Bool {
+        let service = SMAppService.daemon(plistName: Self.daemonPlistName)
+        return service.status == .requiresApproval
+    }
+
+    func refreshBackgroundApprovalState(completion: ((Bool) -> Void)? = nil) {
+        let requiresApproval = requiresBackgroundApproval()
+        DispatchQueue.main.async {
+            MenuState.shared.helperRequiresBackgroundApproval = requiresApproval
+            completion?(requiresApproval)
         }
     }
 

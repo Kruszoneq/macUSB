@@ -1,5 +1,16 @@
 # macUSB Release Changelog
 
+## v2.0.1
+
+This patch release focuses on resolving installer creation failures by enforcing the required **Full Disk Access** permission for macUSB before critical workflows continue.
+
+### FIXED
+- Improved startup permission flow to clearly require **Full Disk Access** when it is missing, reducing cases where installer creation could fail due to insufficient system permissions.
+- Added a direct shortcut in **Tools → Grant Full Disk Access...** to quickly open System Settings and grant the required permission.
+- Added a warning on the operation summary screen when required permissions are missing (Full Disk Access and/or helper background permission), so the risk is visible before starting the process.
+
+---
+
 ## v2.0
 
 macUSB v2.0 introduces a refreshed interface with full support for the **Liquid Glass** effect, tailored to the modern macOS Tahoe aesthetic, and a new architecture powered by native system services that improves reliability and streamlines the installer media preparation process.

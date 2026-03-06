@@ -13,6 +13,15 @@ body:
       options:
         - label: "I confirm that I am using the latest available version of macUSB."
           required: true
+  - type: checkboxes
+    id: permissions_check
+    attributes:
+      label: "Permissions Check"
+      options:
+        - label: "I confirm that Full Disk Access is granted for macUSB in System Settings."
+          required: true
+        - label: "I confirm that 'Allow in the Background' is granted for macUSB in System Settings."
+          required: true
   - type: input
     id: host_os_version
     attributes:
@@ -62,6 +71,11 @@ body:
   - type: markdown
     attributes:
       value: |
+        ---
+        ### Logs
+        In addition to screenshots, attach exported diagnostic logs from macUSB.
+        You can export them from the menu: `Help -> Export diagnostic logs...`
+
         ---
         ### Screenshots
         Attach images of the error or the application window by dragging and dropping them below.

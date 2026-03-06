@@ -6,6 +6,8 @@ final class MenuState: ObservableObject {
     @Published var skipAnalysisEnabled: Bool = false
     @Published var externalDrivesEnabled: Bool = UserDefaults.standard.bool(forKey: "AllowExternalDrives")
     @Published var notificationsEnabled: Bool = false
+    @Published var hasFullDiskAccess: Bool = true
+    @Published var helperRequiresBackgroundApproval: Bool = false
     @Published var debugCopiedDataLabel: String = String(
         format: String(localized: "Przekopiowane dane: %.1f GB"),
         0.0

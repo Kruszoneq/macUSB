@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         UserDefaults.standard.synchronize()
         // Update MenuState to reflect the default state in UI
         MenuState.shared.externalDrivesEnabled = false
-        NotificationPermissionManager.shared.refreshState()
+        refreshPermissionStates()
     }
     
     func applicationWillTerminate(_ notification: Notification) {
@@ -27,7 +27,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
+        refreshPermissionStates()
+    }
+
+    private func refreshPermissionStates() {
         NotificationPermissionManager.shared.refreshState()
+        FullDiskAccessPermissionManager.shared.refreshState()
+        HelperServiceManager.shared.refreshBackgroundApprovalState()
     }
 }
 
@@ -280,10 +286,16 @@ struct macUSBApp: App {
                 } label: {
                     Label(String(localized: "Napraw helpera"), systemImage: "wrench.and.screwdriver")
                 }
+                Divider()
                 Button {
                     SMAppService.openSystemSettingsLoginItems()
                 } label: {
                     Label(String(localized: "Ustawienia działania w tle…"), systemImage: "gearshape")
+                }
+                Button {
+                    FullDiskAccessPermissionManager.shared.openFullDiskAccessSettings(showFallbackAlertIfNeeded: true)
+                } label: {
+                    Label(String(localized: "Przyznaj pełny dostęp do dysku..."), systemImage: "lock.shield")
                 }
             }
             CommandGroup(replacing: .windowList) { }

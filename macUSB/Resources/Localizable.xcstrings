@@ -1296,6 +1296,82 @@
         }
       }
     },
+    "Aby aplikacja macUSB działała poprawnie, przyznaj jej uprawnienie „Pełny dostęp do dysku” w ustawieniach systemowych." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Damit macUSB korrekt funktioniert, gewähren Sie der App in den Systemeinstellungen den Zugriff „Vollständiger Festplattenzugriff“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To ensure macUSB works correctly, grant it the “Full Disk Access” permission in System Settings."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para que macUSB funcione correctamente, concédele el permiso «Acceso total al disco» en Ajustes del Sistema."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour que macUSB fonctionne correctement, accordez-lui l’autorisation « Accès complet au disque » dans Réglages Système."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per il corretto funzionamento di macUSB, concedi all’app il permesso «Accesso completo al disco» nelle Impostazioni di Sistema."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB を正しく動作させるには、システム設定で「フルディスクアクセス」を許可してください。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para o macUSB funcionar corretamente, conceda a permissão “Acesso total ao disco” nos Ajustes do Sistema."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чтобы macUSB работал корректно, предоставьте приложению разрешение «Полный доступ к диску» в системных настройках."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB'nin düzgün çalışması için Sistem Ayarları'nda “Tam Disk Erişimi” iznini verin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Щоб macUSB працював коректно, надайте програмі дозвіл «Повний доступ до диска» у системних налаштуваннях."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Để macUSB hoạt động đúng, hãy cấp quyền “Quyền truy cập toàn bộ ổ đĩa” trong Cài đặt Hệ thống."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "为确保 macUSB 正常工作，请在“系统设置”中授予“完全磁盘访问权限”。"
+          }
+        }
+      }
+    },
     "Aby uruchomić helper systemowy, aplikacja musi znajdować się w katalogu Applications." : {
       "localizations" : {
         "de" : {
@@ -2678,6 +2754,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "没有权限写入所选 USB 介质。请在“选项”→“重置外部驱动器访问权限”中重置应用权限，然后重试。"
+          }
+        }
+      }
+    },
+    "Brak wymaganych zgód" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erforderliche Berechtigungen fehlen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Required Permissions Missing"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faltan permisos obligatorios"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisations requises manquantes"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mancano autorizzazioni obbligatorie"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必要な許可が不足しています"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permissões obrigatórias ausentes"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отсутствуют обязательные разрешения"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerekli izinler eksik"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відсутні обов’язкові дозволи"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thiếu quyền bắt buộc"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "缺少必要权限"
           }
         }
       }
@@ -8723,6 +8875,234 @@
         }
       }
     },
+    "Nie przyznano wymaganej zgody na „Działanie w tle” dla narzędzia pomocniczego. Aplikacja może nie działać poprawnie." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die erforderliche Berechtigung „Hintergrundaktivität erlauben“ für das Hilfswerkzeug fehlt. Die App funktioniert möglicherweise nicht korrekt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Required “Allow in the Background” permission for the helper tool is missing. The app may not work correctly."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falta el permiso obligatorio «Permitir en segundo plano» para la herramienta auxiliar. La app puede no funcionar correctamente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’autorisation requise « Autoriser en arrière-plan » pour l’outil auxiliaire est manquante. L’app peut ne pas fonctionner correctement."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manca l’autorizzazione obbligatoria «Consenti in background» per lo strumento helper. L’app potrebbe non funzionare correttamente."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ヘルパーツールの「バックグラウンドでの実行を許可」が不足しています。アプリが正しく動作しない可能性があります。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falta a permissão obrigatória “Permitir em segundo plano” para a ferramenta auxiliar. O app pode não funcionar corretamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отсутствует обязательное разрешение «Разрешить работу в фоне» для вспомогательного инструмента. Приложение может работать некорректно."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yardımcı araç için gerekli “Arka Planda İzin Ver” izni eksik. Uygulama doğru çalışmayabilir."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відсутній обов’язковий дозвіл «Дозволити у тлі» для допоміжного інструмента. Програма може працювати некоректно."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thiếu quyền bắt buộc “Cho phép trong nền” cho công cụ trợ giúp. Ứng dụng có thể hoạt động không đúng."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "缺少辅助工具所需的“允许在后台运行”权限。应用可能无法正常工作。"
+          }
+        }
+      }
+    },
+    "Nie przyznano wymaganej zgody: „Pełny dostęp do dysku” dla macUSB. Aplikacja może nie działać poprawnie." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die erforderliche Berechtigung fehlt: „Vollständiger Festplattenzugriff“ für macUSB. Die App funktioniert möglicherweise nicht korrekt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Required permission is missing: “Full Disk Access” for macUSB. The app may not work correctly."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falta un permiso obligatorio: «Acceso total al disco» para macUSB. La app puede no funcionar correctamente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’autorisation requise est manquante : « Accès complet au disque » pour macUSB. L’app peut ne pas fonctionner correctement."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manca un’autorizzazione obbligatoria: «Accesso completo al disco» per macUSB. L’app potrebbe non funzionare correttamente."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必要な許可が不足しています: macUSB の「フルディスクアクセス」。アプリが正しく動作しない可能性があります。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falta uma permissão obrigatória: “Acesso total ao disco” para o macUSB. O app pode não funcionar corretamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отсутствует обязательное разрешение: «Полный доступ к диску» для macUSB. Приложение может работать некорректно."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerekli izin eksik: macUSB için “Tam Disk Erişimi”. Uygulama doğru çalışmayabilir."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відсутній обов’язковий дозвіл: «Повний доступ до диска» для macUSB. Програма може працювати некоректно."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thiếu quyền bắt buộc: “Quyền truy cập toàn bộ ổ đĩa” cho macUSB. Ứng dụng có thể hoạt động không đúng."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "缺少必要权限：macUSB 的“完全磁盘访问权限”。应用可能无法正常工作。"
+          }
+        }
+      }
+    },
+    "Nie przyznano wymaganych zgód: „Pełny dostęp do dysku” dla macUSB oraz zgody na „Działanie w tle” dla narzędzia pomocniczego. Aplikacja może nie działać poprawnie." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die erforderlichen Berechtigungen fehlen: „Vollständiger Festplattenzugriff“ für macUSB und „Hintergrundaktivität erlauben“ für das Hilfswerkzeug. Die App funktioniert möglicherweise nicht korrekt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Required permissions are missing: “Full Disk Access” for macUSB and “Allow in the Background” for the helper tool. The app may not work correctly."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faltan permisos obligatorios: «Acceso total al disco» para macUSB y «Permitir en segundo plano» para la herramienta auxiliar. La app puede no funcionar correctamente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les autorisations requises sont manquantes : « Accès complet au disque » pour macUSB et « Autoriser en arrière-plan » pour l’outil auxiliaire. L’app peut ne pas fonctionner correctement."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mancano autorizzazioni obbligatorie: «Accesso completo al disco» per macUSB e «Consenti in background» per lo strumento helper. L’app potrebbe non funzionare correttamente."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必要な許可が不足しています: macUSB の「フルディスクアクセス」と、ヘルパーツールの「バックグラウンドでの実行を許可」。アプリが正しく動作しない可能性があります。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faltam permissões obrigatórias: “Acesso total ao disco” para o macUSB e “Permitir em segundo plano” para a ferramenta auxiliar. O app pode não funcionar corretamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отсутствуют обязательные разрешения: «Полный доступ к диску» для macUSB и «Разрешить работу в фоне» для вспомогательного инструмента. Приложение может работать некорректно."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerekli izinler eksik: macUSB için “Tam Disk Erişimi” ve yardımcı araç için “Arka Planda İzin Ver”. Uygulama doğru çalışmayabilir."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відсутні обов’язкові дозволи: «Повний доступ до диска» для macUSB і «Дозволити у тлі» для допоміжного інструмента. Програма може працювати некоректно."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thiếu quyền bắt buộc: “Quyền truy cập toàn bộ ổ đĩa” cho macUSB và “Cho phép trong nền” cho công cụ trợ giúp. Ứng dụng có thể hoạt động không đúng."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "缺少必要权限：macUSB 的“完全磁盘访问权限”以及辅助工具的“允许在后台运行”。应用可能无法正常工作。"
+          }
+        }
+      }
+    },
     "Nie rozpoznano instalatora" : {
       "localizations" : {
         "de" : {
@@ -9029,6 +9409,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法自动刷新 helper。请打开 工具 → 修复 helper 后重试。"
+          }
+        }
+      }
+    },
+    "Nie udało się otworzyć bezpośrednio zakładki „Pełny dostęp do dysku”. Przejdź do: Prywatność i ochrona -> Pełny dostęp do dysku." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Bereich „Vollständiger Festplattenzugriff“ konnte nicht direkt geöffnet werden. Gehen Sie zu: Datenschutz & Sicherheit -> Vollständiger Festplattenzugriff."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not open the “Full Disk Access” section directly. Go to: Privacy & Security -> Full Disk Access."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo abrir directamente la sección «Acceso total al disco». Ve a: Privacidad y seguridad -> Acceso total al disco."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d’ouvrir directement la section « Accès complet au disque ». Allez dans : Confidentialité et sécurité -> Accès complet au disque."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non è stato possibile aprire direttamente la sezione «Accesso completo al disco». Vai a: Privacy e sicurezza -> Accesso completo al disco."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「フルディスクアクセス」を直接開けませんでした。次へ移動してください: プライバシーとセキュリティ -> フルディスクアクセス。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível abrir diretamente a seção “Acesso total ao disco”. Vá para: Privacidade e Segurança -> Acesso total ao disco."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось напрямую открыть раздел «Полный доступ к диску». Перейдите: Конфиденциальность и безопасность -> Полный доступ к диску."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“Tam Disk Erişimi” bölümü doğrudan açılamadı. Şuraya gidin: Gizlilik ve Güvenlik -> Tam Disk Erişimi."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося напряму відкрити розділ «Повний доступ до диска». Перейдіть: Приватність і безпека -> Повний доступ до диска."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể mở trực tiếp mục “Quyền truy cập toàn bộ ổ đĩa”. Hãy vào: Quyền riêng tư & Bảo mật -> Quyền truy cập toàn bộ ổ đĩa."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法直接打开“完全磁盘访问权限”页面。请前往：隐私与安全性 -> 完全磁盘访问权限。"
           }
         }
       }
@@ -11352,6 +11808,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打开磁盘工具"
+          }
+        }
+      }
+    },
+    "Otworzono Ustawienia systemowe" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systemeinstellungen wurden geöffnet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System Settings Opened"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se abrieron los Ajustes del Sistema"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réglages Système ouverts"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impostazioni di Sistema aperte"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "システム設定を開きました"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustes do Sistema abertos"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Системные настройки открыты"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistem Ayarları Açıldı"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Системні налаштування відкрито"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã mở Cài đặt Hệ thống"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已打开系统设置"
           }
         }
       }
@@ -13922,6 +14454,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在准备操作..."
+          }
+        }
+      }
+    },
+    "Przyznaj pełny dostęp do dysku..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vollständigen Festplattenzugriff gewähren..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grant Full Disk Access..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conceder acceso total al disco..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accorder l’accès complet au disque…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concedi accesso completo al disco..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フルディスクアクセスを許可..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conceder acesso total ao disco..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Предоставить полный доступ к диску..."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tam Disk Erişimi Ver..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Надати повний доступ до диска..."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cấp quyền truy cập toàn bộ ổ đĩa..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "授予完全磁盘访问权限..."
           }
         }
       }
@@ -19447,6 +20055,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "硬件要求"
+          }
+        }
+      }
+    },
+    "Wymagany pełny dostęp do dysku" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erforderlicher vollständiger Festplattenzugriff"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full Disk Access Required"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se requiere acceso total al disco"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accès complet au disque requis"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accesso completo al disco richiesto"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フルディスクアクセスが必要です"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acesso total ao disco obrigatório"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Требуется полный доступ к диску"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tam Disk Erişimi Gerekli"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Потрібен повний доступ до диска"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yêu cầu Quyền truy cập toàn bộ ổ đĩa"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要“完全磁盘访问权限”"
           }
         }
       }

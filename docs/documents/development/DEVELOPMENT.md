@@ -71,9 +71,14 @@ Debug-only shortcut:
 Detailed contract is documented in [Section 17](#17-debug-chapter).
 
 Startup permissions flow:
-- After the optional update alert on the Welcome screen, the app does not auto-prompt for notification permission.
-- Notification permission prompt is user-initiated from `Opcje` → `Powiadomienia` when system status is `.notDetermined`.
-- The update alert shows both remote available version and currently running app version.
+- On `WelcomeView` startup, the app first verifies `Full Disk Access` using `FullDiskAccessPermissionManager`.
+- If `Full Disk Access` is missing, startup alert is shown with:
+- title: `Wymagany pełny dostęp do dysku`
+- buttons: `Przejdź do ustawień systemowych` and `Nie teraz`.
+- After closing the Full Disk Access alert, helper startup bootstrap runs; after helper bootstrap, notification startup state refresh runs.
+- Notification permission prompt remains user-initiated from `Opcje` → `Powiadomienia` when system status is `.notDetermined`.
+- Startup update check runs after startup permission/bootstrap stages; the update alert shows both remote available version and currently running app version.
+- If user selects `Przejdź do ustawień systemowych` in Full Disk Access startup alert, continuation to the helper startup alert is deferred until app becomes active again.
 Detailed notification behavior is documented in [Section 16](#16-notifications-chapter).
 
 Fixed window size:
@@ -170,12 +175,18 @@ Iconography:
 Alerts and dialogs:
 - `NSAlert` uses the application icon and localized strings.
 - Alerts are styled as informational or warning depending on action (updates, cancellations, external drive enablement, etc.).
+- On startup, if Full Disk Access is missing, the app shows:
+- title: `Wymagany pełny dostęp do dysku`
+- message: `Aby aplikacja macUSB działała poprawnie, przyznaj jej uprawnienie „Pełny dostęp do dysku” w ustawieniach systemowych.`
+- buttons: `Przejdź do ustawień systemowych` and `Nie teraz`.
+- Startup Full Disk Access prompt is shown on every app launch while permission remains missing.
+- If direct deep-link to Full Disk Access fails, app opens System Settings fallback and shows instructional alert with path `Prywatność i ochrona -> Pełny dostęp do dysku`.
 - On startup helper bootstrap, if helper status is `requiresApproval` (Background Items permission missing), the app shows:
 - title: `Wymagane narzędzie pomocnicze`
 - message: `macUSB wymaga zezwolenia na działanie w tle, aby umożliwić zarządzanie nośnikami. Przejdź do ustawień systemowych, aby nadać wymagane uprawnienia`
 - buttons: `Przejdź do ustawień systemowych` (opens Background Items settings via `SMAppService.openSystemSettingsLoginItems()`) and `Nie teraz`.
 - This startup approval prompt is shown on every app launch while helper status remains `requiresApproval`.
-- In first-run onboarding sequence it is shown before notification-permission prompts.
+- In first-run onboarding sequence it is shown after Full Disk Access startup prompt and before notification startup flow.
 - Clicking `Rozpocznij` in `UniversalInstallationView` always shows a destructive-data warning alert before any helper workflow starts:
 - title: `Ostrzeżenie o utracie danych`
 - message: `Wszystkie dane na wybranym nośniku zostaną usunięte. Czy na pewno chcesz rozpocząć proces?`
@@ -210,7 +221,9 @@ Menu icon mapping (current):
 - `Narzędzia` → `Otwórz Narzędzie dyskowe`: `externaldrive`
 - `Narzędzia` → `Status helpera`: `info.circle`
 - `Narzędzia` → `Napraw helpera`: `wrench.and.screwdriver`
-- `Narzędzia` → `Ustawienia działania w tle…`: `gearshape` (same group as helper actions; no divider between `Napraw helpera` and background-settings action).
+- divider below `Napraw helpera`
+- `Narzędzia` → `Ustawienia działania w tle…`: `gearshape`
+- `Narzędzia` → `Przyznaj pełny dostęp do dysku...`: `lock.shield` (last item in `Narzędzia` menu).
 
 Progress indicators:
 - Inline progress uses `ProgressView().controlSize(.small)` next to status text.
@@ -218,6 +231,10 @@ Progress indicators:
 - row 1: selected system,
 - row 2: selected USB target (when available),
 - rows are separated by an internal subtle divider.
+- In `UniversalInstallationView`, a warning `StatusCard` (tone `.warning`, `exclamationmark.triangle.fill`) is shown when required permissions are missing:
+- missing Full Disk Access only,
+- missing helper Background Items approval only,
+- or both missing; warning text explicitly names the missing permission(s).
 - The combined summary card and process-description block are separated by a subtle in-content section divider (`Przebieg tworzenia`).
 - In `CreationProgressView`, the selected-system summary and stage list are separated by a subtle in-content section divider (`Etapy tworzenia`) using hairline capsules + secondary caption.
 - During helper execution, `CreationProgressView` shows a stage list where:
@@ -588,10 +605,11 @@ Current effective build configuration snapshot:
 
 ### 11.5 Registration and readiness lifecycle (`HelperServiceManager`)
 - Startup bootstrap:
-- `bootstrapIfNeededAtStartup` runs from `WelcomeView` before notification startup flow.
+- `bootstrapIfNeededAtStartup` runs from `WelcomeView` after Full Disk Access startup prompt stage and before notification startup flow.
 - In normal path, it performs a non-interactive readiness check.
 - If helper status is `requiresApproval`, startup approval alert is shown; startup completion reports not ready until user grants Background Items permission.
 - In `DEBUG` when app runs from Xcode/DerivedData, bootstrap bypasses forced registration, but still checks `requiresApproval` and shows startup approval alert when needed.
+- `refreshBackgroundApprovalState()` provides a non-modal status snapshot for UI state (`MenuState.helperRequiresBackgroundApproval`), used by menu-refresh points and `UniversalInstallationView` warning card.
 - Installation gate:
 - install flow calls interactive `ensureReadyForPrivilegedWork`.
 - Before registration, location rule is evaluated:
@@ -859,7 +877,8 @@ Each entry below lists a file and its role. This section is exhaustive for track
 - `macUSB/Shared/UI/BottomActionBar.swift` — Shared bottom action/status container used with `safeAreaInset(edge: .bottom)`.
 - `macUSB/Shared/UI/StatusCard.swift` — Shared semantic status/info card wrapper.
 - `macUSB/Shared/Services/LanguageManager.swift` — Language selection and locale handling.
-- `macUSB/Shared/Services/MenuState.swift` — Shared menu state (skip analysis, external drives, notifications state, DEBUG copied-data label).
+- `macUSB/Shared/Services/MenuState.swift` — Shared menu/runtime permission state (skip analysis, external drives, notifications state, Full Disk Access state, helper background-approval state, DEBUG copied-data label).
+- `macUSB/Shared/Services/FullDiskAccessPermissionManager.swift` — Full Disk Access detector (`TCC.db` probe), startup prompt orchestration, and System Settings Full Disk Access redirection with fallback alert.
 - `macUSB/Shared/Services/NotificationPermissionManager.swift` — Central notification permission and app-level toggle manager (default-off at first run, menu action, system settings redirect).
 - `macUSB/Shared/Services/Helper/HelperIPC.swift` — Shared app-side helper request/result/event payloads and XPC protocol contracts.
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift` — App-side XPC client for start/cancel/health checks and progress/result routing.
@@ -894,12 +913,12 @@ Notes on non-source items:
 ## 13. File Relationships (Who Calls What)
 This section lists the main call relationships and data flow.
 
-- `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`, `NotificationPermissionManager`, `HelperServiceManager`; in `DEBUG` also publishes `macUSBDebugGoToBigSurSummary` and `macUSBDebugGoToTigerSummary`, opens `${TMPDIR}/macUSB_temp` in Finder, and renders live copied-data informational rows.
+- `macUSB/App/macUSBApp.swift` → uses `ContentView`, `MenuState`, `LanguageManager`, `UpdateChecker`, `NotificationPermissionManager`, `FullDiskAccessPermissionManager`, `HelperServiceManager`; refreshes startup/foreground permission snapshots for notifications, Full Disk Access, and helper background approval; in `DEBUG` also publishes `macUSBDebugGoToBigSurSummary` and `macUSBDebugGoToTigerSummary`, opens `${TMPDIR}/macUSB_temp` in Finder, and renders live copied-data informational rows.
 - `macUSB/App/ContentView.swift` → presents `WelcomeView`, injects `LanguageManager`, applies window/toolbar configuration, calls `AppLogging.logAppStartupOnce()`, and maps debug notifications to delayed (2s) `FinishUSBView` routes (Big Sur and Tiger/PPC).
-- `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, checks `version.json`, bootstraps helper readiness via `HelperServiceManager`, then triggers startup notification-permission flow.
+- `macUSB/Features/Welcome/WelcomeView.swift` → navigates to `SystemAnalysisView`, runs startup permission/bootstrap sequence in order: `FullDiskAccessPermissionManager` prompt → `HelperServiceManager` bootstrap → notification startup state flow; then checks `version.json`.
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` → owns `AnalysisLogic`, calls its analysis and USB methods, updates `MenuState`, snapshots selected drive (`selectedDriveForInstallationSnapshot`) on navigation, forwards that stable target plus `detectedSystemIcon` to installation flow, and renders CTA layer through `BottomActionBar`.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` → calls `USBDriveLogic`, uses `AppLogging`, mounts images via `hdiutil`; forwards USB metadata into selected-drive state.
-- `macUSB/Features/Installation/UniversalInstallationView.swift` → renders detected system icon in system info panel (with `applelogo` fallback), requires destructive confirmation before start, then starts helper path via `startCreationProcessEntry()` and routes to `CreationProgressView`; uses shared `StatusCard` and `BottomActionBar`.
+- `macUSB/Features/Installation/UniversalInstallationView.swift` → renders detected system icon in system info panel (with `applelogo` fallback), shows startup-permission warning card when Full Disk Access and/or helper background approval are missing, requires destructive confirmation before start, then starts helper path via `startCreationProcessEntry()` and routes to `CreationProgressView`; uses shared `StatusCard` and `BottomActionBar`.
 - `macUSB/Features/Installation/CreationProgressView.swift` → renders helper runtime progress (pending/active/completed stage cards, status text, stage-scoped write-speed label), exposes cancel alert flow, navigates to `FinishUSBView`, and uses shared surfaces/buttons from UI compatibility layer.
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` → builds typed helper requests, coordinates helper execution/cancellation, and maps XPC progress events into UI state.
 - `macUSB/Features/Installation/CreatorLogic.swift` → provides shared helper-path utilities (start/cancel alert flow, USB availability monitoring, emergency unmount, cleanup, immediate reset/back flow).
@@ -909,9 +928,10 @@ This section lists the main call relationships and data flow.
 - `macUSB/Shared/UI/BottomActionBar.swift` → consumed by `SystemAnalysisView`, `UniversalInstallationView`, `CreationProgressView`, and `FinishUSBView`.
 - `macUSB/Shared/UI/StatusCard.swift` → consumed by feature screens for semantic cards.
 - `macUSB/Shared/Services/LanguageManager.swift` → controls app locale, used by `ContentView` and menu.
-- `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift`, `SystemAnalysisView`, and `NotificationPermissionManager`.
+- `macUSB/Shared/Services/MenuState.swift` → read/written by `macUSBApp.swift`, `SystemAnalysisView`, `NotificationPermissionManager`, `FullDiskAccessPermissionManager`, and `HelperServiceManager` for UI-visible permission state.
 - `macUSB/Shared/Services/NotificationPermissionManager.swift` → reads `UNUserNotificationCenter` state, updates `MenuState`, controls startup/menu alerts for notification permission, and opens system settings when blocked.
-- `macUSB/Shared/Services/Helper/HelperServiceManager.swift` → registers/repairs/removes LaunchDaemon helper via `SMAppService`, reports readiness, presents startup Background Items approval prompt when needed, and shows helper status alerts (healthy short-form + full details dialog).
+- `macUSB/Shared/Services/FullDiskAccessPermissionManager.swift` → probes Full Disk Access state, presents startup Full Disk Access requirement alert, opens Full Disk Access settings, and delays startup continuation until app reactivation after Settings handoff.
+- `macUSB/Shared/Services/Helper/HelperServiceManager.swift` → registers/repairs/removes LaunchDaemon helper via `SMAppService`, reports readiness, exposes non-modal `requiresApproval` snapshot for UI, presents startup Background Items approval prompt when needed, and shows helper status alerts (healthy short-form + full details dialog).
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift` → app-side XPC client that starts/cancels helper workflows and logs `logLine` events to `HelperLiveLog`.
 - `macUSB/Shared/Services/Helper/HelperIPC.swift` → helper IPC payload contracts (request, progress event, result).
 - `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift` → single source of truth for helper localization key IDs and extraction anchors used by String Catalog.
@@ -972,12 +992,13 @@ This section lists the main call relationships and data flow.
 ---
 
 ## 16. Notifications Chapter
-This chapter defines notification permissions, UI toggles, and delivery rules.
+This chapter defines notification permissions, startup permission ordering, UI toggles, and delivery rules.
 
 Core components:
+- `FullDiskAccessPermissionManager` is the source of truth for startup Full Disk Access checks and Full Disk Access settings redirection.
 - `NotificationPermissionManager` is the source of truth for notification policy.
 - `MenuState.notificationsEnabled` is the effective notifications state used by menu label/icon.
-- `WelcomeView` runs update check, then helper startup bootstrap, then notification state refresh/default initialization flow.
+- `WelcomeView` runs startup permission/bootstrap flow in this order: Full Disk Access check/prompt, helper startup bootstrap, notification startup state flow, then update check.
 - `FinishUSBView` sends completion notification only when policy allows.
 
 State model:
@@ -992,11 +1013,16 @@ System status interpretation (as implemented):
 - Treated as undecided: `.notDetermined`.
 
 Startup flow:
-1. `WelcomeView.onAppear` runs `checkForUpdates(completion:)`.
-2. After update flow completes (including alert close), app calls `HelperServiceManager.bootstrapIfNeededAtStartup(...)`.
-3. After helper startup bootstrap completion, app calls `NotificationPermissionManager.handleStartupFlowIfNeeded()`.
-4. This ordering ensures helper approval alert (`requiresApproval`) is handled first, while notifications stay non-intrusive.
-5. Startup notification behavior:
+1. `WelcomeView.onAppear` runs `FullDiskAccessPermissionManager.handleStartupPromptIfNeeded(...)`.
+2. If Full Disk Access is missing, startup alert is shown:
+- title: `Wymagany pełny dostęp do dysku`
+- body: `Aby aplikacja macUSB działała poprawnie, przyznaj jej uprawnienie „Pełny dostęp do dysku” w ustawieniach systemowych.`
+- buttons: `Przejdź do ustawień systemowych`, `Nie teraz`
+3. If user chooses `Przejdź do ustawień systemowych`, startup continuation is deferred until `applicationDidBecomeActive` so helper prompt is not stacked while app is backgrounded.
+4. After Full Disk Access stage completes, app calls `HelperServiceManager.bootstrapIfNeededAtStartup(...)`.
+5. After helper startup bootstrap completion, app calls `NotificationPermissionManager.handleStartupFlowIfNeeded()`.
+6. After notification startup stage, app runs update check (`checkForUpdates(completion:)`).
+7. Startup notification behavior:
 - no custom notification-permission prompt is shown automatically on first launch,
 - app toggle is initialized to disabled (`false`) if missing,
 - menu state is refreshed to reflect `systemAuthorized && appEnabledInApp`.
@@ -1026,7 +1052,10 @@ System settings redirection:
 - Final fallback: open System Settings app by bundle ID (`com.apple.systempreferences` or `com.apple.SystemSettings`).
 
 Refresh rules:
-- `applicationDidFinishLaunching` and `applicationDidBecomeActive` both call `refreshState()` to keep menu notification label/icon aligned with real system state after returning from Settings.
+- `applicationDidFinishLaunching` and `applicationDidBecomeActive` refresh permission snapshots:
+- `NotificationPermissionManager.refreshState()` (menu notification label/icon),
+- `FullDiskAccessPermissionManager.refreshState()` (Full Disk Access state in shared UI state),
+- `HelperServiceManager.refreshBackgroundApprovalState()` (helper background-approval state for warning card/menu-driven state).
 
 Finish screen delivery rules:
 - `FinishUSBView.sendSystemNotificationIfInactive()` is called on appear.

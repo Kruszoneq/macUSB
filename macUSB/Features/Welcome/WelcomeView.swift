@@ -73,10 +73,15 @@ struct WelcomeView: View {
         .onAppear {
             guard !didRunStartupFlow else { return }
             didRunStartupFlow = true
-            checkForUpdates {
-                HelperServiceManager.shared.bootstrapIfNeededAtStartup { _ in
-                    NotificationPermissionManager.shared.handleStartupFlowIfNeeded()
-                }
+            runStartupFlow()
+        }
+    }
+
+    private func runStartupFlow() {
+        FullDiskAccessPermissionManager.shared.handleStartupPromptIfNeeded {
+            HelperServiceManager.shared.bootstrapIfNeededAtStartup { _ in
+                NotificationPermissionManager.shared.handleStartupFlowIfNeeded()
+                self.checkForUpdates { }
             }
         }
     }

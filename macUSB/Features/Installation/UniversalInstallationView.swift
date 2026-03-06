@@ -2,6 +2,8 @@ import SwiftUI
 import AppKit
 
 struct UniversalInstallationView: View {
+    @ObservedObject private var menuState = MenuState.shared
+
     let sourceAppURL: URL
     let targetDrive: USBDrive?
     let targetDriveDisplayName: String?
@@ -73,6 +75,23 @@ struct UniversalInstallationView: View {
     private var showsIdleActions: Bool {
         !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !isCancelling
     }
+    private var missingFullDiskAccess: Bool { !menuState.hasFullDiskAccess }
+    private var missingHelperBackgroundApproval: Bool { menuState.helperRequiresBackgroundApproval }
+    private var shouldShowRequiredPermissionsWarning: Bool {
+        missingFullDiskAccess || missingHelperBackgroundApproval
+    }
+    private var requiredPermissionsWarningMessage: String {
+        switch (missingFullDiskAccess, missingHelperBackgroundApproval) {
+        case (true, true):
+            return String(localized: "Nie przyznano wymaganych zgód: „Pełny dostęp do dysku” dla macUSB oraz zgody na „Działanie w tle” dla narzędzia pomocniczego. Aplikacja może nie działać poprawnie.")
+        case (true, false):
+            return String(localized: "Nie przyznano wymaganej zgody: „Pełny dostęp do dysku” dla macUSB. Aplikacja może nie działać poprawnie.")
+        case (false, true):
+            return String(localized: "Nie przyznano wymaganej zgody na „Działanie w tle” dla narzędzia pomocniczego. Aplikacja może nie działać poprawnie.")
+        case (false, false):
+            return ""
+        }
+    }
     private var sectionIconFont: Font { .title3 }
     private var processSectionDivider: some View {
         HStack(spacing: 10) {
@@ -135,6 +154,27 @@ struct UniversalInstallationView: View {
                                 }
                             }
                         }
+                    }
+
+                    if shouldShowRequiredPermissionsWarning {
+                        StatusCard(tone: .warning, density: .compact) {
+                            HStack(alignment: .center) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .font(sectionIconFont)
+                                    .foregroundColor(.orange)
+                                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Brak wymaganych zgód")
+                                        .font(.headline)
+                                        .foregroundColor(.orange)
+                                    Text(requiredPermissionsWarningMessage)
+                                        .font(.subheadline)
+                                        .foregroundColor(.orange.opacity(0.8))
+                                }
+                                Spacer()
+                            }
+                        }
+                        .transition(.opacity)
                     }
 
                     if let drive = targetDrive, drive.usbSpeed == .usb2 {
@@ -403,9 +443,13 @@ struct UniversalInstallationView: View {
             AppLogging.info("Przejście do kreatora", category: "Navigation")
             AppLogging.separator()
             AppLogging.separator()
+            refreshRequiredPermissionsState()
             if !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !navigateToCreationProgress {
                 startUSBMonitoring()
             }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            refreshRequiredPermissionsState()
         }
         .onDisappear {
             stopUSBMonitoring()
@@ -413,6 +457,11 @@ struct UniversalInstallationView: View {
                 stopHelperWriteSpeedMonitoring()
             }
         }
+    }
+
+    private func refreshRequiredPermissionsState() {
+        FullDiskAccessPermissionManager.shared.refreshState()
+        HelperServiceManager.shared.refreshBackgroundApprovalState()
     }
 }
 
