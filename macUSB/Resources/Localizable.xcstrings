@@ -21122,6 +21122,252 @@
         }
       }
     },
+    "Nośniki APFS nie mogą zostać automatycznie przeformatowane przez macUSB. Otwórz Narzędzie dyskowe i sformatuj wybrany nośnik ręcznie do dowolnego formatu innego niż APFS, a następnie wybierz go ponownie." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APFS-Laufwerke können von macUSB nicht automatisch in ein anderes Format umformatiert werden. Öffnen Sie das Festplattendienstprogramm und formatieren Sie das ausgewählte Laufwerk manuell in ein beliebiges anderes Format als APFS. Wählen Sie es anschließend erneut aus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APFS drives can't be reformatted automatically by macUSB. Open Disk Utility and manually format the selected drive to any non-APFS format, then select it again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB no puede reformatear automáticamente las unidades APFS a otro formato. Abre Utilidad de Discos y formatea manualmente la unidad seleccionada a cualquier formato distinto de APFS; luego selecciónala de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les disques APFS ne peuvent pas être reformatés automatiquement par macUSB vers un autre format. Ouvrez Utilitaire de disque et formatez manuellement le disque sélectionné vers n'importe quel format autre qu'APFS, puis sélectionnez-le de nouveau."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I dischi APFS non possono essere riformattati automaticamente da macUSB in un altro formato. Apri Utility Disco e formatta manualmente il disco selezionato in qualsiasi formato diverso da APFS, quindi selezionalo di nuovo."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APFS のドライブは macUSB によって自動的に別の形式へ再フォーマットできません。ディスクユーティリティを開き、選択したドライブを APFS 以外の任意の形式に手動でフォーマットしてから、もう一度選択してください。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nośniki APFS nie mogą zostać automatycznie przeformatowane przez macUSB. Otwórz Narzędzie dyskowe i sformatuj wybrany nośnik ręcznie do dowolnego formatu innego niż APFS, a następnie wybierz go ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As unidades APFS não podem ser reformatadas automaticamente pelo macUSB para outro formato. Abra o Utilitário de Disco e formate manualmente a unidade selecionada para qualquer formato diferente de APFS; depois selecione-a novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Диски APFS не могут быть автоматически переформатированы приложением macUSB в другой формат. Откройте Дисковую утилиту и вручную отформатируйте выбранный диск в любой формат, отличный от APFS, затем выберите его снова."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APFS sürücüleri macUSB tarafından başka bir biçime otomatik olarak yeniden biçimlendirilemez. Disk İzlencesi'ni açın ve seçilen sürücüyü APFS dışındaki herhangi bir biçime manuel olarak biçimlendirin, ardından sürücüyü yeniden seçin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Диски APFS не можна автоматично переформатувати в інший формат за допомогою macUSB. Відкрийте Disk Utility і вручну відформатуйте вибраний диск у будь-який формат, відмінний від APFS, а потім виберіть його знову."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB không thể tự động định dạng lại ổ APFS sang định dạng khác. Hãy mở Tiện ích Ổ đĩa và định dạng thủ công ổ đã chọn sang bất kỳ định dạng nào khác APFS, rồi chọn lại ổ đó."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB 无法将 APFS 磁盘自动重新格式化为其他格式。请打开“磁盘工具”，将所选磁盘手动格式化为任意非 APFS 格式，然后重新选择该磁盘。"
+          }
+        }
+      }
+    },
+    "Wybrano nośnik APFS" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APFS-Laufwerk ausgewählt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APFS Drive Selected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se seleccionó una unidad APFS"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un disque APFS a été sélectionné"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "È stato selezionato un disco APFS"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APFSのドライブが選択されました"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybrano nośnik APFS"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unidade APFS selecionada"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбран диск APFS"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APFS sürücüsü seçildi"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вибрано диск APFS"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã chọn ổ APFS"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已选择 APFS 磁盘"
+          }
+        }
+      }
+    },
+    "Wybrany nośnik korzysta z formatu APFS. Aby kontynuować, sformatuj go ręcznie w Narzędziu dyskowym do dowolnego formatu innego niż APFS." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ausgewählte Laufwerk verwendet APFS. Um fortzufahren, formatieren Sie es manuell im Festplattendienstprogramm in ein beliebiges anderes Format als APFS."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The selected drive uses APFS. To continue, manually format it in Disk Utility to any non-APFS format."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La unidad seleccionada usa el formato APFS. Para continuar, formatéala manualmente en Utilidad de Discos a cualquier formato distinto de APFS."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le disque sélectionné utilise le format APFS. Pour continuer, formatez-le manuellement dans Utilitaire de disque vers n'importe quel format autre qu'APFS."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il disco selezionato usa il formato APFS. Per continuare, formattalo manualmente in Utility Disco in qualsiasi formato diverso da APFS."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したドライブは APFS 形式です。続行するには、ディスクユーティリティで APFS 以外の任意の形式に手動でフォーマットしてください。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybrany nośnik korzysta z formatu APFS. Aby kontynuować, sformatuj go ręcznie w Narzędziu dyskowym do dowolnego formatu innego niż APFS."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A unidade selecionada usa o formato APFS. Para continuar, formate-a manualmente no Utilitário de Disco para qualquer formato diferente de APFS."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбранный диск использует формат APFS. Чтобы продолжить, вручную отформатируйте его в Дисковой утилите в любой формат, отличный от APFS."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilen sürücü APFS biçimini kullanıyor. Devam etmek için Disk İzlencesi'nde sürücüyü APFS dışındaki herhangi bir biçime manuel olarak biçimlendirin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вибраний диск використовує формат APFS. Щоб продовжити, вручну відформатуйте його в Disk Utility у будь-який формат, відмінний від APFS."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ổ đã chọn đang dùng định dạng APFS. Để tiếp tục, hãy định dạng thủ công trong Tiện ích Ổ đĩa sang bất kỳ định dạng nào khác APFS."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所选磁盘使用 APFS 格式。若要继续，请在“磁盘工具”中手动将其格式化为任意非 APFS 格式。"
+          }
+        }
+      }
+    },
     "简体中文" : {
       "localizations" : {
         "de" : {

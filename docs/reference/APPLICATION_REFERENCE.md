@@ -114,11 +114,13 @@ Update when compatibility rules, detection heuristics, or version mapping logic 
 - Minimum USB requirement is dynamic and tied to detected installer generation.
 - Before recognition is complete, requirement text is unresolved (`-- GB`) in UI.
 - Proceed action remains blocked unless selected media passes capacity validation.
+- APFS-selected targets must block proceed and require manual reformat in Disk Utility before continuing.
 
 ### Current Behavior (AS-IS)
 - Sonoma (`14`) and older: UI requirement `16 GB`, technical threshold `15_000_000_000` bytes.
 - Sequoia (`15`) and newer (including Tahoe): UI requirement `32 GB`, technical threshold `28_000_000_000` bytes.
 - Capacity validation runs against mounted volume total capacity and updates error/warning cards accordingly.
+- When an APFS target is selected, the app shows an inline error card, keeps proceed disabled, and presents a system alert with a direct action to open Disk Utility for manual reformat.
 
 ### Update Trigger
 Update when threshold bytes, generation split rules, or capacity-related UI messaging behavior changes.

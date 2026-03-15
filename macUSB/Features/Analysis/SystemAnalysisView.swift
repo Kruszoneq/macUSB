@@ -15,6 +15,7 @@ struct SystemAnalysisView: View {
     @State private var isDragTargeted: Bool = false
     @State private var analysisWindowHandler: AnalysisWindowHandler?
     @State private var hostingWindow: NSWindow? = nil
+    @State private var lastAPFSAlertedDriveURL: URL? = nil
     
     let driveRefreshTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     private var visualMode: VisualSystemMode { currentVisualMode() }
@@ -65,6 +66,50 @@ struct SystemAnalysisView: View {
         alert.beginSheetModal(for: window) { _ in
             logic.shouldShowMavericksDialog = false
         }
+    }
+
+    private func presentAPFSDriveDialog() {
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .warning
+        alert.messageText = String(localized: "Wybrano nośnik APFS")
+        alert.informativeText = String(localized: "Nośniki APFS nie mogą zostać automatycznie przeformatowane przez macUSB. Otwórz Narzędzie dyskowe i sformatuj wybrany nośnik ręcznie do dowolnego formatu innego niż APFS, a następnie wybierz go ponownie.")
+        alert.addButton(withTitle: String(localized: "Otwórz Narzędzie dyskowe"))
+        alert.addButton(withTitle: String(localized: "Zamknij"))
+
+        let handleResponse: (NSApplication.ModalResponse) -> Void = { response in
+            guard response == .alertFirstButtonReturn else { return }
+            self.openDiskUtility()
+        }
+
+        if let window = hostingWindow {
+            alert.beginSheetModal(for: window, completionHandler: handleResponse)
+        } else {
+            handleResponse(alert.runModal())
+        }
+    }
+
+    private func openDiskUtility() {
+        let candidates = [
+            "/System/Applications/Utilities/Disk Utility.app",
+            "/Applications/Utilities/Disk Utility.app"
+        ].map { URL(fileURLWithPath: $0) }
+
+        for appURL in candidates where NSWorkspace.shared.open(appURL) {
+            return
+        }
+    }
+
+    private func handleAPFSSelectionChange() {
+        guard isAPFSSelected else {
+            lastAPFSAlertedDriveURL = nil
+            return
+        }
+
+        guard let selectedURL = logic.selectedDrive?.url else { return }
+        guard lastAPFSAlertedDriveURL != selectedURL else { return }
+        lastAPFSAlertedDriveURL = selectedURL
+        presentAPFSDriveDialog()
     }
     
     private var fileRequirementsBox: some View {
@@ -272,8 +317,16 @@ struct SystemAnalysisView: View {
         ((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC || logic.isMavericks)
     }
 
+    private var isAPFSSelected: Bool {
+        logic.selectedDrive?.fileSystemFormat == .apfs
+    }
+
     private var canProceedToInstall: Bool {
-        canUseUSBSelection && logic.selectedDrive != nil && logic.capacityCheckFinished && logic.isCapacitySufficient
+        canUseUSBSelection
+            && logic.selectedDrive != nil
+            && logic.capacityCheckFinished
+            && logic.isCapacitySufficient
+            && !isAPFSSelected
     }
     
     var body: some View {
@@ -346,6 +399,9 @@ struct SystemAnalysisView: View {
         .onChange(of: logic.shouldShowMavericksDialog) { show in
             if show { presentMavericksDialog() }
         }
+        .onChange(of: logic.selectedDrive?.url) { _ in
+            handleAPFSSelectionChange()
+        }
         .onReceive(NotificationCenter.default.publisher(for: .macUSBStartTigerMultiDVD)) { _ in
             logic.forceTigerMultiDVDSelection()
         }
@@ -407,6 +463,26 @@ struct SystemAnalysisView: View {
             .onChange(of: logic.selectedDrive) { _ in logic.checkCapacity() }
             
             if logic.selectedDrive != nil {
+                if isAPFSSelected {
+                    StatusCard(tone: .error, density: .compact) {
+                        HStack(alignment: .center) {
+                            Image(systemName: "xmark.octagon.fill")
+                                .font(sectionIconFont)
+                                .foregroundColor(.red)
+                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            VStack(alignment: .leading) {
+                                Text("Wybrano nośnik APFS")
+                                    .font(.headline)
+                                    .foregroundColor(.red)
+                                Text("Wybrany nośnik korzysta z formatu APFS. Aby kontynuować, sformatuj go ręcznie w Narzędziu dyskowym do dowolnego formatu innego niż APFS.")
+                                    .font(.caption)
+                                    .foregroundColor(.red.opacity(0.8))
+                            }
+                            Spacer()
+                        }
+                    }
+                    .transition(.opacity)
+                }
                 if logic.capacityCheckFinished && !logic.isCapacitySufficient {
                     StatusCard(tone: .error, density: .compact) {
                         HStack {
@@ -426,7 +502,7 @@ struct SystemAnalysisView: View {
                     }
                     .transition(.opacity)
                 }
-                if logic.capacityCheckFinished && logic.isCapacitySufficient {
+                if logic.capacityCheckFinished && logic.isCapacitySufficient && !isAPFSSelected {
                     VStack(alignment: .leading, spacing: 15) {
                         StatusCard(tone: .warning, density: .compact) {
                             HStack(alignment: .center) {

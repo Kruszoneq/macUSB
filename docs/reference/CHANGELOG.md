@@ -6,6 +6,7 @@ This release refines USB target validation by making the minimum required drive 
 
 ### CHANGES
 - USB minimum-capacity validation is now dynamic and tied to detected installer generation: Sonoma and older require 16 GB, Sequoia and newer require 32 GB.
+- Selecting an APFS USB target now blocks proceeding to the next step and clearly guides the user to manually reformat the drive in Disk Utility before continuing.
 
 ---
 
