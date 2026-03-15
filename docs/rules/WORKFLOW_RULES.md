@@ -8,32 +8,35 @@ This file defines the end-to-end workflow for preparing, documenting, and delive
 - Ensure implementation, documentation, release notes, and commits stay synchronized.
 - Serve as the top-level process guide; detailed commit and release-note rules live in dedicated rule files.
 
-## Mandatory Trigger: Automatic Context Bootstrap
+## Mandatory Trigger: Layered Context Bootstrap
 
 This section is mandatory for any AI agent working in this repository.
 
 Trigger condition:
-- If this file is referenced by name or path (for example: `WORKFLOW_RULES.md` or `docs/rules/WORKFLOW_RULES.md`), the agent must automatically execute the full bootstrap below before implementation, recommendations, or code review.
+- If this file is referenced by name or path (for example: `WORKFLOW_RULES.md` or `docs/rules/WORKFLOW_RULES.md`), the agent must automatically execute the layered bootstrap below before implementation, recommendations, or code review.
 
-Required bootstrap sequence:
+Initial bootstrap (first read in a task/session):
 1. Read this file in full.
 2. Discover every repository file matching `*_RULES.md` and read each one in full.
 3. Build one active ruleset from all loaded rules before doing work.
 4. Read `docs/reference/APPLICATION_REFERENCE.md` in full.
-5. Analyze the full codebase to capture complete technical context:
-   - Read all tracked source files and key configuration/build files.
-   - Include both app and helper code paths, plus project metadata and operational configs.
-6. Start implementation or reporting only after steps 1-5 are complete.
+
+Progressive context loading (during execution):
+1. Read only code/docs/config sections required for the current task.
+2. Expand scope only when needed to remove ambiguity, validate assumptions, or assess impact.
+3. Include app and helper paths only when the current task touches or depends on them.
+4. If the task requires broad risk analysis, architecture review, or cross-cutting refactor, escalate to full-codebase analysis.
 
 No-skip policy:
-- The bootstrap is required even for small changes.
+- Initial bootstrap is required even for small changes.
+- During execution, selective reading is allowed and expected, but must remain sufficient to complete the task safely.
 - If any required file cannot be accessed, the agent must stop, report the blocker, and request guidance before proceeding.
 
 ## Workflow (End-to-End)
 
 Use this sequence unless the user explicitly requests a narrower scope and that request does not conflict with the mandatory bootstrap:
 
-1. Complete the mandatory context bootstrap.
+1. Complete the initial layered bootstrap.
 2. Analyze current behavior and gather context from code and docs.
 3. Implement the required change.
 4. Validate behavior (build/tests/smoke checks as appropriate).

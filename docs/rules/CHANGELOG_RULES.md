@@ -9,7 +9,7 @@ This file defines how to write release notes in `CHANGELOG.md`.
 - Verify each entry against shipped behavior and `docs/reference/APPLICATION_REFERENCE.md`.
 - Keep wording concise and suitable for GitHub Releases.
 - Changes with only marginal product impact do not have to be listed in a release entry.
-- Small copy-only edits can be grouped under generic labels such as `Poprawki tłumaczeń` or general text fixes.
+- Small copy-only edits can be grouped under generic labels such as `Translation fixes` or general text fixes.
 - Changelog bullets must stay user-friendly and readable; avoid low-level technical jargon when the change was not significant.
 
 ## Release Entry Format
