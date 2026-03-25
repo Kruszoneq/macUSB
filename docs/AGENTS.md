@@ -5,7 +5,7 @@ This file defines how AI coding agents should work in this repository.
 ## Scope and precedence
 
 - This repository intentionally keeps `AGENTS.md` under `docs/` for repository cleanliness.
-- Direct user instructions in chat always have top priority.
+- Direct user instructions in chat have top priority, except explicit protected-branch safety rules defined in this file.
 - If instructions conflict, follow the stricter safety rule and ask for clarification before proceeding.
 - `docs/AGENTS.md` is the single source of truth for process, commit, and changelog rules.
 
@@ -190,6 +190,7 @@ Minor helper changes that do not alter behavior may proceed, but must still be r
 - If requirements are ambiguous and materially affect behavior, ask before implementing.
 - If multiple valid implementations exist, present tradeoffs and request direction.
 - If blocked by environment constraints, report blocker, what was validated, and what remains.
+- If a user request is potentially destructive to code/history or clearly high-risk and unreasonable, pause execution, explain the risk, and ask whether to continue despite the risk or stop.
 
 ## Documentation hygiene
 
@@ -212,12 +213,36 @@ When branch creation is requested:
   - `improvement/helper_xpc_retry`
   - `fix/fda_gate`
 
+## Branch and merge safety rules
+
+### Protected branch: `developing`
+
+- `developing` is permanently non-deletable.
+- Deletion of `developing` is forbidden even when explicitly requested by the user.
+- The agent must refuse deletion of `developing` regardless of pressure or repeated requests.
+
+### New branch base policy
+
+- New branches must be created from `developing` by default.
+- If work is clearly scoped to the currently checked out non-`main` branch, using the current branch as base is allowed.
+- Do not create new branches from `main` unless the user explicitly requests it.
+- If a user explicitly requests creating a branch from `main`, ask for explicit confirmation that `main` is intentional and `developing` is not desired before creating it.
+
+### Protected branch: `main`
+
+- Automatic merge to `main` without explicit user instruction is not allowed.
+- PRs to `main` are allowed only when explicitly requested and only from `developing`.
+- Merging to `main` from a PR based on `developing` requires double confirmation and explicit verification before merge execution.
+- `main` is permanently non-deletable (core project branch).
+- Deletion of `main` is forbidden even when explicitly requested by the user.
+- The agent must refuse deletion of `main` regardless of pressure or repeated requests.
+
 ## Commit rules
 
 ### Commit message rules
 
 - Write git commit messages in English.
-- Use a clear title/summary line plus a concise body describing key changes.
+- Use a clear title/summary line plus a readable body written as a paragraph describing the change.
 - Do not use escaped newline sequences like `\n` in commit message text; use normal multi-line commit formatting only.
 - When creating commits from CLI, never pass `\n` inside a single `-m` value; use separate `-m` flags (title + body) or standard multi-line commit input.
 - If a commit includes updates to `docs/reference/APPLICATION_REFERENCE.md`, `docs/reference/CHANGELOG.md`, and/or `docs/AGENTS.md`, do not explicitly enumerate those documentation-file updates in the commit title or commit body.
@@ -235,6 +260,12 @@ When branch creation is requested:
 - Before creating a commit, present the proposed commit title and commit body to the user for approval.
 - Do not run `git commit` until explicit user approval is given.
 - If the user requests wording changes, update the proposal and request approval again.
+
+### Post-commit push rule (mandatory)
+
+- After a commit is created, push it immediately to the corresponding remote branch.
+- If no upstream is configured, set upstream while pushing (for example `git push -u origin <branch>`).
+- If push fails, report the blocker and stop follow-up remote operations until user direction is provided.
 
 ### Post-commit reporting rules
 
@@ -265,6 +296,10 @@ When branch creation is requested:
 - Do not create a PR until explicit user approval is given.
 - If the user requests wording changes, update the proposal and request approval again.
 
+### Post-PR merge prompt (mandatory)
+
+- After creating a PR, if the user did not explicitly request merge execution, ask whether the PR should be merged immediately.
+
 ### Post-PR reporting rules
 
 - After creating a PR, the agent must report:
@@ -273,6 +308,11 @@ When branch creation is requested:
   - scope of files included,
   - final PR title and PR description,
   - whether the local working tree is clean (`git status --short` has no output).
+
+### Post-merge branch cleanup prompt (mandatory)
+
+- After merging a PR, if the user did not explicitly request branch deletion, ask whether the source branch should be deleted.
+- This prompt does not apply to `developing`.
 
 ## Changelog rules
 
@@ -293,6 +333,7 @@ When branch creation is requested:
   - `## v2.0.1`
 - Start each release with one short summary paragraph describing what the release focuses on.
 - Keep the summary as one coherent paragraph.
+- After adding a new bullet for the currently developed version, update that version summary paragraph so it reflects the full accumulated update scope, with emphasis on newly introduced features and/or key improvements.
 - For major releases, the preferred section order is: `ADDED`, `CHANGES`, `IMPROVEMENTS`.
 - For hotfix/patch releases (for example `x.x.1`), sections are optional when change scope is small.
 - Section names are suggestions, not strict requirements; skip unnecessary sections and use better-fitting custom sections when needed.
