@@ -97,6 +97,21 @@
 				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/WelcomeView.swift,
 				macUSBIcon.icon,
+				Resources/Icons/OS/os_10_10_yosemite.icns,
+				Resources/Icons/OS/os_10_11_el_capitan.icns,
+				Resources/Icons/OS/os_10_12_sierra.icns,
+				Resources/Icons/OS/os_10_13_high_sierra.icns,
+				Resources/Icons/OS/os_10_14_mojave.icns,
+				Resources/Icons/OS/os_10_15_catalina.icns,
+				Resources/Icons/OS/os_10_7_lion.icns,
+				Resources/Icons/OS/os_10_8_mountain_lion.icns,
+				Resources/Icons/OS/os_10_9_maverics.icns,
+				Resources/Icons/OS/os_11_7_big_sur.icns,
+				Resources/Icons/OS/os_12_7_monterey.icns,
+				Resources/Icons/OS/os_13_7_ventura.icns,
+				Resources/Icons/OS/os_14_8_sonoma.icns,
+				Resources/Icons/OS/os_15_7_sequoia.icns,
+				Resources/Icons/OS/os_26_2_tahoe.icns,
 				Resources/Localizable.xcstrings,
 				Shared/Localization/HelperWorkflowLocalizationKeys.swift,
 				Shared/Models/Models.swift,
@@ -631,7 +646,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -654,7 +669,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -687,7 +702,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -710,7 +725,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

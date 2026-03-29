@@ -95,15 +95,12 @@ struct MacOSDownloaderWindowView: View {
                 .macUSBPanelSurface(.subtle)
 
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Dostępne systemy do pobrania")
+                    Text("Lista systemów dostępnych do pobrania")
                         .font(.headline)
 
                     installerListArea
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 }
-                .padding(MacUSBDesignTokens.panelInnerPadding)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                .macUSBPanelSurface(.subtle)
             }
             .padding(.horizontal, MacUSBDesignTokens.contentHorizontalPadding)
             .padding(.top, MacUSBDesignTokens.contentVerticalPadding)
@@ -191,17 +188,150 @@ struct MacOSDownloaderWindowView: View {
                             .foregroundStyle(.secondary)
 
                         ForEach(group.entries) { entry in
-                            Text(entry.displayTitle)
-                                .font(.subheadline)
-                                .textSelection(.enabled)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(10)
-                                .macUSBPanelSurface(.subtle)
+                            installerEntryRow(entry)
                         }
                     }
                 }
             }
         }
+    }
+
+    private func installerEntryRow(_ entry: MacOSInstallerEntry) -> some View {
+        HStack(alignment: .center, spacing: 12) {
+            installerIconView(for: entry)
+
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Text("\(entry.name) \(entry.version)")
+                    .font(.body.weight(.medium))
+                    .foregroundStyle(.primary)
+
+                if shouldShowBuild(entry.build) {
+                    Text("(\(entry.build))")
+                        .font(.subheadline.italic())
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .textSelection(.enabled)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(maxWidth: .infinity, minHeight: 46, alignment: .leading)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .macUSBPanelSurface(.subtle)
+    }
+
+    @ViewBuilder
+    private func installerIconView(for entry: MacOSInstallerEntry) -> some View {
+        if let image = resolveInstallerIcon(for: entry) {
+            Image(nsImage: image)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 36, height: 36)
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        } else {
+            Image(systemName: "arrow.down.circle.fill")
+                .font(.system(size: 30))
+                .foregroundStyle(.secondary)
+                .frame(width: 36, height: 36)
+        }
+    }
+
+    private func resolveInstallerIcon(for entry: MacOSInstallerEntry) -> NSImage? {
+        let versionKey = normalizedVersionKey(from: entry.version)
+        let majorVersionKey = normalizedMajorVersionKey(from: entry.version)
+        let nameKey = normalizedSystemNameKey(from: entry.name)
+        let nameAliases = iconNameAliases(for: nameKey)
+
+        for alias in nameAliases {
+            if let image = loadIcon(named: "os_\(versionKey)_\(alias)") {
+                return image
+            }
+            if let image = loadIcon(named: "os_\(majorVersionKey)_\(alias)") {
+                return image
+            }
+        }
+
+        // Fallback for legacy names that can vary in catalog metadata.
+        let iconPaths = Bundle.main.paths(forResourcesOfType: "icns", inDirectory: "Icons/OS")
+            + Bundle.main.paths(forResourcesOfType: "icns", inDirectory: nil)
+
+        let fileNames = iconPaths.map({ URL(fileURLWithPath: $0).lastPathComponent })
+        for alias in nameAliases {
+            if let fileName = fileNames.first(where: {
+                matchesMajorVersionIconFile($0, majorVersionKey: majorVersionKey, alias: alias)
+            }), let image = loadIcon(named: String(fileName.dropLast(".icns".count))) {
+                return image
+            }
+        }
+
+        return nil
+    }
+
+    private func loadIcon(named resourceName: String) -> NSImage? {
+        if let nestedURL = Bundle.main.url(forResource: resourceName, withExtension: "icns", subdirectory: "Icons/OS") {
+            return NSImage(contentsOf: nestedURL)
+        }
+        if let rootURL = Bundle.main.url(forResource: resourceName, withExtension: "icns") {
+            return NSImage(contentsOf: rootURL)
+        }
+        return nil
+    }
+
+    private func normalizedVersionKey(from version: String) -> String {
+        let parts = version.split(separator: ".")
+        guard let major = parts.first else { return version.replacingOccurrences(of: ".", with: "_") }
+
+        if parts.count >= 2 {
+            return "\(major)_\(parts[1])"
+        }
+        return String(major)
+    }
+
+    private func normalizedMajorVersionKey(from version: String) -> String {
+        let major = version.split(separator: ".").first ?? Substring(version)
+        return String(major)
+    }
+
+    private func normalizedSystemNameKey(from name: String) -> String {
+        let stripped = name
+            .replacingOccurrences(of: "macOS ", with: "")
+            .replacingOccurrences(of: "OS X ", with: "")
+            .replacingOccurrences(of: "Mac OS X ", with: "")
+            .lowercased()
+
+        let components = stripped.split { !$0.isLetter && !$0.isNumber }
+        return components.joined(separator: "_")
+    }
+
+    private func iconNameAliases(for key: String) -> [String] {
+        if key == "mavericks" {
+            return ["mavericks", "maverics"]
+        }
+        return [key]
+    }
+
+    private func shouldShowBuild(_ build: String) -> Bool {
+        let trimmed = build.trimmingCharacters(in: .whitespacesAndNewlines)
+        return !trimmed.isEmpty && trimmed.caseInsensitiveCompare("N/A") != .orderedSame
+    }
+
+    private func matchesMajorVersionIconFile(_ fileName: String, majorVersionKey: String, alias: String) -> Bool {
+        guard fileName.hasPrefix("os_"), fileName.hasSuffix(".icns") else { return false }
+
+        let core = String(fileName.dropFirst(3).dropLast(".icns".count))
+        let components = core.split(separator: "_")
+        guard let first = components.first, first == Substring(majorVersionKey) else { return false }
+
+        let nameStartIndex: Int
+        if components.count > 1, Int(components[1]) != nil {
+            nameStartIndex = 2
+        } else {
+            nameStartIndex = 1
+        }
+
+        guard components.count > nameStartIndex else { return false }
+        let parsedAlias = components[nameStartIndex...].joined(separator: "_")
+        return parsedAlias == alias
     }
 
     private func listMessageView(title: String, description: String) -> some View {

@@ -4,6 +4,19 @@
     "" : {
 
     },
+    "(%@)" : {
+
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
     "• Do utworzenia instalatora potrzebny jest nośnik USB o pojemności minimum %@ GB" : {
       "localizations" : {
         "de" : {
@@ -3848,9 +3861,6 @@
         }
       }
     },
-    "Dostępne systemy do pobrania" : {
-
-    },
     "Działanie przerwane przez użytkownika. Możesz zacząć od początku." : {
       "localizations" : {
         "de" : {
@@ -7669,6 +7679,9 @@
 
     },
     "Lista oficjalnych instalatorów macOS i OS X dostępnych na serwerach Apple." : {
+
+    },
+    "Lista systemów dostępnych do pobrania" : {
 
     },
     "Lokalizacja aplikacji: /Applications (OK)" : {
