@@ -1752,6 +1752,9 @@
         }
       }
     },
+    "Analiza metadanych wersji..." : {
+
+    },
     "Analiza nie została wykonana - wybór użytkownika" : {
       "localizations" : {
         "de" : {
@@ -1979,6 +1982,9 @@
           }
         }
       }
+    },
+    "Anuluj" : {
+
     },
     "Automatycznie" : {
       "localizations" : {
@@ -2599,6 +2605,9 @@
           }
         }
       }
+    },
+    "Brak dostępnych wersji" : {
+
     },
     "Brak połączenia XPC z helperem" : {
       "extractionState" : "stale",
@@ -3684,6 +3693,9 @@
         }
       }
     },
+    "Dolaczanie starszych wersji z Apple Support..." : {
+
+    },
     "Dostępna aktualizacja!" : {
       "localizations" : {
         "de" : {
@@ -3835,6 +3847,9 @@
           }
         }
       }
+    },
+    "Dostępne systemy do pobrania" : {
+
     },
     "Działanie przerwane przez użytkownika. Możesz zacząć od początku." : {
       "localizations" : {
@@ -7647,6 +7662,15 @@
         }
       }
     },
+    "Łączę się z serwerami Apple i wykrywam dostępne instalatory." : {
+
+    },
+    "Laczenie z serwerami Apple..." : {
+
+    },
+    "Lista oficjalnych instalatorów macOS i OS X dostępnych na serwerach Apple." : {
+
+    },
     "Lokalizacja aplikacji: /Applications (OK)" : {
       "localizations" : {
         "de" : {
@@ -9497,6 +9521,9 @@
         }
       }
     },
+    "Nie udało się pobrać listy" : {
+
+    },
     "Nie udało się usunąć plików tymczasowych: %@" : {
       "localizations" : {
         "de" : {
@@ -10591,6 +10618,9 @@
         }
       }
     },
+    "Nie znaleziono publicznych instalatorów w aktualnym katalogu Apple." : {
+
+    },
     "Nie znaleziono źródłowego pliku obrazu." : {
       "localizations" : {
         "de" : {
@@ -11287,6 +11317,9 @@
         }
       }
     },
+    "Oczekiwanie na wyniki" : {
+
+    },
     "Odłączono nośnik USB" : {
       "localizations" : {
         "de" : {
@@ -11743,6 +11776,9 @@
         }
       }
     },
+    "Otwórz downloader ponownie, aby uruchomić nowe sprawdzanie." : {
+
+    },
     "Otwórz macUSB_temp" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -11978,7 +12014,7 @@
         }
       }
     },
-    "Placeholder: tutaj pojawi się lista systemów macOS/OS X dostępnych do pobrania z oficjalnych serwerów Apple." : {
+    "Pobieranie katalogu Apple..." : {
 
     },
     "Pobierz" : {
@@ -15086,6 +15122,9 @@
         }
       }
     },
+    "Sprawdzanie anulowane" : {
+
+    },
     "Sprawdzanie statusu..." : {
       "localizations" : {
         "de" : {
@@ -15161,6 +15200,9 @@
           }
         }
       }
+    },
+    "Sprawdzanie wersji macOS" : {
+
     },
     "Spróbuj ponownie od początku" : {
       "localizations" : {
@@ -16703,6 +16745,9 @@
           }
         }
       }
+    },
+    "Trwa sprawdzanie dostępnych wersji." : {
+
     },
     "Türkçe" : {
       "localizations" : {
@@ -20791,6 +20836,9 @@
           }
         }
       }
+    },
+    "Wystąpił błąd połączenia z serwerami Apple." : {
+
     },
     "Wyświetl szczegóły" : {
       "localizations" : {

@@ -67,6 +67,9 @@ Update this section when startup permission order, permission prompts, or permis
 - Summary screen confirms destructive start.
 - Progress screen reflects helper-driven stages.
 - Finish screen reports success/failure/cancel and final cleanup status.
+- Tools menu includes `Download macOS installer...`, which opens a dedicated downloader sheet.
+- Entering the downloader sheet triggers on-demand discovery (not app startup discovery) of officially available macOS/OS X installers from Apple endpoints.
+- During discovery, downloader UI presents a blocking progress dialog with cancel action; after completion it displays grouped `Name Version (Build)` entries.
 
 ### Update Trigger
 Update this section when screen order, navigation model, or gating transitions change.
