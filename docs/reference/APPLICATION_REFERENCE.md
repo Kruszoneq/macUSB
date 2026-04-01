@@ -165,6 +165,9 @@ Update when workflow branching, stage sequence semantics, or flow-specific handl
 
 ### Current Behavior (AS-IS)
 - Helper readiness/registration/repair and XPC health checks are centralized in helper services.
+- Tools -> `Napraw helpera` always executes a hard reset sequence: `unregister`, short delay, explicit check that old helper no longer responds over XPC, then `register`, short delay, and final XPC health validation.
+- Hard repair uses a base `3s` post-unregister stabilization delay; if helper still appears unchanged after that wait, it applies an additional one-time `5s` delay before continuing teardown validation.
+- Hard repair uses bounded retry/backoff for transient registration and post-register XPC readiness failures (for example short-lived service invalidation races), while still failing explicitly when helper does not converge to a healthy state.
 - App composes typed helper requests and maps helper events to stage progress.
 - Helper executes stage pipelines, emits progress, and handles cancellation/failure shaping.
 - Release operation expects app location and signing constraints to be satisfied.

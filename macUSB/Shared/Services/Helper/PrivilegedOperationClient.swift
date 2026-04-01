@@ -309,7 +309,15 @@ final class PrivilegedOperationClient: NSObject {
     }
 
     func resetConnectionForRecovery() {
-        resetConnection()
+        lock.lock()
+        let existingConnection = connection
+        connection = nil
+        eventHandlers.removeAll()
+        completionHandlers.removeAll()
+        downloaderAssemblyEventHandlers.removeAll()
+        downloaderAssemblyCompletionHandlers.removeAll()
+        lock.unlock()
+        existingConnection?.invalidate()
     }
 
     private func helperProxy(onError: @escaping (String) -> Void) -> PrivilegedHelperToolXPCProtocol? {

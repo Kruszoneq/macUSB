@@ -19,9 +19,17 @@ final class HelperServiceManager: NSObject {
     private var statusCheckingPanel: NSPanel?
     private var repairProgressPanel: NSPanel?
     private var repairStatusField: NSTextField?
+    private var repairStatusDetailField: NSTextField?
+    private var repairStatusCardView: NSVisualEffectView?
+    private var repairStatusIconView: NSImageView?
     private var repairLogTextView: NSTextView?
     private var repairSpinner: NSProgressIndicator?
+    private var repairProgressBar: NSProgressIndicator?
     private var repairCloseButton: NSButton?
+    private var repairDetailsButton: NSButton?
+    private var repairLogContainerView: NSView?
+    private var repairLogHeightConstraint: NSLayoutConstraint?
+    private var repairDetailsExpanded = false
     private var didPresentStartupApprovalPrompt = false
     private let repairLogFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -182,7 +190,7 @@ final class HelperServiceManager: NSObject {
         PrivilegedOperationClient.shared.resetConnectionForRecovery()
         reportHelperServiceEvent("Zresetowano lokalne połączenie XPC przed naprawą.")
 
-        ensureReadyForPrivilegedWork(interactive: true) { ready, message in
+        performFullRepairFromMenu { ready, message in
             self.finishRepairFlow()
             let summary = message ?? (ready
                                       ? String(localized: "Naprawa helpera zakończona")
@@ -191,6 +199,337 @@ final class HelperServiceManager: NSObject {
             DispatchQueue.main.async {
                 self.finishRepairPresentation(success: ready, message: summary)
             }
+        }
+    }
+
+    private func performFullRepairFromMenu(completion: @escaping EnsureCompletion) {
+        reportHelperServiceEvent("Uruchamiam pełny reset helpera: unregister -> brak odpowiedzi starego -> register -> health-check.")
+
+        guard isLocationRequirementSatisfied() else {
+            let message = String(localized: "Aby uruchomić helper systemowy, aplikacja musi znajdować się w katalogu Applications.")
+            reportHelperServiceEvent("Naprawa przerwana: warunek lokalizacji aplikacji niespełniony.")
+            DispatchQueue.main.async {
+                self.presentMoveToApplicationsAlert()
+                completion(false, message)
+            }
+            return
+        }
+
+        coordinationQueue.async {
+            if self.ensureInProgress {
+                let message = String(localized: "Trwa inna operacja helpera. Poczekaj chwilę i spróbuj ponownie.")
+                self.reportHelperServiceEvent("Naprawa przerwana: trwa równoległa operacja helpera.")
+                DispatchQueue.main.async {
+                    completion(false, message)
+                }
+                return
+            }
+
+            let service = SMAppService.daemon(plistName: Self.daemonPlistName)
+            self.reportHelperServiceEvent("Status helpera przed resetem: \(self.statusDescription(service.status)).")
+
+            self.performHardUnregisterPhase(service: service) { teardownOK, teardownMessage in
+                guard teardownOK else {
+                    DispatchQueue.main.async {
+                        completion(false, teardownMessage ?? String(localized: "Nie udało się usunąć starej rejestracji helpera."))
+                    }
+                    return
+                }
+                self.performHardRegisterPhase(service: service, completion: completion)
+            }
+        }
+    }
+
+    private func performHardUnregisterPhase(
+        service: SMAppService,
+        completion: @escaping (Bool, String?) -> Void
+    ) {
+        reportHelperServiceEvent("Wywołuję SMAppService.unregister() przed pełnym resetem helpera.")
+        service.unregister { error in
+            self.coordinationQueue.async {
+                if let error {
+                    self.reportHelperServiceEvent(
+                        "SMAppService.unregister() zwróciło błąd: \(self.diagnosticErrorDescription(for: error)). Kontynuuję weryfikację teardown."
+                    )
+                } else {
+                    self.reportHelperServiceEvent("SMAppService.unregister() zakończone.")
+                }
+
+                self.schedulePostUnregisterVerification(
+                    service: service,
+                    delaySeconds: 3.0,
+                    allowExtendedDelay: true,
+                    completion: completion
+                )
+            }
+        }
+    }
+
+    private func schedulePostUnregisterVerification(
+        service: SMAppService,
+        delaySeconds: TimeInterval,
+        allowExtendedDelay: Bool,
+        completion: @escaping (Bool, String?) -> Void
+    ) {
+        let secondsText = Int(delaySeconds.rounded())
+        reportHelperServiceEvent("Oczekiwanie \(secondsText) s po unregister na stabilizację usługi.")
+
+        coordinationQueue.asyncAfter(deadline: .now() + delaySeconds) {
+            let statusAfterUnregister = service.status
+            self.reportHelperServiceEvent("Status helpera po unregister: \(self.statusDescription(statusAfterUnregister)).")
+
+            if statusAfterUnregister == .enabled {
+                if allowExtendedDelay {
+                    self.reportHelperServiceEvent(
+                        "Po 3 s brak zmiany statusu helpera (nadal aktywny). Dodaję dodatkowe 5 s przed kolejną próbą."
+                    )
+                    self.schedulePostUnregisterVerification(
+                        service: service,
+                        delaySeconds: 5.0,
+                        allowExtendedDelay: false,
+                        completion: completion
+                    )
+                    return
+                }
+
+                completion(false, String(localized: "Helper pozostał aktywny po unregister. Przerwano naprawę."))
+                return
+            }
+
+            PrivilegedOperationClient.shared.resetConnectionForRecovery()
+            self.reportHelperServiceEvent("Zresetowano połączenie XPC po unregister. Sprawdzam, czy stary helper przestał odpowiadać.")
+            self.ensureOldHelperNoLongerResponds(
+                attempt: 1,
+                maxAttempts: 6,
+                allowExtendedDelay: allowExtendedDelay,
+                completion: completion
+            )
+        }
+    }
+
+    private func ensureOldHelperNoLongerResponds(
+        attempt: Int,
+        maxAttempts: Int,
+        allowExtendedDelay: Bool,
+        completion: @escaping (Bool, String?) -> Void
+    ) {
+        PrivilegedOperationClient.shared.queryHealth(withTimeout: 0.7) { ok, details in
+            self.coordinationQueue.async {
+                if !ok {
+                    self.reportHelperServiceEvent("Stary helper nie odpowiada po unregister (\(details)). Teardown zakończony.")
+                    completion(true, nil)
+                    return
+                }
+
+                if allowExtendedDelay, attempt == 1 {
+                    self.reportHelperServiceEvent(
+                        "Po 3 s brak zmiany odpowiedzi XPC (stary helper nadal odpowiada). Dodaję dodatkowe 5 s przed dalszą weryfikacją."
+                    )
+                    PrivilegedOperationClient.shared.resetConnectionForRecovery()
+                    self.coordinationQueue.asyncAfter(deadline: .now() + 5.0) {
+                        self.ensureOldHelperNoLongerResponds(
+                            attempt: 1,
+                            maxAttempts: maxAttempts,
+                            allowExtendedDelay: false,
+                            completion: completion
+                        )
+                    }
+                    return
+                }
+
+                if attempt >= maxAttempts {
+                    let message = "Po unregister stary helper nadal odpowiada przez XPC: \(details)"
+                    self.reportHelperServiceEvent(message)
+                    completion(false, message)
+                    return
+                }
+
+                self.reportHelperServiceEvent("Stary helper nadal odpowiada (próba \(attempt)/\(maxAttempts)). Ponawiam teardown check.")
+                PrivilegedOperationClient.shared.resetConnectionForRecovery()
+                self.coordinationQueue.asyncAfter(deadline: .now() + 0.25) {
+                    self.ensureOldHelperNoLongerResponds(
+                        attempt: attempt + 1,
+                        maxAttempts: maxAttempts,
+                        allowExtendedDelay: false,
+                        completion: completion
+                    )
+                }
+            }
+        }
+    }
+
+    private func performHardRegisterPhase(
+        service: SMAppService,
+        completion: @escaping EnsureCompletion
+    ) {
+        coordinationQueue.asyncAfter(deadline: .now() + 0.3) {
+            self.attemptHardRegister(service: service, attempt: 1, maxAttempts: 5, completion: completion)
+        }
+    }
+
+    private func attemptHardRegister(
+        service: SMAppService,
+        attempt: Int,
+        maxAttempts: Int,
+        completion: @escaping EnsureCompletion
+    ) {
+        reportHelperServiceEvent("Wywołuję SMAppService.register() po pełnym teardown (próba \(attempt)/\(maxAttempts)).")
+
+        do {
+            try service.register()
+            reportHelperServiceEvent("SMAppService.register() po resecie zakończone bez błędu.")
+        } catch {
+            let details = diagnosticErrorDescription(for: error)
+            reportHelperServiceEvent("SMAppService.register() po resecie zwróciło błąd: \(details)")
+
+            let statusAfterError = service.status
+            if statusAfterError == .enabled {
+                reportHelperServiceEvent("Mimo błędu register() status helpera to enabled. Kontynuuję walidację.")
+                finalizeHardRepairAfterSuccessfulRegister(service: service, completion: completion)
+                return
+            }
+
+            guard attempt < maxAttempts, isRetryableHardRegisterError(error: error) else {
+                DispatchQueue.main.async {
+                    completion(false, details)
+                }
+                return
+            }
+
+            let retryDelay = hardRegisterRetryDelaySeconds(for: attempt)
+            reportHelperServiceEvent("Retry register helpera za \(String(format: "%.2f", retryDelay)) s (próba \(attempt + 1)/\(maxAttempts)).")
+            PrivilegedOperationClient.shared.resetConnectionForRecovery()
+
+            coordinationQueue.asyncAfter(deadline: .now() + retryDelay) {
+                self.attemptHardRegister(
+                    service: service,
+                    attempt: attempt + 1,
+                    maxAttempts: maxAttempts,
+                    completion: completion
+                )
+            }
+            return
+        }
+
+        let statusAfterRegister = service.status
+        reportHelperServiceEvent("Status helpera po rejestracji: \(statusDescription(statusAfterRegister)).")
+
+        guard statusAfterRegister == .enabled else {
+            if attempt < maxAttempts, statusAfterRegister == .notRegistered || statusAfterRegister == .notFound {
+                let retryDelay = hardRegisterRetryDelaySeconds(for: attempt)
+                reportHelperServiceEvent("Status po register to \(statusDescription(statusAfterRegister)). Ponawiam próbę za \(String(format: "%.2f", retryDelay)) s.")
+                PrivilegedOperationClient.shared.resetConnectionForRecovery()
+                coordinationQueue.asyncAfter(deadline: .now() + retryDelay) {
+                    self.attemptHardRegister(
+                        service: service,
+                        attempt: attempt + 1,
+                        maxAttempts: maxAttempts,
+                        completion: completion
+                    )
+                }
+                return
+            }
+
+            let message: String
+            if statusAfterRegister == .requiresApproval {
+                message = String(localized: "Helper został zarejestrowany, ale wymaga zatwierdzenia przez użytkownika.")
+            } else {
+                message = String(localized: "Nie udało się aktywować helpera po pełnym resecie.")
+            }
+            DispatchQueue.main.async {
+                completion(false, message)
+            }
+            return
+        }
+
+        finalizeHardRepairAfterSuccessfulRegister(service: service, completion: completion)
+    }
+
+    private func finalizeHardRepairAfterSuccessfulRegister(
+        service: SMAppService,
+        completion: @escaping EnsureCompletion
+    ) {
+        coordinationQueue.asyncAfter(deadline: .now() + 0.3) {
+            PrivilegedOperationClient.shared.resetConnectionForRecovery()
+            self.reportHelperServiceEvent("Ponownie zresetowano połączenie XPC po rejestracji.")
+            self.attemptHardRepairHealthValidation(
+                service: service,
+                attempt: 1,
+                maxAttempts: 4,
+                completion: completion
+            )
+        }
+    }
+
+    private func attemptHardRepairHealthValidation(
+        service: SMAppService,
+        attempt: Int,
+        maxAttempts: Int,
+        completion: @escaping EnsureCompletion
+    ) {
+        PrivilegedOperationClient.shared.queryHealth(withTimeout: 2.4) { ok, details in
+            self.coordinationQueue.async {
+                let finalStatus = service.status
+                if ok, finalStatus == .enabled {
+                    self.reportHelperServiceEvent("Pełna naprawa helpera zakończona sukcesem. Health XPC: \(details).")
+                    DispatchQueue.main.async {
+                        completion(true, nil)
+                    }
+                    return
+                }
+
+                if attempt < maxAttempts {
+                    let retryDelay = 0.35 * Double(attempt)
+                    self.reportHelperServiceEvent(
+                        "Health-check helpera niegotowy (próba \(attempt)/\(maxAttempts)): status=\(self.statusDescription(finalStatus)), details=\(details). Ponawiam za \(String(format: "%.2f", retryDelay)) s."
+                    )
+                    PrivilegedOperationClient.shared.resetConnectionForRecovery()
+                    self.coordinationQueue.asyncAfter(deadline: .now() + retryDelay) {
+                        self.attemptHardRepairHealthValidation(
+                            service: service,
+                            attempt: attempt + 1,
+                            maxAttempts: maxAttempts,
+                            completion: completion
+                        )
+                    }
+                    return
+                }
+
+                let message = "Helper po pełnym resecie nadal nie jest gotowy. Status: \(self.statusDescription(finalStatus)). Szczegóły XPC: \(details)"
+                self.reportHelperServiceEvent(message)
+                DispatchQueue.main.async {
+                    completion(false, message)
+                }
+            }
+        }
+    }
+
+    private func isRetryableHardRegisterError(error: Error) -> Bool {
+        if isOperationNotPermitted(error) || isLikelyBackgroundTaskPolicyBlock(error) {
+            return true
+        }
+
+        let nsError = error as NSError
+        if nsError.domain == NSCocoaErrorDomain, nsError.code == 4099 {
+            return true
+        }
+
+        let lowered = nsError.localizedDescription.lowercased()
+        if lowered.contains("operation not permitted")
+            || lowered.contains("temporarily unavailable")
+            || lowered.contains("interrupted")
+        {
+            return true
+        }
+        return false
+    }
+
+    private func hardRegisterRetryDelaySeconds(for attempt: Int) -> TimeInterval {
+        switch attempt {
+        case 1: return 0.4
+        case 2: return 0.8
+        case 3: return 1.6
+        default: return 2.2
         }
     }
 
@@ -894,15 +1233,29 @@ final class HelperServiceManager: NSObject {
     private func startRepairPresentation() {
         presentRepairProgressPanelIfNeeded()
         repairLogTextView?.string = ""
+        setRepairDetailsExpanded(false, animated: false)
         repairSpinner?.isHidden = false
         repairSpinner?.startAnimation(nil)
+        repairProgressBar?.isHidden = false
+        repairProgressBar?.startAnimation(nil)
         repairCloseButton?.isEnabled = false
-        updateRepairStatus(text: String(localized: "Trwa naprawa helpera..."), result: nil)
+        updateRepairStatus(
+            text: String(localized: "Przygotowuję naprawę helpera"),
+            detail: String(localized: "Odświeżam usługę systemową i weryfikuję gotowość"),
+            result: nil,
+            symbolName: "wrench.and.screwdriver.fill"
+        )
         appendRepairProgressLine("Rozpoczynanie operacji naprawy.")
         setRepairProgressSink { [weak self] message in
             DispatchQueue.main.async {
-                self?.updateRepairStatus(text: message, result: nil)
-                self?.appendRepairProgressLine(message)
+                guard let self else { return }
+                self.updateRepairStatus(
+                    text: self.userFacingRepairStatus(for: message),
+                    detail: self.userFacingRepairStatusDetail(for: message),
+                    result: nil,
+                    symbolName: self.userFacingRepairStatusSymbol(for: message)
+                )
+                self.appendRepairProgressLine(message)
             }
         }
     }
@@ -910,13 +1263,19 @@ final class HelperServiceManager: NSObject {
     private func finishRepairPresentation(success: Bool, message: String) {
         updateRepairStatus(
             text: success
-            ? String(localized: "Naprawa helpera zakończona pomyślnie.")
-            : String(localized: "Naprawa helpera zakończona błędem."),
-            result: success
+            ? String(localized: "Naprawa helpera zakończona")
+            : String(localized: "Naprawa helpera wymaga uwagi"),
+            detail: success
+            ? String(localized: "Helper jest gotowy do dalszej pracy")
+            : String(localized: "Sprawdź dziennik techniczny, aby zobaczyć szczegóły"),
+            result: success,
+            symbolName: success ? "checkmark.circle.fill" : "exclamationmark.triangle.fill"
         )
         appendRepairProgressLine(message)
         repairSpinner?.stopAnimation(nil)
         repairSpinner?.isHidden = true
+        repairProgressBar?.stopAnimation(nil)
+        repairProgressBar?.isHidden = true
         repairCloseButton?.isEnabled = true
     }
 
@@ -927,7 +1286,7 @@ final class HelperServiceManager: NSObject {
             return
         }
 
-        let panelSize = NSSize(width: 620, height: 430)
+        let panelSize = NSSize(width: MacUSBDesignTokens.windowWidth, height: 450)
         let panel = NSPanel(
             contentRect: NSRect(origin: .zero, size: panelSize),
             styleMask: [.titled, .closable],
@@ -939,51 +1298,141 @@ final class HelperServiceManager: NSObject {
         panel.level = .floating
         panel.isReleasedWhenClosed = false
 
-        let contentView = NSView(frame: NSRect(origin: .zero, size: panelSize))
+        let contentView = NSVisualEffectView(frame: NSRect(origin: .zero, size: panelSize))
+        contentView.material = .underWindowBackground
+        contentView.blendingMode = .withinWindow
+        contentView.state = .active
+        contentView.translatesAutoresizingMaskIntoConstraints = false
 
-        let iconView = NSImageView(frame: NSRect(x: 22, y: panelSize.height - 68, width: 34, height: 34))
-        iconView.image = NSImage(systemSymbolName: "lock.shield.fill", accessibilityDescription: nil)
-        iconView.symbolConfiguration = NSImage.SymbolConfiguration(pointSize: 26, weight: .semibold)
-        iconView.contentTintColor = .systemBlue
-        contentView.addSubview(iconView)
+        let rootView = NSView(frame: NSRect(origin: .zero, size: panelSize))
+        rootView.translatesAutoresizingMaskIntoConstraints = false
+        rootView.addSubview(contentView)
+        NSLayoutConstraint.activate([
+            contentView.leadingAnchor.constraint(equalTo: rootView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: rootView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: rootView.bottomAnchor)
+        ])
+        panel.contentView = rootView
 
-        let titleField = NSTextField(labelWithString: String(localized: "Naprawa helpera"))
-        titleField.font = NSFont.systemFont(ofSize: 20, weight: .bold)
-        titleField.frame = NSRect(x: 66, y: panelSize.height - 62, width: 350, height: 28)
-        contentView.addSubview(titleField)
+        let headerCard = NSVisualEffectView()
+        headerCard.material = .sidebar
+        headerCard.blendingMode = .withinWindow
+        headerCard.state = .active
+        headerCard.translatesAutoresizingMaskIntoConstraints = false
+        headerCard.wantsLayer = true
+        headerCard.layer?.cornerRadius = 14
+        headerCard.layer?.borderWidth = 1
+        headerCard.layer?.borderColor = NSColor.separatorColor.withAlphaComponent(0.30).cgColor
+        contentView.addSubview(headerCard)
 
-        let subtitleField = NSTextField(labelWithString: String(localized: "Bieżący przebieg operacji"))
-        subtitleField.font = NSFont.systemFont(ofSize: 12, weight: .regular)
-        subtitleField.textColor = .secondaryLabelColor
-        subtitleField.frame = NSRect(x: 66, y: panelSize.height - 82, width: 420, height: 18)
-        contentView.addSubview(subtitleField)
+        let headerIconView = NSImageView()
+        headerIconView.image = NSImage(systemSymbolName: "wrench.and.screwdriver.fill", accessibilityDescription: nil)
+        headerIconView.symbolConfiguration = NSImage.SymbolConfiguration(pointSize: 24, weight: .semibold)
+        headerIconView.contentTintColor = .systemBlue
+        headerIconView.translatesAutoresizingMaskIntoConstraints = false
+        headerCard.addSubview(headerIconView)
 
-        let statusSpinner = NSProgressIndicator(frame: NSRect(x: 24, y: panelSize.height - 112, width: 18, height: 18))
-        statusSpinner.style = .spinning
-        statusSpinner.controlSize = .small
-        contentView.addSubview(statusSpinner)
+        let headerTitleField = NSTextField(labelWithString: String(localized: "Naprawa helpera systemowego"))
+        headerTitleField.font = NSFont.systemFont(ofSize: 18, weight: .bold)
+        headerTitleField.textColor = .labelColor
+        headerTitleField.translatesAutoresizingMaskIntoConstraints = false
+        headerCard.addSubview(headerTitleField)
+
+        let headerSubtitleField = NSTextField(labelWithString: String(localized: "Odświeżam rejestrację helpera i potwierdzam gotowość do pracy"))
+        headerSubtitleField.font = NSFont.systemFont(ofSize: 12, weight: .regular)
+        headerSubtitleField.textColor = .secondaryLabelColor
+        headerSubtitleField.translatesAutoresizingMaskIntoConstraints = false
+        headerCard.addSubview(headerSubtitleField)
+
+        let separatorView = NSView()
+        separatorView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(separatorView)
+
+        let separatorLabel = NSTextField(labelWithString: String(localized: "Postęp naprawy"))
+        separatorLabel.font = NSFont.systemFont(ofSize: 11, weight: .semibold)
+        separatorLabel.textColor = .secondaryLabelColor
+        separatorLabel.alignment = .center
+        separatorLabel.translatesAutoresizingMaskIntoConstraints = false
+        separatorView.addSubview(separatorLabel)
+
+        let separatorLeft = NSBox()
+        separatorLeft.boxType = .custom
+        separatorLeft.borderType = .lineBorder
+        separatorLeft.borderColor = NSColor.separatorColor.withAlphaComponent(0.5)
+        separatorLeft.contentViewMargins = .zero
+        separatorLeft.translatesAutoresizingMaskIntoConstraints = false
+        separatorView.addSubview(separatorLeft)
+
+        let separatorRight = NSBox()
+        separatorRight.boxType = .custom
+        separatorRight.borderType = .lineBorder
+        separatorRight.borderColor = NSColor.separatorColor.withAlphaComponent(0.5)
+        separatorRight.contentViewMargins = .zero
+        separatorRight.translatesAutoresizingMaskIntoConstraints = false
+        separatorView.addSubview(separatorRight)
+
+        let statusCard = NSVisualEffectView()
+        statusCard.material = .sidebar
+        statusCard.blendingMode = .withinWindow
+        statusCard.state = .active
+        statusCard.translatesAutoresizingMaskIntoConstraints = false
+        statusCard.wantsLayer = true
+        statusCard.layer?.cornerRadius = 14
+        statusCard.layer?.borderWidth = 1
+        statusCard.layer?.borderColor = NSColor.separatorColor.withAlphaComponent(0.35).cgColor
+        statusCard.layer?.backgroundColor = NSColor.windowBackgroundColor.withAlphaComponent(0.18).cgColor
+        contentView.addSubview(statusCard)
+
+        let statusIconView = NSImageView()
+        statusIconView.image = NSImage(systemSymbolName: "arrow.triangle.2.circlepath.circle.fill", accessibilityDescription: nil)
+        statusIconView.symbolConfiguration = NSImage.SymbolConfiguration(pointSize: 18, weight: .semibold)
+        statusIconView.contentTintColor = .systemBlue
+        statusIconView.translatesAutoresizingMaskIntoConstraints = false
+        statusCard.addSubview(statusIconView)
 
         let statusField = NSTextField(labelWithString: String(localized: "Przygotowanie..."))
-        statusField.font = NSFont.systemFont(ofSize: 13, weight: .semibold)
-        statusField.textColor = .secondaryLabelColor
-        statusField.frame = NSRect(x: 52, y: panelSize.height - 112, width: 540, height: 18)
-        contentView.addSubview(statusField)
+        statusField.font = NSFont.systemFont(ofSize: 14, weight: .semibold)
+        statusField.textColor = .labelColor
+        statusField.translatesAutoresizingMaskIntoConstraints = false
+        statusCard.addSubview(statusField)
 
-        let logContainer = NSBox(frame: NSRect(x: 20, y: 64, width: panelSize.width - 40, height: panelSize.height - 196))
+        let statusDetailField = NSTextField(labelWithString: String(localized: "Postęp naprawy jest aktualizowany na bieżąco"))
+        statusDetailField.font = NSFont.systemFont(ofSize: 12, weight: .regular)
+        statusDetailField.textColor = .secondaryLabelColor
+        statusDetailField.translatesAutoresizingMaskIntoConstraints = false
+        statusCard.addSubview(statusDetailField)
+
+        let statusProgressBar = NSProgressIndicator()
+        statusProgressBar.style = .bar
+        statusProgressBar.controlSize = .small
+        statusProgressBar.isIndeterminate = true
+        statusProgressBar.usesThreadedAnimation = true
+        statusProgressBar.translatesAutoresizingMaskIntoConstraints = false
+        statusCard.addSubview(statusProgressBar)
+
+        let detailsButton = NSButton(title: String(localized: "Pokaż dziennik techniczny"), target: self, action: #selector(toggleRepairDetails(_:)))
+        detailsButton.bezelStyle = .rounded
+        detailsButton.setButtonType(.momentaryPushIn)
+        detailsButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(detailsButton)
+
+        let logContainer = NSBox()
         logContainer.boxType = .custom
-        logContainer.cornerRadius = 10
-        logContainer.borderColor = NSColor.separatorColor
-        logContainer.fillColor = NSColor.windowBackgroundColor
+        logContainer.cornerRadius = 12
+        logContainer.borderColor = NSColor.separatorColor.withAlphaComponent(0.4)
+        logContainer.fillColor = NSColor.windowBackgroundColor.withAlphaComponent(0.85)
+        logContainer.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(logContainer)
 
-        let scrollFrame = NSRect(x: 1, y: 1, width: logContainer.frame.width - 2, height: logContainer.frame.height - 2)
-        let scrollView = NSScrollView(frame: scrollFrame)
+        let scrollView = NSScrollView()
         scrollView.hasVerticalScroller = true
         scrollView.autohidesScrollers = true
         scrollView.borderType = .noBorder
         scrollView.drawsBackground = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
 
-        let textView = NSTextView(frame: scrollView.bounds)
+        let textView = NSTextView()
         textView.isEditable = false
         textView.isSelectable = true
         textView.drawsBackground = false
@@ -996,10 +1445,92 @@ final class HelperServiceManager: NSObject {
         let closeButton = NSButton(title: String(localized: "Zamknij"), target: self, action: #selector(closeRepairProgressPanel(_:)))
         closeButton.bezelStyle = .rounded
         closeButton.isEnabled = false
-        closeButton.frame = NSRect(x: panelSize.width - 116, y: 20, width: 92, height: 30)
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(closeButton)
 
-        panel.contentView = contentView
+        let logHeightConstraint = logContainer.heightAnchor.constraint(equalToConstant: 0)
+        logHeightConstraint.priority = .required
+
+        NSLayoutConstraint.activate([
+            headerCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            headerCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            headerCard.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 18),
+
+            headerIconView.leadingAnchor.constraint(equalTo: headerCard.leadingAnchor, constant: 14),
+            headerIconView.topAnchor.constraint(equalTo: headerCard.topAnchor, constant: 14),
+            headerIconView.widthAnchor.constraint(equalToConstant: 28),
+            headerIconView.heightAnchor.constraint(equalToConstant: 28),
+
+            headerTitleField.leadingAnchor.constraint(equalTo: headerIconView.trailingAnchor, constant: 10),
+            headerTitleField.topAnchor.constraint(equalTo: headerCard.topAnchor, constant: 12),
+            headerTitleField.trailingAnchor.constraint(equalTo: headerCard.trailingAnchor, constant: -14),
+
+            headerSubtitleField.leadingAnchor.constraint(equalTo: headerTitleField.leadingAnchor),
+            headerSubtitleField.topAnchor.constraint(equalTo: headerTitleField.bottomAnchor, constant: 2),
+            headerSubtitleField.trailingAnchor.constraint(equalTo: headerTitleField.trailingAnchor),
+            headerSubtitleField.bottomAnchor.constraint(equalTo: headerCard.bottomAnchor, constant: -14),
+
+            separatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            separatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            separatorView.topAnchor.constraint(equalTo: headerCard.bottomAnchor, constant: 12),
+            separatorView.heightAnchor.constraint(equalToConstant: 18),
+
+            separatorLabel.centerXAnchor.constraint(equalTo: separatorView.centerXAnchor),
+            separatorLabel.centerYAnchor.constraint(equalTo: separatorView.centerYAnchor),
+            separatorLabel.widthAnchor.constraint(equalToConstant: 120),
+
+            separatorLeft.leadingAnchor.constraint(equalTo: separatorView.leadingAnchor),
+            separatorLeft.trailingAnchor.constraint(equalTo: separatorLabel.leadingAnchor, constant: -8),
+            separatorLeft.centerYAnchor.constraint(equalTo: separatorView.centerYAnchor),
+            separatorLeft.heightAnchor.constraint(equalToConstant: 1),
+
+            separatorRight.leadingAnchor.constraint(equalTo: separatorLabel.trailingAnchor, constant: 8),
+            separatorRight.trailingAnchor.constraint(equalTo: separatorView.trailingAnchor),
+            separatorRight.centerYAnchor.constraint(equalTo: separatorView.centerYAnchor),
+            separatorRight.heightAnchor.constraint(equalToConstant: 1),
+
+            statusCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            statusCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            statusCard.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 10),
+
+            statusIconView.leadingAnchor.constraint(equalTo: statusCard.leadingAnchor, constant: 14),
+            statusIconView.topAnchor.constraint(equalTo: statusCard.topAnchor, constant: 14),
+            statusIconView.widthAnchor.constraint(equalToConstant: 18),
+            statusIconView.heightAnchor.constraint(equalToConstant: 18),
+
+            statusField.leadingAnchor.constraint(equalTo: statusIconView.trailingAnchor, constant: 8),
+            statusField.topAnchor.constraint(equalTo: statusCard.topAnchor, constant: 12),
+            statusField.trailingAnchor.constraint(equalTo: statusCard.trailingAnchor, constant: -14),
+
+            statusDetailField.leadingAnchor.constraint(equalTo: statusField.leadingAnchor),
+            statusDetailField.topAnchor.constraint(equalTo: statusField.bottomAnchor, constant: 4),
+            statusDetailField.trailingAnchor.constraint(equalTo: statusField.trailingAnchor),
+
+            statusProgressBar.leadingAnchor.constraint(equalTo: statusCard.leadingAnchor, constant: 14),
+            statusProgressBar.trailingAnchor.constraint(equalTo: statusCard.trailingAnchor, constant: -14),
+            statusProgressBar.topAnchor.constraint(equalTo: statusDetailField.bottomAnchor, constant: 10),
+            statusProgressBar.heightAnchor.constraint(equalToConstant: 8),
+            statusProgressBar.bottomAnchor.constraint(equalTo: statusCard.bottomAnchor, constant: -12),
+
+            detailsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            detailsButton.topAnchor.constraint(equalTo: statusCard.bottomAnchor, constant: 12),
+
+            logContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            logContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            logContainer.topAnchor.constraint(equalTo: detailsButton.bottomAnchor, constant: 10),
+            logHeightConstraint,
+
+            scrollView.leadingAnchor.constraint(equalTo: logContainer.leadingAnchor, constant: 1),
+            scrollView.trailingAnchor.constraint(equalTo: logContainer.trailingAnchor, constant: -1),
+            scrollView.topAnchor.constraint(equalTo: logContainer.topAnchor, constant: 1),
+            scrollView.bottomAnchor.constraint(equalTo: logContainer.bottomAnchor, constant: -1),
+
+            closeButton.topAnchor.constraint(equalTo: logContainer.bottomAnchor, constant: 14),
+            closeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            closeButton.widthAnchor.constraint(equalToConstant: 92),
+            closeButton.heightAnchor.constraint(equalToConstant: 30),
+            closeButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -18)
+        ])
 
         if let ownerWindow = NSApp.keyWindow ?? NSApp.mainWindow {
             let ownerFrame = ownerWindow.frame
@@ -1014,9 +1545,18 @@ final class HelperServiceManager: NSObject {
 
         repairProgressPanel = panel
         repairStatusField = statusField
+        repairStatusDetailField = statusDetailField
+        repairStatusCardView = statusCard
+        repairStatusIconView = statusIconView
         repairLogTextView = textView
-        repairSpinner = statusSpinner
+        repairSpinner = nil
+        repairProgressBar = statusProgressBar
         repairCloseButton = closeButton
+        repairDetailsButton = detailsButton
+        repairLogContainerView = logContainer
+        repairLogHeightConstraint = logHeightConstraint
+        repairDetailsExpanded = false
+        logContainer.isHidden = true
 
         panel.orderFrontRegardless()
         NSApp.activate(ignoringOtherApps: true)
@@ -1036,17 +1576,122 @@ final class HelperServiceManager: NSObject {
         textView.scrollToEndOfDocument(nil)
     }
 
-    private func updateRepairStatus(text: String, result: Bool?) {
+    private func updateRepairStatus(text: String, detail: String, result: Bool?, symbolName: String?) {
         guard let statusField = repairStatusField else { return }
+        guard let detailField = repairStatusDetailField else { return }
+        guard let statusCard = repairStatusCardView else { return }
+        guard let statusIconView = repairStatusIconView else { return }
         statusField.stringValue = text
+        detailField.stringValue = detail
+
         switch result {
         case .some(true):
             statusField.textColor = .systemGreen
+            detailField.textColor = .secondaryLabelColor
+            statusIconView.image = NSImage(systemSymbolName: "checkmark.circle.fill", accessibilityDescription: nil)
+            statusIconView.contentTintColor = .systemGreen
+            statusCard.layer?.backgroundColor = NSColor.systemGreen.withAlphaComponent(0.15).cgColor
+            statusCard.layer?.borderColor = NSColor.systemGreen.withAlphaComponent(0.35).cgColor
         case .some(false):
             statusField.textColor = .systemRed
+            detailField.textColor = .secondaryLabelColor
+            statusIconView.image = NSImage(systemSymbolName: "exclamationmark.triangle.fill", accessibilityDescription: nil)
+            statusIconView.contentTintColor = .systemRed
+            statusCard.layer?.backgroundColor = NSColor.systemRed.withAlphaComponent(0.13).cgColor
+            statusCard.layer?.borderColor = NSColor.systemRed.withAlphaComponent(0.33).cgColor
         case .none:
-            statusField.textColor = .secondaryLabelColor
+            statusField.textColor = .labelColor
+            detailField.textColor = .secondaryLabelColor
+            let neutralSymbol = symbolName ?? "arrow.triangle.2.circlepath.circle.fill"
+            statusIconView.image = NSImage(systemSymbolName: neutralSymbol, accessibilityDescription: nil)
+            statusIconView.contentTintColor = .systemBlue
+            statusCard.layer?.backgroundColor = NSColor.windowBackgroundColor.withAlphaComponent(0.18).cgColor
+            statusCard.layer?.borderColor = NSColor.separatorColor.withAlphaComponent(0.35).cgColor
         }
+    }
+
+    private func userFacingRepairStatus(for message: String) -> String {
+        let lower = message.lowercased()
+        if lower.contains("rozpoczynanie operacji naprawy") { return String(localized: "Rozpoczynam naprawę helpera") }
+        if lower.contains("status helpera przed resetem") { return String(localized: "Sprawdzam bieżący stan helpera") }
+        if lower.contains("unregister") { return String(localized: "Usuwam poprzednią rejestrację") }
+        if lower.contains("oczekiwanie") { return String(localized: "Czekam na odświeżenie usług systemowych") }
+        if lower.contains("stary helper nie odpowiada") { return String(localized: "Poprzednia instancja helpera została zatrzymana") }
+        if lower.contains("register()") { return String(localized: "Rejestruję helpera od nowa") }
+        if lower.contains("status helpera po rejestracji") { return String(localized: "Potwierdzam poprawną rejestrację") }
+        if lower.contains("health") { return String(localized: "Sprawdzam komunikację z helperem") }
+        if lower.contains("zakończona sukcesem") || lower.contains("zakończona: ok") {
+            return String(localized: "Naprawa helpera zakończona")
+        }
+        if lower.contains("błąd") || lower.contains("error") {
+            return String(localized: "Naprawa helpera wymaga uwagi")
+        }
+        return String(localized: "Trwa naprawa helpera")
+    }
+
+    private func userFacingRepairStatusDetail(for message: String) -> String {
+        let lower = message.lowercased()
+        if lower.contains("po 3 s brak zmiany") {
+            return String(localized: "Brak zmiany po 3 sekundach, dodaję dodatkowe oczekiwanie")
+        }
+        if lower.contains("status helpera po unregister: nie zarejestrowany") {
+            return String(localized: "Poprzednia rejestracja została usunięta")
+        }
+        if lower.contains("stary helper nie odpowiada") {
+            return String(localized: "Można bezpiecznie przejść do ponownej rejestracji")
+        }
+        if lower.contains("status helpera po rejestracji: włączony") {
+            return String(localized: "Nowa usługa została aktywowana")
+        }
+        if lower.contains("health") {
+            return String(localized: "Sprawdzam, czy helper odpowiada poprawnie przez XPC")
+        }
+        if lower.contains("zakończona sukcesem") || lower.contains("zakończona: ok") {
+            return String(localized: "Proces został wykonany poprawnie")
+        }
+        if lower.contains("błąd") || lower.contains("error") {
+            return String(localized: "Szczegóły techniczne są dostępne w dzienniku poniżej")
+        }
+        return String(localized: "Status jest aktualizowany na bieżąco")
+    }
+
+    private func userFacingRepairStatusSymbol(for message: String) -> String {
+        let lower = message.lowercased()
+        if lower.contains("unregister") { return "trash.circle.fill" }
+        if lower.contains("register") { return "lock.shield.fill" }
+        if lower.contains("health") { return "checkmark.shield.fill" }
+        if lower.contains("oczekiwanie") || lower.contains("ponawiam") { return "hourglass.circle.fill" }
+        if lower.contains("stary helper nie odpowiada") { return "checkmark.circle.fill" }
+        if lower.contains("błąd") || lower.contains("error") { return "exclamationmark.triangle.fill" }
+        return "arrow.triangle.2.circlepath.circle.fill"
+    }
+
+    private func setRepairDetailsExpanded(_ expanded: Bool, animated: Bool) {
+        guard let panel = repairProgressPanel else { return }
+        repairDetailsExpanded = expanded
+        repairDetailsButton?.title = expanded
+        ? String(localized: "Ukryj dziennik techniczny")
+        : String(localized: "Pokaż dziennik techniczny")
+
+        repairLogContainerView?.isHidden = false
+        repairLogHeightConstraint?.constant = expanded ? 190 : 0
+
+        let targetHeight: CGFloat = expanded ? 650 : 450
+        var newFrame = panel.frame
+        let delta = targetHeight - panel.frame.height
+        newFrame.origin.y -= delta
+        newFrame.size.height = targetHeight
+
+        panel.setFrame(newFrame, display: true, animate: animated)
+        panel.contentView?.layoutSubtreeIfNeeded()
+
+        if !expanded {
+            repairLogContainerView?.isHidden = true
+        }
+    }
+
+    @objc private func toggleRepairDetails(_ sender: NSButton) {
+        setRepairDetailsExpanded(!repairDetailsExpanded, animated: true)
     }
 
     @objc private func closeRepairProgressPanel(_ sender: NSButton) {

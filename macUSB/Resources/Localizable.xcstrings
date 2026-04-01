@@ -2082,6 +2082,7 @@
       }
     },
     "Bieżący przebieg operacji" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2863,6 +2864,9 @@
         }
       }
     },
+    "Brak zmiany po 3 sekundach, dodaję dodatkowe oczekiwanie" : {
+
+    },
     "Cały proces może potrwać kilka minut." : {
       "localizations" : {
         "de" : {
@@ -3014,6 +3018,9 @@
           }
         }
       }
+    },
+    "Czekam na odświeżenie usług systemowych" : {
+
     },
     "Czy chcesz włączyć powiadomienia?" : {
       "localizations" : {
@@ -4481,6 +4488,9 @@
         }
       }
     },
+    "Helper jest gotowy do dalszej pracy" : {
+
+    },
     "Helper jest już usunięty" : {
       "localizations" : {
         "de" : {
@@ -4796,6 +4806,9 @@
           }
         }
       }
+    },
+    "Helper pozostał aktywny po unregister. Przerwano naprawę." : {
+
     },
     "Helper wymaga zatwierdzenia w Ustawieniach systemowych." : {
       "localizations" : {
@@ -8330,6 +8343,9 @@
     "Menedżer pobierania systemów macOS" : {
 
     },
+    "Można bezpiecznie przejść do ponownej rejestracji" : {
+
+    },
     "Napraw helpera" : {
       "localizations" : {
         "de" : {
@@ -8481,6 +8497,12 @@
           }
         }
       }
+    },
+    "Naprawa helpera systemowego" : {
+
+    },
+    "Naprawa helpera wymaga uwagi" : {
+
     },
     "Naprawa helpera zakończona" : {
       "localizations" : {
@@ -8635,6 +8657,7 @@
       }
     },
     "Naprawa helpera zakończona błędem." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8711,6 +8734,7 @@
       }
     },
     "Naprawa helpera zakończona pomyślnie." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9318,6 +9342,9 @@
         }
       }
     },
+    "Nie udało się aktywować helpera po pełnym resecie." : {
+
+    },
     "Nie udało się aktywować helpera." : {
       "localizations" : {
         "de" : {
@@ -9630,6 +9657,9 @@
           }
         }
       }
+    },
+    "Nie udało się usunąć starej rejestracji helpera." : {
+
     },
     "Nie udało się utworzyć proxy XPC helpera." : {
       "localizations" : {
@@ -11272,6 +11302,9 @@
         }
       }
     },
+    "Nowa usługa została aktywowana" : {
+
+    },
     "Oczekiwanie na plik .dmg, .iso, .cdr lub .app..." : {
       "localizations" : {
         "de" : {
@@ -11423,6 +11456,12 @@
           }
         }
       }
+    },
+    "Odświeżam rejestrację helpera i potwierdzam gotowość do pracy" : {
+
+    },
+    "Odświeżam usługę systemową i weryfikuję gotowość" : {
+
     },
     "OK" : {
       "localizations" : {
@@ -12231,6 +12270,9 @@
         }
       }
     },
+    "Pokaż dziennik techniczny" : {
+
+    },
     "Pokaż w Finderze" : {
 
     },
@@ -12629,6 +12671,12 @@
         }
       }
     },
+    "Poprzednia instancja helpera została zatrzymana" : {
+
+    },
+    "Poprzednia rejestracja została usunięta" : {
+
+    },
     "Português (BR)" : {
       "localizations" : {
         "de" : {
@@ -12704,6 +12752,15 @@
           }
         }
       }
+    },
+    "Postęp naprawy" : {
+
+    },
+    "Postęp naprawy jest aktualizowany na bieżąco" : {
+
+    },
+    "Potwierdzam poprawną rejestrację" : {
+
     },
     "Powiadomienia dla macUSB zostały zablokowane w ustawieniach systemowych. Aby otrzymywać informacje o zakończeniu procesów, należy zezwolić aplikacji na ich wyświetlanie w systemie." : {
       "localizations" : {
@@ -13324,6 +13381,9 @@
           }
         }
       }
+    },
+    "Proces został wykonany poprawnie" : {
+
     },
     "Proces został zatrzymany przez użytkownika" : {
       "localizations" : {
@@ -14579,6 +14639,9 @@
         }
       }
     },
+    "Przygotowuję naprawę helpera" : {
+
+    },
     "Przygotowywanie operacji..." : {
       "localizations" : {
         "de" : {
@@ -14730,6 +14793,9 @@
           }
         }
       }
+    },
+    "Rejestruję helpera od nowa" : {
+
     },
     "Repozytorium macUSB na GitHub" : {
       "localizations" : {
@@ -14959,6 +15025,9 @@
         }
       }
     },
+    "Rozpoczynam naprawę helpera" : {
+
+    },
     "Rozpoczynanie..." : {
       "localizations" : {
         "de" : {
@@ -15186,6 +15255,18 @@
           }
         }
       }
+    },
+    "Sprawdź dziennik techniczny, aby zobaczyć szczegóły" : {
+
+    },
+    "Sprawdzam bieżący stan helpera" : {
+
+    },
+    "Sprawdzam komunikację z helperem" : {
+
+    },
+    "Sprawdzam, czy helper odpowiada poprawnie przez XPC" : {
+
     },
     "Sprawdzanie anulowane" : {
 
@@ -15499,6 +15580,9 @@
           }
         }
       }
+    },
+    "Status jest aktualizowany na bieżąco" : {
+
     },
     "Status usługi: %@" : {
       "localizations" : {
@@ -15888,6 +15972,9 @@
           }
         }
       }
+    },
+    "Szczegóły techniczne są dostępne w dzienniku poniżej" : {
+
     },
     "Szczegóły: %@" : {
       "localizations" : {
@@ -16744,7 +16831,11 @@
         }
       }
     },
+    "Trwa naprawa helpera" : {
+
+    },
     "Trwa naprawa helpera..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -17364,6 +17455,9 @@
         }
       }
     },
+    "Ukryj dziennik techniczny" : {
+
+    },
     "Upewnij się, że wybrany obraz systemu pochodzi ze strony Mavericks Forever. Inne wersje mogą powodować błędy w trakcie tworzenia instalatora na nośniku USB." : {
       "comment" : "Mavericks detected alert description",
       "localizations" : {
@@ -17671,6 +17765,9 @@
           }
         }
       }
+    },
+    "Usuwam poprzednią rejestrację" : {
+
     },
     "Utworzono instalator systemu" : {
       "localizations" : {
