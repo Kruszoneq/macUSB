@@ -91,12 +91,14 @@ Primary protocols:
 Primary request types:
 - `HelperWorkflowRequestPayload` for USB workflows.
 - `DownloaderAssemblyRequestPayload` for downloader `.pkg` to `.app` assembly.
+- `DownloaderCleanupRequestPayload` for downloader session-temp cleanup.
 
 Primary progress/result types:
 - `HelperProgressEventPayload`
 - `HelperWorkflowResultPayload`
 - `DownloaderAssemblyProgressPayload`
 - `DownloaderAssemblyResultPayload`
+- `DownloaderCleanupResultPayload`
 
 Serialization:
 - `HelperXPCCodec` (`JSONEncoder`/`JSONDecoder`, ISO-8601 dates).
@@ -132,7 +134,13 @@ Contract invariants:
 ### Downloader Assembly Flow
 - App sends `DownloaderAssemblyRequestPayload`.
 - Daemon runs installer-based assembly and file operations.
+- Daemon normalizes ownership of the final installer `.app` to requester UID.
 - Progress and final result are reported over dedicated downloader assembly IPC methods.
+
+### Downloader Final Cleanup Flow
+- App sends `DownloaderCleanupRequestPayload` in the final cleanup stage.
+- Daemon removes the session temp directory and returns `DownloaderCleanupResultPayload`.
+- Cleanup is executed as the last downloader stage before summary (not inside assembly stage).
 
 ---
 
@@ -168,7 +176,7 @@ Daemon helper runtime:
 - `macUSBHelper/IPC/HelperIPC.swift`
   - daemon-side IPC contracts and payload types.
 - `macUSBHelper/Service/PrivilegedHelperService.swift`
-  - XPC service entrypoints and active executor lifecycle.
+  - XPC service entrypoints and active executor lifecycle, including downloader session cleanup endpoint.
 - `macUSBHelper/Service/HelperListenerDelegate.swift`
   - listener delegate and connection wiring.
 - `macUSBHelper/Workflow/HelperWorkflowExecutor.swift`
@@ -182,7 +190,7 @@ Daemon helper runtime:
 - `macUSBHelper/Workflow/HelperWorkflowFileOperations.swift`
   - helper-side file operations and command wrappers.
 - `macUSBHelper/DownloaderAssembly/DownloaderAssemblyExecutor.swift`
-  - downloader assembly execution orchestration.
+  - downloader assembly execution orchestration and final `.app` ownership normalization.
 - `macUSBHelper/DownloaderAssembly/DownloaderAssemblyProcess.swift`
   - installer output handling, progress mapping, app location logic.
 

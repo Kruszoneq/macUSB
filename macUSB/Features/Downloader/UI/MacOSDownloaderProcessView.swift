@@ -47,7 +47,7 @@ extension MacOSDownloaderWindowShellView {
                         downloadStageSectionDivider
 
                         VStack(spacing: 10) {
-                            ForEach(MontereyDownloadPlaceholderFlowStage.allCases, id: \.self) { stage in
+                            ForEach(MontereyDownloadFlowStage.allCases, id: \.self) { stage in
                                 downloadStageRow(for: stage)
                             }
                         }
@@ -78,7 +78,7 @@ extension MacOSDownloaderWindowShellView {
     }
 
     @ViewBuilder
-    func downloadStageRow(for stage: MontereyDownloadPlaceholderFlowStage) -> some View {
+    func downloadStageRow(for stage: MontereyDownloadFlowStage) -> some View {
         let stageState = downloadFlowModel.visualState(for: stage)
 
         switch stageState {
@@ -170,7 +170,7 @@ extension MacOSDownloaderWindowShellView {
         }
     }
 
-    func iconForDownloadStage(_ stage: MontereyDownloadPlaceholderFlowStage) -> String {
+    func iconForDownloadStage(_ stage: MontereyDownloadFlowStage) -> String {
         switch stage {
         case .connection:
             return "network"
@@ -187,7 +187,7 @@ extension MacOSDownloaderWindowShellView {
         }
     }
 
-    func downloadStageTitle(for stage: MontereyDownloadPlaceholderFlowStage) -> String {
+    func downloadStageTitle(for stage: MontereyDownloadFlowStage) -> String {
         switch stage {
         case .connection:
             return "Sprawdzanie połączenia"
@@ -204,7 +204,7 @@ extension MacOSDownloaderWindowShellView {
         }
     }
 
-    func downloadStageDescription(for stage: MontereyDownloadPlaceholderFlowStage) -> String? {
+    func downloadStageDescription(for stage: MontereyDownloadFlowStage) -> String? {
         switch stage {
         case .connection:
             return downloadFlowModel.connectionStatusText
@@ -221,7 +221,7 @@ extension MacOSDownloaderWindowShellView {
         }
     }
 
-    func downloadStageProgress(for stage: MontereyDownloadPlaceholderFlowStage) -> Double? {
+    func downloadStageProgress(for stage: MontereyDownloadFlowStage) -> Double? {
         switch stage {
         case .connection:
             return nil

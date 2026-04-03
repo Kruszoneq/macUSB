@@ -15,14 +15,16 @@ Before implementation, recommendations, or review:
 
 1. Read this file in full.
 2. Read relevant section(s) in `docs/reference/APPLICATION_REFERENCE.md` for the task scope.
-3. If scope is cross-cutting or uncertain, read `docs/reference/APPLICATION_REFERENCE.md` in full.
-4. Build one active ruleset before changing code.
+3. For downloader-scope tasks, read `docs/reference/DOWNLOADER.md`.
+4. If scope is cross-cutting or uncertain, read `docs/reference/APPLICATION_REFERENCE.md` in full.
+5. Build one active ruleset before changing code.
 
 ## Repository map
 
 - App runtime: `macUSB/`
 - Privileged helper: `macUSBHelper/main.swift`
 - Runtime contract: `docs/reference/APPLICATION_REFERENCE.md`
+- Downloader runtime reference: `docs/reference/DOWNLOADER.md`
 - Release notes: `docs/reference/CHANGELOG.md`
 - Agent process rules: `docs/AGENTS.md`
 

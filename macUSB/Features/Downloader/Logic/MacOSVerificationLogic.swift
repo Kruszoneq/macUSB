@@ -1,7 +1,7 @@
 import Foundation
 import CryptoKit
 
-extension MontereyDownloadPlaceholderFlowModel {
+extension MontereyDownloadFlowModel {
     private enum DigestVerificationFailure: LocalizedError {
         case mismatch(fileName: String, algorithm: String, expected: String, actual: String)
 

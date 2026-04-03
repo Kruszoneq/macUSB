@@ -1,7 +1,7 @@
 import Foundation
 import AppKit
 
-extension MontereyDownloadPlaceholderFlowModel {
+extension MontereyDownloadFlowModel {
     enum CleanupCompletionReason {
         case success
         case failed

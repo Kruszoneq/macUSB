@@ -7,7 +7,7 @@ struct MacOSDownloaderWindowShellView: View {
     let onClose: () -> Void
 
     @StateObject var logic = MacOSDownloaderLogic()
-    @StateObject var downloadFlowModel = MontereyDownloadPlaceholderFlowModel()
+    @StateObject var downloadFlowModel = MontereyDownloadFlowModel()
     @State var isOptionsPresented = false
     @State var showAllAvailableVersions = false
     @State var selectedInstallerID: String?
@@ -149,13 +149,13 @@ struct MacOSDownloaderWindowShellView: View {
         }
     }
 
-    func supportsMontereyPlaceholderDownload(_ entry: MacOSInstallerEntry) -> Bool {
+    func supportsMontereyDownload(_ entry: MacOSInstallerEntry) -> Bool {
         let normalizedName = entry.name.lowercased()
         return normalizedName.contains("monterey") || entry.version.split(separator: ".").first == "12"
     }
 
     func handleDownloadTap(for entry: MacOSInstallerEntry) {
-        guard supportsMontereyPlaceholderDownload(entry) else {
+        guard supportsMontereyDownload(entry) else {
             AppLogging.info(
                 "Pobieranie jest obecnie dostepne tylko dla macOS Monterey.",
                 category: "Downloader"

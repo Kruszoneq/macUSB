@@ -1,13 +1,13 @@
 import Foundation
 import Combine
 
-enum DownloadPlaceholderStageVisualState {
+enum DownloadStageVisualState {
     case pending
     case active
     case completed
 }
 
-enum MontereyDownloadPlaceholderFlowStage: Int, CaseIterable {
+enum MontereyDownloadFlowStage: Int, CaseIterable {
     case connection
     case downloading
     case verifying
@@ -85,9 +85,9 @@ struct DownloadManifest: Hashable {
 }
 
 @MainActor
-final class MontereyDownloadPlaceholderFlowModel: ObservableObject {
-    @Published var currentStage: MontereyDownloadPlaceholderFlowStage = .connection
-    @Published var completedStages: Set<MontereyDownloadPlaceholderFlowStage> = []
+final class MontereyDownloadFlowModel: ObservableObject {
+    @Published var currentStage: MontereyDownloadFlowStage = .connection
+    @Published var completedStages: Set<MontereyDownloadFlowStage> = []
     @Published var isFinished: Bool = false
     @Published var workflowState: DownloadSessionState = .idle
     @Published var failureMessage: String?
@@ -169,7 +169,7 @@ final class MontereyDownloadPlaceholderFlowModel: ObservableObject {
         }
     }
 
-    func visualState(for stage: MontereyDownloadPlaceholderFlowStage) -> DownloadPlaceholderStageVisualState {
+    func visualState(for stage: MontereyDownloadFlowStage) -> DownloadStageVisualState {
         if completedStages.contains(stage) {
             return .completed
         }

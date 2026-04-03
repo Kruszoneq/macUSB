@@ -1,7 +1,7 @@
 import Foundation
 import Darwin
 
-extension MontereyDownloadPlaceholderFlowModel {
+extension MontereyDownloadFlowModel {
     func runInstallerBuild(
         manifest: DownloadManifest,
         entry: MacOSInstallerEntry
