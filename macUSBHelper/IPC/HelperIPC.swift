@@ -69,12 +69,22 @@ struct DownloaderAssemblyResultPayload: Codable {
     let cleanupErrorMessage: String?
 }
 
+struct DownloaderCleanupRequestPayload: Codable {
+    let sessionRootPath: String
+}
+
+struct DownloaderCleanupResultPayload: Codable {
+    let success: Bool
+    let errorMessage: String?
+}
+
 @objc(MacUSBPrivilegedHelperToolXPCProtocol)
 protocol PrivilegedHelperToolXPCProtocol {
     func startWorkflow(_ requestData: NSData, reply: @escaping (NSString?, NSError?) -> Void)
     func cancelWorkflow(_ workflowID: String, reply: @escaping (Bool, NSError?) -> Void)
     func startDownloaderAssembly(_ requestData: NSData, reply: @escaping (NSString?, NSError?) -> Void)
     func cancelDownloaderAssembly(_ workflowID: String, reply: @escaping (Bool, NSError?) -> Void)
+    func cleanupDownloaderSession(_ requestData: NSData, reply: @escaping (NSData?, NSError?) -> Void)
     func queryHealth(_ reply: @escaping (Bool, NSString) -> Void)
 }
 

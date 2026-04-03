@@ -58,8 +58,7 @@ struct MacOSDownloaderWindowShellView: View {
         .sheet(isPresented: $isOptionsPresented) {
             MacOSDownloaderOptionsSheetView(
                 showAllAvailableVersions: $showAllAvailableVersions,
-                preserveDownloadedFilesInDebug: $downloadFlowModel.preserveDownloadedFilesInDebug,
-                skipAppSignatureVerificationInDebug: $downloadFlowModel.skipAppSignatureVerificationInDebug
+                preserveDownloadedFilesInDebug: $downloadFlowModel.preserveDownloadedFilesInDebug
             )
         }
         .task {
@@ -211,7 +210,6 @@ struct MacOSDownloaderWindowShellView: View {
 private struct MacOSDownloaderOptionsSheetView: View {
     @Binding var showAllAvailableVersions: Bool
     @Binding var preserveDownloadedFilesInDebug: Bool
-    @Binding var skipAppSignatureVerificationInDebug: Bool
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -231,8 +229,6 @@ private struct MacOSDownloaderOptionsSheetView: View {
                 .foregroundStyle(.secondary)
 
             Toggle("DEBUG: Nie usuwaj pobranych plików", isOn: $preserveDownloadedFilesInDebug)
-                .toggleStyle(.checkbox)
-            Toggle("DEBUG: Pomiń weryfikację podpisu .app", isOn: $skipAppSignatureVerificationInDebug)
                 .toggleStyle(.checkbox)
             #endif
 

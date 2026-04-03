@@ -68,14 +68,35 @@ final class DownloaderAssemblyExecutor {
                 try FileManager.default.removeItem(at: destinationURL)
             }
 
-            emit(percent: 0.88, status: "Kopiowanie instalatora .app do katalogu sesji")
+            emit(
+                percent: 0.88,
+                status: "Kopiowanie instalatora .app do katalogu sesji",
+                logLine: "assembly copy-to-session start source=\(assembledAppURL.path) destination=\(destinationURL.path)"
+            )
             try runCommand(
                 executable: "/usr/bin/ditto",
                 arguments: [assembledAppURL.path, destinationURL.path]
             )
+            emit(
+                percent: 0.91,
+                status: "Kopiowanie instalatora .app do katalogu sesji",
+                logLine: "assembly copy-to-session success destination=\(destinationURL.path)"
+            )
 
-            emit(percent: 0.94, status: "Przenoszenie instalatora do katalogu docelowego")
+            emit(
+                percent: 0.94,
+                status: "Przenoszenie instalatora do katalogu docelowego",
+                logLine: "assembly move-to-final start source=\(destinationURL.path) destination_dir=\(request.finalDestinationDirectoryPath)"
+            )
             let finalDestinationURL = try moveInstallerToFinalDestination(from: destinationURL)
+            emit(
+                percent: 0.97,
+                status: "Przenoszenie instalatora do katalogu docelowego",
+                logLine: "assembly move-to-final success destination=\(finalDestinationURL.path)"
+            )
+
+            emit(percent: 0.975, status: "Finalizacja uprawnien instalatora")
+            try normalizeOwnership(path: finalDestinationURL.path, requesterUID: request.requesterUID)
 
             if request.cleanupSessionFiles {
                 emit(percent: 0.98, status: "Czyszczenie plików tymczasowych sesji")
@@ -101,10 +122,7 @@ final class DownloaderAssemblyExecutor {
             }
         }
 
-        if flowSuccess && cleanupRequested && !cleanupSucceeded {
-            flowSuccess = false
-            flowErrorMessage = "Czyszczenie plików tymczasowych nie powiodło się: \(cleanupErrorMessage ?? "Nieznany błąd")"
-        } else if !flowSuccess, let cleanupErrorMessage, cleanupRequested {
+        if !flowSuccess, let cleanupErrorMessage, cleanupRequested {
             flowErrorMessage = "\(flowErrorMessage ?? "Nieznany błąd"). Dodatkowo cleanup sesji nie powiódł się: \(cleanupErrorMessage)"
         }
 
@@ -117,5 +135,31 @@ final class DownloaderAssemblyExecutor {
             cleanupSucceeded: cleanupSucceeded,
             cleanupErrorMessage: cleanupErrorMessage
         )
+    }
+
+    private func normalizeOwnership(path: String, requesterUID: UInt32) throws {
+        guard requesterUID > 0 else { return }
+        do {
+            try runCommand(
+                executable: "/usr/sbin/chown",
+                arguments: ["-R", "\(requesterUID)", path]
+            )
+            emit(
+                percent: nil,
+                status: "Finalizacja uprawnien instalatora",
+                logLine: "assembly ownership normalize success uid=\(requesterUID) path=\(path)"
+            )
+        } catch {
+            emit(
+                percent: nil,
+                status: "Finalizacja uprawnien instalatora",
+                logLine: "assembly ownership normalize failed uid=\(requesterUID) path=\(path) error=\(error.localizedDescription)"
+            )
+            throw NSError(
+                domain: "macUSBHelper",
+                code: 550,
+                userInfo: [NSLocalizedDescriptionKey: "Nie udalo sie ustawic wlasciciela instalatora na domyslnego uzytkownika: \(error.localizedDescription)"]
+            )
+        }
     }
 }

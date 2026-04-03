@@ -24,7 +24,7 @@ extension MontereyDownloadPlaceholderFlowModel {
             outputDirectoryPath: outputDirectory.path,
             expectedAppName: "Install macOS Monterey.app",
             finalDestinationDirectoryPath: plannedInstallerFolderURL().path,
-            cleanupSessionFiles: !shouldRetainSessionFilesForDebugMode(),
+            cleanupSessionFiles: false,
             requesterUID: getuid()
         )
         cleanupDelegatedToHelper = request.cleanupSessionFiles
@@ -40,6 +40,8 @@ extension MontereyDownloadPlaceholderFlowModel {
             sessionCleanupHandledByHelper = false
             helperCleanupFailureMessage = result.cleanupErrorMessage
         } else {
+            // Cleanup sesji wykonujemy zawsze jako osobny, ostatni etap
+            // bezposrednio przed podsumowaniem.
             sessionCleanupHandledByHelper = false
             helperCleanupFailureMessage = nil
         }
@@ -69,6 +71,7 @@ extension MontereyDownloadPlaceholderFlowModel {
         copyProgress = 0.85
         try validateFinalInstallerApp(
             at: finalAppURL,
+            packageURL: packageURL,
             expectedVersion: entry.version,
             expectedBuild: entry.build
         )
@@ -167,17 +170,11 @@ extension MontereyDownloadPlaceholderFlowModel {
 
     private func validateFinalInstallerApp(
         at appURL: URL,
+        packageURL: URL,
         expectedVersion: String,
         expectedBuild: String
     ) throws {
-        if shouldSkipAppSignatureVerificationForDebug() {
-            AppLogging.info(
-                "DEBUG: Pomijam weryfikacje podpisu .app dla \(appURL.lastPathComponent).",
-                category: "Downloader"
-            )
-        } else {
-            try verifyCodeSignature(of: appURL)
-        }
+        verifyCodeSignatureNonBlocking(of: appURL, packageURL: packageURL)
         try verifyInstallerBuildIfAvailable(
             of: appURL,
             expectedBuild: expectedBuild,
@@ -185,33 +182,61 @@ extension MontereyDownloadPlaceholderFlowModel {
         )
     }
 
-    private func shouldSkipAppSignatureVerificationForDebug() -> Bool {
-        #if DEBUG
-        return skipAppSignatureVerificationInDebug
-        #else
-        return false
-        #endif
-    }
-
-    private func verifyCodeSignature(of appURL: URL) throws {
+    private func verifyCodeSignatureNonBlocking(of appURL: URL, packageURL: URL) {
+        let expectedCodesign = "exit=0"
         let codesign = runAndCapture(
             executable: "/usr/bin/codesign",
             arguments: ["--verify", "--deep", "--verbose=2", appURL.path]
         )
-        guard codesign.status == 0 else {
-            throw DownloadFailureReason.assemblyFailed(
-                "Weryfikacja podpisu .app nie powiodla sie\(codesign.output.isEmpty ? "" : ": \(codesign.output)")"
+
+        if codesign.status == 0 {
+            AppLogging.info(
+                "Weryfikacja podpisu .app (codesign): expected=\(expectedCodesign), actual=exit=\(codesign.status) dla \(appURL.lastPathComponent).",
+                category: "Downloader"
             )
+        } else {
+            let details = codesign.output.isEmpty ? "brak szczegolow" : codesign.output
+            AppLogging.error(
+                "Weryfikacja podpisu .app (codesign) niezgodna: expected=\(expectedCodesign), actual=exit=\(codesign.status), details=\(details). Kontynuuje bez blokowania przeplywu.",
+                category: "Downloader"
+            )
+            if isLegacyResourceEnvelopeWarning(details) {
+                verifyPackageSignatureWithPkgutilNonBlocking(packageURL: packageURL)
+            }
+        }
+    }
+
+    private func isLegacyResourceEnvelopeWarning(_ text: String) -> Bool {
+        let normalized = text.lowercased()
+        return normalized.contains("resource envelope is obsolete")
+            || normalized.contains("custom omit rules")
+    }
+
+    private func verifyPackageSignatureWithPkgutilNonBlocking(packageURL: URL) {
+        guard FileManager.default.fileExists(atPath: packageURL.path) else {
+            AppLogging.info(
+                "Legacy warning z codesign: pomijam pkgutil, bo pakiet nie jest juz dostepny pod \(packageURL.path).",
+                category: "Downloader"
+            )
+            return
         }
 
-        let gatekeeper = runAndCapture(
-            executable: "/usr/sbin/spctl",
-            arguments: ["--assess", "--type", "execute", "--verbose=2", appURL.path]
+        let expectedPkgutil = "signature valid (exit=0)"
+        let pkgutil = runAndCapture(
+            executable: "/usr/sbin/pkgutil",
+            arguments: ["--check-signature", packageURL.path]
         )
-        if gatekeeper.status != 0 {
-            let details = gatekeeper.output.isEmpty ? "brak szczegolow" : gatekeeper.output
+
+        if pkgutil.status == 0 {
+            let details = pkgutil.output.isEmpty ? "brak szczegolow" : pkgutil.output
             AppLogging.info(
-                "Gatekeeper assessment zwrocil ostrzezenie dla \(appURL.lastPathComponent): \(details)",
+                "Fallback podpisu pakietu (pkgutil): expected=\(expectedPkgutil), actual=signature valid (exit=\(pkgutil.status)), details=\(details)",
+                category: "Downloader"
+            )
+        } else {
+            let details = pkgutil.output.isEmpty ? "brak szczegolow" : pkgutil.output
+            AppLogging.error(
+                "Fallback podpisu pakietu (pkgutil) niezgodny: expected=\(expectedPkgutil), actual=invalid/warning (exit=\(pkgutil.status)), details=\(details). Kontynuuje bez blokowania przeplywu.",
                 category: "Downloader"
             )
         }

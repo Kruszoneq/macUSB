@@ -92,6 +92,7 @@ final class MontereyDownloadPlaceholderFlowModel: ObservableObject {
     @Published var workflowState: DownloadSessionState = .idle
     @Published var failureMessage: String?
     @Published var isPartialSuccess: Bool = false
+    @Published var cleanupWarningMessage: String?
 
     @Published var connectionStatusText: String = "Weryfikuję połączenie z serwerami Apple..."
     @Published var downloadCurrentIndex: Int = 0
@@ -118,7 +119,6 @@ final class MontereyDownloadPlaceholderFlowModel: ObservableObject {
     @Published var discoveredDownloadItems: [DownloadManifestItem] = []
 
     @Published var preserveDownloadedFilesInDebug: Bool = false
-    @Published var skipAppSignatureVerificationInDebug: Bool = false
 
     var workflowTask: Task<Void, Never>?
     var processStartedAt: Date?
@@ -186,6 +186,7 @@ final class MontereyDownloadPlaceholderFlowModel: ObservableObject {
         workflowState = .idle
         failureMessage = nil
         isPartialSuccess = false
+        cleanupWarningMessage = nil
 
         connectionStatusText = "Weryfikuję połączenie z serwerami Apple..."
         downloadCurrentIndex = 0
@@ -242,9 +243,16 @@ final class MontereyDownloadPlaceholderFlowModel: ObservableObject {
             try await runCleanup(completionReason: .success)
 
             updateSummaryMetrics()
-            playCompletionSound(success: true)
             isFinished = true
-            workflowState = .completed
+            if let cleanupWarningMessage, !cleanupWarningMessage.isEmpty {
+                failureMessage = cleanupWarningMessage
+                isPartialSuccess = finalInstallerAppURL != nil
+                workflowState = .failed
+                playCompletionSound(success: true)
+            } else {
+                workflowState = .completed
+                playCompletionSound(success: true)
+            }
         } catch is CancellationError {
             workflowState = .cancelled
             failureMessage = nil
@@ -261,22 +269,33 @@ final class MontereyDownloadPlaceholderFlowModel: ObservableObject {
             let technicalMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
             failureMessage = userFacingFailureMessage(for: technicalMessage)
             workflowState = .failed
+            let isCleanupFailure = {
+                if case DownloadFailureReason.cleanupFailed = error { return true }
+                return false
+            }()
 
             AppLogging.error(
                 "Pobieranie Monterey zakonczone bledem: \(technicalMessage)",
                 category: "Downloader"
             )
 
-            do {
-                try await runCleanup(completionReason: .failed)
-            } catch {
-                AppLogging.error(
-                    "Cleanup po bledzie pobierania nie powiodl sie: \(error.localizedDescription)",
-                    category: "Downloader"
-                )
+            if !isCleanupFailure {
+                do {
+                    try await runCleanup(completionReason: .failed)
+                } catch {
+                    AppLogging.error(
+                        "Cleanup po bledzie pobierania nie powiodl sie: \(error.localizedDescription)",
+                        category: "Downloader"
+                    )
+                }
             }
 
-            isPartialSuccess = (finalInstallerAppURL != nil) && completedStages.contains(.cleanup)
+            if isCleanupFailure, finalInstallerAppURL != nil {
+                isPartialSuccess = true
+                failureMessage = "Instalator jest gotowy, ale nie udalo sie usunac plikow tymczasowych. Szczegoly znajdziesz w logach"
+            } else {
+                isPartialSuccess = (finalInstallerAppURL != nil) && completedStages.contains(.cleanup)
+            }
             updateSummaryMetrics()
             playCompletionSound(success: false)
             isFinished = true

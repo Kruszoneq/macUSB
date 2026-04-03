@@ -97,58 +97,63 @@ extension MacOSDownloaderWindowShellView {
             }
 
         case .active:
-            StatusCard(
-                tone: .active,
-                cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode())
-            ) {
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack(spacing: 12) {
-                        Image(systemName: iconForDownloadStage(stage))
-                            .font(.title3)
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 12) {
+                    Image(systemName: iconForDownloadStage(stage))
+                        .font(.title3)
+                        .foregroundColor(.accentColor)
+                        .frame(width: 24)
+                    Text(downloadStageTitle(for: stage))
+                        .font(.headline)
+                    Spacer()
+                    if stage == .downloading {
+                        Text(downloadProgressText())
+                            .font(.title3.monospacedDigit())
+                            .fontWeight(.semibold)
                             .foregroundColor(.accentColor)
-                            .frame(width: 24)
-                        Text(downloadStageTitle(for: stage))
-                            .font(.headline)
-                        Spacer()
-                        if stage == .downloading {
-                            Text(downloadProgressText())
-                                .font(.title3.monospacedDigit())
-                                .fontWeight(.semibold)
-                                .foregroundColor(.accentColor)
-                        }
                     }
+                }
 
-                    if let description = downloadStageDescription(for: stage) {
-                        Text(description)
-                            .font(.subheadline)
+                if let description = downloadStageDescription(for: stage) {
+                    Text(description)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+
+                if let progress = downloadStageProgress(for: stage) {
+                    ProgressView(value: progress)
+                        .progressViewStyle(.linear)
+                } else {
+                    ProgressView()
+                        .progressViewStyle(.linear)
+                }
+
+                if stage == .downloading {
+                    HStack {
+                        Text(verbatim: downloadSpeedLabelText())
+                            .font(.subheadline.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text(downloadFlowModel.downloadTransferredText)
+                            .font(.caption.monospacedDigit())
                             .foregroundStyle(.secondary)
                     }
 
-                    if let progress = downloadStageProgress(for: stage) {
-                        ProgressView(value: progress)
-                            .progressViewStyle(.linear)
-                    } else {
-                        ProgressView()
-                            .progressViewStyle(.linear)
-                    }
-
-                    if stage == .downloading {
-                        HStack {
-                            Text(verbatim: downloadSpeedLabelText())
-                                .font(.subheadline.monospacedDigit())
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                            Text(downloadFlowModel.downloadTransferredText)
-                                .font(.caption.monospacedDigit())
-                                .foregroundStyle(.secondary)
-                        }
-
-                        if !downloadFlowModel.discoveredDownloadItems.isEmpty {
-                            downloadManifestInlineListView
-                        }
+                    if !downloadFlowModel.discoveredDownloadItems.isEmpty {
+                        downloadManifestInlineListView
                     }
                 }
             }
+            .padding(MacUSBDesignTokens.panelInnerPadding)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(activeStageBackgroundFill)
+            .overlay(activeStageBackgroundStroke)
+            .clipShape(
+                RoundedRectangle(
+                    cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode()),
+                    style: .continuous
+                )
+            )
 
         case .completed:
             StatusCard(tone: .neutral, density: .compact) {
@@ -295,5 +300,21 @@ extension MacOSDownloaderWindowShellView {
         }
 
         return "clock.fill"
+    }
+
+    private var activeStageBackgroundFill: some View {
+        RoundedRectangle(
+            cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode()),
+            style: .continuous
+        )
+        .fill(Color.accentColor.opacity(0.14))
+    }
+
+    private var activeStageBackgroundStroke: some View {
+        RoundedRectangle(
+            cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode()),
+            style: .continuous
+        )
+        .stroke(Color.accentColor.opacity(0.30), lineWidth: 0.6)
     }
 }

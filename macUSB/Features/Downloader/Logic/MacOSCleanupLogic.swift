@@ -36,13 +36,19 @@ extension MontereyDownloadPlaceholderFlowModel {
                 return
             }
             let reason = helperCleanupFailureMessage ?? "Helper nie potwierdził usunięcia plików tymczasowych"
+            cleanupWarningMessage = "Instalator jest gotowy, ale pliki tymczasowe nie zostaly usuniete automatycznie. Szczegoly znajdziesz w logach"
+            cleanupStatusText = "Cleanup zakończony z ostrzeżeniem..."
+            summaryTemporaryFilesText = "Wymaga ręcznego usunięcia"
+            cleanupProgress = 1
+            completedStages.insert(.cleanup)
             AppLogging.error(
-                "Helper cleanup niepotwierdzony, uruchamiam lokalne czyszczenie sesji: \(reason)",
+                "Helper cleanup niepotwierdzony: \(reason)",
                 category: "Downloader"
             )
+            return
         }
 
-        guard let activeSessionRootURL else {
+        guard let sessionRootURL = activeSessionRootURL else {
             cleanupStatusText = "Brak plików tymczasowych do usunięcia..."
             summaryTemporaryFilesText = "Brak plików tymczasowych"
             cleanupProgress = 1
@@ -54,9 +60,15 @@ extension MontereyDownloadPlaceholderFlowModel {
         cleanupProgress = 0.2
 
         do {
-            if FileManager.default.fileExists(atPath: activeSessionRootURL.path) {
-                try FileManager.default.removeItem(at: activeSessionRootURL)
+            let helperResult = try await requestHelperCleanup(sessionRootURL: sessionRootURL)
+            if !helperResult.success {
+                throw DownloadFailureReason.cleanupFailed(
+                    helperResult.errorMessage ?? "Helper nie potwierdzil usuniecia katalogu sesji"
+                )
             }
+            activeSessionRootURL = nil
+            activeSessionPayloadURL = nil
+            activeSessionOutputURL = nil
             cleanupProgress = 1
             completedStages.insert(.cleanup)
             cleanupStatusText = "Pliki tymczasowe zostały usunięte..."
@@ -64,6 +76,17 @@ extension MontereyDownloadPlaceholderFlowModel {
         } catch {
             summaryTemporaryFilesText = "Nie usunięto plików tymczasowych"
             throw DownloadFailureReason.cleanupFailed(error.localizedDescription)
+        }
+    }
+
+    private func requestHelperCleanup(
+        sessionRootURL: URL
+    ) async throws -> DownloaderCleanupResultPayload {
+        let request = DownloaderCleanupRequestPayload(sessionRootPath: sessionRootURL.path)
+        return await withCheckedContinuation { continuation in
+            PrivilegedOperationClient.shared.cleanupDownloaderSession(request: request) { result in
+                continuation.resume(returning: result)
+            }
         }
     }
 

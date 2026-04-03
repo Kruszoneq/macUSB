@@ -241,6 +241,56 @@ final class PrivilegedOperationClient: NSObject {
         }
     }
 
+    func cleanupDownloaderSession(
+        request: DownloaderCleanupRequestPayload,
+        completion: @escaping (DownloaderCleanupResultPayload) -> Void
+    ) {
+        let fail: (String) -> Void = { message in
+            DispatchQueue.main.async {
+                completion(DownloaderCleanupResultPayload(success: false, errorMessage: message))
+            }
+        }
+
+        guard let proxy = helperProxy(onError: { message in
+            fail(message)
+        }) else {
+            fail(String(localized: "Nie udało się uzyskać połączenia XPC z helperem."))
+            return
+        }
+
+        let requestData: Data
+        do {
+            requestData = try HelperXPCCodec.encode(request)
+        } catch {
+            fail("Nie udalo sie zakodowac zadania cleanupu: \(error.localizedDescription)")
+            return
+        }
+
+        proxy.cleanupDownloaderSession(requestData as NSData) { data, error in
+            DispatchQueue.main.async {
+                if let error {
+                    completion(DownloaderCleanupResultPayload(success: false, errorMessage: error.localizedDescription))
+                    return
+                }
+                guard let data else {
+                    completion(DownloaderCleanupResultPayload(success: false, errorMessage: "Helper nie zwrócił wyniku cleanupu."))
+                    return
+                }
+                do {
+                    let result = try HelperXPCCodec.decode(DownloaderCleanupResultPayload.self, from: data as Data)
+                    completion(result)
+                } catch {
+                    completion(
+                        DownloaderCleanupResultPayload(
+                            success: false,
+                            errorMessage: "Nie udalo sie zdekodowac wyniku cleanupu: \(error.localizedDescription)"
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     func queryHealth(completion: @escaping (Bool, String) -> Void) {
         queryHealth(withTimeout: healthReplyTimeout, completion: completion)
     }

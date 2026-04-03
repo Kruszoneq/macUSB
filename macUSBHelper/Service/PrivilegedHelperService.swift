@@ -133,6 +133,63 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
         }
     }
 
+    func cleanupDownloaderSession(_ requestData: NSData, reply: @escaping (NSData?, NSError?) -> Void) {
+        queue.async {
+            guard self.activeExecutor == nil, self.activeDownloaderAssemblyExecutor == nil else {
+                let error = NSError(
+                    domain: "macUSBHelper",
+                    code: 409,
+                    userInfo: [NSLocalizedDescriptionKey: "Helper realizuje już inne zadanie."]
+                )
+                reply(nil, error)
+                return
+            }
+
+            let request: DownloaderCleanupRequestPayload
+            do {
+                request = try HelperXPCCodec.decode(DownloaderCleanupRequestPayload.self, from: requestData as Data)
+            } catch {
+                let err = NSError(
+                    domain: "macUSBHelper",
+                    code: 400,
+                    userInfo: [NSLocalizedDescriptionKey: "Nieprawidłowe żądanie cleanupu downloadera: \(error.localizedDescription)"]
+                )
+                reply(nil, err)
+                return
+            }
+
+            let sessionRootURL = URL(fileURLWithPath: request.sessionRootPath, isDirectory: true)
+            let result: DownloaderCleanupResultPayload
+            do {
+                if FileManager.default.fileExists(atPath: sessionRootURL.path) {
+                    try FileManager.default.removeItem(at: sessionRootURL)
+                }
+                if FileManager.default.fileExists(atPath: sessionRootURL.path) {
+                    throw NSError(
+                        domain: "macUSBHelper",
+                        code: 500,
+                        userInfo: [NSLocalizedDescriptionKey: "Katalog sesji nadal istnieje po cleanup: \(sessionRootURL.path)"]
+                    )
+                }
+                result = DownloaderCleanupResultPayload(success: true, errorMessage: nil)
+            } catch {
+                result = DownloaderCleanupResultPayload(success: false, errorMessage: error.localizedDescription)
+            }
+
+            do {
+                let encoded = try HelperXPCCodec.encode(result)
+                reply(encoded as NSData, nil)
+            } catch {
+                let err = NSError(
+                    domain: "macUSBHelper",
+                    code: 500,
+                    userInfo: [NSLocalizedDescriptionKey: "Nie udało się zakodować wyniku cleanupu: \(error.localizedDescription)"]
+                )
+                reply(nil, err)
+            }
+        }
+    }
+
     func queryHealth(_ reply: @escaping (Bool, NSString) -> Void) {
         let uid = getuid()
         let euid = geteuid()
