@@ -27,6 +27,10 @@ extension MontereyDownloadPlaceholderFlowModel {
 
             verifyCurrentIndex = index + 1
             verifyFileName = item.name
+            AppLogging.info(
+                "Weryfikacja \(verifyCurrentIndex)/\(verifyTotal): start dla \(item.name)",
+                category: "Downloader"
+            )
 
             guard let localURL = downloadedFileURLsByItemID[item.id] else {
                 throw DownloadFailureReason.verificationFailed("Brak lokalnego pliku \(item.name)")
@@ -38,6 +42,10 @@ extension MontereyDownloadPlaceholderFlowModel {
 
             if try await verifyIntegrityDataChunklistIfAvailable(for: localURL, item: item) {
                 try logSHA256VerificationDetails(for: localURL, item: item)
+                AppLogging.info(
+                    "Weryfikacja \(verifyCurrentIndex)/\(verifyTotal): zakonczona sukcesem przez IntegrityData dla \(item.name)",
+                    category: "Downloader"
+                )
                 verifiedCount += 1
                 verifyProgress = min(1.0, Double(verifiedCount) / totalCount)
                 continue
@@ -67,6 +75,10 @@ extension MontereyDownloadPlaceholderFlowModel {
             }
 
             try logSHA256VerificationDetails(for: localURL, item: item)
+            AppLogging.info(
+                "Weryfikacja \(verifyCurrentIndex)/\(verifyTotal): zakonczona sukcesem fallback digest dla \(item.name)",
+                category: "Downloader"
+            )
 
             verifiedCount += 1
             verifyProgress = min(1.0, Double(verifiedCount) / totalCount)
@@ -83,6 +95,10 @@ extension MontereyDownloadPlaceholderFlowModel {
 
         let currentSize = (try? FileManager.default.attributesOfItem(atPath: fileURL.path)[.size] as? NSNumber)?
             .int64Value ?? -1
+        AppLogging.info(
+            "Sprawdzanie rozmiaru \(fileName): expected=\(expectedBytes), actual=\(currentSize)",
+            category: "Downloader"
+        )
         guard currentSize == expectedBytes else {
             throw DownloadFailureReason.verificationFailed(
                 "Rozmiar pliku \(fileName) jest niepoprawny (\(currentSize) != \(expectedBytes))"
@@ -104,6 +120,10 @@ extension MontereyDownloadPlaceholderFlowModel {
             normalizedHexDigest: expectedHex
         )
         let computedHex = try computeFileDigestHex(for: fileURL, algorithm: algorithm)
+        AppLogging.info(
+            "Digest verify \(item.name): alg=\(algorithmLabel(algorithm)), expected=\(checksumPreview(expectedHex)), actual=\(checksumPreview(computedHex))",
+            category: "Downloader"
+        )
 
         guard computedHex.caseInsensitiveCompare(expectedHex) == .orderedSame else {
             let algorithmText = algorithmLabel(algorithm)
@@ -160,6 +180,10 @@ extension MontereyDownloadPlaceholderFlowModel {
         item: DownloadManifestItem
     ) async throws -> Bool {
         guard let integrityDataURL = item.integrityDataURL else {
+            AppLogging.info(
+                "IntegrityData: brak URL dla \(item.name), przechodze na fallback digest.",
+                category: "Downloader"
+            )
             return false
         }
         guard isAppleIntegrityHost(integrityDataURL) else {
@@ -167,6 +191,10 @@ extension MontereyDownloadPlaceholderFlowModel {
                 "IntegrityDataURL poza allowlista Apple dla \(item.name)"
             )
         }
+        AppLogging.info(
+            "IntegrityData: pobieram metadane dla \(item.name) z \(integrityDataURL.absoluteString)",
+            category: "Downloader"
+        )
 
         let integrityData: Data
         do {
@@ -177,6 +205,10 @@ extension MontereyDownloadPlaceholderFlowModel {
                 )
             }
             integrityData = data
+            AppLogging.info(
+                "IntegrityData: pobrano \(data.count) B dla \(item.name)",
+                category: "Downloader"
+            )
         } catch let error as DownloadFailureReason {
             throw error
         } catch {
@@ -188,6 +220,10 @@ extension MontereyDownloadPlaceholderFlowModel {
         let chunks: [IntegrityChunk]
         do {
             chunks = try parseIntegrityChunks(from: integrityData, fileName: item.name)
+            AppLogging.info(
+                "IntegrityData: sparsowano \(chunks.count) chunkow dla \(item.name)",
+                category: "Downloader"
+            )
         } catch let error as DownloadFailureReason {
             throw error
         } catch {
@@ -205,19 +241,35 @@ extension MontereyDownloadPlaceholderFlowModel {
         defer { try? fileHandle.close() }
 
         var offset: UInt64 = 0
-        for chunk in chunks {
+        for (chunkIndex, chunk) in chunks.enumerated() {
             try fileHandle.seek(toOffset: offset)
             let data = fileHandle.readData(ofLength: chunk.size)
             let computed = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined().uppercased()
+            if shouldLogIntegrityChunkStep(chunkIndex: chunkIndex, total: chunks.count) {
+                AppLogging.info(
+                    "IntegrityData chunk \(chunkIndex + 1)/\(chunks.count) \(item.name): expected=\(checksumPreview(chunk.sha256Hex)), actual=\(checksumPreview(computed)), size=\(chunk.size)",
+                    category: "Downloader"
+                )
+            }
             guard computed == chunk.sha256Hex else {
                 throw DownloadFailureReason.verificationFailed(
-                    "Weryfikacja IntegrityData nie powiodla sie dla \(item.name)"
+                    "Weryfikacja IntegrityData nie powiodla sie dla \(item.name) (chunk \(chunkIndex + 1)/\(chunks.count), expected=\(checksumPreview(chunk.sha256Hex)), actual=\(checksumPreview(computed)))"
                 )
             }
             offset += UInt64(chunk.size)
         }
+        AppLogging.info(
+            "IntegrityData: weryfikacja chunklist zakonczona sukcesem dla \(item.name)",
+            category: "Downloader"
+        )
 
         return true
+    }
+
+    private func shouldLogIntegrityChunkStep(chunkIndex: Int, total: Int) -> Bool {
+        if total <= 20 { return true }
+        if chunkIndex < 5 || chunkIndex >= total - 5 { return true }
+        return ((chunkIndex + 1) % 100) == 0
     }
 
     private struct IntegrityChunk {
