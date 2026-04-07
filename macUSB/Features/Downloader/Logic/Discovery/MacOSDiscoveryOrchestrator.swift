@@ -57,6 +57,10 @@ final class MacOSDownloaderLogic: ObservableObject {
         catalogService.isOldestInstallerTarget(entry)
     }
 
+    func isLegacyAssemblyTarget(_ entry: MacOSInstallerEntry) -> Bool {
+        catalogService.isLegacyAssemblyTarget(entry)
+    }
+
     private func runDiscovery() async {
         do {
             let entries = try await catalogService.fetchStableInstallers { [weak self] phase in

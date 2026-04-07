@@ -109,7 +109,7 @@ extension MacOSDownloaderWindowShellView {
         case .pending:
             StatusCard(tone: .subtle, density: .compact) {
                 HStack(spacing: 12) {
-                    Image(systemName: iconForDownloadStage(stage))
+                    Image(systemName: iconForDownloadStage(stage, stageState: stageState))
                         .font(.title3)
                         .foregroundStyle(.secondary)
                         .frame(width: 24)
@@ -123,7 +123,7 @@ extension MacOSDownloaderWindowShellView {
         case .active:
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 12) {
-                    Image(systemName: iconForDownloadStage(stage))
+                    Image(systemName: iconForDownloadStage(stage, stageState: stageState))
                         .font(.title3)
                         .foregroundColor(.accentColor)
                         .frame(width: 24)
@@ -194,19 +194,35 @@ extension MacOSDownloaderWindowShellView {
         }
     }
 
-    func iconForDownloadStage(_ stage: MontereyDownloadFlowStage) -> String {
+    func iconForDownloadStage(_ stage: MontereyDownloadFlowStage, stageState: DownloadStageVisualState) -> String {
         switch stage {
         case .connection:
             return "network"
         case .downloading:
             return "arrow.down.circle.fill"
         case .verifying:
+            if shouldUseFilledActiveIconsForLegacyAndOldest(), stageState == .active {
+                return "checkmark.shield.fill"
+            }
             return "checkmark.shield"
         case .buildingInstaller:
+            if shouldUseFilledActiveIconsForLegacyAndOldest() {
+                return stageState == .active ? "shippingbox.fill" : "shippingbox"
+            }
             return "wand.and.stars"
         case .cleanup:
+            if shouldUseFilledActiveIconsForLegacyAndOldest(), stageState == .active {
+                return "checkmark.circle.fill"
+            }
             return "checkmark.circle"
         }
+    }
+
+    private func shouldUseFilledActiveIconsForLegacyAndOldest() -> Bool {
+        guard let entry = activeDownloadEntry else {
+            return false
+        }
+        return logic.isLegacyAssemblyTarget(entry) || logic.isOldestDownloadTarget(entry)
     }
 
     func downloadStageTitle(for stage: MontereyDownloadFlowStage) -> String {
