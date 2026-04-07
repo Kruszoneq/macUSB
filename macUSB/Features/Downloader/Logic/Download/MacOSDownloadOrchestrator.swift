@@ -72,9 +72,9 @@ extension MontereyDownloadFlowModel {
 
             if isInternetTimeoutFailure(technicalMessage) {
                 if completedStages.contains(.cleanup) {
-                    failureMessage = "Pobieranie zatrzymano, bo przez 1 minutę nie udało się przywrócić połączenia z internetem. Pobrane pliki tymczasowe zostały usunięte"
+                    failureMessage = "Przez 1 minutę nie udało się odzyskać połączenia internetowego. Pliki tymczasowe zostały usunięte."
                 } else {
-                    failureMessage = "Pobieranie zatrzymano, bo przez 1 minutę nie udało się przywrócić połączenia z internetem. Nie udało się potwierdzić usunięcia plików tymczasowych"
+                    failureMessage = "Przez 1 minutę nie udało się odzyskać połączenia internetowego. Nie udało się potwierdzić usunięcia plików tymczasowych."
                 }
             } else {
                 failureMessage = userFacingFailureMessage(for: technicalMessage)
@@ -82,7 +82,7 @@ extension MontereyDownloadFlowModel {
 
             if isCleanupFailure, finalInstallerAppURL != nil {
                 isPartialSuccess = true
-                failureMessage = "Instalator jest gotowy, ale nie udalo sie usunac plikow tymczasowych. Szczegoly znajdziesz w logach"
+                failureMessage = "Instalator został przygotowany, ale usuwanie plików tymczasowych nie zostało ukończone automatycznie."
             } else {
                 isPartialSuccess = (finalInstallerAppURL != nil) && completedStages.contains(.cleanup)
             }
@@ -107,7 +107,7 @@ extension MontereyDownloadFlowModel {
 
     func userFacingFailureMessage(for technicalMessage: String) -> String {
         if isMovePermissionFailure(technicalMessage) {
-            return "Nie udało się przenieść instalatora do folderu docelowego z powodu braku uprawnień. Sprawdź uprawnienia wybranego folderu i spróbuj ponownie. Szczegóły techniczne znajdziesz w logach"
+            return "Nie udało się zapisać instalatora w lokalizacji docelowej. Sprawdź uprawnienia i spróbuj ponownie."
         }
         return technicalMessage
     }

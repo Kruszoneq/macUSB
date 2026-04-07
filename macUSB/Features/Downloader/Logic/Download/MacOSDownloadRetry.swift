@@ -77,7 +77,7 @@ extension MontereyDownloadFlowModel {
             let elapsed = Int(Date().timeIntervalSince(start))
             let remaining = max(0, timeoutSeconds - elapsed)
 
-            networkWarningMessage = "Połączenie sieciowe jest niedostępne. Spróbuję wznowić pobieranie automatycznie (\(remaining)s)..."
+            networkWarningMessage = "Pobieranie zostało wstrzymane. Wznowienie nastąpi automatycznie po odzyskaniu połączenia (pozostało: \(remaining) s)."
             downloadSpeedText = "0.0 MB/s"
 
             if await probeReachability(url: probeURL) {

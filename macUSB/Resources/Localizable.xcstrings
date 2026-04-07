@@ -2009,9 +2009,6 @@
     "Anulować pobieranie systemu?" : {
 
     },
-    "Anuluj" : {
-
-    },
     "Anuluj pobieranie i zamknij" : {
 
     },
@@ -2721,9 +2718,6 @@
           }
         }
       }
-    },
-    "Brak połączenia z internetem" : {
-
     },
     "Brak uprawnień do zapisu na wybranym nośniku USB. Zresetuj uprawnienia aplikacji w menu Opcje → Resetuj uprawnienia dostępu do dysków zewnętrznych, a następnie spróbuj ponownie." : {
       "localizations" : {
@@ -7412,12 +7406,6 @@
         }
       }
     },
-    "Jeśli zamkniesz okno teraz, pobieranie zostanie przerwane, a pobrane pliki pozostaną w folderze tymczasowym do czasu zamknięcia aplikacji" : {
-
-    },
-    "Jeśli zamkniesz okno teraz, pobieranie zostanie przerwane, a pobrane pliki tymczasowe zostaną usunięte" : {
-
-    },
     "Język" : {
       "localizations" : {
         "de" : {
@@ -9510,6 +9498,9 @@
         }
       }
     },
+    "Nie udało się dokończyć pobierania" : {
+
+    },
     "Nie udało się otworzyć bezpośrednio zakładki „Pełny dostęp do dysku”. Przejdź do: Prywatność i ochrona -> Pełny dostęp do dysku." : {
       "localizations" : {
         "de" : {
@@ -9585,12 +9576,6 @@
           }
         }
       }
-    },
-    "Nie udało się pobrać listy systemów" : {
-
-    },
-    "Nie udało się ukończyć" : {
-
     },
     "Nie udało się usunąć plików tymczasowych: %@" : {
       "localizations" : {
@@ -11467,6 +11452,9 @@
         }
       }
     },
+    "Odśwież listę systemów" : {
+
+    },
     "Odświeżam rejestrację helpera i potwierdzam gotowość do pracy" : {
 
     },
@@ -12097,13 +12085,16 @@
     "Pliki do pobrania" : {
 
     },
+    "Po zamknięciu okna pobieranie zostanie przerwane, a pliki tymczasowe pozostaną do czasu zamknięcia aplikacji" : {
+
+    },
+    "Po zamknięciu okna pobieranie zostanie przerwane, a pliki tymczasowe zostaną usunięte" : {
+
+    },
     "Pobieranie katalogu Apple..." : {
 
     },
     "Pobieranie manifestu wybranego systemu..." : {
-
-    },
-    "Pobieranie przerwane" : {
 
     },
     "Pobieranie systemu" : {
@@ -12290,6 +12281,9 @@
 
     },
     "Pokaż wszystkie dostępne wersje" : {
+
+    },
+    "Połączenie internetowe zostało utracone" : {
 
     },
     "Połączenie z helperem zostało przerwane." : {
@@ -17387,9 +17381,6 @@
         }
       }
     },
-    "Ukończono częściowo" : {
-
-    },
     "Ukończono w %02dm %02ds" : {
       "localizations" : {
         "de" : {
@@ -17471,6 +17462,9 @@
           }
         }
       }
+    },
+    "Ukończono z ostrzeżeniem" : {
+
     },
     "Ukryj dziennik techniczny" : {
 
@@ -21025,9 +21019,6 @@
         }
       }
     },
-    "Wystąpił problem z połączeniem z serwerami Apple" : {
-
-    },
     "Wyświetl szczegóły" : {
       "localizations" : {
         "de" : {
@@ -21108,9 +21099,6 @@
 
     },
     "Wyszukiwanie dostępnych systemów" : {
-
-    },
-    "Wyszukiwanie instalatorów na serwerach Apple..." : {
 
     },
     "XPC health: %@" : {

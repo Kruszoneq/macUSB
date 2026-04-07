@@ -36,7 +36,7 @@ extension MontereyDownloadFlowModel {
                 return
             }
             let reason = helperCleanupFailureMessage ?? "Helper nie potwierdził usunięcia plików tymczasowych"
-            cleanupWarningMessage = "Instalator jest gotowy, ale pliki tymczasowe nie zostaly usuniete automatycznie. Szczegoly znajdziesz w logach"
+            cleanupWarningMessage = "Instalator został przygotowany, ale usuwanie plików tymczasowych nie zostało ukończone automatycznie."
             cleanupStatusText = "Kończenie pracy z ostrzeżeniem..."
             summaryTemporaryFilesText = "Wymaga ręcznego dokończenia"
             cleanupProgress = 1

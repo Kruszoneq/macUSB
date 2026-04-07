@@ -11,6 +11,18 @@ extension MacOSDownloaderWindowShellView {
                 Spacer()
 
                 Button {
+                    logic.startDiscovery()
+                } label: {
+                    Image(systemName: "arrow.clockwise")
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                }
+                .macUSBSecondaryButtonStyle()
+                .disabled(isDiscoveryInProgress)
+                .opacity(isDiscoveryInProgress ? 0.65 : 1.0)
+                .help(String(localized: "Odśwież listę systemów"))
+
+                Button {
                     isOptionsPresented = true
                 } label: {
                     HStack(spacing: 6) {
@@ -69,10 +81,7 @@ extension MacOSDownloaderWindowShellView {
                 installerSectionsView
             }
         case .failed:
-            listMessageView(
-                title: String(localized: "Nie udało się pobrać listy systemów"),
-                description: logic.errorText ?? String(localized: "Wystąpił problem z połączeniem z serwerami Apple")
-            )
+            discoveryFailureView
         case .loaded:
             if logic.familyGroups.isEmpty {
                 listMessageView(
@@ -88,45 +97,105 @@ extension MacOSDownloaderWindowShellView {
     }
 
     var discoveryStatusView: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .center, spacing: 12) {
+        VStack {
+            Spacer(minLength: 0)
+
+            VStack(alignment: .center, spacing: 0) {
                 Image(nsImage: NSApp.applicationIconImage)
                     .resizable()
-                    .frame(width: 40, height: 40)
-                    .cornerRadius(9)
+                    .frame(width: 64, height: 64)
+                    .cornerRadius(14)
 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Wyszukiwanie dostępnych systemów")
-                        .font(.headline)
-                    Text("Wyszukiwanie instalatorów na serwerach Apple...")
-                        .font(.subheadline)
+                Text("Wyszukiwanie dostępnych systemów")
+                    .font(.headline)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 16)
+
+                Spacer()
+                    .frame(height: 10)
+
+                ProgressView()
+                    .progressViewStyle(.linear)
+                    .frame(maxWidth: 360)
+
+                Text(
+                    logic.statusText.isEmpty
+                        ? "Wyszukiwanie instalatorów na serwerach Apple..."
+                        : logic.statusText
+                )
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.top, 12)
+            }
+            .frame(maxWidth: 420)
+            .frame(maxWidth: .infinity)
+
+            Spacer(minLength: 0)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        .macUSBPanelSurface(.subtle)
+    }
+
+    var discoveryFailureView: some View {
+        let isOffline = isDiscoveryOfflineFailure()
+        let title = isOffline
+            ? "Połączenie internetowe jest niedostępne"
+            : "Nie udało się odświeżyć listy systemów"
+        let description = isOffline
+            ? "Sprawdzanie dostępnych systemów zostało wstrzymane. Po przywróceniu połączenia ponów próbę odświeżenia."
+            : "Połączenie z serwerami Apple jest obecnie niedostępne. Spróbuj ponownie za chwilę."
+
+        return StatusCard(tone: .warning, density: .compact) {
+            HStack(alignment: .center, spacing: 10) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.title3)
+                    .foregroundStyle(.orange)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.orange)
+                    Text(description)
+                        .font(.caption)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-            }
 
-            ProgressView()
-                .progressViewStyle(.linear)
-
-            if !logic.statusText.isEmpty {
-                Text(logic.statusText)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                Spacer(minLength: 0)
             }
-
-            Button {
-                logic.cancelDiscovery()
-            } label: {
-                Text("Anuluj")
-                    .frame(maxWidth: .infinity)
-                    .padding(8)
-            }
-            .macUSBSecondaryButtonStyle()
-            .padding(.top, 6)
         }
-        .padding(16)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .macUSBPanelSurface(.subtle)
+    }
+
+    func isDiscoveryOfflineFailure() -> Bool {
+        guard let errorText = logic.errorText?.lowercased() else {
+            return false
+        }
+
+        let offlineMarkers = [
+            "not connected to internet",
+            "network connection was lost",
+            "cannot find host",
+            "cannot connect to host",
+            "dns lookup failed",
+            "połączenie internetowe",
+            "połączenie z internetem",
+            "połączenie sieciowe",
+            "brak internetu",
+            "brak połączenia",
+            "połączenie zostało utracone",
+            "nsurlerrordomain -1009",
+            "nsurlerrordomain -1005",
+            "nsurlerrordomain -1003",
+            "nsurlerrordomain -1004",
+            "nsurlerrordomain -1006"
+        ]
+
+        return offlineMarkers.contains { marker in
+            errorText.contains(marker)
+        }
     }
 
     var installerSectionsView: some View {

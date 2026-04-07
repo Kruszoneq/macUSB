@@ -140,9 +140,9 @@ struct MacOSDownloaderWindowShellView: View {
         alert.alertStyle = .warning
         alert.messageText = String(localized: "Anulować pobieranie systemu?")
         if downloadFlowModel.shouldRetainSessionFilesForDebugMode() {
-            alert.informativeText = String(localized: "Jeśli zamkniesz okno teraz, pobieranie zostanie przerwane, a pobrane pliki pozostaną w folderze tymczasowym do czasu zamknięcia aplikacji")
+            alert.informativeText = String(localized: "Po zamknięciu okna pobieranie zostanie przerwane, a pliki tymczasowe pozostaną do czasu zamknięcia aplikacji")
         } else {
-            alert.informativeText = String(localized: "Jeśli zamkniesz okno teraz, pobieranie zostanie przerwane, a pobrane pliki tymczasowe zostaną usunięte")
+            alert.informativeText = String(localized: "Po zamknięciu okna pobieranie zostanie przerwane, a pliki tymczasowe zostaną usunięte")
         }
         alert.addButton(withTitle: String(localized: "Kontynuuj pobieranie"))
         alert.addButton(withTitle: String(localized: "Anuluj pobieranie i zamknij"))
@@ -274,12 +274,18 @@ private struct MacOSDownloaderOptionsSheetView: View {
                 .toggleStyle(.checkbox)
 
             #if DEBUG
-            Divider()
-                .padding(.vertical, 2)
-
-            Text("DEBUG")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
+            HStack(spacing: 10) {
+                Capsule()
+                    .fill(Color.secondary.opacity(0.20))
+                    .frame(height: 1)
+                Text("DEBUG")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                Capsule()
+                    .fill(Color.secondary.opacity(0.20))
+                    .frame(height: 1)
+            }
+            .padding(.vertical, 2)
 
             Toggle("DEBUG: Nie usuwaj pobranych plików", isOn: $preserveDownloadedFilesInDebug)
                 .toggleStyle(.checkbox)

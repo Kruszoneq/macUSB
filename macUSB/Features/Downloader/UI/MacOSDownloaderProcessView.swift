@@ -40,7 +40,7 @@ extension MacOSDownloaderWindowShellView {
                                         .foregroundStyle(.orange)
 
                                     VStack(alignment: .leading, spacing: 4) {
-                                        Text("Brak połączenia z internetem")
+                                        Text("Połączenie internetowe zostało utracone")
                                             .font(.subheadline.weight(.semibold))
                                         Text(networkWarningMessage)
                                             .font(.caption)
@@ -56,7 +56,7 @@ extension MacOSDownloaderWindowShellView {
                            !failureMessage.isEmpty {
                             StatusCard(tone: .warning, density: .compact) {
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("Pobieranie przerwane")
+                                    Text("Nie udało się dokończyć pobierania")
                                         .font(.subheadline.weight(.semibold))
                                     Text(failureMessage)
                                         .font(.caption)

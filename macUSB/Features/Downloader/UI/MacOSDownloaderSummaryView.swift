@@ -5,12 +5,14 @@ extension MacOSDownloaderWindowShellView {
     var downloadSummaryView: some View {
         let isFailure = downloadFlowModel.workflowState == .failed
         let isPartial = isFailure && downloadFlowModel.isPartialSuccess
+        let hasFinalInstallerApp = downloadFlowModel.finalInstallerAppURL != nil
+        let shouldShowInstallerOutputSection = !isFailure || hasFinalInstallerApp
         return VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 10) {
                 Image(systemName: isPartial ? "exclamationmark.triangle.fill" : (isFailure ? "xmark.circle.fill" : "checkmark.circle.fill"))
                     .font(.title3)
                     .foregroundColor(isPartial ? .orange : (isFailure ? .red : .green))
-                Text(isPartial ? "Ukończono częściowo" : (isFailure ? "Nie udało się ukończyć" : "Gotowe"))
+                Text(isPartial ? "Ukończono z ostrzeżeniem" : (isFailure ? "Nie udało się dokończyć pobierania" : "Gotowe"))
                     .font(.headline)
             }
 
@@ -33,14 +35,16 @@ extension MacOSDownloaderWindowShellView {
 
             Divider()
 
-            downloadSummaryMetricRow(
-                title: "Instalator",
-                value: downloadFlowModel.summaryCreatedFileText
-            )
-            downloadSummaryMetricRow(
-                title: "Lokalizacja",
-                value: downloadFlowModel.summaryLocationText
-            )
+            if shouldShowInstallerOutputSection {
+                downloadSummaryMetricRow(
+                    title: "Instalator",
+                    value: downloadFlowModel.summaryCreatedFileText
+                )
+                downloadSummaryMetricRow(
+                    title: "Lokalizacja",
+                    value: downloadFlowModel.summaryLocationText
+                )
+            }
             downloadSummaryMetricRow(
                 title: "Stan porządkowania",
                 value: downloadFlowModel.summaryTemporaryFilesText
@@ -61,21 +65,23 @@ extension MacOSDownloaderWindowShellView {
                 }
             }
 
-            HStack {
-                Spacer()
-                Button {
-                    openPlannedInstallerFolder()
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "folder.fill")
-                        Text("Pokaż w Finderze")
+            if shouldShowInstallerOutputSection {
+                HStack {
+                    Spacer()
+                    Button {
+                        openPlannedInstallerFolder()
+                    } label: {
+                        HStack(spacing: 8) {
+                            Image(systemName: "folder.fill")
+                            Text("Pokaż w Finderze")
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
+                    .macUSBSecondaryButtonStyle()
                 }
-                .macUSBSecondaryButtonStyle()
+                .padding(.top, 6)
             }
-            .padding(.top, 6)
         }
         .padding(MacUSBDesignTokens.panelInnerPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
