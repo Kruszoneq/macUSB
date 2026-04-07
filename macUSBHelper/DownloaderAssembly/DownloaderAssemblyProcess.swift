@@ -1,4 +1,5 @@
 import Foundation
+import Darwin
 
 extension DownloaderAssemblyExecutor {
     func cleanupSessionDirectory(_ sessionRootDirectory: URL) throws {
@@ -245,6 +246,41 @@ extension DownloaderAssemblyExecutor {
         return appURL
     }
 
+    func rewriteInstallerOwnershipToRequesterIfNeeded(installerAppURL: URL) throws {
+        let requesterUID = uid_t(request.requesterUID)
+        guard requesterUID > 0 else {
+            emit(
+                percent: nil,
+                status: "Kończenie przygotowania instalatora...",
+                logLine: "assembly ownership: pomijam zmiane własności (brak requesterUID)"
+            )
+            return
+        }
+        guard let userRecord = getpwuid(requesterUID) else {
+            throw NSError(
+                domain: "macUSBHelper",
+                code: 500,
+                userInfo: [NSLocalizedDescriptionKey: "Nie udało się odczytać danych konta dla UID \(request.requesterUID)."]
+            )
+        }
+
+        let requesterGID = userRecord.pointee.pw_gid
+        emit(
+            percent: 0.93,
+            status: "Ustawianie własności instalatora...",
+            logLine: "assembly ownership: chown -R \(requesterUID):\(requesterGID) \(installerAppURL.path)"
+        )
+        try runCommand(
+            executable: "/usr/sbin/chown",
+            arguments: ["-R", "\(requesterUID):\(requesterGID)", installerAppURL.path]
+        )
+        emit(
+            percent: nil,
+            status: "Ustawianie własności instalatora...",
+            logLine: "assembly ownership: zakonczono dla \(installerAppURL.path)"
+        )
+    }
+
     private func runInstallerProcess(
         installerInputURL: URL,
         targetPath: String,
@@ -266,6 +302,29 @@ extension DownloaderAssemblyExecutor {
         try process.run()
         let handle = pipe.fileHandleForReading
         var buffer = Data()
+        let progressQueue = DispatchQueue(label: "macUSB.helper.downloaderAssembly.installerProgress")
+        var targetProgress = 0.10
+        var displayedProgress = 0.10
+        var smoothingStopped = false
+        let smoothingTimer = DispatchSource.makeTimerSource(queue: progressQueue)
+        smoothingTimer.schedule(deadline: .now() + .milliseconds(120), repeating: .milliseconds(120))
+        smoothingTimer.setEventHandler { [weak self] in
+            guard let self else { return }
+            guard !smoothingStopped else { return }
+            let clampedTarget = min(max(targetProgress, 0.10), 0.82)
+            let visibleTarget = max(0.10, clampedTarget - 0.003)
+            guard displayedProgress < visibleTarget else { return }
+            displayedProgress = min(visibleTarget, displayedProgress + 0.0045)
+            self.emit(percent: displayedProgress, status: statusText)
+        }
+        smoothingTimer.resume()
+        defer {
+            progressQueue.sync {
+                smoothingStopped = true
+            }
+            smoothingTimer.setEventHandler {}
+            smoothingTimer.cancel()
+        }
 
         while true {
             let chunk = handle.availableData
@@ -274,7 +333,11 @@ extension DownloaderAssemblyExecutor {
             }
             buffer.append(chunk)
             drainOutputLines(from: &buffer) { [weak self] line in
-                self?.emitInstallerLine(line, statusText: statusText)
+                self?.emitInstallerLine(line, statusText: statusText) { scaledProgress in
+                    progressQueue.sync {
+                        targetProgress = max(targetProgress, min(max(scaledProgress, 0.10), 0.82))
+                    }
+                }
             }
             try throwIfCancelled()
         }
@@ -283,7 +346,11 @@ extension DownloaderAssemblyExecutor {
            let tailLine = String(data: buffer, encoding: .utf8)?
             .trimmingCharacters(in: .whitespacesAndNewlines),
            !tailLine.isEmpty {
-            emitInstallerLine(tailLine, statusText: statusText)
+            emitInstallerLine(tailLine, statusText: statusText) { scaledProgress in
+                progressQueue.sync {
+                    targetProgress = max(targetProgress, min(max(scaledProgress, 0.10), 0.82))
+                }
+            }
         }
 
         process.waitUntilExit()
@@ -299,6 +366,7 @@ extension DownloaderAssemblyExecutor {
                 userInfo: [NSLocalizedDescriptionKey: "Polecenie installer zakonczone bledem (\(process.terminationStatus))."]
             )
         }
+        emit(percent: 0.82, status: statusText)
     }
 
     private func locateInstallerApp(onMountedVolume mountURL: URL) -> URL? {
@@ -393,7 +461,11 @@ extension DownloaderAssemblyExecutor {
             return lhsDate < rhsDate
         }
     }
-    func emitInstallerLine(_ rawLine: String, statusText: String? = nil) {
+    func emitInstallerLine(
+        _ rawLine: String,
+        statusText: String? = nil,
+        onScaledPercent: ((Double) -> Void)? = nil
+    ) {
         let line = rawLine.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !line.isEmpty else { return }
         let resolvedStatusText = statusText ?? "Instalowanie składników systemu..."
@@ -401,7 +473,8 @@ extension DownloaderAssemblyExecutor {
         if let percent = parseInstallerPercent(from: line) {
             let normalized = min(max(percent / 100.0, 0), 1)
             let scaled = 0.10 + (normalized * 0.72)
-            emit(percent: scaled, status: resolvedStatusText, logLine: line)
+            onScaledPercent?(scaled)
+            emit(percent: nil, status: resolvedStatusText, logLine: line)
         } else {
             emit(percent: nil, status: resolvedStatusText, logLine: line)
         }

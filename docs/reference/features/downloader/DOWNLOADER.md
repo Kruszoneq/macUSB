@@ -131,10 +131,10 @@ Both modes share the same staged UI and runtime skeleton:
 3. File verification
   - size validation for each file,
   - IntegrityData/chunklist verification when available,
-  - digest fallback and package-signature fallback where needed.
+  - package signature verification (`pkgutil`) for downloaded `.pkg` files.
 4. Installer build and move
   - `Legacy`: in-app assembly (without root) using `pkgutil --expand-full` + `hdiutil attach` and SharedSupport composition,
-  - `Modern`: helper-based `InstallAssistant.pkg -> .app`,
+  - `Modern`: helper-based `InstallAssistant.pkg -> .app` plus final reassignment of installer `.app` ownership to the requesting user before cleanup,
   - `Oldest`: mount `.dmg`, extract installer `.pkg`, expand package (`pkgutil --expand`), extract `Payload` (`cpio` with compression fallback), and move final `.app` to `/Applications`,
   - final installer is placed in `/Applications`.
 5. Final cleanup
@@ -154,24 +154,20 @@ Per-file verification order:
 1. local presence and exact size check,
 2. for `Oldest` (`10.7` to `10.12`) `.dmg` payloads: verify reference SHA-256 from `DownloadChecksums.json`,
 3. for `Oldest` (`10.7` to `10.12`) `.dmg` payloads: mount image and verify embedded `.pkg` signature (`pkgutil --check-signature`),
-4. IntegrityData chunklist validation (`SHA-256` per chunk) when available,
-5. digest fallback from manifest metadata if needed,
-6. package signature check (`pkgutil`) fallback for package-specific mismatch cases.
+4. for non-`Oldest` payloads: package signature check (`pkgutil`) for `.pkg` files,
+5. for non-`Oldest` payloads: IntegrityData chunklist validation (`SHA-256` per chunk) when available.
 
 `Oldest` specific rule:
-- for `.dmg` installers in `10.7` to `10.12`, the verification flow intentionally stops after reference SHA-256 and embedded package-signature validation (no IntegrityData or digest fallback checks).
+- for `.dmg` installers in `10.7` to `10.12`, the verification flow intentionally stops after reference SHA-256 and embedded package-signature validation (no IntegrityData checks).
+- this `Oldest` flow is separate and not affected by `Modern/Legacy` verification rules.
 
 Legacy exception:
 - for OS X Lion (10.7) and OS X Mountain Lion (10.8), expired-but-Apple-signed package certificates are accepted for `.dmg` embedded installer packages.
 
-Final installer verification:
-- non-blocking code-signature check (`codesign`) for diagnostics,
-- fallback package signature diagnostics when legacy signature warnings occur,
-- expected build check from installer metadata with controlled compatibility alias handling.
-
 Design intent:
-- strict integrity for downloaded payload,
-- pragmatic non-blocking diagnostics for legacy signature edge cases in final `.app`.
+- strict integrity for downloaded payload via file size + IntegrityData where available,
+- package-signature confirmation for package payloads,
+- no final `.app` build validation step.
 
 ---
 

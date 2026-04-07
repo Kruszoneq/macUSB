@@ -14,17 +14,6 @@ extension MontereyDownloadFlowModel {
         let sha256: String
     }
 
-    private enum DigestVerificationFailure: LocalizedError {
-        case mismatch(fileName: String, algorithm: String, expected: String, actual: String)
-
-        var errorDescription: String? {
-            switch self {
-            case let .mismatch(fileName, _, _, _):
-                return "Suma kontrolna pliku \(fileName) jest niepoprawna"
-            }
-        }
-    }
-
     func runFileVerification(
         manifest: DownloadManifest,
         entry: MacOSInstallerEntry
@@ -94,18 +83,6 @@ extension MontereyDownloadFlowModel {
                     )
                 }
             ) {
-                try logSHA256VerificationDetails(
-                    for: localURL,
-                    item: item,
-                    progressHandler: { [weak self] shaFraction in
-                        guard let self else { return }
-                        self.updateVerificationProgress(
-                            completedFiles: verifiedCount,
-                            totalCount: totalCount,
-                            currentFileFraction: 0.80 + (shaFraction * 0.20)
-                        )
-                    }
-                )
                 AppLogging.info(
                     "Weryfikacja \(verifyCurrentIndex)/\(verifyTotal): zakonczona sukcesem przez IntegrityData dla \(item.name)",
                     category: "Downloader"
@@ -116,21 +93,8 @@ extension MontereyDownloadFlowModel {
             }
 
             AppLogging.info(
-                "IntegrityData: brak URL dla \(item.name), pomijam fallback digest i kontynuuje (rozmiar + podpis pakietu).",
+                "IntegrityData: brak URL dla \(item.name), kontynuuje (rozmiar + podpis pakietu).",
                 category: "Downloader"
-            )
-
-            try logSHA256VerificationDetails(
-                for: localURL,
-                item: item,
-                progressHandler: { [weak self] shaFraction in
-                    guard let self else { return }
-                    self.updateVerificationProgress(
-                        completedFiles: verifiedCount,
-                        totalCount: totalCount,
-                        currentFileFraction: 0.15 + (shaFraction * 0.85)
-                    )
-                }
             )
             AppLogging.info(
                 "Weryfikacja \(verifyCurrentIndex)/\(verifyTotal): zakonczona bez IntegrityData dla \(item.name)",
@@ -138,6 +102,11 @@ extension MontereyDownloadFlowModel {
             )
 
             verifiedCount += 1
+            updateVerificationProgress(
+                completedFiles: verifiedCount,
+                totalCount: totalCount,
+                currentFileFraction: 0
+            )
             verifyProgress = min(1.0, Double(verifiedCount) / totalCount)
         }
 
@@ -169,40 +138,6 @@ extension MontereyDownloadFlowModel {
         guard currentSize == expectedBytes else {
             throw DownloadFailureReason.verificationFailed(
                 "Rozmiar pliku \(fileName) jest niepoprawny (\(currentSize) != \(expectedBytes))"
-            )
-        }
-    }
-
-    private func verifyDigestIfNeeded(for fileURL: URL, item: DownloadManifestItem) throws {
-        guard let expectedDigestRaw = item.expectedDigest?.trimmingCharacters(in: .whitespacesAndNewlines),
-              !expectedDigestRaw.isEmpty
-        else {
-            return
-        }
-
-        let expectedHex = normalizeExpectedDigestToHex(expectedDigestRaw)
-        let algorithm = resolvedDigestAlgorithm(
-            explicitAlgorithm: item.digestAlgorithm,
-            rawDigest: expectedDigestRaw,
-            normalizedHexDigest: expectedHex
-        )
-        let computedHex = try computeFileDigestHex(for: fileURL, algorithm: algorithm)
-        AppLogging.info(
-            "Digest verify \(item.name): alg=\(algorithmLabel(algorithm)), expected=\(checksumPreview(expectedHex)), actual=\(checksumPreview(computedHex))",
-            category: "Downloader"
-        )
-
-        guard computedHex.caseInsensitiveCompare(expectedHex) == .orderedSame else {
-            let algorithmText = algorithmLabel(algorithm)
-            AppLogging.error(
-                "Mismatch checksum dla \(item.name): alg=\(algorithmText), expected=\(checksumPreview(expectedHex)), actual=\(checksumPreview(computedHex))",
-                category: "Downloader"
-            )
-            throw DigestVerificationFailure.mismatch(
-                fileName: item.name,
-                algorithm: algorithmText,
-                expected: expectedHex,
-                actual: computedHex
             )
         }
     }
@@ -365,7 +300,7 @@ extension MontereyDownloadFlowModel {
         entry: MacOSInstallerEntry
     ) throws {
         let expectedSHA = try expectedReferenceChecksumForOldest(entry: entry)
-        let actualSHA = try computeFileDigestHex(for: fileURL, algorithm: .sha256)
+        let actualSHA = try computeFileSHA256Hex(for: fileURL)
 
         AppLogging.info(
             "Oldest SHA-256 verify \(entry.name) \(entry.version): expected=\(expectedSHA), actual=\(actualSHA)",
@@ -447,7 +382,7 @@ extension MontereyDownloadFlowModel {
     ) async throws -> Bool {
         guard let integrityDataURL = item.integrityDataURL else {
             AppLogging.info(
-                "IntegrityData: brak URL dla \(item.name), przechodze na fallback digest.",
+                "IntegrityData: brak URL dla \(item.name).",
                 category: "Downloader"
             )
             return false
@@ -506,11 +441,21 @@ extension MontereyDownloadFlowModel {
         }
         defer { try? fileHandle.close() }
 
+        let totalChunkBytes = max(chunks.reduce(0) { partial, chunk in
+            partial + max(0, chunk.size)
+        }, 1)
+        var processedChunkBytes = 0
         var offset: UInt64 = 0
         for (chunkIndex, chunk) in chunks.enumerated() {
-            try fileHandle.seek(toOffset: offset)
-            let data = fileHandle.readData(ofLength: chunk.size)
-            let computed = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined().uppercased()
+            try Task.checkCancellation()
+            let computed = try computeSHA256ForIntegrityChunk(
+                fileHandle: fileHandle,
+                offset: offset,
+                size: chunk.size
+            ) { processedBytes in
+                processedChunkBytes += processedBytes
+                progressHandler?(min(1.0, Double(processedChunkBytes) / Double(totalChunkBytes)))
+            }
             if shouldLogIntegrityChunkStep(chunkIndex: chunkIndex, total: chunks.count) {
                 AppLogging.info(
                     "IntegrityData chunk \(chunkIndex + 1)/\(chunks.count) \(item.name): expected=\(checksumPreview(chunk.sha256Hex)), actual=\(checksumPreview(computed)), size=\(chunk.size)",
@@ -522,9 +467,6 @@ extension MontereyDownloadFlowModel {
                     "Weryfikacja IntegrityData nie powiodla sie dla \(item.name) (chunk \(chunkIndex + 1)/\(chunks.count), expected=\(checksumPreview(chunk.sha256Hex)), actual=\(checksumPreview(computed)))"
                 )
             }
-            if chunks.count > 0 {
-                progressHandler?(Double(chunkIndex + 1) / Double(chunks.count))
-            }
             offset += UInt64(chunk.size)
         }
         AppLogging.info(
@@ -533,6 +475,33 @@ extension MontereyDownloadFlowModel {
         )
 
         return true
+    }
+
+    private func computeSHA256ForIntegrityChunk(
+        fileHandle: FileHandle,
+        offset: UInt64,
+        size: Int,
+        progressPerBytes: ((Int) -> Void)? = nil
+    ) throws -> String {
+        try fileHandle.seek(toOffset: offset)
+        var remaining = size
+        var hasher = SHA256()
+        let readBlockSize = 1_048_576
+
+        while remaining > 0 {
+            let blockSize = min(readBlockSize, remaining)
+            let data = fileHandle.readData(ofLength: blockSize)
+            guard !data.isEmpty else {
+                throw DownloadFailureReason.verificationFailed(
+                    "Nieoczekiwany koniec pliku podczas weryfikacji IntegrityData"
+                )
+            }
+            hasher.update(data: data)
+            remaining -= data.count
+            progressPerBytes?(data.count)
+        }
+
+        return hasher.finalize().map { String(format: "%02x", $0) }.joined().uppercased()
     }
 
     private func shouldLogIntegrityChunkStep(chunkIndex: Int, total: Int) -> Bool {
@@ -622,66 +591,8 @@ extension MontereyDownloadFlowModel {
         return host == "swcdn.apple.com" || host == "swdist.apple.com" || host.hasSuffix(".apple.com")
     }
 
-    private enum DigestAlgorithmKind {
-        case sha1
-        case sha256
-    }
-
-    private func resolvedDigestAlgorithm(
-        explicitAlgorithm: String?,
-        rawDigest: String,
-        normalizedHexDigest: String
-    ) -> DigestAlgorithmKind {
-        if let explicitAlgorithm {
-            let normalized = explicitAlgorithm.lowercased()
-            if normalized.contains("sha256") {
-                return .sha256
-            }
-            if normalized.contains("sha1") {
-                return .sha1
-            }
-        }
-
-        let hexCandidate = normalizedHexDigest.trimmingCharacters(in: .whitespacesAndNewlines)
-        if hexCandidate.count == 64 {
-            return .sha256
-        }
-        if hexCandidate.count == 40 {
-            return .sha1
-        }
-
-        let base64Candidate = rawDigest.trimmingCharacters(in: .whitespacesAndNewlines)
-        if let decoded = Data(base64Encoded: base64Candidate) {
-            switch decoded.count {
-            case 32:
-                return .sha256
-            case 20:
-                return .sha1
-            default:
-                break
-            }
-        }
-
-        return .sha1
-    }
-
-    private func normalizeExpectedDigestToHex(_ digest: String) -> String {
-        let trimmed = digest.trimmingCharacters(in: .whitespacesAndNewlines)
-        let isHex = trimmed.range(of: #"^[0-9a-fA-F]+$"#, options: .regularExpression) != nil
-        if isHex {
-            return trimmed.lowercased()
-        }
-
-        if let data = Data(base64Encoded: trimmed) {
-            return data.map { String(format: "%02x", $0) }.joined()
-        }
-
-        return trimmed.lowercased()
-    }
-
-    private func computeFileDigestHex(
+    private func computeFileSHA256Hex(
         for fileURL: URL,
-        algorithm: DigestAlgorithmKind,
         progressHandler: ((Double) -> Void)? = nil
     ) throws -> String {
         let handle = try FileHandle(forReadingFrom: fileURL)
@@ -696,42 +607,17 @@ extension MontereyDownloadFlowModel {
             progressHandler(progress)
         }
 
-        switch algorithm {
-        case .sha1:
-            var hasher = Insecure.SHA1()
-            while autoreleasepool(invoking: {
-                let data = handle.readData(ofLength: 1_048_576)
-                if data.isEmpty {
-                    return false
-                }
-                hasher.update(data: data)
-                updateDigestProgress(data.count)
-                return true
-            }) {}
-            return hasher.finalize().map { String(format: "%02x", $0) }.joined()
-
-        case .sha256:
-            var hasher = SHA256()
-            while autoreleasepool(invoking: {
-                let data = handle.readData(ofLength: 1_048_576)
-                if data.isEmpty {
-                    return false
-                }
-                hasher.update(data: data)
-                updateDigestProgress(data.count)
-                return true
-            }) {}
-            return hasher.finalize().map { String(format: "%02x", $0) }.joined()
-        }
-    }
-
-    private func algorithmLabel(_ algorithm: DigestAlgorithmKind) -> String {
-        switch algorithm {
-        case .sha1:
-            return "sha1"
-        case .sha256:
-            return "sha256"
-        }
+        var hasher = SHA256()
+        while autoreleasepool(invoking: {
+            let data = handle.readData(ofLength: 1_048_576)
+            if data.isEmpty {
+                return false
+            }
+            hasher.update(data: data)
+            updateDigestProgress(data.count)
+            return true
+        }) {}
+        return hasher.finalize().map { String(format: "%02x", $0) }.joined()
     }
 
     private func checksumPreview(_ checksum: String) -> String {
@@ -742,40 +628,4 @@ extension MontereyDownloadFlowModel {
         return "\(trimmed.prefix(8))...\(trimmed.suffix(8))"
     }
 
-    private func logSHA256VerificationDetails(
-        for fileURL: URL,
-        item: DownloadManifestItem,
-        progressHandler: ((Double) -> Void)? = nil
-    ) throws {
-        let actualSHA256 = try computeFileDigestHex(
-            for: fileURL,
-            algorithm: .sha256,
-            progressHandler: progressHandler
-        )
-        let expectedSHA256 = expectedSHA256FromManifest(for: item) ?? "N/A"
-        AppLogging.info(
-            "SHA-256 verify \(item.name): expected=\(expectedSHA256), actual=\(actualSHA256)",
-            category: "Downloader"
-        )
-    }
-
-    private func expectedSHA256FromManifest(for item: DownloadManifestItem) -> String? {
-        guard let expectedDigestRaw = item.expectedDigest?.trimmingCharacters(in: .whitespacesAndNewlines),
-              !expectedDigestRaw.isEmpty
-        else {
-            return nil
-        }
-
-        let normalizedHex = normalizeExpectedDigestToHex(expectedDigestRaw)
-        let algorithm = resolvedDigestAlgorithm(
-            explicitAlgorithm: item.digestAlgorithm,
-            rawDigest: expectedDigestRaw,
-            normalizedHexDigest: normalizedHex
-        )
-        guard algorithm == .sha256 else {
-            return nil
-        }
-
-        return normalizedHex.lowercased()
-    }
 }

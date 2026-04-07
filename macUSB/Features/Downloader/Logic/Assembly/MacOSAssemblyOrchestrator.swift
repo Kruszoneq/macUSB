@@ -43,11 +43,6 @@ extension MontereyDownloadFlowModel {
         }
 
         finalInstallerAppURL = finalAppURL
-        try verifyInstallerBuildIfAvailable(
-            of: finalAppURL,
-            expectedBuild: entry.build,
-            expectedVersion: entry.version
-        )
         buildStatusText = "Instalator został przygotowany"
         buildProgress = 1.0
         completedStages.insert(.buildingInstaller)

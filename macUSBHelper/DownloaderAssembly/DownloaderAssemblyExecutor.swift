@@ -78,6 +78,7 @@ final class DownloaderAssemblyExecutor {
 
             try throwIfCancelled()
             let finalDestinationURL = assembledAppURL
+            try rewriteInstallerOwnershipToRequesterIfNeeded(installerAppURL: finalDestinationURL)
             emit(
                 percent: 0.95,
                 status: "Instalator gotowy",

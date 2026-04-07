@@ -108,7 +108,6 @@
 				App/macUSBApp.swift,
 				Features/Analysis/AnalysisLogic.swift,
 				Features/Analysis/SystemAnalysisView.swift,
-				Features/Downloader/Logic/Assembly/MacOSAssemblyBuildVerification.swift,
 				Features/Downloader/Logic/Assembly/MacOSAssemblyFileUtils.swift,
 				Features/Downloader/Logic/Assembly/MacOSAssemblyLegacyFlow.swift,
 				Features/Downloader/Logic/Assembly/MacOSAssemblyLegacyProgress.swift,
@@ -194,7 +193,6 @@
 			membershipExceptions = (
 				App/ContentView.swift,
 				App/macUSBApp.swift,
-				Features/Downloader/Logic/Assembly/MacOSAssemblyBuildVerification.swift,
 				Features/Downloader/Logic/Assembly/MacOSAssemblyFileUtils.swift,
 				Features/Downloader/Logic/Assembly/MacOSAssemblyLegacyFlow.swift,
 				Features/Downloader/Logic/Assembly/MacOSAssemblyLegacyProgress.swift,
