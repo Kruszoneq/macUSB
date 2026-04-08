@@ -72,9 +72,9 @@ extension MontereyDownloadFlowModel {
 
             if isInternetTimeoutFailure(technicalMessage) {
                 if completedStages.contains(.cleanup) {
-                    failureMessage = "Przez 1 minutę nie udało się odzyskać połączenia internetowego. Pliki tymczasowe zostały usunięte."
+                    failureMessage = String(localized: "Przez 1 minutę nie udało się odzyskać połączenia internetowego. Pliki tymczasowe zostały usunięte.")
                 } else {
-                    failureMessage = "Przez 1 minutę nie udało się odzyskać połączenia internetowego. Nie udało się potwierdzić usunięcia plików tymczasowych."
+                    failureMessage = String(localized: "Przez 1 minutę nie udało się odzyskać połączenia internetowego. Nie udało się potwierdzić usunięcia plików tymczasowych.")
                 }
             } else {
                 failureMessage = userFacingFailureMessage(for: technicalMessage)
@@ -82,7 +82,7 @@ extension MontereyDownloadFlowModel {
 
             if isCleanupFailure, finalInstallerAppURL != nil {
                 isPartialSuccess = true
-                failureMessage = "Instalator został przygotowany, ale usuwanie plików tymczasowych nie zostało ukończone automatycznie."
+                failureMessage = String(localized: "Instalator został przygotowany, ale usuwanie plików tymczasowych nie zostało ukończone automatycznie.")
             } else {
                 isPartialSuccess = (finalInstallerAppURL != nil) && completedStages.contains(.cleanup)
             }
@@ -107,7 +107,7 @@ extension MontereyDownloadFlowModel {
 
     func userFacingFailureMessage(for technicalMessage: String) -> String {
         if isMovePermissionFailure(technicalMessage) {
-            return "Nie udało się zapisać instalatora w lokalizacji docelowej. Sprawdź uprawnienia i spróbuj ponownie."
+            return String(localized: "Nie udało się zapisać instalatora w lokalizacji docelowej. Sprawdź uprawnienia i spróbuj ponownie.")
         }
         return technicalMessage
     }
@@ -135,11 +135,11 @@ extension MontereyDownloadFlowModel {
         using logic: MacOSDownloaderLogic
     ) async throws -> DownloadManifest {
         currentStage = .connection
-        connectionStatusText = "Łączenie z serwerami Apple i pobieranie manifestu wybranego systemu..."
+        connectionStatusText = String(localized: "Łączenie z serwerami Apple i pobieranie manifestu wybranego systemu...")
 
         let manifest = try await logic.prepareDownloadManifest(for: entry) { [weak self] status in
             Task { @MainActor [weak self] in
-                self?.connectionStatusText = "\(status)..."
+                self?.connectionStatusText = status
             }
         }
 
@@ -161,12 +161,16 @@ extension MontereyDownloadFlowModel {
             )
         }
 
-        connectionStatusText = "Sprawdzanie dostepnego miejsca w katalogu tymczasowym..."
+        connectionStatusText = String(localized: "Sprawdzanie dostępnego miejsca w katalogu tymczasowym...")
         try verifyTemporaryDiskCapacity(requiredBytes: manifest.totalExpectedBytes)
 
         downloadTotal = manifest.items.count
         verifyTotal = manifest.items.count
-        connectionStatusText = "Wykryto \(manifest.items.count) plików o łącznym rozmiarze \(DownloadManifestItem.formatBytes(manifest.totalExpectedBytes))..."
+        connectionStatusText = String(
+            format: String(localized: "Wykryto %@ plików o łącznym rozmiarze %@..."),
+            String(manifest.items.count),
+            DownloadManifestItem.formatBytes(manifest.totalExpectedBytes)
+        )
         completedStages.insert(.connection)
         return manifest
     }

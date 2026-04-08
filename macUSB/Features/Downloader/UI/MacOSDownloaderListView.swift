@@ -5,7 +5,7 @@ extension MacOSDownloaderWindowShellView {
     var installerSelectionSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 10) {
-                Text("Dostępne systemy")
+                Text(String(localized: "Dostępne systemy"))
                     .font(.headline)
 
                 Spacer()
@@ -27,7 +27,7 @@ extension MacOSDownloaderWindowShellView {
                 } label: {
                     HStack(spacing: 6) {
                         Image(systemName: "slider.horizontal.3")
-                        Text("Opcje")
+                        Text(String(localized: "Opcje"))
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
@@ -106,7 +106,7 @@ extension MacOSDownloaderWindowShellView {
                     .frame(width: 64, height: 64)
                     .cornerRadius(14)
 
-                Text("Wyszukiwanie dostępnych systemów")
+                Text(String(localized: "Wyszukiwanie dostępnych systemów"))
                     .font(.headline)
                     .multilineTextAlignment(.center)
                     .padding(.top, 16)
@@ -120,7 +120,7 @@ extension MacOSDownloaderWindowShellView {
 
                 Text(
                     logic.statusText.isEmpty
-                        ? "Wyszukiwanie instalatorów na serwerach Apple..."
+                        ? String(localized: "Wyszukiwanie instalatorów na serwerach Apple...")
                         : logic.statusText
                 )
                 .font(.caption)
@@ -141,11 +141,11 @@ extension MacOSDownloaderWindowShellView {
     var discoveryFailureView: some View {
         let isOffline = isDiscoveryOfflineFailure()
         let title = isOffline
-            ? "Połączenie internetowe jest niedostępne"
-            : "Nie udało się odświeżyć listy systemów"
+            ? String(localized: "Połączenie internetowe jest niedostępne")
+            : String(localized: "Nie udało się odświeżyć listy systemów")
         let description = isOffline
-            ? "Sprawdzanie dostępnych systemów zostało wstrzymane. Po przywróceniu połączenia ponów próbę odświeżenia."
-            : "Połączenie z serwerami Apple jest obecnie niedostępne. Spróbuj ponownie za chwilę."
+            ? String(localized: "Sprawdzanie dostępnych systemów zostało wstrzymane. Po przywróceniu połączenia ponów próbę odświeżenia.")
+            : String(localized: "Połączenie z serwerami Apple jest obecnie niedostępne. Spróbuj ponownie za chwilę.")
 
         return StatusCard(tone: .warning, density: .compact) {
             HStack(alignment: .center, spacing: 10) {
@@ -249,7 +249,7 @@ extension MacOSDownloaderWindowShellView {
                     } label: {
                         HStack(spacing: 8) {
                             Image(systemName: "arrow.down.circle.fill")
-                            Text("Pobierz")
+                            Text(String(localized: "Pobierz"))
                         }
                         .padding(.horizontal, 14)
                         .padding(.vertical, 7)

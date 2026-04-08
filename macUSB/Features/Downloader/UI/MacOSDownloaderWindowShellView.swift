@@ -16,7 +16,7 @@ struct MacOSDownloaderWindowShellView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
             VStack(alignment: .leading, spacing: 8) {
-                Text("Pobieranie systemu macOS")
+                Text(String(localized: "Pobieranie systemu macOS"))
                     .font(.title3.weight(.semibold))
                 Text(managerDescriptionText)
                     .font(.body)
@@ -89,17 +89,19 @@ struct MacOSDownloaderWindowShellView: View {
     }
 
     var closeButtonTitle: String {
-        shouldConfirmCloseDuringDownload ? "Anuluj" : "Zamknij"
+        shouldConfirmCloseDuringDownload
+            ? String(localized: "Anuluj")
+            : String(localized: "Zamknij")
     }
 
     var managerDescriptionText: String {
         if activeDownloadEntry == nil {
-            return "Wybierz instalator dostępny na serwerach Apple"
+            return String(localized: "Wybierz instalator dostępny na serwerach Apple")
         }
         if downloadFlowModel.isFinished {
-            return "Pobieranie zakończone. Podsumowanie jest dostępne poniżej"
+            return String(localized: "Pobieranie zakończone. Podsumowanie jest dostępne poniżej")
         }
-        return "Trwa pobieranie i przygotowywanie instalatora"
+        return String(localized: "Trwa pobieranie i przygotowywanie instalatora")
     }
 
     var shouldConfirmCloseDuringDownload: Bool {
@@ -267,10 +269,10 @@ private struct MacOSDownloaderOptionsSheetView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Opcje pobierania")
+            Text(String(localized: "Opcje pobierania"))
                 .font(.headline)
 
-            Toggle("Pokaż wszystkie wersje", isOn: $showAllAvailableVersions)
+            Toggle(String(localized: "Pokaż wszystkie wersje"), isOn: $showAllAvailableVersions)
                 .toggleStyle(.checkbox)
 
             #if DEBUG
@@ -278,7 +280,7 @@ private struct MacOSDownloaderOptionsSheetView: View {
                 Capsule()
                     .fill(Color.secondary.opacity(0.20))
                     .frame(height: 1)
-                Text("Deweloperskie")
+                Text(String(localized: "Deweloperskie"))
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                 Capsule()
@@ -287,7 +289,7 @@ private struct MacOSDownloaderOptionsSheetView: View {
             }
             .padding(.vertical, 2)
 
-            Toggle("Zachowaj pobrane pliki (Debug)", isOn: $preserveDownloadedFilesInDebug)
+            Toggle(String(localized: "Zachowaj pobrane pliki (Debug)"), isOn: $preserveDownloadedFilesInDebug)
                 .toggleStyle(.checkbox)
             #endif
 
@@ -298,7 +300,7 @@ private struct MacOSDownloaderOptionsSheetView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text("OK")
+                    Text(String(localized: "OK"))
                         .padding(.horizontal, 16)
                         .padding(.vertical, 6)
                 }

@@ -12,7 +12,11 @@ extension MacOSDownloaderWindowShellView {
                 Image(systemName: isPartial ? "exclamationmark.triangle.fill" : (isFailure ? "xmark.circle.fill" : "checkmark.circle.fill"))
                     .font(.title3)
                     .foregroundColor(isPartial ? .orange : (isFailure ? .red : .green))
-                Text(isPartial ? "Ukończono z ostrzeżeniem" : (isFailure ? "Nie udało się dokończyć pobierania" : "Gotowe"))
+                Text(isPartial
+                     ? String(localized: "Ukończono z ostrzeżeniem")
+                     : (isFailure
+                        ? String(localized: "Nie udało się dokończyć pobierania")
+                        : String(localized: "Gotowe")))
                     .font(.headline)
             }
 
@@ -21,15 +25,15 @@ extension MacOSDownloaderWindowShellView {
             }
 
             downloadSummaryMetricRow(
-                title: "Pobrano danych",
+                title: String(localized: "Pobrano danych"),
                 value: downloadFlowModel.summaryTotalDownloadedText
             )
             downloadSummaryMetricRow(
-                title: "Średnia szybkość",
+                title: String(localized: "Średnia szybkość"),
                 value: downloadFlowModel.summaryAverageSpeedText
             )
             downloadSummaryMetricRow(
-                title: "Czas pobierania",
+                title: String(localized: "Czas pobierania"),
                 value: downloadFlowModel.summaryDurationText
             )
 
@@ -37,16 +41,16 @@ extension MacOSDownloaderWindowShellView {
 
             if shouldShowInstallerOutputSection {
                 downloadSummaryMetricRow(
-                    title: "Instalator",
+                    title: String(localized: "Instalator"),
                     value: downloadFlowModel.summaryCreatedFileText
                 )
                 downloadSummaryMetricRow(
-                    title: "Lokalizacja",
+                    title: String(localized: "Lokalizacja"),
                     value: downloadFlowModel.summaryLocationText
                 )
             }
             downloadSummaryMetricRow(
-                title: "Stan porządkowania",
+                title: String(localized: "Stan porządkowania"),
                 value: downloadFlowModel.summaryTemporaryFilesText
             )
 
@@ -56,7 +60,7 @@ extension MacOSDownloaderWindowShellView {
                !failureMessage.isEmpty {
                 Divider()
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(isPartial ? "Status" : "Szczegóły")
+                    Text(isPartial ? String(localized: "Status") : String(localized: "Szczegóły"))
                         .font(.subheadline.weight(.semibold))
                     Text(failureMessage)
                         .font(.subheadline)
@@ -73,7 +77,7 @@ extension MacOSDownloaderWindowShellView {
                         } label: {
                             HStack(spacing: 8) {
                                 Image(systemName: "arrow.right.circle.fill")
-                                Text("Przejdź do tworzenia USB z tym instalatorem")
+                                Text(String(localized: "Przejdź do tworzenia USB z tym instalatorem"))
                             }
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding(.horizontal, 12)
@@ -81,7 +85,7 @@ extension MacOSDownloaderWindowShellView {
                         }
                         .frame(maxWidth: .infinity)
                         .macUSBSecondaryButtonStyle()
-                        .help("Przejdź do tworzenia USB z tym instalatorem")
+                        .help(String(localized: "Przejdź do tworzenia USB z tym instalatorem"))
                     }
                     
                     Button {
@@ -89,7 +93,7 @@ extension MacOSDownloaderWindowShellView {
                     } label: {
                         HStack(spacing: 8) {
                             Image(systemName: "folder.fill")
-                            Text("Pokaż w Finderze")
+                            Text(String(localized: "Pokaż w Finderze"))
                         }
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.horizontal, 12)
@@ -168,7 +172,7 @@ extension MacOSDownloaderWindowShellView {
                 Image(systemName: "info.circle.fill")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                Text("Podpis Apple potwierdzony")
+                Text(String(localized: "Podpis Apple potwierdzony"))
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.primary)
             }
@@ -197,7 +201,7 @@ extension MacOSDownloaderWindowShellView {
     }
 
     private var expiredAppleSignatureInfoDescription: String {
-        "Ten instalator został prawidłowo podpisany przez Apple. Certyfikat użyty historycznie do podpisu wygasł, co jest oczekiwane dla starszych wydań systemu i nie wpływa na poprawność pobranego pliku."
+        String(localized: "Ten instalator został prawidłowo podpisany przez Apple. Certyfikat użyty historycznie do podpisu wygasł, co jest oczekiwane dla starszych wydań systemu i nie wpływa na poprawność pobranego pliku.")
     }
 
     func openPlannedInstallerFolder() {

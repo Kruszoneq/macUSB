@@ -3,7 +3,7 @@ import SwiftUI
 extension MacOSDownloaderWindowShellView {
     func downloaderProgressSection(for entry: MacOSInstallerEntry) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Pobieranie systemu")
+            Text(String(localized: "Pobieranie systemu"))
                 .font(.headline)
 
             ScrollView {
@@ -40,7 +40,7 @@ extension MacOSDownloaderWindowShellView {
                                         .foregroundStyle(.orange)
 
                                     VStack(alignment: .leading, spacing: 4) {
-                                        Text("Połączenie internetowe zostało utracone")
+                                        Text(String(localized: "Połączenie internetowe zostało utracone"))
                                             .font(.subheadline.weight(.semibold))
                                         Text(networkWarningMessage)
                                             .font(.caption)
@@ -56,7 +56,7 @@ extension MacOSDownloaderWindowShellView {
                            !failureMessage.isEmpty {
                             StatusCard(tone: .warning, density: .compact) {
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("Nie udało się dokończyć pobierania")
+                                    Text(String(localized: "Nie udało się dokończyć pobierania"))
                                         .font(.subheadline.weight(.semibold))
                                     Text(failureMessage)
                                         .font(.caption)
@@ -91,7 +91,7 @@ extension MacOSDownloaderWindowShellView {
             Capsule()
                 .fill(Color.secondary.opacity(0.20))
                 .frame(height: 1)
-            Text("Etapy pobierania")
+            Text(String(localized: "Etapy pobierania"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
             Capsule()
@@ -224,15 +224,18 @@ extension MacOSDownloaderWindowShellView {
     func downloadStageTitle(for stage: MontereyDownloadFlowStage) -> String {
         switch stage {
         case .connection:
-            return "Łączenie z serwerami Apple"
+            return String(localized: "Łączenie z serwerami Apple")
         case .downloading:
-            return "Pobieranie plików"
+            return String(localized: "Pobieranie plików")
         case .verifying:
-            return "Weryfikowanie plików"
+            return String(localized: "Weryfikowanie plików")
         case .buildingInstaller:
-            return "Przygotowywanie instalatora \(installerFamilyLabelForBuildStage())"
+            return String(
+                format: String(localized: "Przygotowywanie instalatora %@"),
+                installerFamilyLabelForBuildStage()
+            )
         case .cleanup:
-            return "Kończenie pracy"
+            return String(localized: "Kończenie pracy")
         }
     }
 
@@ -264,10 +267,13 @@ extension MacOSDownloaderWindowShellView {
         case .verifying:
             let fileName = downloadFlowModel.verifyFileName.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !fileName.isEmpty else { return nil }
-            if fileName == "Oczekiwanie..." {
+            if fileName == String(localized: "Oczekiwanie...") {
                 return fileName
             }
-            return "Weryfikowanie pliku \(fileName)..."
+            return String(
+                format: String(localized: "Weryfikowanie pliku %@..."),
+                fileName
+            )
         case .buildingInstaller:
             return downloadFlowModel.buildStatusText
         case .cleanup:

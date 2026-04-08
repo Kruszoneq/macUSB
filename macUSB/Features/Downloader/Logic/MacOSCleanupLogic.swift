@@ -15,13 +15,13 @@ extension MontereyDownloadFlowModel {
         if shouldRetainSessionFilesForDebugMode() {
             switch completionReason {
             case .success:
-                cleanupStatusText = "Tryb DEBUG: pliki sesji pozostawiono po sukcesie..."
+                cleanupStatusText = String(localized: "Tryb DEBUG: pliki sesji pozostawiono po sukcesie...")
             case .failed:
-                cleanupStatusText = "Tryb DEBUG: pliki sesji pozostawiono po błędzie..."
+                cleanupStatusText = String(localized: "Tryb DEBUG: pliki sesji pozostawiono po błędzie...")
             case .cancelled:
-                cleanupStatusText = "Tryb DEBUG: pliki sesji pozostawiono po anulowaniu..."
+                cleanupStatusText = String(localized: "Tryb DEBUG: pliki sesji pozostawiono po anulowaniu...")
             }
-            summaryTemporaryFilesText = "Pozostawione (tryb DEBUG)"
+            summaryTemporaryFilesText = String(localized: "Pozostawione (tryb DEBUG)")
             cleanupProgress = 1
             completedStages.insert(.cleanup)
             return
@@ -29,16 +29,16 @@ extension MontereyDownloadFlowModel {
 
         if cleanupDelegatedToHelper {
             if sessionCleanupHandledByHelper {
-                cleanupStatusText = "Kończenie pracy..."
-                summaryTemporaryFilesText = "Zakończone automatycznie"
+                cleanupStatusText = String(localized: "Kończenie pracy...")
+                summaryTemporaryFilesText = String(localized: "Zakończone automatycznie")
                 cleanupProgress = 1
                 completedStages.insert(.cleanup)
                 return
             }
-            let reason = helperCleanupFailureMessage ?? "Helper nie potwierdził usunięcia plików tymczasowych"
-            cleanupWarningMessage = "Instalator został przygotowany, ale usuwanie plików tymczasowych nie zostało ukończone automatycznie."
-            cleanupStatusText = "Kończenie pracy z ostrzeżeniem..."
-            summaryTemporaryFilesText = "Wymaga ręcznego dokończenia"
+            let reason = helperCleanupFailureMessage ?? String(localized: "Helper nie potwierdził usunięcia plików tymczasowych")
+            cleanupWarningMessage = String(localized: "Instalator został przygotowany, ale usuwanie plików tymczasowych nie zostało ukończone automatycznie.")
+            cleanupStatusText = String(localized: "Kończenie pracy z ostrzeżeniem...")
+            summaryTemporaryFilesText = String(localized: "Wymaga ręcznego dokończenia")
             cleanupProgress = 1
             completedStages.insert(.cleanup)
             AppLogging.error(
@@ -49,21 +49,21 @@ extension MontereyDownloadFlowModel {
         }
 
         guard let sessionRootURL = activeSessionRootURL else {
-            cleanupStatusText = "Kończenie pracy..."
-            summaryTemporaryFilesText = "Brak danych do porządkowania"
+            cleanupStatusText = String(localized: "Kończenie pracy...")
+            summaryTemporaryFilesText = String(localized: "Brak danych do porządkowania")
             cleanupProgress = 1
             completedStages.insert(.cleanup)
             return
         }
 
-        cleanupStatusText = "Porządkowanie plików tymczasowych..."
+        cleanupStatusText = String(localized: "Porządkowanie plików tymczasowych...")
         cleanupProgress = 0.2
 
         do {
             let helperResult = try await requestHelperCleanup(sessionRootURL: sessionRootURL)
             if !helperResult.success {
                 throw DownloadFailureReason.cleanupFailed(
-                    helperResult.errorMessage ?? "Helper nie potwierdzil usuniecia katalogu sesji"
+                    helperResult.errorMessage ?? String(localized: "Helper nie potwierdził usunięcia katalogu sesji")
                 )
             }
             activeSessionRootURL = nil
@@ -71,10 +71,10 @@ extension MontereyDownloadFlowModel {
             activeSessionOutputURL = nil
             cleanupProgress = 1
             completedStages.insert(.cleanup)
-            cleanupStatusText = "Kończenie pracy..."
-            summaryTemporaryFilesText = "Zakończone automatycznie"
+            cleanupStatusText = String(localized: "Kończenie pracy...")
+            summaryTemporaryFilesText = String(localized: "Zakończone automatycznie")
         } catch {
-            summaryTemporaryFilesText = "Nieukończone"
+            summaryTemporaryFilesText = String(localized: "Nieukończone")
             throw DownloadFailureReason.cleanupFailed(error.localizedDescription)
         }
     }
@@ -106,15 +106,19 @@ extension MontereyDownloadFlowModel {
             durationSeconds = 0
         }
         summaryDurationText = formatDuration(durationSeconds)
-        summaryCreatedFileText = finalInstallerAppURL?.lastPathComponent ?? "Nie utworzono instalatora"
-        summaryLocationText = finalInstallerAppURL?.deletingLastPathComponent().path ?? "Brak danych"
+        summaryCreatedFileText = finalInstallerAppURL?.lastPathComponent ?? String(localized: "Nie utworzono instalatora")
+        summaryLocationText = finalInstallerAppURL?.deletingLastPathComponent().path ?? String(localized: "Brak danych")
     }
 
     func formatDuration(_ seconds: TimeInterval) -> String {
         let totalSeconds = Int(seconds.rounded())
         let minutes = totalSeconds / 60
         let remainder = totalSeconds % 60
-        return String(format: "%02dm %02ds", minutes, remainder)
+        return String(
+            format: String(localized: "%02dm %02ds"),
+            minutes,
+            remainder
+        )
     }
 
     func playCompletionSound(success: Bool) {

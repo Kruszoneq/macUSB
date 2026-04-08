@@ -24,7 +24,10 @@ extension MontereyDownloadFlowModel {
                     let recovered = try await waitForInternetReconnect(timeoutSeconds: internetReconnectTimeoutSeconds, probeURL: item.url)
                     if recovered {
                         networkWarningMessage = nil
-                        downloadFileName = "Pobieranie pliku \(item.name)..."
+                        downloadFileName = String(
+                            format: String(localized: "Pobieranie pliku %@..."),
+                            item.name
+                        )
                         AppLogging.info(
                             "Polaczenie internetowe przywrocone. Wznawiam pobieranie \(item.name).",
                             category: "Downloader"
@@ -32,7 +35,7 @@ extension MontereyDownloadFlowModel {
                         continue
                     }
 
-                    throw DownloadFailureReason.downloadFailed("Brak dostępu do internetu przez ponad 1 minutę")
+                    throw DownloadFailureReason.downloadFailed(String(localized: "Brak dostępu do internetu przez ponad 1 minutę"))
                 }
 
                 lastError = error
@@ -48,7 +51,7 @@ extension MontereyDownloadFlowModel {
             }
         }
 
-        throw lastError ?? DownloadFailureReason.downloadFailed("Nieznany blad pobierania")
+        throw lastError ?? DownloadFailureReason.downloadFailed(String(localized: "Nieznany błąd pobierania"))
     }
 
     func isOfflineDownloadError(_ error: Error) -> Bool {
@@ -77,7 +80,10 @@ extension MontereyDownloadFlowModel {
             let elapsed = Int(Date().timeIntervalSince(start))
             let remaining = max(0, timeoutSeconds - elapsed)
 
-            networkWarningMessage = "Pobieranie zostało wstrzymane. Wznowienie nastąpi automatycznie po odzyskaniu połączenia (pozostało: \(remaining) s)."
+            networkWarningMessage = String(
+                format: String(localized: "Pobieranie zostało wstrzymane. Wznowienie nastąpi automatycznie po odzyskaniu połączenia (pozostało: %@ s)."),
+                String(remaining)
+            )
             downloadSpeedText = "0.0 MB/s"
 
             if await probeReachability(url: probeURL) {

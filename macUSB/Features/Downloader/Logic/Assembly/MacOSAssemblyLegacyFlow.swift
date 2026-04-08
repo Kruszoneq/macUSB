@@ -57,7 +57,7 @@ extension MontereyDownloadFlowModel {
         _ = try await runCommandWithBuildProgress(
             executable: "/usr/sbin/pkgutil",
             arguments: ["--expand-full", files.installAssistantAuto.path, expandedURL.path],
-            statusText: "Przygotowywanie plików instalatora...",
+            statusText: String(localized: "Przygotowywanie plików instalatora..."),
             progressStart: 0.08,
             progressEnd: 0.26,
             stepName: "pkgutil expand"
@@ -72,7 +72,7 @@ extension MontereyDownloadFlowModel {
         let sharedSupportURL = appURL.appendingPathComponent("Contents/SharedSupport", isDirectory: true)
 
         try await runLegacyFileStepWithProgress(
-            statusText: "Przygotowywanie zasobów instalatora...",
+            statusText: String(localized: "Przygotowywanie zasobów instalatora..."),
             progressStart: 0.28,
             progressEnd: 0.38,
             stepName: "prepare SharedSupport"
@@ -85,7 +85,7 @@ extension MontereyDownloadFlowModel {
         _ = try await runCommandWithBuildProgress(
             executable: "/usr/bin/hdiutil",
             arguments: ["attach", "-readonly", "-nobrowse", files.recoveryHDMetaDmg.path, "-mountpoint", mountURL.path],
-            statusText: "Otwieranie pakietu odzyskiwania...",
+            statusText: String(localized: "Otwieranie pakietu odzyskiwania..."),
             progressStart: 0.40,
             progressEnd: 0.52,
             stepName: "attach recovery image"
@@ -93,7 +93,7 @@ extension MontereyDownloadFlowModel {
         recoveryMounted = true
 
         try await runLegacyFileStepWithProgress(
-            statusText: "Dodawanie wymaganych zasobów...",
+            statusText: String(localized: "Dodawanie wymaganych zasobów..."),
             progressStart: 0.54,
             progressEnd: 0.72,
             stepName: "copy RecoveryHD assets"
@@ -109,7 +109,7 @@ extension MontereyDownloadFlowModel {
             }
         }
 
-        buildStatusText = "Kończenie przygotowania zasobów..."
+        buildStatusText = String(localized: "Kończenie przygotowania zasobów...")
         buildProgress = 0.74
         AppLogging.info(
             "Legacy assembly: detach recovery mount=\(mountURL.path)",
@@ -134,7 +134,7 @@ extension MontereyDownloadFlowModel {
             )
         }
         try await runLegacyFileStepWithProgress(
-            statusText: "Kończenie przygotowania instalatora...",
+            statusText: String(localized: "Kończenie przygotowania instalatora..."),
             progressStart: 0.80,
             progressEnd: 0.96,
             stepName: "copy installer to /Applications"
@@ -185,7 +185,7 @@ extension MontereyDownloadFlowModel {
         _ = try await runCommandWithBuildProgress(
             executable: "/usr/bin/hdiutil",
             arguments: ["attach", "-readonly", "-nobrowse", diskImageURL.path, "-mountpoint", mountURL.path],
-            statusText: "Otwieranie obrazu instalatora...",
+            statusText: String(localized: "Otwieranie obrazu instalatora..."),
             progressStart: 0.08,
             progressEnd: 0.24,
             stepName: "attach oldest dmg"
@@ -194,7 +194,7 @@ extension MontereyDownloadFlowModel {
 
         let installerPackageURL = try locateInstallerPackage(in: mountURL)
         try await runLegacyFileStepWithProgress(
-            statusText: "Kopiowanie pakietu instalatora...",
+            statusText: String(localized: "Kopiowanie pakietu instalatora..."),
             progressStart: 0.26,
             progressEnd: 0.34,
             stepName: "copy oldest package"
@@ -216,7 +216,7 @@ extension MontereyDownloadFlowModel {
         )
 
         try await runLegacyFileStepWithProgress(
-            statusText: "Kończenie przygotowania instalatora...",
+            statusText: String(localized: "Kończenie przygotowania instalatora..."),
             progressStart: 0.86,
             progressEnd: 0.96,
             stepName: "copy oldest installer to /Applications"
@@ -304,7 +304,7 @@ extension MontereyDownloadFlowModel {
         let extractionRootURL = workspaceURL.appendingPathComponent("ExtractedPayload", isDirectory: true)
 
         try await runLegacyFileStepWithProgress(
-            statusText: "Przygotowywanie zawartości instalatora...",
+            statusText: String(localized: "Przygotowywanie zawartości instalatora..."),
             progressStart: 0.36,
             progressEnd: 0.42,
             stepName: "prepare oldest extraction workspace"
@@ -321,7 +321,7 @@ extension MontereyDownloadFlowModel {
         _ = try await runCommandWithBuildProgress(
             executable: "/usr/sbin/pkgutil",
             arguments: ["--expand", packageURL.path, expandedURL.path],
-            statusText: "Rozpakowywanie pakietu instalatora...",
+            statusText: String(localized: "Rozpakowywanie pakietu instalatora..."),
             progressStart: 0.42,
             progressEnd: 0.54,
             stepName: "pkgutil expand oldest package"
@@ -341,7 +341,7 @@ extension MontereyDownloadFlowModel {
             _ = try await runCommandWithBuildProgress(
                 executable: "/usr/sbin/pkgutil",
                 arguments: ["--expand-full", packageURL.path, expandedFullURL.path],
-                statusText: "Przygotowywanie rozszerzonego rozpakowania...",
+                statusText: String(localized: "Przygotowywanie rozszerzonego rozpakowania..."),
                 progressStart: 0.54,
                 progressEnd: 0.78,
                 stepName: "pkgutil expand-full oldest package"
@@ -362,7 +362,11 @@ extension MontereyDownloadFlowModel {
             let start = 0.54 + (Double(index) / Double(totalPayloads)) * 0.22
             let end = 0.54 + (Double(index + 1) / Double(totalPayloads)) * 0.22
             try await runLegacyFileStepWithProgress(
-                statusText: "Przygotowywanie plików instalatora (\(index + 1)/\(payloadURLs.count))...",
+                statusText: String(
+                    format: String(localized: "Przygotowywanie plików instalatora (%@/%@)..."),
+                    String(index + 1),
+                    String(payloadURLs.count)
+                ),
                 progressStart: start,
                 progressEnd: end,
                 stepName: "extract payload \(index + 1)"
@@ -394,7 +398,7 @@ extension MontereyDownloadFlowModel {
                 category: "Downloader"
             )
             throw DownloadFailureReason.assemblyFailed(
-                "Nie można dokończyć przygotowania. Brakuje pliku InstallESD.dmg. Spróbuj ponownie pobrać ten system."
+                String(localized: "Nie można dokończyć przygotowania. Brakuje pliku InstallESD.dmg. Spróbuj ponownie pobrać ten system.")
             )
         }
         AppLogging.info(
@@ -403,7 +407,7 @@ extension MontereyDownloadFlowModel {
         )
 
         try await runLegacyFileStepWithProgress(
-            statusText: "Dodawanie obrazu systemu do instalatora...",
+            statusText: String(localized: "Dodawanie obrazu systemu do instalatora..."),
             progressStart: 0.78,
             progressEnd: 0.84,
             stepName: "copy InstallESD into SharedSupport"

@@ -179,7 +179,7 @@ struct CreationProgressView: View {
         case .pending:
             StatusCard(tone: .subtle, density: .compact) {
                 HStack(spacing: 12) {
-                    Image(systemName: iconForStage(stage.key))
+                    Image(systemName: pendingIconForStage(stage.key))
                         .font(sectionIconFont)
                         .foregroundColor(.secondary)
                         .frame(width: 24)
@@ -197,7 +197,7 @@ struct CreationProgressView: View {
             ) {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack(spacing: 12) {
-                        Image(systemName: iconForStage(stage.key))
+                        Image(systemName: activeIconForStage(stage.key))
                             .font(sectionIconFont)
                             .foregroundColor(.accentColor)
                             .frame(width: 24)
@@ -286,26 +286,49 @@ struct CreationProgressView: View {
         return .pending
     }
 
-    private func iconForStage(_ stageKey: String) -> String {
+    private func pendingIconForStage(_ stageKey: String) -> String {
+        switch stageKey {
+        case "prepare_source":
+            return "tray.and.arrow.down"
+        case "preformat", "ppc_format":
+            return "externaldrive"
+        case "imagescan":
+            return "magnifyingglass.circle"
+        case "restore", "ppc_restore", "catalina_copy":
+            return "doc.on.doc"
+        case "createinstallmedia":
+            return "externaldrive.badge.plus"
+        case "catalina_cleanup":
+            return "gearshape"
+        case "cleanup_temp":
+            return "trash"
+        case "catalina_xattr":
+            return "checkmark.shield"
+        default:
+            return "gearshape"
+        }
+    }
+
+    private func activeIconForStage(_ stageKey: String) -> String {
         switch stageKey {
         case "prepare_source":
             return "tray.and.arrow.down.fill"
         case "preformat", "ppc_format":
             return "externaldrive.fill"
         case "imagescan":
-            return "magnifyingglass"
+            return "magnifyingglass.circle.fill"
         case "restore", "ppc_restore", "catalina_copy":
             return "doc.on.doc.fill"
         case "createinstallmedia":
-            return "externaldrive.badge.plus"
+            return "externaldrive.fill.badge.plus"
         case "catalina_cleanup":
-            return "doc.badge.gearshape"
+            return "gearshape.fill"
         case "cleanup_temp":
             return "trash.fill"
         case "catalina_xattr":
             return "checkmark.shield.fill"
         default:
-            return "gearshape.2"
+            return "gearshape.fill"
         }
     }
 

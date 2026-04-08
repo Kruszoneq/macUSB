@@ -35,19 +35,39 @@ enum DownloadFailureReason: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .unsupportedSelection:
-            return "Wybrana pozycja nie jest wspierana w aktualnym pobieraniu"
+            return String(localized: "Wybrana pozycja nie jest wspierana w aktualnym pobieraniu")
         case let .insufficientDiskSpace(requiredMinimumBytes, availableBytes, installerBytes):
-            return "Brak wolnego miejsca: wymagane minimum \(DownloadManifestItem.formatBytes(requiredMinimumBytes)) (250% rozmiaru instalatora \(DownloadManifestItem.formatBytes(installerBytes))), dostepne \(DownloadManifestItem.formatBytes(availableBytes))."
+            return String(
+                format: String(localized: "Brak wolnego miejsca: wymagane minimum %@ (250%% rozmiaru instalatora %@), dostępne %@."),
+                DownloadManifestItem.formatBytes(requiredMinimumBytes),
+                DownloadManifestItem.formatBytes(installerBytes),
+                DownloadManifestItem.formatBytes(availableBytes)
+            )
         case let .sessionInitializationFailed(details):
-            return "Nie udało się rozpocząć pobierania. Nie udało się przygotować sesji pobierania: \(details)"
+            return String(
+                format: String(localized: "Nie udało się rozpocząć pobierania. Nie udało się przygotować sesji pobierania: %@"),
+                details
+            )
         case let .downloadFailed(details):
-            return "Nie udało się pobrać plików instalatora: \(details)"
+            return String(
+                format: String(localized: "Nie udało się pobrać plików instalatora: %@"),
+                details
+            )
         case let .verificationFailed(details):
-            return "Weryfikacja plików nie powiodła się: \(details)"
+            return String(
+                format: String(localized: "Weryfikacja plików nie powiodła się: %@"),
+                details
+            )
         case let .assemblyFailed(details):
-            return "Nie udało się przygotować instalatora: \(details)"
+            return String(
+                format: String(localized: "Nie udało się przygotować instalatora: %@"),
+                details
+            )
         case let .cleanupFailed(details):
-            return "Usuwanie plików tymczasowych nie zostało ukończone: \(details)"
+            return String(
+                format: String(localized: "Usuwanie plików tymczasowych nie zostało ukończone: %@"),
+                details
+            )
         }
     }
 }
@@ -107,27 +127,31 @@ final class MontereyDownloadFlowModel: ObservableObject {
     @Published var networkWarningMessage: String?
     @Published var hasExpiredButTrustedAppleSignature: Bool = false
 
-    @Published var connectionStatusText: String = "Łączenie z serwerami Apple..."
+    @Published var connectionStatusText: String = String(localized: "Łączenie z serwerami Apple...")
     @Published var downloadCurrentIndex: Int = 0
     @Published var downloadTotal: Int = 0
-    @Published var downloadFileName: String = "Oczekiwanie..."
+    @Published var downloadFileName: String = String(localized: "Oczekiwanie...")
     @Published var downloadProgress: Double = 0
     @Published var downloadSpeedText: String = "0.0 MB/s"
     @Published var downloadTransferredText: String = "0.0MB/0.0MB"
     @Published var verifyCurrentIndex: Int = 0
     @Published var verifyTotal: Int = 0
-    @Published var verifyFileName: String = "Oczekiwanie..."
+    @Published var verifyFileName: String = String(localized: "Oczekiwanie...")
     @Published var verifyProgress: Double = 0
-    @Published var buildStatusText: String = "Przygotowywanie instalatora..."
+    @Published var buildStatusText: String = String(localized: "Przygotowywanie instalatora...")
     @Published var buildProgress: Double? = nil
-    @Published var cleanupStatusText: String = "Przygotowanie czyszczenia..."
+    @Published var cleanupStatusText: String = String(localized: "Przygotowanie czyszczenia...")
     @Published var cleanupProgress: Double = 0
     @Published var summaryTotalDownloadedText: String = "0.0 GB"
     @Published var summaryAverageSpeedText: String = "0.0 MB/s"
-    @Published var summaryDurationText: String = "00m 00s"
-    @Published var summaryLocationText: String = "Brak danych"
-    @Published var summaryTemporaryFilesText: String = "Brak danych"
-    @Published var summaryCreatedFileText: String = "Brak danych"
+    @Published var summaryDurationText: String = String(
+        format: String(localized: "%02dm %02ds"),
+        0,
+        0
+    )
+    @Published var summaryLocationText: String = String(localized: "Brak danych")
+    @Published var summaryTemporaryFilesText: String = String(localized: "Brak danych")
+    @Published var summaryCreatedFileText: String = String(localized: "Brak danych")
     @Published var discoveredDownloadItems: [DownloadManifestItem] = []
     @Published var pendingDiskSpaceAlert: DiskSpaceAlertContext?
     @Published var suppressInlineFailureMessage: Bool = false
@@ -204,27 +228,31 @@ final class MontereyDownloadFlowModel: ObservableObject {
         networkWarningMessage = nil
         hasExpiredButTrustedAppleSignature = false
 
-        connectionStatusText = "Łączenie z serwerami Apple..."
+        connectionStatusText = String(localized: "Łączenie z serwerami Apple...")
         downloadCurrentIndex = 0
         downloadTotal = 0
-        downloadFileName = "Oczekiwanie..."
+        downloadFileName = String(localized: "Oczekiwanie...")
         downloadProgress = 0
         downloadSpeedText = "0.0 MB/s"
         downloadTransferredText = "0.0MB/0.0MB"
         verifyCurrentIndex = 0
         verifyTotal = 0
-        verifyFileName = "Oczekiwanie..."
+        verifyFileName = String(localized: "Oczekiwanie...")
         verifyProgress = 0
-        buildStatusText = "Przygotowywanie instalatora..."
+        buildStatusText = String(localized: "Przygotowywanie instalatora...")
         buildProgress = nil
-        cleanupStatusText = "Przygotowanie czyszczenia..."
+        cleanupStatusText = String(localized: "Przygotowanie czyszczenia...")
         cleanupProgress = 0
         summaryTotalDownloadedText = "0.0 GB"
         summaryAverageSpeedText = "0.0 MB/s"
-        summaryDurationText = "00m 00s"
-        summaryLocationText = "Brak danych"
-        summaryTemporaryFilesText = "Brak danych"
-        summaryCreatedFileText = "Brak danych"
+        summaryDurationText = String(
+            format: String(localized: "%02dm %02ds"),
+            0,
+            0
+        )
+        summaryLocationText = String(localized: "Brak danych")
+        summaryTemporaryFilesText = String(localized: "Brak danych")
+        summaryCreatedFileText = String(localized: "Brak danych")
         discoveredDownloadItems = []
         pendingDiskSpaceAlert = nil
         suppressInlineFailureMessage = false

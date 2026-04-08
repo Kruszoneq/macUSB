@@ -16,11 +16,14 @@ extension MontereyDownloadFlowModel {
         for (index, item) in manifest.items.enumerated() {
             try Task.checkCancellation()
             guard let payloadURL = activeSessionPayloadURL else {
-                throw DownloadFailureReason.sessionInitializationFailed("Brak katalogu payload sesji")
+                throw DownloadFailureReason.sessionInitializationFailed(String(localized: "Brak katalogu payload sesji"))
             }
 
             downloadCurrentIndex = index + 1
-            downloadFileName = "Pobieranie pliku \(item.name)..."
+            downloadFileName = String(
+                format: String(localized: "Pobieranie pliku %@..."),
+                item.name
+            )
 
             let itemDestinationURL = payloadURL.appendingPathComponent(
                 destinationFileName(for: item, index: index, manifest: manifest)
@@ -164,7 +167,10 @@ final class FileDownloadTaskDelegate: NSObject, URLSessionDownloadDelegate {
         else {
             continuation?.resume(
                 throwing: DownloadFailureReason.downloadFailed(
-                    "Serwer zwrocil niepoprawny kod odpowiedzi dla \(fileName)"
+                    String(
+                        format: String(localized: "Serwer zwrócił niepoprawny kod odpowiedzi dla %@"),
+                        fileName
+                    )
                 )
             )
             continuation = nil
@@ -191,7 +197,11 @@ final class FileDownloadTaskDelegate: NSObject, URLSessionDownloadDelegate {
         } catch {
             continuation?.resume(
                 throwing: DownloadFailureReason.downloadFailed(
-                    "Nie udalo sie zapisac pliku \(fileName): \(error.localizedDescription)"
+                    String(
+                        format: String(localized: "Nie udało się zapisać pliku %@: %@"),
+                        fileName,
+                        error.localizedDescription
+                    )
                 )
             )
         }
