@@ -87,6 +87,15 @@ extension HelperServiceManager {
         alert.addButton(withTitle: String(localized: "OK"))
         presentAlert(alert)
     }
+    func presentAutomaticHelperUpdateFailureAlert() {
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .warning
+        alert.messageText = String(localized: "Nie udało się automatycznie zaktualizować helpera")
+        alert.informativeText = String(localized: "macUSB wykrył nową wersję aplikacji, ale automatyczna aktualizacja helpera zakończyła się błędem. Wybierz Narzędzia → Napraw helpera i uruchom naprawę ręcznie.")
+        alert.addButton(withTitle: String(localized: "Rozumiem"))
+        presentAlert(alert)
+    }
     func isOperationNotPermitted(_ error: Error) -> Bool {
         let nsError = error as NSError
         if nsError.code == Int(EPERM) || nsError.code == 1 {

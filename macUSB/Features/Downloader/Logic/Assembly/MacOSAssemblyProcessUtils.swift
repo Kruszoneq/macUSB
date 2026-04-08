@@ -46,6 +46,53 @@ extension MontereyDownloadFlowModel {
         )
     }
 
+    @discardableResult
+    func detachDiskImageWithRetry(
+        mountURL: URL,
+        context: String
+    ) -> Bool {
+        let normalArguments = ["detach", mountURL.path]
+        for attempt in 1...2 {
+            do {
+                try runProcessAndCaptureOutput(
+                    executable: "/usr/bin/hdiutil",
+                    arguments: normalArguments
+                )
+                AppLogging.info(
+                    "\(context): detach success attempt=\(attempt) mode=normal mount=\(mountURL.path)",
+                    category: "Downloader"
+                )
+                return true
+            } catch {
+                AppLogging.error(
+                    "\(context): detach failed attempt=\(attempt) mode=normal mount=\(mountURL.path) error=\(error.localizedDescription)",
+                    category: "Downloader"
+                )
+                if attempt == 1 {
+                    Thread.sleep(forTimeInterval: 0.25)
+                }
+            }
+        }
+
+        do {
+            try runProcessAndCaptureOutput(
+                executable: "/usr/bin/hdiutil",
+                arguments: ["detach", mountURL.path, "-force"]
+            )
+            AppLogging.info(
+                "\(context): detach success mode=force mount=\(mountURL.path)",
+                category: "Downloader"
+            )
+            return true
+        } catch {
+            AppLogging.error(
+                "\(context): detach failed mode=force mount=\(mountURL.path) error=\(error.localizedDescription)",
+                category: "Downloader"
+            )
+            return false
+        }
+    }
+
     private static func runProcessAndCaptureOutputBlocking(
         executable: String,
         arguments: [String]

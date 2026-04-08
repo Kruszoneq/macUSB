@@ -1385,6 +1385,9 @@
         }
       }
     },
+    "Aby helper działał poprawnie, wymagane jest zezwolenie na działanie w tle w Ustawieniach systemowych." : {
+
+    },
     "Aby rozpocząć pobieranie, potrzebujesz więcej wolnego miejsca na dysku.\n\nWymagane minimum: %@. Dostępne: %@.\n\nZwolnij miejsce i spróbuj ponownie." : {
       "localizations" : {
         "pl" : {
@@ -2877,9 +2880,6 @@
         }
       }
     },
-    "Brak zmiany po 3 sekundach, dodaję dodatkowe oczekiwanie" : {
-
-    },
     "Cały proces może potrwać kilka minut." : {
       "localizations" : {
         "de" : {
@@ -3031,9 +3031,6 @@
           }
         }
       }
-    },
-    "Czekam na odświeżenie usług systemowych" : {
-
     },
     "Czy chcesz włączyć powiadomienia?" : {
       "localizations" : {
@@ -4429,6 +4426,7 @@
 
     },
     "Helper działa poprawnie" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4504,7 +4502,7 @@
         }
       }
     },
-    "Helper jest gotowy do dalszej pracy" : {
+    "Helper działa prawidłowo i jest gotowy do pracy." : {
 
     },
     "Helper jest już usunięty" : {
@@ -8265,6 +8263,9 @@
         }
       }
     },
+    "macUSB wykrył nową wersję aplikacji, ale automatyczna aktualizacja helpera zakończyła się błędem. Wybierz Narzędzia → Napraw helpera i uruchom naprawę ręcznie." : {
+
+    },
     "macUSB wymaga zezwolenia na działanie w tle, aby umożliwić zarządzanie nośnikami. Przejdź do ustawień systemowych, aby nadać wymagane uprawnienia" : {
       "localizations" : {
         "de" : {
@@ -8340,9 +8341,6 @@
           }
         }
       }
-    },
-    "Można bezpiecznie przejść do ponownej rejestracji" : {
-
     },
     "Napraw helpera" : {
       "localizations" : {
@@ -8497,9 +8495,6 @@
       }
     },
     "Naprawa helpera systemowego" : {
-
-    },
-    "Naprawa helpera wymaga uwagi" : {
 
     },
     "Naprawa helpera zakończona" : {
@@ -8731,6 +8726,12 @@
         }
       }
     },
+    "Naprawa helpera zakończona niepowodzeniem" : {
+
+    },
+    "Naprawa helpera zakończona pomyślnie" : {
+
+    },
     "Naprawa helpera zakończona pomyślnie." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -8807,6 +8808,9 @@
           }
         }
       }
+    },
+    "Naprawianie…" : {
+
     },
     "Narzędzia" : {
       "localizations" : {
@@ -9501,6 +9505,9 @@
         }
       }
     },
+    "Nie udało się automatycznie zaktualizować helpera" : {
+
+    },
     "Nie udało się dokończyć pobierania" : {
 
     },
@@ -9579,6 +9586,12 @@
           }
         }
       }
+    },
+    "Nie udało się potwierdzić gotowości helpera." : {
+
+    },
+    "Nie udało się przywrócić pełnej gotowości helpera. Szczegóły zapisano w logach diagnostycznych." : {
+
     },
     "Nie udało się usunąć plików tymczasowych: %@" : {
       "localizations" : {
@@ -10908,6 +10921,9 @@
         }
       }
     },
+    "Nieznany błąd" : {
+
+    },
     "Nieznany status helpera po rejestracji." : {
       "localizations" : {
         "de" : {
@@ -11299,9 +11315,6 @@
           }
         }
       }
-    },
-    "Nowa usługa została aktywowana" : {
-
     },
     "Oczekiwanie na plik .dmg, .iso, .cdr lub .app..." : {
       "localizations" : {
@@ -12678,12 +12691,6 @@
         }
       }
     },
-    "Poprzednia instancja helpera została zatrzymana" : {
-
-    },
-    "Poprzednia rejestracja została usunięta" : {
-
-    },
     "Português (BR)" : {
       "localizations" : {
         "de" : {
@@ -12761,9 +12768,6 @@
       }
     },
     "Postęp naprawy" : {
-
-    },
-    "Potwierdzam poprawną rejestrację" : {
 
     },
     "Powiadomienia dla macUSB zostały zablokowane w ustawieniach systemowych. Aby otrzymywać informacje o zakończeniu procesów, należy zezwolić aplikacji na ich wyświetlanie w systemie." : {
@@ -13385,9 +13389,6 @@
           }
         }
       }
-    },
-    "Proces został wykonany poprawnie" : {
-
     },
     "Proces został zatrzymany przez użytkownika" : {
       "localizations" : {
@@ -14805,7 +14806,7 @@
         }
       }
     },
-    "Rejestruję helpera od nowa" : {
+    "Rejestracja helpera i weryfikacja komunikacji zostały zakończone pomyślnie." : {
 
     },
     "Repozytorium macUSB na GitHub" : {
@@ -15036,9 +15037,6 @@
         }
       }
     },
-    "Rozpoczynam naprawę helpera" : {
-
-    },
     "Rozpoczynanie..." : {
       "localizations" : {
         "de" : {
@@ -15114,6 +15112,9 @@
           }
         }
       }
+    },
+    "Rozumiem" : {
+
     },
     "Ścieżka..." : {
       "localizations" : {
@@ -15267,22 +15268,14 @@
         }
       }
     },
-    "Sprawdź dziennik techniczny, aby zobaczyć szczegóły" : {
-
-    },
-    "Sprawdzam bieżący stan helpera" : {
-
-    },
-    "Sprawdzam komunikację z helperem" : {
-
-    },
-    "Sprawdzam, czy helper odpowiada poprawnie przez XPC" : {
-
-    },
     "Sprawdzanie rozmiarów instalatorów..." : {
 
     },
+    "Sprawdzanie statusu helpera" : {
+
+    },
     "Sprawdzanie statusu..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -15357,6 +15350,18 @@
           }
         }
       }
+    },
+    "Sprawdzanie…" : {
+
+    },
+    "Sprawdzenie statusu helpera zakończone niepowodzeniem" : {
+
+    },
+    "Sprawdzenie statusu helpera zakończone pomyślnie" : {
+
+    },
+    "Sprawdzenie statusu helpera zakończone wymaganym działaniem" : {
+
     },
     "Spróbuj ponownie od początku" : {
       "localizations" : {
@@ -15588,9 +15593,6 @@
           }
         }
       }
-    },
-    "Status jest aktualizowany na bieżąco" : {
-
     },
     "Status usługi: %@" : {
       "localizations" : {
@@ -15908,6 +15910,9 @@
     "Szczegóły" : {
 
     },
+    "Szczegóły naprawy helpera" : {
+
+    },
     "Szczegóły operacji" : {
       "localizations" : {
         "de" : {
@@ -15984,7 +15989,7 @@
         }
       }
     },
-    "Szczegóły techniczne są dostępne w dzienniku poniżej" : {
+    "Szczegóły statusu helpera" : {
 
     },
     "Szczegóły: %@" : {
@@ -16842,9 +16847,6 @@
         }
       }
     },
-    "Trwa naprawa helpera" : {
-
-    },
     "Trwa naprawa helpera..." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -16921,6 +16923,12 @@
           }
         }
       }
+    },
+    "Trwa odświeżanie rejestracji i połączenia helpera systemowego." : {
+
+    },
+    "Trwa sprawdzanie gotowości helpera systemowego." : {
+
     },
     "Türkçe" : {
       "localizations" : {
@@ -17780,7 +17788,7 @@
         }
       }
     },
-    "Usuwam poprzednią rejestrację" : {
+    "Ustawienia systemowe" : {
 
     },
     "Utworzono instalator systemu" : {
@@ -21023,6 +21031,7 @@
       }
     },
     "Wyświetl szczegóły" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

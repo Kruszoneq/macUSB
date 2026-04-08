@@ -46,9 +46,9 @@ extension MontereyDownloadFlowModel {
                     "Legacy assembly: cleanup detach recovery mount=\(mountURL.path)",
                     category: "Downloader"
                 )
-                _ = try? runProcessAndCaptureOutput(
-                    executable: "/usr/bin/hdiutil",
-                    arguments: ["detach", mountURL.path, "-force"]
+                _ = detachDiskImageWithRetry(
+                    mountURL: mountURL,
+                    context: "Legacy assembly cleanup"
                 )
             }
             try? FileManager.default.removeItem(at: mountURL)
@@ -115,9 +115,9 @@ extension MontereyDownloadFlowModel {
             "Legacy assembly: detach recovery mount=\(mountURL.path)",
             category: "Downloader"
         )
-        _ = try? runProcessAndCaptureOutput(
-            executable: "/usr/bin/hdiutil",
-            arguments: ["detach", mountURL.path, "-force"]
+        _ = detachDiskImageWithRetry(
+            mountURL: mountURL,
+            context: "Legacy assembly finalize"
         )
         recoveryMounted = false
 
@@ -174,9 +174,9 @@ extension MontereyDownloadFlowModel {
         var mounted = false
         defer {
             if mounted {
-                _ = try? runProcessAndCaptureOutput(
-                    executable: "/usr/bin/hdiutil",
-                    arguments: ["detach", mountURL.path, "-force"]
+                _ = detachDiskImageWithRetry(
+                    mountURL: mountURL,
+                    context: "Oldest assembly cleanup"
                 )
             }
             try? FileManager.default.removeItem(at: mountURL)

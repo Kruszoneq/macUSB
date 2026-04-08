@@ -2,6 +2,57 @@ import Foundation
 import Darwin
 
 extension DownloaderAssemblyExecutor {
+    @discardableResult
+    private func detachDiskImageWithRetry(
+        mountURL: URL,
+        statusText: String
+    ) -> Bool {
+        let normalArguments = ["detach", mountURL.path]
+        for attempt in 1...2 {
+            do {
+                try runCommand(
+                    executable: "/usr/bin/hdiutil",
+                    arguments: normalArguments
+                )
+                emit(
+                    percent: nil,
+                    status: statusText,
+                    logLine: "legacy-assembly detach success attempt=\(attempt) mode=normal mount=\(mountURL.path)"
+                )
+                return true
+            } catch {
+                emit(
+                    percent: nil,
+                    status: statusText,
+                    logLine: "legacy-assembly detach failed attempt=\(attempt) mode=normal mount=\(mountURL.path) error=\(error.localizedDescription)"
+                )
+                if attempt == 1 {
+                    Thread.sleep(forTimeInterval: 0.25)
+                }
+            }
+        }
+
+        do {
+            try runCommand(
+                executable: "/usr/bin/hdiutil",
+                arguments: ["detach", mountURL.path, "-force"]
+            )
+            emit(
+                percent: nil,
+                status: statusText,
+                logLine: "legacy-assembly detach success mode=force mount=\(mountURL.path)"
+            )
+            return true
+        } catch {
+            emit(
+                percent: nil,
+                status: statusText,
+                logLine: "legacy-assembly detach failed mode=force mount=\(mountURL.path) error=\(error.localizedDescription)"
+            )
+            return false
+        }
+    }
+
     func cleanupSessionDirectory(_ sessionRootDirectory: URL) throws {
         guard FileManager.default.fileExists(atPath: sessionRootDirectory.path) else { return }
         try FileManager.default.removeItem(at: sessionRootDirectory)
@@ -34,9 +85,9 @@ extension DownloaderAssemblyExecutor {
         let mountURL = sessionRootDirectory.appendingPathComponent("legacy_installer_mount", isDirectory: true)
 
         if FileManager.default.fileExists(atPath: mountURL.path) {
-            try? runCommand(
-                executable: "/usr/bin/hdiutil",
-                arguments: ["detach", mountURL.path, "-force"]
+            _ = detachDiskImageWithRetry(
+                mountURL: mountURL,
+                statusText: "Czyszczenie poprzedniego montowania obrazu..."
             )
             try? FileManager.default.removeItem(at: mountURL)
         }
@@ -77,9 +128,9 @@ extension DownloaderAssemblyExecutor {
         )
 
         defer {
-            try? runCommand(
-                executable: "/usr/bin/hdiutil",
-                arguments: ["detach", mountURL.path, "-force"]
+            _ = detachDiskImageWithRetry(
+                mountURL: mountURL,
+                statusText: "Zamykanie tymczasowego obrazu..."
             )
             try? FileManager.default.removeItem(at: mountURL)
             try? FileManager.default.removeItem(at: imageURL)

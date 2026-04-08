@@ -119,11 +119,22 @@ Contract invariants:
 - Performs health validation via XPC.
 - Uses controlled recovery when enabled service is unhealthy.
 
+### Startup Auto-Repair Flow (version/build change)
+- Entry point: `bootstrapIfNeededAtStartup`.
+- After successful non-interactive ensure-ready, app compares current app fingerprint (`CFBundleShortVersionString` + `CFBundleVersion`) with last successful helper-repair fingerprint stored in `UserDefaults`.
+- If fingerprint changed, or no previous fingerprint exists (upgrade from older app versions), app runs automatic full helper repair in background.
+- Successful automatic repair updates stored fingerprint and remains visible only in logs.
+- Failed automatic repair presents one warning `NSAlert` with guidance to run `Tools → Repair helper` manually.
+
 ### Hard-Repair Flow
 - Triggered from Tools menu repair action.
 - Full reset sequence: unregister, stabilization delay, teardown validation, register, health-check.
 - Includes bounded retry/backoff for transient registration/health race conditions.
 - Produces detailed progress logs for diagnostics.
+- UI surface uses `NSAlert`:
+  - in-progress informational alert (non-dismissable action button while repair is running),
+  - automatic transition to final status alert after completion,
+  - failure path offers an additional details alert with technical repair logs.
 
 ### USB Workflow Flow
 - App sends `HelperWorkflowRequestPayload`.
@@ -163,9 +174,9 @@ App-side helper integration:
 - `macUSB/Shared/Services/Helper/HelperService/HelperServiceStatusUI.swift`
   - helper status UI surfaces.
 - `macUSB/Shared/Services/Helper/HelperService/HelperServiceRepairUI.swift`
-  - repair UI orchestration logic.
+  - repair alert orchestration logic (progress/status/details).
 - `macUSB/Shared/Services/Helper/HelperService/HelperServiceRepairPanelView.swift`
-  - repair panel SwiftUI view and presentation model.
+  - legacy repair panel SwiftUI view and presentation model (not used in current repair UX flow).
 - `macUSB/Shared/Services/Helper/HelperService/HelperServiceDiagnostics.swift`
   - diagnostic helpers and error interpretation.
 
@@ -223,6 +234,7 @@ Diagnostics should allow answering:
 - What status the helper had at that moment.
 - Whether XPC health passed or failed.
 - Whether recovery was attempted and with what outcome.
+- Whether startup auto-repair was triggered by app fingerprint change or by missing previous fingerprint.
 
 ---
 

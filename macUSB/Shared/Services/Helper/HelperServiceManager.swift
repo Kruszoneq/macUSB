@@ -8,6 +8,7 @@ final class HelperServiceManager: NSObject {
 
     static let daemonPlistName = "com.kruszoneq.macusb.helper.plist"
     static let machServiceName = "com.kruszoneq.macusb.helper"
+    static let helperRepairFingerprintDefaultsKey = "macUSB.Helper.LastSuccessfulAutoRepairFingerprint"
 
     typealias EnsureCompletion = (Bool, String?) -> Void
     let coordinationQueue = DispatchQueue(label: "macUSB.helper.registration", qos: .userInitiated)
@@ -19,6 +20,11 @@ final class HelperServiceManager: NSObject {
     var statusCheckingPanel: NSPanel?
     var repairProgressPanel: NSPanel?
     var repairPresentationModel: HelperRepairPanelPresentationModel?
+    weak var repairProgressAlertParentWindow: NSWindow?
+    var repairProgressAlertWindow: NSWindow?
+    var repairTechnicalLogs: [String] = []
+    weak var statusCheckAlertParentWindow: NSWindow?
+    var statusCheckAlertWindow: NSWindow?
     var didPresentStartupApprovalPrompt = false
     let repairLogFormatter: DateFormatter = {
         let formatter = DateFormatter()

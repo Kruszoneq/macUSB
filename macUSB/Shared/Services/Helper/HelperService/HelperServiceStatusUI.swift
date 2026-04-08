@@ -26,11 +26,22 @@ extension HelperServiceManager {
                     } else {
                         let alert = NSAlert()
                         alert.icon = NSApp.applicationIconImage
-                        alert.alertStyle = .informational
-                        alert.messageText = String(localized: "Status helpera")
-                        alert.informativeText = snapshot.detailedText
+                        alert.alertStyle = .warning
+                        alert.messageText = String(localized: "Sprawdzenie statusu helpera zakończone niepowodzeniem")
+                        alert.informativeText = String(localized: "Nie udało się potwierdzić gotowości helpera.")
                         alert.addButton(withTitle: String(localized: "OK"))
-                        self.presentAlert(alert)
+                        alert.addButton(withTitle: String(localized: "Szczegóły"))
+
+                        let handler: (NSApplication.ModalResponse) -> Void = { response in
+                            guard response == .alertSecondButtonReturn else { return }
+                            self.presentStatusDetailsAlert(detailsText: snapshot.detailedText)
+                        }
+
+                        if let window = NSApp.keyWindow ?? NSApp.mainWindow {
+                            alert.beginSheetModal(for: window, completionHandler: handler)
+                        } else {
+                            handler(alert.runModal())
+                        }
                     }
 
                     self.coordinationQueue.async {
@@ -101,10 +112,10 @@ extension HelperServiceManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Status helpera")
-        alert.informativeText = String(localized: "Helper działa poprawnie")
+        alert.messageText = String(localized: "Sprawdzenie statusu helpera zakończone pomyślnie")
+        alert.informativeText = String(localized: "Helper działa prawidłowo i jest gotowy do pracy.")
         alert.addButton(withTitle: String(localized: "OK"))
-        alert.addButton(withTitle: String(localized: "Wyświetl szczegóły"))
+        alert.addButton(withTitle: String(localized: "Szczegóły"))
 
         if let window = NSApp.keyWindow ?? NSApp.mainWindow {
             alert.beginSheetModal(for: window) { response in
@@ -124,11 +135,11 @@ extension HelperServiceManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Status helpera")
-        alert.informativeText = String(localized: "macUSB wymaga zezwolenia na działanie w tle, aby umożliwić zarządzanie nośnikami. Przejdź do ustawień systemowych, aby nadać wymagane uprawnienia")
-        alert.addButton(withTitle: String(localized: "Przejdź do ustawień systemowych"))
+        alert.messageText = String(localized: "Sprawdzenie statusu helpera zakończone wymaganym działaniem")
+        alert.informativeText = String(localized: "Aby helper działał poprawnie, wymagane jest zezwolenie na działanie w tle w Ustawieniach systemowych.")
+        alert.addButton(withTitle: String(localized: "Ustawienia systemowe"))
         alert.addButton(withTitle: String(localized: "OK"))
-        alert.addButton(withTitle: String(localized: "Wyświetl szczegóły"))
+        alert.addButton(withTitle: String(localized: "Szczegóły"))
 
         let handleResponse: (NSApplication.ModalResponse) -> Void = { response in
             if response == .alertFirstButtonReturn {
@@ -153,67 +164,50 @@ extension HelperServiceManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Status helpera")
+        alert.messageText = String(localized: "Szczegóły statusu helpera")
         alert.informativeText = detailsText
         alert.addButton(withTitle: String(localized: "OK"))
         presentAlert(alert)
     }
     func presentStatusCheckingPanelIfNeeded() {
-        guard statusCheckingPanel == nil else { return }
+        guard statusCheckAlertWindow == nil else { return }
 
-        let panelSize = NSSize(width: 320, height: 110)
-        let panel = NSPanel(
-            contentRect: NSRect(origin: .zero, size: panelSize),
-            styleMask: [.titled],
-            backing: .buffered,
-            defer: false
-        )
-        panel.title = String(localized: "Status helpera")
-        panel.isFloatingPanel = true
-        panel.level = .floating
-        panel.standardWindowButton(.closeButton)?.isHidden = true
-        panel.standardWindowButton(.miniaturizeButton)?.isHidden = true
-        panel.standardWindowButton(.zoomButton)?.isHidden = true
-        panel.isMovable = false
-
-        let contentView = NSView(frame: NSRect(origin: .zero, size: panelSize))
-
-        let spinner = NSProgressIndicator(frame: NSRect(x: 24, y: 46, width: 20, height: 20))
-        spinner.style = .spinning
-        spinner.controlSize = .regular
-        spinner.startAnimation(nil)
-        contentView.addSubview(spinner)
-
-        let titleField = NSTextField(labelWithString: String(localized: "Sprawdzanie statusu..."))
-        titleField.font = NSFont.systemFont(ofSize: 15, weight: .semibold)
-        titleField.frame = NSRect(x: 56, y: 52, width: 240, height: 20)
-        contentView.addSubview(titleField)
-
-        let subtitleField = NSTextField(labelWithString: String(localized: "Proszę czekać"))
-        subtitleField.font = NSFont.systemFont(ofSize: 12, weight: .regular)
-        subtitleField.textColor = .secondaryLabelColor
-        subtitleField.frame = NSRect(x: 56, y: 30, width: 240, height: 16)
-        contentView.addSubview(subtitleField)
-
-        panel.contentView = contentView
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .informational
+        alert.messageText = String(localized: "Sprawdzanie statusu helpera")
+        alert.informativeText = String(localized: "Trwa sprawdzanie gotowości helpera systemowego.")
+        alert.addButton(withTitle: String(localized: "Sprawdzanie…"))
+        alert.buttons.first?.isEnabled = false
 
         if let ownerWindow = NSApp.keyWindow ?? NSApp.mainWindow {
-            let ownerFrame = ownerWindow.frame
-            let origin = NSPoint(
-                x: ownerFrame.midX - panelSize.width / 2,
-                y: ownerFrame.midY - panelSize.height / 2
-            )
-            panel.setFrameOrigin(origin)
-        } else {
-            panel.center()
+            statusCheckAlertParentWindow = ownerWindow
+            statusCheckAlertWindow = alert.window
+            alert.beginSheetModal(for: ownerWindow, completionHandler: nil)
+            return
         }
 
-        panel.orderFrontRegardless()
-        statusCheckingPanel = panel
+        let alertWindow = alert.window
+        alertWindow.standardWindowButton(.closeButton)?.isHidden = true
+        alertWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
+        alertWindow.standardWindowButton(.zoomButton)?.isHidden = true
+        alertWindow.level = .floating
+        alertWindow.orderFrontRegardless()
+        NSApp.activate(ignoringOtherApps: true)
+        statusCheckAlertParentWindow = nil
+        statusCheckAlertWindow = alertWindow
     }
     func dismissStatusCheckingPanelIfNeeded() {
-        guard let panel = statusCheckingPanel else { return }
-        panel.orderOut(nil)
-        statusCheckingPanel = nil
+        guard let alertWindow = statusCheckAlertWindow else { return }
+
+        if let parentWindow = statusCheckAlertParentWindow,
+           parentWindow.attachedSheet == alertWindow {
+            parentWindow.endSheet(alertWindow, returnCode: .abort)
+        }
+
+        alertWindow.orderOut(nil)
+        alertWindow.close()
+        statusCheckAlertWindow = nil
+        statusCheckAlertParentWindow = nil
     }
 }
