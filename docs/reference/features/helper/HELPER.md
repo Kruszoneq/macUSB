@@ -112,6 +112,10 @@ Contract invariants:
 
 ## 6. Runtime Flows
 
+### Single Active Task Invariant
+- Helper executes only one privileged task at a time across USB workflow, downloader assembly, and downloader cleanup requests.
+- If another task is already active, the new request is rejected with conflict semantics and must be retried by app-side flow when appropriate.
+
 ### Ensure-Ready Flow
 - Entry point: `HelperServiceManager` ensure-ready path.
 - Checks app location and helper service status.

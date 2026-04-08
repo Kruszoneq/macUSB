@@ -89,7 +89,7 @@ Process runtime state:
 - `DownloadSessionState`
   - `idle`, `running`, `completed`, `failed`, `cancelled`.
 - Stages:
-  - `connection`, `downloading`, `verifying`, `buildingInstaller`, `copyingInstaller`, `cleanup`.
+  - `connection`, `downloading`, `verifying`, `buildingInstaller`, `cleanup`.
 
 ---
 
@@ -115,7 +115,7 @@ Discovery UX contract:
 
 ## 6. Production Download Flow (Sierra and Older + Catalina to Tahoe)
 
-Production pipeline (`MontereyDownloadFlowModel`) uses two compatible distribution modes:
+Production pipeline (`MontereyDownloadFlowModel`) uses three compatible distribution modes:
 - `Modern`: Big Sur, Monterey, Ventura, Sonoma, Sequoia, Tahoe (`InstallAssistant.pkg -> .app`).
 - `Legacy`: High Sierra, Mojave, Catalina (`InstallAssistantAuto.pkg` + `RecoveryHDMetaDmg.pkg` + `InstallESDDmg.pkg`).
 - `Oldest`: Sierra and older Apple Support downloads (`.dmg -> .pkg -> .app`).
