@@ -66,38 +66,39 @@ extension MacOSDownloaderWindowShellView {
             }
 
             if shouldShowInstallerOutputSection {
-                HStack {
-                    Spacer()
-                    
-                    VStack(alignment: .trailing, spacing: 8) {
-                        if hasFinalInstallerApp {
-                            Button {
-                                useDownloadedInstallerInAnalysis()
-                            } label: {
-                                HStack(spacing: 8) {
-                                    Image(systemName: "arrow.right.circle.fill")
-                                    Text("Przejdź do tworzenia USB z tym instalatorem")
-                                }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
-                            }
-                            .macUSBSecondaryButtonStyle()
-                            .help("Przejdź do tworzenia USB z tym instalatorem")
-                        }
-                        
+                VStack(spacing: 8) {
+                    if hasFinalInstallerApp {
                         Button {
-                            openPlannedInstallerFolder()
+                            useDownloadedInstallerInAnalysis()
                         } label: {
                             HStack(spacing: 8) {
-                                Image(systemName: "folder.fill")
-                                Text("Pokaż w Finderze")
+                                Image(systemName: "arrow.right.circle.fill")
+                                Text("Przejdź do tworzenia USB z tym instalatorem")
                             }
+                            .frame(maxWidth: .infinity, alignment: .center)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
                         }
+                        .frame(maxWidth: .infinity)
                         .macUSBSecondaryButtonStyle()
+                        .help("Przejdź do tworzenia USB z tym instalatorem")
                     }
+                    
+                    Button {
+                        openPlannedInstallerFolder()
+                    } label: {
+                        HStack(spacing: 8) {
+                            Image(systemName: "folder.fill")
+                            Text("Pokaż w Finderze")
+                        }
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .macUSBSecondaryButtonStyle()
                 }
+                .frame(maxWidth: .infinity)
                 .padding(.top, 6)
             }
         }
