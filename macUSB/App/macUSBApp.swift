@@ -24,6 +24,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         UserDefaults.standard.synchronize()
         // Reflect the state in MenuState for consistency
         MenuState.shared.externalDrivesEnabled = false
+
+        let tempRootURL = FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_temp", isDirectory: true)
+        if FileManager.default.fileExists(atPath: tempRootURL.path) {
+            do {
+                try FileManager.default.removeItem(at: tempRootURL)
+                AppLogging.info("Zamkniecie aplikacji: usunieto katalog macUSB_temp.", category: "Downloader")
+            } catch {
+                AppLogging.error(
+                    "Zamkniecie aplikacji: nie udalo sie usunac macUSB_temp: \(error.localizedDescription)",
+                    category: "Downloader"
+                )
+            }
+        }
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
@@ -256,6 +269,13 @@ struct macUSBApp: App {
                 }
             }
             CommandMenu(String(localized: "Narzędzia")) {
+                Button {
+                    MacOSDownloaderWindowManager.shared.present()
+                } label: {
+                    Label(String(localized: "Pobierz instalator macOS..."), systemImage: "square.and.arrow.down")
+                }
+                .disabled(menuState.isDownloaderAccessBlocked)
+                Divider()
                 Button {
                     if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.DiskUtility") {
                         NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration(), completionHandler: nil)

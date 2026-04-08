@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "description": "Reference SHA-256 checksums for downloadable macOS/OS X installers",
+  "systems": [
+    {
+      "family": "legacy",
+      "name": "macOS High Sierra",
+      "version": "10.13.6",
+      "files": [
+        {
+          "name": "InstallAssistantAuto.pkg",
+          "sha256": "a06df157a8474cb518a360b812ec68e405e24bf64e2a1106820da80f7e067c8f"
+        },
+        {
+          "name": "RecoveryHDMetaDmg.pkg",
+          "sha256": "db948a49ff4022daf924a1c1a7b1ded2e84f8bc993c19ee21a946ef1361cf7c2"
+        },
+        {
+          "name": "InstallESDDmg.pkg",
+          "sha256": "f922284fc560d34eca84752ae9c030d2c37ff00115ed87b32baaf78d98ebb1bf"
+        }
+      ]
+    },
+    {
+      "family": "oldest",
+      "name": "macOS Sierra",
+      "version": "10.12.6",
+      "sha256": "c793c9aae9b59302b4b01a52aad387d7e4873cf00c48352afc1ffcc826cb0208"
+    },
+    {
+      "family": "oldest",
+      "name": "OS X El Capitan",
+      "version": "10.11.6",
+      "sha256": "bca6d2b699fc03e7876be9c9185d45bf4574517033548a47cb0d0938c5732d59"
+    },
+    {
+      "family": "oldest",
+      "name": "OS X Yosemite",
+      "version": "10.10.5",
+      "sha256": "de869907ce4289fe948cbd2dea7479ff9c369bbf47b06d5cb5290d78fb2932c6"
+    },
+    {
+      "family": "oldest",
+      "name": "OS X Mountain Lion",
+      "version": "10.8.5",
+      "sha256": "b006a6d63f20d0b369493469699d42d5cbca91c295b40b273f6fe9eeca3484ce"
+    },
+    {
+      "family": "oldest",
+      "name": "Mac OS X Lion",
+      "version": "10.7.5",
+      "sha256": "db0b2300de719fa3e4ee132b55afd4e689211ad5332760fe5fe7a30351c9e75c"
+    }
+  ]
+}

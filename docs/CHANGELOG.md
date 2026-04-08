@@ -1,5 +1,28 @@
 # macUSB Release Changelog
 
+---
+
+## v2.1
+
+macUSB v2.1 brings a new built-in macOS Downloader, improved helper reliability with automatic post-update repair, and a polished USB creation experience.
+
+### NEW: DOWNLOADER
+- Added a downloader module available from **Tools → Download macOS installer...** and from the analysis screen via **Download**.
+- Added Apple-catalog installer discovery with grouped system families and an option to show all available versions.
+- Added a complete staged workflow: connection, file download, verification, installer build, and final cleanup.
+- Added installer verification based on package signature checks and data-integrity validation, applied according to system version and available verification methods.
+- Added support for preparing installers across modern and legacy Apple distribution paths, including Sierra and older official Apple Support downloads.
+- Added a completion summary with transfer metrics, destination details, and direct **Show in Finder** action.
+- Added one-click handoff from downloader summary to analysis, allowing immediate use of the downloaded installer in USB creation.
+
+### IMPROVEMENTS
+- Helper repair is now more reliable and repeatable, especially in cases where macOS temporarily blocks or delays background activation, with more stable recovery after reconnection attempts.
+- Helper repair is now presented as a system alert, improving UI consistency and making recovery status easier to follow.
+- After updating to a new app version, helper auto-repair now runs automatically to ensure compatibility with newly introduced functionality.
+- Minor UI polish during the USB creation stage.
+
+---
+
 ## v2.0.2
 
 This patch release improves installer workflow reliability by tightening USB target validation rules and strengthening recovery behavior in helper and source-analysis edge cases.

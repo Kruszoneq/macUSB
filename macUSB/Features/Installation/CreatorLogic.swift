@@ -106,6 +106,10 @@ extension UniversalInstallationView {
     }
 
     func completeCancellationFlow() {
+        if let token = usbProcessSleepBlockToken {
+            SystemSleepBlocker.shared.end(token)
+            usbProcessSleepBlockToken = nil
+        }
         withAnimation(.easeInOut(duration: 0.4)) {
             didCancelCreation = true
             cancellationRequestedBeforeWorkflowStart = false

@@ -8,10 +8,13 @@ final class MenuState: ObservableObject {
     @Published var notificationsEnabled: Bool = false
     @Published var hasFullDiskAccess: Bool = true
     @Published var helperRequiresBackgroundApproval: Bool = false
+    @Published private(set) var isDownloaderAccessBlocked: Bool = false
     @Published var debugCopiedDataLabel: String = String(
         format: String(localized: "Przekopiowane dane: %.1f GB"),
         0.0
     )
+
+    private var downloaderBlockReasons: Set<String> = []
     
     func enableExternalDrives() {
         UserDefaults.standard.set(true, forKey: "AllowExternalDrives")
@@ -31,6 +34,26 @@ final class MenuState: ObservableObject {
         } else {
             DispatchQueue.main.async {
                 self.debugCopiedDataLabel = label
+            }
+        }
+    }
+
+    func setDownloaderAccessBlocked(_ blocked: Bool, reason: String) {
+        let normalizedReason = reason.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalizedReason.isEmpty else { return }
+
+        if blocked {
+            downloaderBlockReasons.insert(normalizedReason)
+        } else {
+            downloaderBlockReasons.remove(normalizedReason)
+        }
+
+        let nextValue = !downloaderBlockReasons.isEmpty
+        if Thread.isMainThread {
+            isDownloaderAccessBlocked = nextValue
+        } else {
+            DispatchQueue.main.async {
+                self.isDownloaderAccessBlocked = nextValue
             }
         }
     }

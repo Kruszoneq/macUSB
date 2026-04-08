@@ -3,6 +3,9 @@ import AppKit
 import UserNotifications
 
 struct FinishUSBView: View {
+    @ObservedObject private var menuState = MenuState.shared
+    private let downloaderBlockReason = "usb_finish_summary"
+
     let systemName: String
     let mountPoint: URL
     let onReset: () -> Void
@@ -270,9 +273,13 @@ struct FinishUSBView: View {
             }
         )
         .onAppear {
+            menuState.setDownloaderAccessBlocked(true, reason: downloaderBlockReason)
             playResultSoundOnce()
             performCleanupWithDelay()
             sendSystemNotificationIfInactive()
+        }
+        .onDisappear {
+            menuState.setDownloaderAccessBlocked(false, reason: downloaderBlockReason)
         }
     }
     // --- LOGIKA ---

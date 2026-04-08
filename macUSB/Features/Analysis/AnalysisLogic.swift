@@ -234,6 +234,19 @@ final class AnalysisLogic: ObservableObject {
         }
     }
 
+    func applySelectedURLAndStartAnalysis(_ url: URL) {
+        let ext = url.pathExtension.lowercased()
+        guard ext == "dmg" || ext == "app" || ext == "iso" || ext == "cdr" else {
+            logError("Pominięto automatyczne podstawienie ścieżki. Nieobsługiwany format: .\(ext)")
+            return
+        }
+
+        processDroppedURL(url)
+        DispatchQueue.main.async { [weak self] in
+            self?.startAnalysis()
+        }
+    }
+
     func selectDMGFile() {
         self.log("Otwieram panel wyboru pliku…")
         let p = NSOpenPanel()
@@ -1187,9 +1200,29 @@ final class AnalysisLogic: ObservableObject {
     }
 }
 
+@MainActor
+final class AnalysisSelectionHandoff {
+    static let shared = AnalysisSelectionHandoff()
+
+    private var pendingInstallerURL: URL?
+
+    private init() {}
+
+    func setPendingInstallerURL(_ url: URL) {
+        pendingInstallerURL = url.standardizedFileURL
+    }
+
+    func consumePendingInstallerURL() -> URL? {
+        defer { pendingInstallerURL = nil }
+        return pendingInstallerURL
+    }
+}
+
 extension Notification.Name {
     static let macUSBResetToStart = Notification.Name("macUSB.resetToStart")
     static let macUSBStartTigerMultiDVD = Notification.Name("macUSB.startTigerMultiDVD")
     static let macUSBDebugGoToBigSurSummary = Notification.Name("macUSB.debugGoToBigSurSummary")
     static let macUSBDebugGoToTigerSummary = Notification.Name("macUSB.debugGoToTigerSummary")
+    static let macUSBNavigateToAnalysis = Notification.Name("macUSB.navigateToAnalysis")
+    static let macUSBApplyPendingDownloaderInstaller = Notification.Name("macUSB.applyPendingDownloaderInstaller")
 }

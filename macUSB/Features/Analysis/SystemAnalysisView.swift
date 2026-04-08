@@ -5,6 +5,7 @@ import Combine
 
 struct SystemAnalysisView: View {
     
+    @ObservedObject private var menuState = MenuState.shared
     @Binding var isTabLocked: Bool
     @StateObject private var logic = AnalysisLogic()
     @State private var shouldResetToStart: Bool = false
@@ -130,6 +131,11 @@ struct SystemAnalysisView: View {
         lastAPFSAlertedDriveURL = selectedURL
         presentAPFSDriveDialog()
     }
+
+    private func consumePendingDownloaderInstallerAndAnalyze() {
+        guard let installerURL = AnalysisSelectionHandoff.shared.consumePendingInstallerURL() else { return }
+        logic.applySelectedURLAndStartAnalysis(installerURL)
+    }
     
     private var fileRequirementsBox: some View {
         StatusCard(tone: .neutral, density: .compact) {
@@ -141,6 +147,7 @@ struct SystemAnalysisView: View {
                         Text("• Wybrany plik musi zawierać instalator systemu macOS lub Mac OS X")
                         Text("• Dozwolone formaty plików to .dmg, .iso, .cdr oraz .app")
                         Text("• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym")
+                        Text("• Brak instalatora? Użyj przycisku „Pobierz”")
                     }
                     .font(.subheadline).foregroundColor(.secondary)
                 }
@@ -154,6 +161,8 @@ struct SystemAnalysisView: View {
                 .textFieldStyle(.roundedBorder)
                 .disabled(true)
             Button(String(localized: "Wybierz")) { logic.selectDMGFile() }
+            Button(String(localized: "Pobierz")) { MacOSDownloaderWindowManager.shared.present() }
+                .disabled(menuState.isDownloaderAccessBlocked)
             Button(String(localized: "Analizuj")) { logic.startAnalysis() }
                 .buttonStyle(.borderedProminent)
                 .tint(.accentColor)
@@ -427,9 +436,13 @@ struct SystemAnalysisView: View {
         .onReceive(NotificationCenter.default.publisher(for: .macUSBStartTigerMultiDVD)) { _ in
             logic.forceTigerMultiDVDSelection()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .macUSBApplyPendingDownloaderInstaller)) { _ in
+            consumePendingDownloaderInstallerAndAnalyze()
+        }
         .onAppear {
             logic.refreshDrives()
             updateMenuState()
+            consumePendingDownloaderInstallerAndAnalyze()
             if logic.shouldShowMavericksDialog { presentMavericksDialog() }
         }
         .navigationTitle("Konfiguracja źródła i celu")

@@ -8,11 +8,15 @@ final class PrivilegedOperationClient: NSObject {
 
     typealias EventHandler = (HelperProgressEventPayload) -> Void
     typealias CompletionHandler = (HelperWorkflowResultPayload) -> Void
+    typealias DownloaderAssemblyEventHandler = (DownloaderAssemblyProgressPayload) -> Void
+    typealias DownloaderAssemblyCompletionHandler = (DownloaderAssemblyResultPayload) -> Void
 
     private let lock = NSLock()
     private var connection: NSXPCConnection?
     private var eventHandlers: [String: EventHandler] = [:]
     private var completionHandlers: [String: CompletionHandler] = [:]
+    private var downloaderAssemblyEventHandlers: [String: DownloaderAssemblyEventHandler] = [:]
+    private var downloaderAssemblyCompletionHandlers: [String: DownloaderAssemblyCompletionHandler] = [:]
     private let startReplyTimeout: TimeInterval = 10
     private let healthReplyTimeout: TimeInterval = 5
 
@@ -130,6 +134,163 @@ final class PrivilegedOperationClient: NSObject {
         }
     }
 
+    func startDownloaderAssembly(
+        request: DownloaderAssemblyRequestPayload,
+        onEvent: @escaping DownloaderAssemblyEventHandler,
+        onCompletion: @escaping DownloaderAssemblyCompletionHandler,
+        onStartError: @escaping (String) -> Void,
+        onStarted: @escaping (String) -> Void
+    ) {
+        let stateLock = NSLock()
+        var didFinish = false
+        let finishOnce: (@escaping () -> Void) -> Void = { action in
+            stateLock.lock()
+            let shouldRun = !didFinish
+            if shouldRun {
+                didFinish = true
+            }
+            stateLock.unlock()
+            guard shouldRun else { return }
+            action()
+        }
+
+        var timeoutWorkItem: DispatchWorkItem?
+        let failStart: (String) -> Void = { [weak self] message in
+            DispatchQueue.main.async {
+                timeoutWorkItem?.cancel()
+                self?.resetConnection()
+                finishOnce {
+                    onStartError(message)
+                }
+            }
+        }
+
+        guard let proxy = helperProxy(onError: { message in
+            failStart(message)
+        }) else {
+            failStart(String(localized: "Nie udało się uzyskać połączenia XPC z helperem."))
+            return
+        }
+
+        let requestData: Data
+        do {
+            requestData = try HelperXPCCodec.encode(request)
+        } catch {
+            failStart("Nie udalo sie zakodowac żądania assembly: \(error.localizedDescription)")
+            return
+        }
+
+        timeoutWorkItem = DispatchWorkItem { [weak self] in
+            self?.resetConnection()
+            DispatchQueue.main.async {
+                finishOnce {
+                    onStartError(String(localized: "Przekroczono czas oczekiwania na odpowiedź helpera XPC."))
+                }
+            }
+        }
+        if let timeoutWorkItem {
+            DispatchQueue.global(qos: .userInitiated).asyncAfter(
+                deadline: .now() + startReplyTimeout,
+                execute: timeoutWorkItem
+            )
+        }
+
+        proxy.startDownloaderAssembly(requestData as NSData) { [weak self] workflowID, error in
+            DispatchQueue.main.async {
+                finishOnce {
+                    timeoutWorkItem?.cancel()
+
+                    if let error {
+                        onStartError(error.localizedDescription)
+                        return
+                    }
+
+                    guard let workflowID = workflowID as String?, !workflowID.isEmpty else {
+                        onStartError(String(localized: "Helper nie zwrócił identyfikatora zadania."))
+                        return
+                    }
+
+                    self?.lock.lock()
+                    self?.downloaderAssemblyEventHandlers[workflowID] = onEvent
+                    self?.downloaderAssemblyCompletionHandlers[workflowID] = onCompletion
+                    self?.lock.unlock()
+
+                    onStarted(workflowID)
+                }
+            }
+        }
+    }
+
+    func cancelDownloaderAssembly(_ workflowID: String, completion: @escaping (Bool, String?) -> Void = { _, _ in }) {
+        guard let proxy = helperProxy(onError: { message in
+            DispatchQueue.main.async {
+                completion(false, message)
+            }
+        }) else {
+            return
+        }
+
+        proxy.cancelDownloaderAssembly(workflowID) { cancelled, error in
+            DispatchQueue.main.async {
+                if let error {
+                    completion(false, error.localizedDescription)
+                } else {
+                    completion(cancelled, nil)
+                }
+            }
+        }
+    }
+
+    func cleanupDownloaderSession(
+        request: DownloaderCleanupRequestPayload,
+        completion: @escaping (DownloaderCleanupResultPayload) -> Void
+    ) {
+        let fail: (String) -> Void = { message in
+            DispatchQueue.main.async {
+                completion(DownloaderCleanupResultPayload(success: false, errorMessage: message))
+            }
+        }
+
+        guard let proxy = helperProxy(onError: { message in
+            fail(message)
+        }) else {
+            fail(String(localized: "Nie udało się uzyskać połączenia XPC z helperem."))
+            return
+        }
+
+        let requestData: Data
+        do {
+            requestData = try HelperXPCCodec.encode(request)
+        } catch {
+            fail("Nie udalo sie zakodowac zadania cleanupu: \(error.localizedDescription)")
+            return
+        }
+
+        proxy.cleanupDownloaderSession(requestData as NSData) { data, error in
+            DispatchQueue.main.async {
+                if let error {
+                    completion(DownloaderCleanupResultPayload(success: false, errorMessage: error.localizedDescription))
+                    return
+                }
+                guard let data else {
+                    completion(DownloaderCleanupResultPayload(success: false, errorMessage: "Helper nie zwrócił wyniku cleanupu."))
+                    return
+                }
+                do {
+                    let result = try HelperXPCCodec.decode(DownloaderCleanupResultPayload.self, from: data as Data)
+                    completion(result)
+                } catch {
+                    completion(
+                        DownloaderCleanupResultPayload(
+                            success: false,
+                            errorMessage: "Nie udalo sie zdekodowac wyniku cleanupu: \(error.localizedDescription)"
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     func queryHealth(completion: @escaping (Bool, String) -> Void) {
         queryHealth(withTimeout: healthReplyTimeout, completion: completion)
     }
@@ -192,11 +353,21 @@ final class PrivilegedOperationClient: NSObject {
         lock.lock()
         eventHandlers.removeValue(forKey: workflowID)
         completionHandlers.removeValue(forKey: workflowID)
+        downloaderAssemblyEventHandlers.removeValue(forKey: workflowID)
+        downloaderAssemblyCompletionHandlers.removeValue(forKey: workflowID)
         lock.unlock()
     }
 
     func resetConnectionForRecovery() {
-        resetConnection()
+        lock.lock()
+        let existingConnection = connection
+        connection = nil
+        eventHandlers.removeAll()
+        completionHandlers.removeAll()
+        downloaderAssemblyEventHandlers.removeAll()
+        downloaderAssemblyCompletionHandlers.removeAll()
+        lock.unlock()
+        existingConnection?.invalidate()
     }
 
     private func helperProxy(onError: @escaping (String) -> Void) -> PrivilegedHelperToolXPCProtocol? {
@@ -256,8 +427,11 @@ final class PrivilegedOperationClient: NSObject {
     private func handleConnectionInvalidation(_ message: String) {
         lock.lock()
         let completionSnapshot = completionHandlers
+        let downloaderAssemblyCompletionSnapshot = downloaderAssemblyCompletionHandlers
         eventHandlers.removeAll()
         completionHandlers.removeAll()
+        downloaderAssemblyEventHandlers.removeAll()
+        downloaderAssemblyCompletionHandlers.removeAll()
         connection = nil
         lock.unlock()
 
@@ -271,6 +445,20 @@ final class PrivilegedOperationClient: NSObject {
                         errorCode: nil,
                         errorMessage: message,
                         isUserCancelled: false
+                    )
+                )
+            }
+
+            for (workflowID, handler) in downloaderAssemblyCompletionSnapshot {
+                handler(
+                    DownloaderAssemblyResultPayload(
+                        workflowID: workflowID,
+                        success: false,
+                        outputAppPath: nil,
+                        errorMessage: message,
+                        cleanupRequested: false,
+                        cleanupSucceeded: false,
+                        cleanupErrorMessage: nil
                     )
                 )
             }
@@ -364,6 +552,54 @@ extension PrivilegedOperationClient: PrivilegedHelperClientXPCProtocol {
         let completion = completionHandlers[result.workflowID]
         eventHandlers.removeValue(forKey: result.workflowID)
         completionHandlers.removeValue(forKey: result.workflowID)
+        lock.unlock()
+
+        if let completion {
+            DispatchQueue.main.async {
+                completion(result)
+            }
+        }
+    }
+
+    func receiveDownloaderAssemblyProgress(_ eventData: NSData) {
+        let event: DownloaderAssemblyProgressPayload
+        do {
+            event = try HelperXPCCodec.decode(DownloaderAssemblyProgressPayload.self, from: eventData as Data)
+        } catch {
+            AppLogging.error(
+                "Nie udalo sie zdekodowac postepu assembly downloadera: \(error.localizedDescription)",
+                category: "HelperLiveLog"
+            )
+            return
+        }
+
+        lock.lock()
+        let handler = downloaderAssemblyEventHandlers[event.workflowID]
+        lock.unlock()
+
+        if let handler {
+            DispatchQueue.main.async {
+                handler(event)
+            }
+        }
+    }
+
+    func finishDownloaderAssembly(_ resultData: NSData) {
+        let result: DownloaderAssemblyResultPayload
+        do {
+            result = try HelperXPCCodec.decode(DownloaderAssemblyResultPayload.self, from: resultData as Data)
+        } catch {
+            AppLogging.error(
+                "Nie udalo sie zdekodowac wyniku assembly downloadera: \(error.localizedDescription)",
+                category: "HelperLiveLog"
+            )
+            return
+        }
+
+        lock.lock()
+        let completion = downloaderAssemblyCompletionHandlers[result.workflowID]
+        downloaderAssemblyEventHandlers.removeValue(forKey: result.workflowID)
+        downloaderAssemblyCompletionHandlers.removeValue(forKey: result.workflowID)
         lock.unlock()
 
         if let completion {

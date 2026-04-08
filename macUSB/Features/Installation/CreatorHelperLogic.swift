@@ -2,6 +2,17 @@ import Foundation
 import SwiftUI
 
 extension UniversalInstallationView {
+    private func acquireUSBProcessSleepBlockIfNeeded() {
+        guard usbProcessSleepBlockToken == nil else { return }
+        usbProcessSleepBlockToken = SystemSleepBlocker.shared.begin(reason: "Tworzenie nośnika USB")
+    }
+
+    private func releaseUSBProcessSleepBlockIfNeeded() {
+        guard let token = usbProcessSleepBlockToken else { return }
+        SystemSleepBlocker.shared.end(token)
+        usbProcessSleepBlockToken = nil
+    }
+
     func startCreationProcessEntry() {
         startCreationProcessWithHelper()
     }
@@ -13,6 +24,7 @@ extension UniversalInstallationView {
             return
         }
 
+        acquireUSBProcessSleepBlockIfNeeded()
         usbProcessStartedAt = Date()
 
         withAnimation(.easeInOut(duration: 0.4)) {
@@ -60,6 +72,7 @@ extension UniversalInstallationView {
                 completeCancellationFlow()
                 return
             }
+            releaseUSBProcessSleepBlockIfNeeded()
             withAnimation {
                 isProcessing = false
                 isHelperWorking = false
@@ -79,6 +92,7 @@ extension UniversalInstallationView {
                     completeCancellationFlow()
                     return
                 }
+                releaseUSBProcessSleepBlockIfNeeded()
                 withAnimation {
                     isProcessing = false
                     isHelperWorking = false
@@ -118,6 +132,7 @@ extension UniversalInstallationView {
                                 return
                             }
                             logError("Start helper workflow nieudany: \(message)", category: "Installation")
+                            releaseUSBProcessSleepBlockIfNeeded()
                             withAnimation {
                                 isProcessing = false
                                 isHelperWorking = false
@@ -178,6 +193,7 @@ extension UniversalInstallationView {
                                         logError("Helper zakończył się błędem: \(errorMessageText)", category: "Installation")
                                     }
 
+                                    releaseUSBProcessSleepBlockIfNeeded()
                                     withAnimation {
                                         navigateToFinish = true
                                     }
@@ -242,6 +258,7 @@ extension UniversalInstallationView {
                             completeCancellationFlow()
                             return
                         }
+                        releaseUSBProcessSleepBlockIfNeeded()
                         withAnimation {
                             isProcessing = false
                             isHelperWorking = false
@@ -405,6 +422,7 @@ extension UniversalInstallationView {
 
     func cancelHelperWorkflowIfNeeded(completion: @escaping () -> Void) {
         guard let workflowID = activeHelperWorkflowID else {
+            releaseUSBProcessSleepBlockIfNeeded()
             completion()
             return
         }
@@ -417,6 +435,7 @@ extension UniversalInstallationView {
             isHelperWorking = false
             stopHelperWriteSpeedMonitoring()
             usbProcessStartedAt = nil
+            releaseUSBProcessSleepBlockIfNeeded()
             completion()
         }
     }

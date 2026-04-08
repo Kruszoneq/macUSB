@@ -14,16 +14,26 @@ This file defines how AI coding agents should work in this repository.
 Before implementation, recommendations, or review:
 
 1. Read this file in full.
-2. Read relevant section(s) in `docs/reference/APPLICATION_REFERENCE.md` for the task scope.
-3. If scope is cross-cutting or uncertain, read `docs/reference/APPLICATION_REFERENCE.md` in full.
-4. Build one active ruleset before changing code.
+2. Read `docs/reference/README.md`.
+3. Read the topic-specific runtime reference(s) for the task scope.
+4. For downloader-scope tasks, read `docs/reference/features/downloader/DOWNLOADER.md`.
+5. For helper-scope tasks, read `docs/reference/features/helper/HELPER.md`.
+6. If scope is cross-cutting or uncertain, read:
+   - `docs/reference/core/APP_RUNTIME_OVERVIEW.md`
+   - `docs/reference/core/USER_FLOW.md`
+   - `docs/reference/core/FILE_STRUCTURE.md`
+   - `docs/reference/core/RISK_AREAS.md`
+   - plus all affected topic references listed in `docs/reference/README.md`.
+7. Build one active ruleset before changing code.
 
 ## Repository map
 
 - App runtime: `macUSB/`
 - Privileged helper: `macUSBHelper/main.swift`
-- Runtime contract: `docs/reference/APPLICATION_REFERENCE.md`
-- Release notes: `docs/reference/CHANGELOG.md`
+- Runtime reference index: `docs/reference/README.md`
+- Downloader runtime reference: `docs/reference/features/downloader/DOWNLOADER.md`
+- Helper runtime reference: `docs/reference/features/helper/HELPER.md`
+- Release notes: `docs/CHANGELOG.md`
 - Agent process rules: `docs/AGENTS.md`
 
 ## Critical runtime invariants (must preserve)
@@ -113,10 +123,15 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 - Localization key drift between helper and app breaks runtime text quality.
 - Notification and permission UX can regress when startup/menu/finish logic diverges.
 
-## When to open APPLICATION_REFERENCE
+## When to open runtime references
 
-- If a task changes runtime behavior, read the relevant section(s) in `docs/reference/APPLICATION_REFERENCE.md`.
-- If a task is cross-cutting (architecture, broad risk analysis, major refactor), read `docs/reference/APPLICATION_REFERENCE.md` in full before implementation.
+- If a task changes runtime behavior, read the relevant topic file(s) from `docs/reference/README.md`.
+- If a task is cross-cutting (architecture, broad risk analysis, major refactor), read:
+  - `docs/reference/core/APP_RUNTIME_OVERVIEW.md`
+  - `docs/reference/core/USER_FLOW.md`
+  - `docs/reference/core/FILE_STRUCTURE.md`
+  - `docs/reference/core/RISK_AREAS.md`
+  - and all affected topic files from `docs/reference/README.md`.
 
 ## Workflow (end-to-end)
 
@@ -127,7 +142,7 @@ Use this sequence unless the user explicitly requests a narrower scope that does
 3. Implement the required change.
 4. Validate behavior (project policy in this file applies).
 5. Update documentation in `docs/reference/` when behavior, contracts, or workflows changed.
-6. Update release notes in `docs/reference/CHANGELOG.md` when the change is user-facing and release-relevant.
+6. Update release notes in `docs/CHANGELOG.md` only when the user explicitly asks for changelog edits.
 7. Prepare commit message and commit scope according to commit rules in this file.
 
 ## Definition of done
@@ -137,8 +152,8 @@ A change is done when all applicable conditions are met:
 - Mandatory context bootstrap was completed.
 - Requested behavior is implemented.
 - Validation was run (or explicitly reported if not possible).
-- `docs/reference/APPLICATION_REFERENCE.md` reflects current behavior when relevant.
-- `docs/reference/CHANGELOG.md` is updated when release-relevant.
+- relevant file(s) in `docs/reference/` reflect current behavior when relevant.
+- `docs/CHANGELOG.md` is updated only when the user explicitly asks for changelog edits.
 - No stale documentation links remain.
 - Commit content and message follow this file.
 
@@ -164,9 +179,9 @@ xcodebuild -project macUSB.xcodeproj -scheme macUSB -configuration Debug -destin
 Use these rules to decide required documentation updates:
 
 - Code or runtime behavior changed:
-  - update `docs/reference/APPLICATION_REFERENCE.md`.
+  - update relevant file(s) from `docs/reference/README.md`.
 - User-facing behavior changed and should appear in release notes:
-  - update `docs/reference/CHANGELOG.md`.
+  - update `docs/CHANGELOG.md` only when the user explicitly asks for changelog edits.
 - Internal-only refactor with no user-facing impact:
   - changelog update is optional.
 - Documentation-only change:
@@ -194,12 +209,19 @@ Minor helper changes that do not alter behavior may proceed, but must still be r
 
 ## Documentation hygiene
 
-- If runtime behavior changed, update `docs/reference/APPLICATION_REFERENCE.md`.
-- If release-relevant user-facing behavior changed, update `docs/reference/CHANGELOG.md`.
+- If runtime behavior changed, update relevant file(s) from `docs/reference/README.md`.
+- If release-relevant user-facing behavior changed, update `docs/CHANGELOG.md` only when the user explicitly asks for changelog edits.
 - Keep process rules only in `docs/AGENTS.md`.
 - Keep app behavior and technical reference only in `docs/reference/`.
 - Avoid duplicating the same rule in multiple files.
 - Keep links and file paths current after any rename or restructure.
+
+## Code structure hygiene
+
+- When adding new features, prefer creating new files/modules instead of extending an unrelated large file when this improves readability, reviewability, and safety.
+- When extending an existing feature and the code grows materially, proactively suggest and (when accepted) perform a split into smaller focused files.
+- Keep one clear orchestrator per workflow and move helper policies/utilities/IO/details to focused companion files.
+- Treat structural refactors as behavior-preserving by default (no runtime/UI changes unless explicitly requested).
 
 ## Branch naming convention
 
@@ -243,9 +265,11 @@ When branch creation is requested:
 
 - Write git commit messages in English.
 - Use a clear title/summary line plus a readable body written as a paragraph describing the change.
+- Base commit title and body on the full scope of changes since the last commit up to the commit being created, not only on the most recent edit made with the agent.
+- Keep commit bodies concise and summarized (short paragraph), while still covering the key scope of the full change set.
 - Do not use escaped newline sequences like `\n` in commit message text; use normal multi-line commit formatting only.
 - When creating commits from CLI, never pass `\n` inside a single `-m` value; use separate `-m` flags (title + body) or standard multi-line commit input.
-- If a commit includes updates to `docs/reference/APPLICATION_REFERENCE.md`, `docs/reference/CHANGELOG.md`, and/or `docs/AGENTS.md`, do not explicitly enumerate those documentation-file updates in the commit title or commit body.
+- If a commit includes updates to runtime reference docs under `docs/reference/`, `docs/CHANGELOG.md`, and/or `docs/AGENTS.md`, do not explicitly enumerate those documentation-file updates in the commit title or commit body.
 
 ### Commit scope rules
 
@@ -320,7 +344,10 @@ When branch creation is requested:
 
 - `CHANGELOG.md` should contain release entries only (no writing instructions).
 - Write changelogs in English.
-- Verify each entry against shipped behavior and `docs/reference/APPLICATION_REFERENCE.md`.
+- `CHANGELOG.md` must never be edited automatically.
+- Changelog edits are allowed only on explicit user request.
+- Before applying changelog edits, present the proposed changelog text to the user for approval.
+- Verify each entry against shipped behavior and relevant runtime reference files from `docs/reference/README.md`.
 - Keep wording concise and suitable for GitHub Releases.
 - Changes with only marginal product impact do not have to be listed in a release entry.
 - Small copy-only edits can be grouped under generic labels such as `Translation fixes` or general text fixes.

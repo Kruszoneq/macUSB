@@ -52,3 +52,6 @@ macUSB_temp/
 
 # Xcode DerivedData (for custom locations)
 DerivedData/
+
+# Local planning workspace
+docs/plans/

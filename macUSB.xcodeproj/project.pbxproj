@@ -12,6 +12,16 @@
 		A10000012F00000100000001 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000006 /* main.swift */; };
 		A10000012F00000100000002 /* macUSBHelper in CopyFiles */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000005 /* macUSBHelper */; };
 		A10000012F00000100000003 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000007 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist */; };
+		A10000012F00000100000031 /* IPC/HelperIPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000021 /* IPC/HelperIPC.swift */; };
+		A10000012F00000100000032 /* Service/PrivilegedHelperService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000022 /* Service/PrivilegedHelperService.swift */; };
+		A10000012F00000100000033 /* Service/HelperListenerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000023 /* Service/HelperListenerDelegate.swift */; };
+		A10000012F00000100000034 /* Workflow/HelperWorkflowExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000024 /* Workflow/HelperWorkflowExecutor.swift */; };
+		A10000012F00000100000035 /* Workflow/HelperWorkflowStages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000025 /* Workflow/HelperWorkflowStages.swift */; };
+		A10000012F00000100000036 /* Workflow/HelperWorkflowProgressParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000026 /* Workflow/HelperWorkflowProgressParsing.swift */; };
+		A10000012F00000100000037 /* Workflow/HelperWorkflowDiskResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000027 /* Workflow/HelperWorkflowDiskResolution.swift */; };
+		A10000012F00000100000038 /* Workflow/HelperWorkflowFileOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000028 /* Workflow/HelperWorkflowFileOperations.swift */; };
+		A10000012F00000100000039 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000029 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift */; };
+		A10000012F0000010000003A /* DownloaderAssembly/DownloaderAssemblyProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000002A /* DownloaderAssembly/DownloaderAssemblyProcess.swift */; };
 		B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */ = {isa = PBXBuildFile; fileRef = B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */; };
 		C10000012F00000100000001 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */; };
 /* End PBXBuildFile section */
@@ -76,6 +86,16 @@
 		A10000012F00000100000007 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist; sourceTree = "<group>"; };
 		A10000012F00000100000013 /* macUSBHelper.debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macUSBHelper.debug.entitlements; sourceTree = "<group>"; };
 		A10000012F00000100000014 /* macUSBHelper.release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macUSBHelper.release.entitlements; sourceTree = "<group>"; };
+		A10000012F00000100000021 /* IPC/HelperIPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPC/HelperIPC.swift; sourceTree = "<group>"; };
+		A10000012F00000100000022 /* Service/PrivilegedHelperService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service/PrivilegedHelperService.swift; sourceTree = "<group>"; };
+		A10000012F00000100000023 /* Service/HelperListenerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service/HelperListenerDelegate.swift; sourceTree = "<group>"; };
+		A10000012F00000100000024 /* Workflow/HelperWorkflowExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/HelperWorkflowExecutor.swift; sourceTree = "<group>"; };
+		A10000012F00000100000025 /* Workflow/HelperWorkflowStages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/HelperWorkflowStages.swift; sourceTree = "<group>"; };
+		A10000012F00000100000026 /* Workflow/HelperWorkflowProgressParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/HelperWorkflowProgressParsing.swift; sourceTree = "<group>"; };
+		A10000012F00000100000027 /* Workflow/HelperWorkflowDiskResolution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/HelperWorkflowDiskResolution.swift; sourceTree = "<group>"; };
+		A10000012F00000100000028 /* Workflow/HelperWorkflowFileOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/HelperWorkflowFileOperations.swift; sourceTree = "<group>"; };
+		A10000012F00000100000029 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderAssembly/DownloaderAssemblyExecutor.swift; sourceTree = "<group>"; };
+		A10000012F0000010000002A /* DownloaderAssembly/DownloaderAssemblyProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderAssembly/DownloaderAssemblyProcess.swift; sourceTree = "<group>"; };
 		B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = macUSB/Resources/Sounds/burn_complete.aif; sourceTree = "<group>"; };
 		C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -88,6 +108,37 @@
 				App/macUSBApp.swift,
 				Features/Analysis/AnalysisLogic.swift,
 				Features/Analysis/SystemAnalysisView.swift,
+				Features/Downloader/Logic/Assembly/MacOSAssemblyFileUtils.swift,
+				Features/Downloader/Logic/Assembly/MacOSAssemblyLegacyFlow.swift,
+				Features/Downloader/Logic/Assembly/MacOSAssemblyLegacyProgress.swift,
+				Features/Downloader/Logic/Assembly/MacOSAssemblyModernHelper.swift,
+				Features/Downloader/Logic/Assembly/MacOSAssemblyOrchestrator.swift,
+				Features/Downloader/Logic/Assembly/MacOSAssemblyProcessUtils.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryCatalogClient.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryCatalogParser.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryConstants.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryDistributionParser.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryFiltering.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryGrouping.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryLegacySupport.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryModels.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryOrchestrator.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoverySizeProbe.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadFormatting.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadNamingPolicy.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadOrchestrator.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadRetry.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadSessionFiles.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadState.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadTransfer.swift,
+				Features/Downloader/Logic/DownloadChecksums.json,
+				Features/Downloader/Logic/MacOSCleanupLogic.swift,
+				Features/Downloader/Logic/MacOSVerificationLogic.swift,
+				Features/Downloader/MacOSDownloaderCoordinator.swift,
+				Features/Downloader/UI/MacOSDownloaderListView.swift,
+				Features/Downloader/UI/MacOSDownloaderProcessView.swift,
+				Features/Downloader/UI/MacOSDownloaderSummaryView.swift,
+				Features/Downloader/UI/MacOSDownloaderWindowShellView.swift,
 				Features/Finish/FinishUSBView.swift,
 				Features/Installation/CreationProgressView.swift,
 				Features/Installation/CreatorHelperLogic.swift,
@@ -95,17 +146,40 @@
 				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/WelcomeView.swift,
 				macUSBIcon.icon,
+				Resources/Icons/OS/os_10_7_lion.icns,
+				Resources/Icons/OS/os_10_8_mountain_lion.icns,
+				Resources/Icons/OS/os_10_9_maverics.icns,
+				Resources/Icons/OS/os_10_10_yosemite.icns,
+				Resources/Icons/OS/os_10_11_el_capitan.icns,
+				Resources/Icons/OS/os_10_12_sierra.icns,
+				Resources/Icons/OS/os_10_13_high_sierra.icns,
+				Resources/Icons/OS/os_10_14_mojave.icns,
+				Resources/Icons/OS/os_10_15_catalina.icns,
+				Resources/Icons/OS/os_11_7_big_sur.icns,
+				Resources/Icons/OS/os_12_7_monterey.icns,
+				Resources/Icons/OS/os_13_7_ventura.icns,
+				Resources/Icons/OS/os_14_8_sonoma.icns,
+				Resources/Icons/OS/os_15_7_sequoia.icns,
+				Resources/Icons/OS/os_26_2_tahoe.icns,
 				Resources/Localizable.xcstrings,
 				Shared/Localization/HelperWorkflowLocalizationKeys.swift,
 				Shared/Models/Models.swift,
 				Shared/Services/FullDiskAccessPermissionManager.swift,
 				Shared/Services/Helper/HelperIPC.swift,
+				Shared/Services/Helper/HelperService/HelperServiceBootstrap.swift,
+				Shared/Services/Helper/HelperService/HelperServiceDiagnostics.swift,
+				Shared/Services/Helper/HelperService/HelperServiceEnsureReadyFlow.swift,
+				Shared/Services/Helper/HelperService/HelperServiceRepairFlow.swift,
+				Shared/Services/Helper/HelperService/HelperServiceRepairPanelView.swift,
+				Shared/Services/Helper/HelperService/HelperServiceRepairUI.swift,
+				Shared/Services/Helper/HelperService/HelperServiceStatusUI.swift,
 				Shared/Services/Helper/HelperServiceManager.swift,
 				Shared/Services/Helper/PrivilegedOperationClient.swift,
 				Shared/Services/LanguageManager.swift,
 				Shared/Services/Logging.swift,
 				Shared/Services/MenuState.swift,
 				Shared/Services/NotificationPermissionManager.swift,
+				Shared/Services/SystemSleepBlocker.swift,
 				Shared/Services/UpdateChecker.swift,
 				Shared/Services/USBDriveLogic.swift,
 				Shared/UI/BottomActionBar.swift,
@@ -120,6 +194,37 @@
 			membershipExceptions = (
 				App/ContentView.swift,
 				App/macUSBApp.swift,
+				Features/Downloader/Logic/Assembly/MacOSAssemblyFileUtils.swift,
+				Features/Downloader/Logic/Assembly/MacOSAssemblyLegacyFlow.swift,
+				Features/Downloader/Logic/Assembly/MacOSAssemblyLegacyProgress.swift,
+				Features/Downloader/Logic/Assembly/MacOSAssemblyModernHelper.swift,
+				Features/Downloader/Logic/Assembly/MacOSAssemblyOrchestrator.swift,
+				Features/Downloader/Logic/Assembly/MacOSAssemblyProcessUtils.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryCatalogClient.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryCatalogParser.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryConstants.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryDistributionParser.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryFiltering.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryGrouping.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryLegacySupport.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryModels.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryOrchestrator.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoverySizeProbe.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadFormatting.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadNamingPolicy.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadOrchestrator.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadRetry.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadSessionFiles.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadState.swift,
+				Features/Downloader/Logic/Download/MacOSDownloadTransfer.swift,
+				Features/Downloader/Logic/DownloadChecksums.json,
+				Features/Downloader/Logic/MacOSCleanupLogic.swift,
+				Features/Downloader/Logic/MacOSVerificationLogic.swift,
+				Features/Downloader/MacOSDownloaderCoordinator.swift,
+				Features/Downloader/UI/MacOSDownloaderListView.swift,
+				Features/Downloader/UI/MacOSDownloaderProcessView.swift,
+				Features/Downloader/UI/MacOSDownloaderSummaryView.swift,
+				Features/Downloader/UI/MacOSDownloaderWindowShellView.swift,
 				Features/Installation/CreationProgressView.swift,
 				Features/Installation/CreatorHelperLogic.swift,
 				Features/Installation/CreatorLogic.swift,
@@ -131,12 +236,20 @@
 				Shared/Models/Models.swift,
 				Shared/Services/FullDiskAccessPermissionManager.swift,
 				Shared/Services/Helper/HelperIPC.swift,
+				Shared/Services/Helper/HelperService/HelperServiceBootstrap.swift,
+				Shared/Services/Helper/HelperService/HelperServiceDiagnostics.swift,
+				Shared/Services/Helper/HelperService/HelperServiceEnsureReadyFlow.swift,
+				Shared/Services/Helper/HelperService/HelperServiceRepairFlow.swift,
+				Shared/Services/Helper/HelperService/HelperServiceRepairPanelView.swift,
+				Shared/Services/Helper/HelperService/HelperServiceRepairUI.swift,
+				Shared/Services/Helper/HelperService/HelperServiceStatusUI.swift,
 				Shared/Services/Helper/HelperServiceManager.swift,
 				Shared/Services/Helper/PrivilegedOperationClient.swift,
 				Shared/Services/LanguageManager.swift,
 				Shared/Services/Logging.swift,
 				Shared/Services/MenuState.swift,
 				Shared/Services/NotificationPermissionManager.swift,
+				Shared/Services/SystemSleepBlocker.swift,
 				Shared/Services/UpdateChecker.swift,
 				Shared/UI/BottomActionBar.swift,
 				Shared/UI/DesignTokens.swift,
@@ -241,6 +354,16 @@
 			isa = PBXGroup;
 			children = (
 				A10000012F00000100000006 /* main.swift */,
+				A10000012F00000100000021 /* IPC/HelperIPC.swift */,
+				A10000012F00000100000022 /* Service/PrivilegedHelperService.swift */,
+				A10000012F00000100000023 /* Service/HelperListenerDelegate.swift */,
+				A10000012F00000100000024 /* Workflow/HelperWorkflowExecutor.swift */,
+				A10000012F00000100000025 /* Workflow/HelperWorkflowStages.swift */,
+				A10000012F00000100000026 /* Workflow/HelperWorkflowProgressParsing.swift */,
+				A10000012F00000100000027 /* Workflow/HelperWorkflowDiskResolution.swift */,
+				A10000012F00000100000028 /* Workflow/HelperWorkflowFileOperations.swift */,
+				A10000012F00000100000029 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift */,
+				A10000012F0000010000002A /* DownloaderAssembly/DownloaderAssemblyProcess.swift */,
 				C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */,
 				A10000012F00000100000013 /* macUSBHelper.debug.entitlements */,
 				A10000012F00000100000014 /* macUSBHelper.release.entitlements */,
@@ -458,6 +581,16 @@
 			files = (
 				C10000012F00000100000001 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift in Sources */,
 				A10000012F00000100000001 /* main.swift in Sources */,
+				A10000012F00000100000031 /* IPC/HelperIPC.swift in Sources */,
+				A10000012F00000100000032 /* Service/PrivilegedHelperService.swift in Sources */,
+				A10000012F00000100000033 /* Service/HelperListenerDelegate.swift in Sources */,
+				A10000012F00000100000034 /* Workflow/HelperWorkflowExecutor.swift in Sources */,
+				A10000012F00000100000035 /* Workflow/HelperWorkflowStages.swift in Sources */,
+				A10000012F00000100000036 /* Workflow/HelperWorkflowProgressParsing.swift in Sources */,
+				A10000012F00000100000037 /* Workflow/HelperWorkflowDiskResolution.swift in Sources */,
+				A10000012F00000100000038 /* Workflow/HelperWorkflowFileOperations.swift in Sources */,
+				A10000012F00000100000039 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift in Sources */,
+				A10000012F0000010000003A /* DownloaderAssembly/DownloaderAssemblyProcess.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -627,7 +760,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 16;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -650,7 +783,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -683,7 +816,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 16;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -706,7 +839,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

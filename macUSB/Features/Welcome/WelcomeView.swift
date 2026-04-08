@@ -8,6 +8,7 @@ struct WelcomeView: View {
     
     @State private var dummyLock: Bool = false
     @State private var didRunStartupFlow: Bool = false
+    @State private var navigateToAnalysis: Bool = false
     
     let versionCheckURL = URL(string: "https://raw.githubusercontent.com/Kruszoneq/macUSB/main/version.json")!
     
@@ -44,7 +45,9 @@ struct WelcomeView: View {
             Spacer()
             
             // --- PRZYCISK START ---
-            NavigationLink(destination: SystemAnalysisView(isTabLocked: $dummyLock)) {
+            Button {
+                navigateToAnalysis = true
+            } label: {
                 HStack {
                     Text("Rozpocznij") // Klucz do tłumaczenia
                         .font(.headline)
@@ -70,6 +73,16 @@ struct WelcomeView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationTitle("Start")
+        .background(
+            NavigationLink(
+                destination: SystemAnalysisView(isTabLocked: $dummyLock),
+                isActive: $navigateToAnalysis
+            ) { EmptyView() }
+            .hidden()
+        )
+        .onReceive(NotificationCenter.default.publisher(for: .macUSBNavigateToAnalysis)) { _ in
+            navigateToAnalysis = true
+        }
         .onAppear {
             guard !didRunStartupFlow else { return }
             didRunStartupFlow = true
