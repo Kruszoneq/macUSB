@@ -204,7 +204,8 @@ extension MontereyDownloadFlowModel {
 
         let extractedAppURL = try await extractInstallerAppFromPackageWithoutInstaller(
             packageURL: copiedPackageURL,
-            workspaceURL: workspaceURL
+            workspaceURL: workspaceURL,
+            entry: entry
         )
 
         let applicationsURL = URL(fileURLWithPath: "/Applications", isDirectory: true)
@@ -296,7 +297,8 @@ extension MontereyDownloadFlowModel {
 
     private func extractInstallerAppFromPackageWithoutInstaller(
         packageURL: URL,
-        workspaceURL: URL
+        workspaceURL: URL,
+        entry: MacOSInstallerEntry
     ) async throws -> URL {
         let expandedURL = workspaceURL.appendingPathComponent("ExpandedPackage", isDirectory: true)
         let extractionRootURL = workspaceURL.appendingPathComponent("ExtractedPayload", isDirectory: true)
@@ -345,7 +347,13 @@ extension MontereyDownloadFlowModel {
                 stepName: "pkgutil expand-full oldest package"
             )
             let payloadDirectory = expandedFullURL.appendingPathComponent("Payload", isDirectory: true)
-            return try locateInstallerApp(in: payloadDirectory)
+            let appURL = try locateInstallerApp(in: payloadDirectory)
+            try await attachInstallESDIfNeeded(
+                in: expandedFullURL,
+                installerAppURL: appURL,
+                entry: entry
+            )
+            return appURL
         }
 
         let totalPayloads = max(payloadURLs.count, 1)
@@ -366,7 +374,79 @@ extension MontereyDownloadFlowModel {
             }
         }
 
-        return try locateInstallerApp(in: extractionRootURL)
+        let appURL = try locateInstallerApp(in: extractionRootURL)
+        try await attachInstallESDIfNeeded(
+            in: expandedURL,
+            installerAppURL: appURL,
+            entry: entry
+        )
+        return appURL
+    }
+
+    private func attachInstallESDIfNeeded(
+        in expandedPackageRootURL: URL,
+        installerAppURL: URL,
+        entry: MacOSInstallerEntry
+    ) async throws {
+        guard let installESDSourceURL = locateInstallESD(in: expandedPackageRootURL) else {
+            AppLogging.error(
+                "Oldest assembly: brak InstallESD.dmg w rozpakowanym pakiecie \(expandedPackageRootURL.path) dla \(entry.version)",
+                category: "Downloader"
+            )
+            throw DownloadFailureReason.assemblyFailed(
+                "Nie można dokończyć przygotowania. Brakuje pliku InstallESD.dmg. Spróbuj ponownie pobrać ten system."
+            )
+        }
+        AppLogging.info(
+            "Oldest assembly: znaleziono InstallESD.dmg source=\(installESDSourceURL.path)",
+            category: "Downloader"
+        )
+
+        try await runLegacyFileStepWithProgress(
+            statusText: "Dodawanie obrazu systemu do instalatora...",
+            progressStart: 0.78,
+            progressEnd: 0.84,
+            stepName: "copy InstallESD into SharedSupport"
+        ) {
+            let sharedSupportURL = installerAppURL.appendingPathComponent("Contents/SharedSupport", isDirectory: true)
+            try FileManager.default.createDirectory(at: sharedSupportURL, withIntermediateDirectories: true)
+            let installESDDestinationURL = sharedSupportURL.appendingPathComponent("InstallESD.dmg", isDirectory: false)
+            try self.copyItemReplacing(sourceURL: installESDSourceURL, destinationURL: installESDDestinationURL)
+        }
+    }
+
+    private func locateInstallESD(in expandedPackageRootURL: URL) -> URL? {
+        let rootCandidate = expandedPackageRootURL.appendingPathComponent("InstallESD.dmg", isDirectory: false)
+        if FileManager.default.fileExists(atPath: rootCandidate.path) {
+            return rootCandidate
+        }
+
+        let nestedCandidate = expandedPackageRootURL
+            .appendingPathComponent("InstallMacOSX.pkg", isDirectory: true)
+            .appendingPathComponent("InstallESD.dmg", isDirectory: false)
+        if FileManager.default.fileExists(atPath: nestedCandidate.path) {
+            return nestedCandidate
+        }
+
+        guard let enumerator = FileManager.default.enumerator(
+            at: expandedPackageRootURL,
+            includingPropertiesForKeys: [.isRegularFileKey],
+            options: [.skipsHiddenFiles]
+        ) else {
+            return nil
+        }
+
+        var candidates: [URL] = []
+        for case let fileURL as URL in enumerator {
+            guard fileURL.lastPathComponent.caseInsensitiveCompare("InstallESD.dmg") == .orderedSame else {
+                continue
+            }
+            candidates.append(fileURL)
+        }
+
+        return candidates.sorted { lhs, rhs in
+            lhs.path.count < rhs.path.count
+        }.first
     }
 
     private func locatePayloadFiles(in directoryURL: URL) -> [URL] {
