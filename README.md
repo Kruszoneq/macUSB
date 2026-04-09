@@ -4,7 +4,7 @@
 
 ![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) ![Security](https://img.shields.io/badge/Security-Notarized-success) [![Website](https://img.shields.io/badge/Website-macUSB-blueviolet)](https://kruszoneq.github.io/macUSB/)
 
-**macUSB** is a guided macOS app focused on creating bootable USB installers on Apple Silicon and Intel Macs, using local `.dmg`, `.iso`, `.cdr`, `.app` sources or the built-in downloader.
+**macUSB** is a guided macOS app for creating bootable macOS USB installers on Apple Silicon and Intel Macs, from local `.dmg`, `.iso`, `.cdr`, and `.app` files or with the built-in downloader.
 
 ---
 
@@ -54,7 +54,7 @@ Common issues reported across forums and guides include:
 ## ✅ Key Features
 
 - **Built-in Downloader:** discovers and downloads macOS installers available from Apple servers.
-- **Local source support:** create USB from `.dmg`, `.iso`, `.cdr`, and `.app`.
+- **Local source support:** build bootable macOS USB installers from local `.dmg`, `.iso`, `.cdr`, and `.app` files.
 - **One guided flow:** from source/downloader selection to final bootable media.
 - **Apple Silicon legacy support:** automatic compatibility handling for older installers during bootable USB creation.
 - **Automatic media prep:** partition and format checks with conversion when required.
@@ -66,7 +66,7 @@ Common issues reported across forums and guides include:
 
 1. Install macUSB using one of the methods listed in **How to Download macUSB**.
 2. Open macUSB and either:
-   - choose a local installer file (`.dmg`, `.iso`, `.cdr`, or `.app`), or
+   - choose a local macOS installer (`.dmg`, `.iso`, `.cdr`, or `.app`), or
    - use the built-in Downloader to fetch a macOS installer.
 3. Select the target USB drive and review operation details.
 4. Start creation and monitor stage-by-stage progress.
@@ -199,7 +199,7 @@ Common issues reported across forums and guides include:
 - **External HDD/SSD support:** installer creation on external hard drives is disabled by default on every app launch to improve safety and reduce the risk of accidental target selection. You can enable it in **Options** → **Enable external drives support**.
 
 ### Installer Inputs
-Accepted local installer types:
+Accepted local formats for macOS installers:
 - `.dmg`
 - `.cdr`
 - `.iso`
@@ -250,9 +250,12 @@ A dedicated Open Firmware guide is available on the project website, based on re
 Test coverage includes:
 - **Mac OS X Tiger** and **Mac OS X Leopard** boot scenarios,
 - **Single DVD** editions, and for Tiger also the **Multi-DVD** path,
-- Open Firmware boot command usage verified on an **iMac G5** test machine.
+- Open Firmware boot command usage verified in real hardware tests (including an **iMac G5**).
 
 If you are reviving a PowerPC Mac, use this [step-by-step guide](https://kruszoneq.github.io/macUSB/pages/guides/ppc_boot_instructions.html).
+
+> **Note:** PowerPC USB boot support can vary by model, especially on older hardware.
+> During validation testing, USB boot was confirmed on an **iMac G5**. On an **iBook G4 (2003)**, the USB device was detected but still failed as a readable boot source.
 
 ---
 
