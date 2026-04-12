@@ -46,7 +46,8 @@ cd /path/to/macUSB && python3 -m http.server 8000 --bind 0.0.0.0
 - The draft must include: title, description, and file list.
 - The title must be specific and clear.
 - The description must be written as one paragraph in full sentences, without line-break markers like `\n`, and must describe the changes included in that commit.
-- After commit approval and commit execution, provide an execution report containing: short commit hash, title, file list, and URL.
+- After commit approval and commit execution, provide an execution report containing: short commit hash, title, number of files, and URL.
+- After creating an approved commit, push the current branch to `origin` immediately.
 
 ## Pull Request Rules
 
@@ -67,6 +68,7 @@ cd /path/to/macUSB && python3 -m http.server 8000 --bind 0.0.0.0
 
 - Branch names should reflect the feature being added (when a specific feature is provided in the request).
 - Propose the branch name for approval first; create the branch only after user approval.
+- After creating an approved branch, push it to `origin` immediately and set upstream tracking.
 
 ## `gh-pages` Branch Protection Rules
 
