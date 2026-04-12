@@ -1,0 +1,22 @@
+# Pre-Ship Acceptance Checklist
+
+- [ ] Navbar renders on index/SEO/guides via partial injection.
+- [ ] Footer renders on index/SEO/guides via partial injection.
+- [ ] Sticky/frosted navbar behavior works and remains readable in fixed default theme.
+- [ ] No theme toggle is rendered in navbar.
+- [ ] No system theme switching changes page appearance.
+- [ ] Guides dropdown works on desktop hover, mobile click, and keyboard.
+- [ ] Latest release fetch updates `#latest-version`.
+- [ ] On desktop, `.cta-button` download links resolve to latest GitHub `.dmg` asset when available.
+- [ ] On mobile/tablet, `.cta-button` links remain on releases page.
+- [ ] Homepage hero includes both CTAs: `Download for macOS` and `Support macUSB`.
+- [ ] Homepage hero carousel works smoothly and screenshots are not cropped.
+- [ ] `#screenshots` anchor and scroll cue behavior work.
+- [ ] PPC guide command content remains unchanged.
+- [ ] Cross-guide links in Tiger/PPC guides are rendered as `card-button` actions.
+- [ ] Tiger guide TOC auto-generation and scrollspy remain stable.
+- [ ] SEO page has complete metadata and internal links.
+- [ ] SEO page includes `SoftwareApplication` and `FAQPage` structured data.
+- [ ] `/pages/about.html` redirects to merged SEO page and keeps canonical to that URL.
+- [ ] Mobile layouts pass `360/390/414` width checks without overflow.
+- [ ] `prefers-reduced-motion` behavior is respected.
