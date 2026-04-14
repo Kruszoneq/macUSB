@@ -34,6 +34,16 @@ enum HelperWorkflowLocalizationKeys {
     static let catalinaXattrTitle = "helper.workflow.catalina_xattr.title"
     static let catalinaXattrStatus = "helper.workflow.catalina_xattr.status"
 
+    static let windowsFormatTitle = "helper.workflow.windows_format.title"
+    static let windowsFormatStatus = "helper.workflow.windows_format.status"
+    static let windowsCopyTitle = "helper.workflow.windows_copy.title"
+    static let windowsCopyStatus = "helper.workflow.windows_copy.status"
+
+    static let linuxUnmountTitle = "helper.workflow.linux_unmount.title"
+    static let linuxUnmountStatus = "helper.workflow.linux_unmount.status"
+    static let linuxDdTitle = "helper.workflow.linux_dd.title"
+    static let linuxDdStatus = "helper.workflow.linux_dd.status"
+
     static let cleanupTempTitle = "helper.workflow.cleanup_temp.title"
     static let cleanupTempStatus = "helper.workflow.cleanup_temp.status"
 
@@ -62,6 +72,14 @@ enum HelperWorkflowLocalizationKeys {
             return HelperWorkflowStageLocalization(titleKey: catalinaCopyTitle, statusKey: catalinaCopyStatus)
         case "catalina_xattr":
             return HelperWorkflowStageLocalization(titleKey: catalinaXattrTitle, statusKey: catalinaXattrStatus)
+        case "windows_format":
+            return HelperWorkflowStageLocalization(titleKey: windowsFormatTitle, statusKey: windowsFormatStatus)
+        case "windows_copy":
+            return HelperWorkflowStageLocalization(titleKey: windowsCopyTitle, statusKey: windowsCopyStatus)
+        case "linux_unmount":
+            return HelperWorkflowStageLocalization(titleKey: linuxUnmountTitle, statusKey: linuxUnmountStatus)
+        case "linux_dd":
+            return HelperWorkflowStageLocalization(titleKey: linuxDdTitle, statusKey: linuxDdStatus)
         case "cleanup_temp":
             return HelperWorkflowStageLocalization(titleKey: cleanupTempTitle, statusKey: cleanupTempStatus)
         case "finalize":
@@ -73,7 +91,6 @@ enum HelperWorkflowLocalizationKeys {
 }
 
 enum HelperWorkflowLocalizationExtractionAnchors {
-    // Keep literal keys here so String Catalog extraction can detect dynamic helper keys used at runtime.
     static let anchoredValues: [String] = [
         String(localized: "helper.workflow.prepare_source.title"),
         String(localized: "helper.workflow.prepare_source.status"),
@@ -95,6 +112,14 @@ enum HelperWorkflowLocalizationExtractionAnchors {
         String(localized: "helper.workflow.catalina_copy.status"),
         String(localized: "helper.workflow.catalina_xattr.title"),
         String(localized: "helper.workflow.catalina_xattr.status"),
+        String(localized: "helper.workflow.windows_format.title"),
+        String(localized: "helper.workflow.windows_format.status"),
+        String(localized: "helper.workflow.windows_copy.title"),
+        String(localized: "helper.workflow.windows_copy.status"),
+        String(localized: "helper.workflow.linux_unmount.title"),
+        String(localized: "helper.workflow.linux_unmount.status"),
+        String(localized: "helper.workflow.linux_dd.title"),
+        String(localized: "helper.workflow.linux_dd.status"),
         String(localized: "helper.workflow.cleanup_temp.title"),
         String(localized: "helper.workflow.cleanup_temp.status"),
         String(localized: "helper.workflow.finalize.title"),
