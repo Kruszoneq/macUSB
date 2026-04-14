@@ -38,6 +38,8 @@ final class AnalysisLogic: ObservableObject {
     @Published var isPPC: Bool = false
     @Published var legacyArchInfo: String? = nil
     @Published var userSkippedAnalysis: Bool = false
+    @Published var isWindowsISO: Bool = false
+    @Published var isLinuxISO: Bool = false
 
     @Published var availableDrives: [USBDrive] = []
     @Published var selectedDrive: USBDrive? {
@@ -107,8 +109,8 @@ final class AnalysisLogic: ObservableObject {
         // Recognized and supported when analysis finished, a valid source exists or PPC flow is selected,
         // the system is detected (modern/legacy/catalina/sierra), and it's not marked unsupported.
         let recognized = (!isAnalyzing)
-        let hasValidSourceOrPPC = (sourceAppURL != nil) || isPPC
-        let detected = isSystemDetected || isPPC
+        let hasValidSourceOrPPC = (sourceAppURL != nil) || isPPC || isWindowsISO || isLinuxISO
+        let detected = isSystemDetected || isPPC || isWindowsISO || isLinuxISO
         let unsupported = showUnsupportedMessage || isUnsupportedSierra
         return recognized && hasValidSourceOrPPC && detected && !unsupported
     }
@@ -223,6 +225,8 @@ final class AnalysisLogic: ObservableObject {
                     self.isMavericks = false
                     self.isUnsupportedSierra = false
                     self.isPPC = false
+                    self.isWindowsISO = false
+                    self.isLinuxISO = false
                     self.legacyArchInfo = nil
                     self.userSkippedAnalysis = false
                     self.shouldShowMavericksDialog = false
@@ -272,6 +276,8 @@ final class AnalysisLogic: ObservableObject {
                 self.isMavericks = false
                 self.isUnsupportedSierra = false
                 self.isPPC = false
+                self.isWindowsISO = false
+                self.isLinuxISO = false
                 self.legacyArchInfo = nil
                 self.userSkippedAnalysis = false
                 self.shouldShowMavericksDialog = false
@@ -296,6 +302,8 @@ final class AnalysisLogic: ObservableObject {
         showUSBSection = false; showUnsupportedMessage = false
         isUnsupportedSierra = false
         isPPC = false
+        isWindowsISO = false
+        isLinuxISO = false
         isMavericks = false
         shouldShowAlreadyMountedSourceAlert = false
         requiredUSBCapacityGB = nil
@@ -331,16 +339,27 @@ final class AnalysisLogic: ObservableObject {
                         }
                         if let (_, _, _, mp) = mountedReadInfo { self.mountedDMGPath = mp } else { self.mountedDMGPath = nil }
                         if let (name, rawVer, appURL, _) = mountedReadInfo {
-                            let friendlyVer = self.formatMarketingVersion(raw: rawVer, name: name)
-                            var cleanName = name
-                            cleanName = cleanName.replacingOccurrences(of: "Install ", with: "")
-                            cleanName = cleanName.replacingOccurrences(of: "macOS ", with: "")
-                            cleanName = cleanName.replacingOccurrences(of: "Mac OS X ", with: "")
-                            cleanName = cleanName.replacingOccurrences(of: "OS X ", with: "")
-                            let prefix = name.contains("macOS") ? "macOS" : (name.contains("OS X") ? "OS X" : "macOS")
+                            let isWindowsISO = (name == "Windows ISO")
+                            let isLinuxISO = (name == "Linux ISO")
 
-                            self.recognizedVersion = "\(prefix) \(cleanName) \(friendlyVer)"
-                            self.updateRequiredUSBCapacity(rawVersion: rawVer, name: name)
+                            if isWindowsISO {
+                                self.recognizedVersion = "Windows Bootable ISO"
+                                self.requiredUSBCapacityGB = 8
+                            } else if isLinuxISO {
+                                self.recognizedVersion = "Linux Distro Bootable ISO"
+                                self.requiredUSBCapacityGB = nil
+                            } else {
+                                let friendlyVer = self.formatMarketingVersion(raw: rawVer, name: name)
+                                var cleanName = name
+                                cleanName = cleanName.replacingOccurrences(of: "Install ", with: "")
+                                cleanName = cleanName.replacingOccurrences(of: "macOS ", with: "")
+                                cleanName = cleanName.replacingOccurrences(of: "Mac OS X ", with: "")
+                                cleanName = cleanName.replacingOccurrences(of: "OS X ", with: "")
+                                let prefix = name.contains("macOS") ? "macOS" : (name.contains("OS X") ? "OS X" : "macOS")
+
+                                self.recognizedVersion = "\(prefix) \(cleanName) \(friendlyVer)"
+                                self.updateRequiredUSBCapacity(rawVersion: rawVer, name: name)
+                            }
                             self.sourceAppURL = appURL
                             self.updateDetectedSystemIcon(from: appURL)
 
@@ -425,6 +444,8 @@ final class AnalysisLogic: ObservableObject {
                                 self.isSierra = false
                                 self.isMavericks = false
                                 self.isUnsupportedSierra = false
+                                self.isWindowsISO = false
+                                self.isLinuxISO = false
                                 return
                             }
 
@@ -481,16 +502,18 @@ final class AnalysisLogic: ObservableObject {
                                 rawVer.starts(with: "10.8") ||
                                 rawVer.starts(with: "10.7")
 
-                            // ZMIANA: Dodanie isCatalina do isSystemDetected
-                            self.isSystemDetected = isModern || isOldSupported || isLegacyDetected || isRestoreLegacy || isCatalina || isSierra || isMavericks
+                            // ZMIANA: Dodanie isCatalina, isWindowsISO, isLinuxISO do isSystemDetected
+                            self.isSystemDetected = isModern || isOldSupported || isLegacyDetected || isRestoreLegacy || isCatalina || isSierra || isMavericks || isWindowsISO || isLinuxISO
 
                             // Catalina ma swój własny codesign, więc tu wyłączamy standardowy 'needsCodesign'
-                            self.needsCodesign = isOldSupported && !isModern && !isLegacyDetected
+                            self.needsCodesign = isOldSupported && !isModern && !isLegacyDetected && !isWindowsISO && !isLinuxISO
                             self.isLegacyDetected = isLegacyDetected
                             self.isRestoreLegacy = isRestoreLegacy
                             self.isCatalina = isCatalina
                             self.isSierra = isSierra
                             self.isMavericks = isMavericks
+                            self.isWindowsISO = isWindowsISO
+                            self.isLinuxISO = isLinuxISO
                             if isMavericks {
                                 self.shouldShowMavericksDialog = true
                             }
@@ -534,6 +557,8 @@ final class AnalysisLogic: ObservableObject {
                             self.isMavericks = false
                             self.isUnsupportedSierra = false
                             self.isPPC = false
+                            self.isWindowsISO = false
+                            self.isLinuxISO = false
                             self.legacyArchInfo = nil
                             self.userSkippedAnalysis = false
                             self.requiredUSBCapacityGB = nil
@@ -763,12 +788,14 @@ final class AnalysisLogic: ObservableObject {
                     self.isMavericks = false
                     self.isUnsupportedSierra = false
                     self.isPPC = true
+                    self.isWindowsISO = false
+                    self.isLinuxISO = false
                     self.legacyArchInfo = nil
                     self.selectedDrive = nil
                     self.capacityCheckFinished = false
                     self.requiredUSBCapacityGB = 16
                 }
-                let flags = [self.isPPC ? "isPPC" : nil].compactMap { $0 }.joined(separator: ", ")
+                let flags = [self.isPPC ? "isPPC" : nil, self.isWindowsISO ? "isWindowsISO" : nil, self.isLinuxISO ? "isLinuxISO" : nil].compactMap { $0 }.joined(separator: ", ")
                 self.log("Ustawiono Tiger Multi DVD: recognizedVersion=\(self.recognizedVersion). Flagi: \(flags.isEmpty ? "brak" : flags)")
             }
         }
@@ -1067,6 +1094,21 @@ final class AnalysisLogic: ObservableObject {
                     }
                 } else {
                     self.log("Nie znaleziono pakietu .app w zamontowanym obrazie: \(mp)")
+                    let fm = FileManager.default
+                    if fm.fileExists(atPath: mUrl.appendingPathComponent("sources").appendingPathComponent("boot.wim").path) ||
+                       fm.fileExists(atPath: mUrl.appendingPathComponent("sources").appendingPathComponent("install.wim").path) ||
+                       fm.fileExists(atPath: mUrl.appendingPathComponent("sources").appendingPathComponent("install.swm").path) ||
+                       fm.fileExists(atPath: mUrl.appendingPathComponent("setup.exe").path) {
+                        self.log("Wykryto instalator Windows w: \(mp)")
+                        return .success(name: "Windows ISO", rawVersion: "Windows Bootable ISO", appURL: mUrl, mountPath: mp)
+                    }
+                    if fm.fileExists(atPath: mUrl.appendingPathComponent("isolinux").path) ||
+                       fm.fileExists(atPath: mUrl.appendingPathComponent("casper").path) ||
+                       fm.fileExists(atPath: mUrl.appendingPathComponent("arch").path) {
+                        self.log("Wykryto instalator Linux w: \(mp)")
+                        return .success(name: "Linux ISO", rawVersion: "Linux Distro Bootable ISO", appURL: mUrl, mountPath: mp)
+                    }
+
                     if let names = dirContents?.map({ $0.lastPathComponent }).prefix(10) {
                         self.log("Zawartość katalogu (\(mp)) [pierwsze 10]: \(names.joined(separator: ", "))")
                     }
