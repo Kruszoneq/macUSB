@@ -5,6 +5,8 @@ enum HelperWorkflowKind: String, Codable {
     case legacyRestore
     case mavericks
     case ppc
+    case windowsISO
+    case linuxISO
 }
 
 struct HelperWorkflowRequestPayload: Codable {
