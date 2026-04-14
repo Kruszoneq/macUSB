@@ -357,6 +357,44 @@ extension UniversalInstallationView {
             )
         }
 
+        if isWindowsISO {
+            return HelperWorkflowRequestPayload(
+                workflowKind: .windowsISO,
+                systemName: systemName,
+                sourceAppPath: sourceAppURL.path,
+                originalImagePath: originalImageURL?.path,
+                tempWorkPath: tempWorkURL.path,
+                targetVolumePath: drive.url.path,
+                targetBSDName: helperTargetBSDName,
+                targetLabel: drive.url.lastPathComponent,
+                needsPreformat: true, // Needs preformat ExFAT
+                isCatalina: false,
+                isSierra: false,
+                needsCodesign: false,
+                requiresApplicationPathArg: false,
+                requesterUID: requesterUID
+            )
+        }
+
+        if isLinuxISO {
+            return HelperWorkflowRequestPayload(
+                workflowKind: .linuxISO,
+                systemName: systemName,
+                sourceAppPath: sourceAppURL.path,
+                originalImagePath: originalImageURL?.path,
+                tempWorkPath: tempWorkURL.path,
+                targetVolumePath: drive.url.path,
+                targetBSDName: helperTargetBSDName,
+                targetLabel: drive.url.lastPathComponent,
+                needsPreformat: false, // DD raw flashing
+                isCatalina: false,
+                isSierra: false,
+                needsCodesign: false,
+                requiresApplicationPathArg: false,
+                requesterUID: requesterUID
+            )
+        }
+
         return HelperWorkflowRequestPayload(
             workflowKind: .standard,
             systemName: systemName,
@@ -675,6 +713,18 @@ extension UniversalInstallationView {
                 if request.isCatalina {
                     totals["catalina_copy"] = appBytes
                 }
+            }
+
+        case .windowsISO:
+            let copyPath = request.originalImagePath ?? request.sourceAppPath
+            if let bytes = sizeInBytes(at: copyPath) {
+                totals["windows_copy"] = bytes
+            }
+
+        case .linuxISO:
+            let copyPath = request.originalImagePath ?? request.sourceAppPath
+            if let bytes = sizeInBytes(at: copyPath) {
+                totals["linux_dd"] = bytes
             }
         }
 
