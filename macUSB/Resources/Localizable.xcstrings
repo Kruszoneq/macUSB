@@ -1641,7 +1641,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Affinché l'helper funzioni correttamente, devi consentirne l'esecuzione in background in Impostazioni di sistema."
+            "value" : "Affinché l'assistente funzioni correttamente, devi consentirne l'esecuzione in background in Impostazioni di sistema."
           }
         },
         "ja" : {
@@ -1799,7 +1799,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Per eseguire l'helper di sistema, l'applicazione deve trovarsi nella directory Applicazioni."
+            "value" : "Per eseguire l'assistente di sistema, l'applicazione deve trovarsi nella directory Applicazioni."
           }
         },
         "ja" : {
@@ -3097,7 +3097,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Errore di connessione all'helper: %@"
+            "value" : "Errore di connessione all'assistente: %@"
           }
         },
         "ja" : {
@@ -6168,7 +6168,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper funziona correttamente ed è pronto all'uso."
+            "value" : "l'assistente funziona correttamente ed è pronto all'uso."
           }
         },
         "ja" : {
@@ -6244,7 +6244,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper è già stato rimosso"
+            "value" : "l'assistente è già stato rimosso"
           }
         },
         "ja" : {
@@ -6320,7 +6320,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper non è pronto per il lavoro."
+            "value" : "l'assistente non è pronto per il lavoro."
           }
         },
         "ja" : {
@@ -6396,7 +6396,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper non ha confermato l'eliminazione della directory di sessione"
+            "value" : "l'assistente non ha confermato l'eliminazione della directory di sessione"
           }
         },
         "ja" : {
@@ -6472,7 +6472,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper non ha confermato l'eliminazione dei file temporanei"
+            "value" : "l'assistente non ha confermato l'eliminazione dei file temporanei"
           }
         },
         "ja" : {
@@ -6548,7 +6548,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper non ha restituito l'ID dell'attività."
+            "value" : "l'assistente non ha restituito l'ID dell'attività."
           }
         },
         "ja" : {
@@ -6630,7 +6630,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper non ha restituito il percorso dell'installer .app"
+            "value" : "l'assistente non ha restituito il percorso dell'installer .app"
           }
         },
         "ja" : {
@@ -6706,7 +6706,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper risponde correttamente (uid=%@, euid=%@, pid=%@)"
+            "value" : "l'assistente risponde correttamente (uid=%@, euid=%@, pid=%@)"
           }
         },
         "ja" : {
@@ -6788,7 +6788,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper è rimasto attivo dopo l'annullamento della registrazione. Riparazione interrotta."
+            "value" : "l'assistente è rimasto attivo dopo l'annullamento della registrazione. Riparazione interrotta."
           }
         },
         "ja" : {
@@ -6864,7 +6864,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper richiede l'approvazione nelle Impostazioni di sistema."
+            "value" : "l'assistente richiede l'approvazione nelle Impostazioni di sistema."
           }
         },
         "ja" : {
@@ -6940,7 +6940,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper è stato rimosso"
+            "value" : "l'assistente è stato rimosso"
           }
         },
         "ja" : {
@@ -7016,7 +7016,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper è stato registrato ma richiede l'approvazione dell'utente."
+            "value" : "l'assistente è stato registrato ma richiede l'approvazione dell'utente."
           }
         },
         "ja" : {
@@ -7092,7 +7092,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper ha restituito un errore durante l'assemblaggio del programma di installazione"
+            "value" : "l'assistente ha restituito un errore durante l'assemblaggio del programma di installazione"
           }
         },
         "ja" : {
@@ -7988,7 +7988,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Finalizzare l'operazione e preparare una sintesi."
+            "value" : "Finalizzando l'operazione e preparando una sintesi."
           }
         },
         "ja" : {
@@ -8152,7 +8152,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verificare l'immagine del programma di installazione prima di scrivere."
+            "value" : "Verificando l'immagine del programma di installazione prima di scrivere."
           }
         },
         "ja" : {
@@ -9136,7 +9136,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ignorare"
+            "value" : "Ignora"
           }
         },
         "ja" : {
@@ -9750,7 +9750,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lavori di finitura"
+            "value" : "Finendo"
           }
         },
         "ja" : {
@@ -9826,7 +9826,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Concludere il lavoro con un avvertimento..."
+            "value" : "Finendo con un avvertimento..."
           }
         },
         "ja" : {
@@ -10896,7 +10896,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Luogo di applicazione: esterno/Applicazioni"
+            "value" : ""Posizione dell'app: fuori da /Applicazioni"
           }
         },
         "ja" : {
@@ -11048,7 +11048,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Servizio macchina: %@"
+            "value" : "Servizio Mach: %@"
           }
         },
         "ja" : {
@@ -11282,7 +11282,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macUSB ha rilevato una nuova versione dell'applicazione, ma l'aggiornamento automatico dell'helper si è concluso con un errore. Seleziona Strumenti → Assistente riparazione ed esegui la riparazione manualmente."
+            "value" : "macUSB ha rilevato una nuova versione dell'applicazione, ma l'aggiornamento automatico dell'assistente si è concluso con un errore. Seleziona Strumenti → Assistente riparazione ed esegui la riparazione manualmente."
           }
         },
         "ja" : {
@@ -11434,7 +11434,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Correggi l'helper"
+            "value" : "Correggi l'assistente"
           }
         },
         "ja" : {
@@ -11510,7 +11510,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Riparazione dell'helper"
+            "value" : "Riparazione dell'assistente"
           }
         },
         "ja" : {
@@ -11586,7 +11586,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Riparazione dell'helper di sistema"
+            "value" : "Riparazione dell'assistente di sistema"
           }
         },
         "ja" : {
@@ -11738,7 +11738,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La riparazione dell'helper è terminata con un errore"
+            "value" : "La riparazione dell'assistente è terminata con un errore"
           }
         },
         "ja" : {
@@ -11890,7 +11890,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Riparazione dell'helper completata con successo"
+            "value" : "Riparazione dell'assistente completata con successo"
           }
         },
         "ja" : {
@@ -11966,7 +11966,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fissaggio…"
+            "value" : "Riparando…"
           }
         },
         "ja" : {
@@ -12656,7 +12656,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile attivare l'helper dopo il ripristino completo."
+            "value" : "Impossibile attivare l'assistente dopo il ripristino completo."
           }
         },
         "ja" : {
@@ -12732,7 +12732,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile attivare l'helper."
+            "value" : "Impossibile attivare l'assistente."
           }
         },
         "ja" : {
@@ -12808,7 +12808,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile aggiornare automaticamente l'helper. Apri Strumenti → Aiuto riparazione e riprova."
+            "value" : "Impossibile aggiornare automaticamente l'assistente. Apri Strumenti → Aiuto riparazione e riprova."
           }
         },
         "ja" : {
@@ -12890,7 +12890,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile aggiornare automaticamente l'helper"
+            "value" : "Impossibile aggiornare automaticamente l'assistente"
           }
         },
         "ja" : {
@@ -13276,7 +13276,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Non è stato possibile confermare la disponibilità dell'helper."
+            "value" : "Non è stato possibile confermare la disponibilità dell'assistente."
           }
         },
         "ja" : {
@@ -13428,7 +13428,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Non è stato possibile ripristinare la piena disponibilità dell'helper. I dettagli vengono registrati nei registri diagnostici."
+            "value" : "Non è stato possibile ripristinare la piena disponibilità dell'assistente. I dettagli vengono registrati nei registri diagnostici."
           }
         },
         "ja" : {
@@ -13732,7 +13732,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile creare l'helper XPC proxy."
+            "value" : "Impossibile creare l'assistente XPC proxy."
           }
         },
         "ja" : {
@@ -13814,7 +13814,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile connettere XPC all'helper."
+            "value" : "Impossibile connettere XPC all'assistente."
           }
         },
         "ja" : {
@@ -14288,7 +14288,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile registrare l'helper"
+            "value" : "Impossibile registrare l'assistente"
           }
         },
         "ja" : {
@@ -14364,7 +14364,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile decodificare il risultato dell'helper: %@"
+            "value" : "Impossibile decodificare il risultato dell'assistente: %@"
           }
         },
         "ja" : {
@@ -14446,7 +14446,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile decodificare l'evento helper: %@"
+            "value" : "Impossibile decodificare l'evento dell'assistente: %@"
           }
         },
         "ja" : {
@@ -15820,7 +15820,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stato di helper sconosciuto dopo la registrazione."
+            "value" : "Stato dell'assistente dopo la registrazione sconosciuto."
           }
         },
         "ja" : {
@@ -15896,7 +15896,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stato dell'helper sconosciuto."
+            "value" : "Stato dell'assistente sconosciuto."
           }
         },
         "ja" : {
@@ -16288,7 +16288,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aspettativa..."
+            "value" : "Attendi.."
           }
         },
         "ja" : {
@@ -16516,7 +16516,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aggiornamento la registrazione del mio helper e confermo la mia disponibilità a lavorare"
+            "value" : "Aggiorno la registrazione del mio assistente e confermo la mia disponibilità a lavorare"
           }
         },
         "ja" : {
@@ -19194,7 +19194,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La connessione con l'helper è stata interrotta."
+            "value" : "La connessione con l'assistente è stata interrotta."
           }
         },
         "ja" : {
@@ -19276,7 +19276,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La connessione con l'helper è stata invalidata."
+            "value" : "La connessione con l'assistente è stata invalidata."
           }
         },
         "ja" : {
@@ -20212,7 +20212,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sinistra (modalità DEBUG)"
+            "value" : "Retained (modalità DEBUG)"
           }
         },
         "ja" : {
@@ -21282,7 +21282,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper XPC è scaduto in attesa di una risposta."
+            "value" : "l'assistente XPC è scaduto in attesa di una risposta."
           }
         },
         "ja" : {
@@ -21984,7 +21984,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sto preparando una riparazione di aiuto"
+            "value" : "Sto preparando una riparazione dell'assistente"
           }
         },
         "ja" : {
@@ -22744,7 +22744,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La registrazione dell'helper e la verifica della comunicazione sono state completate con successo."
+            "value" : "La registrazione dell'assistente e la verifica della comunicazione sono state completate con successo."
           }
         },
         "ja" : {
@@ -22972,7 +22972,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Disimballaggio del pacchetto di installazione..."
+            "value" : "Estraendo il pacchetto di installazione..."
           }
         },
         "ja" : {
@@ -23738,7 +23738,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verifica dello stato dell'helper"
+            "value" : "Verifica dello stato dell'assistente"
           }
         },
         "ja" : {
@@ -23890,7 +23890,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verifica dello stato dell'helper non riuscita"
+            "value" : "Verifica dello stato dell'assistente non riuscita"
           }
         },
         "ja" : {
@@ -23966,7 +23966,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verifica dello stato dell'helper completata con successo"
+            "value" : "Verifica dello stato dell'assistente completata con successo"
           }
         },
         "ja" : {
@@ -24042,7 +24042,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verifica dello stato dell'helper completata: è richiesta un'azione"
+            "value" : "Verifica dello stato dell'assistente completata: è richiesta un'azione"
           }
         },
         "ja" : {
@@ -24510,7 +24510,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stato di helper"
+            "value" : "Stato dell'assistente"
           }
         },
         "ja" : {
@@ -24820,7 +24820,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il sistema blocca la registrazione dell'helper (Gestione attività in background). Rimuovi le vecchie voci macUSB da \"Elementi di accesso/Consenti in background\", esegui `sudo sfltool resetbtm`, riavvia macOS ed esegui solo la versione da /Applicazioni."
+            "value" : "Il sistema blocca la registrazione dell'assistente (Gestione attività in background). Rimuovi le vecchie voci macUSB da \"Elementi di accesso/Consenti in background\", esegui `sudo sfltool resetbtm`, riavvia macOS ed esegui solo la versione da /Applicazioni."
           }
         },
         "ja" : {
@@ -24896,7 +24896,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il sistema ha bloccato la registrazione dell'assistente per l'esecuzione di Xcode. Esegui l'applicazione dalla directory Applicazioni una volta, consenti l'esecuzione dell'helper in background, quindi torna al test in Xcode. Dettagli XPC: %@"
+            "value" : "Il sistema ha bloccato la registrazione dell'assistente per l'esecuzione di Xcode. Esegui l'applicazione dalla directory Applicazioni una volta, consenti l'esecuzione dell'assistente in background, quindi torna al test in Xcode. Dettagli XPC: %@"
           }
         },
         "ja" : {
@@ -25200,7 +25200,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dettagli sullo stato dell'helper"
+            "value" : "Dettagli sullo stato dell'assistente"
           }
         },
         "ja" : {
@@ -26049,7 +26049,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Timeout della connessione XPC con l'helper"
+            "value" : "Timeout della connessione XPC con l'assistente"
           }
         },
         "ja" : {
@@ -26283,7 +26283,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper è attualmente in riparazione. Aspetta che finisca."
+            "value" : "l'assistente è attualmente in riparazione. Aspetta che finisca."
           }
         },
         "ja" : {
@@ -26359,7 +26359,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La registrazione e la connessione dell'helper di sistema vengono aggiornate."
+            "value" : "La registrazione e la connessione dell'assistente di sistema vengono aggiornate."
           }
         },
         "ja" : {
@@ -27512,7 +27512,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Assicurati che l'immagine del sistema selezionata provenga da Mavericks Forever. Altre versioni potrebbero causare errori durante la creazione del programma di installazione sull'unità USB."
+            "value" : "Assicurati che l'immagine del sistema selezionata provenga dal sito Mavericks Forever. Altre versioni potrebbero causare errori durante la creazione del programma di installazione sull'unità USB."
           }
         },
         "ja" : {
@@ -27816,7 +27816,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impostazioni dello sfondo…"
+            "value" : "Impostazioni attività app in background…"
           }
         },
         "ja" : {
@@ -29418,7 +29418,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scegliere..."
+            "value" : "Scegli..."
           }
         },
         "ja" : {
@@ -30820,7 +30820,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rilevati OS X Mavericks"
+            "value" : "Rilevato OS X Mavericks"
           }
         },
         "ja" : {
@@ -31200,7 +31200,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Strumento di supporto richiesto"
+            "value" : "Strumento assistente richiesto"
           }
         },
         "ja" : {
@@ -32283,7 +32283,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Finisci e parti"
+            "value" : "Finisci ed Esci"
           }
         },
         "ja" : {
