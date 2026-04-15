@@ -197,7 +197,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Nessun installatore? Utilizza il pulsante \"Scarica\"."
+            "value" : "• Nessun installer? Utilizza il pulsante \"Scarica\"."
           }
         },
         "ja" : {
@@ -1185,7 +1185,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Avvia il computer tenendo premuto il pulsante Opzione (⌥)."
+            "value" : "• Avvia il computer tenendo premuto il pulsante Option (⌥)."
           }
         },
         "ja" : {
@@ -2483,7 +2483,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Analizzare"
+            "value" : "Analizza"
           }
         },
         "ja" : {
@@ -2635,7 +2635,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cancellare"
+            "value" : "Cancella"
           }
         },
         "ja" : {
@@ -3097,7 +3097,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Errore di connessione all'assistente: %@"
+            "value" : "Errore di connessione all'helper: %@"
           }
         },
         "ja" : {
@@ -4407,7 +4407,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sei sicuro di voler smettere di lavorare?"
+            "value" : "Sei sicuro di voler annullare l'operazione?"
           }
         },
         "ja" : {
@@ -5560,7 +5560,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esportare i log diagnostici"
+            "value" : "Esporta log diagnostici"
           }
         },
         "ja" : {
@@ -5636,7 +5636,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esporta registri diagnostici..."
+            "value" : "Esporta log diagnostici..."
           }
         },
         "ja" : {
@@ -5864,7 +5864,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scarica i passaggi"
+            "value" : "Scarica passaggi"
           }
         },
         "ja" : {
@@ -6244,7 +6244,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante è già stato rimosso"
+            "value" : "L'helper è già stato rimosso"
           }
         },
         "ja" : {
@@ -6320,7 +6320,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante non è pronto per il lavoro."
+            "value" : "L'helper non è pronto per il lavoro."
           }
         },
         "ja" : {
@@ -6548,7 +6548,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante non ha restituito l'ID dell'attività."
+            "value" : "L'helper non ha restituito l'ID dell'attività."
           }
         },
         "ja" : {
@@ -6788,7 +6788,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante è rimasto attivo dopo l'annullamento della registrazione. Riparazione interrotta."
+            "value" : "L'helper è rimasto attivo dopo l'annullamento della registrazione. Riparazione interrotta."
           }
         },
         "ja" : {
@@ -6864,7 +6864,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante richiede l'approvazione nelle Impostazioni di sistema."
+            "value" : "L'helper richiede l'approvazione nelle Impostazioni di sistema."
           }
         },
         "ja" : {
@@ -6940,7 +6940,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante è stato rimosso"
+            "value" : "L'helper è stato rimosso"
           }
         },
         "ja" : {
@@ -7016,7 +7016,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante è stato registrato ma richiede l'approvazione dell'utente."
+            "value" : "L'helper è stato registrato ma richiede l'approvazione dell'utente."
           }
         },
         "ja" : {
@@ -11434,7 +11434,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Correggi l'aiutante"
+            "value" : "Correggi l'helper"
           }
         },
         "ja" : {
@@ -11510,7 +11510,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Riparazione dell'aiutante"
+            "value" : "Riparazione dell'helper"
           }
         },
         "ja" : {
@@ -12732,7 +12732,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile attivare l'aiutante."
+            "value" : "Impossibile attivare l'helper."
           }
         },
         "ja" : {
@@ -13276,7 +13276,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Non è stato possibile confermare la disponibilità dell'aiutante."
+            "value" : "Non è stato possibile confermare la disponibilità dell'helper."
           }
         },
         "ja" : {
@@ -13428,7 +13428,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Non è stato possibile ripristinare la piena disponibilità dell'aiutante. I dettagli vengono registrati nei registri diagnostici."
+            "value" : "Non è stato possibile ripristinare la piena disponibilità dell'helper. I dettagli vengono registrati nei registri diagnostici."
           }
         },
         "ja" : {
@@ -14288,7 +14288,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile registrare l'aiutante"
+            "value" : "Impossibile registrare l'helper"
           }
         },
         "ja" : {
@@ -15896,7 +15896,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stato dell'aiutante sconosciuto."
+            "value" : "Stato dell'helper sconosciuto."
           }
         },
         "ja" : {
@@ -16516,7 +16516,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aggiornamento la registrazione del mio aiutante e confermo la mia disponibilità a lavorare"
+            "value" : "Aggiornamento la registrazione del mio helper e confermo la mia disponibilità a lavorare"
           }
         },
         "ja" : {
@@ -18422,7 +18422,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scaricamento"
+            "value" : "Scarica"
           }
         },
         "ja" : {
@@ -19194,7 +19194,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La connessione con l'aiutante è stata interrotta."
+            "value" : "La connessione con l'helper è stata interrotta."
           }
         },
         "ja" : {
@@ -19276,7 +19276,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La connessione con l'aiutante è stata invalidata."
+            "value" : "La connessione con l'helper è stata invalidata."
           }
         },
         "ja" : {
@@ -20972,7 +20972,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vai avanti"
+            "value" : "Avanti"
           }
         },
         "ja" : {
@@ -22744,7 +22744,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La registrazione dell'aiutante e la verifica della comunicazione sono state completate con successo."
+            "value" : "La registrazione dell'helper e la verifica della comunicazione sono state completate con successo."
           }
         },
         "ja" : {
@@ -23276,7 +23276,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sentiero..."
+            "value" : "Percorso..."
           }
         },
         "ja" : {
@@ -24510,7 +24510,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stato di aiutante"
+            "value" : "Stato di helper"
           }
         },
         "ja" : {
@@ -24820,7 +24820,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il sistema blocca la registrazione dell'aiutante (Gestione attività in background). Rimuovi le vecchie voci macUSB da \"Elementi di accesso/Consenti in background\", esegui `sudo sfltool resetbtm`, riavvia macOS ed esegui solo la versione da /Applicazioni."
+            "value" : "Il sistema blocca la registrazione dell'helper (Gestione attività in background). Rimuovi le vecchie voci macUSB da \"Elementi di accesso/Consenti in background\", esegui `sudo sfltool resetbtm`, riavvia macOS ed esegui solo la versione da /Applicazioni."
           }
         },
         "ja" : {
@@ -25200,7 +25200,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dettagli sullo stato dell'aiutante"
+            "value" : "Dettagli sullo stato dell'helper"
           }
         },
         "ja" : {
@@ -26283,7 +26283,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante è attualmente in riparazione. Aspetta che finisca."
+            "value" : "L'helper è attualmente in riparazione. Aspetta che finisca."
           }
         },
         "ja" : {
@@ -26359,7 +26359,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La registrazione e la connessione dell'aiutante di sistema vengono aggiornate."
+            "value" : "La registrazione e la connessione dell'helper di sistema vengono aggiornate."
           }
         },
         "ja" : {
@@ -29038,7 +29038,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scegliere"
+            "value" : "Scegli"
           }
         },
         "ja" : {
@@ -32511,7 +32511,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vicino"
+            "value" : "Chiudi"
           }
         },
         "ja" : {
