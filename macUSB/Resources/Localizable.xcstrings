@@ -197,7 +197,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Nessun installer? Utilizza il pulsante \"Scarica\"."
+            "value" : "• Nessun installer? Utilizza il pulsante \"Scarica\""
           }
         },
         "ja" : {
@@ -1185,7 +1185,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Avvia il computer tenendo premuto il pulsante Option (⌥)."
+            "value" : "• Avvia il computer tenendo premuto il pulsante Option (⌥)"
           }
         },
         "ja" : {
@@ -1875,7 +1875,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Per eseguire l'installer da un'unità USB su un Mac con PowerPC, è necessario inserire il comando nella console Open Firmware. Il manuale utente completo è disponibile sul sito Web dell'applicazione."
+            "value" : "Per eseguire l'installer da un'unità USB su un Mac con PowerPC, devi inserire il comando nella console Open Firmware. Il manuale utente completo è disponibile sul sito web dell'applicazione."
           }
         },
         "ja" : {
@@ -2331,7 +2331,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Analizzando"
+            "value" : "Analisi in corso"
           }
         },
         "ja" : {
@@ -2787,7 +2787,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Auto"
+            "value" : "Automatico"
           }
         },
         "ja" : {
@@ -5636,7 +5636,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esporto log diagnostici..."
+            "value" : "Esportazione log diagnostici..."
           }
         },
         "ja" : {
@@ -6244,7 +6244,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l'helper è già stato rimosso"
+            "value" : "L'helper è già stato rimosso"
           }
         },
         "ja" : {
@@ -6320,7 +6320,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l'helper non è pronto per il lavoro."
+            "value" : "L'helper non è pronto per il lavoro."
           }
         },
         "ja" : {
@@ -6396,7 +6396,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l'helper non ha confermato l'eliminazione della directory di sessione"
+            "value" : "L'helper non ha confermato l'eliminazione della directory di sessione"
           }
         },
         "ja" : {
@@ -6472,7 +6472,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l'helper non ha confermato l'eliminazione dei file temporanei"
+            "value" : "L'helper non ha confermato l'eliminazione dei file temporanei"
           }
         },
         "ja" : {
@@ -6545,10 +6545,11 @@
             "value" : "Le helper n a pas renvoyé d identifiant de workflow."
           }
         },
+
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l'helper non ha restituito l'ID dell'attività."
+            "value" : "L'helper non ha restituito l'ID dell'attività."
           }
         },
         "ja" : {
@@ -6630,7 +6631,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l'helper non ha restituito il percorso dell'installer .app"
+            "value" : "L'helper non ha restituito il percorso dell'installer .app"
           }
         },
         "ja" : {
@@ -6706,7 +6707,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l'helper risponde correttamente (uid=%@, euid=%@, pid=%@)"
+            "value" : "L'helper risponde correttamente (uid=%@, euid=%@, pid=%@)"
           }
         },
         "ja" : {
@@ -6788,7 +6789,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l'helper è rimasto attivo dopo l'annullamento della registrazione. Riparazione interrotta."
+            "value" : "L'helper è rimasto attivo dopo l'annullamento della registrazione. Riparazione interrotta."
           }
         },
         "ja" : {
@@ -6864,7 +6865,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l'helper richiede l'approvazione nelle Impostazioni di sistema."
+            "value" : "L'helper richiede l'approvazione nelle Impostazioni di sistema."
           }
         },
         "ja" : {
@@ -6940,7 +6941,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l'helper è stato rimosso"
+            "value" : "L'helper è stato rimosso"
           }
         },
         "ja" : {
@@ -7016,7 +7017,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l'helper è stato registrato ma richiede l'approvazione dell'utente."
+            "value" : "L'helper è stato registrato ma richiede l'approvazione dell'utente."
           }
         },
         "ja" : {
@@ -7092,7 +7093,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l'helper ha restituito un errore durante l'assemblaggio dell'installer"
+            "value" : "L'helper ha restituito un errore durante l'assemblaggio dell'installer"
           }
         },
         "ja" : {
@@ -8152,7 +8153,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verificando l'immagine dell'installer prima di scrivere."
+            "value" : "Verifico l'immagine dell'installer prima di scrivere."
           }
         },
         "ja" : {
@@ -10206,7 +10207,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Continua"
+            "value" : "Avanti"
           }
         },
         "ja" : {
@@ -10896,7 +10897,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Posizione dell'app: fuori da /Applicazioni"
+            "value" : "Posizione dell'app: fuori da /Applications"
           }
         },
         "ja" : {
@@ -11358,7 +11359,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macUSB richiede l'autorizzazione per l'esecuzione in background per abilitare la gestione dei contenuti multimediali. Vai alle impostazioni di sistema per concedere le autorizzazioni richieste"
+            "value" : "macUSB richiede l'autorizzazione per l'esecuzione in background per abilitare la gestione dei supporti. Vai alle impostazioni di sistema per concedere le autorizzazioni richieste"
           }
         },
         "ja" : {
@@ -12118,7 +12119,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "NO"
+            "value" : "No"
           }
         },
         "ja" : {
@@ -13732,7 +13733,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile creare l'helper XPC proxy."
+            "value" : "Impossibile creare il proxy XPC dell'helper."
           }
         },
         "ja" : {
@@ -16288,7 +16289,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Attendi.."
+            "value" : "Attendi..."
           }
         },
         "ja" : {
@@ -16516,7 +16517,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aggiorno la registrazione del mio helper e confermo la mia disponibilità a lavorare"
+            "value" : "Aggiornamento della registrazione dell'helper"
           }
         },
         "ja" : {
@@ -20820,7 +20821,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Flusso del processo"
+            "value" : "Dettagli"
           }
         },
         "ja" : {
@@ -21282,7 +21283,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tempo scaduto per l'attesa di una risposta dall'helper XPC."
+            "value" : "Timeout durante l'attesa di una risposta dall'helper XPC."
           }
         },
         "ja" : {
@@ -21908,7 +21909,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preparazione di un manifest per il sistema più vecchio..."
+            "value" : "Preparazione di un manifest per il sistema più datato..."
           }
         },
         "ja" : {
@@ -21984,7 +21985,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sto preparando una riparazione dell'helper"
+            "value" : "Preparazione della riparazione dell'helper"
           }
         },
         "ja" : {
@@ -22440,7 +22441,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preparazione del disimballaggio esteso..."
+            "value" : "Preparazione dell'estrazione estesa..."
           }
         },
         "ja" : {
@@ -22820,7 +22821,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "repository macUSB su GitHub"
+            "value" : "Repository macUSB su GitHub"
           }
         },
         "ja" : {
@@ -24668,7 +24669,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "sito web macUSB"
+            "value" : "Sito web di macUSB"
           }
         },
         "ja" : {
@@ -26283,7 +26284,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l'helper è attualmente in riparazione. Aspetta che finisca."
+            "value" : "L'helper è attualmente in riparazione. Aspetta che finisca."
           }
         },
         "ja" : {
@@ -31048,7 +31049,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Posizione/Applicazioni richieste"
+            "value" : "Posizione /Applicazioni richiesta"
           }
         },
         "ja" : {
