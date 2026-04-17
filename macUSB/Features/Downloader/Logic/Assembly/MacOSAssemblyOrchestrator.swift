@@ -31,10 +31,17 @@ extension MontereyDownloadFlowModel {
                 entry: entry
             )
         case .oldestDiskImage:
-            finalAppURL = try await runOldestDiskImageAssemblyWithoutRoot(
-                diskImageURL: assemblySelection.inputURL,
-                entry: entry
-            )
+            if isSierraOldestEntry(entry) {
+                finalAppURL = try await runSierraDiskImageAssemblyWithHelper(
+                    diskImageURL: assemblySelection.inputURL,
+                    entry: entry
+                )
+            } else {
+                finalAppURL = try await runOldestDiskImageAssemblyWithoutRoot(
+                    diskImageURL: assemblySelection.inputURL,
+                    entry: entry
+                )
+            }
         case .modern:
             finalAppURL = try await runPackageAssemblyWithHelper(
                 packageURL: assemblySelection.inputURL,
@@ -51,6 +58,63 @@ extension MontereyDownloadFlowModel {
             "Assembly success destination=\(finalAppURL.path)",
             category: "Downloader"
         )
+    }
+
+    private func isSierraOldestEntry(_ entry: MacOSInstallerEntry) -> Bool {
+        if entry.version.hasPrefix("10.12") {
+            return true
+        }
+        let normalizedName = entry.name.lowercased()
+        return normalizedName.contains("sierra") && !normalizedName.contains("high sierra")
+    }
+
+    func runSierraDiskImageAssemblyWithHelper(
+        diskImageURL: URL,
+        entry: MacOSInstallerEntry
+    ) async throws -> URL {
+        guard let outputDirectory = activeSessionOutputURL else {
+            throw DownloadFailureReason.assemblyFailed(String(localized: "Brak katalogu output sesji"))
+        }
+        let request = DownloaderAssemblyRequestPayload(
+            packagePath: diskImageURL.path,
+            outputDirectoryPath: outputDirectory.path,
+            expectedAppName: expectedInstallerAppName(for: entry),
+            finalDestinationDirectoryPath: "",
+            cleanupSessionFiles: false,
+            requesterUID: getuid(),
+            patchLegacyDistributionInDebug: false
+        )
+        cleanupDelegatedToHelper = request.cleanupSessionFiles
+
+        let result = try await startAssemblyWithHelper(request: request)
+        if result.cleanupRequested && result.cleanupSucceeded {
+            sessionCleanupHandledByHelper = true
+            helperCleanupFailureMessage = nil
+            activeSessionRootURL = nil
+            activeSessionPayloadURL = nil
+            activeSessionOutputURL = nil
+        } else if result.cleanupRequested {
+            sessionCleanupHandledByHelper = false
+            helperCleanupFailureMessage = result.cleanupErrorMessage
+        } else {
+            sessionCleanupHandledByHelper = false
+            helperCleanupFailureMessage = nil
+        }
+
+        guard result.success else {
+            throw DownloadFailureReason.assemblyFailed(
+                result.errorMessage ?? String(localized: "Helper zwrócił błąd składania instalatora")
+            )
+        }
+        guard let outputAppPath = result.outputAppPath else {
+            throw DownloadFailureReason.assemblyFailed(String(localized: "Helper nie zwrócił ścieżki do instalatora .app"))
+        }
+
+        let producedURL = URL(fileURLWithPath: outputAppPath)
+        guard FileManager.default.fileExists(atPath: producedURL.path) else {
+            throw DownloadFailureReason.assemblyFailed(String(localized: "Zbudowana aplikacja instalatora nie istnieje"))
+        }
+        return producedURL
     }
 
     func runPackageAssemblyWithHelper(
