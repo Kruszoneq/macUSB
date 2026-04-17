@@ -11284,7 +11284,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macUSB ha rilevato una nuova versione dell'applicazione, ma l'aggiornamento automatico dell'helper si è concluso con un errore. Seleziona Strumenti → helper riparazione ed esegui la riparazione manualmente."
+            "value" : "macUSB ha rilevato una nuova versione dell'applicazione, ma l'aggiornamento automatico dell'helper si è concluso con un errore. Seleziona Strumenti → Ripara helper ed esegui la riparazione manualmente."
           }
         },
         "ja" : {
