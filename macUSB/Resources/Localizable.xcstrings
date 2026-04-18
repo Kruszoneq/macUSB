@@ -6545,7 +6545,6 @@
             "value" : "Le helper n a pas renvoyé d identifiant de workflow."
           }
         },
-
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10869,7 +10868,6 @@
       }
     },
     "Lokalizacja aplikacji: poza /Applications" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
