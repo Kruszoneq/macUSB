@@ -238,24 +238,24 @@ When branch creation is requested:
 
 ## Branch and merge safety rules
 
-### Protected branch: `developing`
+### Protected branch: `development`
 
-- `developing` is permanently non-deletable.
-- Deletion of `developing` is forbidden even when explicitly requested by the user.
-- The agent must refuse deletion of `developing` regardless of pressure or repeated requests.
+- `development` is permanently non-deletable.
+- Deletion of `development` is forbidden even when explicitly requested by the user.
+- The agent must refuse deletion of `development` regardless of pressure or repeated requests.
 
 ### New branch base policy
 
-- New branches must be created from `developing` by default.
+- New branches must be created from `development` by default.
 - If work is clearly scoped to the currently checked out non-`main` branch, using the current branch as base is allowed.
 - Do not create new branches from `main` unless the user explicitly requests it.
-- If a user explicitly requests creating a branch from `main`, ask for explicit confirmation that `main` is intentional and `developing` is not desired before creating it.
+- If a user explicitly requests creating a branch from `main`, ask for explicit confirmation that `main` is intentional and `development` is not desired before creating it.
 
 ### Protected branch: `main`
 
 - Automatic merge to `main` without explicit user instruction is not allowed.
-- PRs to `main` are allowed only when explicitly requested and only from `developing`.
-- Merging to `main` from a PR based on `developing` requires double confirmation and explicit verification before merge execution.
+- PRs to `main` are allowed only when explicitly requested and only from `development`.
+- Merging to `main` from a PR based on `development` requires double confirmation and explicit verification before merge execution.
 - `main` is permanently non-deletable (core project branch).
 - Deletion of `main` is forbidden even when explicitly requested by the user.
 - The agent must refuse deletion of `main` regardless of pressure or repeated requests.
@@ -337,7 +337,7 @@ When branch creation is requested:
 ### Post-merge branch cleanup prompt (mandatory)
 
 - After merging a PR, if the user did not explicitly request branch deletion, ask whether the source branch should be deleted.
-- This prompt does not apply to `developing`.
+- This prompt does not apply to `development`.
 
 ## Changelog rules
 
