@@ -31,8 +31,8 @@ extension MontereyDownloadFlowModel {
                 entry: entry
             )
         case .oldestDiskImage:
-            if isSierraOldestEntry(entry) {
-                finalAppURL = try await runSierraDiskImageAssemblyWithHelper(
+            if isInstallerBasedOldestEntry(entry) {
+                finalAppURL = try await runInstallerBasedOldestDiskImageAssemblyWithHelper(
                     diskImageURL: assemblySelection.inputURL,
                     entry: entry
                 )
@@ -60,15 +60,22 @@ extension MontereyDownloadFlowModel {
         )
     }
 
-    private func isSierraOldestEntry(_ entry: MacOSInstallerEntry) -> Bool {
-        if entry.version.hasPrefix("10.12") {
+    private func isInstallerBasedOldestEntry(_ entry: MacOSInstallerEntry) -> Bool {
+        if entry.version.hasPrefix("10.10")
+            || entry.version.hasPrefix("10.11")
+            || entry.version.hasPrefix("10.12") {
             return true
         }
         let normalizedName = entry.name.lowercased()
-        return normalizedName.contains("sierra") && !normalizedName.contains("high sierra")
+        if normalizedName.contains("high sierra") {
+            return false
+        }
+        return normalizedName.contains("yosemite")
+            || normalizedName.contains("el capitan")
+            || normalizedName.contains("sierra")
     }
 
-    func runSierraDiskImageAssemblyWithHelper(
+    func runInstallerBasedOldestDiskImageAssemblyWithHelper(
         diskImageURL: URL,
         entry: MacOSInstallerEntry
     ) async throws -> URL {

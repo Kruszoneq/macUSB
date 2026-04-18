@@ -2,7 +2,7 @@ import Foundation
 import Darwin
 
 extension DownloaderAssemblyExecutor {
-    func runSierraDiskImageAssemblyAndLocateApp(
+    func runInstallerBasedOldestDiskImageAssemblyAndLocateApp(
         diskImageURL: URL,
         sessionRootDirectory: URL
     ) throws -> URL {
@@ -143,7 +143,7 @@ extension DownloaderAssemblyExecutor {
             throw NSError(
                 domain: "macUSBHelper",
                 code: 404,
-                userInfo: [NSLocalizedDescriptionKey: "Nie znaleziono Install macOS Sierra.app na obrazie roboczym."]
+                userInfo: [NSLocalizedDescriptionKey: "Nie znaleziono aplikacji instalatora na obrazie roboczym."]
             )
         }
         emit(
@@ -601,7 +601,7 @@ extension DownloaderAssemblyExecutor {
             throw NSError(
                 domain: "macUSBHelper",
                 code: 404,
-                userInfo: [NSLocalizedDescriptionKey: "Nie udalo sie przeszukac zamontowanego obrazu Sierra."]
+                userInfo: [NSLocalizedDescriptionKey: "Nie udalo sie przeszukac zamontowanego obrazu .dmg."]
             )
         }
 
@@ -617,7 +617,7 @@ extension DownloaderAssemblyExecutor {
             throw NSError(
                 domain: "macUSBHelper",
                 code: 404,
-                userInfo: [NSLocalizedDescriptionKey: "W obrazie Sierra nie znaleziono pakietu .pkg."]
+                userInfo: [NSLocalizedDescriptionKey: "W obrazie .dmg nie znaleziono pakietu .pkg."]
             )
         }
 

@@ -69,15 +69,15 @@ final class DownloaderAssemblyExecutor {
                     patchLegacyDistribution: request.patchLegacyDistributionInDebug
                 )
             } else if packageURL.pathExtension.caseInsensitiveCompare("dmg") == .orderedSame {
-                guard isSierraAssemblyRequest else {
+                guard isInstallerBasedOldestAssemblyRequest else {
                     throw NSError(
                         domain: "macUSBHelper",
                         code: 400,
-                        userInfo: [NSLocalizedDescriptionKey: "Obraz .dmg jest wspierany tylko dla assembly Sierra w downloaderze."]
+                        userInfo: [NSLocalizedDescriptionKey: "Obraz .dmg jest wspierany tylko dla assembly Yosemite/El Capitan/Sierra w downloaderze."]
                     )
                 }
                 emit(percent: 0.10, status: "Otwieranie obrazu instalatora...")
-                assembledAppURL = try runSierraDiskImageAssemblyAndLocateApp(
+                assembledAppURL = try runInstallerBasedOldestDiskImageAssemblyAndLocateApp(
                     diskImageURL: packageURL,
                     sessionRootDirectory: sessionRootDirectory
                 )
@@ -137,8 +137,10 @@ final class DownloaderAssemblyExecutor {
         )
     }
 
-    var isSierraAssemblyRequest: Bool {
+    var isInstallerBasedOldestAssemblyRequest: Bool {
         let expected = request.expectedAppName.lowercased()
-        return expected.contains("sierra")
+        return expected.contains("yosemite")
+            || expected.contains("el capitan")
+            || expected.contains("sierra")
     }
 }

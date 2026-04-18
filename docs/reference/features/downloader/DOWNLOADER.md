@@ -118,7 +118,7 @@ Discovery UX contract:
 Production pipeline (`MontereyDownloadFlowModel`) uses three compatible distribution modes:
 - `Modern`: Big Sur, Monterey, Ventura, Sonoma, Sequoia, Tahoe (`InstallAssistant.pkg -> .app`).
 - `Legacy`: High Sierra, Mojave, Catalina (`InstallAssistantAuto.pkg` + `RecoveryHDMetaDmg.pkg` + `InstallESDDmg.pkg`).
-- `Oldest`: Sierra and older Apple Support downloads (`.dmg -> .pkg -> .app`), with Sierra routed through helper-based `installer`.
+- `Oldest`: Sierra and older Apple Support downloads (`.dmg -> .pkg -> .app`), with Yosemite/El Capitan/Sierra routed through helper-based `installer`.
 
 Both modes share the same staged UI and runtime skeleton:
 1. Connection / preflight
@@ -135,8 +135,8 @@ Both modes share the same staged UI and runtime skeleton:
 4. Installer build and move
   - `Legacy`: in-app assembly (without root) using `pkgutil --expand-full` + `hdiutil attach` and SharedSupport composition,
   - `Modern`: helper-based `InstallAssistant.pkg -> .app` plus final reassignment of installer `.app` ownership to the requesting user before cleanup,
-  - `Oldest` (`10.12 Sierra`): helper mounts source `.dmg`, resolves embedded installer `.pkg`, installs with Apple `installer` on temporary writable HFS+ target using `CM_BUILD=CM_BUILD`, and copies final `.app` to `/Applications`,
-  - `Oldest` (`10.7` to `10.11`): in-app path mounts `.dmg`, extracts installer `.pkg`, expands package (`pkgutil --expand`), extracts `Payload` (`cpio` with compression fallback), and moves final `.app` to `/Applications`,
+  - `Oldest` (`10.10 Yosemite`, `10.11 El Capitan`, `10.12 Sierra`): helper mounts source `.dmg`, resolves embedded installer `.pkg`, installs with Apple `installer` on temporary writable HFS+ target using `CM_BUILD=CM_BUILD`, and copies final `.app` to `/Applications`,
+  - `Oldest` (`10.7` to `10.9`): in-app path mounts `.dmg`, extracts installer `.pkg`, expands package (`pkgutil --expand`), extracts `Payload` (`cpio` with compression fallback), and moves final `.app` to `/Applications`,
   - final installer is placed in `/Applications`.
 5. Final cleanup
   - dedicated helper-side cleanup of session temp directory,
@@ -192,7 +192,7 @@ Downloader uses dedicated helper operations:
 
 Helper responsibilities in downloader flow:
 - build installer `.app` from `InstallAssistant.pkg` for `Modern` workflow,
-- build `Install macOS Sierra.app` from Sierra `.dmg` by running Apple `installer` with `CM_BUILD=CM_BUILD` on helper-owned staging volume,
+- build installer `.app` from Yosemite/El Capitan/Sierra `.dmg` by running Apple `installer` with `CM_BUILD=CM_BUILD` on helper-owned staging volume,
 - perform final privileged cleanup of session temp directory.
 
 ---

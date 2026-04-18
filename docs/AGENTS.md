@@ -204,6 +204,7 @@ Minor helper changes that do not alter behavior may proceed, but must still be r
 
 - If requirements are ambiguous and materially affect behavior, ask before implementing.
 - If multiple valid implementations exist, present tradeoffs and request direction.
+- Do not plan fallback paths unless the user explicitly requests a fallback.
 - If blocked by environment constraints, report blocker, what was validated, and what remains.
 - If a user request is potentially destructive to code/history or clearly high-risk and unreasonable, pause execution, explain the risk, and ask whether to continue despite the risk or stop.
 

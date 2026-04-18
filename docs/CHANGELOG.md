@@ -4,10 +4,10 @@
 
 ## v2.1.1
 
-This update improves installer reliability for macOS Sierra and refreshes selected interface copy.
+This update improves installer reliability for legacy macOS installers and refreshes selected interface copy.
 
 ### FIXED
-- Improved the macOS Sierra installer `.app` build path to prevent package-signature issues that could appear during installation.
+- Improved the installer `.app` build path for macOS Yosemite, El Capitan, and Sierra to prevent package-signature issues that could appear during installation.
 
 ### IMPROVEMENTS
 - Improved Italian translation quality (#48).
