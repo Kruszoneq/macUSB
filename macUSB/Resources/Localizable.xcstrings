@@ -197,7 +197,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Nessun installatore? Utilizza il pulsante \"Scarica\"."
+            "value" : "• Nessun installer? Utilizza il pulsante \"Scarica\""
           }
         },
         "ja" : {
@@ -273,7 +273,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Per creare il programma di installazione è necessaria un'unità USB con una capacità minima di %@ GB"
+            "value" : "• Per creare l'installer è necessaria un'unità USB con una capacità minima di %@ GB"
           }
         },
         "ja" : {
@@ -1109,7 +1109,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• La struttura dell'installatore sarà finalizzata"
+            "value" : "• La struttura dell'installer sarà finalizzata"
           }
         },
         "ja" : {
@@ -1185,7 +1185,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Avvia il computer tenendo premuto il pulsante Opzione (⌥)."
+            "value" : "• Avvia il computer tenendo premuto il pulsante Option (⌥)"
           }
         },
         "ja" : {
@@ -1261,7 +1261,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Seleziona il programma di installazione di macOS o OS X dall'elenco"
+            "value" : "• Seleziona l'installer di macOS o OS X dall'elenco"
           }
         },
         "ja" : {
@@ -1337,7 +1337,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Il file selezionato deve contenere il programma di installazione di macOS o Mac OS X"
+            "value" : "• Il file selezionato deve contenere l'installer di macOS o Mac OS X"
           }
         },
         "ja" : {
@@ -1875,7 +1875,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Per eseguire l'installer da un'unità USB su un Mac con PowerPC, è necessario inserire il comando nella console Open Firmware. Il manuale utente completo è disponibile sul sito Web dell'applicazione."
+            "value" : "Per eseguire l'installer da un'unità USB su un Mac con PowerPC, devi inserire il comando nella console Open Firmware. Il manuale utente completo è disponibile sul sito web dell'applicazione."
           }
         },
         "ja" : {
@@ -1951,7 +1951,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Per utilizzare l'assistente privilegiato, sposta l'applicazione macUSB nella directory Applicazioni e riavviala."
+            "value" : "Per utilizzare l'helper privilegiato, sposta l'applicazione macUSB nella directory Applicazioni e riavviala."
           }
         },
         "ja" : {
@@ -2331,7 +2331,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Analizzando"
+            "value" : "Analisi in corso"
           }
         },
         "ja" : {
@@ -2483,7 +2483,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Analizzare"
+            "value" : "Analizza"
           }
         },
         "ja" : {
@@ -2635,7 +2635,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cancellare"
+            "value" : "Annulla"
           }
         },
         "ja" : {
@@ -2787,7 +2787,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Automaticamente"
+            "value" : "Automatico"
           }
         },
         "ja" : {
@@ -3097,7 +3097,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Errore di connessione all'assistente: %@"
+            "value" : "Errore di connessione all'helper: %@"
           }
         },
         "ja" : {
@@ -3863,7 +3863,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nessuno spazio libero: minimo %@ richiesto (250%% della dimensione dell'installatore %@), %@ disponibile."
+            "value" : "Nessuno spazio libero: minimo %@ richiesto (250%% della dimensione dell'installer %@), %@ disponibile."
           }
         },
         "ja" : {
@@ -3945,7 +3945,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nessuna voce di registro"
+            "value" : "Nessuna voce nei log"
           }
         },
         "ja" : {
@@ -4407,7 +4407,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sei sicuro di voler smettere di lavorare?"
+            "value" : "Sei sicuro di voler annullare l'operazione?"
           }
         },
         "ja" : {
@@ -5028,7 +5028,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aggiunta di un'immagine di sistema al programma di installazione..."
+            "value" : "Aggiunta di un'immagine di sistema all'installer..."
           }
         },
         "ja" : {
@@ -5560,7 +5560,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esportare i log diagnostici"
+            "value" : "Esporta log diagnostici"
           }
         },
         "ja" : {
@@ -5636,7 +5636,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esporta registri diagnostici..."
+            "value" : "Esportazione log diagnostici..."
           }
         },
         "ja" : {
@@ -5864,7 +5864,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scarica i passaggi"
+            "value" : "Fasi del download"
           }
         },
         "ja" : {
@@ -6244,7 +6244,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante è già stato rimosso"
+            "value" : "L'helper è già stato rimosso"
           }
         },
         "ja" : {
@@ -6320,7 +6320,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante non è pronto per il lavoro."
+            "value" : "L'helper non è pronto per il lavoro."
           }
         },
         "ja" : {
@@ -6548,7 +6548,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante non ha restituito l'ID dell'attività."
+            "value" : "L'helper non ha restituito l'ID dell'attività."
           }
         },
         "ja" : {
@@ -6788,7 +6788,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante è rimasto attivo dopo l'annullamento della registrazione. Riparazione interrotta."
+            "value" : "L'helper è rimasto attivo dopo l'annullamento della registrazione. Riparazione interrotta."
           }
         },
         "ja" : {
@@ -6864,7 +6864,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante richiede l'approvazione nelle Impostazioni di sistema."
+            "value" : "L'helper richiede l'approvazione nelle Impostazioni di sistema."
           }
         },
         "ja" : {
@@ -6940,7 +6940,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante è stato rimosso"
+            "value" : "L'helper è stato rimosso"
           }
         },
         "ja" : {
@@ -7016,7 +7016,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante è stato registrato ma richiede l'approvazione dell'utente."
+            "value" : "L'helper è stato registrato ma richiede l'approvazione dell'utente."
           }
         },
         "ja" : {
@@ -7092,7 +7092,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper ha restituito un errore durante l'assemblaggio del programma di installazione"
+            "value" : "L'helper ha restituito un errore durante l'assemblaggio dell'installer"
           }
         },
         "ja" : {
@@ -7168,7 +7168,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preparazione dello spazio per la struttura dell'installatore finale."
+            "value" : "Preparazione dello spazio per la struttura dell'installer finale."
           }
         },
         "ja" : {
@@ -7250,7 +7250,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preparazione della struttura dell'installatore"
+            "value" : "Preparazione della struttura dell'installer"
           }
         },
         "ja" : {
@@ -7988,7 +7988,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Finalizzare l'operazione e preparare una sintesi."
+            "value" : "Completamento dell'operazione e preparazione di un riassunto."
           }
         },
         "ja" : {
@@ -8152,7 +8152,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verificare l'immagine del programma di installazione prima di scrivere."
+            "value" : "Verifico l'immagine dell'installer prima di scrivere."
           }
         },
         "ja" : {
@@ -8234,7 +8234,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verifica dell'immagine del programma di installazione"
+            "value" : "Verifica dell'immagine dell'installer"
           }
         },
         "ja" : {
@@ -8316,7 +8316,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adattamento del supporto USB per un programma di installazione PowerPC."
+            "value" : "Adattamento del supporto USB per un installer PowerPC."
           }
         },
         "ja" : {
@@ -8644,7 +8644,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Configurazione del supporto USB per la creazione del programma di installazione."
+            "value" : "Configurazione del supporto USB per la creazione dell'installer."
           }
         },
         "ja" : {
@@ -9136,7 +9136,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ignorare"
+            "value" : "Ignora"
           }
         },
         "ja" : {
@@ -9294,7 +9294,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il programma di installazione è pronto"
+            "value" : "L'installer è pronto"
           }
         },
         "ja" : {
@@ -9370,7 +9370,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il programma di installazione è stato preparato"
+            "value" : "L'installer è stato preparato"
           }
         },
         "ja" : {
@@ -9446,7 +9446,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il programma di installazione è stato preparato, ma la rimozione dei file temporanei non è stata completata automaticamente."
+            "value" : "L'installer è stato preparato, ma la rimozione dei file temporanei non è stata completata automaticamente."
           }
         },
         "ja" : {
@@ -9750,7 +9750,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lavori di finitura"
+            "value" : "Completando"
           }
         },
         "ja" : {
@@ -9826,7 +9826,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Concludere il lavoro con un avvertimento..."
+            "value" : "Completando con un avvertimento..."
           }
         },
         "ja" : {
@@ -9978,7 +9978,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Completamento della preparazione dell'installatore..."
+            "value" : "Completamento della preparazione dell'installer..."
           }
         },
         "ja" : {
@@ -10206,7 +10206,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Continua"
+            "value" : "Avanti"
           }
         },
         "ja" : {
@@ -10896,7 +10896,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Luogo di applicazione: esterno/Applicazioni"
+            "value" : "Posizione dell'app: fuori da /Applications"
           }
         },
         "ja" : {
@@ -11048,7 +11048,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Servizio macchina: %@"
+            "value" : "Servizio Mach: %@"
           }
         },
         "ja" : {
@@ -11282,7 +11282,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macUSB ha rilevato una nuova versione dell'applicazione, ma l'aggiornamento automatico dell'helper si è concluso con un errore. Seleziona Strumenti → Assistente riparazione ed esegui la riparazione manualmente."
+            "value" : "macUSB ha rilevato una nuova versione dell'applicazione, ma l'aggiornamento automatico dell'helper si è concluso con un errore. Seleziona Strumenti → Ripara helper ed esegui la riparazione manualmente."
           }
         },
         "ja" : {
@@ -11358,7 +11358,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macUSB richiede l'autorizzazione per l'esecuzione in background per abilitare la gestione dei contenuti multimediali. Vai alle impostazioni di sistema per concedere le autorizzazioni richieste"
+            "value" : "macUSB richiede l'autorizzazione per l'esecuzione in background per abilitare la gestione dei supporti. Vai alle impostazioni di sistema per concedere le autorizzazioni richieste"
           }
         },
         "ja" : {
@@ -11434,7 +11434,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Correggi l'aiutante"
+            "value" : "Correggi l'helper"
           }
         },
         "ja" : {
@@ -11510,7 +11510,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Riparazione dell'aiutante"
+            "value" : "Riparazione dell'helper"
           }
         },
         "ja" : {
@@ -11662,7 +11662,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Riparazione dell'assistente completata"
+            "value" : "Riparazione dell'helper completata"
           }
         },
         "ja" : {
@@ -11814,7 +11814,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La riparazione dell'assistente non è riuscita"
+            "value" : "La riparazione dell'helper non è riuscita"
           }
         },
         "ja" : {
@@ -11966,7 +11966,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fissaggio…"
+            "value" : "Riparando…"
           }
         },
         "ja" : {
@@ -12118,7 +12118,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "NO"
+            "value" : "No"
           }
         },
         "ja" : {
@@ -12504,7 +12504,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Installatore non riconosciuto"
+            "value" : "Installer non riconosciuto"
           }
         },
         "ja" : {
@@ -12732,7 +12732,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile attivare l'aiutante."
+            "value" : "Impossibile attivare l'helper."
           }
         },
         "ja" : {
@@ -12808,7 +12808,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile aggiornare automaticamente l'helper. Apri Strumenti → Aiuto riparazione e riprova."
+            "value" : "Impossibile aggiornare automaticamente l'helper. Apri Strumenti → Ripara helper e riprova."
           }
         },
         "ja" : {
@@ -13276,7 +13276,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Non è stato possibile confermare la disponibilità dell'aiutante."
+            "value" : "Non è stato possibile confermare la disponibilità dell'helper."
           }
         },
         "ja" : {
@@ -13352,7 +13352,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile preparare il programma di installazione: %@"
+            "value" : "Impossibile preparare l'installer: %@"
           }
         },
         "ja" : {
@@ -13428,7 +13428,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Non è stato possibile ripristinare la piena disponibilità dell'aiutante. I dettagli vengono registrati nei registri diagnostici."
+            "value" : "Non è stato possibile ripristinare la piena disponibilità dell'helper. I dettagli vengono registrati nei log diagnostici."
           }
         },
         "ja" : {
@@ -13656,7 +13656,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile eliminare la vecchia registrazione dell'assistente."
+            "value" : "Impossibile eliminare la vecchia registrazione dell'helper."
           }
         },
         "ja" : {
@@ -13732,7 +13732,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile creare l'helper XPC proxy."
+            "value" : "Impossibile creare il proxy XPC dell'helper."
           }
         },
         "ja" : {
@@ -13896,7 +13896,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile cancellare i permessi di accesso ai dischi esterni"
+            "value" : "Impossibile eliminare i permessi di accesso ai dischi esterni"
           }
         },
         "ja" : {
@@ -13972,7 +13972,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile codificare la richiesta di supporto: %@"
+            "value" : "Impossibile codificare la richiesta dell'helper: %@"
           }
         },
         "ja" : {
@@ -14054,7 +14054,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile salvare il programma di installazione nella posizione di destinazione. Controlla le tue autorizzazioni e riprova."
+            "value" : "Impossibile salvare l'installer nella posizione di destinazione. Controlla le tue autorizzazioni e riprova."
           }
         },
         "ja" : {
@@ -14212,7 +14212,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile salvare il file di registro"
+            "value" : "Impossibile salvare il file di log"
           }
         },
         "ja" : {
@@ -14288,7 +14288,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile registrare l'aiutante"
+            "value" : "Impossibile registrare l'helper"
           }
         },
         "ja" : {
@@ -14446,7 +14446,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile decodificare l'evento helper: %@"
+            "value" : "Impossibile decodificare l'evento dell'helper: %@"
           }
         },
         "ja" : {
@@ -14604,7 +14604,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Programma di installazione non creato"
+            "value" : "Installer non creato"
           }
         },
         "ja" : {
@@ -14908,7 +14908,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nessun programma di installazione trovato nella directory Apple corrente"
+            "value" : "Nessun installer trovato nella directory Apple corrente"
           }
         },
         "ja" : {
@@ -15820,7 +15820,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stato di helper sconosciuto dopo la registrazione."
+            "value" : "Stato dell'helper dopo la registrazione sconosciuto."
           }
         },
         "ja" : {
@@ -15896,7 +15896,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stato dell'aiutante sconosciuto."
+            "value" : "Stato dell'helper sconosciuto."
           }
         },
         "ja" : {
@@ -16288,7 +16288,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aspettativa..."
+            "value" : "Attendi..."
           }
         },
         "ja" : {
@@ -16516,7 +16516,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aggiornamento la registrazione del mio aiutante e confermo la mia disponibilità a lavorare"
+            "value" : "Aggiornamento della registrazione dell'helper"
           }
         },
         "ja" : {
@@ -17124,7 +17124,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apertura dell'immagine del programma di installazione..."
+            "value" : "Apertura dell'immagine dell'installer..."
           }
         },
         "ja" : {
@@ -17960,7 +17960,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scaricamento del sistema"
+            "value" : "Download del sistema"
           }
         },
         "ja" : {
@@ -18194,7 +18194,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scaricamento completo"
+            "value" : "Download completato"
           }
         },
         "ja" : {
@@ -18270,7 +18270,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scaricamento completo. Di seguito è disponibile un riepilogo"
+            "value" : "Download completato. Di seguito è disponibile un riepilogo"
           }
         },
         "ja" : {
@@ -18422,7 +18422,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scaricamento"
+            "value" : "Scarica"
           }
         },
         "ja" : {
@@ -18498,7 +18498,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scarica il programma di installazione di macOS..."
+            "value" : "Scarica l'installer di macOS..."
           }
         },
         "ja" : {
@@ -18808,7 +18808,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mostra registro tecnico"
+            "value" : "Mostra log tecnico"
           }
         },
         "ja" : {
@@ -19194,7 +19194,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La connessione con l'aiutante è stata interrotta."
+            "value" : "La connessione con l'helper è stata interrotta."
           }
         },
         "ja" : {
@@ -19276,7 +19276,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La connessione con l'aiutante è stata invalidata."
+            "value" : "La connessione con l'helper è stata invalidata."
           }
         },
         "ja" : {
@@ -19820,7 +19820,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Riparare i progressi"
+            "value" : "Stato riparazione"
           }
         },
         "ja" : {
@@ -20212,7 +20212,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sinistra (modalità DEBUG)"
+            "value" : "Mantenuto (modalità DEBUG)"
           }
         },
         "ja" : {
@@ -20440,7 +20440,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il processo di creazione del programma di installazione sul supporto selezionato non è riuscito."
+            "value" : "Il processo di creazione dell'installer sul supporto selezionato non è riuscito."
           }
         },
         "ja" : {
@@ -20668,7 +20668,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "attendere prego"
+            "value" : "Attendere prego"
           }
         },
         "ja" : {
@@ -20820,7 +20820,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Flusso del processo"
+            "value" : "Dettagli"
           }
         },
         "ja" : {
@@ -20972,7 +20972,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vai avanti"
+            "value" : "Avanti"
           }
         },
         "ja" : {
@@ -21048,7 +21048,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Procedi alla creazione dell'USB con questo programma di installazione"
+            "value" : "Procedi alla creazione dell'USB con questo installer"
           }
         },
         "ja" : {
@@ -21282,7 +21282,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'helper XPC è scaduto in attesa di una risposta."
+            "value" : "Timeout durante l'attesa di una risposta dall'helper XPC."
           }
         },
         "ja" : {
@@ -21908,7 +21908,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preparazione di un manifest per il sistema più vecchio..."
+            "value" : "Preparazione di un manifest per il sistema più datato..."
           }
         },
         "ja" : {
@@ -21984,7 +21984,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sto preparando una riparazione di aiuto"
+            "value" : "Preparazione della riparazione dell'helper"
           }
         },
         "ja" : {
@@ -22060,7 +22060,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preparazione del programma di installazione %@"
+            "value" : "Preparazione dell'installer %@"
           }
         },
         "ja" : {
@@ -22136,7 +22136,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preparazione del programma di installazione..."
+            "value" : "Preparazione dell'installer..."
           }
         },
         "ja" : {
@@ -22440,7 +22440,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preparazione del disimballaggio esteso..."
+            "value" : "Preparazione dell'estrazione estesa..."
           }
         },
         "ja" : {
@@ -22516,7 +22516,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preparazione delle risorse del programma di installazione..."
+            "value" : "Preparazione delle risorse dell'installer..."
           }
         },
         "ja" : {
@@ -22592,7 +22592,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preparazione del contenuto del programma di installazione..."
+            "value" : "Preparazione del contenuto dell'installer..."
           }
         },
         "ja" : {
@@ -22744,7 +22744,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La registrazione dell'aiutante e la verifica della comunicazione sono state completate con successo."
+            "value" : "La registrazione dell'helper e la verifica della comunicazione sono state completate con successo."
           }
         },
         "ja" : {
@@ -22820,7 +22820,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "repository macUSB su GitHub"
+            "value" : "Repository macUSB su GitHub"
           }
         },
         "ja" : {
@@ -22972,7 +22972,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Disimballaggio del pacchetto di installazione..."
+            "value" : "Estraendo il pacchetto di installazione..."
           }
         },
         "ja" : {
@@ -23276,7 +23276,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sentiero..."
+            "value" : "Percorso..."
           }
         },
         "ja" : {
@@ -23662,7 +23662,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Controllo delle dimensioni dell'installatore..."
+            "value" : "Controllo delle dimensioni dell'installer..."
           }
         },
         "ja" : {
@@ -24510,7 +24510,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stato di aiutante"
+            "value" : "Stato dell'helper"
           }
         },
         "ja" : {
@@ -24668,7 +24668,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "sito web macUSB"
+            "value" : "Sito web di macUSB"
           }
         },
         "ja" : {
@@ -24820,7 +24820,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il sistema blocca la registrazione dell'aiutante (Gestione attività in background). Rimuovi le vecchie voci macUSB da \"Elementi di accesso/Consenti in background\", esegui `sudo sfltool resetbtm`, riavvia macOS ed esegui solo la versione da /Applicazioni."
+            "value" : "Il sistema blocca la registrazione dell'helper (Gestione attività in background). Rimuovi le vecchie voci macUSB da \"Elementi di accesso/Consenti in background\", esegui `sudo sfltool resetbtm`, riavvia macOS ed esegui solo la versione da /Applicazioni."
           }
         },
         "ja" : {
@@ -24896,7 +24896,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il sistema ha bloccato la registrazione dell'assistente per l'esecuzione di Xcode. Esegui l'applicazione dalla directory Applicazioni una volta, consenti l'esecuzione dell'helper in background, quindi torna al test in Xcode. Dettagli XPC: %@"
+            "value" : "Il sistema ha bloccato la registrazione dell'helper per l'esecuzione di Xcode. Esegui l'applicazione dalla directory Applicazioni una volta, consenti l'esecuzione dell'helper in background, quindi torna al test in Xcode. Dettagli XPC: %@"
           }
         },
         "ja" : {
@@ -25048,7 +25048,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dettagli sulla riparazione dell'assistente"
+            "value" : "Dettagli sulla riparazione dell'helper"
           }
         },
         "ja" : {
@@ -25200,7 +25200,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dettagli sullo stato dell'aiutante"
+            "value" : "Dettagli sullo stato dell'helper"
           }
         },
         "ja" : {
@@ -25662,7 +25662,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Questa funzionalità consente di creare un programma di installazione su dischi rigidi e SSD esterni. Prestare particolare attenzione quando si seleziona l'unità di destinazione dall'elenco per evitare perdite accidentali di dati!"
+            "value" : "Questa funzionalità consente di creare un installer su dischi rigidi e SSD esterni. Prestare particolare attenzione quando si seleziona l'unità di destinazione dall'elenco per evitare perdite accidentali di dati!"
           }
         },
         "ja" : {
@@ -25739,7 +25739,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Questa versione di macOS Sierra non è supportata dall'app. È necessaria una versione più recente del programma di installazione."
+            "value" : "Questa versione di macOS Sierra non è supportata dall'app. È necessaria una versione più recente dell'installer."
           }
         },
         "ja" : {
@@ -25815,7 +25815,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "SÌ"
+            "value" : "Si"
           }
         },
         "ja" : {
@@ -26207,7 +26207,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "È in corso un'altra operazione di supporto. Attendi qualche istante e riprova."
+            "value" : "È in corso un'altra operazione dall'helper. Attendi qualche istante e riprova."
           }
         },
         "ja" : {
@@ -26283,7 +26283,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'aiutante è attualmente in riparazione. Aspetta che finisca."
+            "value" : "L'helper è attualmente in riparazione. Aspetta che finisca."
           }
         },
         "ja" : {
@@ -26359,7 +26359,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La registrazione e la connessione dell'aiutante di sistema vengono aggiornate."
+            "value" : "La registrazione e la connessione dell'helper di sistema vengono aggiornate."
           }
         },
         "ja" : {
@@ -26435,7 +26435,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il programma di installazione è in fase di download e preparazione"
+            "value" : "L'installer è in fase di download e preparazione"
           }
         },
         "ja" : {
@@ -26511,7 +26511,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Viene verificata la disponibilità dell'assistente di sistema."
+            "value" : "Viene verificata la disponibilità dell'helper di sistema."
           }
         },
         "ja" : {
@@ -26587,7 +26587,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modalità DEBUG: file di sessione rimasti dopo la cancellazione..."
+            "value" : "Modalità DEBUG: file di sessione rimasti dopo l'eliminazione..."
           }
         },
         "ja" : {
@@ -26862,82 +26862,6 @@
         }
       }
     },
-    "Tworzenie bootowalnych dysków USB z systemem macOS oraz OS X nigdy nie było takie proste!" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Das Erstellen von bootfähigen macOS- und OS X-USB-Laufwerken war noch nie so einfach!"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Creating bootable macOS and OS X USB drives has never been easier!"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Crear memorias USB de arranque con macOS y OS X nunca fue tan fácil!"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Créer des clés USB amorçables macOS et OS X n'a jamais été aussi simple !"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Creare unità USB avviabili con macOS e OS X non è mai stato così facile!"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "macOSおよびOS Xの起動可能なUSBメモリの作成がかつてないほど簡単になりました！"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Criar pen drives inicializáveis do macOS e OS X nunca foi tão fácil!"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Создание загрузочных USB-дисков macOS и OS X еще никогда не было таким простым!"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "MacOS ve OS X ile önyüklenebilir USB sürücüler oluşturmak hiç bu kadar kolay olmamıştı!"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Створення завантажувальних USB-накопичувачів з macOS і OS X ще ніколи не було таким простим!"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tạo ổ USB có khả năng khởi động với macOS và OS X chưa bao giờ dễ dàng đến thế!"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "创建可引导的 macOS 和 OS X U 盘从未如此简单！"
-          }
-        }
-      }
-    },
     "Tworzenie instalatora nie powiodło się" : {
       "localizations" : {
         "de" : {
@@ -27043,7 +26967,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Creazione di media"
+            "value" : "Creazione del supporto"
           }
         },
         "ja" : {
@@ -27435,7 +27359,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nascondi registro tecnico"
+            "value" : "Nascondi log tecnico"
           }
         },
         "ja" : {
@@ -27512,7 +27436,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Assicurati che l'immagine del sistema selezionata provenga da Mavericks Forever. Altre versioni potrebbero causare errori durante la creazione del programma di installazione sull'unità USB."
+            "value" : "Assicurati che l'immagine del sistema selezionata provenga dal sito Mavericks Forever. Altre versioni potrebbero causare errori durante la creazione dell'installer sull'unità USB."
           }
         },
         "ja" : {
@@ -27816,7 +27740,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impostazioni dello sfondo…"
+            "value" : "Impostazioni attività app in background…"
           }
         },
         "ja" : {
@@ -29038,7 +28962,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scegliere"
+            "value" : "Scegli"
           }
         },
         "ja" : {
@@ -29266,7 +29190,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seleziona il programma di installazione disponibile sui server Apple"
+            "value" : "Seleziona l'installer disponibile sui server Apple"
           }
         },
         "ja" : {
@@ -29342,7 +29266,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Selezionare una posizione in cui salvare il file di registro diagnostico"
+            "value" : "Selezionare una posizione in cui salvare il file di log diagnostici"
           }
         },
         "ja" : {
@@ -29418,7 +29342,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scegliere..."
+            "value" : "Scegli..."
           }
         },
         "ja" : {
@@ -30038,7 +29962,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il mezzo selezionato funziona con uno standard di trasferimento dati precedente. Il processo di creazione del programma di installazione potrebbe richiedere diversi minuti"
+            "value" : "Il mezzo selezionato funziona con uno standard di trasferimento dati precedente. Il processo di creazione dell'installer potrebbe richiedere diversi minuti"
           }
         },
         "ja" : {
@@ -30591,7 +30515,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "I permessi di accesso ai dischi esterni sono stati cancellati"
+            "value" : "I permessi di accesso ai dischi esterni sono stati eliminati"
           }
         },
         "ja" : {
@@ -30743,7 +30667,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rilevato programma di installazione compatibile"
+            "value" : "Rilevato installer compatibile"
           }
         },
         "ja" : {
@@ -30820,7 +30744,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rilevati OS X Mavericks"
+            "value" : "Rilevato OS X Mavericks"
           }
         },
         "ja" : {
@@ -31048,7 +30972,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Posizione/Applicazioni richieste"
+            "value" : "Posizione /Applicazioni richiesta"
           }
         },
         "ja" : {
@@ -31200,7 +31124,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Strumento di supporto richiesto"
+            "value" : "Strumento helper richiesto"
           }
         },
         "ja" : {
@@ -32283,7 +32207,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Finisci e parti"
+            "value" : "Finisci ed Esci"
           }
         },
         "ja" : {
@@ -32359,7 +32283,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Completato automaticamente"
+            "value" : "Completata automaticamente"
           }
         },
         "ja" : {
@@ -32511,7 +32435,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vicino"
+            "value" : "Chiudi"
           }
         },
         "ja" : {

@@ -2,6 +2,19 @@
 
 ---
 
+## v2.1.1
+
+This update improves installer reliability for legacy macOS installers and refreshes selected interface copy.
+
+### FIXED
+- Improved the installer `.app` build path for macOS Yosemite, El Capitan, and Sierra to prevent package-signature issues that could appear during installation.
+
+### IMPROVEMENTS
+- Improved Italian translation quality (#48).
+- Updated the app tagline shown on the start screen.
+
+---
+
 ## v2.1
 
 macUSB v2.1 brings a new built-in macOS Downloader, improved helper reliability with automatic post-update repair, and a polished USB creation experience.

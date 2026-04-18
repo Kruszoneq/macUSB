@@ -2,6 +2,178 @@ import Foundation
 import Darwin
 
 extension DownloaderAssemblyExecutor {
+    func runInstallerBasedOldestDiskImageAssemblyAndLocateApp(
+        diskImageURL: URL,
+        sessionRootDirectory: URL
+    ) throws -> URL {
+        let sourceMountURL = sessionRootDirectory.appendingPathComponent("sierra_source_mount", isDirectory: true)
+        let stagingImageURL = sessionRootDirectory.appendingPathComponent("sierra_staging_workspace.dmg")
+        let stagingMountURL = sessionRootDirectory.appendingPathComponent("sierra_staging_mount", isDirectory: true)
+
+        if FileManager.default.fileExists(atPath: sourceMountURL.path) {
+            _ = detachDiskImageWithRetry(
+                mountURL: sourceMountURL,
+                statusText: "Czyszczenie poprzedniego montowania obrazu..."
+            )
+            try? FileManager.default.removeItem(at: sourceMountURL)
+        }
+        if FileManager.default.fileExists(atPath: stagingMountURL.path) {
+            _ = detachDiskImageWithRetry(
+                mountURL: stagingMountURL,
+                statusText: "Czyszczenie poprzedniego montowania obrazu..."
+            )
+            try? FileManager.default.removeItem(at: stagingMountURL)
+        }
+        if FileManager.default.fileExists(atPath: stagingImageURL.path) {
+            try? FileManager.default.removeItem(at: stagingImageURL)
+        }
+
+        try FileManager.default.createDirectory(at: sourceMountURL, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: stagingMountURL, withIntermediateDirectories: true)
+
+        var sourceMounted = false
+        var stagingMounted = false
+        defer {
+            if stagingMounted {
+                _ = detachDiskImageWithRetry(
+                    mountURL: stagingMountURL,
+                    statusText: "Zamykanie obrazu roboczego Sierra..."
+                )
+            }
+            if sourceMounted {
+                _ = detachDiskImageWithRetry(
+                    mountURL: sourceMountURL,
+                    statusText: "Zamykanie obrazu źródłowego Sierra..."
+                )
+            }
+            try? FileManager.default.removeItem(at: stagingMountURL)
+            try? FileManager.default.removeItem(at: sourceMountURL)
+            try? FileManager.default.removeItem(at: stagingImageURL)
+        }
+
+        emit(
+            percent: 0.12,
+            status: "Otwieranie obrazu instalatora...",
+            logLine: "sierra-assembly source-mount start image=\(diskImageURL.path) mount=\(sourceMountURL.path)"
+        )
+        try runCommand(
+            executable: "/usr/bin/hdiutil",
+            arguments: [
+                "attach",
+                "-readonly",
+                "-nobrowse",
+                diskImageURL.path,
+                "-mountpoint", sourceMountURL.path
+            ]
+        )
+        sourceMounted = true
+        emit(
+            percent: nil,
+            status: "Otwieranie obrazu instalatora...",
+            logLine: "sierra-assembly source-mount success mount=\(sourceMountURL.path)"
+        )
+
+        let installerPackageURL = try locateInstallerPackage(in: sourceMountURL)
+        emit(
+            percent: 0.18,
+            status: "Kopiowanie pakietu instalatora...",
+            logLine: "sierra-assembly package-resolved path=\(installerPackageURL.path)"
+        )
+
+        let imageSizeGB = calculateLegacyImageSizeGB(from: sourceMountURL)
+        emit(
+            percent: 0.22,
+            status: "Przygotowywanie zawartości instalatora...",
+            logLine: "sierra-assembly staging-image create size=\(imageSizeGB)g path=\(stagingImageURL.path)"
+        )
+        try runCommand(
+            executable: "/usr/bin/hdiutil",
+            arguments: [
+                "create",
+                "-fs", "HFS+",
+                "-layout", "SPUD",
+                "-size", "\(imageSizeGB)g",
+                "-volname", "macUSBSierraInstaller",
+                "-ov",
+                stagingImageURL.path
+            ]
+        )
+
+        emit(
+            percent: 0.28,
+            status: "Rozpakowywanie pakietu instalatora...",
+            logLine: "sierra-assembly staging-mount start image=\(stagingImageURL.path) mount=\(stagingMountURL.path)"
+        )
+        try runCommand(
+            executable: "/usr/bin/hdiutil",
+            arguments: [
+                "attach",
+                stagingImageURL.path,
+                "-noverify",
+                "-nobrowse",
+                "-mountpoint", stagingMountURL.path
+            ]
+        )
+        stagingMounted = true
+        emit(
+            percent: nil,
+            status: "Rozpakowywanie pakietu instalatora...",
+            logLine: "sierra-assembly staging-mount success mount=\(stagingMountURL.path)"
+        )
+
+        let installerEnvironment = ProcessInfo.processInfo.environment.merging(["CM_BUILD": "CM_BUILD"]) { current, _ in current }
+        emit(
+            percent: 0.34,
+            status: "Dodawanie obrazu systemu do instalatora...",
+            logLine: "sierra-assembly installer start pkg=\(installerPackageURL.path) target=\(stagingMountURL.path) env=CM_BUILD"
+        )
+        try runInstallerProcess(
+            installerInputURL: installerPackageURL,
+            targetPath: stagingMountURL.path,
+            statusText: "Dodawanie obrazu systemu do instalatora...",
+            environment: installerEnvironment
+        )
+        emit(
+            percent: nil,
+            status: "Dodawanie obrazu systemu do instalatora...",
+            logLine: "sierra-assembly installer finished target=\(stagingMountURL.path)"
+        )
+
+        guard let builtInstallerURL = locateInstallerApp(onMountedVolume: stagingMountURL) else {
+            throw NSError(
+                domain: "macUSBHelper",
+                code: 404,
+                userInfo: [NSLocalizedDescriptionKey: "Nie znaleziono aplikacji instalatora na obrazie roboczym."]
+            )
+        }
+        emit(
+            percent: 0.86,
+            status: "Kończenie przygotowania instalatora...",
+            logLine: "sierra-assembly app-resolved path=\(builtInstallerURL.path)"
+        )
+
+        let applicationsURL = URL(fileURLWithPath: "/Applications", isDirectory: true)
+        let destinationURL = uniqueCollisionSafeURL(
+            in: applicationsURL,
+            preferredFileName: request.expectedAppName
+        )
+        emit(
+            percent: 0.90,
+            status: "Kończenie przygotowania instalatora...",
+            logLine: "sierra-assembly app-copy start source=\(builtInstallerURL.path) destination=\(destinationURL.path)"
+        )
+        try runCommand(
+            executable: "/usr/bin/ditto",
+            arguments: [builtInstallerURL.path, destinationURL.path]
+        )
+        emit(
+            percent: 0.94,
+            status: "Instalator gotowy",
+            logLine: "sierra-assembly app-copy success destination=\(destinationURL.path)"
+        )
+        return destinationURL
+    }
+
     @discardableResult
     private func detachDiskImageWithRetry(
         mountURL: URL,
@@ -420,6 +592,41 @@ extension DownloaderAssemblyExecutor {
         emit(percent: 0.82, status: statusText)
     }
 
+    private func locateInstallerPackage(in mountedDiskImageURL: URL) throws -> URL {
+        guard let enumerator = FileManager.default.enumerator(
+            at: mountedDiskImageURL,
+            includingPropertiesForKeys: [.isDirectoryKey],
+            options: [.skipsHiddenFiles, .skipsPackageDescendants]
+        ) else {
+            throw NSError(
+                domain: "macUSBHelper",
+                code: 404,
+                userInfo: [NSLocalizedDescriptionKey: "Nie udalo sie przeszukac zamontowanego obrazu .dmg."]
+            )
+        }
+
+        var candidates: [URL] = []
+        for case let candidate as URL in enumerator {
+            guard candidate.pathExtension.caseInsensitiveCompare("pkg") == .orderedSame else {
+                continue
+            }
+            candidates.append(candidate)
+        }
+
+        guard !candidates.isEmpty else {
+            throw NSError(
+                domain: "macUSBHelper",
+                code: 404,
+                userInfo: [NSLocalizedDescriptionKey: "W obrazie .dmg nie znaleziono pakietu .pkg."]
+            )
+        }
+
+        if let preferred = candidates.first(where: { $0.lastPathComponent.lowercased().contains("install") }) {
+            return preferred
+        }
+        return candidates.sorted { lhs, rhs in lhs.path.count < rhs.path.count }.first!
+    }
+
     private func locateInstallerApp(onMountedVolume mountURL: URL) -> URL? {
         let canonicalApplications = mountURL.appendingPathComponent("Applications", isDirectory: true)
         let fusedApplications = URL(fileURLWithPath: mountURL.path + "Applications", isDirectory: true)
@@ -462,6 +669,31 @@ extension DownloaderAssemblyExecutor {
         let requiredBytes = directorySizeBytes(at: payloadDirectory)
         let requiredGB = Int(ceil(Double(requiredBytes) / 1_000_000_000.0))
         return max(16, requiredGB + 4)
+    }
+
+    private func uniqueCollisionSafeURL(
+        in directoryURL: URL,
+        preferredFileName: String
+    ) -> URL {
+        let preferredURL = directoryURL.appendingPathComponent(preferredFileName, isDirectory: true)
+        guard FileManager.default.fileExists(atPath: preferredURL.path) else {
+            return preferredURL
+        }
+
+        let baseName = (preferredFileName as NSString).deletingPathExtension
+        let ext = (preferredFileName as NSString).pathExtension
+
+        for index in 2...999 {
+            let suffixName = ext.isEmpty
+                ? "\(baseName) \(index)"
+                : "\(baseName) \(index).\(ext)"
+            let candidateURL = directoryURL.appendingPathComponent(suffixName, isDirectory: true)
+            if !FileManager.default.fileExists(atPath: candidateURL.path) {
+                return candidateURL
+            }
+        }
+
+        return directoryURL.appendingPathComponent("\(UUID().uuidString)-\(preferredFileName)", isDirectory: true)
     }
 
     private func directorySizeBytes(at rootURL: URL) -> Int64 {
