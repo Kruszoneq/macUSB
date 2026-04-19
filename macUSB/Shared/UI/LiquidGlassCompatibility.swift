@@ -78,23 +78,6 @@ private extension MacUSBSurfaceTone {
         }
     }
 
-    @available(macOS 26.0, *)
-    var glass: Glass {
-        switch self {
-        case .neutral, .subtle:
-            return .regular.interactive(false)
-        case .info:
-            return .regular.tint(.blue.opacity(0.14)).interactive(false)
-        case .success:
-            return .regular.tint(.green.opacity(0.14)).interactive(false)
-        case .warning:
-            return .regular.tint(.orange.opacity(0.16)).interactive(false)
-        case .error:
-            return .regular.tint(.red.opacity(0.16)).interactive(false)
-        case .active:
-            return .regular.tint(.accentColor.opacity(0.18)).interactive(false)
-        }
-    }
 }
 
 private struct MacUSBTopRoundedRectangle: Shape {
@@ -131,8 +114,26 @@ private struct MacUSBPanelSurfaceModifier: ViewModifier {
         let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
 
         if #available(macOS 26.0, *), !tone.usesStableSurfaceOnLiquidGlass {
-            content
-                .glassEffect(tone.glass, in: shape)
+            switch tone {
+            case .neutral, .subtle:
+                content
+                    .glassEffect(.regular.interactive(false), in: shape)
+            case .info:
+                content
+                    .glassEffect(.regular.tint(.blue.opacity(0.14)).interactive(false), in: shape)
+            case .success:
+                content
+                    .glassEffect(.regular.tint(.green.opacity(0.14)).interactive(false), in: shape)
+            case .warning:
+                content
+                    .glassEffect(.regular.tint(.orange.opacity(0.16)).interactive(false), in: shape)
+            case .error:
+                content
+                    .glassEffect(.regular.tint(.red.opacity(0.16)).interactive(false), in: shape)
+            case .active:
+                content
+                    .glassEffect(.regular.tint(.accentColor.opacity(0.18)).interactive(false), in: shape)
+            }
         } else {
             content
                 .background(

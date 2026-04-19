@@ -10868,6 +10868,7 @@
       }
     },
     "Lokalizacja aplikacji: poza /Applications" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

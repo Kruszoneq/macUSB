@@ -224,6 +224,27 @@ Minor helper changes that do not alter behavior may proceed, but must still be r
 - Keep one clear orchestrator per workflow and move helper policies/utilities/IO/details to focused companion files.
 - Treat structural refactors as behavior-preserving by default (no runtime/UI changes unless explicitly requested).
 
+## File naming rules
+
+- File names must use letters only (`A-Z`, `a-z`) by default.
+- Use `PascalCase` and compose names from:
+  - feature/domain prefix,
+  - concrete responsibility,
+  - role suffix.
+- Match existing repository patterns, for example:
+  - `AnalysisLogicMacOSCompatibility.swift`
+  - `MacOSDiscoveryCatalogParser.swift`
+  - `MacOSDownloadOrchestrator.swift`
+  - `MacOSDownloaderListView.swift`
+- The underscore (`_`) is allowed only when an external or required structure mandates it (for example GitHub workflow conventions).
+- Do not use spaces, hyphens, digits, or other special characters in file names unless required by external format constraints.
+
+## Large file split rule
+
+- If a file becomes materially larger after a change (many additional lines), the agent must explicitly evaluate whether splitting it into smaller focused files makes sense.
+- When a split is reasonable, the agent should propose the split before implementation or include the split in the same change when safe.
+- Splits should preserve behavior and separate concerns (orchestrator vs helpers/policies/parsers/ui parts).
+
 ## Branch naming convention
 
 When branch creation is requested:
