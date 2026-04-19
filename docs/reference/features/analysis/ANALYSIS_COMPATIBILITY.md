@@ -1,5 +1,7 @@
 # Analysis and Compatibility Contract
 
+Current implementation scope of this contract is the macOS analysis path (see `AnalysisLogicMacOSCompatibility.swift`).
+
 ## Detection Source of Truth
 
 Analysis flags are the source of truth for workflow branch selection.
