@@ -174,18 +174,6 @@ xcodebuild -project macUSB.xcodeproj -scheme macUSB -configuration Debug -destin
 xcodebuild -project macUSB.xcodeproj -scheme macUSB -configuration Debug -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build
 ```
 
-## CI required check for development
-
-For `development`, a GitHub Actions Debug build check is required for both:
-- push to `development`,
-- pull requests targeting `development`.
-
-Required workflow file:
-- `.github/workflows/development_build_debug.yml`
-
-Required status check (branch protection):
-- `Build Debug app`
-
 ## Change classification
 
 Use these rules to decide required documentation updates:
