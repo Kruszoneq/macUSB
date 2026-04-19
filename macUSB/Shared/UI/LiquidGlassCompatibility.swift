@@ -113,38 +113,15 @@ private struct MacUSBPanelSurfaceModifier: ViewModifier {
         let radius = cornerRadius ?? MacUSBDesignTokens.panelCornerRadius(for: currentVisualMode())
         let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
 
-        if #available(macOS 26.0, *), !tone.usesStableSurfaceOnLiquidGlass {
-            switch tone {
-            case .neutral, .subtle:
-                content
-                    .glassEffect(.regular.interactive(false), in: shape)
-            case .info:
-                content
-                    .glassEffect(.regular.tint(.blue.opacity(0.14)).interactive(false), in: shape)
-            case .success:
-                content
-                    .glassEffect(.regular.tint(.green.opacity(0.14)).interactive(false), in: shape)
-            case .warning:
-                content
-                    .glassEffect(.regular.tint(.orange.opacity(0.16)).interactive(false), in: shape)
-            case .error:
-                content
-                    .glassEffect(.regular.tint(.red.opacity(0.16)).interactive(false), in: shape)
-            case .active:
-                content
-                    .glassEffect(.regular.tint(.accentColor.opacity(0.18)).interactive(false), in: shape)
-            }
-        } else {
-            content
-                .background(
-                    shape
-                        .fill(tone.fallbackFillColor(for: colorScheme))
-                )
-                .overlay(
-                    shape
-                        .stroke(tone.fallbackStrokeColor(for: colorScheme), lineWidth: 0.5)
-                )
-        }
+        content
+            .background(
+                shape
+                    .fill(tone.fallbackFillColor(for: colorScheme))
+            )
+            .overlay(
+                shape
+                    .stroke(tone.fallbackStrokeColor(for: colorScheme), lineWidth: 0.5)
+            )
     }
 }
 
@@ -157,16 +134,11 @@ private struct MacUSBDockedBarSurfaceModifier: ViewModifier {
             cornerRadius: MacUSBDesignTokens.dockedBarTopCornerRadius(for: mode)
         )
 
-        if #available(macOS 26.0, *) {
-            content
-                .glassEffect(.regular.interactive(false), in: shape)
-        } else {
-            content
-                .background(shape.fill(MacUSBSurfaceTone.subtle.fallbackFillColor(for: colorScheme)))
-                .overlay(
-                    shape.stroke(MacUSBSurfaceTone.subtle.fallbackStrokeColor(for: colorScheme), lineWidth: 0.5)
-                )
-        }
+        content
+            .background(shape.fill(MacUSBSurfaceTone.subtle.fallbackFillColor(for: colorScheme)))
+            .overlay(
+                shape.stroke(MacUSBSurfaceTone.subtle.fallbackStrokeColor(for: colorScheme), lineWidth: 0.5)
+            )
     }
 }
 
@@ -174,18 +146,11 @@ private struct MacUSBPrimaryButtonStyleModifier: ViewModifier {
     let isEnabled: Bool
 
     func body(content: Content) -> some View {
-        if #available(macOS 26.0, *) {
-            content
-                .buttonStyle(.glassProminent)
-                .controlSize(.large)
-                .opacity(isEnabled ? 1.0 : 0.55)
-        } else {
-            content
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-                .tint(.accentColor)
-                .opacity(isEnabled ? 1.0 : 0.55)
-        }
+        content
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .tint(.accentColor)
+            .opacity(isEnabled ? 1.0 : 0.55)
     }
 }
 
@@ -193,17 +158,10 @@ private struct MacUSBSecondaryButtonStyleModifier: ViewModifier {
     let isEnabled: Bool
 
     func body(content: Content) -> some View {
-        if #available(macOS 26.0, *) {
-            content
-                .buttonStyle(.glass)
-                .controlSize(.large)
-                .opacity(isEnabled ? 1.0 : 0.55)
-        } else {
-            content
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-                .opacity(isEnabled ? 1.0 : 0.55)
-        }
+        content
+            .buttonStyle(.bordered)
+            .controlSize(.large)
+            .opacity(isEnabled ? 1.0 : 0.55)
     }
 }
 
