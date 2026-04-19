@@ -44,6 +44,7 @@ extension AnalysisLogic {
                     self.selectedDrive = nil
                     self.capacityCheckFinished = false
                     self.requiredUSBCapacityGB = 16
+                    self.resetLinuxDetectionState()
                 }
                 let flags = [self.isPPC ? "isPPC" : nil].compactMap { $0 }.joined(separator: ", ")
                 self.log("Ustawiono Tiger Multi DVD: recognizedVersion=\(self.recognizedVersion). Flagi: \(flags.isEmpty ? "brak" : flags)")
@@ -87,6 +88,7 @@ extension AnalysisLogic {
                 self.userSkippedAnalysis = false
                 self.shouldShowMavericksDialog = false
                 self.requiredUSBCapacityGB = nil
+                self.resetLinuxDetectionState()
 
                 self.availableDrives = []
                 self.selectedDrive = nil

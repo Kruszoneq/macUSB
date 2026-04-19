@@ -31,6 +31,15 @@ final class AnalysisLogic: ObservableObject {
     @Published var isPPC: Bool = false
     @Published var legacyArchInfo: String? = nil
     @Published var userSkippedAnalysis: Bool = false
+    @Published var isLinuxDetected: Bool = false
+    @Published var isLinuxDistributionRecognized: Bool = false
+    @Published var linuxDistro: String? = nil
+    @Published var linuxVersion: String? = nil
+    @Published var linuxEdition: String? = nil
+    @Published var linuxArchitecture: String? = nil
+    @Published var isLinuxARM: Bool = false
+    @Published var linuxDisplayName: String? = nil
+    @Published var linuxSourceURL: URL? = nil
 
     @Published var availableDrives: [USBDrive] = []
     @Published var selectedDrive: USBDrive? {

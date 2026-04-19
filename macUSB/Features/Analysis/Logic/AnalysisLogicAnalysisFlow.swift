@@ -16,6 +16,7 @@ extension AnalysisLogic {
         isMavericks = false
         shouldShowAlreadyMountedSourceAlert = false
         requiredUSBCapacityGB = nil
+        resetLinuxDetectionState()
 
         let ext = url.pathExtension.lowercased()
         self.log("Wykryto rozszerzenie: \(ext)")
@@ -34,11 +35,16 @@ extension AnalysisLogic {
                         self.isAnalyzing = false
                         let mountedReadInfo = result?.mountedReadInfo
                         let sourceAlreadyMountedPath = result?.sourceAlreadyMountedPath
+                        let mountedImagePath = result?.mountedImagePath
                         let sourceAlreadyMounted = sourceAlreadyMountedPath != nil
                         if let mountPath = sourceAlreadyMountedPath {
                             self.log("Wykryto, że wybrany obraz źródłowy jest już zamontowany: \(mountPath)")
                         }
-                        if let (_, _, _, mp) = mountedReadInfo { self.mountedDMGPath = mp } else { self.mountedDMGPath = nil }
+                        if let (_, _, _, mp) = mountedReadInfo {
+                            self.mountedDMGPath = mp
+                        } else {
+                            self.mountedDMGPath = mountedImagePath
+                        }
                         if let (name, rawVer, appURL, _) = mountedReadInfo {
                             let friendlyVer = self.formatMarketingVersion(raw: rawVer, name: name)
                             var cleanName = name
@@ -86,11 +92,48 @@ extension AnalysisLogic {
                             self.userSkippedAnalysis = false
                             self.requiredUSBCapacityGB = nil
                             self.shouldShowAlreadyMountedSourceAlert = true
+                            self.resetLinuxDetectionState()
                             AppLogging.separator()
                         } else {
+                            if ext == "iso" || ext == "cdr" {
+                                if let mountedImagePath {
+                                    self.log("Nie rozpoznano instalatora macOS. Przechodzę do procesu rozpoznawania Linuxa (z zamontowanego obrazu).")
+                                    if let linuxResult = self.detectLinux(fromMountPath: mountedImagePath, sourceURL: url) {
+                                        self.applyLinuxDetectionResult(linuxResult, sourceURL: url, mountedImagePath: mountedImagePath)
+                                        return
+                                    }
+                                }
+
+                                self.log("Nie rozpoznano instalatora macOS. Przechodzę do procesu rozpoznawania Linuxa przez bsdtar (bez montowania).")
+                                self.isAnalyzing = true
+                                DispatchQueue.global(qos: .userInitiated).async {
+                                    let linuxResult = self.detectLinuxFromArchive(sourceURL: url)
+                                    DispatchQueue.main.async {
+                                        withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                                            defer { self.isAnalyzing = false }
+
+                                            if let linuxResult {
+                                                self.applyLinuxDetectionResult(linuxResult, sourceURL: url, mountedImagePath: nil)
+                                                return
+                                            }
+
+                                            self.log("Nie wykryto wiarygodnych sygnałów Linuxa. Kończę analizę jako nierozpoznaną.")
+                                            // Użyto String(localized:) aby ten ciąg został wykryty, mimo że jest przypisywany do zmiennej
+                                            self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
+                                            self.requiredUSBCapacityGB = nil
+                                            self.resetLinuxDetectionState()
+                                            self.log("Analiza zakończona: nie rozpoznano instalatora.")
+                                            AppLogging.separator()
+                                        }
+                                    }
+                                }
+                                return
+                            }
+
                             // Użyto String(localized:) aby ten ciąg został wykryty, mimo że jest przypisywany do zmiennej
                             self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
                             self.requiredUSBCapacityGB = nil
+                            self.resetLinuxDetectionState()
                             self.log("Analiza zakończona: nie rozpoznano instalatora.")
                             AppLogging.separator()
                         }
@@ -128,6 +171,7 @@ extension AnalysisLogic {
                         } else {
                             self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
                             self.requiredUSBCapacityGB = nil
+                            self.resetLinuxDetectionState()
                             self.log("Analiza zakończona: nie rozpoznano instalatora.")
                             AppLogging.separator()
                         }

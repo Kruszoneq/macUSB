@@ -1,0 +1,119 @@
+# Linux Analysis Flow and Rules
+
+This document defines Linux-source detection behavior in `SystemAnalysisView` analysis stage.
+
+## Scope
+
+Linux detection is a fallback path in analysis only.
+
+- Primary path remains macOS installer detection.
+- Linux path runs when macOS installer metadata is not detected from `.iso` / `.cdr` sources.
+- Linux detection does **not** unlock USB creation flow.
+
+## Trigger and Entry
+
+Linux fallback is entered when all conditions are met:
+
+- selected source is `.iso` or `.cdr`,
+- source is not blocked by pre-mounted image guard,
+- macOS installer `.app` metadata was not resolved.
+
+Runtime sequence:
+
+- app first attempts standard image attach/read path (same as macOS analysis),
+- when macOS installer is not found, Linux detection first tries mounted-image metadata if mount path exists,
+- if mounted-image Linux detection does not produce a result (or mount path is unavailable), app falls back to archive reading via `bsdtar` (without mounting).
+
+If `.iso`/`.cdr` is already mounted manually in macOS, analysis is blocked and user must unmount first (same guard as macOS analysis path).
+
+## Detection Inputs (Performance Policy)
+
+Detection uses a bounded whitelist of files only.
+No recursive unpacking of live rootfs/squashfs is allowed.
+
+- `.disk/info`
+- `.treeinfo`
+- `install/.treeinfo`
+- `dists/*/Release` (first matching release file)
+- `arch/version`
+- boot/menu config snippets:
+  - `boot/grub/grub.cfg`
+  - `boot/grub/loopback.cfg`
+  - `boot/grub2/grub.cfg`
+  - `EFI/BOOT/grub.cfg`
+  - `boot/grub/kernels.cfg`
+  - `boot/syslinux/syslinux.cfg`
+  - `boot/x86_64/loader/isolinux.cfg`
+- top-level directory names from mounted root
+
+For `bsdtar` fallback:
+
+- archive index is read with `bsdtar -tf`,
+- selected text files are read with `bsdtar -xOf`,
+- both operations are time-bounded (10 seconds timeout),
+- file reads are size-bounded (max bytes cap) to avoid UI stalls.
+
+## Classification Rules
+
+Detection result must produce:
+
+- distro name (if recognized),
+- version (if recognized),
+- edition/flavor (if available),
+- architecture and ARM flag,
+- evidence list for logs.
+
+If Linux signals are present but distro cannot be matched, result is still Linux and displayed as unknown distro.
+
+## UI Output and Gating
+
+Display format:
+
+- recognized distro: `Linux - <Distro> <Version>`
+- unknown distro: `Linux - nierozpoznana dystrybucja`
+- if ARM detected: append ` (ARM)`
+
+Linux recognition is shown as successful detection in analysis UI, but proceed/install path remains blocked:
+
+- no `sourceAppURL` assignment,
+- USB selection/proceed remains unavailable,
+- no installation workflow is started for Linux.
+
+Linux detected state uses dedicated icon resource:
+
+- `macUSB/Resources/Icons/Linux/linux.icns`
+- loaded as `detectedSystemIcon` with fallback lookup (`Icons/Linux` subdirectory, then bundle root).
+
+## Logging Contract
+
+When Linux fallback runs, logs must include:
+
+- transition entry from macOS detection to Linux fallback,
+- transition entry from mounted Linux detection to archive (`bsdtar`) fallback when needed,
+- final Linux result string,
+- parsed details: `distro`, `version`, `edition`, `arch`, `isARM`,
+- evidence summary (files/rules that produced the result),
+- archive-reader diagnostics for timeout/error cases.
+
+## Reset and Lifecycle Rules
+
+Linux analysis state must be reset on:
+
+- new file selection/drop,
+- full analysis reset,
+- explicit transitions that force macOS-only state (for example Tiger manual selection).
+
+Mount lifecycle behavior remains aligned with existing analysis behavior:
+
+- previous attached image is detached before analyzing another source,
+- attached image path is stored for deterministic cleanup.
+
+## Non-goals
+
+- No Linux installer creation support.
+- No Linux helper workflow changes.
+- No distro icon extraction from ISO.
+
+## Update Trigger
+
+Update this file when Linux detection heuristics, fallback routing, display format, or gating rules change.

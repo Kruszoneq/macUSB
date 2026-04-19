@@ -42,12 +42,13 @@ struct SystemAnalysisView: View {
         // Hide/disable when the selected system is supported (including PPC flow) or analysis not finished.
         let analysisFinished = !logic.isAnalyzing
         let hasAnySelection = !logic.selectedFilePath.isEmpty || logic.selectedFileUrl != nil
-        let isValidSelection = (logic.sourceAppURL != nil) || logic.isPPC || logic.isMavericks
+        let isValidSelection = (logic.sourceAppURL != nil) || logic.isPPC || logic.isMavericks || logic.isLinuxDetected
 
         let unrecognizedBlocking = (!logic.isSystemDetected
                                     && !logic.recognizedVersion.isEmpty
                                     && logic.sourceAppURL == nil
-                                    && !logic.showUnsupportedMessage)
+                                    && !logic.showUnsupportedMessage
+                                    && !logic.isLinuxDetected)
 
         let recognizedUnsupported = (!logic.isSystemDetected
                                      && !logic.recognizedVersion.isEmpty
@@ -221,7 +222,7 @@ struct SystemAnalysisView: View {
     }
 
     private var detectedOrUnsupportedView: some View {
-        let isValid = (logic.sourceAppURL != nil) || logic.isPPC
+        let isValid = (logic.sourceAppURL != nil) || logic.isPPC || logic.isLinuxDetected
         let unsupportedText = logic.isUnsupportedSierra
             ? String(localized: "Ta wersja systemu macOS Sierra nie jest wspierana przez aplikację. Potrzebna jest nowsza wersja instalatora.", comment: "Unsupported Sierra (not 12.6.06) message")
             : String(localized: "Wybrany system nie jest wspierany przez aplikację", comment: "Generic unsupported system message")
@@ -234,6 +235,11 @@ struct SystemAnalysisView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 32, height: 32)
+                    } else if logic.isLinuxDetected {
+                        Image(systemName: "desktopcomputer")
+                            .font(sectionIconFont)
+                            .foregroundColor(.green)
+                            .frame(width: MacUSBDesignTokens.iconColumnWidth)
                     } else {
                         Image(systemName: isValid ? "checkmark.circle.fill" : "xmark.circle.fill")
                             .font(sectionIconFont)
@@ -423,6 +429,7 @@ struct SystemAnalysisView: View {
         .onChange(of: logic.isSystemDetected) { _ in updateMenuState() }
         .onChange(of: logic.selectedFilePath) { _ in updateMenuState() }
         .onChange(of: logic.isPPC) { _ in updateMenuState() }
+        .onChange(of: logic.isLinuxDetected) { _ in updateMenuState() }
         .onChange(of: logic.sourceAppURL) { _ in updateMenuState() }
         .onChange(of: logic.shouldShowMavericksDialog) { show in
             if show { presentMavericksDialog() }
