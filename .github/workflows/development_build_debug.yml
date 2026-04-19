@@ -1,4 +1,4 @@
-name: Debug Build (development)
+name: macUSB - development
 
 on:
   push:
@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   debug-build:
-    name: macUSB - Debug Build
+    name: Debug Build
     runs-on: macos-latest
     timeout-minutes: 30
 
