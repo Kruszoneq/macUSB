@@ -7,6 +7,13 @@ struct LinuxDistributionMatch {
     let evidence: String
 }
 
+private struct LinuxCatalogDetectionRule {
+    let distro: String
+    let evidence: String
+    let signals: [String]
+    let edition: String?
+}
+
 extension AnalysisLogic {
     func classifyLinuxDistribution(from metadata: LinuxImageMetadata) -> LinuxDistributionMatch {
         let volumeLower = metadata.volumeName.lowercased()
@@ -207,12 +214,149 @@ extension AnalysisLogic {
             )
         }
 
+        if let genericMatch = classifyLinuxDistributionFromCatalog(
+            metadata: metadata,
+            volumeLower: volumeLower,
+            diskInfoLower: diskInfoLower,
+            hintsLower: hintsLower,
+            treeReleaseName: treeReleaseName,
+            treeGeneralFamily: treeGeneralFamily,
+            treeGeneralName: treeGeneralName,
+            releaseOriginLower: releaseOriginLower,
+            releaseLabelLower: releaseLabelLower,
+            releaseCodenameLower: releaseCodenameLower,
+            releaseFields: releaseFields
+        ) {
+            return genericMatch
+        }
+
         return LinuxDistributionMatch(
             distro: nil,
             version: nil,
             edition: nil,
             evidence: "rule=linux_unrecognized"
         )
+    }
+
+    private func classifyLinuxDistributionFromCatalog(
+        metadata: LinuxImageMetadata,
+        volumeLower: String,
+        diskInfoLower: String,
+        hintsLower: String,
+        treeReleaseName: String,
+        treeGeneralFamily: String,
+        treeGeneralName: String,
+        releaseOriginLower: String,
+        releaseLabelLower: String,
+        releaseCodenameLower: String,
+        releaseFields: [String: String]
+    ) -> LinuxDistributionMatch? {
+        let topLevelLower = metadata.topLevelEntries.map { $0.lowercased() }.joined(separator: " ")
+        let misoLower = (metadata.misoLabel ?? "").lowercased()
+        let releaseFieldsLower = releaseFields
+            .map { "\($0.key.lowercased()) \($0.value.lowercased())" }
+            .joined(separator: " ")
+        let corpus = [
+            volumeLower,
+            diskInfoLower,
+            hintsLower,
+            treeReleaseName,
+            treeGeneralFamily,
+            treeGeneralName,
+            releaseOriginLower,
+            releaseLabelLower,
+            releaseCodenameLower,
+            topLevelLower,
+            misoLower,
+            releaseFieldsLower
+        ].joined(separator: " | ")
+
+        let rules: [LinuxCatalogDetectionRule] = [
+            .init(distro: "Alpine Linux", evidence: "rule=linux_catalog_alpine", signals: ["alpine linux", "alpine"], edition: nil),
+            .init(distro: "antiX", evidence: "rule=linux_catalog_antix", signals: ["antix", "anti x"], edition: nil),
+            .init(distro: "ArcoLinux", evidence: "rule=linux_catalog_arco", signals: ["arcolinux", "arco linux"], edition: nil),
+            .init(distro: "Artix Linux", evidence: "rule=linux_catalog_artix", signals: ["artix linux", "artix"], edition: nil),
+            .init(distro: "BlueStar Linux", evidence: "rule=linux_catalog_bluestar", signals: ["bluestar", "blue star"], edition: nil),
+            .init(distro: "Bodhi Linux", evidence: "rule=linux_catalog_bodhi", signals: ["bodhi linux", "bodhi"], edition: nil),
+            .init(distro: "BunsenLabs", evidence: "rule=linux_catalog_bunsenlabs", signals: ["bunsenlabs", "bunsen labs"], edition: nil),
+            .init(distro: "Clear Linux", evidence: "rule=linux_catalog_clear", signals: ["clear linux", "clearlinux"], edition: nil),
+            .init(distro: "Deepin", evidence: "rule=linux_catalog_deepin", signals: ["deepin"], edition: nil),
+            .init(distro: "elementary OS", evidence: "rule=linux_catalog_elementary", signals: ["elementary os", "elementary"], edition: nil),
+            .init(distro: "EndeavourOS", evidence: "rule=linux_catalog_endeavour", signals: ["endeavouros", "endeavour os"], edition: nil),
+            .init(distro: "Endless OS", evidence: "rule=linux_catalog_endless", signals: ["endless os"], edition: nil),
+            .init(distro: "Feren OS", evidence: "rule=linux_catalog_feren", signals: ["feren os", "feren"], edition: nil),
+            .init(distro: "Gentoo", evidence: "rule=linux_catalog_gentoo", signals: ["gentoo"], edition: nil),
+            .init(distro: "KaOS", evidence: "rule=linux_catalog_kaos", signals: ["kaos"], edition: nil),
+            .init(distro: "Knoppix", evidence: "rule=linux_catalog_knoppix", signals: ["knoppix"], edition: nil),
+            .init(distro: "Kubuntu", evidence: "rule=linux_catalog_kubuntu", signals: ["kubuntu"], edition: nil),
+            .init(distro: "Linux Lite", evidence: "rule=linux_catalog_lite", signals: ["linux lite"], edition: nil),
+            .init(distro: "Lubuntu", evidence: "rule=linux_catalog_lubuntu", signals: ["lubuntu"], edition: nil),
+            .init(distro: "Mageia", evidence: "rule=linux_catalog_mageia", signals: ["mageia"], edition: nil),
+            .init(distro: "MX Linux", evidence: "rule=linux_catalog_mx", signals: ["mx linux"], edition: nil),
+            .init(distro: "KDE neon", evidence: "rule=linux_catalog_neon", signals: ["kde neon", "neon"], edition: nil),
+            .init(distro: "Netrunner", evidence: "rule=linux_catalog_netrunner", signals: ["netrunner"], edition: nil),
+            .init(distro: "NixOS", evidence: "rule=linux_catalog_nixos", signals: ["nixos", "nix os"], edition: nil),
+            .init(distro: "OpenMandriva", evidence: "rule=linux_catalog_openmandriva", signals: ["openmandriva", "open mandriva"], edition: nil),
+            .init(distro: "Parrot OS", evidence: "rule=linux_catalog_parrot", signals: ["parrot os", "parrot security"], edition: nil),
+            .init(distro: "PCLinuxOS", evidence: "rule=linux_catalog_pclinuxos", signals: ["pclinuxos", "pc linux os"], edition: nil),
+            .init(distro: "Peppermint OS", evidence: "rule=linux_catalog_peppermint", signals: ["peppermint os", "peppermint"], edition: nil),
+            .init(distro: "Qubes OS", evidence: "rule=linux_catalog_qubes", signals: ["qubes os", "qubes"], edition: nil),
+            .init(distro: "Raspberry Pi OS", evidence: "rule=linux_catalog_raspios", signals: ["raspberry pi os", "raspios", "raspian"], edition: nil),
+            .init(distro: "RebornOS", evidence: "rule=linux_catalog_rebornos", signals: ["rebornos", "reborn os"], edition: nil),
+            .init(distro: "Red Hat Enterprise Linux", evidence: "rule=linux_catalog_redhat", signals: ["red hat enterprise linux", "red hat", "redhat", "rhel"], edition: nil),
+            .init(distro: "ROSA", evidence: "rule=linux_catalog_rosa", signals: ["rosa linux", "rosa"], edition: nil),
+            .init(distro: "Septor Linux", evidence: "rule=linux_catalog_septor", signals: ["septor linux", "septor"], edition: nil),
+            .init(distro: "Slackware", evidence: "rule=linux_catalog_slackware", signals: ["slackware"], edition: nil),
+            .init(distro: "Solus", evidence: "rule=linux_catalog_solus", signals: ["solus"], edition: nil),
+            .init(distro: "Tails", evidence: "rule=linux_catalog_tails", signals: ["tails"], edition: nil),
+            .init(distro: "Tiny Core Linux", evidence: "rule=linux_catalog_tinycore", signals: ["tiny core linux", "tinycore"], edition: nil),
+            .init(distro: "Ubuntu Cinnamon", evidence: "rule=linux_catalog_ubuntu_cinnamon", signals: ["ubuntu cinnamon"], edition: nil),
+            .init(distro: "Ubuntu DDE", evidence: "rule=linux_catalog_ubuntu_dde", signals: ["ubuntu dde"], edition: nil),
+            .init(distro: "Ubuntu MATE", evidence: "rule=linux_catalog_ubuntu_mate", signals: ["ubuntu mate"], edition: nil),
+            .init(distro: "Void Linux", evidence: "rule=linux_catalog_void", signals: ["void linux"], edition: nil),
+            .init(distro: "Zorin OS", evidence: "rule=linux_catalog_zorin", signals: ["zorin os", "zorin"], edition: nil)
+        ]
+
+        for rule in rules {
+            guard let matchedSignal = firstMatchedLinuxSignal(in: corpus, signals: rule.signals) else { continue }
+            let version = firstNonEmpty([
+                releaseFields["Version"],
+                extractFirstVersion(in: metadata.diskInfo ?? ""),
+                extractFirstVersion(in: metadata.volumeName),
+                extractFirstVersion(in: metadata.grubHints)
+            ])
+
+            return LinuxDistributionMatch(
+                distro: rule.distro,
+                version: normalizedVersion(version),
+                edition: rule.edition,
+                evidence: "\(rule.evidence):\(matchedSignal)"
+            )
+        }
+
+        return nil
+    }
+
+    private func firstMatchedLinuxSignal(in corpus: String, signals: [String]) -> String? {
+        for signal in signals {
+            let normalizedSignal = signal.lowercased()
+            if normalizedSignal.contains(" ") {
+                if corpus.contains(normalizedSignal) {
+                    return normalizedSignal
+                }
+                continue
+            }
+
+            let escaped = NSRegularExpression.escapedPattern(for: normalizedSignal)
+            let pattern = #"(?<![a-z0-9])\#(escaped)(?![a-z0-9])"#
+            guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else { continue }
+            let range = NSRange(corpus.startIndex..<corpus.endIndex, in: corpus)
+            if regex.firstMatch(in: corpus, options: [], range: range) != nil {
+                return normalizedSignal
+            }
+        }
+
+        return nil
     }
 
     private func extractManjaroVersion(fromMisoLabel label: String) -> String? {

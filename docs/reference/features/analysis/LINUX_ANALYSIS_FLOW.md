@@ -63,6 +63,11 @@ Detection result must produce:
 - architecture and ARM flag,
 - evidence list for logs.
 
+Classification uses two layers:
+
+- dedicated high-confidence rules for popular distros (for example Ubuntu/Xubuntu, Debian, Kali, Arch, Manjaro, openSUSE, Fedora),
+- catalog-based signal matching for additional distros available in icon resources (based on bounded metadata fields, without recursive filesystem scans).
+
 If Linux signals are present but distro cannot be matched, result is still Linux and displayed as unknown distro.
 
 ## UI Output and Gating
@@ -79,10 +84,12 @@ Linux recognition is shown as successful detection in analysis UI, but proceed/i
 - USB selection/proceed remains unavailable,
 - no installation workflow is started for Linux.
 
-Linux detected state uses dedicated icon resource:
+Linux detected state uses icon fallback chain:
 
-- `macUSB/Resources/Icons/Linux/linux.icns`
-- loaded as `detectedSystemIcon` with fallback lookup (`Icons/Linux` subdirectory, then bundle root).
+- first: distro-specific icon from `macUSB/Resources/Icons/Linux/Distros/*.png` when distro is recognized and mapped,
+  runtime lookup supports both `Icons/Linux/Distros` and bundled `Distros` subdirectory variants,
+- second: generic Linux icon `macUSB/Resources/Icons/Linux/linux.icns` (lookup: `Icons/Linux` subdirectory, then bundle root),
+- third: SF Symbol fallback in UI when no file icon could be loaded.
 
 ## Logging Contract
 
