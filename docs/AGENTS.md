@@ -107,6 +107,7 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 - New UI copy is authored in Polish first.
 - Runtime non-`Text` user-facing strings use `String(localized:)`.
 - Helper localization keys and app-side rendering keys must remain synchronized.
+- For strings that mirror macOS system UI, notifications, or alerts, match Apple’s terminology in each language instead of inventing custom wording.
 
 ### Logging and notifications invariants
 

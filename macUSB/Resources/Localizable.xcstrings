@@ -1308,78 +1308,78 @@
         }
       }
     },
-    "• Wybrany plik musi zawierać instalator systemu macOS lub Mac OS X" : {
+    "• Wybrany plik musi zawierać instalator macOS, Mac OS X lub Linux" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Die ausgewählte Datei muss einen macOS- oder Mac OS X-Installer enthalten"
+            "value" : "• Die ausgewählte Datei muss einen macOS-, Mac OS X- oder Linux-Installer enthalten"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• The selected file must contain a macOS or Mac OS X installer"
+            "value" : "• The selected file must contain a macOS, Mac OS X, or Linux installer"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• El archivo seleccionado debe contener un instalador de macOS o Mac OS X"
+            "value" : "• El archivo seleccionado debe contener un instalador de macOS, Mac OS X o Linux"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Le fichier sélectionné doit contenir un installateur macOS ou Mac OS X"
+            "value" : "• Le fichier sélectionné doit contenir un installateur macOS, Mac OS X ou Linux"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Il file selezionato deve contenere l'installer di macOS o Mac OS X"
+            "value" : "• Il file selezionato deve contenere l'installer di macOS, Mac OS X o Linux"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• 選択したファイルにはmacOSまたはMac OS Xインストーラが含まれている必要があります"
+            "value" : "• 選択したファイルにはmacOS、Mac OS X、またはLinuxのインストーラが含まれている必要があります"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• O arquivo selecionado deve conter um instalador do macOS ou Mac OS X"
+            "value" : "• O arquivo selecionado deve conter um instalador do macOS, Mac OS X ou Linux"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Выбранный файл должен содержать установщик macOS или Mac OS X"
+            "value" : "• Выбранный файл должен содержать установщик macOS, Mac OS X или Linux"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Seçilen dosya macOS veya Mac OS X yükleyicisini içermelidir"
+            "value" : "• Seçilen dosya macOS, Mac OS X veya Linux yükleyicisini içermelidir"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Вибраний файл має містити програму встановлення macOS або Mac OS X"
+            "value" : "• Вибраний файл має містити програму встановлення macOS, Mac OS X або Linux"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Tệp được chọn phải chứa trình cài đặt macOS hoặc Mac OS X"
+            "value" : "• Tệp được chọn phải chứa trình cài đặt macOS, Mac OS X hoặc Linux"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• 所选文件必须包含 macOS 或 Mac OS X 安装程序"
+            "value" : "• 所选文件必须包含 macOS、Mac OS X 或 Linux 安装程序"
           }
         }
       }
@@ -10708,6 +10708,9 @@
           }
         }
       }
+    },
+    "Linux - nierozpoznana dystrybucja" : {
+
     },
     "Lokalizacja" : {
       "localizations" : {

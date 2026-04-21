@@ -51,6 +51,7 @@ extension AnalysisLogic {
                     self.userSkippedAnalysis = false
                     self.shouldShowMavericksDialog = false
                     self.requiredUSBCapacityGB = nil
+                    self.resetLinuxDetectionState()
                 }
                 self.log("Lokalizacja wybranego pliku: \(url.path)")
                 self.log("Źródło do rozpoznania wersji: \(url.path)")
@@ -101,6 +102,7 @@ extension AnalysisLogic {
                     self.userSkippedAnalysis = false
                     self.shouldShowMavericksDialog = false
                     self.requiredUSBCapacityGB = nil
+                    self.resetLinuxDetectionState()
                 }
                 self.log("Wybrano plik w formacie .\(ext)")
                 self.log("Lokalizacja wybranego pliku: \(url.path)")

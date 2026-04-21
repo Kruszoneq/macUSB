@@ -91,12 +91,12 @@ extension AnalysisLogic {
         return nil
     }
 
-    func mountAndReadInfo(dmgUrl: URL, detectPreMountedSource: Bool = false) -> (mountedReadInfo: (String, String, URL, String)?, sourceAlreadyMountedPath: String?)? {
+    func mountAndReadInfo(dmgUrl: URL, detectPreMountedSource: Bool = false) -> (mountedReadInfo: (String, String, URL, String)?, sourceAlreadyMountedPath: String?, mountedImagePath: String?)? {
         self.log("Montowanie obrazu (DMG/ISO/CDR)")
         if detectPreMountedSource,
            let mountPoint = mountedPathForAlreadyAttachedImage(sourceURL: dmgUrl) {
             self.log("Wybrany obraz .\(dmgUrl.pathExtension.lowercased()) jest już zamontowany w systemie: \(mountPoint)")
-            return (mountedReadInfo: nil, sourceAlreadyMountedPath: mountPoint)
+            return (mountedReadInfo: nil, sourceAlreadyMountedPath: mountPoint, mountedImagePath: nil)
         }
 
         let task = Process(); task.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
@@ -113,7 +113,7 @@ extension AnalysisLogic {
             if detectPreMountedSource,
                let mountPoint = mountedPathForAlreadyAttachedImage(sourceURL: dmgUrl) {
                 self.log("Po błędzie uruchomienia attach wykryto już zamontowany obraz źródłowy: \(mountPoint)")
-                return (mountedReadInfo: nil, sourceAlreadyMountedPath: mountPoint)
+                return (mountedReadInfo: nil, sourceAlreadyMountedPath: mountPoint, mountedImagePath: nil)
             }
             return nil
         }
@@ -132,7 +132,7 @@ extension AnalysisLogic {
             if detectPreMountedSource,
                let mountPoint = mountedPathForAlreadyAttachedImage(sourceURL: dmgUrl) {
                 self.log("Po błędzie attach wykryto już zamontowany obraz źródłowy: \(mountPoint)")
-                return (mountedReadInfo: nil, sourceAlreadyMountedPath: mountPoint)
+                return (mountedReadInfo: nil, sourceAlreadyMountedPath: mountPoint, mountedImagePath: nil)
             }
             return nil
         }
@@ -142,13 +142,17 @@ extension AnalysisLogic {
             if detectPreMountedSource,
                let mountPoint = mountedPathForAlreadyAttachedImage(sourceURL: dmgUrl) {
                 self.log("Po nieudanym odczycie plist wykryto już zamontowany obraz źródłowy: \(mountPoint)")
-                return (mountedReadInfo: nil, sourceAlreadyMountedPath: mountPoint)
+                return (mountedReadInfo: nil, sourceAlreadyMountedPath: mountPoint, mountedImagePath: nil)
             }
             return nil
         }
         self.log("Przetwarzanie wyników hdiutil attach (\(entities.count) encji)")
+        var firstMountedImagePath: String?
         for e in entities {
             if let mp = e["mount-point"] as? String {
+                if firstMountedImagePath == nil {
+                    firstMountedImagePath = mp
+                }
                 let devEntry = (e["dev-entry"] as? String) ?? (e["devname"] as? String)
                 var mountId = "unknown"
                 if let dev = devEntry {
@@ -164,7 +168,7 @@ extension AnalysisLogic {
                 let mUrl = URL(fileURLWithPath: mp)
                 if let (legacyName, legacyVersion, legacyInstallerURL) = self.readLegacyInstallMacOSXInfo(from: mUrl) {
                     self.log("Rozpoznano instalator legacy z obrazu: name=\(legacyName), version=\(legacyVersion)")
-                    return (mountedReadInfo: (legacyName, legacyVersion, legacyInstallerURL, mp), sourceAlreadyMountedPath: nil)
+                    return (mountedReadInfo: (legacyName, legacyVersion, legacyInstallerURL, mp), sourceAlreadyMountedPath: nil, mountedImagePath: mp)
                 }
                 let dirContents = try? FileManager.default.contentsOfDirectory(at: mUrl, includingPropertiesForKeys: nil)
                 if let item = dirContents?.first(where: { $0.pathExtension == "app" }) {
@@ -174,7 +178,7 @@ extension AnalysisLogic {
                         let name = (dict["CFBundleDisplayName"] as? String) ?? item.lastPathComponent
                         let ver = (dict["CFBundleShortVersionString"] as? String) ?? "?"
                         self.log("Odczytano Info.plist z obrazu: name=\(name), version=\(ver)")
-                        return (mountedReadInfo: (name, ver, item, mp), sourceAlreadyMountedPath: nil)
+                        return (mountedReadInfo: (name, ver, item, mp), sourceAlreadyMountedPath: nil, mountedImagePath: mp)
                     } else {
                         self.logError("Nie udało się odczytać Info.plist z obrazu: \(plistUrl.path)")
                     }
@@ -187,6 +191,10 @@ extension AnalysisLogic {
             }
         }
         self.log("Próbowano zamontować obraz i znaleźć pakiet .app oraz plik Info.plist, ale nie zostały odnalezione.")
+        if let firstMountedImagePath {
+            self.log("Brak instalatora macOS .app na zamontowanym obrazie. Zachowuję mount-point do dalszej analizy: \(firstMountedImagePath)")
+            return (mountedReadInfo: nil, sourceAlreadyMountedPath: nil, mountedImagePath: firstMountedImagePath)
+        }
         self.logError("Nie udało się odczytać informacji z obrazu")
         return nil
     }

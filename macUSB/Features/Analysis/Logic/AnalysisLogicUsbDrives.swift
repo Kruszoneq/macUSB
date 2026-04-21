@@ -5,6 +5,8 @@ extension AnalysisLogic {
     private var requiredUSBCapacityBytes: Int? {
         guard let requiredGB = requiredUSBCapacityGB else { return nil }
         switch requiredGB {
+        case 8:
+            return 6_000_000_000
         case 16:
             return 15_000_000_000
         case 32:
