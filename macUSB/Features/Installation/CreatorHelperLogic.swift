@@ -14,10 +14,14 @@ extension UniversalInstallationView {
     }
 
     func startCreationProcessEntry() {
+        if isLinuxWorkflow {
+            startLinuxCreationProcessWithHelper()
+            return
+        }
         startCreationProcessWithHelper()
     }
 
-    private func startCreationProcessWithHelper() {
+    func startCreationProcessWithHelper() {
         guard let drive = targetDrive else {
             navigateToCreationProgress = false
             errorMessage = String(localized: "Błąd: Nie wybrano dysku.")
@@ -154,6 +158,12 @@ extension UniversalInstallationView {
                                     let normalizedStageKey = canonicalStageKeyForPresentation(event.stageKey)
                                     let previousStageKey = helperCurrentStageKey
                                     helperCurrentStageKey = normalizedStageKey
+                                    if isLinuxWorkflow, previousStageKey != normalizedStageKey {
+                                        log(
+                                            "LinuxInstallFlow: stage transition \(previousStageKey.isEmpty ? "<start>" : previousStageKey) -> \(normalizedStageKey)",
+                                            category: "LinuxInstallFlow"
+                                        )
+                                    }
                                     helperProgressPercent = max(helperProgressPercent, min(event.percent, 100))
                                     if let localization = HelperWorkflowLocalizationKeys.presentation(for: normalizedStageKey) {
                                         helperStageTitleKey = localization.titleKey
@@ -191,6 +201,12 @@ extension UniversalInstallationView {
 
                                     if !result.success, let errorMessageText = result.errorMessage {
                                         logError("Helper zakończył się błędem: \(errorMessageText)", category: "Installation")
+                                    }
+                                    if isLinuxWorkflow {
+                                        log(
+                                            "LinuxInstallFlow: workflow zakończony (success=\(result.success ? "TAK" : "NIE"), cancelled=\(result.isUserCancelled ? "TAK" : "NIE"), failedStage=\(result.failedStage ?? "brak"))",
+                                            category: "LinuxInstallFlow"
+                                        )
                                     }
 
                                     releaseUSBProcessSleepBlockIfNeeded()
@@ -276,6 +292,10 @@ extension UniversalInstallationView {
     }
 
     private func prepareHelperWorkflowRequest(for drive: USBDrive) throws -> HelperWorkflowRequestPayload {
+        if isLinuxWorkflow {
+            return try prepareLinuxHelperWorkflowRequest(for: drive)
+        }
+
         let fileManager = FileManager.default
         let requesterUID = Int(getuid())
 
@@ -375,7 +395,7 @@ extension UniversalInstallationView {
         )
     }
 
-    private func resolveHelperTargetBSDName(for drive: USBDrive) -> String {
+    func resolveHelperTargetBSDName(for drive: USBDrive) -> String {
         if let resolved = USBDriveLogic.resolveFormattingWholeDiskBSDName(
             forVolumeURL: drive.url,
             fallbackBSDName: drive.device
@@ -631,6 +651,10 @@ extension UniversalInstallationView {
     }
 
     private func isTransferTrackedStage(_ stageKey: String) -> Bool {
+        if CreationProgressLinuxMapping.isTransferStage(stageKey) {
+            return true
+        }
+
         switch stageKey {
         case "restore", "ppc_restore", "createinstallmedia", "catalina_copy":
             return true
@@ -675,6 +699,11 @@ extension UniversalInstallationView {
                 if request.isCatalina {
                     totals["catalina_copy"] = appBytes
                 }
+            }
+
+        case .linux:
+            if let imageBytes = sizeInBytes(at: request.sourceAppPath) {
+                totals["linux_raw_copy"] = imageBytes
             }
         }
 
@@ -828,6 +857,11 @@ extension UniversalInstallationView {
     }
 
     private func canonicalStageKeyForPresentation(_ stageKey: String) -> String {
+        let linuxCanonical = CreationProgressLinuxMapping.canonicalStageKey(stageKey)
+        if linuxCanonical != stageKey {
+            return linuxCanonical
+        }
+
         switch stageKey {
         case "ditto", "catalina_ditto":
             return "catalina_copy"

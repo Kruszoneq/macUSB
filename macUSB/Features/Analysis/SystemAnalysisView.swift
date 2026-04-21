@@ -12,6 +12,7 @@ struct SystemAnalysisView: View {
     
     @State private var selectedDriveDisplayNameSnapshot: String? = nil
     @State private var selectedDriveForInstallationSnapshot: USBDrive? = nil
+    @State private var linuxFlowContextSnapshot: LinuxInstallationFlowContext? = nil
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
     @State private var analysisWindowHandler: AnalysisWindowHandler?
@@ -304,15 +305,16 @@ struct SystemAnalysisView: View {
 
     private var navigationBackgroundLink: some View {
         Group {
-            if let appURL = logic.sourceAppURL {
+            if let sourceURL = logic.sourceAppURL ?? logic.linuxInstallationFlowContext?.sourceImageURL {
                 NavigationLink(
                     destination: UniversalInstallationView(
-                        sourceAppURL: appURL,
+                        sourceAppURL: sourceURL,
                         targetDrive: selectedDriveForInstallationSnapshot,
                         targetDriveDisplayName: selectedDriveDisplayNameSnapshot,
                         systemName: logic.recognizedVersion,
                         detectedSystemIcon: logic.detectedSystemIcon,
                         originalImageURL: logic.selectedFileUrl,
+                        linuxFlowContext: linuxFlowContextSnapshot,
                         needsCodesign: logic.needsCodesign,
                         isLegacySystem: logic.isLegacyDetected,
                         isRestoreLegacy: logic.isRestoreLegacy,
@@ -348,7 +350,8 @@ struct SystemAnalysisView: View {
     }
 
     private var canUseUSBSelection: Bool {
-        ((logic.sourceAppURL != nil) || logic.isPPC) && (logic.isSystemDetected || logic.isPPC || logic.isMavericks)
+        ((logic.sourceAppURL != nil) || logic.isPPC || logic.isLinuxDetected)
+            && (logic.isSystemDetected || logic.isPPC || logic.isMavericks || logic.isLinuxDetected)
     }
 
     private var isAPFSSelected: Bool {
@@ -398,6 +401,7 @@ struct SystemAnalysisView: View {
                 Button(action: {
                     selectedDriveDisplayNameSnapshot = logic.selectedDrive?.displayName
                     selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
+                    linuxFlowContextSnapshot = logic.linuxInstallationFlowContext
                     isTabLocked = true
                     navigateToInstall = true
                 }) {
@@ -421,6 +425,7 @@ struct SystemAnalysisView: View {
             navigateToInstall = false
             selectedDriveDisplayNameSnapshot = nil
             selectedDriveForInstallationSnapshot = nil
+            linuxFlowContextSnapshot = nil
             MenuState.shared.skipAnalysisEnabled = false
         }
         .onChange(of: logic.showUnsupportedMessage) { _ in updateMenuState() }

@@ -4068,6 +4068,9 @@
         }
       }
     },
+    "Brak źródła obrazu Linux do utworzenia nośnika USB." : {
+
+    },
     "Cały proces może potrwać kilka minut." : {
       "localizations" : {
         "de" : {
@@ -10871,7 +10874,6 @@
       }
     },
     "Lokalizacja aplikacji: poza /Applications" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

@@ -4,11 +4,11 @@ This document defines Linux-source detection behavior in `SystemAnalysisView` an
 
 ## Scope
 
-Linux detection is a fallback path in analysis only.
+Linux detection is a fallback path in analysis, with install handoff enabled.
 
 - Primary path remains macOS installer detection.
 - Linux path runs when macOS installer metadata is not detected from `.iso` / `.cdr` sources.
-- Linux detection does **not** unlock USB creation flow.
+- Positive Linux detection unlocks USB selection and installer creation flow.
 
 ## Trigger and Entry
 
@@ -78,15 +78,18 @@ Display format:
 - unknown distro: `Linux - nierozpoznana dystrybucja`
 - if ARM detected: append ` (ARM)`
 
-Linux recognition is shown as successful detection in analysis UI, but proceed/install path remains blocked:
+Linux recognition is shown as successful detection in analysis UI and enables install handoff:
 
-- no `sourceAppURL` assignment,
-- USB selection/proceed remains unavailable,
-- no installation workflow is started for Linux.
-- required USB capacity is still computed from source file size for diagnostics and consistency:
-  - source size `<= 6_000_000_000` bytes -> `8 GB`,
-  - source size `> 6_000_000_000` and `<= 14_000_000_000` bytes -> `16 GB`,
-  - source size `> 14_000_000_000` bytes -> `32 GB`.
+- `linuxSourceURL` is assigned,
+- USB selection/proceed is available after capacity/APFS validation,
+- installation workflow starts from shared summary/progress/finish UI,
+- Linux helper branch uses raw copy (`dd`) stages.
+
+Required USB capacity is computed from source file size:
+
+- source size `<= 6_000_000_000` bytes -> `8 GB`,
+- source size `> 6_000_000_000` and `<= 14_000_000_000` bytes -> `16 GB`,
+- source size `> 14_000_000_000` bytes -> `32 GB`.
 
 Linux detected state uses icon fallback chain:
 
@@ -123,10 +126,10 @@ Mount lifecycle behavior remains aligned with existing analysis behavior:
 
 ## Non-goals
 
-- No Linux installer creation support.
-- No Linux helper workflow changes.
+- No Linux distro-specific installer customization.
+- No persistent storage configuration for Linux media.
 - No distro icon extraction from ISO.
 
 ## Update Trigger
 
-Update this file when Linux detection heuristics, fallback routing, display format, or gating rules change.
+Update this file when Linux detection heuristics, fallback routing, display format, or install-gating rules change.

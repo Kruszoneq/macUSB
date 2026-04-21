@@ -33,6 +33,18 @@
 - `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicLinuxArchitecture.swift` — Linux architecture normalization and ARM flag mapping.
 - `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicLinuxDisplayName.swift` — final Linux display-name formatting policy.
 - `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicLinuxLifecycle.swift` — Linux state reset/apply helpers.
+- `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicLinuxInstallationHandoff.swift` — Linux install context handoff for USB creation flow.
+
+### Installation layout
+
+- `macUSB/Features/Installation/UniversalInstallationView.swift` — shared summary screen before start.
+- `macUSB/Features/Installation/CreationProgressView.swift` — shared stage/progress UI.
+- `macUSB/Features/Installation/CreatorLogic.swift` — shared install actions/cancel/cleanup orchestration.
+- `macUSB/Features/Installation/CreatorHelperLogic.swift` — shared helper workflow orchestration and transfer metrics.
+- `macUSB/Features/Installation/Linux/LinuxInstallationFlowContext.swift` — Linux flow context payload.
+- `macUSB/Features/Installation/Linux/CreatorLinuxLogic.swift` — Linux-specific summary/cleanup helpers.
+- `macUSB/Features/Installation/Linux/CreatorLinuxHelperLogic.swift` — Linux helper request construction and start routing.
+- `macUSB/Features/Installation/Linux/CreationProgressLinuxMapping.swift` — Linux stage mapping for shared progress UI.
 
 ### Analysis docs
 
@@ -62,6 +74,7 @@
 - `macUSBHelper/IPC/*`
 - `macUSBHelper/Service/*`
 - `macUSBHelper/Workflow/*`
+- `macUSBHelper/Workflow/Linux/*` — Linux raw-copy stage builder, parser, and disk ops.
 - `macUSBHelper/DownloaderAssembly/*`
 
 ## Localization catalog

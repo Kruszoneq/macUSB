@@ -171,6 +171,9 @@ extension HelperWorkflowExecutor {
                 sourcePath: effectiveAppURL.path,
                 postInstallSourceAppPath: postInstallSourcePath
             )
+
+        case .linux:
+            context = try prepareLinuxWorkflowContext()
         }
 
         emitProgress(
@@ -362,6 +365,9 @@ extension HelperWorkflowExecutor {
                     )
                 )
             }
+
+        case .linux:
+            stages.append(contentsOf: try buildLinuxWorkflowStages(using: context))
         }
 
         return stages

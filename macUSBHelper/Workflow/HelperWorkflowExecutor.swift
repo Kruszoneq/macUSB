@@ -12,6 +12,7 @@ final class HelperWorkflowExecutor {
     var activeProcess: Process?
     var latestPercent: Double = 0
     var lastStageOutputLine: String?
+    var linuxSourceImageSizeBytes: Int64?
 
     init(request: HelperWorkflowRequestPayload, workflowID: String, sendEvent: @escaping (HelperProgressEventPayload) -> Void) {
         self.request = request

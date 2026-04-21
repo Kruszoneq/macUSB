@@ -290,6 +290,7 @@ When branch creation is requested:
 - Use a clear title/summary line plus a readable body written as a paragraph describing the change.
 - Base commit title and body on the full scope of changes since the last commit up to the commit being created, not only on the most recent edit made with the agent.
 - Keep commit bodies concise and summarized (short paragraph), while still covering the key scope of the full change set.
+- Keep commit bodies short by default: one short paragraph, ideally 1-2 sentences.
 - Do not use escaped newline sequences like `\n` in commit message text; use normal multi-line commit formatting only.
 - When creating commits from CLI, never pass `\n` inside a single `-m` value; use separate `-m` flags (title + body) or standard multi-line commit input.
 - If a commit includes updates to runtime reference docs under `docs/reference/`, `docs/CHANGELOG.md`, and/or `docs/AGENTS.md`, do not explicitly enumerate those documentation-file updates in the commit title or commit body.

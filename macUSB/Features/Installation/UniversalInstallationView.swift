@@ -11,6 +11,7 @@ struct UniversalInstallationView: View {
     let systemName: String
     let detectedSystemIcon: NSImage?
     let originalImageURL: URL?
+    let linuxFlowContext: LinuxInstallationFlowContext?
     
     // Flagi
     let needsCodesign: Bool
@@ -397,7 +398,7 @@ struct UniversalInstallationView: View {
                             return self.isCancelled
                         },
                         onCleanup: {
-                            self.performEmergencyCleanup(mountPoint: sourceAppURL.deletingLastPathComponent(), tempURL: tempWorkURL)
+                            self.performEmergencyCleanupIfNeeded(tempURL: tempWorkURL)
                         }
                     )
                     window.delegate = handler
@@ -409,12 +410,14 @@ struct UniversalInstallationView: View {
             NavigationLink(
                 destination: CreationProgressView(
                     systemName: systemName,
-                    mountPoint: sourceAppURL.deletingLastPathComponent(),
+                    mountPoint: effectiveMountPointForCreation,
                     detectedSystemIcon: detectedSystemIcon,
                     isCatalina: isCatalina,
                     isRestoreLegacy: isRestoreLegacy,
                     isMavericks: isMavericks,
                     isPPC: isPPC,
+                    isLinuxWorkflow: isLinuxWorkflow,
+                    shouldDetachMountPoint: shouldDetachMountPointAfterFinish,
                     needsPreformat: (targetDrive?.needsFormatting ?? false) && !isPPC,
                     onReset: {
                         NotificationCenter.default.post(name: .macUSBResetToStart, object: nil)

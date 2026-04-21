@@ -26,6 +26,10 @@ enum HelperWorkflowLocalizationKeys {
 
     static let createinstallmediaTitle = "helper.workflow.createinstallmedia.title"
     static let createinstallmediaStatus = "helper.workflow.createinstallmedia.status"
+    static let linuxUnmountTargetTitle = preformatTitle
+    static let linuxUnmountTargetStatus = "Odmontowywanie wybranego nośnika USB."
+    static let linuxRawCopyTitle = restoreTitle
+    static let linuxRawCopyStatus = "Przenoszenie obrazu systemu Linux na wybrany nośnik USB."
 
     static let catalinaCleanupTitle = "helper.workflow.catalina_cleanup.title"
     static let catalinaCleanupStatus = "helper.workflow.catalina_cleanup.status"
@@ -56,6 +60,10 @@ enum HelperWorkflowLocalizationKeys {
             return HelperWorkflowStageLocalization(titleKey: ppcRestoreTitle, statusKey: ppcRestoreStatus)
         case "createinstallmedia":
             return HelperWorkflowStageLocalization(titleKey: createinstallmediaTitle, statusKey: createinstallmediaStatus)
+        case "linux_unmount_target":
+            return HelperWorkflowStageLocalization(titleKey: linuxUnmountTargetTitle, statusKey: linuxUnmountTargetStatus)
+        case "linux_raw_copy":
+            return HelperWorkflowStageLocalization(titleKey: linuxRawCopyTitle, statusKey: linuxRawCopyStatus)
         case "catalina_cleanup":
             return HelperWorkflowStageLocalization(titleKey: catalinaCleanupTitle, statusKey: catalinaCleanupStatus)
         case "catalina_copy":
