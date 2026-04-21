@@ -145,7 +145,7 @@ struct SystemAnalysisView: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Wymagania").font(.headline).foregroundColor(.primary)
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("• Wybrany plik musi zawierać instalator systemu macOS lub Mac OS X")
+                        Text("• Wybrany plik musi zawierać instalator macOS, Mac OS X lub Linux")
                         Text("• Dozwolone formaty plików to .dmg, .iso, .cdr oraz .app")
                         Text("• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym")
                         Text("• Brak instalatora? Użyj przycisku „Pobierz”")

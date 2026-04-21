@@ -7,6 +7,9 @@ Before installer recognition completes, required size in UI is unresolved (`-- G
 Thresholds:
 - major version `<= 14`: UI `16 GB`, technical threshold `15_000_000_000` bytes
 - major version `>= 15`: UI `32 GB`, technical threshold `28_000_000_000` bytes
+- Linux source size `<= 6_000_000_000` bytes: UI `8 GB`, technical threshold `6_000_000_000` bytes
+- Linux source size `> 6_000_000_000` and `<= 14_000_000_000` bytes: UI `16 GB`, technical threshold `15_000_000_000` bytes
+- Linux source size `> 14_000_000_000` bytes: UI `32 GB`, technical threshold `28_000_000_000` bytes
 
 Proceed must remain blocked until selected target passes validation.
 

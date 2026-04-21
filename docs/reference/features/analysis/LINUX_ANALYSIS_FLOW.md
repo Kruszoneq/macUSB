@@ -83,6 +83,10 @@ Linux recognition is shown as successful detection in analysis UI, but proceed/i
 - no `sourceAppURL` assignment,
 - USB selection/proceed remains unavailable,
 - no installation workflow is started for Linux.
+- required USB capacity is still computed from source file size for diagnostics and consistency:
+  - source size `<= 6_000_000_000` bytes -> `8 GB`,
+  - source size `> 6_000_000_000` and `<= 14_000_000_000` bytes -> `16 GB`,
+  - source size `> 14_000_000_000` bytes -> `32 GB`.
 
 Linux detected state uses icon fallback chain:
 
@@ -99,6 +103,8 @@ When Linux fallback runs, logs must include:
 - transition entry from mounted Linux detection to archive (`bsdtar`) fallback when needed,
 - final Linux result string,
 - parsed details: `distro`, `version`, `edition`, `arch`, `isARM`,
+- source file size in bytes (when available),
+- selected USB threshold in GB only,
 - evidence summary (files/rules that produced the result),
 - archive-reader diagnostics for timeout/error cases.
 

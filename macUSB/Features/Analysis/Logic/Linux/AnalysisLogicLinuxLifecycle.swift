@@ -86,6 +86,16 @@ private enum LinuxDistroIconCatalog {
 }
 
 extension AnalysisLogic {
+    private func linuxRequiredUSBCapacityGB(fromFileSizeBytes fileSizeBytes: Int64) -> Int {
+        if fileSizeBytes > 14_000_000_000 {
+            return 32
+        }
+        if fileSizeBytes > 6_000_000_000 {
+            return 16
+        }
+        return 8
+    }
+
     private func loadLinuxDetectedSystemIcon(for distro: String?) -> NSImage? {
         if let distro, let distroIcon = loadLinuxDistroIcon(for: distro) {
             self.log("Załadowano ikonę Linux distro: \(distro)")
@@ -227,7 +237,17 @@ extension AnalysisLogic {
         self.isPPC = false
         self.legacyArchInfo = nil
         self.userSkippedAnalysis = false
-        self.requiredUSBCapacityGB = nil
+        if let values = try? sourceURL.resourceValues(forKeys: [.fileSizeKey]),
+           let fileSize = values.fileSize {
+            let fileSizeBytes = Int64(fileSize)
+            let requiredGB = linuxRequiredUSBCapacityGB(fromFileSizeBytes: fileSizeBytes)
+            self.requiredUSBCapacityGB = requiredGB
+            self.log("Linux source size: \(fileSizeBytes) bytes")
+            self.log("Linux required USB threshold: \(requiredGB) GB")
+        } else {
+            self.requiredUSBCapacityGB = nil
+            self.logError("Nie udało się odczytać rozmiaru pliku Linux. Minimalna pojemność USB pozostaje nierozstrzygnięta (-- GB).")
+        }
 
         self.log("Rozpoznano obraz Linux: \(result.displayName)")
         self.log("Linux source file: \(sourceURL.path)")
