@@ -209,7 +209,11 @@ struct UniversalInstallationView: View {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Przebieg procesu").font(.headline)
                                 VStack(alignment: .leading, spacing: 4) {
-                                    if isRestoreLegacy {
+                                    if isLinuxWorkflow {
+                                        Text("• Pliki obrazu Linux zostaną przygotowane")
+                                        Text("• Wybrany nośnik USB zostanie odmontowany")
+                                        Text("• Obraz Linux zostanie zapisany na nośniku USB")
+                                    } else if isRestoreLegacy {
                                         Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
                                         Text("• Nośnik USB zostanie sformatowany")
                                         Text("• Obraz systemu zostanie przywrócony")
