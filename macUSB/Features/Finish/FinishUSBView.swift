@@ -10,6 +10,7 @@ struct FinishUSBView: View {
     let mountPoint: URL
     let onReset: () -> Void
     let isPPC: Bool
+    let isLinuxWorkflow: Bool
     let didFail: Bool
     let didCancel: Bool
     let creationStartedAt: Date?
@@ -29,6 +30,7 @@ struct FinishUSBView: View {
         mountPoint: URL,
         onReset: @escaping () -> Void,
         isPPC: Bool,
+        isLinuxWorkflow: Bool = false,
         didFail: Bool,
         didCancel: Bool = false,
         creationStartedAt: Date? = nil,
@@ -40,6 +42,7 @@ struct FinishUSBView: View {
         self.mountPoint = mountPoint
         self.onReset = onReset
         self.isPPC = isPPC
+        self.isLinuxWorkflow = isLinuxWorkflow
         self.didFail = didFail
         self.didCancel = didCancel
         self.creationStartedAt = creationStartedAt
@@ -89,6 +92,7 @@ struct FinishUSBView: View {
     private var summaryTitleText: String {
         if isCancelledResult { return String(localized: "Tworzenie nośnika zostało przerwane") }
         if isFailedResult { return String(localized: "Tworzenie instalatora nie powiodło się") }
+        if isLinuxWorkflow { return String(localized: "Utworzono nośnik startowy Linux") }
         return String(localized: "Utworzono instalator systemu")
     }
     
@@ -141,11 +145,17 @@ struct FinishUSBView: View {
                             HStack(alignment: .top) {
                                 Image(systemName: "info.circle.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 10) {
-                                    Text("Co teraz?").font(.headline).foregroundColor(.primary)
+                                    Text(isLinuxWorkflow ? "Co dalej?" : "Co teraz?").font(.headline).foregroundColor(.primary)
                                     VStack(alignment: .leading, spacing: 5) {
-                                        Text("• Podłącz nośnik USB do docelowego komputera Mac")
-                                        Text("• Uruchom komputer trzymając przycisk Option (⌥)")
-                                        Text("• Wybierz instalator systemu macOS lub OS X z listy")
+                                        if isLinuxWorkflow {
+                                            Text("• Podłącz nośnik USB do komputera docelowego (Mac lub PC)")
+                                            Text("• Uruchom komputer i wybierz rozruch z nośnika USB w menu startowym")
+                                            Text("• Po uruchomieniu Linuxa postępuj zgodnie z instrukcjami instalatora systemu")
+                                        } else {
+                                            Text("• Podłącz nośnik USB do docelowego komputera Mac")
+                                            Text("• Uruchom komputer trzymając przycisk Option (⌥)")
+                                            Text("• Wybierz instalator systemu macOS lub OS X z listy")
+                                        }
                                     }
                                     .font(.subheadline).foregroundColor(.secondary)
                                 }

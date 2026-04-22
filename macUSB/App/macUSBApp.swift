@@ -407,6 +407,9 @@ struct macUSBApp: App {
                 Button(String(localized: "Przejdź do podsumowania (Tiger) (2s delay)")) {
                     NotificationCenter.default.post(name: .macUSBDebugGoToTigerSummary, object: nil)
                 }
+                Button(String(localized: "Przejdź do podsumowania Linux (2s delay)")) {
+                    NotificationCenter.default.post(name: .macUSBDebugGoToLinuxSummary, object: nil)
+                }
                 Divider()
                 Button(String(localized: "Otwórz macUSB_temp")) {
                     openMacUSBTempFolderInFinder()

@@ -166,6 +166,7 @@ struct CreationProgressView: View {
                     mountPoint: mountPoint,
                     onReset: onReset,
                     isPPC: isPPC,
+                    isLinuxWorkflow: isLinuxWorkflow,
                     didFail: helperOperationFailed,
                     didCancel: didCancelCreation,
                     creationStartedAt: creationStartedAt,

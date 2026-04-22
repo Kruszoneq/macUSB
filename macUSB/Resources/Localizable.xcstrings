@@ -1156,6 +1156,82 @@
         }
       }
     },
+    "• Po uruchomieniu Linuxa postępuj zgodnie z instrukcjami instalatora systemu" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Folgen Sie nach dem Start von Linux den Anweisungen des Installationsprogramms"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• After Linux starts, follow the installer instructions"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Después de iniciar Linux, sigue las instrucciones del instalador del sistema"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Une fois Linux démarré, suivez les instructions du programme d’installation du système"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Dopo l’avvio di Linux, segui le istruzioni del programma di installazione del sistema"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linuxが起動したら、システムインストーラの案内に従ってください"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Após iniciar o Linux, siga as instruções do instalador do sistema"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• После запуска Linux следуйте инструкциям установщика системы"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linux başlatıldıktan sonra sistem yükleyicisinin yönergelerini izleyin"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Після запуску Linux дотримуйтеся інструкцій інсталятора системи"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Sau khi Linux khởi động, hãy làm theo hướng dẫn của trình cài đặt hệ thống"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linux 启动后，请按照安装程序的说明进行操作"
+          }
+        }
+      }
+    },
     "• Podłącz nośnik USB do docelowego komputera Mac" : {
       "localizations" : {
         "de" : {
@@ -1232,6 +1308,82 @@
         }
       }
     },
+    "• Podłącz nośnik USB do komputera docelowego (Mac lub PC)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Schließen Sie das USB-Laufwerk an den Zielcomputer an (Mac oder PC)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Connect the USB drive to the target computer (Mac or PC)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Conecta la unidad USB al equipo de destino (Mac o PC)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Connectez le support USB à l’ordinateur cible (Mac ou PC)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Collega l’unità USB al computer di destinazione (Mac o PC)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• USBドライブを対象のコンピュータ（MacまたはPC）に接続します"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Conecte a unidade USB ao computador de destino (Mac ou PC)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Подключите USB-накопитель к целевому компьютеру (Mac или ПК)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• USB sürücüsünü hedef bilgisayara bağlayın (Mac veya PC)"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Підключіть USB-накопичувач до цільового комп’ютера (Mac або ПК)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Kết nối ổ USB với máy tính đích (Mac hoặc PC)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 将 USB 驱动器连接到目标电脑（Mac 或 PC）"
+          }
+        }
+      }
+    },
     "• Struktura instalatora zostanie sfinalizowana" : {
       "localizations" : {
         "de" : {
@@ -1304,6 +1456,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• 安装器结构将被完成"
+          }
+        }
+      }
+    },
+    "• Uruchom komputer i wybierz rozruch z nośnika USB w menu startowym" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Starten Sie den Computer und wählen Sie im Startmenü den Start vom USB-Laufwerk"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Start the computer and choose to boot from the USB drive in the boot menu"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Inicia el ordenador y elige arrancar desde la unidad USB en el menú de arranque"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Démarrez l’ordinateur et choisissez le démarrage depuis le support USB dans le menu de démarrage"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Avvia il computer e seleziona l’avvio dall’unità USB nel menu di avvio"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• コンピュータを起動し、起動メニューでUSBドライブからの起動を選択します"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Inicie o computador e selecione a inicialização pela unidade USB no menu de inicialização"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Запустите компьютер и выберите загрузку с USB-накопителя в меню загрузки"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Bilgisayarı başlatın ve önyükleme menüsünde USB sürücüsünden önyüklemeyi seçin"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Запустіть комп’ютер і виберіть завантаження з USB-накопичувача в меню завантаження"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Khởi động máy tính và chọn khởi động từ ổ USB trong menu khởi động"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 启动电脑，并在启动菜单中选择从 USB 驱动器启动"
           }
         }
       }
@@ -4371,6 +4599,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "整个过程可能需要几分钟。"
+          }
+        }
+      }
+    },
+    "Co dalej?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie geht es weiter?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What’s next?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué sigue?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Et ensuite ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E adesso?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次は何をしますか？"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O que fazer agora?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Что дальше?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sırada ne var?"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Що далі?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiếp theo là gì?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "接下来做什么？"
           }
         }
       }
@@ -28410,6 +28714,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "系统安装器已创建"
+          }
+        }
+      }
+    },
+    "Utworzono nośnik startowy Linux" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux-Startmedium erstellt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux bootable media created"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se creó el medio de arranque de Linux"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le support de démarrage Linux a été créé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supporto di avvio Linux creato"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux起動メディアが作成されました"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A mídia de inicialização do Linux foi criada"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Загрузочный носитель Linux создан"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux önyükleme ortamı oluşturuldu"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завантажувальний носій Linux створено"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã tạo phương tiện khởi động Linux"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux 启动介质已创建"
           }
         }
       }

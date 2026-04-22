@@ -5,6 +5,7 @@ extension Notification.Name {
     static let macUSBStartTigerMultiDVD = Notification.Name("macUSB.startTigerMultiDVD")
     static let macUSBDebugGoToBigSurSummary = Notification.Name("macUSB.debugGoToBigSurSummary")
     static let macUSBDebugGoToTigerSummary = Notification.Name("macUSB.debugGoToTigerSummary")
+    static let macUSBDebugGoToLinuxSummary = Notification.Name("macUSB.debugGoToLinuxSummary")
     static let macUSBNavigateToAnalysis = Notification.Name("macUSB.navigateToAnalysis")
     static let macUSBApplyPendingDownloaderInstaller = Notification.Name("macUSB.applyPendingDownloaderInstaller")
 }
