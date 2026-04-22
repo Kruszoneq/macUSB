@@ -42,6 +42,8 @@ final class AnalysisLogic: ObservableObject {
     @Published var linuxSourceURL: URL? = nil
 
     @Published var availableDrives: [USBDrive] = []
+    @Published var hasUnreadableExternalUSBMedia: Bool = false
+    @Published var unreadableExternalUSBMediaCount: Int = 0
     @Published var selectedDrive: USBDrive? {
         didSet {
             // Log only when the detected/selected drive actually changes
@@ -87,6 +89,9 @@ final class AnalysisLogic: ObservableObject {
     @Published var isCapacitySufficient: Bool = false
     @Published var capacityCheckFinished: Bool = false
     @Published var requiredUSBCapacityGB: Int? = nil
+    var lastUnreadableUSBDetectionDate: Date = .distantPast
+    let unreadableUSBDetectionInterval: TimeInterval = 2.5
+    var isUnreadableUSBDetectionRunning: Bool = false
 
     var requiredUSBCapacityDisplayValue: String {
         requiredUSBCapacityGB.map(String.init) ?? "--"

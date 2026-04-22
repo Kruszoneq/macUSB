@@ -92,6 +92,10 @@ extension AnalysisLogic {
 
                 self.availableDrives = []
                 self.selectedDrive = nil
+                self.hasUnreadableExternalUSBMedia = false
+                self.unreadableExternalUSBMediaCount = 0
+                self.lastUnreadableUSBDetectionDate = .distantPast
+                self.isUnreadableUSBDetectionRunning = false
 
                 self.isCapacitySufficient = false
                 self.capacityCheckFinished = false

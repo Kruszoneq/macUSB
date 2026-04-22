@@ -388,8 +388,6 @@ struct SystemAnalysisView: View {
                         Spacer().frame(height: 12)
                         usbSelectionSection
                             .id("usbSection")
-                            .disabled(!canUseUSBSelection)
-                            .opacity(canUseUSBSelection ? 1.0 : 0.5)
                     }
                     .padding(.horizontal, MacUSBDesignTokens.contentHorizontalPadding)
                     .padding(.vertical, MacUSBDesignTokens.contentVerticalPadding)
@@ -462,6 +460,50 @@ struct SystemAnalysisView: View {
     }
     
     var usbSelectionSection: some View {
+        SystemAnalysisUSBSectionView(
+            logic: logic,
+            sectionIconFont: sectionIconFont,
+            onOpenDiskUtility: openDiskUtility,
+            isSelectionEnabled: canUseUSBSelection
+        )
+    }
+}
+
+struct SystemAnalysisUSBSectionView: View {
+    @ObservedObject var logic: AnalysisLogic
+    let sectionIconFont: Font
+    let onOpenDiskUtility: () -> Void
+    let isSelectionEnabled: Bool
+
+    private var isAPFSSelected: Bool {
+        logic.selectedDrive?.fileSystemFormat == .apfs
+    }
+
+    private var unreadableUSBDescription: String {
+        if logic.unreadableExternalUSBMediaCount > 1 {
+            return String(localized: "Do Maca są podłączone zewnętrzne nośniki USB, których macOS nie może odczytać. Otwórz Narzędzie dyskowe i wymaż je do formatu obsługiwanego przez macOS, a następnie wybierz nośnik ponownie.")
+        }
+
+        return String(localized: "Do Maca jest podłączony zewnętrzny nośnik USB, którego macOS nie może odczytać. Otwórz Narzędzie dyskowe i wymaż nośnik do formatu obsługiwanego przez macOS, a następnie wybierz go ponownie.")
+    }
+
+    private func sectionDivider(_ title: LocalizedStringKey) -> some View {
+        HStack(spacing: 10) {
+            Capsule()
+                .fill(Color.secondary.opacity(0.20))
+                .frame(height: 1)
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Capsule()
+                .fill(Color.secondary.opacity(0.20))
+                .frame(height: 1)
+        }
+        .padding(.horizontal, 2)
+        .padding(.vertical, 2)
+    }
+
+    var body: some View {
         VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
             sectionDivider("Wybór nośnika USB")
             StatusCard(tone: .neutral, density: .compact) {
@@ -483,10 +525,10 @@ struct SystemAnalysisView: View {
                     }
                 }
             }
-            
+
             VStack(alignment: .leading, spacing: 10) {
                 Text("Wybierz docelowy nośnik USB:").font(.subheadline)
-                if logic.availableDrives.isEmpty {
+                if logic.availableDrives.isEmpty && !logic.hasUnreadableExternalUSBMedia {
                     StatusCard(tone: .error, density: .compact) {
                         HStack {
                             Image(systemName: "externaldrive.badge.xmark").font(sectionIconFont).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
@@ -496,7 +538,7 @@ struct SystemAnalysisView: View {
                             }
                         }
                     }
-                } else {
+                } else if !logic.availableDrives.isEmpty {
                     HStack {
                         Picker("", selection: $logic.selectedDrive) {
                             Text("Wybierz...").tag(nil as USBDrive?)
@@ -507,8 +549,51 @@ struct SystemAnalysisView: View {
                     }
                 }
             }
+            .disabled(!isSelectionEnabled)
+            .opacity(isSelectionEnabled ? 1.0 : 0.5)
             .onChange(of: logic.selectedDrive) { _ in logic.checkCapacity() }
-            
+
+            if logic.hasUnreadableExternalUSBMedia {
+                StatusCard(tone: .warning, density: .compact) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack(alignment: .top, spacing: 10) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .font(sectionIconFont)
+                                .foregroundColor(.orange)
+                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Wykryto nieczytelny nośnik USB")
+                                    .font(.headline)
+                                    .foregroundColor(.orange)
+
+                                Text(unreadableUSBDescription)
+                                    .font(.subheadline)
+                                    .foregroundColor(.orange.opacity(0.85))
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+
+                            Spacer(minLength: 0)
+                        }
+
+                        Button(action: onOpenDiskUtility) {
+                            HStack(spacing: 8) {
+                                Image(systemName: "externaldrive")
+                                Text("Otwórz Narzędzie dyskowe")
+                            }
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .foregroundColor(.orange)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .macUSBSecondaryButtonStyle()
+                        .tint(.orange)
+                    }
+                }
+                .transition(.opacity)
+            }
+
             if logic.selectedDrive != nil {
                 if isAPFSSelected {
                     StatusCard(tone: .error, density: .compact) {

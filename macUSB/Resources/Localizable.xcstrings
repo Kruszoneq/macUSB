@@ -10874,6 +10874,7 @@
       }
     },
     "Lokalizacja aplikacji: poza /Applications" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -30716,6 +30717,252 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "检测到兼容的安装器"
+          }
+        }
+      }
+    },
+    "Wykryto nieczytelny nośnik USB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht lesbares USB-Medium erkannt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unreadable USB media detected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se detectó un medio USB ilegible"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support USB illisible détecté"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rilevato supporto USB illeggibile"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読み取れないUSBメディアを検出しました"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wykryto nieczytelny nośnik USB"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mídia USB ilegível detectada"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обнаружен нечитаемый USB-носитель"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okunamayan USB ortam algılandı"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Виявлено нечитабельний USB-носій"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã phát hiện thiết bị USB không thể đọc"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检测到无法读取的 USB 介质"
+          }
+        }
+      }
+    },
+    "Do Maca jest podłączony zewnętrzny nośnik USB, którego macOS nie może odczytać. Otwórz Narzędzie dyskowe i wymaż nośnik do formatu obsługiwanego przez macOS, a następnie wybierz go ponownie." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An den Mac ist ein externes USB-Medium angeschlossen, das von macOS nicht gelesen werden kann. Öffnen Sie das Festplattendienstprogramm, löschen Sie das Medium in ein von macOS unterstütztes Format und wählen Sie es anschließend erneut aus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An external USB drive is connected to your Mac, but macOS can’t read it. Open Disk Utility, erase the drive to a macOS-supported format, then select it again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hay un medio USB externo conectado al Mac que macOS no puede leer. Abre Utilidad de Discos, bórralo con un formato compatible con macOS y luego selecciónalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un support USB externe est connecté au Mac, mais macOS ne peut pas le lire. Ouvrez Utilitaire de disque, effacez le support dans un format pris en charge par macOS, puis sélectionnez-le à nouveau."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al Mac è collegato un supporto USB esterno che macOS non riesce a leggere. Apri Utility Disco, inizializza il supporto in un formato supportato da macOS, quindi selezionalo di nuovo."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac に外部 USB メディアが接続されていますが、macOS では読み取れません。ディスクユーティリティを開き、macOS が対応するフォーマットでメディアを消去してから、もう一度選択してください。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do Maca jest podłączony zewnętrzny nośnik USB, którego macOS nie może odczytać. Otwórz Narzędzie dyskowe i wymaż nośnik do formatu obsługiwanego przez macOS, a następnie wybierz go ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Há uma mídia USB externa conectada ao Mac que o macOS não consegue ler. Abra o Utilitário de Disco, apague a mídia em um formato compatível com o macOS e selecione-a novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "К Mac подключен внешний USB-носитель, который macOS не может прочитать. Откройте Дисковую утилиту, сотрите носитель в формат, поддерживаемый macOS, затем выберите его снова."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac'e bağlı, macOS'in okuyamadığı bir harici USB ortamı var. Disk İzlencesi'ni açın, ortamı macOS tarafından desteklenen bir biçimde silin ve ardından tekrar seçin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "До Mac підключено зовнішній USB-носій, який macOS не може прочитати. Відкрийте Disk Utility, зітріть носій у формат, що підтримується macOS, а потім виберіть його знову."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Có thiết bị USB ngoài đang được kết nối với máy Mac nhưng macOS không thể đọc. Hãy mở Tiện ích Ổ đĩa, xóa thiết bị sang định dạng được macOS hỗ trợ, rồi chọn lại."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac 已连接外部 USB 介质，但 macOS 无法读取。请打开“磁盘工具”，将该介质抹掉为 macOS 支持的格式，然后重新选择。"
+          }
+        }
+      }
+    },
+    "Do Maca są podłączone zewnętrzne nośniki USB, których macOS nie może odczytać. Otwórz Narzędzie dyskowe i wymaż je do formatu obsługiwanego przez macOS, a następnie wybierz nośnik ponownie." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An den Mac sind externe USB-Medien angeschlossen, die von macOS nicht gelesen werden können. Öffnen Sie das Festplattendienstprogramm, löschen Sie sie in ein von macOS unterstütztes Format und wählen Sie anschließend das Medium erneut aus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "External USB drives are connected to your Mac, but macOS can’t read them. Open Disk Utility, erase them to a macOS-supported format, then select the drive again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hay medios USB externos conectados al Mac que macOS no puede leer. Abre Utilidad de Discos, bórralos con un formato compatible con macOS y luego vuelve a seleccionar la unidad."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Des supports USB externes sont connectés au Mac, mais macOS ne peut pas les lire. Ouvrez Utilitaire de disque, effacez-les dans un format pris en charge par macOS, puis sélectionnez de nouveau le support."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al Mac sono collegati supporti USB esterni che macOS non riesce a leggere. Apri Utility Disco, inizializzali in un formato supportato da macOS, quindi seleziona di nuovo il supporto."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac に外部 USB メディアが接続されていますが、macOS では読み取れません。ディスクユーティリティを開き、macOS が対応するフォーマットでそれらを消去してから、メディアをもう一度選択してください。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do Maca są podłączone zewnętrzne nośniki USB, których macOS nie może odczytać. Otwórz Narzędzie dyskowe i wymaż je do formatu obsługiwanego przez macOS, a następnie wybierz nośnik ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Há mídias USB externas conectadas ao Mac que o macOS não consegue ler. Abra o Utilitário de Disco, apague-as em um formato compatível com o macOS e depois selecione a unidade novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "К Mac подключены внешние USB-носители, которые macOS не может прочитать. Откройте Дисковую утилиту, сотрите их в формат, поддерживаемый macOS, затем снова выберите носитель."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac'e bağlı, macOS'in okuyamadığı harici USB ortamları var. Disk İzlencesi'ni açın, bunları macOS tarafından desteklenen bir biçimde silin ve ardından ortamı tekrar seçin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "До Mac підключено зовнішні USB-носії, які macOS не може прочитати. Відкрийте Disk Utility, зітріть їх у формат, що підтримується macOS, а потім знову виберіть носій."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Có các thiết bị USB ngoài được kết nối với máy Mac nhưng macOS không thể đọc. Hãy mở Tiện ích Ổ đĩa, xóa chúng sang định dạng được macOS hỗ trợ, rồi chọn lại thiết bị."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac 已连接外部 USB 介质，但 macOS 无法读取。请打开“磁盘工具”，将这些介质抹掉为 macOS 支持的格式，然后重新选择该介质。"
           }
         }
       }

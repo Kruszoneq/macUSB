@@ -46,6 +46,14 @@ For `.cdr` and `.iso` sources:
 
 This rule applies to both macOS and Linux fallback paths.
 
+## USB Unreadable Target Hint (Non-blocking)
+
+During analysis screen USB target area:
+- if a physical external USB disk is connected but unreadable for macOS mount stack, show a warning hint with Disk Utility guidance,
+- this hint does not replace supported-target validation (capacity/APFS) for readable drives,
+- generic `Nie wykryto nośnika USB` message is suppressed when unreadable USB hint is active and picker has no readable targets,
+- Disk Utility action inside this hint remains interactive regardless of analysis-state gating for USB selection controls.
+
 ## Logging and Diagnostics
 
 Analysis should log:
