@@ -253,6 +253,7 @@ Diagnostics should allow answering:
 - DEBUG-only helper/debug UI must not leak into Release.
 - Runtime helper invariants are identical across build configurations.
 - Any debug convenience path must not alter production helper semantics.
+- DEBUG and Release must use isolated helper identity tuples (`bundle id`, daemon plist name, daemon label, mach service) to avoid BTM/TCC cross-environment collisions.
 
 ---
 
