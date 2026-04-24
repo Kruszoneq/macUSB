@@ -49,8 +49,8 @@ extension UniversalInstallationView {
         processingIcon = "lock.shield.fill"
         isCancelled = false
         helperProgressPercent = 0
-        helperStageTitleKey = "Przygotowanie"
-        helperStatusKey = "Przygotowywanie operacji..."
+        helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
+        helperStatusKey = HelperWorkflowLocalizationKeys.startingStatus
         helperCurrentStageKey = ""
         helperWriteSpeedText = "- MB/s"
         helperCopyProgressPercent = 0
@@ -125,8 +125,8 @@ extension UniversalInstallationView {
                             isProcessing = false
                             isHelperWorking = true
                             helperProgressPercent = 0
-                            helperStageTitleKey = "Uruchamianie procesu"
-                            helperStatusKey = "Rozpoczynanie..."
+                            helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
+                            helperStatusKey = HelperWorkflowLocalizationKeys.initializingStatus
                             helperTransferStageTotals = transferTotals
                         }
 
@@ -204,8 +204,8 @@ extension UniversalInstallationView {
                                                 workflowResultDetailMessage = nil
                                                 let forcedRequest = makeLinuxForceUnmountRequest(from: workflowRequest)
                                                 workflowRequest = forcedRequest
-                                                helperStageTitleKey = String(localized: "Uruchamianie procesu")
-                                                helperStatusKey = String(localized: "Rozpoczynanie...")
+                                                helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
+                                                helperStatusKey = HelperWorkflowLocalizationKeys.initializingStatus
                                                 helperCurrentStageKey = ""
                                                 helperProgressPercent = 0
                                                 helperCopyProgressPercent = 0
@@ -250,8 +250,8 @@ extension UniversalInstallationView {
                                     }
 
                                     log("Wykryto niezgodność kontraktu IPC helpera. Rozpoczynam automatyczne przeładowanie helpera.", category: "Installation")
-                                    helperStageTitleKey = "Rozpoczynanie..."
-                                    helperStatusKey = "Przygotowywanie operacji..."
+                                    helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
+                                    helperStatusKey = HelperWorkflowLocalizationKeys.startingStatus
 
                                     HelperServiceManager.shared.forceReloadForIPCContractMismatch { ready, recoveryMessage in
                                         guard ready else {
@@ -259,8 +259,8 @@ extension UniversalInstallationView {
                                             return
                                         }
 
-                                        helperStageTitleKey = "Rozpoczynanie..."
-                                        helperStatusKey = "Przygotowywanie operacji..."
+                                        helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
+                                        helperStatusKey = HelperWorkflowLocalizationKeys.startingStatus
                                         startHelperWorkflow(false)
                                     }
                                 },
@@ -272,8 +272,8 @@ extension UniversalInstallationView {
                                         }
                                         return
                                     }
-                                    helperStageTitleKey = "Rozpoczynanie..."
-                                    helperStatusKey = "Rozpoczynanie..."
+                                    helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
+                                    helperStatusKey = HelperWorkflowLocalizationKeys.initializingStatus
                                     helperCurrentStageKey = ""
                                     helperCopyProgressPercent = 0
                                     helperCopiedBytes = 0

@@ -26,10 +26,13 @@ enum HelperWorkflowLocalizationKeys {
 
     static let createinstallmediaTitle = "helper.workflow.createinstallmedia.title"
     static let createinstallmediaStatus = "helper.workflow.createinstallmedia.status"
-    static let linuxUnmountTargetTitle = preformatTitle
-    static let linuxUnmountTargetStatus = "Odmontowywanie wybranego nośnika USB."
-    static let linuxRawCopyTitle = restoreTitle
-    static let linuxRawCopyStatus = "Przenoszenie obrazu systemu Linux na wybrany nośnik USB."
+    static let linuxUnmountTargetTitle = "helper.workflow.linux_unmount_target.title"
+    static let linuxUnmountTargetStatus = "helper.workflow.linux_unmount_target.status"
+    static let linuxRawCopyTitle = "helper.workflow.linux_raw_copy.title"
+    static let linuxRawCopyStatus = "helper.workflow.linux_raw_copy.status"
+    static let startingTitle = "helper.workflow.starting.title"
+    static let startingStatus = "helper.workflow.starting.status"
+    static let initializingStatus = "helper.workflow.initializing.status"
 
     static let catalinaCleanupTitle = "helper.workflow.catalina_cleanup.title"
     static let catalinaCleanupStatus = "helper.workflow.catalina_cleanup.status"
@@ -97,6 +100,13 @@ enum HelperWorkflowLocalizationExtractionAnchors {
         String(localized: "helper.workflow.ppc_restore.status"),
         String(localized: "helper.workflow.createinstallmedia.title"),
         String(localized: "helper.workflow.createinstallmedia.status"),
+        String(localized: "helper.workflow.linux_unmount_target.title"),
+        String(localized: "helper.workflow.linux_unmount_target.status"),
+        String(localized: "helper.workflow.linux_raw_copy.title"),
+        String(localized: "helper.workflow.linux_raw_copy.status"),
+        String(localized: "helper.workflow.starting.title"),
+        String(localized: "helper.workflow.starting.status"),
+        String(localized: "helper.workflow.initializing.status"),
         String(localized: "helper.workflow.catalina_cleanup.title"),
         String(localized: "helper.workflow.catalina_cleanup.status"),
         String(localized: "helper.workflow.catalina_copy.title"),

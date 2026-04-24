@@ -8986,6 +8986,56 @@
         }
       }
     },
+    "helper.workflow.initializing.status" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rozpoczynanie..."
+          }
+        }
+      }
+    },
+    "helper.workflow.linux_raw_copy.status" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapisywanie obrazu Linux na dysku docelowym..."
+          }
+        }
+      }
+    },
+    "helper.workflow.linux_raw_copy.title" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tworzenie nośnika Linux"
+          }
+        }
+      }
+    },
+    "helper.workflow.linux_unmount_target.status" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odmontowywanie dysku docelowego..."
+          }
+        }
+      }
+    },
+    "helper.workflow.linux_unmount_target.title" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przygotowanie dysku docelowego"
+          }
+        }
+      }
+    },
     "helper.workflow.ppc_format.status" : {
       "localizations" : {
         "de" : {
@@ -9802,6 +9852,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在创建安装介质"
+          }
+        }
+      }
+    },
+    "helper.workflow.starting.status" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przygotowywanie operacji..."
+          }
+        }
+      }
+    },
+    "helper.workflow.starting.title" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uruchamianie procesu"
           }
         }
       }
@@ -28273,9 +28343,6 @@
           }
         }
       }
-    },
-    "Uruchamianie procesu" : {
-
     },
     "Uruchom aplikację ponownie" : {
       "localizations" : {

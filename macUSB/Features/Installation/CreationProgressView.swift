@@ -221,7 +221,7 @@ struct CreationProgressView: View {
                                 .foregroundColor(.accentColor)
                         }
                     }
-                    Text(LocalizedStringKey(helperStatusKey.isEmpty ? "Rozpoczynanie..." : helperStatusKey))
+                    Text(LocalizedStringKey(helperStatusKey.isEmpty ? HelperWorkflowLocalizationKeys.initializingStatus : helperStatusKey))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     if shouldShowCopyProgress(for: stage.key) {
