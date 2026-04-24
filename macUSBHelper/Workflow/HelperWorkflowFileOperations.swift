@@ -6,6 +6,11 @@ extension HelperWorkflowExecutor {
         try throwIfCancelled()
         lastStageOutputLine = nil
 
+        if stage.key == "linux_unmount_target" {
+            try runLinuxUnmountTargetStage(stage)
+            return
+        }
+
         let process = Process()
         if let requesterUID = request.requesterUID, requesterUID > 0 {
             process.executableURL = URL(fileURLWithPath: "/bin/launchctl")

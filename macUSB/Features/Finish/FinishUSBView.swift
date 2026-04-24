@@ -17,6 +17,7 @@ struct FinishUSBView: View {
     let cleanupTempWorkURL: URL?
     let shouldDetachMountPoint: Bool
     let detectedSystemIcon: NSImage?
+    let resultDetailMessage: String?
     
     @State private var isCleaning: Bool = true
     @State private var cleanupSuccess: Bool = false
@@ -36,7 +37,8 @@ struct FinishUSBView: View {
         creationStartedAt: Date? = nil,
         cleanupTempWorkURL: URL? = nil,
         shouldDetachMountPoint: Bool = true,
-        detectedSystemIcon: NSImage? = nil
+        detectedSystemIcon: NSImage? = nil,
+        resultDetailMessage: String? = nil
     ) {
         self.systemName = systemName
         self.mountPoint = mountPoint
@@ -49,6 +51,7 @@ struct FinishUSBView: View {
         self.cleanupTempWorkURL = cleanupTempWorkURL
         self.shouldDetachMountPoint = shouldDetachMountPoint
         self.detectedSystemIcon = detectedSystemIcon
+        self.resultDetailMessage = resultDetailMessage
     }
     
     private var isSnowLeopard: Bool {
@@ -134,6 +137,26 @@ struct FinishUSBView: View {
                                     Text(verbatim: systemName)
                                         .font(.headline)
                                         .foregroundColor(.primary)
+                                }
+                                Spacer()
+                            }
+                        }
+                    }
+
+                    if let resultDetailMessage, !resultDetailMessage.isEmpty {
+                        StatusCard(tone: isCancelledResult ? .warning : .error, density: .compact) {
+                            HStack(alignment: .top) {
+                                Image(systemName: "info.circle.fill")
+                                    .font(sectionIconFont)
+                                    .foregroundColor(isCancelledResult ? .orange : .red)
+                                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(isCancelledResult ? String(localized: "Szczegóły przerwania") : String(localized: "Szczegóły błędu"))
+                                        .font(.headline)
+                                        .foregroundColor(isCancelledResult ? .orange : .red)
+                                    Text(resultDetailMessage)
+                                        .font(.subheadline)
+                                        .foregroundColor(isCancelledResult ? .orange.opacity(0.9) : .red.opacity(0.85))
                                 }
                                 Spacer()
                             }

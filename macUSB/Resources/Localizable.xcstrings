@@ -12950,6 +12950,9 @@
         }
       }
     },
+    "Nie można odmontować nośnika USB" : {
+
+    },
     "Nie przyznano wymaganej zgody na „Działanie w tle” dla narzędzia pomocniczego. Aplikacja może nie działać poprawnie." : {
       "localizations" : {
         "de" : {
@@ -16645,6 +16648,9 @@
           }
         }
       }
+    },
+    "Nośnik USB był używany przez inną aplikację. Nie wyrażono zgody na wymuszenie odmontowania, dlatego proces został przerwany. Zamknij aplikacje korzystające z nośnika i spróbuj ponownie." : {
+
     },
     "Nośnik USB nie będzie zdatny do rozruchu, jeśli proces zostanie zatrzymany przed zakończeniem. Konieczne będzie ponowne przygotowanie urządzenia." : {
       "localizations" : {
@@ -25722,6 +25728,9 @@
         }
       }
     },
+    "Szczegóły błędu" : {
+
+    },
     "Szczegóły naprawy helpera" : {
       "localizations" : {
         "de" : {
@@ -25873,6 +25882,9 @@
           }
         }
       }
+    },
+    "Szczegóły przerwania" : {
+
     },
     "Szczegóły statusu helpera" : {
       "localizations" : {
@@ -28262,6 +28274,9 @@
         }
       }
     },
+    "Uruchamianie procesu" : {
+
+    },
     "Uruchom aplikację ponownie" : {
       "localizations" : {
         "de" : {
@@ -30630,6 +30645,9 @@
         }
       }
     },
+    "Wybrany nośnik jest używany przez inną aplikację. Aby kontynuować tworzenie nośnika startowego Linux, macUSB może wymusić odmontowanie urządzenia. Niezapisane dane na tym nośniku mogą zostać utracone. Czy chcesz wymusić odmontowanie?" : {
+
+    },
     "Wybrany nośnik korzysta z formatu APFS. Aby kontynuować, sformatuj go ręcznie w Narzędziu dyskowym do dowolnego formatu innego niż APFS." : {
       "localizations" : {
         "de" : {
@@ -32335,6 +32353,9 @@
           }
         }
       }
+    },
+    "Wymuś odmontowanie" : {
+
     },
     "Wynik operacji" : {
       "localizations" : {
