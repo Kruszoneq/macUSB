@@ -22,6 +22,11 @@
 		A10000012F00000100000038 /* Workflow/HelperWorkflowFileOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000028 /* Workflow/HelperWorkflowFileOperations.swift */; };
 		A10000012F00000100000039 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000029 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift */; };
 		A10000012F0000010000003A /* DownloaderAssembly/DownloaderAssemblyProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000002A /* DownloaderAssembly/DownloaderAssemblyProcess.swift */; };
+		A10000012F0000010000003E /* Workflow/Linux/HelperWorkflowLinuxStages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000003B /* Workflow/Linux/HelperWorkflowLinuxStages.swift */; };
+		A10000012F0000010000003F /* Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000003C /* Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift */; };
+		A10000012F00000100000040 /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000003D /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift */; };
+		A10000012F00000100000044 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */; };
+		A10000012F00000100000041 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000042 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist */; };
 		B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */ = {isa = PBXBuildFile; fileRef = B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */; };
 		C10000012F00000100000001 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */; };
 		D10000012F00000100000001 /* macUSB/Resources/Icons/Linux/Distros in Resources */ = {isa = PBXBuildFile; fileRef = D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */; };
@@ -69,6 +74,7 @@
 			dstSubfolderSpec = 1;
 			files = (
 				A10000012F00000100000003 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist in CopyFiles */,
+				A10000012F00000100000041 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +103,11 @@
 		A10000012F00000100000028 /* Workflow/HelperWorkflowFileOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/HelperWorkflowFileOperations.swift; sourceTree = "<group>"; };
 		A10000012F00000100000029 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderAssembly/DownloaderAssemblyExecutor.swift; sourceTree = "<group>"; };
 		A10000012F0000010000002A /* DownloaderAssembly/DownloaderAssemblyProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderAssembly/DownloaderAssemblyProcess.swift; sourceTree = "<group>"; };
+		A10000012F0000010000003B /* Workflow/Linux/HelperWorkflowLinuxStages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxStages.swift; sourceTree = "<group>"; };
+		A10000012F0000010000003C /* Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift; sourceTree = "<group>"; };
+		A10000012F0000010000003D /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxDiskOps.swift; sourceTree = "<group>"; };
+		A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift; sourceTree = "<group>"; };
+		A10000012F00000100000042 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist; sourceTree = "<group>"; };
 		B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = macUSB/Resources/Sounds/burn_complete.aif; sourceTree = "<group>"; };
 		C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift; sourceTree = "<group>"; };
 		D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */ = {isa = PBXFileReference; lastKnownFileType = folder; path = macUSB/Resources/Icons/Linux/Distros; sourceTree = "<group>"; };
@@ -119,6 +130,7 @@
 				Features/Analysis/Logic/Linux/AnalysisLogicLinuxClassification.swift,
 				Features/Analysis/Logic/Linux/AnalysisLogicLinuxDetection.swift,
 				Features/Analysis/Logic/Linux/AnalysisLogicLinuxDisplayName.swift,
+				Features/Analysis/Logic/Linux/AnalysisLogicLinuxInstallationHandoff.swift,
 				Features/Analysis/Logic/Linux/AnalysisLogicLinuxLifecycle.swift,
 				Features/Analysis/Logic/Linux/AnalysisLogicLinuxMetadata.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSCompatibility.swift,
@@ -162,6 +174,11 @@
 				Features/Installation/CreationProgressView.swift,
 				Features/Installation/CreatorHelperLogic.swift,
 				Features/Installation/CreatorLogic.swift,
+				Features/Installation/Linux/CreationProgressLinuxMapping.swift,
+				Features/Installation/Linux/CreatorLinuxHelperLogic.swift,
+				Features/Installation/Linux/CreatorLinuxLogic.swift,
+				Features/Installation/Linux/CreatorLinuxUnmountRecoveryLogic.swift,
+				Features/Installation/Linux/LinuxInstallationFlowContext.swift,
 				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/WelcomeView.swift,
 				macUSBIcon.icon,
@@ -248,6 +265,11 @@
 				Features/Installation/CreationProgressView.swift,
 				Features/Installation/CreatorHelperLogic.swift,
 				Features/Installation/CreatorLogic.swift,
+				Features/Installation/Linux/CreationProgressLinuxMapping.swift,
+				Features/Installation/Linux/CreatorLinuxHelperLogic.swift,
+				Features/Installation/Linux/CreatorLinuxLogic.swift,
+				Features/Installation/Linux/CreatorLinuxUnmountRecoveryLogic.swift,
+				Features/Installation/Linux/LinuxInstallationFlowContext.swift,
 				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/WelcomeView.swift,
 				macUSBIcon.icon,
@@ -365,6 +387,7 @@
 			isa = PBXGroup;
 			children = (
 				A10000012F00000100000007 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.plist */,
+				A10000012F00000100000042 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist */,
 				B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */,
 				D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */,
 			);
@@ -383,6 +406,10 @@
 				A10000012F00000100000026 /* Workflow/HelperWorkflowProgressParsing.swift */,
 				A10000012F00000100000027 /* Workflow/HelperWorkflowDiskResolution.swift */,
 				A10000012F00000100000028 /* Workflow/HelperWorkflowFileOperations.swift */,
+				A10000012F0000010000003B /* Workflow/Linux/HelperWorkflowLinuxStages.swift */,
+				A10000012F0000010000003C /* Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift */,
+				A10000012F0000010000003D /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift */,
+				A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */,
 				A10000012F00000100000029 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift */,
 				A10000012F0000010000002A /* DownloaderAssembly/DownloaderAssemblyProcess.swift */,
 				C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */,
@@ -611,6 +638,10 @@
 				A10000012F00000100000036 /* Workflow/HelperWorkflowProgressParsing.swift in Sources */,
 				A10000012F00000100000037 /* Workflow/HelperWorkflowDiskResolution.swift in Sources */,
 				A10000012F00000100000038 /* Workflow/HelperWorkflowFileOperations.swift in Sources */,
+				A10000012F0000010000003E /* Workflow/Linux/HelperWorkflowLinuxStages.swift in Sources */,
+				A10000012F0000010000003F /* Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift in Sources */,
+				A10000012F00000100000040 /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift in Sources */,
+				A10000012F00000100000044 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift in Sources */,
 				A10000012F00000100000039 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift in Sources */,
 				A10000012F0000010000003A /* DownloaderAssembly/DownloaderAssemblyProcess.swift in Sources */,
 			);
@@ -782,7 +813,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 19;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -805,8 +836,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
+				MARKETING_VERSION = 2.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
@@ -838,7 +869,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 19;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -861,7 +892,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -977,7 +1008,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macusb.helper;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macusb.helper.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;

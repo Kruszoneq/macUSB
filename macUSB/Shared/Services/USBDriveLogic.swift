@@ -319,6 +319,71 @@ struct USBDriveLogic {
         return nil
     }
 
+    static func unreadableExternalUSBMediaCount() -> Int {
+        guard let externalList = runDiskutilPlistCommand(arguments: ["list", "-plist", "external"]),
+              let wholeDisks = externalList["WholeDisks"] as? [String],
+              !wholeDisks.isEmpty else {
+            return 0
+        }
+
+        let mountedWholeDisks = mountedWholeDiskNames()
+        var unreadableCount = 0
+
+        for wholeDisk in wholeDisks where isUnreadableUSBWholeDisk(wholeDisk, mountedWholeDisks: mountedWholeDisks) {
+            unreadableCount += 1
+        }
+
+        return unreadableCount
+    }
+
+    private static func mountedWholeDiskNames() -> Set<String> {
+        guard let urls = FileManager.default.mountedVolumeURLs(
+            includingResourceValuesForKeys: [.volumeNameKey],
+            options: .skipHiddenVolumes
+        ) else {
+            return []
+        }
+
+        var result = Set<String>()
+        for url in urls {
+            let bsd = getBSDName(from: url)
+            guard !bsd.isEmpty, bsd != "unknown" else { continue }
+            let mountedWhole = wholeDiskName(from: bsd)
+            result.insert(mountedWhole)
+
+            // APFS volumes can be mounted through container identifiers that do not
+            // directly map to the physical external whole disk reported by diskutil list external.
+            // Add resolved physical store whole disk to avoid false "unreadable USB" classification.
+            if detectFileSystemFormat(forVolumeURL: url) == .apfs,
+               let resolvedWhole = resolveFormattingWholeDiskBSDName(forVolumeURL: url, fallbackBSDName: bsd) {
+                result.insert(wholeDiskName(from: resolvedWhole))
+            }
+        }
+        return result
+    }
+
+    private static func isUnreadableUSBWholeDisk(_ wholeDisk: String, mountedWholeDisks: Set<String>) -> Bool {
+        guard !mountedWholeDisks.contains(wholeDisk),
+              let info = runDiskutilPlistCommand(arguments: ["info", "-plist", "/dev/\(wholeDisk)"]) else {
+            return false
+        }
+
+        let busProtocol = (info["BusProtocol"] as? String)?.uppercased()
+        let isUSB = (busProtocol == "USB")
+        if !isUSB { return false }
+
+        let isInternal = (info["Internal"] as? Bool)
+            ?? (info["OSInternalMedia"] as? Bool)
+            ?? true
+        if isInternal { return false }
+
+        let isPhysical = ((info["VirtualOrPhysical"] as? String)?.lowercased() ?? "physical") == "physical"
+        if !isPhysical { return false }
+
+        let removableOrExternal = (info["RemovableMediaOrExternalDevice"] as? Bool) ?? true
+        return removableOrExternal
+    }
+
     /// Enumerates external, non-internal, non-network removable mounted volumes and returns them as USBDrive models.
     static func enumerateAvailableDrives() -> [USBDrive] {
         let keys: [URLResourceKey] = [

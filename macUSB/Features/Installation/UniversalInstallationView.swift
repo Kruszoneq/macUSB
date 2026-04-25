@@ -11,6 +11,7 @@ struct UniversalInstallationView: View {
     let systemName: String
     let detectedSystemIcon: NSImage?
     let originalImageURL: URL?
+    let linuxFlowContext: LinuxInstallationFlowContext?
     
     // Flagi
     let needsCodesign: Bool
@@ -63,6 +64,7 @@ struct UniversalInstallationView: View {
     @State var usbCheckTimer: Timer?
 
     @State var helperOperationFailed: Bool = false
+    @State var workflowResultDetailMessage: String? = nil
     
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
@@ -208,7 +210,11 @@ struct UniversalInstallationView: View {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Przebieg procesu").font(.headline)
                                 VStack(alignment: .leading, spacing: 4) {
-                                    if isRestoreLegacy {
+                                    if isLinuxWorkflow {
+                                        Text("• Pliki obrazu Linux zostaną przygotowane")
+                                        Text("• Wybrany nośnik USB zostanie odmontowany")
+                                        Text("• Obraz Linux zostanie zapisany na nośniku USB")
+                                    } else if isRestoreLegacy {
                                         Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
                                         Text("• Nośnik USB zostanie sformatowany")
                                         Text("• Obraz systemu zostanie przywrócony")
@@ -397,7 +403,7 @@ struct UniversalInstallationView: View {
                             return self.isCancelled
                         },
                         onCleanup: {
-                            self.performEmergencyCleanup(mountPoint: sourceAppURL.deletingLastPathComponent(), tempURL: tempWorkURL)
+                            self.performEmergencyCleanupIfNeeded(tempURL: tempWorkURL)
                         }
                     )
                     window.delegate = handler
@@ -409,12 +415,14 @@ struct UniversalInstallationView: View {
             NavigationLink(
                 destination: CreationProgressView(
                     systemName: systemName,
-                    mountPoint: sourceAppURL.deletingLastPathComponent(),
+                    mountPoint: effectiveMountPointForCreation,
                     detectedSystemIcon: detectedSystemIcon,
                     isCatalina: isCatalina,
                     isRestoreLegacy: isRestoreLegacy,
                     isMavericks: isMavericks,
                     isPPC: isPPC,
+                    isLinuxWorkflow: isLinuxWorkflow,
+                    shouldDetachMountPoint: shouldDetachMountPointAfterFinish,
                     needsPreformat: (targetDrive?.needsFormatting ?? false) && !isPPC,
                     onReset: {
                         NotificationCenter.default.post(name: .macUSBResetToStart, object: nil)
@@ -432,6 +440,7 @@ struct UniversalInstallationView: View {
                     isCancelling: $isCancelling,
                     navigateToFinish: $navigateToFinish,
                     helperOperationFailed: $helperOperationFailed,
+                    workflowResultDetailMessage: $workflowResultDetailMessage,
                     didCancelCreation: $didCancelCreation,
                     creationStartedAt: $usbProcessStartedAt
                 ),

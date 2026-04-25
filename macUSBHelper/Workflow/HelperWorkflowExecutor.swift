@@ -12,6 +12,7 @@ final class HelperWorkflowExecutor {
     var activeProcess: Process?
     var latestPercent: Double = 0
     var lastStageOutputLine: String?
+    var linuxSourceImageSizeBytes: Int64?
 
     init(request: HelperWorkflowRequestPayload, workflowID: String, sendEvent: @escaping (HelperProgressEventPayload) -> Void) {
         self.request = request
@@ -71,7 +72,9 @@ final class HelperWorkflowExecutor {
                 isUserCancelled: true
             )
         } catch HelperExecutionError.failed(let stage, let exitCode, let description) {
-            runBestEffortTempCleanupStage()
+            if !shouldDeferCleanupForLinuxUnmountPrompt(failedStage: stage, description: description) {
+                runBestEffortTempCleanupStage()
+            }
             return HelperWorkflowResultPayload(
                 workflowID: workflowID,
                 success: false,

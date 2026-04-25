@@ -3,7 +3,7 @@
 Current implementation scope includes:
 
 - macOS analysis path (primary, workflow-driving),
-- Linux image recognition fallback path (analysis-only, no install flow).
+- Linux image recognition fallback path with USB-creation handoff.
 
 Linux-specific behavior details are documented in:
 
@@ -17,8 +17,9 @@ Unsupported detection outcomes must be clearly surfaced and must block unsupport
 For Linux fallback:
 
 - detection is considered successful when Linux is recognized, including unknown distro case,
-- recognition result is informational-only and must not unlock install workflow,
+- recognized Linux result unlocks shared install flow (`UniversalInstallationView -> CreationProgressView -> FinishUSBView`),
 - detected Linux state may present dedicated Linux icon resource (`linux.icns`) in analysis UI.
+- manual Linux force from `Opcje -> Pomiń analizowanie pliku -> Linux` is treated as Linux-recognized state for install handoff.
 
 ## Current Supported Routing Families
 
@@ -29,13 +30,15 @@ For Linux fallback:
 - Sierra-specific
 - Catalina-specific
 - Mavericks-specific
+- Linux raw-copy
 
 Panther remains explicitly unsupported.
 
-Linux fallback routing is out of installer families:
+Linux fallback routing includes:
 
 - recognized Linux distro,
 - Linux with unknown distro (`Linux - nierozpoznana dystrybucja`).
+- manually forced Linux (`Linux`).
 
 ## Special Blocking Rule
 
@@ -44,6 +47,14 @@ For `.cdr` and `.iso` sources:
 - analysis must stop and instruct user to unmount and retry.
 
 This rule applies to both macOS and Linux fallback paths.
+
+## USB Unreadable Target Hint (Non-blocking)
+
+During analysis screen USB target area:
+- if a physical external USB disk is connected but unreadable for macOS mount stack, show a warning hint with Disk Utility guidance,
+- this hint does not replace supported-target validation (capacity/APFS) for readable drives,
+- generic `Nie wykryto nośnika USB` message is suppressed when unreadable USB hint is active and picker has no readable targets,
+- Disk Utility action inside this hint remains interactive regardless of analysis-state gating for USB selection controls.
 
 ## Logging and Diagnostics
 
@@ -58,8 +69,10 @@ Linux fallback should additionally log:
 - fallback transition from mounted detection to `bsdtar` detection when needed,
 - parsed Linux details (`distro`, `version`, `edition`, `arch`, `isARM`),
 - evidence summary used for recognition,
-- archive-reader diagnostics relevant to bounded execution (`bsdtar` timeout/errors).
+- archive-reader diagnostics relevant to bounded execution (`bsdtar` timeout/errors),
+- install handoff readiness (`linuxSourceURL` present, capacity computed).
+- manual-force diagnostics when Linux is forced from menu.
 
 ## Update Trigger
 
-Update when detection heuristics, compatibility mapping, or blocking logic changes.
+Update when detection heuristics, compatibility mapping, or blocking/handoff logic changes.

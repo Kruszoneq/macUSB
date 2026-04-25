@@ -6,6 +6,7 @@ import OSLog
 private enum AppRoute: Hashable {
     case debugFinishUSBBigSurSuccess
     case debugFinishUSBTigerSuccess
+    case debugFinishUSBLinuxSuccess
 }
 
 struct ContentView: View {
@@ -27,6 +28,14 @@ struct ContentView: View {
 
     private var debugTigerCleanupTempWorkURL: URL {
         FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_debug_tiger_temp")
+    }
+
+    private var debugLinuxMountPointURL: URL {
+        FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_debug_linux_mount_point")
+    }
+
+    private var debugLinuxCleanupTempWorkURL: URL {
+        FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_debug_linux_temp")
     }
     
     var body: some View {
@@ -71,6 +80,20 @@ struct ContentView: View {
                             cleanupTempWorkURL: debugTigerCleanupTempWorkURL,
                             shouldDetachMountPoint: false
                         )
+                    case .debugFinishUSBLinuxSuccess:
+                        FinishUSBView(
+                            systemName: "Linux - Ubuntu 24.04",
+                            mountPoint: debugLinuxMountPointURL,
+                            onReset: {
+                                NotificationCenter.default.post(name: .macUSBResetToStart, object: nil)
+                                path = NavigationPath()
+                            },
+                            isPPC: false,
+                            isLinuxWorkflow: true,
+                            didFail: false,
+                            cleanupTempWorkURL: debugLinuxCleanupTempWorkURL,
+                            shouldDetachMountPoint: false
+                        )
                     }
                 }
         }
@@ -100,6 +123,12 @@ struct ContentView: View {
             scheduleDebugSummaryNavigation(
                 route: .debugFinishUSBTigerSuccess,
                 logMessage: "DEBUG: Zaplanowano przejście do podsumowania Tiger (isPPC) za 2 sekundy"
+            )
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .macUSBDebugGoToLinuxSummary)) { _ in
+            scheduleDebugSummaryNavigation(
+                route: .debugFinishUSBLinuxSuccess,
+                logMessage: "DEBUG: Zaplanowano przejście do podsumowania Linux (Ubuntu 24.04) za 2 sekundy"
             )
         }
     }

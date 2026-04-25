@@ -118,6 +118,29 @@ struct macUSBApp: App {
                     }
                     .keyboardShortcut("t", modifiers: [.option, .command])
                     .disabled(!menuState.skipAnalysisEnabled)
+                    Divider()
+                    Button(String(localized: "Linux")) {
+                        let alert = NSAlert()
+                        alert.alertStyle = .informational
+                        alert.icon = NSApp.applicationIconImage
+                        alert.messageText = String(localized: "Tworzenie USB z Linux")
+                        alert.informativeText = String(localized: "Dla wybranego pliku zostanie pominięta analiza i rozpoznanie dystrybucji. Aplikacja wymusi rozpoznanie pliku jako „Linux”, aby umożliwić zapis USB w trybie Linux. Czy chcesz kontynuować?")
+                        alert.addButton(withTitle: String(localized: "Nie"))
+                        alert.addButton(withTitle: String(localized: "Tak"))
+                        if let window = NSApp.keyWindow ?? NSApp.mainWindow {
+                            alert.beginSheetModal(for: window) { response in
+                                if response == .alertSecondButtonReturn {
+                                    NotificationCenter.default.post(name: .macUSBStartLinuxManualSelection, object: nil)
+                                }
+                            }
+                        } else {
+                            let response = alert.runModal()
+                            if response == .alertSecondButtonReturn {
+                                NotificationCenter.default.post(name: .macUSBStartLinuxManualSelection, object: nil)
+                            }
+                        }
+                    }
+                    .disabled(!menuState.skipAnalysisEnabled)
                 } label: {
                     Label(String(localized: "Pomiń analizowanie pliku"), systemImage: "doc.text.magnifyingglass")
                 }
@@ -406,6 +429,9 @@ struct macUSBApp: App {
                 }
                 Button(String(localized: "Przejdź do podsumowania (Tiger) (2s delay)")) {
                     NotificationCenter.default.post(name: .macUSBDebugGoToTigerSummary, object: nil)
+                }
+                Button(String(localized: "Przejdź do podsumowania Linux (2s delay)")) {
+                    NotificationCenter.default.post(name: .macUSBDebugGoToLinuxSummary, object: nil)
                 }
                 Divider()
                 Button(String(localized: "Otwórz macUSB_temp")) {

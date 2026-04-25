@@ -26,6 +26,13 @@ enum HelperWorkflowLocalizationKeys {
 
     static let createinstallmediaTitle = "helper.workflow.createinstallmedia.title"
     static let createinstallmediaStatus = "helper.workflow.createinstallmedia.status"
+    static let linuxUnmountTargetTitle = "helper.workflow.linux_unmount_target.title"
+    static let linuxUnmountTargetStatus = "helper.workflow.linux_unmount_target.status"
+    static let linuxRawCopyTitle = "helper.workflow.linux_raw_copy.title"
+    static let linuxRawCopyStatus = "helper.workflow.linux_raw_copy.status"
+    static let startingTitle = "helper.workflow.starting.title"
+    static let startingStatus = "helper.workflow.starting.status"
+    static let initializingStatus = "helper.workflow.initializing.status"
 
     static let catalinaCleanupTitle = "helper.workflow.catalina_cleanup.title"
     static let catalinaCleanupStatus = "helper.workflow.catalina_cleanup.status"
@@ -56,6 +63,10 @@ enum HelperWorkflowLocalizationKeys {
             return HelperWorkflowStageLocalization(titleKey: ppcRestoreTitle, statusKey: ppcRestoreStatus)
         case "createinstallmedia":
             return HelperWorkflowStageLocalization(titleKey: createinstallmediaTitle, statusKey: createinstallmediaStatus)
+        case "linux_unmount_target":
+            return HelperWorkflowStageLocalization(titleKey: linuxUnmountTargetTitle, statusKey: linuxUnmountTargetStatus)
+        case "linux_raw_copy":
+            return HelperWorkflowStageLocalization(titleKey: linuxRawCopyTitle, statusKey: linuxRawCopyStatus)
         case "catalina_cleanup":
             return HelperWorkflowStageLocalization(titleKey: catalinaCleanupTitle, statusKey: catalinaCleanupStatus)
         case "catalina_copy":
@@ -89,6 +100,13 @@ enum HelperWorkflowLocalizationExtractionAnchors {
         String(localized: "helper.workflow.ppc_restore.status"),
         String(localized: "helper.workflow.createinstallmedia.title"),
         String(localized: "helper.workflow.createinstallmedia.status"),
+        String(localized: "helper.workflow.linux_unmount_target.title"),
+        String(localized: "helper.workflow.linux_unmount_target.status"),
+        String(localized: "helper.workflow.linux_raw_copy.title"),
+        String(localized: "helper.workflow.linux_raw_copy.status"),
+        String(localized: "helper.workflow.starting.title"),
+        String(localized: "helper.workflow.starting.status"),
+        String(localized: "helper.workflow.initializing.status"),
         String(localized: "helper.workflow.catalina_cleanup.title"),
         String(localized: "helper.workflow.catalina_cleanup.status"),
         String(localized: "helper.workflow.catalina_copy.title"),

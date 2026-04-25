@@ -5,6 +5,7 @@ enum HelperWorkflowKind: String, Codable {
     case legacyRestore
     case mavericks
     case ppc
+    case linux
 }
 
 struct HelperWorkflowRequestPayload: Codable {
@@ -22,6 +23,7 @@ struct HelperWorkflowRequestPayload: Codable {
     let needsCodesign: Bool
     let requiresApplicationPathArg: Bool
     let requesterUID: Int?
+    let linuxForceUnmount: Bool
 }
 
 struct HelperProgressEventPayload: Codable {

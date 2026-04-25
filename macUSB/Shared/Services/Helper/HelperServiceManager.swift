@@ -6,8 +6,13 @@ import Darwin
 final class HelperServiceManager: NSObject {
     static let shared = HelperServiceManager()
 
+    #if DEBUG
+    static let daemonPlistName = "com.kruszoneq.macusb.helper.debug.plist"
+    static let machServiceName = "com.kruszoneq.macusb.helper.debug"
+    #else
     static let daemonPlistName = "com.kruszoneq.macusb.helper.plist"
     static let machServiceName = "com.kruszoneq.macusb.helper"
+    #endif
     static let helperRepairFingerprintDefaultsKey = "macUSB.Helper.LastSuccessfulAutoRepairFingerprint"
 
     typealias EnsureCompletion = (Bool, String?) -> Void

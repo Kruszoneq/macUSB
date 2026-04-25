@@ -9,6 +9,8 @@ extension HelperWorkflowExecutor {
         var percent = latestPercent
         if stage.key == "ppc_restore", let mapped = mapPPCProgress(from: line) {
             percent = max(percent, mapped)
+        } else if stage.key == "linux_raw_copy", let mapped = mapLinuxRawCopyProgress(from: line, stage: stage) {
+            percent = max(percent, mapped)
         } else if stage.parseToolPercent, let parsed = extractToolPercent(from: line, stageKey: stage.key) {
             let clamped = max(0, min(parsed, 100))
             let mapped = stage.startPercent + ((stage.endPercent - stage.startPercent) * (clamped / 100.0))

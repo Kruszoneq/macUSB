@@ -624,6 +624,82 @@
         }
       }
     },
+    "• Obraz Linux zostanie zapisany na nośniku USB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Das Linux-Image wird auf das USB-Laufwerk geschrieben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The Linux image will be written to the USB drive"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La imagen de Linux se escribirá en la unidad USB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• L’image Linux sera écrite sur le support USB"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• L’immagine Linux verrà scritta sull’unità USB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linux イメージが USB ドライブに書き込まれます"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• A imagem Linux será gravada na unidade USB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Образ Linux будет записан на USB-накопитель"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linux imajı USB sürücüsüne yazılacak"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Образ Linux буде записано на USB-накопичувач"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Ảnh Linux sẽ được ghi vào ổ USB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linux 镜像将被写入 USB 驱动器"
+          }
+        }
+      }
+    },
     "• Obraz systemu zostanie przywrócony" : {
       "localizations" : {
         "de" : {
@@ -852,6 +928,82 @@
         }
       }
     },
+    "• Pliki obrazu Linux zostaną przygotowane" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Die Linux-Image-Dateien werden vorbereitet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linux image files will be prepared"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Se prepararán los archivos de la imagen de Linux"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Les fichiers de l’image Linux seront préparés"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• I file dell’immagine Linux verranno preparati"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linux イメージファイルが準備されます"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Os arquivos da imagem Linux serão preparados"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Файлы образа Linux будут подготовлены"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linux imaj dosyaları hazırlanacak"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Файли образу Linux будуть підготовлені"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Các tệp ảnh Linux sẽ được chuẩn bị"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linux 镜像文件将准备就绪"
+          }
+        }
+      }
+    },
     "• Pliki systemowe zostaną przygotowane" : {
       "localizations" : {
         "de" : {
@@ -1004,6 +1156,82 @@
         }
       }
     },
+    "• Po uruchomieniu Linuxa postępuj zgodnie z instrukcjami instalatora systemu" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Folgen Sie nach dem Start von Linux den Anweisungen des Installationsprogramms"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• After Linux starts, follow the installer instructions"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Después de iniciar Linux, sigue las instrucciones del instalador del sistema"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Une fois Linux démarré, suivez les instructions du programme d’installation du système"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Dopo l’avvio di Linux, segui le istruzioni del programma di installazione del sistema"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linuxが起動したら、システムインストーラの案内に従ってください"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Após iniciar o Linux, siga as instruções do instalador do sistema"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• После запуска Linux следуйте инструкциям установщика системы"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linux başlatıldıktan sonra sistem yükleyicisinin yönergelerini izleyin"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Після запуску Linux дотримуйтеся інструкцій інсталятора системи"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Sau khi Linux khởi động, hãy làm theo hướng dẫn của trình cài đặt hệ thống"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linux 启动后，请按照安装程序的说明进行操作"
+          }
+        }
+      }
+    },
     "• Podłącz nośnik USB do docelowego komputera Mac" : {
       "localizations" : {
         "de" : {
@@ -1080,6 +1308,82 @@
         }
       }
     },
+    "• Podłącz nośnik USB do komputera docelowego (Mac lub PC)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Schließen Sie das USB-Laufwerk an den Zielcomputer an (Mac oder PC)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Connect the USB drive to the target computer (Mac or PC)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Conecta la unidad USB al equipo de destino (Mac o PC)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Connectez le support USB à l’ordinateur cible (Mac ou PC)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Collega l’unità USB al computer di destinazione (Mac o PC)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• USBドライブを対象のコンピュータ（MacまたはPC）に接続します"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Conecte a unidade USB ao computador de destino (Mac ou PC)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Подключите USB-накопитель к целевому компьютеру (Mac или ПК)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• USB sürücüsünü hedef bilgisayara bağlayın (Mac veya PC)"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Підключіть USB-накопичувач до цільового комп’ютера (Mac або ПК)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Kết nối ổ USB với máy tính đích (Mac hoặc PC)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 将 USB 驱动器连接到目标电脑（Mac 或 PC）"
+          }
+        }
+      }
+    },
     "• Struktura instalatora zostanie sfinalizowana" : {
       "localizations" : {
         "de" : {
@@ -1152,6 +1456,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• 安装器结构将被完成"
+          }
+        }
+      }
+    },
+    "• Uruchom komputer i wybierz rozruch z nośnika USB w menu startowym" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Starten Sie den Computer und wählen Sie im Startmenü den Start vom USB-Laufwerk"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Start the computer and choose to boot from the USB drive in the boot menu"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Inicia el ordenador y elige arrancar desde la unidad USB en el menú de arranque"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Démarrez l’ordinateur et choisissez le démarrage depuis le support USB dans le menu de démarrage"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Avvia il computer e seleziona l’avvio dall’unità USB nel menu di avvio"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• コンピュータを起動し、起動メニューでUSBドライブからの起動を選択します"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Inicie o computador e selecione a inicialização pela unidade USB no menu de inicialização"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Запустите компьютер и выберите загрузку с USB-накопителя в меню загрузки"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Bilgisayarı başlatın ve önyükleme menüsünde USB sürücüsünden önyüklemeyi seçin"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Запустіть комп’ютер і виберіть завантаження з USB-накопичувача в меню завантаження"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Khởi động máy tính và chọn khởi động từ ổ USB trong menu khởi động"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 启动电脑，并在启动菜单中选择从 USB 驱动器启动"
           }
         }
       }
@@ -1304,6 +1684,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• 从列表中选择 macOS 或 OS X 安装程序"
+          }
+        }
+      }
+    },
+    "• Wybrany nośnik USB zostanie odmontowany" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Das ausgewählte USB-Laufwerk wird ausgehängt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The selected USB drive will be unmounted"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La unidad USB seleccionada se desmontará"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Le support USB sélectionné sera démonté"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• L’unità USB selezionata verrà smontata"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 選択したUSBドライブはマウント解除されます"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• A unidade USB selecionada será desmontada"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Выбранный USB-накопитель будет размонтирован"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Seçilen USB sürücüsünün bağlantısı kaldırılacak"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Вибраний USB-накопичувач буде відмонтовано"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Ổ USB đã chọn sẽ được ngắt kết nối"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 所选 USB 驱动器将被卸载"
           }
         }
       }
@@ -4068,6 +4524,82 @@
         }
       }
     },
+    "Brak źródła obrazu Linux do utworzenia nośnika USB." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Linux-Imagequelle zum Erstellen eines USB-Laufwerks verfügbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Linux image source is available to create a USB drive."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay una imagen de Linux de origen disponible para crear una unidad USB."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune image source de Linux n’est disponible pour créer une clé USB."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna immagine sorgente Linux disponibile per creare un'unità USB."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USBドライブを作成するためのLinuxイメージがありません。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não há imagem de origem do Linux disponível para criar a unidade USB."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет исходного образа Linux для создания USB-носителя."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB ortamı oluşturmak için Linux imaj kaynağı bulunamadı."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Немає вихідного образу Linux для створення USB-носія."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có ảnh đĩa nguồn Linux để tạo ổ USB."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有可用于创建 USB 驱动器的 Linux 镜像源。"
+          }
+        }
+      }
+    },
     "Cały proces może potrwać kilka minut." : {
       "localizations" : {
         "de" : {
@@ -4140,6 +4672,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "整个过程可能需要几分钟。"
+          }
+        }
+      }
+    },
+    "Co dalej?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie geht es weiter?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What’s next?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué sigue?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Et ensuite ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E adesso?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次は何をしますか？"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O que fazer agora?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Что дальше?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sırada ne var?"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Що далі?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiếp theo là gì?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "接下来做什么？"
           }
         }
       }
@@ -4995,6 +5603,246 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "将跳过所选镜像的版本验证。应用程序将强制识别该文件为 “Mac OS X Tiger 10.4”，以允许挂载并写入 USB。您想继续吗？"
+          }
+        }
+      }
+    },
+    "Dla wybranego pliku zostanie pominięta analiza i rozpoznanie dystrybucji. Aplikacja wymusi rozpoznanie pliku jako „Linux”, aby umożliwić zapis USB w trybie Linux. Czy chcesz kontynuować?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Analyse und Distributionserkennung wird für die ausgewählte Datei übersprungen. Die Anwendung erzwingt die Erkennung der Datei als „Linux“, um das Schreiben auf USB im Linux-Modus zu ermöglichen. Möchten Sie fortfahren?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analysis and distribution detection will be skipped for the selected file. The application will force recognition of the file as “Linux” to enable writing to USB in Linux mode. Do you want to continue?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se omitirá el análisis y el reconocimiento de la distribución para el archivo seleccionado. La aplicación forzará el reconocimiento del archivo como «Linux» para permitir la escritura en USB en modo Linux. ¿Desea continuar?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’analyse et la détection de la distribution seront ignorées pour le fichier sélectionné. L’application forcera la reconnaissance du fichier comme « Linux » pour permettre l’écriture sur USB en mode Linux. Voulez-vous continuer ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per il file selezionato verranno ignorate l'analisi e il riconoscimento della distribuzione. L'applicazione forzerà il riconoscimento del file come \"Linux\" per consentire la scrittura su USB in modalità Linux. Vuoi continuare?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したファイルでは、解析とディストリビューションの検出がスキップされます。アプリケーションはファイルを「Linux」として強制的に認識し、LinuxモードでUSBに書き込めるようにします。続けますか？"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A análise e o reconhecimento da distribuição serão ignorados para o arquivo selecionado. O aplicativo forçará o reconhecimento do arquivo como \"Linux\" para permitir a gravação em USB no modo Linux. Deseja continuar?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для выбранного файла будут пропущены анализ и распознавание дистрибутива. Приложение принудительно распознает файл как «Linux», чтобы разрешить запись на USB в режиме Linux. Вы хотите продолжить?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilen dosya için analiz ve dağıtımın algılanması atlanacaktır. Uygulama, Linux modunda USB’ye yazmayı mümkün kılmak için dosyanın “Linux” olarak tanınmasını zorlayacaktır. Devam etmek istiyor musunuz?"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для вибраного файлу аналіз і розпізнавання дистрибутива буде пропущено. Програма примусово розпізнає файл як «Linux», щоб дозволити запис на USB у режимі Linux. Ви хочете продовжити?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Việc phân tích và nhận diện bản phân phối sẽ được bỏ qua đối với tệp đã chọn. Ứng dụng sẽ buộc nhận diện tệp là \"Linux\" để cho phép ghi USB ở chế độ Linux. Bạn có muốn tiếp tục không?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将跳过对所选文件的分析和发行版识别。应用程序将强制将该文件识别为“Linux”，以便在 Linux 模式下写入 USB。您想继续吗？"
+          }
+        }
+      }
+    },
+    "Do Maca jest podłączony zewnętrzny nośnik USB, którego macOS nie może odczytać. Otwórz Narzędzie dyskowe i wymaż nośnik do formatu obsługiwanego przez macOS, a następnie wybierz go ponownie." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An den Mac ist ein externes USB-Medium angeschlossen, das von macOS nicht gelesen werden kann. Öffnen Sie das Festplattendienstprogramm, löschen Sie das Medium in ein von macOS unterstütztes Format und wählen Sie es anschließend erneut aus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An external USB drive is connected to your Mac, but macOS can’t read it. Open Disk Utility, erase the drive to a macOS-supported format, then select it again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hay un medio USB externo conectado al Mac que macOS no puede leer. Abre Utilidad de Discos, bórralo con un formato compatible con macOS y luego selecciónalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un support USB externe est connecté au Mac, mais macOS ne peut pas le lire. Ouvrez Utilitaire de disque, effacez le support dans un format pris en charge par macOS, puis sélectionnez-le à nouveau."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al Mac è collegato un supporto USB esterno che macOS non riesce a leggere. Apri Utility Disco, inizializza il supporto in un formato supportato da macOS, quindi selezionalo di nuovo."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac に外部 USB メディアが接続されていますが、macOS では読み取れません。ディスクユーティリティを開き、macOS が対応するフォーマットでメディアを消去してから、もう一度選択してください。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do Maca jest podłączony zewnętrzny nośnik USB, którego macOS nie może odczytać. Otwórz Narzędzie dyskowe i wymaż nośnik do formatu obsługiwanego przez macOS, a następnie wybierz go ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Há uma mídia USB externa conectada ao Mac que o macOS não consegue ler. Abra o Utilitário de Disco, apague a mídia em um formato compatível com o macOS e selecione-a novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "К Mac подключен внешний USB-носитель, который macOS не может прочитать. Откройте Дисковую утилиту, сотрите носитель в формат, поддерживаемый macOS, затем выберите его снова."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac'e bağlı, macOS'in okuyamadığı bir harici USB ortamı var. Disk İzlencesi'ni açın, ortamı macOS tarafından desteklenen bir biçimde silin ve ardından tekrar seçin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "До Mac підключено зовнішній USB-носій, який macOS не може прочитати. Відкрийте Disk Utility, зітріть носій у формат, що підтримується macOS, а потім виберіть його знову."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Có thiết bị USB ngoài đang được kết nối với máy Mac nhưng macOS không thể đọc. Hãy mở Tiện ích Ổ đĩa, xóa thiết bị sang định dạng được macOS hỗ trợ, rồi chọn lại."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac 已连接外部 USB 介质，但 macOS 无法读取。请打开“磁盘工具”，将该介质抹掉为 macOS 支持的格式，然后重新选择。"
+          }
+        }
+      }
+    },
+    "Do Maca są podłączone zewnętrzne nośniki USB, których macOS nie może odczytać. Otwórz Narzędzie dyskowe i wymaż je do formatu obsługiwanego przez macOS, a następnie wybierz nośnik ponownie." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An den Mac sind externe USB-Medien angeschlossen, die von macOS nicht gelesen werden können. Öffnen Sie das Festplattendienstprogramm, löschen Sie sie in ein von macOS unterstütztes Format und wählen Sie anschließend das Medium erneut aus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "External USB drives are connected to your Mac, but macOS can’t read them. Open Disk Utility, erase them to a macOS-supported format, then select the drive again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hay medios USB externos conectados al Mac que macOS no puede leer. Abre Utilidad de Discos, bórralos con un formato compatible con macOS y luego vuelve a seleccionar la unidad."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Des supports USB externes sont connectés au Mac, mais macOS ne peut pas les lire. Ouvrez Utilitaire de disque, effacez-les dans un format pris en charge par macOS, puis sélectionnez de nouveau le support."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al Mac sono collegati supporti USB esterni che macOS non riesce a leggere. Apri Utility Disco, inizializzali in un formato supportato da macOS, quindi seleziona di nuovo il supporto."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac に外部 USB メディアが接続されていますが、macOS では読み取れません。ディスクユーティリティを開き、macOS が対応するフォーマットでそれらを消去してから、メディアをもう一度選択してください。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do Maca są podłączone zewnętrzne nośniki USB, których macOS nie może odczytać. Otwórz Narzędzie dyskowe i wymaż je do formatu obsługiwanego przez macOS, a następnie wybierz nośnik ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Há mídias USB externas conectadas ao Mac que o macOS não consegue ler. Abra o Utilitário de Disco, apague-as em um formato compatível com o macOS e depois selecione a unidade novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "К Mac подключены внешние USB-носители, которые macOS не может прочитать. Откройте Дисковую утилиту, сотрите их в формат, поддерживаемый macOS, затем снова выберите носитель."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac'e bağlı, macOS'in okuyamadığı harici USB ortamları var. Disk İzlencesi'ni açın, bunları macOS tarafından desteklenen bir biçimde silin ve ardından ortamı tekrar seçin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "До Mac підключено зовнішні USB-носії, які macOS не може прочитати. Відкрийте Disk Utility, зітріть їх у формат, що підтримується macOS, а потім знову виберіть носій."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Có các thiết bị USB ngoài được kết nối với máy Mac nhưng macOS không thể đọc. Hãy mở Tiện ích Ổ đĩa, xóa chúng sang định dạng được macOS hỗ trợ, rồi chọn lại thiết bị."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac 已连接外部 USB 介质，但 macOS 无法读取。请打开“磁盘工具”，将这些介质抹掉为 macOS 支持的格式，然后重新选择该介质。"
           }
         }
       }
@@ -8287,6 +9135,416 @@
         }
       }
     },
+    "helper.workflow.initializing.status" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starten..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starting..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciando..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarrage..."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avvio..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始中..."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rozpoczynanie..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciando..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запуск..."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başlatılıyor..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запуск..."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang bắt đầu..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在启动..."
+          }
+        }
+      }
+    },
+    "helper.workflow.linux_raw_copy.status" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schreiben des Linux-Images auf den Zieldatenträger..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Writing the Linux image to the target disk..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escribiendo la imagen de Linux en el disco de destino..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écriture de l’image Linux sur le disque cible..."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scrittura dell’immagine Linux sul disco di destinazione..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux イメージを対象ディスクに書き込み中..."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapisywanie obrazu Linux na dysku docelowym..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gravando a imagem Linux no disco de destino..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запись образа Linux на целевой диск..."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux imajı hedef diske yazılıyor..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запис образу Linux на цільовий диск..."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang ghi ảnh đĩa Linux vào ổ đích..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在将 Linux 镜像写入目标磁盘..."
+          }
+        }
+      }
+    },
+    "helper.workflow.linux_raw_copy.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstellen des Linux-Mediums"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating Linux media"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creando medio Linux"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Création du support Linux"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creazione del supporto Linux"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux メディアを作成中"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tworzenie nośnika Linux"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Criando mídia Linux"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создание носителя Linux"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux ortamı oluşturuluyor"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Створення носія Linux"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang tạo phương tiện Linux"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在创建 Linux 介质"
+          }
+        }
+      }
+    },
+    "helper.workflow.linux_unmount_target.status" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aushängen des Zieldatenträgers..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unmounting target disk..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desmontando el disco de destino..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démontage du disque cible..."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Smontaggio del disco di destinazione..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "対象ディスクをアンマウント中..."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odmontowywanie dysku docelowego..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desmontando o disco de destino..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отмонтирование целевого диска..."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hedef diskin bağlantısı kesiliyor..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відмонтування цільового диска..."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang tháo gắn kết ổ đích..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在卸载目标磁盘..."
+          }
+        }
+      }
+    },
+    "helper.workflow.linux_unmount_target.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorbereiten des Zieldatenträgers"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing target disk"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparando el disco de destino"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Préparation du disque cible"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparazione del disco di destinazione"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "対象ディスクを準備中"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przygotowanie dysku docelowego"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparando o disco de destino"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подготовка целевого диска"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hedef disk hazırlanıyor"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Підготовка цільового диска"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang chuẩn bị ổ đích"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在准备目标磁盘"
+          }
+        }
+      }
+    },
     "helper.workflow.ppc_format.status" : {
       "localizations" : {
         "de" : {
@@ -9103,6 +10361,170 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在创建安装介质"
+          }
+        }
+      }
+    },
+    "helper.workflow.starting.status" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorbereiten des Vorgangs..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing operation..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparando la operación..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Préparation de l’opération..."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparazione dell’operazione..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "処理を準備中..."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przygotowywanie operacji..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparando a operação..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подготовка операции..."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İşlem hazırlanıyor..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Підготовка операції..."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang chuẩn bị thao tác..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在准备操作..."
+          }
+        }
+      }
+    },
+    "helper.workflow.starting.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starten des Vorgangs"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starting process"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciando el proceso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarrage du processus"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avvio del processo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プロセスを開始中"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uruchamianie procesu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciando o processo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запуск процесса"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Süreç başlatılıyor"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запуск процесу"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang khởi chạy quy trình"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在启动流程"
           }
         }
       }
@@ -10709,8 +12131,157 @@
         }
       }
     },
+    "Linux" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        }
+      }
+    },
     "Linux - nierozpoznana dystrybucja" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - nicht erkannte Distribution"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - unrecognized distribution"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - distribución no reconocida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - distribution non reconnue"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - distribuzione non riconosciuta"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - 未認識のディストリビューション"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - distribuição não reconhecida"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - нераспознанный дистрибутив"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - tanınmayan dağıtım"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - нерозпізнаний дистрибутив"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - bản phân phối không xác định"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - 未识别的发行版"
+          }
+        }
+      }
     },
     "Lokalizacja" : {
       "localizations" : {
@@ -12247,6 +13818,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法完成准备。缺少 InstallESD.dmg 文件。请重新下载该系统。"
+          }
+        }
+      }
+    },
+    "Nie można odmontować nośnika USB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-Laufwerk konnte nicht ausgehängt werden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to unmount USB drive"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo desmontar la unidad USB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de démonter le disque USB"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile smontare l’unità USB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB ドライブをアンマウントできません"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível desmontar a unidade USB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось отмонтировать USB-накопитель"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB sürücüsünün bağlantısı kesilemedi"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося відмонтувати USB-носій"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể tháo gắn kết ổ USB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法卸载 USB 驱动器"
           }
         }
       }
@@ -15943,6 +17590,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "辅助工具状态未知。"
+          }
+        }
+      }
+    },
+    "Nośnik USB był używany przez inną aplikację. Nie wyrażono zgody na wymuszenie odmontowania, dlatego proces został przerwany. Zamknij aplikacje korzystające z nośnika i spróbuj ponownie." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das USB-Laufwerk wurde von einer anderen App verwendet. Die Zustimmung zum erzwungenen Aushängen wurde nicht erteilt, daher wurde der Vorgang abgebrochen. Schließen Sie Apps, die dieses Laufwerk verwenden, und versuchen Sie es erneut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The USB drive was in use by another app. Permission to forcibly unmount it was not granted, so the process was canceled. Close apps using this drive and try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La unidad USB estaba en uso por otra app. No se concedió permiso para forzar el desmontaje, por lo que el proceso se canceló. Cierra las apps que usan esta unidad e inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le disque USB était utilisé par une autre app. L’autorisation de forcer le démontage n’a pas été accordée, le processus a donc été interrompu. Fermez les apps qui utilisent ce disque et réessayez."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’unità USB era in uso da un’altra app. Non è stata concessa l’autorizzazione a forzare lo smontaggio, quindi il processo è stato interrotto. Chiudi le app che usano questa unità e riprova."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB ドライブは別のアプリで使用中でした。強制アンマウントへの同意が得られなかったため、処理を中止しました。このドライブを使用しているアプリを終了して、もう一度お試しください。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A unidade USB estava sendo usada por outro app. A permissão para forçar a desmontagem não foi concedida, então o processo foi interrompido. Feche os apps que usam essa unidade e tente novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-носитель использовался другим приложением. Согласие на принудительное отмонтирование не было получено, поэтому процесс был прерван. Закройте приложения, использующие этот носитель, и попробуйте снова."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB sürücüsü başka bir uygulama tarafından kullanılıyordu. Zorla ayırma onayı verilmediği için işlem durduruldu. Bu sürücüyü kullanan uygulamaları kapatıp yeniden deneyin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-носій використовувався іншою програмою. Згоду на примусове відмонтування не надано, тому процес було перервано. Закрийте програми, що використовують цей носій, і спробуйте ще раз."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ổ USB đang được ứng dụng khác sử dụng. Không có quyền cho phép tháo gắn kết bắt buộc nên quá trình đã bị hủy. Hãy đóng các ứng dụng đang dùng ổ này rồi thử lại."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB 驱动器正被其他应用使用。由于未获准强制卸载，过程已中止。请关闭正在使用该驱动器的应用后重试。"
           }
         }
       }
@@ -25023,6 +26746,82 @@
         }
       }
     },
+    "Szczegóły błędu" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehlerdetails"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error details"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detalles del error"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détails de l’erreur"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dettagli errore"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エラーの詳細"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detalhes do erro"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подробности ошибки"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hata ayrıntıları"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Деталі помилки"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chi tiết lỗi"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "错误详情"
+          }
+        }
+      }
+    },
     "Szczegóły naprawy helpera" : {
       "localizations" : {
         "de" : {
@@ -25171,6 +26970,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "操作详情"
+          }
+        }
+      }
+    },
+    "Szczegóły przerwania" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details zur Unterbrechung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interruption details"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detalles de la interrupción"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détails de l’interruption"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dettagli dell’interruzione"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中断の詳細"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detalhes da interrupção"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подробности прерывания"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kesinti ayrıntıları"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Деталі переривання"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chi tiết gián đoạn"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中断详情"
           }
         }
       }
@@ -27100,6 +28975,82 @@
         }
       }
     },
+    "Tworzenie USB z Linux" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux-USB erstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating Linux USB"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creando USB de Linux"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Création de la clé USB Linux"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creazione di USB da Linux"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux USBを作成中"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Criando USB do Linux"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создание USB с Linux"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux'tan USB oluşturma"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Створення USB з Linux"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tạo USB từ Linux"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在创建 Linux USB"
+          }
+        }
+      }
+    },
     "Tworzenie USB z Mac OS X Tiger (Multi DVD)" : {
       "localizations" : {
         "de" : {
@@ -28015,6 +29966,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "系统安装器已创建"
+          }
+        }
+      }
+    },
+    "Utworzono nośnik startowy Linux" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux-Startmedium erstellt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux bootable media created"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se creó el medio de arranque de Linux"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le support de démarrage Linux a été créé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supporto di avvio Linux creato"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux起動メディアが作成されました"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A mídia de inicialização do Linux foi criada"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Загрузочный носитель Linux создан"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux önyükleme ortamı oluşturuldu"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завантажувальний носій Linux створено"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã tạo phương tiện khởi động Linux"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux 启动介质已创建"
           }
         }
       }
@@ -29855,6 +31882,82 @@
         }
       }
     },
+    "Wybrany nośnik jest używany przez inną aplikację. Aby kontynuować tworzenie nośnika startowego Linux, macUSB może wymusić odmontowanie urządzenia. Niezapisane dane na tym nośniku mogą zostać utracone. Czy chcesz wymusić odmontowanie?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ausgewählte Laufwerk wird von einer anderen App verwendet. Um die Erstellung des Linux-Startmediums fortzusetzen, kann macUSB das Gerät zwangsweise aushängen. Nicht gespeicherte Daten auf diesem Laufwerk können verloren gehen. Möchten Sie das Aushängen erzwingen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The selected drive is being used by another app. To continue creating Linux boot media, macUSB can forcibly unmount the device. Unsaved data on this drive may be lost. Do you want to forcibly unmount it?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La unidad seleccionada está siendo utilizada por otra app. Para continuar con la creación del medio de arranque Linux, macUSB puede forzar el desmontaje del dispositivo. Los datos no guardados en esta unidad podrían perderse. ¿Quieres forzar el desmontaje?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le disque sélectionné est utilisé par une autre app. Pour poursuivre la création du support de démarrage Linux, macUSB peut forcer le démontage de l’appareil. Les données non enregistrées sur ce disque peuvent être perdues. Voulez-vous forcer le démontage ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’unità selezionata è in uso da un’altra app. Per continuare la creazione del supporto di avvio Linux, macUSB può forzare lo smontaggio del dispositivo. I dati non salvati su questa unità potrebbero andare persi. Vuoi forzare lo smontaggio?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したドライブは別のアプリで使用中です。Linux 起動メディアの作成を続行するために、macUSB はデバイスを強制的にアンマウントできます。このドライブ上の未保存データは失われる可能性があります。強制アンマウントしますか？"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A unidade selecionada está sendo usada por outro app. Para continuar criando a mídia de inicialização Linux, o macUSB pode forçar a desmontagem do dispositivo. Dados não salvos nessa unidade podem ser perdidos. Deseja forçar a desmontagem?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбранный носитель используется другим приложением. Чтобы продолжить создание загрузочного носителя Linux, macUSB может принудительно отмонтировать устройство. Несохранённые данные на этом носителе могут быть потеряны. Принудительно отмонтировать?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilen sürücü başka bir uygulama tarafından kullanılıyor. Linux önyükleme ortamı oluşturmayı sürdürmek için macUSB aygıtı zorla ayırabilir. Bu sürücüdeki kaydedilmemiş veriler kaybolabilir. Zorla ayırmak istiyor musunuz?"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вибраний носій використовується іншою програмою. Щоб продовжити створення завантажувального носія Linux, macUSB може примусово відмонтувати пристрій. Незбережені дані на цьому носії можуть бути втрачені. Примусово відмонтувати?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ổ đã chọn đang được ứng dụng khác sử dụng. Để tiếp tục tạo phương tiện khởi động Linux, macUSB có thể buộc tháo gắn kết thiết bị. Dữ liệu chưa lưu trên ổ này có thể bị mất. Bạn có muốn buộc tháo gắn kết không?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所选驱动器正被其他应用使用。若要继续创建 Linux 启动介质，macUSB 可以强制卸载该设备。该驱动器上的未保存数据可能会丢失。要强制卸载吗？"
+          }
+        }
+      }
+    },
     "Wybrany nośnik korzysta z formatu APFS. Aby kontynuować, sformatuj go ręcznie w Narzędziu dyskowym do dowolnego formatu innego niż APFS." : {
       "localizations" : {
         "de" : {
@@ -30718,6 +32821,88 @@
         }
       }
     },
+    "Wykryto nieczytelny nośnik USB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht lesbares USB-Medium erkannt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unreadable USB media detected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se detectó un medio USB ilegible"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support USB illisible détecté"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rilevato supporto USB illeggibile"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読み取れないUSBメディアを検出しました"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wykryto nieczytelny nośnik USB"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mídia USB ilegível detectada"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обнаружен нечитаемый USB-носитель"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okunamayan USB ortam algılandı"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Виявлено нечитабельний USB-носій"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã phát hiện thiết bị USB không thể đọc"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检测到无法读取的 USB 介质"
+          }
+        }
+      }
+    },
     "Wykryto system OS X Mavericks" : {
       "comment" : "Mavericks detected alert title",
       "localizations" : {
@@ -31475,6 +33660,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "需要重启应用程序"
+          }
+        }
+      }
+    },
+    "Wymuś odmontowanie" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aushängen erzwingen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Force Unmount"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forzar desmontaje"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forcer le démontage"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forza smontaggio"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "強制アンマウント"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forçar desmontagem"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Принудительно отмонтировать"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zorla ayır"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Примусово відмонтувати"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buộc tháo gắn kết"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "强制卸载"
           }
         }
       }

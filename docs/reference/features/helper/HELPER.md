@@ -106,6 +106,7 @@ Serialization:
 Contract invariants:
 - Stage keys and status keys are treated as stable technical identifiers.
 - App-side localization rendering must stay compatible with helper payload content.
+- Helper workflow `stageTitleKey` and `statusKey` values must be localization catalog keys only (no user-facing literal strings in payload fields).
 - IPC shape changes are major helper changes and require explicit confirmation before implementation.
 
 ---
@@ -142,7 +143,7 @@ Contract invariants:
 
 ### USB Workflow Flow
 - App sends `HelperWorkflowRequestPayload`.
-- Daemon executes staged workflow (`prepare`, format/restore/createinstallmedia/copy/finalize patterns by workflow kind).
+- Daemon executes staged workflow (`prepare`, format/restore/createinstallmedia/copy/finalize patterns by workflow kind, plus Linux raw-copy branch).
 - Progress events are emitted with stage/status keys and percent updates.
 - Cancellation and failure return deterministic result payloads.
 
@@ -204,6 +205,12 @@ Daemon helper runtime:
   - disk resolution and target mapping helpers.
 - `macUSBHelper/Workflow/HelperWorkflowFileOperations.swift`
   - helper-side file operations and command wrappers.
+- `macUSBHelper/Workflow/Linux/HelperWorkflowLinuxStages.swift`
+  - Linux-specific stage graph (`linux_unmount_target`, `linux_raw_copy`).
+- `macUSBHelper/Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift`
+  - Linux raw-copy (`dd`) progress parsing and percent mapping.
+- `macUSBHelper/Workflow/Linux/HelperWorkflowLinuxDiskOps.swift`
+  - Linux source/target disk resolution helpers.
 - `macUSBHelper/DownloaderAssembly/DownloaderAssemblyExecutor.swift`
   - downloader assembly execution orchestration and final `.app` ownership normalization.
 - `macUSBHelper/DownloaderAssembly/DownloaderAssemblyProcess.swift`
@@ -247,6 +254,7 @@ Diagnostics should allow answering:
 - DEBUG-only helper/debug UI must not leak into Release.
 - Runtime helper invariants are identical across build configurations.
 - Any debug convenience path must not alter production helper semantics.
+- DEBUG and Release must use isolated helper identity tuples (`bundle id`, daemon plist name, daemon label, mach service) to avoid BTM/TCC cross-environment collisions.
 
 ---
 
@@ -302,7 +310,7 @@ Expected result:
 Update `HELPER.md` when:
 - helper file layout changes,
 - IPC contracts/types change,
-- stage/status key semantics change,
+- stage/status key semantics change (including Linux stage keys),
 - repair lifecycle behavior changes,
 - downloader assembly behavior in helper changes,
 - helper verification procedure changes.

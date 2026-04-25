@@ -10,12 +10,14 @@ struct FinishUSBView: View {
     let mountPoint: URL
     let onReset: () -> Void
     let isPPC: Bool
+    let isLinuxWorkflow: Bool
     let didFail: Bool
     let didCancel: Bool
     let creationStartedAt: Date?
     let cleanupTempWorkURL: URL?
     let shouldDetachMountPoint: Bool
     let detectedSystemIcon: NSImage?
+    let resultDetailMessage: String?
     
     @State private var isCleaning: Bool = true
     @State private var cleanupSuccess: Bool = false
@@ -29,23 +31,27 @@ struct FinishUSBView: View {
         mountPoint: URL,
         onReset: @escaping () -> Void,
         isPPC: Bool,
+        isLinuxWorkflow: Bool = false,
         didFail: Bool,
         didCancel: Bool = false,
         creationStartedAt: Date? = nil,
         cleanupTempWorkURL: URL? = nil,
         shouldDetachMountPoint: Bool = true,
-        detectedSystemIcon: NSImage? = nil
+        detectedSystemIcon: NSImage? = nil,
+        resultDetailMessage: String? = nil
     ) {
         self.systemName = systemName
         self.mountPoint = mountPoint
         self.onReset = onReset
         self.isPPC = isPPC
+        self.isLinuxWorkflow = isLinuxWorkflow
         self.didFail = didFail
         self.didCancel = didCancel
         self.creationStartedAt = creationStartedAt
         self.cleanupTempWorkURL = cleanupTempWorkURL
         self.shouldDetachMountPoint = shouldDetachMountPoint
         self.detectedSystemIcon = detectedSystemIcon
+        self.resultDetailMessage = resultDetailMessage
     }
     
     private var isSnowLeopard: Bool {
@@ -89,6 +95,7 @@ struct FinishUSBView: View {
     private var summaryTitleText: String {
         if isCancelledResult { return String(localized: "Tworzenie nośnika zostało przerwane") }
         if isFailedResult { return String(localized: "Tworzenie instalatora nie powiodło się") }
+        if isLinuxWorkflow { return String(localized: "Utworzono nośnik startowy Linux") }
         return String(localized: "Utworzono instalator systemu")
     }
     
@@ -136,16 +143,42 @@ struct FinishUSBView: View {
                         }
                     }
 
+                    if let resultDetailMessage, !resultDetailMessage.isEmpty {
+                        StatusCard(tone: isCancelledResult ? .warning : .error, density: .compact) {
+                            HStack(alignment: .top) {
+                                Image(systemName: "info.circle.fill")
+                                    .font(sectionIconFont)
+                                    .foregroundColor(isCancelledResult ? .orange : .red)
+                                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(isCancelledResult ? String(localized: "Szczegóły przerwania") : String(localized: "Szczegóły błędu"))
+                                        .font(.headline)
+                                        .foregroundColor(isCancelledResult ? .orange : .red)
+                                    Text(resultDetailMessage)
+                                        .font(.subheadline)
+                                        .foregroundColor(isCancelledResult ? .orange.opacity(0.9) : .red.opacity(0.85))
+                                }
+                                Spacer()
+                            }
+                        }
+                    }
+
                     if isSuccessResult {
                         StatusCard(tone: .neutral, density: .compact) {
                             HStack(alignment: .top) {
                                 Image(systemName: "info.circle.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 10) {
-                                    Text("Co teraz?").font(.headline).foregroundColor(.primary)
+                                    Text(isLinuxWorkflow ? "Co dalej?" : "Co teraz?").font(.headline).foregroundColor(.primary)
                                     VStack(alignment: .leading, spacing: 5) {
-                                        Text("• Podłącz nośnik USB do docelowego komputera Mac")
-                                        Text("• Uruchom komputer trzymając przycisk Option (⌥)")
-                                        Text("• Wybierz instalator systemu macOS lub OS X z listy")
+                                        if isLinuxWorkflow {
+                                            Text("• Podłącz nośnik USB do komputera docelowego (Mac lub PC)")
+                                            Text("• Uruchom komputer i wybierz rozruch z nośnika USB w menu startowym")
+                                            Text("• Po uruchomieniu Linuxa postępuj zgodnie z instrukcjami instalatora systemu")
+                                        } else {
+                                            Text("• Podłącz nośnik USB do docelowego komputera Mac")
+                                            Text("• Uruchom komputer trzymając przycisk Option (⌥)")
+                                            Text("• Wybierz instalator systemu macOS lub OS X z listy")
+                                        }
                                     }
                                     .font(.subheadline).foregroundColor(.secondary)
                                 }

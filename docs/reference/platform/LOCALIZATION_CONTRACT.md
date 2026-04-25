@@ -10,6 +10,7 @@
 - Static UI text should map cleanly through localization catalog.
 - Runtime non-`Text` user-facing strings should use `String(localized:)`.
 - Helper localization keys and app-side rendering keys must stay synchronized.
+- In helper workflow transport/rendering, `titleKey` and `statusKey` fields must always carry localization catalog keys, never prelocalized literal text.
 
 ## Language Set Consistency
 

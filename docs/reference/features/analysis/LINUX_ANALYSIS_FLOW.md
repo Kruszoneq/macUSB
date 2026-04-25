@@ -4,11 +4,12 @@ This document defines Linux-source detection behavior in `SystemAnalysisView` an
 
 ## Scope
 
-Linux detection is a fallback path in analysis only.
+Linux detection is a fallback path in analysis, with install handoff enabled.
 
 - Primary path remains macOS installer detection.
 - Linux path runs when macOS installer metadata is not detected from `.iso` / `.cdr` sources.
-- Linux detection does **not** unlock USB creation flow.
+- Linux path can also be forced manually from `Opcje -> Pomiń analizowanie pliku -> Linux` after unsupported/unrecognized analysis.
+- Positive Linux detection unlocks USB selection and installer creation flow.
 
 ## Trigger and Entry
 
@@ -78,15 +79,25 @@ Display format:
 - unknown distro: `Linux - nierozpoznana dystrybucja`
 - if ARM detected: append ` (ARM)`
 
-Linux recognition is shown as successful detection in analysis UI, but proceed/install path remains blocked:
+Linux recognition is shown as successful detection in analysis UI and enables install handoff:
 
-- no `sourceAppURL` assignment,
-- USB selection/proceed remains unavailable,
-- no installation workflow is started for Linux.
-- required USB capacity is still computed from source file size for diagnostics and consistency:
-  - source size `<= 6_000_000_000` bytes -> `8 GB`,
-  - source size `> 6_000_000_000` and `<= 14_000_000_000` bytes -> `16 GB`,
-  - source size `> 14_000_000_000` bytes -> `32 GB`.
+- `linuxSourceURL` is assigned,
+- USB selection/proceed is available after capacity/APFS validation,
+- installation workflow starts from shared summary/progress/finish UI,
+- Linux helper branch uses raw copy (`dd`) stages.
+
+Manual Linux force from menu sets Linux workflow state without distro recognition:
+
+- display name: `Linux`,
+- distro metadata: unresolved (no distro/version/edition),
+- icon: generic Linux fallback (`linux.icns`),
+- source handoff: selected file path is used as `linuxSourceURL`.
+
+Required USB capacity is computed from source file size:
+
+- source size `<= 6_000_000_000` bytes -> `8 GB`,
+- source size `> 6_000_000_000` and `<= 14_000_000_000` bytes -> `16 GB`,
+- source size `> 14_000_000_000` bytes -> `32 GB`.
 
 Linux detected state uses icon fallback chain:
 
@@ -108,13 +119,20 @@ When Linux fallback runs, logs must include:
 - evidence summary (files/rules that produced the result),
 - archive-reader diagnostics for timeout/error cases.
 
+When manual Linux force runs, logs must include:
+
+- manual-force transition entry,
+- selected source path,
+- resolved source file size in bytes (when available),
+- selected USB threshold in GB only.
+
 ## Reset and Lifecycle Rules
 
 Linux analysis state must be reset on:
 
 - new file selection/drop,
 - full analysis reset,
-- explicit transitions that force macOS-only state (for example Tiger manual selection).
+- explicit transitions that force another workflow family (for example Tiger manual selection).
 
 Mount lifecycle behavior remains aligned with existing analysis behavior:
 
@@ -123,10 +141,10 @@ Mount lifecycle behavior remains aligned with existing analysis behavior:
 
 ## Non-goals
 
-- No Linux installer creation support.
-- No Linux helper workflow changes.
+- No Linux distro-specific installer customization.
+- No persistent storage configuration for Linux media.
 - No distro icon extraction from ISO.
 
 ## Update Trigger
 
-Update this file when Linux detection heuristics, fallback routing, display format, or gating rules change.
+Update this file when Linux detection heuristics, fallback routing, display format, or install-gating rules change.

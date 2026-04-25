@@ -83,6 +83,38 @@ extension AnalysisLogic {
                 self.capacityCheckFinished = false
             }
         }
+
+        refreshUnreadableExternalUSBMediaIfNeeded()
+    }
+
+    func refreshUnreadableExternalUSBMediaIfNeeded(force: Bool = false) {
+        let now = Date()
+        guard force || now.timeIntervalSince(lastUnreadableUSBDetectionDate) >= unreadableUSBDetectionInterval else {
+            return
+        }
+        guard !isUnreadableUSBDetectionRunning else { return }
+
+        lastUnreadableUSBDetectionDate = now
+        isUnreadableUSBDetectionRunning = true
+
+        DispatchQueue.global(qos: .utility).async { [weak self] in
+            let unreadableCount = USBDriveLogic.unreadableExternalUSBMediaCount()
+
+            DispatchQueue.main.async {
+                guard let self else { return }
+                self.isUnreadableUSBDetectionRunning = false
+
+                if self.unreadableExternalUSBMediaCount != unreadableCount {
+                    self.log(
+                        "Wykryto nieczytelne nośniki USB: \(unreadableCount)",
+                        category: "USBSelection"
+                    )
+                }
+
+                self.unreadableExternalUSBMediaCount = unreadableCount
+                self.hasUnreadableExternalUSBMedia = unreadableCount > 0
+            }
+        }
     }
 
     func checkCapacity() {

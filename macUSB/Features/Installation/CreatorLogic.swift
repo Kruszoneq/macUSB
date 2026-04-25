@@ -134,6 +134,29 @@ extension UniversalInstallationView {
         log("UnmountDMG: polecenie zakończone")
     }
 
+    func unmountSourceImageIfNeeded() {
+        if let linuxMountPoint = linuxFlowContext?.mountPointURLForCleanup {
+            let mountPath = linuxMountPoint.path
+            log("Unmount Linux image: próba odmontowania \(mountPath)")
+
+            let task = Process()
+            task.launchPath = "/usr/bin/hdiutil"
+            task.arguments = ["detach", mountPath, "-force"]
+            try? task.run()
+            task.waitUntilExit()
+
+            log("Unmount Linux image: polecenie zakończone")
+            return
+        }
+
+        if linuxFlowContext != nil {
+            log("Unmount Linux image: brak mounted image path, pomijam.")
+            return
+        }
+
+        unmountDMG()
+    }
+
     func startUSBMonitoring() {
         guard !isProcessing,
               !isHelperWorking,
@@ -181,7 +204,7 @@ extension UniversalInstallationView {
             DispatchQueue.main.async {
                 self.isTabLocked = false
                 DispatchQueue.global(qos: .userInitiated).async {
-                    self.unmountDMG()
+                    self.unmountSourceImageIfNeeded()
                 }
                 withAnimation(.easeInOut(duration: 0.5)) {
                     self.isUSBDisconnectedLock = true
@@ -194,7 +217,7 @@ extension UniversalInstallationView {
             alert.beginSheetModal(for: window, completionHandler: completionHandler)
         } else {
             alert.runModal()
-            completionHandler(.alertFirstButtonReturn)
+            completionHandler(NSApplication.ModalResponse.alertFirstButtonReturn)
         }
     }
 }
