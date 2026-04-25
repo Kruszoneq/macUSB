@@ -151,6 +151,20 @@ extension AnalysisLogic {
         return 8
     }
 
+    private func resolveLinuxSourceFileSizeBytes(for sourceURL: URL) -> (bytes: Int64, source: String)? {
+        if let values = try? sourceURL.resourceValues(forKeys: [.fileSizeKey]),
+           let fileSize = values.fileSize {
+            return (Int64(fileSize), "fileSizeKey")
+        }
+
+        if let attributes = try? FileManager.default.attributesOfItem(atPath: sourceURL.path),
+           let size = attributes[.size] as? NSNumber {
+            return (size.int64Value, "attributesOfItem")
+        }
+
+        return nil
+    }
+
     private func loadLinuxDetectedSystemIcon(for distro: String?) -> NSImage? {
         if let distro, let distroIcon = loadLinuxDistroIcon(for: distro) {
             self.log("Załadowano ikonę Linux distro: \(distro)")
@@ -292,12 +306,10 @@ extension AnalysisLogic {
         self.isPPC = false
         self.legacyArchInfo = nil
         self.userSkippedAnalysis = false
-        if let values = try? sourceURL.resourceValues(forKeys: [.fileSizeKey]),
-           let fileSize = values.fileSize {
-            let fileSizeBytes = Int64(fileSize)
-            let requiredGB = linuxRequiredUSBCapacityGB(fromFileSizeBytes: fileSizeBytes)
+        if let fileSizeResolution = resolveLinuxSourceFileSizeBytes(for: sourceURL) {
+            let requiredGB = linuxRequiredUSBCapacityGB(fromFileSizeBytes: fileSizeResolution.bytes)
             self.requiredUSBCapacityGB = requiredGB
-            self.log("Linux source size: \(fileSizeBytes) bytes")
+            self.log("Linux source size: \(fileSizeResolution.bytes) bytes (source=\(fileSizeResolution.source))")
             self.log("Linux required USB threshold: \(requiredGB) GB")
         } else {
             self.requiredUSBCapacityGB = nil
