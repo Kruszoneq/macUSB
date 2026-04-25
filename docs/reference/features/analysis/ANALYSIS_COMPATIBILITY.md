@@ -19,6 +19,7 @@ For Linux fallback:
 - detection is considered successful when Linux is recognized, including unknown distro case,
 - recognized Linux result unlocks shared install flow (`UniversalInstallationView -> CreationProgressView -> FinishUSBView`),
 - detected Linux state may present dedicated Linux icon resource (`linux.icns`) in analysis UI.
+- manual Linux force from `Opcje -> Pomiń analizowanie pliku -> Linux` is treated as Linux-recognized state for install handoff.
 
 ## Current Supported Routing Families
 
@@ -37,6 +38,7 @@ Linux fallback routing includes:
 
 - recognized Linux distro,
 - Linux with unknown distro (`Linux - nierozpoznana dystrybucja`).
+- manually forced Linux (`Linux`).
 
 ## Special Blocking Rule
 
@@ -69,6 +71,7 @@ Linux fallback should additionally log:
 - evidence summary used for recognition,
 - archive-reader diagnostics relevant to bounded execution (`bsdtar` timeout/errors),
 - install handoff readiness (`linuxSourceURL` present, capacity computed).
+- manual-force diagnostics when Linux is forced from menu.
 
 ## Update Trigger
 
