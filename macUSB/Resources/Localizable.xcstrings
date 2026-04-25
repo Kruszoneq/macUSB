@@ -4525,7 +4525,80 @@
       }
     },
     "Brak źródła obrazu Linux do utworzenia nośnika USB." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Linux-Imagequelle zum Erstellen eines USB-Laufwerks verfügbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Linux image source is available to create a USB drive."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay una imagen de Linux de origen disponible para crear una unidad USB."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune image source de Linux n’est disponible pour créer une clé USB."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna immagine sorgente Linux disponibile per creare un'unità USB."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USBドライブを作成するためのLinuxイメージがありません。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhuma imagem de origem do Linux está disponível para criar uma unidade USB."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет исходного образа Linux для создания USB-накопителя."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB ortamı oluşturmak için Linux imaj kaynağı bulunamadı."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Немає вихідного образу Linux для створення USB-носія."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có ảnh đĩa nguồn Linux để tạo ổ USB."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有可用于创建 USB 驱动器的 Linux 源镜像。"
+          }
+        }
+      }
     },
     "Cały proces może potrwać kilka minut." : {
       "localizations" : {
@@ -5530,6 +5603,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "将跳过所选镜像的版本验证。应用程序将强制识别该文件为 “Mac OS X Tiger 10.4”，以允许挂载并写入 USB。您想继续吗？"
+          }
+        }
+      }
+    },
+    "Dla wybranego pliku zostanie pominięta analiza i rozpoznanie dystrybucji. Aplikacja wymusi rozpoznanie pliku jako „Linux”, aby umożliwić zapis USB w trybie Linux. Czy chcesz kontynuować?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Analyse und Distributionserkennung wird für die ausgewählte Datei übersprungen. Die Anwendung erzwingt die Erkennung der Datei als „Linux“, um das Schreiben auf USB im Linux-Modus zu ermöglichen. Möchten Sie fortfahren?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analysis and distribution detection will be skipped for the selected file. The application will force recognition of the file as “Linux” to enable writing to USB in Linux mode. Do you want to continue?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se omitirá el análisis y el reconocimiento de la distribución para el archivo seleccionado. La aplicación forzará el reconocimiento del archivo como «Linux» para permitir la escritura en USB en modo Linux. ¿Desea continuar?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’analyse et la détection de la distribution seront ignorées pour le fichier sélectionné. L’application forcera la reconnaissance du fichier comme « Linux » pour permettre l’écriture sur USB en mode Linux. Voulez-vous continuer ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per il file selezionato verranno ignorate l'analisi e il riconoscimento della distribuzione. L'applicazione forzerà il riconoscimento del file come \"Linux\" per consentire la scrittura su USB in modalità Linux. Vuoi continuare?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したファイルでは、解析とディストリビューションの検出がスキップされます。アプリケーションはファイルを「Linux」として強制的に認識し、LinuxモードでUSBに書き込めるようにします。続けますか？"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A análise e o reconhecimento da distribuição serão ignorados para o arquivo selecionado. O aplicativo forçará o reconhecimento do arquivo como \"Linux\" para permitir a gravação em USB no modo Linux. Deseja continuar?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для выбранного файла будут пропущены анализ и распознавание дистрибутива. Приложение принудительно распознает файл как «Linux», чтобы разрешить запись на USB в режиме Linux. Вы хотите продолжить?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilen dosya için analiz ve dağıtımın algılanması atlanacaktır. Uygulama, Linux modunda USB’ye yazmayı mümkün kılmak için dosyanın “Linux” olarak tanınmasını zorlayacaktır. Devam etmek istiyor musunuz?"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для вибраного файлу аналіз і розпізнавання дистрибутива буде пропущено. Програма примусово розпізнає файл як «Linux», щоб дозволити запис на USB у режимі Linux. Ви хочете продовжити?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Việc phân tích và nhận diện bản phân phối sẽ được bỏ qua đối với tệp đã chọn. Ứng dụng sẽ buộc nhận diện tệp là \"Linux\" để cho phép ghi USB ở chế độ Linux. Bạn có muốn tiếp tục không?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将跳过对所选文件的分析和发行版识别。应用程序将强制将该文件识别为“Linux”，以便在 Linux 模式下写入 USB。您想继续吗？"
           }
         }
       }
@@ -11408,8 +11557,157 @@
         }
       }
     },
+    "Linux" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux"
+          }
+        }
+      }
+    },
     "Linux - nierozpoznana dystrybucja" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - nicht erkannte Distribution"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - unrecognized distribution"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - distribución no reconocida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - distribution non reconnue"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - distribuzione non riconosciuta"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - 不明なディストリビューション"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - distribuição não reconhecida"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - нераспознанный дистрибутив"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - tanınmayan dağıtım"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - нерозпізнаний дистрибутив"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - bản phân phối không được nhận diện"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - 未识别的发行版"
+          }
+        }
+      }
     },
     "Lokalizacja" : {
       "localizations" : {
@@ -27795,6 +28093,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "介质创建已中止"
+          }
+        }
+      }
+    },
+    "Tworzenie USB z Linux" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux-USB erstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating Linux USB"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creando USB de Linux"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Création de la clé USB Linux"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creazione di USB da Linux"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux USBを作成中"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Criando USB do Linux"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создание USB с Linux"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux'tan USB oluşturma"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Створення USB з Linux"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tạo USB từ Linux"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在创建 Linux USB"
           }
         }
       }

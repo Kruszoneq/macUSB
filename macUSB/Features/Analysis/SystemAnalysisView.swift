@@ -138,6 +138,15 @@ struct SystemAnalysisView: View {
         guard let installerURL = AnalysisSelectionHandoff.shared.consumePendingInstallerURL() else { return }
         logic.applySelectedURLAndStartAnalysis(installerURL)
     }
+
+    private func handleViewAppear() {
+        logic.refreshDrives()
+        updateMenuState()
+        consumePendingDownloaderInstallerAndAnalyze()
+        if logic.shouldShowMavericksDialog {
+            presentMavericksDialog()
+        }
+    }
     
     private var fileRequirementsBox: some View {
         StatusCard(tone: .neutral, density: .compact) {
@@ -446,14 +455,14 @@ struct SystemAnalysisView: View {
         .onReceive(NotificationCenter.default.publisher(for: .macUSBStartTigerMultiDVD)) { _ in
             logic.forceTigerMultiDVDSelection()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .macUSBStartLinuxManualSelection)) { _ in
+            logic.forceLinuxManualSelection()
+        }
         .onReceive(NotificationCenter.default.publisher(for: .macUSBApplyPendingDownloaderInstaller)) { _ in
             consumePendingDownloaderInstallerAndAnalyze()
         }
         .onAppear {
-            logic.refreshDrives()
-            updateMenuState()
-            consumePendingDownloaderInstallerAndAnalyze()
-            if logic.shouldShowMavericksDialog { presentMavericksDialog() }
+            handleViewAppear()
         }
         .navigationTitle("Konfiguracja źródła i celu")
         .navigationBarBackButtonHidden(true)

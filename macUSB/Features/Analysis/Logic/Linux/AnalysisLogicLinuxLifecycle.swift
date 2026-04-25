@@ -1,5 +1,6 @@
 import Foundation
 import AppKit
+import SwiftUI
 
 private enum LinuxDistroIconCatalog {
     static let names: [String] = [
@@ -86,6 +87,60 @@ private enum LinuxDistroIconCatalog {
 }
 
 extension AnalysisLogic {
+    func forceLinuxManualSelection() {
+        guard let sourceURL = self.selectedFileUrl else {
+            self.logError("Nie można wymusić rozpoznania Linux: brak wybranego pliku.")
+            return
+        }
+
+        self.log("Ręcznie wybrano tryb Linux (pominięcie analizy pliku).")
+
+        withAnimation {
+            self.isAnalyzing = false
+            self.userSkippedAnalysis = true
+            self.resetLinuxDetectionState()
+
+            self.isLinuxDetected = true
+            self.isLinuxDistributionRecognized = false
+            self.linuxDisplayName = "Linux"
+            self.linuxSourceURL = sourceURL
+
+            self.recognizedVersion = "Linux"
+            self.sourceAppURL = nil
+            self.detectedSystemIcon = loadLinuxDetectedSystemIcon(for: nil)
+
+            self.isSystemDetected = true
+            self.showUnsupportedMessage = false
+            self.showUSBSection = false
+
+            self.needsCodesign = true
+            self.isLegacyDetected = false
+            self.isRestoreLegacy = false
+            self.isCatalina = false
+            self.isSierra = false
+            self.isMavericks = false
+            self.isUnsupportedSierra = false
+            self.isPPC = false
+            self.legacyArchInfo = nil
+            self.selectedDrive = nil
+            self.capacityCheckFinished = false
+        }
+
+        if let values = try? sourceURL.resourceValues(forKeys: [.fileSizeKey]),
+           let fileSize = values.fileSize {
+            let fileSizeBytes = Int64(fileSize)
+            let requiredGB = linuxRequiredUSBCapacityGB(fromFileSizeBytes: fileSizeBytes)
+            self.requiredUSBCapacityGB = requiredGB
+            self.log("Linux manual source size: \(fileSizeBytes) bytes")
+            self.log("Linux manual required USB threshold: \(requiredGB) GB")
+        } else {
+            self.requiredUSBCapacityGB = nil
+            self.logError("Nie udało się odczytać rozmiaru pliku dla ręcznego trybu Linux. Minimalna pojemność USB pozostaje nierozstrzygnięta (-- GB).")
+        }
+
+        self.log("Ustawiono ręczne rozpoznanie Linux: recognizedVersion=\(self.recognizedVersion), source=\(sourceURL.path)")
+    }
+
     private func linuxRequiredUSBCapacityGB(fromFileSizeBytes fileSizeBytes: Int64) -> Int {
         if fileSizeBytes > 14_000_000_000 {
             return 32
