@@ -23,6 +23,7 @@ struct HelperWorkflowRequestPayload: Codable {
     let needsCodesign: Bool
     let requiresApplicationPathArg: Bool
     let requesterUID: Int?
+    let linuxForceUnmount: Bool
 }
 
 struct HelperProgressEventPayload: Codable {

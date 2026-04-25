@@ -37,7 +37,8 @@ extension UniversalInstallationView {
             isSierra: false,
             needsCodesign: false,
             requiresApplicationPathArg: false,
-            requesterUID: requesterUID
+            requesterUID: requesterUID,
+            linuxForceUnmount: false
         )
     }
 }

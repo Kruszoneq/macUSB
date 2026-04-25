@@ -348,7 +348,16 @@ struct USBDriveLogic {
         for url in urls {
             let bsd = getBSDName(from: url)
             guard !bsd.isEmpty, bsd != "unknown" else { continue }
-            result.insert(wholeDiskName(from: bsd))
+            let mountedWhole = wholeDiskName(from: bsd)
+            result.insert(mountedWhole)
+
+            // APFS volumes can be mounted through container identifiers that do not
+            // directly map to the physical external whole disk reported by diskutil list external.
+            // Add resolved physical store whole disk to avoid false "unreadable USB" classification.
+            if detectFileSystemFormat(forVolumeURL: url) == .apfs,
+               let resolvedWhole = resolveFormattingWholeDiskBSDName(forVolumeURL: url, fallbackBSDName: bsd) {
+                result.insert(wholeDiskName(from: resolvedWhole))
+            }
         }
         return result
     }

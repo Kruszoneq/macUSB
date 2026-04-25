@@ -40,6 +40,7 @@ extension UniversalInstallationView {
         processingSubtitle = String(localized: "Przygotowywanie operacji...")
         isHelperWorking = false
         errorMessage = ""
+        workflowResultDetailMessage = nil
         navigateToFinish = false
         didCancelCreation = false
         cancellationRequestedBeforeWorkflowStart = false
@@ -48,8 +49,8 @@ extension UniversalInstallationView {
         processingIcon = "lock.shield.fill"
         isCancelled = false
         helperProgressPercent = 0
-        helperStageTitleKey = "Przygotowanie"
-        helperStatusKey = "Przygotowywanie operacji..."
+        helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
+        helperStatusKey = HelperWorkflowLocalizationKeys.startingStatus
         helperCurrentStageKey = ""
         helperWriteSpeedText = "- MB/s"
         helperCopyProgressPercent = 0
@@ -112,20 +113,20 @@ extension UniversalInstallationView {
 
             DispatchQueue.global(qos: .userInitiated).async {
                 do {
-                    let request = try prepareHelperWorkflowRequest(for: drive)
-                    let transferTotals = calculateTransferStageTotals(for: request)
+                    var workflowRequest = try prepareHelperWorkflowRequest(for: drive)
+                    let transferTotals = calculateTransferStageTotals(for: workflowRequest)
                     DispatchQueue.main.async {
-                        helperTransferMonitoringRequestedBSDName = request.targetBSDName
-                        helperTransferMonitoringWholeDiskBSDName = extractWholeDiskName(from: request.targetBSDName)
-                        helperTransferMonitoringTargetVolumePath = request.targetVolumePath
-                        helperTransferMonitoringLastKnownPath = request.targetVolumePath
+                        helperTransferMonitoringRequestedBSDName = workflowRequest.targetBSDName
+                        helperTransferMonitoringWholeDiskBSDName = extractWholeDiskName(from: workflowRequest.targetBSDName)
+                        helperTransferMonitoringTargetVolumePath = workflowRequest.targetVolumePath
+                        helperTransferMonitoringLastKnownPath = workflowRequest.targetVolumePath
 
                         withAnimation {
                             isProcessing = false
                             isHelperWorking = true
                             helperProgressPercent = 0
-                            helperStageTitleKey = "Uruchamianie procesu"
-                            helperStatusKey = "Rozpoczynanie..."
+                            helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
+                            helperStatusKey = HelperWorkflowLocalizationKeys.initializingStatus
                             helperTransferStageTotals = transferTotals
                         }
 
@@ -152,7 +153,7 @@ extension UniversalInstallationView {
                         var startHelperWorkflow: ((Bool) -> Void)!
                         startHelperWorkflow = { allowCompatibilityRecovery in
                             PrivilegedOperationClient.shared.startWorkflow(
-                                request: request,
+                                request: workflowRequest,
                                 onEvent: { event in
                                     guard event.workflowID == activeHelperWorkflowID else { return }
                                     let normalizedStageKey = canonicalStageKeyForPresentation(event.stageKey)
@@ -197,7 +198,35 @@ extension UniversalInstallationView {
                                         return
                                     }
 
+                                    if shouldPromptLinuxForceUnmountAlert(for: result) {
+                                        showLinuxForceUnmountAlert(
+                                            onForce: {
+                                                workflowResultDetailMessage = nil
+                                                let forcedRequest = makeLinuxForceUnmountRequest(from: workflowRequest)
+                                                workflowRequest = forcedRequest
+                                                helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
+                                                helperStatusKey = HelperWorkflowLocalizationKeys.initializingStatus
+                                                helperCurrentStageKey = ""
+                                                helperProgressPercent = 0
+                                                helperCopyProgressPercent = 0
+                                                helperWriteSpeedText = "- MB/s"
+                                                withAnimation {
+                                                    isHelperWorking = true
+                                                }
+                                                log("LinuxInstallFlow: użytkownik wyraził zgodę na wymuszenie odmontowania nośnika.", category: "LinuxInstallFlow")
+                                                startHelperWorkflow(true)
+                                            },
+                                            onCancel: {
+                                                workflowResultDetailMessage = String(localized: "Nośnik USB był używany przez inną aplikację. Nie wyrażono zgody na wymuszenie odmontowania, dlatego proces został przerwany. Zamknij aplikacje korzystające z nośnika i spróbuj ponownie.")
+                                                log("LinuxInstallFlow: użytkownik odmówił wymuszonego odmontowania nośnika.", category: "LinuxInstallFlow")
+                                                performLinuxUnmountDeclinedCleanupAndCancel()
+                                            }
+                                        )
+                                        return
+                                    }
+
                                     helperOperationFailed = !result.success
+                                    workflowResultDetailMessage = result.success ? nil : result.errorMessage
 
                                     if !result.success, let errorMessageText = result.errorMessage {
                                         logError("Helper zakończył się błędem: \(errorMessageText)", category: "Installation")
@@ -221,8 +250,8 @@ extension UniversalInstallationView {
                                     }
 
                                     log("Wykryto niezgodność kontraktu IPC helpera. Rozpoczynam automatyczne przeładowanie helpera.", category: "Installation")
-                                    helperStageTitleKey = "Rozpoczynanie..."
-                                    helperStatusKey = "Przygotowywanie operacji..."
+                                    helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
+                                    helperStatusKey = HelperWorkflowLocalizationKeys.startingStatus
 
                                     HelperServiceManager.shared.forceReloadForIPCContractMismatch { ready, recoveryMessage in
                                         guard ready else {
@@ -230,8 +259,8 @@ extension UniversalInstallationView {
                                             return
                                         }
 
-                                        helperStageTitleKey = "Rozpoczynanie..."
-                                        helperStatusKey = "Przygotowywanie operacji..."
+                                        helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
+                                        helperStatusKey = HelperWorkflowLocalizationKeys.startingStatus
                                         startHelperWorkflow(false)
                                     }
                                 },
@@ -243,8 +272,8 @@ extension UniversalInstallationView {
                                         }
                                         return
                                     }
-                                    helperStageTitleKey = "Rozpoczynanie..."
-                                    helperStatusKey = "Rozpoczynanie..."
+                                    helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
+                                    helperStatusKey = HelperWorkflowLocalizationKeys.initializingStatus
                                     helperCurrentStageKey = ""
                                     helperCopyProgressPercent = 0
                                     helperCopiedBytes = 0
@@ -255,10 +284,10 @@ extension UniversalInstallationView {
                                     helperTransferFallbackBytes = 0
                                     helperTransferFallbackStageKey = ""
                                     helperTransferFallbackLastSampleAt = nil
-                                    helperTransferMonitoringRequestedBSDName = request.targetBSDName
-                                    helperTransferMonitoringWholeDiskBSDName = extractWholeDiskName(from: request.targetBSDName)
-                                    helperTransferMonitoringTargetVolumePath = request.targetVolumePath
-                                    helperTransferMonitoringLastKnownPath = request.targetVolumePath
+                                    helperTransferMonitoringRequestedBSDName = workflowRequest.targetBSDName
+                                    helperTransferMonitoringWholeDiskBSDName = extractWholeDiskName(from: workflowRequest.targetBSDName)
+                                    helperTransferMonitoringTargetVolumePath = workflowRequest.targetVolumePath
+                                    helperTransferMonitoringLastKnownPath = workflowRequest.targetVolumePath
                                     MenuState.shared.updateDebugCopiedData(bytes: 0)
                                     startHelperWriteSpeedMonitoring(for: drive)
                                     log("Uruchomiono helper workflow: \(workflowID)")
@@ -326,7 +355,8 @@ extension UniversalInstallationView {
                 isSierra: false,
                 needsCodesign: false,
                 requiresApplicationPathArg: false,
-                requesterUID: requesterUID
+                requesterUID: requesterUID,
+                linuxForceUnmount: false
             )
         }
 
@@ -354,7 +384,8 @@ extension UniversalInstallationView {
                 isSierra: false,
                 needsCodesign: false,
                 requiresApplicationPathArg: false,
-                requesterUID: requesterUID
+                requesterUID: requesterUID,
+                linuxForceUnmount: false
             )
         }
 
@@ -373,7 +404,8 @@ extension UniversalInstallationView {
                 isSierra: false,
                 needsCodesign: false,
                 requiresApplicationPathArg: false,
-                requesterUID: requesterUID
+                requesterUID: requesterUID,
+                linuxForceUnmount: false
             )
         }
 
@@ -391,7 +423,8 @@ extension UniversalInstallationView {
             isSierra: isSierra,
             needsCodesign: needsCodesign,
             requiresApplicationPathArg: isLegacySystem || isSierra,
-            requesterUID: requesterUID
+            requesterUID: requesterUID,
+            linuxForceUnmount: false
         )
     }
 

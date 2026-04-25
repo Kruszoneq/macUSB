@@ -72,7 +72,9 @@ final class HelperWorkflowExecutor {
                 isUserCancelled: true
             )
         } catch HelperExecutionError.failed(let stage, let exitCode, let description) {
-            runBestEffortTempCleanupStage()
+            if !shouldDeferCleanupForLinuxUnmountPrompt(failedStage: stage, description: description) {
+                runBestEffortTempCleanupStage()
+            }
             return HelperWorkflowResultPayload(
                 workflowID: workflowID,
                 success: false,

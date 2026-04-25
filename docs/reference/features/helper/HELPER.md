@@ -106,6 +106,7 @@ Serialization:
 Contract invariants:
 - Stage keys and status keys are treated as stable technical identifiers.
 - App-side localization rendering must stay compatible with helper payload content.
+- Helper workflow `stageTitleKey` and `statusKey` values must be localization catalog keys only (no user-facing literal strings in payload fields).
 - IPC shape changes are major helper changes and require explicit confirmation before implementation.
 
 ---

@@ -113,7 +113,8 @@ extension AnalysisLogic {
                                             defer { self.isAnalyzing = false }
 
                                             if let linuxResult {
-                                                self.applyLinuxDetectionResult(linuxResult, sourceURL: url, mountedImagePath: nil)
+                                                let mountPathForFallback = self.mountedDMGPath
+                                                self.applyLinuxDetectionResult(linuxResult, sourceURL: url, mountedImagePath: mountPathForFallback)
                                                 return
                                             }
 

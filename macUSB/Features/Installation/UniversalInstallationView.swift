@@ -64,6 +64,7 @@ struct UniversalInstallationView: View {
     @State var usbCheckTimer: Timer?
 
     @State var helperOperationFailed: Bool = false
+    @State var workflowResultDetailMessage: String? = nil
     
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
@@ -439,6 +440,7 @@ struct UniversalInstallationView: View {
                     isCancelling: $isCancelling,
                     navigateToFinish: $navigateToFinish,
                     helperOperationFailed: $helperOperationFailed,
+                    workflowResultDetailMessage: $workflowResultDetailMessage,
                     didCancelCreation: $didCancelCreation,
                     creationStartedAt: $usbProcessStartedAt
                 ),

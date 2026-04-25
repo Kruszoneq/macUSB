@@ -41,6 +41,7 @@ struct CreationProgressView: View {
     @Binding var isCancelling: Bool
     @Binding var navigateToFinish: Bool
     @Binding var helperOperationFailed: Bool
+    @Binding var workflowResultDetailMessage: String?
     @Binding var didCancelCreation: Bool
     @Binding var creationStartedAt: Date?
     private var sectionIconFont: Font { .title3 }
@@ -171,7 +172,8 @@ struct CreationProgressView: View {
                     didCancel: didCancelCreation,
                     creationStartedAt: creationStartedAt,
                     shouldDetachMountPoint: shouldDetachMountPoint,
-                    detectedSystemIcon: detectedSystemIcon
+                    detectedSystemIcon: detectedSystemIcon,
+                    resultDetailMessage: workflowResultDetailMessage
                 ),
                 isActive: $navigateToFinish
             ) { EmptyView() }
@@ -219,7 +221,7 @@ struct CreationProgressView: View {
                                 .foregroundColor(.accentColor)
                         }
                     }
-                    Text(LocalizedStringKey(helperStatusKey.isEmpty ? "Rozpoczynanie..." : helperStatusKey))
+                    Text(LocalizedStringKey(helperStatusKey.isEmpty ? HelperWorkflowLocalizationKeys.initializingStatus : helperStatusKey))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     if shouldShowCopyProgress(for: stage.key) {
