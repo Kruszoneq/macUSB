@@ -46,6 +46,10 @@
 - `macUSB/Features/Installation/Linux/CreatorLinuxHelperLogic.swift` — Linux helper request construction and start routing.
 - `macUSB/Features/Installation/Linux/CreationProgressLinuxMapping.swift` — Linux stage mapping for shared progress UI.
 
+### Shared UI layout
+
+- `macUSB/Shared/UI/TouchBar/TouchbarSupport.swift` — global, fixed Touch Bar configuration (app branding).
+
 ### Analysis docs
 
 - `docs/reference/features/analysis/ANALYSIS_COMPATIBILITY.md` — analysis contract and routing invariants.

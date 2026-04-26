@@ -20,6 +20,7 @@ Use this map before reading feature-specific references:
 
 ### UI and visual consistency
 - `docs/reference/design/DESIGN_SYSTEM.md`
+- `docs/reference/platform/TOUCHBAR.md`
 
 ### Analysis and compatibility routing
 - `docs/reference/features/analysis/ANALYSIS_COMPATIBILITY.md`

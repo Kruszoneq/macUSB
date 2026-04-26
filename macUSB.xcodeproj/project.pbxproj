@@ -25,8 +25,8 @@
 		A10000012F0000010000003E /* Workflow/Linux/HelperWorkflowLinuxStages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000003B /* Workflow/Linux/HelperWorkflowLinuxStages.swift */; };
 		A10000012F0000010000003F /* Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000003C /* Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift */; };
 		A10000012F00000100000040 /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000003D /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift */; };
-		A10000012F00000100000044 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */; };
 		A10000012F00000100000041 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000042 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist */; };
+		A10000012F00000100000044 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */; };
 		B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */ = {isa = PBXBuildFile; fileRef = B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */; };
 		C10000012F00000100000001 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */; };
 		D10000012F00000100000001 /* macUSB/Resources/Icons/Linux/Distros in Resources */ = {isa = PBXBuildFile; fileRef = D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */; };
@@ -106,8 +106,8 @@
 		A10000012F0000010000003B /* Workflow/Linux/HelperWorkflowLinuxStages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxStages.swift; sourceTree = "<group>"; };
 		A10000012F0000010000003C /* Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift; sourceTree = "<group>"; };
 		A10000012F0000010000003D /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxDiskOps.swift; sourceTree = "<group>"; };
-		A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift; sourceTree = "<group>"; };
 		A10000012F00000100000042 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist; sourceTree = "<group>"; };
+		A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift; sourceTree = "<group>"; };
 		B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = macUSB/Resources/Sounds/burn_complete.aif; sourceTree = "<group>"; };
 		C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift; sourceTree = "<group>"; };
 		D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */ = {isa = PBXFileReference; lastKnownFileType = folder; path = macUSB/Resources/Icons/Linux/Distros; sourceTree = "<group>"; };
@@ -180,6 +180,7 @@
 				Features/Installation/Linux/CreatorLinuxUnmountRecoveryLogic.swift,
 				Features/Installation/Linux/LinuxInstallationFlowContext.swift,
 				Features/Installation/UniversalInstallationView.swift,
+				Features/Welcome/AppBranding.swift,
 				Features/Welcome/WelcomeView.swift,
 				macUSBIcon.icon,
 				Resources/Icons/Linux/linux.icns,
@@ -223,6 +224,7 @@
 				Shared/UI/DesignTokens.swift,
 				Shared/UI/LiquidGlassCompatibility.swift,
 				Shared/UI/StatusCard.swift,
+				Shared/UI/TouchBar/TouchbarSupport.swift,
 			);
 			target = 0F94F4A42EDE3E510019F69A /* macUSB */;
 		};
@@ -271,6 +273,7 @@
 				Features/Installation/Linux/CreatorLinuxUnmountRecoveryLogic.swift,
 				Features/Installation/Linux/LinuxInstallationFlowContext.swift,
 				Features/Installation/UniversalInstallationView.swift,
+				Features/Welcome/AppBranding.swift,
 				Features/Welcome/WelcomeView.swift,
 				macUSBIcon.icon,
 				Resources/Localizable.xcstrings,
@@ -297,6 +300,7 @@
 				Shared/UI/DesignTokens.swift,
 				Shared/UI/LiquidGlassCompatibility.swift,
 				Shared/UI/StatusCard.swift,
+				Shared/UI/TouchBar/TouchbarSupport.swift,
 			);
 			target = 0F94F4BD2EDE3E520019F69A /* macUSBUITests */;
 		};
