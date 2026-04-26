@@ -215,6 +215,9 @@ struct WindowConfigurator: NSViewRepresentable {
                 
                 // Ustawienie tytułu
                 window.title = "macUSB"
+
+                // Staly Touch Bar dla calej aplikacji niezaleznie od widoku.
+                TouchbarSupport.shared.install(on: window)
             }
         }
         return view
