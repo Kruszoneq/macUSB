@@ -72,9 +72,10 @@ Common problems reported across forums and guides include:
    - use the built-in Downloader to fetch a macOS installer from Apple.
 3. Select the target USB drive and review the operation details.
 4. Start the process and monitor bootable media creation stage by stage.
+   - ***All data on the selected USB drive will be erased.***
 5. Use the final result screen for next steps.
 
-> **Note:**
+> [!IMPORTANT]
 > macUSB requires two mandatory permissions for reliable bootable media creation: **enable Allow in the Background for macUSB** and **enable Full Disk Access for macUSB** in System Settings. Without these permissions, helper workflows may fail.
 
 <table align="center">
@@ -95,9 +96,6 @@ Common problems reported across forums and guides include:
     </td>
   </tr>
 </table>
-
-> **Warning:**
-> All data on the selected USB drive will be erased.
 
 ---
 
@@ -202,7 +200,7 @@ Common problems reported across forums and guides include:
 - **For Linux images:** **8 GB** or more, depending on the size of the selected `.iso` or `.cdr` image.
 - **Performance:** USB 3.0+ is recommended.
 
-> **Note:**
+> [!NOTE]
 > External HDD/SSD support is disabled by default on every app launch to improve safety and reduce the risk of accidental target selection. You can enable it in **Options** → **Enable external drives support**.
 
 ### Source Inputs
@@ -268,7 +266,6 @@ Validated scenarios include:
 
 Use the [step-by-step guide](https://kruszoneq.github.io/macUSB/pages/guides/ppc_boot_instructions.html) for setup and boot instructions.
 
-> **Note:**
 > PowerPC USB boot behavior can vary by model. During validation testing, USB boot was confirmed on an **iMac G5**, while an **iBook G4 (2003)** detected the USB device but did not boot from it successfully.
 
 ---
