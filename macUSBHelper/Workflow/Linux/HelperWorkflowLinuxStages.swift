@@ -58,6 +58,16 @@ extension HelperWorkflowExecutor {
                     "conv=fsync"
                 ],
                 parseToolPercent: false
+            ),
+            WorkflowStage(
+                key: "linux_verify_write",
+                titleKey: HelperWorkflowLocalizationKeys.linuxVerifyWriteTitle,
+                statusKey: HelperWorkflowLocalizationKeys.linuxVerifyWriteStatus,
+                startPercent: 98,
+                endPercent: 99,
+                executable: "/usr/bin/true",
+                arguments: [rawTargetDevice],
+                parseToolPercent: false
             )
         ]
     }

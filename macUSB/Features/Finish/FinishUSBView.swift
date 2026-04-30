@@ -18,6 +18,7 @@ struct FinishUSBView: View {
     let shouldDetachMountPoint: Bool
     let detectedSystemIcon: NSImage?
     let resultDetailMessage: String?
+    let linuxErrorPresentation: LinuxWorkflowErrorPresentation?
     
     @State private var isCleaning: Bool = true
     @State private var cleanupSuccess: Bool = false
@@ -38,7 +39,8 @@ struct FinishUSBView: View {
         cleanupTempWorkURL: URL? = nil,
         shouldDetachMountPoint: Bool = true,
         detectedSystemIcon: NSImage? = nil,
-        resultDetailMessage: String? = nil
+        resultDetailMessage: String? = nil,
+        linuxErrorPresentation: LinuxWorkflowErrorPresentation? = nil
     ) {
         self.systemName = systemName
         self.mountPoint = mountPoint
@@ -52,6 +54,7 @@ struct FinishUSBView: View {
         self.shouldDetachMountPoint = shouldDetachMountPoint
         self.detectedSystemIcon = detectedSystemIcon
         self.resultDetailMessage = resultDetailMessage
+        self.linuxErrorPresentation = linuxErrorPresentation
     }
     
     private var isSnowLeopard: Bool {
@@ -143,7 +146,25 @@ struct FinishUSBView: View {
                         }
                     }
 
-                    if let resultDetailMessage, !resultDetailMessage.isEmpty {
+                    if isFailedResult, isLinuxWorkflow, let linuxErrorPresentation {
+                        StatusCard(tone: .warning, density: .compact) {
+                            HStack(alignment: .top) {
+                                Image(systemName: linuxErrorPresentation.iconSystemName)
+                                    .font(sectionIconFont)
+                                    .foregroundColor(.orange)
+                                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(LocalizedStringKey(linuxErrorPresentation.titleKey))
+                                        .font(.headline)
+                                        .foregroundColor(.orange)
+                                    Text(LocalizedStringKey(linuxErrorPresentation.descriptionKey))
+                                        .font(.subheadline)
+                                        .foregroundColor(.orange.opacity(0.9))
+                                }
+                                Spacer()
+                            }
+                        }
+                    } else if let resultDetailMessage, !resultDetailMessage.isEmpty {
                         StatusCard(tone: isCancelledResult ? .warning : .error, density: .compact) {
                             HStack(alignment: .top) {
                                 Image(systemName: "info.circle.fill")

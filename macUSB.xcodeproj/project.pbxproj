@@ -26,7 +26,8 @@
 		A10000012F0000010000003F /* Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000003C /* Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift */; };
 		A10000012F00000100000040 /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000003D /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift */; };
 		A10000012F00000100000041 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000042 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist */; };
-		A10000012F00000100000044 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */; };
+			A10000012F00000100000044 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */; };
+			A10000012F00000100000045 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000046 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift */; };
 		B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */ = {isa = PBXBuildFile; fileRef = B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */; };
 		C10000012F00000100000001 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */; };
 		D10000012F00000100000001 /* macUSB/Resources/Icons/Linux/Distros in Resources */ = {isa = PBXBuildFile; fileRef = D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */; };
@@ -107,7 +108,8 @@
 		A10000012F0000010000003C /* Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift; sourceTree = "<group>"; };
 		A10000012F0000010000003D /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxDiskOps.swift; sourceTree = "<group>"; };
 		A10000012F00000100000042 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist; sourceTree = "<group>"; };
-		A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift; sourceTree = "<group>"; };
+			A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift; sourceTree = "<group>"; };
+			A10000012F00000100000046 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxVerification.swift; sourceTree = "<group>"; };
 		B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = macUSB/Resources/Sounds/burn_complete.aif; sourceTree = "<group>"; };
 		C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift; sourceTree = "<group>"; };
 		D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */ = {isa = PBXFileReference; lastKnownFileType = folder; path = macUSB/Resources/Icons/Linux/Distros; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				Features/Installation/Linux/CreatorLinuxHelperLogic.swift,
 				Features/Installation/Linux/CreatorLinuxLogic.swift,
 				Features/Installation/Linux/CreatorLinuxUnmountRecoveryLogic.swift,
+				Features/Installation/Linux/LinuxWorkflowErrorPresentation.swift,
 				Features/Installation/Linux/LinuxInstallationFlowContext.swift,
 				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/AppBranding.swift,
@@ -271,6 +274,7 @@
 				Features/Installation/Linux/CreatorLinuxHelperLogic.swift,
 				Features/Installation/Linux/CreatorLinuxLogic.swift,
 				Features/Installation/Linux/CreatorLinuxUnmountRecoveryLogic.swift,
+				Features/Installation/Linux/LinuxWorkflowErrorPresentation.swift,
 				Features/Installation/Linux/LinuxInstallationFlowContext.swift,
 				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/AppBranding.swift,
@@ -412,9 +416,10 @@
 				A10000012F00000100000028 /* Workflow/HelperWorkflowFileOperations.swift */,
 				A10000012F0000010000003B /* Workflow/Linux/HelperWorkflowLinuxStages.swift */,
 				A10000012F0000010000003C /* Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift */,
-				A10000012F0000010000003D /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift */,
-				A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */,
-				A10000012F00000100000029 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift */,
+					A10000012F0000010000003D /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift */,
+					A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */,
+					A10000012F00000100000046 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift */,
+					A10000012F00000100000029 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift */,
 				A10000012F0000010000002A /* DownloaderAssembly/DownloaderAssemblyProcess.swift */,
 				C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */,
 				A10000012F00000100000013 /* macUSBHelper.debug.entitlements */,
@@ -644,9 +649,10 @@
 				A10000012F00000100000038 /* Workflow/HelperWorkflowFileOperations.swift in Sources */,
 				A10000012F0000010000003E /* Workflow/Linux/HelperWorkflowLinuxStages.swift in Sources */,
 				A10000012F0000010000003F /* Workflow/Linux/HelperWorkflowLinuxProgressParsing.swift in Sources */,
-				A10000012F00000100000040 /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift in Sources */,
-				A10000012F00000100000044 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift in Sources */,
-				A10000012F00000100000039 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift in Sources */,
+					A10000012F00000100000040 /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift in Sources */,
+					A10000012F00000100000044 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift in Sources */,
+					A10000012F00000100000045 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift in Sources */,
+					A10000012F00000100000039 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift in Sources */,
 				A10000012F0000010000003A /* DownloaderAssembly/DownloaderAssemblyProcess.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

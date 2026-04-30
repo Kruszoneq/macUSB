@@ -10,6 +10,10 @@ extension HelperWorkflowExecutor {
             try runLinuxUnmountTargetStage(stage)
             return
         }
+        if stage.key == "linux_verify_write" {
+            try runLinuxVerifyWriteStage(stage)
+            return
+        }
 
         let process = Process()
         if let requesterUID = request.requesterUID, requesterUID > 0 {

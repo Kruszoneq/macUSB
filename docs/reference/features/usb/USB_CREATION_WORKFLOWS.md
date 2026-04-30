@@ -17,8 +17,14 @@ Workflow selection must respect analyzed compatibility flags.
 Linux raw-copy stages:
 - `linux_unmount_target` — target USB unmount (indeterminate stage),
 - `linux_raw_copy` — raw image copy to whole disk (`/dev/rdiskX`) with progress + write speed,
+- `linux_verify_write` — post-write verification by comparing SHA-256 of source image with SHA-256 of first `N` bytes on target raw disk (`N = source image size`) (indeterminate stage),
 - `cleanup_temp` — deterministic temp cleanup,
 - `finalize` — terminal state transition.
+
+Linux summary screen (`UniversalInstallationView`) should show an informational card before the process-stages section:
+- card is visible only for Linux workflow,
+- card uses accent tone (`.active`) with SF Symbol `info.circle.fill`,
+- copy explains that macOS may show an unreadable-disk dialog and user should choose `Ignore`.
 
 ## Helper and Privilege Invariants
 
@@ -46,6 +52,7 @@ Linux workflow logs should additionally include:
 - source image path and size,
 - resolved target whole-disk identifier,
 - raw-copy progress and speed metrics,
+- verification summary (source hash preview vs target hash preview, compared byte count, pass/fail),
 - terminal result (`success/fail/cancel`) and failed stage when present.
 
 ## Update Trigger

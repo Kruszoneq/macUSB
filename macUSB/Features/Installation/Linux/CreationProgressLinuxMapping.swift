@@ -5,6 +5,7 @@ enum CreationProgressLinuxMapping {
         "prepare_source",
         "linux_unmount_target",
         "linux_raw_copy",
+        "linux_verify_write",
         "cleanup_temp"
     ]
 
@@ -14,6 +15,8 @@ enum CreationProgressLinuxMapping {
             return "eject"
         case "linux_raw_copy":
             return "square.and.arrow.down"
+        case "linux_verify_write":
+            return "checkmark.seal"
         default:
             return nil
         }
@@ -25,6 +28,8 @@ enum CreationProgressLinuxMapping {
             return "eject.fill"
         case "linux_raw_copy":
             return "square.and.arrow.down.fill"
+        case "linux_verify_write":
+            return "checkmark.seal.fill"
         default:
             return nil
         }

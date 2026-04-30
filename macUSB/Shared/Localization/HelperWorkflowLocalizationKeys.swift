@@ -30,6 +30,8 @@ enum HelperWorkflowLocalizationKeys {
     static let linuxUnmountTargetStatus = "helper.workflow.linux_unmount_target.status"
     static let linuxRawCopyTitle = "helper.workflow.linux_raw_copy.title"
     static let linuxRawCopyStatus = "helper.workflow.linux_raw_copy.status"
+    static let linuxVerifyWriteTitle = "helper.workflow.linux_verify_write.title"
+    static let linuxVerifyWriteStatus = "helper.workflow.linux_verify_write.status"
     static let startingTitle = "helper.workflow.starting.title"
     static let startingStatus = "helper.workflow.starting.status"
     static let initializingStatus = "helper.workflow.initializing.status"
@@ -67,6 +69,8 @@ enum HelperWorkflowLocalizationKeys {
             return HelperWorkflowStageLocalization(titleKey: linuxUnmountTargetTitle, statusKey: linuxUnmountTargetStatus)
         case "linux_raw_copy":
             return HelperWorkflowStageLocalization(titleKey: linuxRawCopyTitle, statusKey: linuxRawCopyStatus)
+        case "linux_verify_write":
+            return HelperWorkflowStageLocalization(titleKey: linuxVerifyWriteTitle, statusKey: linuxVerifyWriteStatus)
         case "catalina_cleanup":
             return HelperWorkflowStageLocalization(titleKey: catalinaCleanupTitle, statusKey: catalinaCleanupStatus)
         case "catalina_copy":
@@ -104,6 +108,8 @@ enum HelperWorkflowLocalizationExtractionAnchors {
         String(localized: "helper.workflow.linux_unmount_target.status"),
         String(localized: "helper.workflow.linux_raw_copy.title"),
         String(localized: "helper.workflow.linux_raw_copy.status"),
+        String(localized: "helper.workflow.linux_verify_write.title"),
+        String(localized: "helper.workflow.linux_verify_write.status"),
         String(localized: "helper.workflow.starting.title"),
         String(localized: "helper.workflow.starting.status"),
         String(localized: "helper.workflow.initializing.status"),

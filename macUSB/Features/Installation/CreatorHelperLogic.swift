@@ -41,6 +41,7 @@ extension UniversalInstallationView {
         isHelperWorking = false
         errorMessage = ""
         workflowResultDetailMessage = nil
+        workflowResultErrorPresentation = nil
         navigateToFinish = false
         didCancelCreation = false
         cancellationRequestedBeforeWorkflowStart = false
@@ -202,6 +203,7 @@ extension UniversalInstallationView {
                                         showLinuxForceUnmountAlert(
                                             onForce: {
                                                 workflowResultDetailMessage = nil
+                                                workflowResultErrorPresentation = nil
                                                 let forcedRequest = makeLinuxForceUnmountRequest(from: workflowRequest)
                                                 workflowRequest = forcedRequest
                                                 helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
@@ -226,7 +228,16 @@ extension UniversalInstallationView {
                                     }
 
                                     helperOperationFailed = !result.success
-                                    workflowResultDetailMessage = result.success ? nil : result.errorMessage
+                                    if result.success {
+                                        workflowResultDetailMessage = nil
+                                        workflowResultErrorPresentation = nil
+                                    } else if isLinuxWorkflow {
+                                        workflowResultDetailMessage = nil
+                                        workflowResultErrorPresentation = LinuxWorkflowErrorMapper.presentation(for: result)
+                                    } else {
+                                        workflowResultDetailMessage = result.errorMessage
+                                        workflowResultErrorPresentation = nil
+                                    }
 
                                     if !result.success, let errorMessageText = result.errorMessage {
                                         logError("Helper zakończył się błędem: \(errorMessageText)", category: "Installation")
