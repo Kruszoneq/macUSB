@@ -58,6 +58,12 @@ For `.dmg`, `.iso`, and `.cdr` sources:
 - timeout finish keeps existing UI behavior (no new messages/views), and blocks supported-flow routing as for other unrecognized outcomes,
 - delayed callbacks from expired analysis sessions must be ignored and must not overwrite state after timeout.
 
+For Linux fallback on `.iso`/`.cdr`:
+
+- cleanup scope includes all image entities captured from `hdiutil info -plist` for the selected `image-path`,
+- cleanup is not limited to one mount-point; it must include all captured `dev-entry` and fallback `mount-point` detach attempts,
+- Linux entity cleanup must run on Linux success, Linux failure, timeout, cancel, and reset paths.
+
 ## USB Unreadable Target Hint (Non-blocking)
 
 During analysis screen USB target area:
@@ -81,7 +87,9 @@ Linux fallback should additionally log:
 - fallback transition from macOS detection to Linux detection,
 - fallback transition from mounted detection to `bsdtar` detection when needed,
 - parsed Linux details (`distro`, `version`, `edition`, `arch`, `isARM`),
+- Linux gate signals and classification source fields (`rule`, `matched_signal`, `version_source`),
 - evidence summary used for recognition,
+- Linux attach-session snapshot plus per-entity cleanup result and residual summary,
 - archive-reader diagnostics relevant to bounded execution (`bsdtar` timeout/errors),
 - install handoff readiness (`linuxSourceURL` present, capacity computed).
 - manual-force diagnostics when Linux is forced from menu.

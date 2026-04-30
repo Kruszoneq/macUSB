@@ -21,6 +21,11 @@ Linux raw-copy stages:
 - `cleanup_temp` — deterministic temp cleanup,
 - `finalize` — terminal state transition.
 
+Linux auto-mount guard invariant:
+- for Linux workflow, helper blocks system auto-mount for target whole-disk (`diskX` and `diskXsY`) from start of `linux_unmount_target` until `linux_verify_write` ends,
+- guard is always released right after `linux_verify_write` terminal outcome (`success`, `failure`, `cancel`),
+- if workflow fails before `linux_verify_write`, guard is released in terminal failure cleanup path.
+
 Linux summary screen (`UniversalInstallationView`) should show an informational card before the process-stages section:
 - card is visible only for Linux workflow,
 - card uses accent tone (`.active`) with SF Symbol `info.circle.fill`,

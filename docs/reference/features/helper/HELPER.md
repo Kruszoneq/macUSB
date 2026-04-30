@@ -146,6 +146,7 @@ Contract invariants:
 - Daemon executes staged workflow (`prepare`, format/restore/createinstallmedia/copy/finalize patterns by workflow kind, plus Linux raw-copy branch).
 - Progress events are emitted with stage/status keys and percent updates.
 - Cancellation and failure return deterministic result payloads.
+- Linux raw-copy branch uses helper-side Disk Arbitration mount guard for target USB (`diskX` and `diskXsY`) from `linux_unmount_target` start until `linux_verify_write` terminal outcome, then always releases guard immediately after verify.
 
 ### Downloader Assembly Flow
 - App sends `DownloaderAssemblyRequestPayload`.
@@ -211,6 +212,8 @@ Daemon helper runtime:
   - Linux raw-copy (`dd`) progress parsing and percent mapping.
 - `macUSBHelper/Workflow/Linux/HelperWorkflowLinuxDiskOps.swift`
   - Linux source/target disk resolution helpers.
+- `macUSBHelper/Workflow/Linux/HelperWorkflowLinuxMountGuard.swift`
+  - Linux Disk Arbitration mount-approval guard blocking target auto-mount until verify phase completes.
 - `macUSBHelper/DownloaderAssembly/DownloaderAssemblyExecutor.swift`
   - downloader assembly execution orchestration and final `.app` ownership normalization.
 - `macUSBHelper/DownloaderAssembly/DownloaderAssemblyProcess.swift`

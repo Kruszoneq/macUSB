@@ -157,6 +157,10 @@ extension UniversalInstallationView {
                                 request: workflowRequest,
                                 onEvent: { event in
                                     guard event.workflowID == activeHelperWorkflowID else { return }
+                                    if shouldIgnoreLinuxMountGuardStageEvent(event) {
+                                        return
+                                    }
+
                                     let normalizedStageKey = canonicalStageKeyForPresentation(event.stageKey)
                                     let previousStageKey = helperCurrentStageKey
                                     helperCurrentStageKey = normalizedStageKey
@@ -918,6 +922,14 @@ extension UniversalInstallationView {
         default:
             return stageKey
         }
+    }
+
+    private func shouldIgnoreLinuxMountGuardStageEvent(_ event: HelperProgressEventPayload) -> Bool {
+        guard isLinuxWorkflow else { return false }
+        guard let logLine = event.logLine?.trimmingCharacters(in: .whitespacesAndNewlines), !logLine.isEmpty else {
+            return false
+        }
+        return logLine.hasPrefix("Linux mount guard:")
     }
 
     private func fetchWriteSpeedMBps(for wholeDisk: String) -> Double? {

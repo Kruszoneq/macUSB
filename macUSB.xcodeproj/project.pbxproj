@@ -28,6 +28,7 @@
 		A10000012F00000100000041 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000042 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist */; };
 		A10000012F00000100000044 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */; };
 		A10000012F00000100000045 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000046 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift */; };
+		A10000012F00000100000048 /* Workflow/Linux/HelperWorkflowLinuxMountGuard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000047 /* Workflow/Linux/HelperWorkflowLinuxMountGuard.swift */; };
 		B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */ = {isa = PBXBuildFile; fileRef = B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */; };
 		C10000012F00000100000001 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */; };
 		D10000012F00000100000001 /* macUSB/Resources/Icons/Linux/Distros in Resources */ = {isa = PBXBuildFile; fileRef = D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */; };
@@ -110,6 +111,7 @@
 		A10000012F00000100000042 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist; sourceTree = "<group>"; };
 		A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift; sourceTree = "<group>"; };
 		A10000012F00000100000046 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxVerification.swift; sourceTree = "<group>"; };
+		A10000012F00000100000047 /* Workflow/Linux/HelperWorkflowLinuxMountGuard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxMountGuard.swift; sourceTree = "<group>"; };
 		B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = macUSB/Resources/Sounds/burn_complete.aif; sourceTree = "<group>"; };
 		C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift; sourceTree = "<group>"; };
 		D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */ = {isa = PBXFileReference; lastKnownFileType = folder; path = macUSB/Resources/Icons/Linux/Distros; sourceTree = "<group>"; };
@@ -419,6 +421,7 @@
 				A10000012F0000010000003D /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift */,
 				A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */,
 				A10000012F00000100000046 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift */,
+				A10000012F00000100000047 /* Workflow/Linux/HelperWorkflowLinuxMountGuard.swift */,
 				A10000012F00000100000029 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift */,
 				A10000012F0000010000002A /* DownloaderAssembly/DownloaderAssemblyProcess.swift */,
 				C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */,
@@ -652,6 +655,7 @@
 				A10000012F00000100000040 /* Workflow/Linux/HelperWorkflowLinuxDiskOps.swift in Sources */,
 				A10000012F00000100000044 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift in Sources */,
 				A10000012F00000100000045 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift in Sources */,
+				A10000012F00000100000048 /* Workflow/Linux/HelperWorkflowLinuxMountGuard.swift in Sources */,
 				A10000012F00000100000039 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift in Sources */,
 				A10000012F0000010000003A /* DownloaderAssembly/DownloaderAssemblyProcess.swift in Sources */,
 			);
@@ -823,7 +827,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -879,7 +883,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;

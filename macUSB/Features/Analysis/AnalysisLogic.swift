@@ -95,6 +95,7 @@ final class AnalysisLogic: ObservableObject {
     let imageAnalysisTimeoutSeconds: TimeInterval = 20
     var activeImageAnalysisRunID: UUID? = nil
     var imageAnalysisTimeoutWorkItem: DispatchWorkItem? = nil
+    var linuxImageAttachSession: LinuxImageAttachSession? = nil
 
     var requiredUSBCapacityDisplayValue: String {
         requiredUSBCapacityGB.map(String.init) ?? "--"
@@ -160,6 +161,7 @@ extension AnalysisLogic {
         guard let runID = activeImageAnalysisRunID else {
             imageAnalysisTimeoutWorkItem?.cancel()
             imageAnalysisTimeoutWorkItem = nil
+            cleanupLinuxAttachSession(reason: "cancel_active_run_no_id")
             return
         }
 
@@ -167,6 +169,7 @@ extension AnalysisLogic {
         imageAnalysisTimeoutWorkItem = nil
         activeImageAnalysisRunID = nil
         log("Anulowano aktywną sesję analizy obrazu [runID=\(runID.uuidString)]: \(reason)")
+        cleanupLinuxAttachSession(reason: "cancel_active_run")
     }
 
     func logIgnoredStaleImageAnalysisCallback(_ runID: UUID, stage: String) {
@@ -196,6 +199,11 @@ extension AnalysisLogic {
         imageAnalysisTimeoutWorkItem = nil
         activeImageAnalysisRunID = nil
 
+        let ext = sourceURL.pathExtension.lowercased()
+        if ext == "iso" || ext == "cdr" {
+            captureLinuxAttachSessionIfNeeded(sourceURL: sourceURL, reason: "timeout_pre_cleanup")
+        }
+        cleanupLinuxAttachSession(reason: "image_analysis_timeout")
         detachMountedImageAfterAnalysisTimeout(sourceURL: sourceURL)
 
         applyUnrecognizedInstallerState(
