@@ -6,6 +6,7 @@ Finish screen must report:
 - success/failure/cancel,
 - relevant final metrics/status,
 - cleanup result state.
+- for Linux workflow failures, show a localized warning card (orange tone) with localized title + localized error description mapped from helper failure context (not raw helper error text).
 
 ## Cleanup Determinism
 

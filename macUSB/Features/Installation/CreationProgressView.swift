@@ -42,6 +42,7 @@ struct CreationProgressView: View {
     @Binding var navigateToFinish: Bool
     @Binding var helperOperationFailed: Bool
     @Binding var workflowResultDetailMessage: String?
+    @Binding var workflowResultErrorPresentation: LinuxWorkflowErrorPresentation?
     @Binding var didCancelCreation: Bool
     @Binding var creationStartedAt: Date?
     private var sectionIconFont: Font { .title3 }
@@ -173,7 +174,8 @@ struct CreationProgressView: View {
                     creationStartedAt: creationStartedAt,
                     shouldDetachMountPoint: shouldDetachMountPoint,
                     detectedSystemIcon: detectedSystemIcon,
-                    resultDetailMessage: workflowResultDetailMessage
+                    resultDetailMessage: workflowResultDetailMessage,
+                    linuxErrorPresentation: workflowResultErrorPresentation
                 ),
                 isActive: $navigateToFinish
             ) { EmptyView() }
