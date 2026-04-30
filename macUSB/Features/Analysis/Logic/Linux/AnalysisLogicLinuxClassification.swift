@@ -5,6 +5,42 @@ struct LinuxDistributionMatch {
     let version: String?
     let edition: String?
     let evidence: String
+    let classificationRule: String
+    let matchedSignal: String?
+    let versionSource: String?
+
+    init(
+        distro: String?,
+        version: String?,
+        edition: String?,
+        evidence: String,
+        classificationRule: String? = nil,
+        matchedSignal: String? = nil,
+        versionSource: String? = nil
+    ) {
+        self.distro = distro
+        self.version = version
+        self.edition = edition
+        self.evidence = evidence
+        self.classificationRule = classificationRule ?? LinuxDistributionMatch.ruleFromEvidence(evidence) ?? "linux_unrecognized"
+        self.matchedSignal = matchedSignal ?? LinuxDistributionMatch.signalFromEvidence(evidence)
+        self.versionSource = versionSource
+    }
+
+    private static func ruleFromEvidence(_ evidence: String) -> String? {
+        guard let range = evidence.range(of: "rule=") else { return nil }
+        let token = evidence[range.upperBound...]
+        if let separator = token.firstIndex(of: ":") {
+            return String(token[..<separator])
+        }
+        return String(token)
+    }
+
+    private static func signalFromEvidence(_ evidence: String) -> String? {
+        guard let separator = evidence.firstIndex(of: ":") else { return nil }
+        let value = String(evidence[evidence.index(after: separator)...]).trimmingCharacters(in: .whitespacesAndNewlines)
+        return value.isEmpty ? nil : value
+    }
 }
 
 private struct LinuxCatalogDetectionRule {
@@ -20,6 +56,7 @@ extension AnalysisLogic {
         let diskInfo = metadata.diskInfo ?? ""
         let diskInfoLower = diskInfo.lowercased()
         let hintsLower = metadata.grubHints.lowercased()
+        let readmeLower = metadata.readmeHints.lowercased()
 
         let treeRelease = metadata.treeInfo["release"] ?? [:]
         let treeGeneral = metadata.treeInfo["general"] ?? [:]
@@ -33,6 +70,65 @@ extension AnalysisLogic {
         let releaseOriginLower = (releaseFields["Origin"] ?? "").lowercased()
         let releaseLabelLower = (releaseFields["Label"] ?? "").lowercased()
         let releaseCodenameLower = (releaseFields["Codename"] ?? "").lowercased()
+
+        // NixOS
+        if hintsLower.contains("nixos") || volumeLower.contains("nixos") || metadata.topLevelEntries.contains("nix-store.squashfs") {
+            let nixVersion = extractNixOSShortVersion(from: metadata)
+            return LinuxDistributionMatch(
+                distro: "NixOS",
+                version: nixVersion,
+                edition: nil,
+                evidence: "rule=nixos",
+                classificationRule: "nixos",
+                matchedSignal: hintsLower.contains("nixos") ? "nixos" : "nix-store.squashfs",
+                versionSource: nixVersion == nil ? nil : "version.txt"
+            )
+        }
+
+        // Garuda
+        let topLevelLower = Set(metadata.topLevelEntries.map { $0.lowercased() })
+        let hasGarudaSignal = hintsLower.contains("garuda") || hintsLower.contains("misobasedir=garuda") || topLevelLower.contains("garuda") || topLevelLower.contains(".miso")
+        if hasGarudaSignal {
+            return LinuxDistributionMatch(
+                distro: "Garuda",
+                version: nil,
+                edition: nil,
+                evidence: "rule=garuda",
+                classificationRule: "garuda",
+                matchedSignal: firstNonEmpty([
+                    hintsLower.contains("misobasedir=garuda") ? "misobasedir=garuda" : nil,
+                    hintsLower.contains("garuda") ? "garuda" : nil,
+                    topLevelLower.contains("garuda") ? "garuda(top-level)" : nil,
+                    topLevelLower.contains(".miso") ? ".miso" : nil
+                ]),
+                versionSource: nil
+            )
+        }
+
+        // Gentoo
+        if hintsLower.contains("gentoo") || readmeLower.contains("gentoo") || volumeLower.contains("gentoo") {
+            let resolvedVersion = resolveVersion(
+                candidates: [
+                    ("release.Version", releaseFields["Version"]),
+                    ("diskInfo", extractFirstVersion(in: diskInfo)),
+                    ("volumeName", extractFirstVersion(in: metadata.volumeName)),
+                    ("grubHints", extractFirstVersion(in: metadata.grubHints))
+                ]
+            )
+            return LinuxDistributionMatch(
+                distro: "Gentoo",
+                version: resolvedVersion.value,
+                edition: nil,
+                evidence: "rule=gentoo",
+                classificationRule: "gentoo",
+                matchedSignal: firstNonEmpty([
+                    hintsLower.contains("gentoo") ? "gentoo(grub)" : nil,
+                    readmeLower.contains("gentoo") ? "gentoo(readme)" : nil,
+                    volumeLower.contains("gentoo") ? "gentoo(volume)" : nil
+                ]),
+                versionSource: resolvedVersion.source
+            )
+        }
 
         // openSUSE Leap
         if treeReleaseName.contains("opensuse leap") || treeGeneralFamily.contains("opensuse leap") || treeGeneralName.contains("opensuse leap") || volumeLower.contains("leap") {
@@ -165,7 +261,6 @@ extension AnalysisLogic {
         }
 
         // Manjaro
-        let topLevelLower = Set(metadata.topLevelEntries.map { $0.lowercased() })
         let hasManjaroSignal = (metadata.misoLabel?.uppercased().contains("MANJARO") ?? false) || topLevelLower.contains("manjaro") || hintsLower.contains("manjaro")
         if hasManjaroSignal {
             let miso = metadata.misoLabel ?? ""
@@ -319,18 +414,22 @@ extension AnalysisLogic {
 
         for rule in rules {
             guard let matchedSignal = firstMatchedLinuxSignal(in: corpus, signals: rule.signals) else { continue }
-            let version = firstNonEmpty([
-                releaseFields["Version"],
-                extractFirstVersion(in: metadata.diskInfo ?? ""),
-                extractFirstVersion(in: metadata.volumeName),
-                extractFirstVersion(in: metadata.grubHints)
-            ])
+            let resolvedVersion = resolveVersion(
+                candidates: [
+                    ("release.Version", releaseFields["Version"]),
+                    ("diskInfo", extractFirstVersion(in: metadata.diskInfo ?? "")),
+                    ("volumeName", extractFirstVersion(in: metadata.volumeName)),
+                    ("grubHints", extractFirstVersion(in: metadata.grubHints))
+                ]
+            )
 
             return LinuxDistributionMatch(
                 distro: rule.distro,
-                version: normalizedVersion(version),
+                version: normalizedVersion(resolvedVersion.value),
                 edition: rule.edition,
-                evidence: "\(rule.evidence):\(matchedSignal)"
+                evidence: "\(rule.evidence):\(matchedSignal)",
+                matchedSignal: matchedSignal,
+                versionSource: resolvedVersion.source
             )
         }
 
@@ -357,6 +456,22 @@ extension AnalysisLogic {
         }
 
         return nil
+    }
+
+    private func extractNixOSShortVersion(from metadata: LinuxImageMetadata) -> String? {
+        guard let raw = metadata.versionTxt else { return nil }
+        if let shortVersion = extractFirstRegexMatch(pattern: #"([0-9]{2}\.[0-9]{2})"#, in: raw, captureGroup: 1) {
+            return normalizedVersion(shortVersion)
+        }
+        return extractFirstVersion(in: raw)
+    }
+
+    private func resolveVersion(candidates: [(source: String, value: String?)]) -> (value: String?, source: String?) {
+        for candidate in candidates {
+            guard let value = candidate.value?.trimmingCharacters(in: .whitespacesAndNewlines), !value.isEmpty else { continue }
+            return (value, candidate.source)
+        }
+        return (nil, nil)
     }
 
     private func extractManjaroVersion(fromMisoLabel label: String) -> String? {

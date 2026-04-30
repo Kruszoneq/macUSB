@@ -9,7 +9,16 @@ struct LinuxDetectionResult {
     let archRaw: String?
     let isARM: Bool
     let displayName: String
+    let gateSignals: [String]
+    let classificationRule: String
+    let matchedSignal: String?
+    let versionSource: String?
     let evidence: [String]
+}
+
+private struct LinuxGateDecision {
+    let isSupported: Bool
+    let gateSignals: [String]
 }
 
 extension AnalysisLogic {
@@ -27,10 +36,12 @@ extension AnalysisLogic {
     }
 
     private func detectLinux(fromMetadata metadata: LinuxImageMetadata, sourceURL: URL) -> LinuxDetectionResult? {
-        guard linuxImageLooksSupported(metadata) else {
+        let gateDecision = linuxImageSupportDecision(metadata)
+        guard gateDecision.isSupported else {
             self.log("Brak wiarygodnych markerów Linuxa w obrazie: \(sourceURL.lastPathComponent)")
             return nil
         }
+        self.log("Linux gate_signals: \(gateDecision.gateSignals.sorted().joined(separator: ", "))")
 
         let classification = classifyLinuxDistribution(from: metadata)
         let architecture = normalizeLinuxArchitecture(from: metadata)
@@ -57,18 +68,27 @@ extension AnalysisLogic {
             archRaw: architecture.raw,
             isARM: architecture.isARM,
             displayName: displayName,
+            gateSignals: gateDecision.gateSignals.sorted(),
+            classificationRule: classification.classificationRule,
+            matchedSignal: classification.matchedSignal,
+            versionSource: classification.versionSource,
             evidence: deduplicatedEvidence
         )
     }
 
-    private func linuxImageLooksSupported(_ metadata: LinuxImageMetadata) -> Bool {
+    private func linuxImageSupportDecision(_ metadata: LinuxImageMetadata) -> LinuxGateDecision {
         let lowerHints = metadata.grubHints.lowercased()
-        let linuxKeywordSignal = [
+        var gateSignals: Set<String> = []
+
+        let linuxKeywordSignals = [
             "gnu-linux",
             "rd.live.image",
+            "rd.live.dir=",
             "boot=casper",
             "archisobasedir",
             "misolabel=",
+            "misobasedir=",
+            "root=miso:",
             "linux mint",
             "ubuntu",
             "xubuntu",
@@ -78,9 +98,15 @@ extension AnalysisLogic {
             "almalinux",
             "opensuse",
             "manjaro",
+            "nixos",
+            "garuda",
+            "gentoo",
             "pop_os",
             "pop-os"
-        ].contains { lowerHints.contains($0) }
+        ]
+        for signal in linuxKeywordSignals where lowerHints.contains(signal) {
+            gateSignals.insert("hint:\(signal)")
+        }
 
         let topLevelSignals: Set<String> = [
             "arch",
@@ -91,27 +117,42 @@ extension AnalysisLogic {
             "isolinux",
             "install",
             "ubuntu",
-            "ubuntu-ports"
+            "ubuntu-ports",
+            ".miso",
+            "garuda",
+            "nix-store.squashfs"
         ]
 
         let topLevelLower = Set(metadata.topLevelEntries.map { $0.lowercased() })
-        let hasTopLevelSignal = !topLevelSignals.intersection(topLevelLower).isEmpty
+        let matchedTopLevelSignals = topLevelSignals.intersection(topLevelLower)
+        if !matchedTopLevelSignals.isEmpty {
+            matchedTopLevelSignals.forEach { gateSignals.insert("top-level:\($0)") }
+        }
+        let hasTopLevelSignal = !matchedTopLevelSignals.isEmpty
+
+        if metadata.hasBootConfigWithLinuxKernel {
+            gateSignals.insert("boot-config:menuentry+linux")
+        }
 
         let strongMarkerCount = [
             metadata.diskInfo != nil,
             !metadata.treeInfo.isEmpty,
             metadata.archVersion != nil,
+            metadata.versionTxt != nil,
             !metadata.distroReleaseFields.isEmpty,
             metadata.misoLabel != nil,
-            linuxKeywordSignal
+            !metadata.readmeHints.isEmpty,
+            !matchedTopLevelSignals.isEmpty,
+            metadata.hasBootConfigWithLinuxKernel,
+            !gateSignals.isEmpty
         ].filter { $0 }.count
 
-        if strongMarkerCount >= 1 && (hasTopLevelSignal || linuxKeywordSignal) {
-            return true
+        if strongMarkerCount >= 1 && (hasTopLevelSignal || !gateSignals.isEmpty || metadata.hasBootConfigWithLinuxKernel) {
+            return LinuxGateDecision(isSupported: true, gateSignals: Array(gateSignals))
         }
 
         let lowerVolumeName = metadata.volumeName.lowercased()
-        let volumeSignal = [
+        let volumeSignals = [
             "linux",
             "ubuntu",
             "xubuntu",
@@ -122,11 +163,18 @@ extension AnalysisLogic {
             "arch",
             "manjaro",
             "opensuse",
+            "nixos",
+            "garuda",
+            "gentoo",
             "mint",
             "pop_os",
             "pop-os"
-        ].contains { lowerVolumeName.contains($0) }
+        ]
+        let matchedVolumeSignals = volumeSignals.filter { lowerVolumeName.contains($0) }
+        matchedVolumeSignals.forEach { gateSignals.insert("volume:\($0)") }
+        let volumeSignal = !matchedVolumeSignals.isEmpty
 
-        return strongMarkerCount >= 2 || (strongMarkerCount >= 1 && volumeSignal)
+        let isSupported = strongMarkerCount >= 2 || (strongMarkerCount >= 1 && volumeSignal) || metadata.hasBootConfigWithLinuxKernel
+        return LinuxGateDecision(isSupported: isSupported, gateSignals: Array(gateSignals))
     }
 }

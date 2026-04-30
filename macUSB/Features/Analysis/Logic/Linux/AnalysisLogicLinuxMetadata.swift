@@ -19,7 +19,10 @@ struct LinuxImageMetadata {
     let treeInfo: [String: [String: String]]
     let distroReleaseFields: [String: String]
     let archVersion: String?
+    let versionTxt: String?
+    let readmeHints: String
     let grubHints: String
+    let hasBootConfigWithLinuxKernel: Bool
     let misoLabel: String?
     let evidence: [String]
 }
@@ -102,9 +105,23 @@ extension AnalysisLogic {
             evidence.append("arch/version")
         }
 
+        let versionTxt = textReader("version.txt", 64_000)?.singleLineCollapsed
+        if versionTxt != nil {
+            evidence.append("version.txt")
+        }
+
+        let readmeHints = readLinuxReadmeHints(textReader: textReader)
+        if !readmeHints.isEmpty {
+            evidence.append("README.txt")
+        }
+
         let grubHints = readLinuxGrubHints(textReader: textReader)
         if !grubHints.isEmpty {
             evidence.append("boot-config")
+        }
+        let hasBootConfigWithLinuxKernel = linuxBootConfigContainsKernelMenu(grubHints)
+        if hasBootConfigWithLinuxKernel {
+            evidence.append("boot-menu-linux-kernel")
         }
 
         let misoLabel = extractFirstRegexMatch(
@@ -125,7 +142,10 @@ extension AnalysisLogic {
             treeInfo: treeInfoSections,
             distroReleaseFields: distroRelease.fields,
             archVersion: archVersion,
+            versionTxt: versionTxt,
+            readmeHints: readmeHints,
             grubHints: grubHints,
+            hasBootConfigWithLinuxKernel: hasBootConfigWithLinuxKernel,
             misoLabel: misoLabel,
             evidence: evidence
         )
@@ -228,6 +248,7 @@ extension AnalysisLogic {
             "menuentry",
             "gnu-linux",
             "rd.live.image",
+            "rd.live.dir=",
             "boot=casper",
             "arch linux",
             "manjaro",
@@ -241,8 +262,16 @@ extension AnalysisLogic {
             "opensuse",
             "pop_os",
             "pop-os",
+            "nixos",
+            "garuda",
+            "gentoo",
             "misolabel",
-            "archisobasedir"
+            "archisobasedir",
+            "misobasedir=",
+            "root=miso:",
+            "linux /",
+            "linux\t",
+            "linux16 "
         ]
 
         var snippets: [String] = []
@@ -264,6 +293,29 @@ extension AnalysisLogic {
         }
 
         return snippets.joined(separator: "\n")
+    }
+
+    private func linuxBootConfigContainsKernelMenu(_ grubHints: String) -> Bool {
+        let lower = grubHints.lowercased()
+        let hasMenuentry = lower.contains("menuentry")
+        let hasKernelLine = lower.contains("linux /") || lower.contains("linux\t") || lower.contains("linux16 ")
+        return hasMenuentry && hasKernelLine
+    }
+
+    private func readLinuxReadmeHints(textReader: (_ relativePath: String, _ maxBytes: Int) -> String?) -> String {
+        guard let readme = textReader("README.txt", 64_000) else {
+            return ""
+        }
+        let keywords = ["gentoo", "linux", "livecd", "boot", "kernel"]
+        let lines = readme
+            .split(whereSeparator: \.isNewline)
+            .map(String.init)
+            .filter { line in
+                let lower = line.lowercased()
+                return keywords.contains { lower.contains($0) }
+            }
+            .prefix(80)
+        return lines.joined(separator: "\n")
     }
 
     private func readLinuxTextFile(fromMountPath mountPath: String, relativePath: String, maxBytes: Int = 64_000) -> String? {

@@ -22,6 +22,7 @@ Linux fallback is entered when all conditions are met:
 Runtime sequence:
 
 - app first attempts standard image attach/read path (same as macOS analysis),
+- for `.iso`/`.cdr`, mount-and-read step has a Linux soft-timeout of `10 s`; after timeout, flow skips mount result and continues Linux fallback,
 - when macOS installer is not found, Linux detection first tries mounted-image metadata if mount path exists,
 - if mounted-image Linux detection does not produce a result (or mount path is unavailable), app falls back to archive reading via `bsdtar` (without mounting).
 - the whole `.iso`/`.cdr` image-analysis session is additionally guarded by a global 20-second timeout; on timeout, analysis is force-finished as unrecognized installer.
@@ -39,6 +40,8 @@ No recursive unpacking of live rootfs/squashfs is allowed.
 - `install/.treeinfo`
 - `dists/*/Release` (first matching release file)
 - `arch/version`
+- `version.txt` (for NixOS short version extraction)
+- `README.txt` (bounded hint scan for additional distro confidence, including Gentoo)
 - boot/menu config snippets:
   - `boot/grub/grub.cfg`
   - `boot/grub/loopback.cfg`
@@ -48,6 +51,7 @@ No recursive unpacking of live rootfs/squashfs is allowed.
   - `boot/syslinux/syslinux.cfg`
   - `boot/x86_64/loader/isolinux.cfg`
 - top-level directory names from mounted root
+- Linux mount-session snapshot from `hdiutil info -plist` (image-path scoped, all entities)
 
 For `bsdtar` fallback:
 
@@ -70,6 +74,12 @@ Classification uses two layers:
 
 - dedicated high-confidence rules for popular distros (for example Ubuntu/Xubuntu, Debian, Kali, Arch, Manjaro, openSUSE, Fedora),
 - catalog-based signal matching for additional distros available in icon resources (based on bounded metadata fields, without recursive filesystem scans).
+
+Dedicated Linux rules include:
+
+- `NixOS` with short version from `version.txt` (for example `25.11`),
+- `Garuda` via `garuda` / `misobasedir=garuda` / `.miso` signals,
+- `Gentoo` with additional confidence from `grub.cfg` / `README.txt` hints.
 
 If Linux signals are present but distro cannot be matched, result is still Linux and displayed as unknown distro.
 
@@ -117,10 +127,15 @@ When Linux fallback runs, logs must include:
 - image-analysis timeout session diagnostics (`runID`, timeout start, timeout finish when triggered),
 - timeout-triggered source-image detach diagnostics (mount path + success/failure),
 - final Linux result string,
+- Linux gate signal list (`gate_signals`),
+- classification summary (`rule`, `matched_signal`, `version_source`),
 - parsed details: `distro`, `version`, `edition`, `arch`, `isARM`,
 - source file size in bytes (when available),
 - selected USB threshold in GB only,
 - evidence summary (files/rules that produced the result),
+- mount-session snapshot (`entities_count`, `dev_entries`, `mount_points`) when available,
+- cleanup result per entity (`detach_ok`/`detach_fail`),
+- cleanup summary (`all_detached`, `residual_entities_count`),
 - archive-reader diagnostics for timeout/error cases,
 - ignored stale callback entry when an expired session returns after timeout.
 
@@ -143,6 +158,12 @@ Mount lifecycle behavior remains aligned with existing analysis behavior:
 
 - previous attached image is detached before analyzing another source,
 - attached image path is stored for deterministic cleanup.
+- Linux fallback additionally captures full image session entities (`dev-entry` + `mount-point`) for `.iso`/`.cdr`.
+- Linux cleanup runs on success/failure/timeout/cancel/reset.
+- Linux cleanup order:
+  - first: `hdiutil detach -force` for all captured `dev-entry`,
+  - second: fallback `hdiutil detach -force` for all captured `mount-point`,
+  - then residual check for the same `image-path`.
 
 ## Non-goals
 

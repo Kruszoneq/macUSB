@@ -266,6 +266,7 @@ extension AnalysisLogic {
     }
 
     func resetLinuxDetectionState() {
+        cleanupLinuxAttachSession(reason: "reset_linux_detection_state")
         self.isLinuxDetected = false
         self.isLinuxDistributionRecognized = false
         self.linuxDistro = nil
@@ -320,7 +321,181 @@ extension AnalysisLogic {
         self.log("Rozpoznano obraz Linux: \(result.displayName)")
         self.log("Linux source file: \(sourceURL.path)")
         self.log("Linux details: distro=\(result.distro ?? "?") version=\(result.version ?? "?") edition=\(result.edition ?? "?") arch=\(result.archRaw ?? "?") arm=\(result.isARM ? "TAK" : "NIE")")
+        self.log("Linux classification: rule=\(result.classificationRule) matched_signal=\(result.matchedSignal ?? "none") version_source=\(result.versionSource ?? "none")")
+        self.log("Linux gate_signals: \(result.gateSignals.joined(separator: ", "))")
         self.log("Linux evidence: \(result.evidence.joined(separator: ", "))")
+        cleanupLinuxAttachSession(reason: "linux_detection_completed_success")
+        self.mountedDMGPath = nil
         AppLogging.separator()
+    }
+}
+
+struct LinuxImageAttachSession {
+    let imagePath: String
+    let devEntries: [String]
+    let mountPoints: [String]
+    let entityCount: Int
+}
+
+extension AnalysisLogic {
+    func captureLinuxAttachSessionIfNeeded(sourceURL: URL, reason: String) {
+        let sourcePath = normalizedLinuxImagePath(sourceURL.path)
+        if let currentSession = linuxImageAttachSession, currentSession.imagePath == sourcePath {
+            return
+        }
+        if linuxImageAttachSession != nil {
+            cleanupLinuxAttachSession(reason: "replace_session_before_capture")
+        }
+
+        guard let session = linuxAttachSessionForImagePath(sourcePath) else {
+            linuxImageAttachSession = nil
+            self.log("Linux mount session: brak encji dla obrazu \(sourceURL.lastPathComponent) [reason=\(reason)]")
+            return
+        }
+
+        linuxImageAttachSession = session
+        logLinuxAttachSessionSnapshot(session, reason: reason)
+    }
+
+    func cleanupLinuxAttachSession(reason: String) {
+        guard let session = linuxImageAttachSession else { return }
+
+        logLinuxAttachSessionSnapshot(session, reason: "\(reason):cleanup_start")
+
+        let devDetachCandidates = session.devEntries
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+            .sorted { lhs, rhs in
+                if lhs.count == rhs.count { return lhs > rhs }
+                return lhs.count > rhs.count
+            }
+
+        for devEntry in devDetachCandidates {
+            let result = detachLinuxImageEntity(identifier: devEntry)
+            if result.success {
+                self.log("Linux cleanup detach_ok identifier=\(devEntry) stage=dev-entry")
+            } else {
+                self.logError("Linux cleanup detach_fail identifier=\(devEntry) stage=dev-entry details=\(result.details ?? "unknown")")
+            }
+        }
+
+        for mountPoint in session.mountPoints {
+            let result = detachLinuxImageEntity(identifier: mountPoint)
+            if result.success {
+                self.log("Linux cleanup detach_ok identifier=\(mountPoint) stage=mount-point")
+            } else {
+                self.logError("Linux cleanup detach_fail identifier=\(mountPoint) stage=mount-point details=\(result.details ?? "unknown")")
+            }
+        }
+
+        let residualSession = linuxAttachSessionForImagePath(session.imagePath)
+        let residualEntitiesCount = residualSession?.entityCount ?? 0
+        let allDetached = residualEntitiesCount == 0
+        self.log("Linux cleanup summary reason=\(reason) all_detached=\(allDetached ? "TAK" : "NIE") residual_entities_count=\(residualEntitiesCount)")
+
+        linuxImageAttachSession = nil
+    }
+
+    private func logLinuxAttachSessionSnapshot(_ session: LinuxImageAttachSession, reason: String) {
+        self.log(
+            "Linux mount session snapshot reason=\(reason) entities_count=\(session.entityCount) dev_entries=[\(session.devEntries.joined(separator: ", "))] mount_points=[\(session.mountPoints.joined(separator: ", "))]"
+        )
+    }
+
+    private func detachLinuxImageEntity(identifier: String) -> (success: Bool, details: String?) {
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
+        task.arguments = ["detach", identifier, "-force"]
+        let errorPipe = Pipe()
+        task.standardError = errorPipe
+
+        do {
+            try task.run()
+            task.waitUntilExit()
+        } catch {
+            return (false, "run_error=\(error.localizedDescription)")
+        }
+
+        if task.terminationStatus == 0 {
+            return (true, nil)
+        }
+
+        let stderrText = String(decoding: errorPipe.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        if stderrText.isEmpty {
+            return (false, "termination_status=\(task.terminationStatus)")
+        }
+        return (false, "termination_status=\(task.terminationStatus) stderr=\(stderrText)")
+    }
+
+    private func linuxAttachSessionForImagePath(_ normalizedImagePath: String) -> LinuxImageAttachSession? {
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
+        task.arguments = ["info", "-plist"]
+        let outputPipe = Pipe()
+        let errorPipe = Pipe()
+        task.standardOutput = outputPipe
+        task.standardError = errorPipe
+
+        do {
+            try task.run()
+        } catch {
+            self.logError("Linux mount session: nie udało się uruchomić hdiutil info: \(error.localizedDescription)")
+            return nil
+        }
+        task.waitUntilExit()
+
+        let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+        let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+        guard task.terminationStatus == 0 else {
+            let stderrText = String(decoding: errorData, as: UTF8.self)
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            if stderrText.isEmpty {
+                self.logError("Linux mount session: hdiutil info zakończył się błędem (kod \(task.terminationStatus)).")
+            } else {
+                self.logError("Linux mount session: hdiutil info zakończył się błędem: \(stderrText)")
+            }
+            return nil
+        }
+
+        guard let plist = try? PropertyListSerialization.propertyList(from: outputData, options: [], format: nil) as? [String: Any],
+              let images = plist["images"] as? [[String: Any]] else {
+            return nil
+        }
+
+        var devEntries: Set<String> = []
+        var mountPoints: Set<String> = []
+        var entityCount = 0
+
+        for image in images {
+            guard let imagePath = image["image-path"] as? String else { continue }
+            let normalizedImage = normalizedLinuxImagePath(imagePath)
+            guard normalizedImage == normalizedImagePath else { continue }
+
+            guard let entities = image["system-entities"] as? [[String: Any]] else { continue }
+            entityCount += entities.count
+            for entity in entities {
+                if let devEntry = (entity["dev-entry"] as? String) ?? (entity["devname"] as? String),
+                   !devEntry.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    devEntries.insert(devEntry)
+                }
+                if let mountPoint = entity["mount-point"] as? String,
+                   !mountPoint.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    mountPoints.insert(mountPoint)
+                }
+            }
+        }
+
+        guard entityCount > 0 else { return nil }
+        return LinuxImageAttachSession(
+            imagePath: normalizedImagePath,
+            devEntries: Array(devEntries).sorted(),
+            mountPoints: Array(mountPoints).sorted(),
+            entityCount: entityCount
+        )
+    }
+
+    private func normalizedLinuxImagePath(_ path: String) -> String {
+        URL(fileURLWithPath: path).resolvingSymlinksInPath().standardizedFileURL.path
     }
 }

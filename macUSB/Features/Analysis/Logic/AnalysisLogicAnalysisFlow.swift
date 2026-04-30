@@ -2,6 +2,37 @@ import SwiftUI
 import Foundation
 
 extension AnalysisLogic {
+    private typealias MountedImageReadResult = (
+        mountedReadInfo: (String, String, URL, String)?,
+        sourceAlreadyMountedPath: String?,
+        mountedImagePath: String?
+    )
+
+    private func mountAndReadInfoWithSoftTimeout(
+        dmgUrl: URL,
+        detectPreMountedSource: Bool,
+        timeoutSeconds: TimeInterval?
+    ) -> (result: MountedImageReadResult?, didTimeout: Bool) {
+        guard let timeoutSeconds, timeoutSeconds > 0 else {
+            return (mountAndReadInfo(dmgUrl: dmgUrl, detectPreMountedSource: detectPreMountedSource), false)
+        }
+
+        let semaphore = DispatchSemaphore(value: 0)
+        var localResult: MountedImageReadResult?
+        DispatchQueue.global(qos: .userInitiated).async {
+            localResult = self.mountAndReadInfo(dmgUrl: dmgUrl, detectPreMountedSource: detectPreMountedSource)
+            semaphore.signal()
+        }
+
+        let waitResult = semaphore.wait(timeout: .now() + timeoutSeconds)
+        if waitResult == .timedOut {
+            self.log("Przekroczono soft-timeout mountAndReadInfo (\(Int(timeoutSeconds)) s) dla \(dmgUrl.lastPathComponent). Pomijam wynik montowania i przechodzę do fallbacku Linux (bsdtar).")
+            return (nil, true)
+        }
+
+        return (localResult, false)
+    }
+
     func startAnalysis() {
         cancelActiveImageAnalysisRun(reason: "Start nowej analizy")
         guard let url = selectedFileUrl else { return }
@@ -31,7 +62,14 @@ extension AnalysisLogic {
                     let task = Process(); task.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil"); task.arguments = ["detach", path, "-force"]; try? task.run(); task.waitUntilExit()
                 }
                 let shouldDetectAlreadyMountedSource = (ext == "cdr" || ext == "iso")
-                let result = self.mountAndReadInfo(dmgUrl: url, detectPreMountedSource: shouldDetectAlreadyMountedSource)
+                let softTimeoutSeconds: TimeInterval? = shouldDetectAlreadyMountedSource ? 10 : nil
+                let mountReadOutcome = self.mountAndReadInfoWithSoftTimeout(
+                    dmgUrl: url,
+                    detectPreMountedSource: shouldDetectAlreadyMountedSource,
+                    timeoutSeconds: softTimeoutSeconds
+                )
+                let result = mountReadOutcome.result
+                let mountReadTimedOut = mountReadOutcome.didTimeout
                 DispatchQueue.main.async {
                     guard self.isImageAnalysisRunCurrent(analysisRunID) else {
                         self.logIgnoredStaleImageAnalysisCallback(analysisRunID, stage: "mountAndReadInfo")
@@ -109,6 +147,10 @@ extension AnalysisLogic {
                             AppLogging.separator()
                         } else {
                             if ext == "iso" || ext == "cdr" {
+                                if mountReadTimedOut {
+                                    self.log("Po soft-timeout mountAndReadInfo przechodzę bezpośrednio do Linux fallback (bsdtar).")
+                                }
+                                self.captureLinuxAttachSessionIfNeeded(sourceURL: url, reason: "linux_fallback_entry")
                                 if let mountedImagePath {
                                     self.log("Nie rozpoznano instalatora macOS. Przechodzę do procesu rozpoznawania Linuxa (z zamontowanego obrazu).")
                                     if let linuxResult = self.detectLinux(fromMountPath: mountedImagePath, sourceURL: url) {
