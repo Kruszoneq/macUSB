@@ -65,7 +65,8 @@ struct ContentView: View {
                             isPPC: false,
                             didFail: false,
                             cleanupTempWorkURL: debugCleanupTempWorkURL,
-                            shouldDetachMountPoint: false
+                            shouldDetachMountPoint: false,
+                            isDebugEjectMode: true
                         )
                     case .debugFinishUSBTigerSuccess:
                         FinishUSBView(
@@ -78,7 +79,8 @@ struct ContentView: View {
                             isPPC: true,
                             didFail: false,
                             cleanupTempWorkURL: debugTigerCleanupTempWorkURL,
-                            shouldDetachMountPoint: false
+                            shouldDetachMountPoint: false,
+                            isDebugEjectMode: true
                         )
                     case .debugFinishUSBLinuxSuccess:
                         FinishUSBView(
@@ -92,7 +94,8 @@ struct ContentView: View {
                             isLinuxWorkflow: true,
                             didFail: false,
                             cleanupTempWorkURL: debugLinuxCleanupTempWorkURL,
-                            shouldDetachMountPoint: false
+                            shouldDetachMountPoint: false,
+                            isDebugEjectMode: true
                         )
                     }
                 }

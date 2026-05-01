@@ -27,6 +27,7 @@ struct CreationProgressView: View {
     let isPPC: Bool
     let isLinuxWorkflow: Bool
     let shouldDetachMountPoint: Bool
+    let targetWholeDiskBSDName: String?
     let needsPreformat: Bool
     let onReset: () -> Void
     let onCancelRequested: () -> Void
@@ -175,7 +176,8 @@ struct CreationProgressView: View {
                     shouldDetachMountPoint: shouldDetachMountPoint,
                     detectedSystemIcon: detectedSystemIcon,
                     resultDetailMessage: workflowResultDetailMessage,
-                    linuxErrorPresentation: workflowResultErrorPresentation
+                    linuxErrorPresentation: workflowResultErrorPresentation,
+                    targetWholeDiskBSDName: targetWholeDiskBSDName
                 ),
                 isActive: $navigateToFinish
             ) { EmptyView() }

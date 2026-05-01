@@ -294,6 +294,7 @@ When branch creation is requested:
 - Do not use escaped newline sequences like `\n` in commit message text; use normal multi-line commit formatting only.
 - When creating commits from CLI, never pass `\n` inside a single `-m` value; use separate `-m` flags (title + body) or standard multi-line commit input.
 - If a commit includes updates to runtime reference docs under `docs/reference/`, `docs/CHANGELOG.md`, and/or `docs/AGENTS.md`, do not explicitly enumerate those documentation-file updates in the commit title or commit body.
+- In commit title/body descriptions, omit explicit listing of debug-only functionality that is not present in Release builds.
 
 ### Commit scope rules
 
@@ -337,6 +338,7 @@ When branch creation is requested:
 - Start with one clear, expanded paragraph explaining what changed and why.
 - If useful, add a short flat list of new features and/or fixes.
 - Do not include testing information in the PR description.
+- In PR title/description, omit explicit listing of debug-only functionality that is not present in Release builds.
 
 ### PR approval gate (mandatory)
 

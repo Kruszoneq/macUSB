@@ -19,6 +19,8 @@ struct FinishUSBView: View {
     let detectedSystemIcon: NSImage?
     let resultDetailMessage: String?
     let linuxErrorPresentation: LinuxWorkflowErrorPresentation?
+    let targetWholeDiskBSDName: String?
+    let isDebugEjectMode: Bool
     
     @State private var isCleaning: Bool = true
     @State private var cleanupSuccess: Bool = false
@@ -26,6 +28,7 @@ struct FinishUSBView: View {
     @State private var didPlayResultSound: Bool = false
     @State private var didSendBackgroundNotification: Bool = false
     @State private var completionDurationText: String? = nil
+    @StateObject private var ejectLogic: FinishUSBEjectLogic
 
     init(
         systemName: String,
@@ -40,7 +43,9 @@ struct FinishUSBView: View {
         shouldDetachMountPoint: Bool = true,
         detectedSystemIcon: NSImage? = nil,
         resultDetailMessage: String? = nil,
-        linuxErrorPresentation: LinuxWorkflowErrorPresentation? = nil
+        linuxErrorPresentation: LinuxWorkflowErrorPresentation? = nil,
+        targetWholeDiskBSDName: String? = nil,
+        isDebugEjectMode: Bool = false
     ) {
         self.systemName = systemName
         self.mountPoint = mountPoint
@@ -55,6 +60,14 @@ struct FinishUSBView: View {
         self.detectedSystemIcon = detectedSystemIcon
         self.resultDetailMessage = resultDetailMessage
         self.linuxErrorPresentation = linuxErrorPresentation
+        self.targetWholeDiskBSDName = targetWholeDiskBSDName
+        self.isDebugEjectMode = isDebugEjectMode
+        _ejectLogic = StateObject(
+            wrappedValue: FinishUSBEjectLogic(
+                targetWholeDiskBSDName: targetWholeDiskBSDName,
+                isDebugMode: isDebugEjectMode
+            )
+        )
     }
     
     private var isSnowLeopard: Bool {
@@ -69,6 +82,32 @@ struct FinishUSBView: View {
     private var isCancelledResult: Bool { didCancel }
     private var isFailedResult: Bool { didFail && !didCancel }
     private var isSuccessResult: Bool { !didFail && !didCancel }
+    private var shouldShowEjectSection: Bool {
+        guard isSuccessResult else { return false }
+        if isDebugEjectMode { return true }
+        return targetWholeDiskBSDName != nil
+    }
+    private func finishEjectText(_ key: String, _ defaultValue: String) -> String {
+        let localized = Bundle.main.localizedString(forKey: key, value: nil, table: nil)
+        return localized == key ? defaultValue : localized
+    }
+    private var ejectActionButtonLabel: String {
+        if ejectLogic.state == .debugDisabled {
+            return finishEjectText("finish.eject.button.debug", "DEBUG")
+        }
+        if ejectLogic.state == .failed {
+            return finishEjectText("finish.eject.error.retry", "Spróbuj ponownie")
+        }
+        return finishEjectText("finish.eject.button.action", "Wysuń nośnik")
+    }
+    private var isEjectActionEnabled: Bool {
+        switch ejectLogic.state {
+        case .ready, .failed:
+            return true
+        case .inProgress, .unavailable, .ejected, .debugDisabled:
+            return false
+        }
+    }
     private var sectionIconFont: Font { .title3 }
     private var primaryResultTone: MacUSBSurfaceTone {
         if isCancelledResult { return .warning }
@@ -207,6 +246,11 @@ struct FinishUSBView: View {
                         }
                     }
 
+                    if shouldShowEjectSection {
+                        finishEjectSection
+                            .animation(.easeInOut(duration: 0.3), value: ejectLogic.state)
+                    }
+
                     if isSuccessResult && isPPC && !isSnowLeopard {
                         StatusCard(tone: .subtle, density: .compact) {
                             VStack(alignment: .leading, spacing: 10) {
@@ -328,12 +372,113 @@ struct FinishUSBView: View {
         )
         .onAppear {
             menuState.setDownloaderAccessBlocked(true, reason: downloaderBlockReason)
+            ejectLogic.prepareForPresentation()
+            ejectLogic.startAvailabilityMonitoring()
             playResultSoundOnce()
             performCleanupWithDelay()
             sendSystemNotificationIfInactive()
         }
         .onDisappear {
             menuState.setDownloaderAccessBlocked(false, reason: downloaderBlockReason)
+            ejectLogic.stopAvailabilityMonitoring()
+        }
+    }
+
+    @ViewBuilder
+    private var finishEjectSection: some View {
+        switch ejectLogic.state {
+        case .ejected:
+            StatusCard(tone: .success, density: .compact) {
+                HStack(alignment: .center) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(sectionIconFont)
+                        .foregroundColor(.green)
+                        .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(finishEjectText("finish.eject.success.title", "Nośnik został bezpiecznie wysunięty"))
+                            .font(.headline)
+                            .foregroundColor(.green)
+                        Text(finishEjectText("finish.eject.success.description", "Możesz teraz odłączyć nośnik USB."))
+                            .font(.subheadline)
+                            .foregroundColor(.green.opacity(0.85))
+                    }
+                    Spacer()
+                }
+            }
+            .transition(.opacity.combined(with: .move(edge: .top)))
+
+        default:
+            VStack(spacing: MacUSBDesignTokens.sectionGroupSpacing) {
+                if ejectLogic.state == .failed {
+                    StatusCard(tone: .error, density: .compact) {
+                        HStack(alignment: .center) {
+                            Image(systemName: "xmark.octagon.fill")
+                                .font(sectionIconFont)
+                                .foregroundColor(.red)
+                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(finishEjectText("finish.eject.error.title", "Nie można wysunąć nośnika"))
+                                    .font(.headline)
+                                    .foregroundColor(.red)
+                                Text(ejectLogic.failureMessage ?? finishEjectText("finish.eject.error.description", "Zamknij aplikacje używające nośnika i spróbuj ponownie."))
+                                    .font(.subheadline)
+                                    .foregroundColor(.red.opacity(0.85))
+                            }
+                            Spacer()
+                        }
+                    }
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+                }
+
+                StatusCard(tone: .active, density: .compact) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack(alignment: .center) {
+                            Image(systemName: "eject.fill")
+                                .font(sectionIconFont)
+                                .foregroundColor(.accentColor)
+                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(
+                                    ejectLogic.state == .unavailable
+                                    ? finishEjectText("finish.eject.unavailable.title", "Nośnik nie jest już dostępny")
+                                    : finishEjectText("finish.eject.card.title", "Bezpiecznie wysuń nośnik USB")
+                                )
+                                .font(.headline)
+                                .foregroundColor(.accentColor)
+                                Text(
+                                    ejectLogic.state == .unavailable
+                                    ? finishEjectText("finish.eject.unavailable.description", "Nośnik został odłączony lub wysunięty poza aplikacją.")
+                                    : finishEjectText("finish.eject.card.description", "Po zakończeniu pracy wysuń nośnik przed odłączeniem od komputera.")
+                                )
+                                .font(.subheadline)
+                                .foregroundColor(.accentColor.opacity(0.9))
+                            }
+                            Spacer()
+                        }
+
+                        Button(action: {
+                            withAnimation(.easeInOut(duration: 0.25)) {
+                                ejectLogic.performEject()
+                            }
+                        }) {
+                            HStack {
+                                Text(ejectActionButtonLabel)
+                                if ejectLogic.state == .inProgress {
+                                    ProgressView()
+                                        .controlSize(.small)
+                                } else {
+                                    Image(systemName: "eject")
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(8)
+                        }
+                        .macUSBPrimaryButtonStyle(isEnabled: isEjectActionEnabled)
+                        .disabled(!isEjectActionEnabled)
+                    }
+                }
+                .transition(.opacity.combined(with: .move(edge: .top)))
+            }
         }
     }
     // --- LOGIKA ---

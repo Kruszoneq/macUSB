@@ -76,6 +76,10 @@ struct UniversalInstallationView: View {
     var tempWorkURL: URL {
         return FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_temp")
     }
+    private var targetWholeDiskBSDNameForFinish: String? {
+        guard let targetDrive else { return nil }
+        return USBDriveLogic.wholeDiskName(from: targetDrive.device)
+    }
 
     private var showsIdleActions: Bool {
         !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !isCancelling
@@ -445,6 +449,7 @@ struct UniversalInstallationView: View {
                     isPPC: isPPC,
                     isLinuxWorkflow: isLinuxWorkflow,
                     shouldDetachMountPoint: shouldDetachMountPointAfterFinish,
+                    targetWholeDiskBSDName: targetWholeDiskBSDNameForFinish,
                     needsPreformat: (targetDrive?.needsFormatting ?? false) && !isPPC,
                     onReset: {
                         NotificationCenter.default.post(name: .macUSBResetToStart, object: nil)
