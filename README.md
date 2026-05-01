@@ -47,7 +47,7 @@ Common problems reported across forums and guides include:
 - version-dependent compatibility constraints and tooling differences on newer hosts,
 - manual terminal workflows that are easy to misconfigure and hard to verify.
 
-**macUSB was built from practical research and tested fixes** developed through repeated troubleshooting of these legacy installer scenarios.
+**macUSB was built through practical research and validated solutions** developed during repeated troubleshooting of these legacy installer scenarios.
 
 ---
 
@@ -247,11 +247,15 @@ macOS versions recognized and supported for USB creation:
 
 ## 🐧 Linux Support
 
-macUSB now also supports creating bootable USB media from Linux `.iso` and `.cdr` images.
+macUSB also supports creating bootable USB media from Linux `.iso` and `.cdr` images.
 
 When a Linux image is recognized, macUSB detects the distribution, version, and architecture automatically. ARM builds are labeled directly in the detected name, for example `Linux - Ubuntu 26.04 (ARM)`.
 
 If a selected file is a valid Linux image but is not recognized automatically, you can force Linux mode manually from **Options** → **Skip file analysis** → **Linux**.
+
+> Linux support has been tested with 19 distributions using the latest available releases as of April 30, 2026.[^5] Boot behavior was verified on a MacBook Air 2017 and additionally checked on an Asus F52Q with Legacy BIOS.
+
+[^5]: Validated distributions: *Ubuntu*, *Kali Linux*, *NixOS*, *Garuda Linux*, *openSUSE Leap*, *Gentoo*, *Rocky Linux*, *Linux Mint*, *Fedora Workstation*, *Manjaro*, *Zorin OS*, *CachyOS*, *AlmaLinux*, *Debian*, *Arch Linux*, *MX Linux*, *Pop!_OS*, *EndeavourOS*, and *elementary OS*.
 
 ---
 
@@ -292,10 +296,11 @@ The interface follows system language automatically:
 
 ## 🛠️ Diagnostics & Support
 
-Use [GitHub Issues](https://github.com/Kruszoneq/macUSB/issues) for troubleshooting, bug reports, and feature requests.
+If you need help with macUSB or want to report a problem, use [GitHub Issues](https://github.com/Kruszoneq/macUSB/issues).
 
-Before submitting:
-- use the appropriate issue template,
+Before opening an issue:
+- check whether the same problem has already been reported,
+- choose the issue template that best matches your case,
 - attach diagnostic logs exported from `Help` → `Export diagnostic logs...`,
 - attach screenshots showing the issue.
 

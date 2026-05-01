@@ -1,7 +1,7 @@
-name: "Bug Report - USB Creation"
+name: "Bug Report - macOS USB Creation"
 description: "Report issues related to analysis and bootable USB creation flow."
-title: "[USB Creation] "
-labels: ["bug", "triage", "usb-creation"]
+title: "[macOS USB Creation] "
+labels: ["bug", "usb-creation", "macos"]
 body:
   - type: markdown
     attributes:
@@ -35,6 +35,16 @@ body:
     validations:
       required: true
 
+  - type: checkboxes
+    id: required_permissions
+    attributes:
+      label: "Required permissions"
+      options:
+        - label: "I enabled Full Disk Access for macUSB in System Settings"
+          required: true
+        - label: "I enabled Allow in the Background for macUSB in System Settings"
+          required: true
+
   - type: dropdown
     id: helper_repair
     attributes:
@@ -42,6 +52,7 @@ body:
       options:
         - "Yes"
         - "No"
+        - "Not applicable"
     validations:
       required: true
 
@@ -64,6 +75,15 @@ body:
     validations:
       required: true
 
+  - type: textarea
+    id: installer_source_details
+    attributes:
+      label: "Installer source details"
+      description: "If you selected Local file or Other, add link/source details here."
+      placeholder: "e.g., local file from archive.org / installer copied from another Mac"
+    validations:
+      required: false
+
   - type: dropdown
     id: installer_format
     attributes:
@@ -73,16 +93,6 @@ body:
         - ".app"
         - ".iso"
         - ".cdr"
-        - "Other"
-    validations:
-      required: true
-
-  - type: textarea
-    id: installer_source_details
-    attributes:
-      label: "Installer source details"
-      description: "Where does the installer come from? Add link/source details."
-      placeholder: "e.g., Downloaded in macUSB Downloader / local file from ..."
     validations:
       required: true
 
@@ -104,14 +114,7 @@ body:
       options:
         - "Pendrive"
         - "Hard drive"
-    validations:
-      required: true
-
-  - type: input
-    id: media_capacity
-    attributes:
-      label: "Target media capacity"
-      placeholder: "e.g., 16 GB / 32 GB / 64 GB"
+        - "Not applicable"
     validations:
       required: true
 

@@ -1,7 +1,7 @@
-name: "Bug Report - Downloader"
-description: "Report issues related to macOS installer discovery/download flow."
-title: "[Downloader] "
-labels: ["bug", "downloader"]
+name: "Bug Report - Linux USB Creation"
+description: "Report issues related to Linux image analysis and USB creation."
+title: "[Linux USB Creation] "
+labels: ["bug", "usb-creation", "linux"]
 body:
   - type: markdown
     attributes:
@@ -35,6 +35,16 @@ body:
     validations:
       required: true
 
+  - type: checkboxes
+    id: required_permissions
+    attributes:
+      label: "Required permissions"
+      options:
+        - label: "I enabled Full Disk Access for macUSB in System Settings"
+          required: true
+        - label: "I enabled Allow in the Background for macUSB in System Settings"
+          required: true
+
   - type: dropdown
     id: helper_repair
     attributes:
@@ -47,10 +57,29 @@ body:
       required: true
 
   - type: input
-    id: downloaded_system
+    id: target_distribution
     attributes:
-      label: "Which system were you downloading?"
-      placeholder: "e.g., macOS Sonoma 14.7.1"
+      label: "Which Linux distribution were you creating?"
+      placeholder: "e.g., Ubuntu 26.04 / Fedora Workstation 42 / Arch Linux"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: installer_format
+    attributes:
+      label: "Image format"
+      options:
+        - ".iso"
+        - ".cdr"
+    validations:
+      required: true
+
+  - type: textarea
+    id: installer_source_details
+    attributes:
+      label: "Image source details"
+      description: "Where does the image come from? Add link/source details."
+      placeholder: "e.g., Official Ubuntu download"
     validations:
       required: true
 
@@ -59,12 +88,28 @@ body:
     attributes:
       label: "Failure stage"
       options:
-        - "Installer list"
-        - "Download start"
-        - "Downloading"
-        - "Verification"
-        - "Installer assembly"
-        - "Download summary"
+        - "Analysis"
+        - "USB creation"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem_description
+    attributes:
+      label: "Problem description"
+      placeholder: "Describe the issue in a few sentences."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: media_type
+    attributes:
+      label: "Target media type"
+      options:
+        - "Pendrive"
+        - "Hard drive"
+        - "Not applicable"
     validations:
       required: true
 
@@ -84,10 +129,11 @@ body:
     attributes:
       label: "Steps to reproduce"
       placeholder: |
-        1. Open Downloader
-        2. Select ...
-        3. Click ...
-        4. Observe error
+        1. Open macUSB
+        2. Select Linux image ...
+        3. Select target USB ...
+        4. Start process
+        5. Observe error
     validations:
       required: true
 
