@@ -60,8 +60,9 @@
 - Keep left sticky TOC only where content is long enough (Tiger guide).
 - PPC guide remains without left TOC unless explicitly requested.
 
-## K) About legacy redirect contract
+## K) About and legacy Why URL redirect contract
 
 - `/pages/about.html` remains lightweight legacy redirect.
-- Redirect target: `/pages/create-bootable-macos-usb-on-apple-silicon.html`.
-- Keep canonical on `about.html` pointing to merged page.
+- `/pages/create-bootable-macos-usb-on-apple-silicon.html` remains lightweight legacy redirect.
+- Redirect target: `/index.html#why`.
+- Keep canonical on both redirect pages pointing to homepage.

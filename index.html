@@ -5,15 +5,15 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DGP06DSXDF"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);} 
+      function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-DGP06DSXDF');
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>macUSB - Create bootable macOS installers on modern Macs</title>
-    <meta name="description" content="Create bootable macOS and Mac OS X USB installers on Apple Silicon and Intel Macs. macUSB v2.0 streamlines legacy and modern installer workflows.">
+    <title>macUSB - The all-in-one USB creator for Mac</title>
+    <meta name="description" content="A clean, guided way to create bootable USB media on Mac. Built for simple workflows and recovery scenarios.">
     <link rel="icon" type="image/png" href="assets/icon/macUSBicon-v2.png">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -22,14 +22,17 @@
     <div id="navbar"></div>
 
     <main id="top">
-        <section class="hero hero-home" aria-labelledby="hero-title">
+        <section class="hero hero-home hero-intro" aria-labelledby="hero-title">
             <div class="hero-inner">
                 <div class="hero-content">
                     <img src="assets/icon/macUSBicon-v2.png" alt="macUSB icon" class="hero-icon">
                     <h1 id="hero-title">macUSB</h1>
-                    <p class="subtitle">Create bootable USBs in one simple move - zero effort, zero complications. Full support for legacy Intel and PowerPC installer creation.</p>
+                    <p class="subtitle">
+                        <span class="intro-line-primary">Download. Flash. Boot</span>
+                        <span class="intro-line-secondary">The all-in-one USB creator for Mac</span>
+                    </p>
 
-                    <div class="cta-container">
+                    <div class="cta-container intro-actions" id="download">
                         <div class="cta-row">
                             <a href="https://github.com/Kruszoneq/macUSB/releases" class="cta-button">
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -52,116 +55,73 @@
                         <span class="requirements-info">Requires macOS 14.6 or newer</span>
                     </div>
                 </div>
-
-                <div class="hero-media">
-                    <div class="screenshot-stage" aria-label="macUSB app screenshots">
-                        <img src="assets/screenshots/app-v2/01-welcome.png" alt="macUSB welcome screen" loading="lazy" decoding="async" data-step="1" class="is-active">
-                        <img src="assets/screenshots/app-v2/02-analysis.png" alt="macUSB source and target configuration" loading="lazy" decoding="async" data-step="2">
-                        <img src="assets/screenshots/app-v2/03-overview.png" alt="macUSB operation overview" loading="lazy" decoding="async" data-step="3">
-                        <img src="assets/screenshots/app-v2/04-progress.png" alt="macUSB creation progress" loading="lazy" decoding="async" data-step="4">
-                        <img src="assets/screenshots/app-v2/05-finish.png" alt="macUSB operation result" loading="lazy" decoding="async" data-step="5">
-                    </div>
-                </div>
             </div>
 
-            <button class="scroll-cue" type="button" aria-label="Scroll to overview" title="Scroll">
+            <button class="scroll-cue" type="button" data-scroll-target="screenshots" aria-label="Scroll to content" title="Scroll">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M6.5 9.5 12 15l5.5-5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
         </section>
 
-        <section class="home-section reveal" id="screenshots" aria-labelledby="overview-title">
+        <section class="home-section reveal" id="screenshots" aria-labelledby="preview-title">
             <div class="section-head">
-                <span class="section-kicker">Overview</span>
-                <h2 id="overview-title">What macUSB changes for your install workflow</h2>
-                <p>macUSB replaces manual, fragile installer preparation with a guided flow tailored for Apple Silicon and Intel hosts.</p>
+                <span class="section-kicker">Product Preview</span>
+                <h2 id="preview-title">A clean, guided experience from source to ready USB</h2>
+                <p>Everything is designed to keep you moving forward: clear choices, clear status, and clear finish.</p>
+            </div>
+
+            <div class="hero-media">
+                <div class="screenshot-stage" aria-label="macUSB app screenshots">
+                    <img src="assets/screenshots/app-v2/01-welcome.png" alt="macUSB welcome screen" loading="lazy" decoding="async" data-step="1" class="is-active">
+                    <img src="assets/screenshots/app-v2/02-analysis.png" alt="macUSB source and target configuration" loading="lazy" decoding="async" data-step="2">
+                    <img src="assets/screenshots/app-v2/03-overview.png" alt="macUSB operation overview" loading="lazy" decoding="async" data-step="3">
+                    <img src="assets/screenshots/app-v2/04-progress.png" alt="macUSB creation progress" loading="lazy" decoding="async" data-step="4">
+                    <img src="assets/screenshots/app-v2/05-finish.png" alt="macUSB operation result" loading="lazy" decoding="async" data-step="5">
+                </div>
+            </div>
+        </section>
+
+        <section class="home-section reveal" id="why" aria-labelledby="why-title">
+            <div class="section-head">
+                <span class="section-kicker">Why macUSB</span>
+                <h2 id="why-title">Built as a practical recovery tool, not a technical maze</h2>
+                <p>macUSB turns complicated installer preparation into one readable flow, focused on outcomes instead of command juggling.</p>
             </div>
 
             <div class="value-grid">
                 <article class="value-card">
-                    <h3>Reliable preparation</h3>
-                    <p>v2.0 verifies USB media and prepares disk formats automatically before file transfer starts.</p>
+                    <h3>Simple by default</h3>
+                    <p>From first click to finished media in a guided interface.</p>
                 </article>
                 <article class="value-card">
-                    <h3>Legacy compatibility</h3>
-                    <p>Create installers for older Intel and PowerPC Macs without rebuilding your toolchain.</p>
+                    <h3>Reliable under pressure</h3>
+                    <p>When you need recovery media, progress and results stay explicit.</p>
                 </article>
                 <article class="value-card">
-                    <h3>Live creation insight</h3>
-                    <p>Track stages, status, and write speed from a dedicated progress dashboard.</p>
-                </article>
-                <article class="value-card">
-                    <h3>Guided completion</h3>
-                    <p>Get next-step boot guidance after creation, including links to PowerPC Open Firmware instructions.</p>
+                    <h3>Built for real cases</h3>
+                    <p>Designed around real-world installation and restore workflows.</p>
                 </article>
             </div>
         </section>
 
-        <section class="home-section reveal" aria-labelledby="workflow-title">
+        <section class="home-section reveal" id="whats-next" aria-labelledby="next-title">
             <div class="section-head">
-                <span class="section-kicker">How it works</span>
-                <h2 id="workflow-title">From source selection to ready-to-boot USB in three clear stages</h2>
-            </div>
-
-            <div class="screenshot-list">
-                <article class="screenshot-item">
-                    <div class="screenshot-frame">
-                        <img src="assets/screenshots/app-v2/02-analysis.png" alt="Select installer and target USB in macUSB" loading="lazy" decoding="async" class="zoom-image">
-                    </div>
-                    <div class="screenshot-description">
-                        <h3>1) Analyze source and prepare target</h3>
-                        <p>Select your installer file and destination drive. macUSB validates requirements and gives you an immediate, readable summary.</p>
-                    </div>
-                </article>
-
-                <article class="screenshot-item">
-                    <div class="screenshot-frame">
-                        <img src="assets/screenshots/app-v2/03-overview.png" alt="Review operation details before starting" loading="lazy" decoding="async" class="zoom-image">
-                    </div>
-                    <div class="screenshot-description">
-                        <h3>2) Confirm the workflow</h3>
-                        <p>Review what will happen before creation begins: file preparation, USB formatting, copy sequence, and cleanup.</p>
-                    </div>
-                </article>
-
-                <article class="screenshot-item">
-                    <div class="screenshot-frame">
-                        <img src="assets/screenshots/app-v2/04-progress.png" alt="Track USB creation progress in real time" loading="lazy" decoding="async" class="zoom-image">
-                    </div>
-                    <div class="screenshot-description">
-                        <h3>3) Monitor and finish</h3>
-                        <p>Follow stage-by-stage progress, then complete with guided post-install notes for your target machine generation.</p>
-                    </div>
-                </article>
+                <span class="section-kicker">What It Creates</span>
+                <h2 id="next-title">Bootable USB for macOS today, Linux next</h2>
+                <p>macUSB creates bootable USB media for macOS. Linux USB creation is coming in the next app release, launching together with this new website edition.</p>
             </div>
         </section>
 
-        <section class="home-section reveal" aria-labelledby="compat-title">
+        <section class="home-section reveal" id="open-source" aria-labelledby="oss-title">
             <div class="section-head">
-                <span class="section-kicker">Compatibility</span>
-                <h2 id="compat-title">Built for current macOS and legacy recovery scenarios</h2>
-                <p>Create installers from current releases down to Mac OS X Tiger and Leopard, with dedicated guidance for PowerPC boot paths.</p>
+                <span class="section-kicker">Open Source</span>
+                <h2 id="oss-title">Transparent development, public repository</h2>
+                <p>macUSB is developed openly. For full technical details, release notes, and implementation specifics, use the GitHub repository.</p>
             </div>
-
-            <div class="compat-grid">
-                <article class="compat-card">
-                    <h3>Modern hosts</h3>
-                    <p>Apple Silicon and Intel Macs running modern macOS can prepare both current and legacy installer media.</p>
-                </article>
-                <article class="compat-card">
-                    <h3>Legacy targets</h3>
-                    <p>Support includes older Intel systems and PowerPC scenarios where USB booting requires Open Firmware steps.</p>
-                </article>
-                <article class="compat-card">
-                    <h3>Guided docs</h3>
-                    <p>Use the built-in flow and continue with website guides for Tiger Multi-DVD and PowerPC USB boot instructions.</p>
-                </article>
-            </div>
-
             <p class="section-actions">
-                <a class="card-button" href="pages/create-bootable-macos-usb-on-apple-silicon.html">Read the full compatibility guide</a>
-                <a class="card-button" href="pages/guides/multidvd_tiger.html">Open Tiger Multi-DVD guide</a>
+                <a class="card-button" href="https://github.com/Kruszoneq/macUSB">View on GitHub</a>
+                <a class="card-button" href="https://github.com/Kruszoneq/macUSB/issues">Report an Issue</a>
             </p>
         </section>
     </main>

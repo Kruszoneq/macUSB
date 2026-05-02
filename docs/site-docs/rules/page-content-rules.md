@@ -3,32 +3,29 @@
 ## Homepage (`/index.html`)
 
 Must include:
-- Product hero with icon, headline, subtitle, primary download CTA, and secondary `Support macUSB` CTA.
-- Latest version and minimum requirement (`macOS 14.6+`).
+- Product hero with icon, app name, two-line slogan, primary download CTA, and secondary support CTA.
+- Latest version and minimum requirement (`macOS 14.6+`) visible in hero.
 - No hero badge.
-- Value section.
-- Workflow section.
-- Compatibility and guide bridge links.
+- Marketing-first landing structure:
+  - product preview,
+  - concise "why" message,
+  - short value cards,
+  - concise "what it creates" statement,
+  - open-source trust block with links to repository/support.
+- Keep technical deep details out of homepage body; direct users to GitHub for implementation specifics.
 - Browser title format: `macUSB - <text>`.
 
 ## Legacy About URL (`/pages/about.html`)
 
 - Legacy redirect only.
 - Must not contain competing long-form content.
-- Required: canonical to merged page, redirect behavior, fallback link.
+- Required: canonical to homepage, redirect behavior, fallback link.
 
-## SEO page (`/pages/create-bootable-macos-usb-on-apple-silicon.html`)
+## Legacy Why URL (`/pages/create-bootable-macos-usb-on-apple-silicon.html`)
 
-- English-only merged product + SEO page.
-- Must semantically cover intents equivalent to:
-  - how to make a bootable macOS USB
-  - create bootable macOS installer on Apple Silicon
-  - bootable USB for older macOS versions
-  - Tiger/Leopard bootable USB for PowerPC
-- Must include metadata: title, description, canonical, Open Graph, Twitter.
-- Must include structured data: `SoftwareApplication` and `FAQPage`.
-- Must include FAQ block and internal links to guides/releases.
-- Copy rule: describe current capabilities only; do not add changelog-style sections such as `What's new`, `Added`, `Changed`, `Improved`.
+- Legacy redirect only.
+- Must not contain competing long-form content.
+- Required: canonical to homepage, redirect behavior, fallback link.
 
 ## Guides
 

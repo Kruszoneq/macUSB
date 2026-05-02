@@ -1,45 +1,50 @@
-# Design System (2026 Refresh)
+# Design System (Cal-style Light Refresh)
 
 ## Visual direction
 
-- Apple-like, modern, minimal, clear hierarchy.
-- Frosted/glass effect should be most visible on navbar in scrolled state.
-- Avoid heavy visual clutter and over-animation.
+- Modern, restrained, white-first editorial SaaS style.
+- Flat white navbar by default; frosted effect only in scrolled sticky state.
+- Real product screenshots are the primary visual artifact.
+- Keep interfaces clean and legible with clear hierarchy and generous whitespace.
 
 ## Colors and theming
 
-- Single fixed default theme.
-- No system theme detection or manual theme switch.
-- Base surfaces remain in the `#303030` family.
-- Accent remains Apple-blue family.
-- Body background uses a subtle blue to blue-gray gradient overlay on `--bg-color`.
+- Single fixed default theme (no theme switch, no system theme detection).
+- Primary canvas: `#ffffff`.
+- Primary action color: `#111111` with active/pressed shade `#242424`.
+- Card surface: light gray (`#f5f5f5`) with hairline borders.
+- Footer closes pages on dark surface (`#101010`) with soft light text.
+- Accent colors are minimal and non-dominant.
 
 ## Typography and spacing
 
-- Use system font stack.
-- Keep heading hierarchy high-contrast and clear.
+- Display stack: `Manrope`, fallback `Inter`.
+- Body/UI stack: `Inter`.
+- Display headlines use weight `600` and tighter letter-spacing.
+- Body copy remains neutral and highly readable.
 - Docs content max width around `980px`.
-- Homepage section widths up to around `1040-1120px`.
+- Homepage section widths up to around `1120-1200px`.
+- Section rhythm targets large-band spacing (roughly 72-96px on desktop).
 
 ## Buttons and actions
 
-- `cta-button`: primary download action only.
-- `card-button`: internal guide links and secondary page actions.
-- `support-button`: voluntary Buy Me a Coffee support action (must remain visually secondary to primary CTA).
+- `cta-button`: primary download action only, dark fill with light text, medium radius.
+- `card-button`: secondary actions and guide links, outlined/light style, pill shape.
+- `support-button`: secondary support action; lower visual priority than `cta-button`.
 
 `card-button` contract:
 - pill shape (`border-radius: 999px`)
-- subtle surface background (`--surface-1`)
-- 1px border (`--border-color`)
-- hover lift (`translateY(-1px)`) with `--surface-2`
+- subtle light surface background
+- 1px hairline border
+- hover lift (`translateY(-1px)`) with soft background shift
 
 `support-button` contract:
-- frosted secondary style with subtle blur
+- visually secondary to primary CTA
 - icon + text inline layout
-- visual priority lower than primary `cta-button`
+- in footer, allowed dark-elevated variant while preserving secondary hierarchy
 
 - Group secondary actions inside `.section-actions`.
-- In Tiger guide, cross-link below final screenshot uses `.section-actions.after-guide-image` for spacing below image shadows.
+- In Tiger guide, cross-link below final screenshot uses `.section-actions.after-guide-image`.
 
 ## Motion
 

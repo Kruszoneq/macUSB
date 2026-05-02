@@ -2,7 +2,7 @@
 
 ## Top-level navigation
 
-- `Why macUSB`
+- `Why macUSB` (anchor to homepage section)
 - `Guides` (dropdown)
 - `GitHub`
 

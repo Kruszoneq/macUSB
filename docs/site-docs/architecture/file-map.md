@@ -2,7 +2,7 @@
 
 ## Core website files
 
-- `/index.html`: homepage (hero, value, workflow, compatibility).
+- `/index.html`: primary landing page (hero, why, features, workflow, requirements, compatibility, guides, support).
 - `/assets/css/style.css`: visual system and responsive behavior.
 - `/assets/js/main.js`: runtime behavior (partials injection, nav state, dropdown, release fetch, carousel, reveal, lightbox, TOC).
 
@@ -13,8 +13,8 @@
 
 ## Main pages
 
-- `/pages/create-bootable-macos-usb-on-apple-silicon.html`: merged Why/About + SEO page.
-- `/pages/about.html`: legacy redirect page to the merged Why page.
+- `/pages/create-bootable-macos-usb-on-apple-silicon.html`: legacy Why URL redirect to homepage `#why`.
+- `/pages/about.html`: legacy About URL redirect to homepage `#why`.
 
 ## Guides
 
@@ -24,7 +24,7 @@
 ## Primary assets
 
 - `/assets/icon/macUSBicon-v2.png`: current icon for nav/favicon/branding.
-- `/assets/screenshots/app-v2/*`: app screenshots used on homepage and SEO page.
+- `/assets/screenshots/app-v2/*`: app screenshots used on homepage.
 - `/assets/screenshots/multidvd_tiger/*`: Tiger guide screenshots.
 
 Canonical Tiger screenshot sequence:

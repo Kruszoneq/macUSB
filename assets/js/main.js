@@ -153,7 +153,8 @@
   if (!scrollCue) return;
 
   scrollCue.addEventListener('click', () => {
-    const target = document.getElementById('screenshots');
+    const targetId = scrollCue.dataset.scrollTarget || 'screenshots';
+    const target = document.getElementById(targetId);
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 })();

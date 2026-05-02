@@ -1,7 +1,7 @@
 # Pre-Ship Acceptance Checklist
 
-- [ ] Navbar renders on index/SEO/guides via partial injection.
-- [ ] Footer renders on index/SEO/guides via partial injection.
+- [ ] Navbar renders on index/guides via partial injection.
+- [ ] Footer renders on index/guides via partial injection.
 - [ ] Sticky/frosted navbar behavior works and remains readable in fixed default theme.
 - [ ] No theme toggle is rendered in navbar.
 - [ ] No system theme switching changes page appearance.
@@ -15,8 +15,7 @@
 - [ ] PPC guide command content remains unchanged.
 - [ ] Cross-guide links in Tiger/PPC guides are rendered as `card-button` actions.
 - [ ] Tiger guide TOC auto-generation and scrollspy remain stable.
-- [ ] SEO page has complete metadata and internal links.
-- [ ] SEO page includes `SoftwareApplication` and `FAQPage` structured data.
-- [ ] `/pages/about.html` redirects to merged SEO page and keeps canonical to that URL.
+- [ ] Legacy Why URL (`/pages/create-bootable-macos-usb-on-apple-silicon.html`) redirects to `/#why` and keeps canonical to homepage.
+- [ ] `/pages/about.html` redirects to `/#why` and keeps canonical to homepage.
 - [ ] Mobile layouts pass `360/390/414` width checks without overflow.
 - [ ] `prefers-reduced-motion` behavior is respected.

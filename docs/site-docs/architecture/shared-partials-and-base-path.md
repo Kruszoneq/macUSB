@@ -12,7 +12,7 @@ Primary content pages must use:
 
 Do not copy navbar/footer markup directly into each page.
 
-Exception: `/pages/about.html` is a minimal legacy redirect and intentionally does not mount shared partials.
+Exceptions: `/pages/about.html` and `/pages/create-bootable-macos-usb-on-apple-silicon.html` are minimal legacy redirects and intentionally do not mount shared partials.
 
 ## Base path compatibility
 
