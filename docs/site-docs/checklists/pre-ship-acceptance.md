@@ -10,6 +10,7 @@
 - [ ] On desktop, `.cta-button` download links resolve to latest GitHub `.dmg` asset when available.
 - [ ] On mobile/tablet, `.cta-button` links remain on releases page.
 - [ ] Homepage hero includes both CTAs: `Download for macOS` and `Support macUSB`.
+- [ ] Homepage intro content is hidden until full load and then revealed by intro animation without flash/jump.
 - [ ] Homepage hero carousel works smoothly and screenshots are not cropped.
 - [ ] `#screenshots` anchor and scroll cue behavior work.
 - [ ] PPC guide command content remains unchanged.

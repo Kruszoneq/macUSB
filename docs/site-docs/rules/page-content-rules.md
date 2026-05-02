@@ -6,6 +6,7 @@ Must include:
 - Product hero with icon, app name, two-line slogan, primary download CTA, and secondary support CTA.
 - Latest version and minimum requirement (`macOS 14.6+`) visible in hero.
 - No hero badge.
+- Hero intro content should not render visibly before full load; reveal starts after load with the configured intro animation.
 - Marketing-first landing structure:
   - product preview,
   - concise "why" message,

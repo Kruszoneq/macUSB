@@ -38,6 +38,8 @@
 
 ## G) Homepage hero behavior
 
+- Hero intro content (logo, app name, slogan, hero CTA block) is hidden during initial loading state.
+- Hero intro reveal animation starts only after full page load.
 - Keep screenshot carousel.
 - No background image layer mounted in hero.
 - Scroll cue jumps to `#screenshots`.

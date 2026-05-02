@@ -6,11 +6,11 @@
 - No horizontal overflow.
 - CTA and body text remain readable.
 - Dropdown/nav interactions remain touch-friendly.
-- On smartphone widths (`<=768px`), homepage hero icon is centered.
-- On desktop widths, hero icon stays left-aligned.
+- Homepage intro icon and text remain centered on smartphone and desktop widths.
 
 ## Accessibility
 
 - Keyboard-focus styles are required.
 - `prefers-reduced-motion` must disable non-essential animation.
 - Keep semantic heading order and descriptive alt text.
+- Homepage intro must remain hidden until load completes; reveal starts after load without visual flash/jump.

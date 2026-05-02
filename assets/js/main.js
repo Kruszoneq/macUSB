@@ -147,6 +147,61 @@
   injectPartial(footerMount, footerUrl, null, 'Footer');
 })();
 
+/* --- Scroll to top on reload --- */
+(function () {
+  const navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+  const isReload = navEntry
+    ? navEntry.type === 'reload'
+    : window.performance &&
+      window.performance.navigation &&
+      window.performance.navigation.type === 1;
+
+  if (!isReload) return;
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  window.addEventListener(
+    'load',
+    () => {
+      window.requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+      });
+    },
+    { once: true }
+  );
+})();
+
+/* --- Intro reveal after load --- */
+(function () {
+  const body = document.body;
+  if (!body || !body.classList.contains('home-page')) return;
+
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const navDelayMs = reduced ? 250 : 1500;
+
+  function revealIntro() {
+    body.classList.remove('intro-loading');
+    body.classList.add('intro-ready');
+    window.setTimeout(() => {
+      body.classList.add('intro-nav-visible');
+    }, navDelayMs);
+  }
+
+  function startIntroAnimation() {
+    window.requestAnimationFrame(() => {
+      revealIntro();
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    startIntroAnimation();
+    return;
+  }
+
+  window.addEventListener('load', () => {
+    startIntroAnimation();
+  }, { once: true });
+})();
+
 /* --- Scroll cue (hero -> section) --- */
 (function () {
   const scrollCue = document.querySelector('.scroll-cue');
@@ -193,36 +248,77 @@
     (a, b) => Number(a.dataset.step || 0) - Number(b.dataset.step || 0)
   );
   if (!slides.length) return;
+  const dots = Array.from(document.querySelectorAll('.screenshot-dot[data-step]')).sort(
+    (a, b) => Number(a.dataset.step || 0) - Number(b.dataset.step || 0)
+  );
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let index = 0;
   let intervalId = null;
   let started = false;
 
+  function updateDots() {
+    if (!dots.length) return;
+    dots.forEach((dot, dotIndex) => {
+      const active = dotIndex === index;
+      dot.classList.toggle('is-active', active);
+      dot.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
   function showInitial() {
     slides.forEach((img) => img.classList.remove('is-active', 'is-exiting'));
     index = 0;
     slides[0].classList.add('is-active');
+    updateDots();
+  }
+
+  function showSlide(nextIndex) {
+    if (nextIndex < 0 || nextIndex >= slides.length) return;
+    if (nextIndex === index) {
+      updateDots();
+      return;
+    }
+
+    const current = slides[index];
+    const next = slides[nextIndex];
+
+    current.classList.remove('is-active');
+    if (!reduced) current.classList.add('is-exiting');
+
+    next.classList.add('is-active');
+    index = nextIndex;
+    updateDots();
+
+    if (!reduced) {
+      setTimeout(() => current.classList.remove('is-exiting'), 850);
+    }
+  }
+
+  function restartAutoRotation() {
+    if (reduced || slides.length === 1 || !started) return;
+    if (intervalId) clearInterval(intervalId);
+    intervalId = setInterval(() => {
+      showSlide((index + 1) % slides.length);
+    }, 2000);
+  }
+
+  function bindDots() {
+    if (!dots.length) return;
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const dotStep = Number(dot.dataset.step || 1) - 1;
+        showSlide(dotStep);
+        restartAutoRotation();
+      });
+    });
   }
 
   function start() {
     if (started) return;
     started = true;
     showInitial();
-
-    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced || slides.length === 1) return;
-
-    intervalId = setInterval(() => {
-      const current = slides[index];
-      current.classList.remove('is-active');
-      current.classList.add('is-exiting');
-
-      index = (index + 1) % slides.length;
-      const next = slides[index];
-      next.classList.add('is-active');
-
-      setTimeout(() => current.classList.remove('is-exiting'), 850);
-    }, 4600);
+    restartAutoRotation();
   }
 
   function stop() {
@@ -231,7 +327,7 @@
     intervalId = null;
   }
 
-  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  bindDots();
   if (reduced) {
     showInitial();
     return;

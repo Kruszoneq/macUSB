@@ -17,7 +17,17 @@
     <link rel="icon" type="image/png" href="assets/icon/macUSBicon-v2.png">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body class="home-page">
+<body class="home-page intro-loading">
+
+    <noscript>
+      <style>
+        .home-page nav { opacity: 1 !important; visibility: visible !important; transform: none !important; pointer-events: auto !important; }
+        .hero-intro .hero-icon,
+        .hero-intro h1,
+        .hero-intro .subtitle,
+        .hero-intro .intro-actions { opacity: 1 !important; transform: none !important; animation: none !important; }
+      </style>
+    </noscript>
 
     <div id="navbar"></div>
 
@@ -28,7 +38,7 @@
                     <img src="assets/icon/macUSBicon-v2.png" alt="macUSB icon" class="hero-icon">
                     <h1 id="hero-title">macUSB</h1>
                     <p class="subtitle">
-                        <span class="intro-line-primary">Download. Flash. Boot</span>
+                        <span class="intro-line-primary">Download. Flash. Boot.</span>
                         <span class="intro-line-secondary">The all-in-one USB creator for Mac</span>
                     </p>
 
@@ -65,19 +75,30 @@
         </section>
 
         <section class="home-section reveal" id="screenshots" aria-labelledby="preview-title">
-            <div class="section-head">
-                <span class="section-kicker">Product Preview</span>
-                <h2 id="preview-title">A clean, guided experience from source to ready USB</h2>
-                <p>Everything is designed to keep you moving forward: clear choices, clear status, and clear finish.</p>
-            </div>
+            <div class="product-preview-grid">
+                <div class="product-preview-copy">
+                    <span class="section-kicker">Product Preview</span>
+                    <h2 id="preview-title" class="product-preview-title">A clean, guided experience from source to ready USB</h2>
+                    <p class="product-preview-lead">Everything is designed to keep you moving forward: clear choices, clear status, and clear finish.</p>
+                    <p class="product-preview-note">Move through the flow from welcome to completion and switch slides manually at any time.</p>
+                </div>
 
-            <div class="hero-media">
-                <div class="screenshot-stage" aria-label="macUSB app screenshots">
-                    <img src="assets/screenshots/app-v2/01-welcome.png" alt="macUSB welcome screen" loading="lazy" decoding="async" data-step="1" class="is-active">
-                    <img src="assets/screenshots/app-v2/02-analysis.png" alt="macUSB source and target configuration" loading="lazy" decoding="async" data-step="2">
-                    <img src="assets/screenshots/app-v2/03-overview.png" alt="macUSB operation overview" loading="lazy" decoding="async" data-step="3">
-                    <img src="assets/screenshots/app-v2/04-progress.png" alt="macUSB creation progress" loading="lazy" decoding="async" data-step="4">
-                    <img src="assets/screenshots/app-v2/05-finish.png" alt="macUSB operation result" loading="lazy" decoding="async" data-step="5">
+                <div class="product-preview-media">
+                    <div class="screenshot-stage" aria-label="macUSB app screenshots">
+                        <img src="assets/screenshots/app-v2/01-welcome.png" alt="macUSB welcome screen" loading="lazy" decoding="async" data-step="1" class="is-active">
+                        <img src="assets/screenshots/app-v2/02-analysis.png" alt="macUSB source and target configuration" loading="lazy" decoding="async" data-step="2">
+                        <img src="assets/screenshots/app-v2/03-overview.png" alt="macUSB operation overview" loading="lazy" decoding="async" data-step="3">
+                        <img src="assets/screenshots/app-v2/04-progress.png" alt="macUSB creation progress" loading="lazy" decoding="async" data-step="4">
+                        <img src="assets/screenshots/app-v2/05-finish.png" alt="macUSB operation result" loading="lazy" decoding="async" data-step="5">
+                    </div>
+
+                    <div class="screenshot-dots" aria-label="Screenshot controls">
+                        <button class="screenshot-dot is-active" type="button" data-step="1" aria-label="Show screenshot 1" aria-pressed="true"></button>
+                        <button class="screenshot-dot" type="button" data-step="2" aria-label="Show screenshot 2" aria-pressed="false"></button>
+                        <button class="screenshot-dot" type="button" data-step="3" aria-label="Show screenshot 3" aria-pressed="false"></button>
+                        <button class="screenshot-dot" type="button" data-step="4" aria-label="Show screenshot 4" aria-pressed="false"></button>
+                        <button class="screenshot-dot" type="button" data-step="5" aria-label="Show screenshot 5" aria-pressed="false"></button>
+                    </div>
                 </div>
             </div>
         </section>
