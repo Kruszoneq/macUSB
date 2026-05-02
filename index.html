@@ -52,6 +52,9 @@
                                 </svg>
                                 <span>Download for macOS</span>
                             </a>
+                            <button class="card-button brew-toggle" type="button" aria-expanded="false" aria-controls="brew-command-panel">
+                                <span>Download via Homebrew</span>
+                            </button>
                             <a href="https://www.buymeacoffee.com/kruszoneq" class="support-button" target="_blank" rel="noopener">
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <path d="M4 7h13v7a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -60,6 +63,18 @@
                                 </svg>
                                 <span>Support macUSB</span>
                             </a>
+                        </div>
+                        <div id="brew-command-panel" class="brew-command-panel" hidden>
+                            <code id="brew-command-text" class="brew-command-text">brew install --cask macusb</code>
+                            <button class="brew-copy-button" type="button" aria-label="Copy Homebrew command">
+                                <svg class="icon-copy" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M9 9.5A1.5 1.5 0 0 1 10.5 8h7A1.5 1.5 0 0 1 19 9.5v9a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 9 18.5v-9Z" stroke="currentColor" stroke-width="1.8"/>
+                                    <path d="M15 8V6.5A1.5 1.5 0 0 0 13.5 5h-7A1.5 1.5 0 0 0 5 6.5v9A1.5 1.5 0 0 0 6.5 17H9" stroke="currentColor" stroke-width="1.8"/>
+                                </svg>
+                                <svg class="icon-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M5.5 12.5 10 17l8.5-8.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
                         </div>
                         <span id="latest-version" class="version-info">Latest release</span>
                         <span class="requirements-info">Requires macOS 14.6 or newer</span>
