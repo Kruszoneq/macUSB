@@ -19,6 +19,11 @@ The footer flips to `{colors.surface-dark}` (#101010) — a deep near-black that
 - Spacing rhythm is `{spacing.section}` (96px) between major bands — tight enough to feel modern-SaaS but generous enough to breathe.
 - Border radius is hierarchical: `{rounded.md}` (8px) for buttons + inputs, `{rounded.lg}` (12px) for content cards, `{rounded.xl}` (16px) for the hero app-mockup container, `{rounded.pill}` for nav-pill-group + badges, `{rounded.full}` for avatars + icon buttons.
 
+## Implementation Deviations (macUSB)
+
+- **Typography deviation (approved):** the macUSB site implementation uses `Manrope` for display headings and `Inter` for body/UI text instead of `Cal Sans + Inter`, due to Cal Sans licensing and self-hosting constraints.
+- **Footer deviation (approved):** the macUSB site implementation uses a compact dark "close" footer instead of a full 4-column mega-footer, while keeping the same dark-surface closing principle.
+
 ## Colors
 
 ### Brand & Accent
@@ -267,4 +272,3 @@ Avatar photos use `{rounded.full}` (perfect circles) at 36px or 40px. Product UI
 - Form validation states beyond `{component.text-input-focused}` are not extracted — error / success states would need a sign-up or booking flow to confirm.
 - The actual booking widget surface (cal.com/{username}) is the product, not a marketing surface; its spec is out of scope.
 - Avatar photos in testimonial sections sometimes carry pastel circular fills with initials instead of photographs; both treatments coexist on the same page.
-

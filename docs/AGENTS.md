@@ -38,6 +38,17 @@ cd /path/to/macUSB && python3 -m http.server 8000 --bind 0.0.0.0
 - Keep shared page elements in separate files and include/import them where needed.
 - When creating new pages, use clear standard naming, place files in the correct folder by page type, and update related documentation files automatically in the same change set.
 
+## Design Consistency Rules
+
+- The visual style of the website must be consistent with `docs/DESIGN.md`, which is the design source of truth for UI decisions.
+- If a task requires a deliberate visual deviation from `docs/DESIGN.md`, explicitly report the conflict and obtain user approval before implementation.
+
+## Editorial Change Approval Rules
+
+- Any editorial change (copywriting, wording, tone, labels, headings, CTA text, or other text content edits) requires user approval before implementation.
+- Before implementing an editorial change, provide a clear "before" and "after" proposal for each edited text fragment.
+- Implement editorial changes only after the user explicitly accepts the proposal.
+
 ## Commit Rules
 
 - Before creating any commit, prepare a commit draft for user approval.
