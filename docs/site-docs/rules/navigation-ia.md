@@ -4,6 +4,7 @@
 
 - `Why macUSB` (anchor to homepage section)
 - `Guides` (dropdown)
+- `Theme toggle` (light/dark switch)
 - `GitHub`
 
 ## Guides dropdown groups

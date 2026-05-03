@@ -7,6 +7,7 @@
 
 ## JavaScript runtime (split by scope)
 
+- `/assets/js/core/theme.js`: theme bootstrap and state management (system preference detection, persisted user override, and runtime theme application).
 - `/assets/js/core/partials-nav-footer.js`: shared partial injection (`#navbar`, `#footer`), base-prefix handling, nav state/dropdown behavior, runtime CSS variables.
 - `/assets/js/core/scroll-top-reload.js`: reload-only scroll reset behavior.
 - `/assets/js/common/reveal.js`: generic reveal-on-scroll animation.

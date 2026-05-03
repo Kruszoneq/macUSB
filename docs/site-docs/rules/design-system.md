@@ -9,11 +9,14 @@
 
 ## Colors and theming
 
-- Single fixed default theme (no theme switch, no system theme detection).
+- Dual theme support: light and dark.
+- Theme initializes from `prefers-color-scheme` on first load.
+- Navbar includes a user theme toggle; explicit user choice persists in `localStorage`.
 - Primary canvas: `#ffffff`.
 - Primary action color: `#111111` with active/pressed shade `#242424`.
 - Card surface: light gray (`#f5f5f5`) with hairline borders.
-- Footer closes pages on dark surface (`#101010`) with soft light text.
+- Dark theme canvas is near-black (`#101010`) with light text and preserved contrast hierarchy.
+- Footer still closes pages on the deepest dark surface family.
 - Accent colors are minimal and non-dominant.
 
 ## Typography and spacing

@@ -111,9 +111,36 @@
     });
   }
 
+  function initThemeToggle() {
+    const themeToggle = document.querySelector('.theme-toggle');
+    if (!themeToggle) return;
+
+    const themeApi = window.macUSBTheme;
+    if (!themeApi || typeof themeApi.toggleThemePreference !== 'function') return;
+
+    function describeNextAction() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      const label = `Switch to ${nextTheme} theme`;
+      themeToggle.setAttribute('aria-label', label);
+      themeToggle.setAttribute('title', label);
+      themeToggle.setAttribute('aria-checked', currentTheme === 'dark' ? 'true' : 'false');
+    }
+
+    describeNextAction();
+
+    themeToggle.addEventListener('click', () => {
+      themeApi.toggleThemePreference();
+      describeNextAction();
+    });
+
+    document.addEventListener('theme:change', describeNextAction);
+  }
+
   function initAfterNavbarInjected() {
     initNavStateTracking();
     initGuidesDropdown();
+    initThemeToggle();
   }
 
   function runScripts(mount) {

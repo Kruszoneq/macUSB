@@ -23,6 +23,7 @@ The footer flips to `{colors.surface-dark}` (#101010) — a deep near-black that
 
 - **Typography deviation (approved):** the macUSB site implementation uses `Manrope` for display headings and `Inter` for body/UI text instead of `Cal Sans + Inter`, due to Cal Sans licensing and self-hosting constraints.
 - **Footer deviation (approved):** the macUSB site implementation uses a compact dark "close" footer instead of a full 4-column mega-footer, while keeping the same dark-surface closing principle.
+- **Theme deviation (approved):** the macUSB site implementation supports dual theme mode (`light` and `dark`) with automatic first-load selection from system preference (`prefers-color-scheme`) and a persistent user override through the navbar theme switch.
 
 ## Colors
 

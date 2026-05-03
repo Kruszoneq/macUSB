@@ -17,11 +17,12 @@
 - Must work for both local mode (`''`) and GitHub Pages mode (`/macUSB`).
 - Keep and replace `{{BASE}}` placeholders in partials via JS.
 
-## D) Fixed theme contract
+## D) Theme contract
 
-- No theme toggle in navbar.
-- No `prefers-color-scheme` switching.
-- No localStorage theme state.
+- Support both light and dark themes across all primary pages.
+- On first load, resolve theme from `prefers-color-scheme`.
+- Navbar must expose a theme toggle.
+- User-selected theme must persist in `localStorage` and override system theme until changed again.
 
 ## E) Guides dropdown behavior
 
