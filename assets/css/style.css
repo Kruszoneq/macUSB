@@ -441,6 +441,103 @@ body.scrolled .logo {
   padding: calc(var(--nav-height, 72px) + 40px) 20px 0;
 }
 
+/* PPC guide: flat, minimal layout closer to landing page rhythm. */
+.ppc-guide-page .page {
+  max-width: 840px;
+  padding-top: calc(var(--nav-height, 72px) + 30px);
+}
+
+.ppc-guide-page .page-header {
+  padding: 12px 0 6px;
+}
+
+.ppc-guide-page .page-title {
+  margin-bottom: 8px;
+  font-size: clamp(34px, 3.8vw, 46px);
+  letter-spacing: -0.02em;
+}
+
+.ppc-guide-page .page-lead {
+  max-width: 64ch;
+  font-size: clamp(16px, 1.9vw, 19px);
+}
+
+.ppc-guide-page .page-section {
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid var(--color-hairline-soft);
+}
+
+.ppc-guide-page .page-section:first-of-type {
+  margin-top: 22px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.ppc-guide-page #example.page-section {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.ppc-guide-page .page-section h2 {
+  margin-bottom: 8px;
+  font-size: clamp(24px, 2.5vw, 34px);
+  letter-spacing: -0.01em;
+}
+
+.ppc-guide-page #example .minor {
+  margin-top: 12px;
+}
+
+.ppc-guide-page .page-card {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.ppc-guide-page .page-list {
+  margin-top: 6px;
+}
+
+.ppc-guide-page .page-list li {
+  margin: 5px 0;
+}
+
+.ppc-guide-page .kbd {
+  padding: 1px 7px;
+  font-size: 12.5px;
+  background: var(--color-surface-soft);
+  border-color: var(--color-hairline-soft);
+}
+
+.ppc-guide-page .code-block {
+  margin-top: 10px;
+  padding: 9px 11px;
+  border-radius: 12px;
+  background: var(--color-surface-soft);
+  border-color: var(--color-hairline-soft);
+  box-shadow: none;
+}
+
+.ppc-guide-page .code-block code {
+  font-size: 12.5px;
+}
+
+.ppc-guide-page .page-divider {
+  margin: 30px 0 18px;
+  height: 3px;
+  background: linear-gradient(to right, transparent, var(--color-hairline), transparent);
+}
+
+.ppc-guide-page .page-actions {
+  margin-top: 28px;
+  padding-top: 16px;
+  padding-bottom: 42px;
+  border-top: 1px solid var(--color-hairline-soft);
+}
+
 .page-header {
   padding: 24px 0 10px;
 }
@@ -1720,6 +1817,20 @@ footer .cta-button:hover {
 
   .page {
     padding-top: calc(var(--nav-height, 72px) + 22px);
+  }
+
+  .ppc-guide-page .page {
+    max-width: 100%;
+    padding-top: calc(var(--nav-height, 72px) + 16px);
+  }
+
+  .ppc-guide-page .page-section {
+    margin-top: 22px;
+    padding-top: 22px;
+  }
+
+  .ppc-guide-page .page-card {
+    padding: 0;
   }
 
   .page-list.two-col {
