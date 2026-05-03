@@ -23,5 +23,4 @@ Use these files to load only the context needed for a specific task.
 - Content requirements for each page: `rules/page-content-rules.md`
 - Responsive and accessibility constraints: `rules/responsive-accessibility.md`
 - Page creation conventions: `rules/page-creation-rules.md`
-- Local server and rendering verification rules: `docs/AGENTS.md` (Local Development and Rendering Validation section)
-- Final acceptance before shipping: `checklists/pre-ship-acceptance.md`
+- Local server and rendering verification rules: `docs/AGENTS.md` (Local Development and Rendering Validation + Pull Request Rules sections)

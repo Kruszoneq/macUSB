@@ -8,10 +8,16 @@
 
 ## Runtime CSS variables from JS
 
-`main.js` updates:
+`assets/js/core/partials-nav-footer.js` updates:
 - `--vh`
 - `--nav-height`
 - `--page-header-offset`
+
+## Script loading strategy
+
+- Keep script loading page-scoped.
+- Do not reintroduce one monolithic JS runtime file for all pages.
+- Prefer loading only features required by the current page.
 
 ## Editing constraints
 

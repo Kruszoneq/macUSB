@@ -8,7 +8,7 @@
 
 ## B) Shared navbar/footer injection
 
-- Primary content pages must mount `#navbar` and `#footer` and load shared partials via `main.js`.
+- Primary content pages must mount `#navbar` and `#footer` and load shared partials through `assets/js/core/partials-nav-footer.js`.
 - Do not duplicate navbar/footer markup into each page.
 - Exception: `/pages/about.html` remains a minimal legacy redirect.
 

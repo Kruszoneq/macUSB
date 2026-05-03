@@ -6,7 +6,7 @@ Primary content pages must use:
 - `<div id="navbar"></div>`
 - `<div id="footer"></div>`
 
-`main.js` injects:
+`assets/js/core/partials-nav-footer.js` injects:
 - `${basePrefix}/pages/partials.html`
 - `${basePrefix}/pages/footer.html`
 
@@ -16,7 +16,7 @@ Exceptions: `/pages/about.html` and `/pages/create-bootable-macos-usb-on-apple-s
 
 ## Base path compatibility
 
-`main.js` must support both:
+`assets/js/core/partials-nav-footer.js` must support both:
 - Local dev base path: `''`
 - GitHub Pages base path: `/macUSB`
 

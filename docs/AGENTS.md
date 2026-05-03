@@ -16,7 +16,6 @@ Use modular documentation from `docs/site-docs/` to minimize unnecessary context
 - `docs/site-docs/README.md`: entry point and routing map for all site docs.
 - `docs/site-docs/architecture/*`: use for project scope, file responsibilities, and technical structure.
 - `docs/site-docs/rules/*`: use for UI/UX rules, behavior contracts, navigation architecture, and per-page content constraints.
-- `docs/site-docs/checklists/*`: use before release/final verification.
 
 When handling a task, read only the modules required for that task instead of loading all documentation files.
 
@@ -69,7 +68,7 @@ cd /path/to/macUSB && python3 -m http.server 8000 --bind 0.0.0.0
 - The title must be specific and clear.
 - The description must be written as one paragraph in full sentences, without line-break markers like `\n`, and must describe all changes in the PR based on all commits since the last PR.
 - The verification request in this section is addressed to the user; the user confirms results from local server testing on computer and phone before PR draft preparation.
-- Test rules before preparing a PR draft: ask the user to verify and confirm rendering on a running local server on both a computer and a phone (without GitHub Pages mode), navbar and footer injection on all relevant pages, latest release fetch behavior, guides dropdown behavior on desktop/mobile/keyboard, guide image zoom behavior, and Tiger guide TOC generation with scrollspy behavior.
+- Test rules before preparing a PR draft: ask the user to verify and confirm rendering on a running local server on both a computer and a phone (without GitHub Pages mode), navbar and footer injection on all relevant pages, latest release fetch behavior, guides dropdown behavior on desktop/mobile/keyboard, guide image zoom behavior, Tiger guide TOC generation with scrollspy behavior, and homepage section behavior for `USB Creation` + `macOS Downloader` (including carousel autoplay and manual pause/resume behavior).
 - Before preparing the PR draft, ask for user confirmation that all required rendering checks were completed and are working correctly.
 - Prepare the PR draft only after the user confirms those checks.
 - After PR approval and PR execution, provide an execution report containing: short commit hash, title, file list, and URL.

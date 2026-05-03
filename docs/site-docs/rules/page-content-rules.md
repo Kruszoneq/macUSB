@@ -8,11 +8,12 @@ Must include:
 - No hero badge.
 - Hero intro content should not render visibly before full load; reveal starts after load with the configured intro animation.
 - Marketing-first landing structure:
-  - product preview,
-  - concise "why" message,
-  - short value cards,
-  - concise "what it creates" statement,
-  - open-source trust block with links to repository/support.
+  - `USB Creation` product section.
+  - `macOS Downloader` product section.
+  - concise `Why macUSB` message.
+  - short value cards.
+  - concise `What It Creates` statement.
+  - `Open Source` trust block with links to repository/support.
 - Keep technical deep details out of homepage body; direct users to GitHub for implementation specifics.
 - Browser title format: `macUSB - <text>`.
 
