@@ -1,10 +1,39 @@
 /* --- Latest release fetch --- */
 (function () {
-  const releaseTargets = Array.from(document.querySelectorAll('#latest-version'));
-  const downloadButtons = Array.from(
-    document.querySelectorAll('a.cta-button[href*="github.com/Kruszoneq/macUSB/releases"]')
-  );
-  if (!releaseTargets.length && !downloadButtons.length) return;
+  let latestVersionLabel = null;
+  let latestDmgUrl = null;
+  let fetchFailed = false;
+
+  function getReleaseTargets() {
+    return Array.from(document.querySelectorAll('[data-latest-version]'));
+  }
+
+  function getDownloadButtons() {
+    return Array.from(document.querySelectorAll('a.cta-button[href*="github.com/Kruszoneq/macUSB/releases"]'));
+  }
+
+  function renderVersionTargets() {
+    const releaseTargets = getReleaseTargets();
+    releaseTargets.forEach((node) => {
+      if (latestVersionLabel) {
+        node.textContent = latestVersionLabel;
+        node.style.opacity = '1';
+      } else if (fetchFailed) {
+        node.textContent = 'Latest release';
+        node.style.opacity = '0.9';
+      }
+    });
+  }
+
+  function updateDownloadButtons(isMobileOrTablet) {
+    if (!latestDmgUrl || isMobileOrTablet) return;
+    const downloadButtons = getDownloadButtons();
+    downloadButtons.forEach((button) => {
+      button.href = latestDmgUrl;
+    });
+  }
+
+  if (!getReleaseTargets().length && !getDownloadButtons().length) return;
   const userAgent = navigator.userAgent || '';
   const isIPadDesktopMode = /Macintosh/.test(userAgent) && navigator.maxTouchPoints > 1;
   const isMobileOrTablet =
@@ -17,26 +46,24 @@
       return response.json();
     })
     .then((data) => {
-      releaseTargets.forEach((node) => {
-        node.textContent = `Latest version: ${data.tag_name}`;
-        node.style.opacity = '1';
-      });
+      latestVersionLabel = `Latest version: ${data.tag_name}`;
+      renderVersionTargets();
 
       const latestDmgAsset = Array.isArray(data.assets)
         ? data.assets.find((asset) => /\.dmg$/i.test(asset.name || ''))
         : null;
+      latestDmgUrl = latestDmgAsset && latestDmgAsset.browser_download_url ? latestDmgAsset.browser_download_url : null;
 
-      if (!isMobileOrTablet && latestDmgAsset && latestDmgAsset.browser_download_url) {
-        downloadButtons.forEach((button) => {
-          button.href = latestDmgAsset.browser_download_url;
-        });
-      }
+      updateDownloadButtons(isMobileOrTablet);
     })
     .catch((error) => {
       console.log('Version fetch error:', error);
-      releaseTargets.forEach((node) => {
-        node.textContent = 'Latest release';
-        node.style.opacity = '0.9';
-      });
+      fetchFailed = true;
+      renderVersionTargets();
     });
+
+  document.addEventListener('partial:loaded', () => {
+    renderVersionTargets();
+    updateDownloadButtons(isMobileOrTablet);
+  });
 })();

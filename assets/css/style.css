@@ -527,6 +527,16 @@ body.scrolled .logo {
   background: var(--color-surface-soft);
 }
 
+.card-button.has-icon {
+  gap: 8px;
+}
+
+.card-button.has-icon svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+}
+
 .brew-toggle {
   appearance: none;
   cursor: pointer;
@@ -1031,6 +1041,21 @@ body.scrolled .scroll-cue {
   padding: var(--space-section) 20px 0;
 }
 
+.home-section.home-section-full {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.home-section.home-section-full .section-head,
+.home-section.home-section-full .section-actions {
+  max-width: 1120px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .section-head {
   max-width: 760px;
 }
@@ -1412,8 +1437,25 @@ footer a {
   color: var(--color-on-dark-soft);
 }
 
-.footer-support-wrap {
+.footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-bottom: 16px;
+}
+
+.footer-version-info {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--color-on-dark-soft);
+  opacity: 0.95;
+}
+
+.footer-copyright {
+  font-size: 12px;
 }
 
 footer .support-button {
@@ -1424,6 +1466,15 @@ footer .support-button {
 
 footer .support-button:hover {
   background: #222;
+}
+
+footer .cta-button {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+footer .cta-button:hover {
+  background: var(--color-surface-soft);
 }
 
 @media (max-width: 1024px) {
@@ -1552,6 +1603,12 @@ footer .support-button:hover {
 
   .hero-home,
   .home-section {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .home-section.home-section-full .section-head,
+  .home-section.home-section-full .section-actions {
     padding-left: 14px;
     padding-right: 14px;
   }

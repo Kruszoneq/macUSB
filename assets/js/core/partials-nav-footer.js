@@ -138,6 +138,11 @@
         const resolved = html.replaceAll('{{BASE}}', basePrefix);
         mount.innerHTML = resolved;
         runScripts(mount);
+        document.dispatchEvent(
+          new CustomEvent('partial:loaded', {
+            detail: { label, mountId: mount.id || null },
+          })
+        );
         if (onLoad) onLoad();
       })
       .catch((error) => console.error(`${label} load error:`, error));
