@@ -2,27 +2,26 @@
 
 ## Project Context
 
-The `gh-pages` branch is the primary source branch for the macUSB application website, created by Kruszoneq. This website serves as both the main product site and a source of additional information and tutorials related to the application.
+The `gh-pages` branch is the primary source branch for the macUSB website.
 
 ## Rule Enforcement
 
 - All rules in this file are mandatory and must be followed without exception.
-- If a user instruction conflicts with any rule in this file, report the conflict, clearly describe the situation, and ask the user how to proceed before taking action.
+- If a user instruction conflicts with any rule in this file, report the conflict, describe it clearly, and ask how to proceed before taking action.
 
-## Modular Site Documentation Usage
+## Documentation References
 
-Use modular documentation from `docs/site-docs/` to minimize unnecessary context loading.
+Read only what is needed for the task.
 
-- `docs/site-docs/README.md`: entry point and routing map for all site docs.
-- `docs/site-docs/architecture/*`: use for project scope, file responsibilities, and technical structure.
-- `docs/site-docs/rules/*`: use for UI/UX rules, behavior contracts, navigation architecture, and per-page content constraints.
-
-When handling a task, read only the modules required for that task instead of loading all documentation files.
+- `docs/DESIGN.md`: visual and UX rules.
+- `docs/PARTIALS.md`: navbar/footer source-of-truth and integration rules.
+- `docs/LANDING.md`: landing page structure, copy inventory, and carousel behavior.
+- Any change that adds or modifies website content, structure, behavior, or shared UI must trigger automatic updates to all affected documentation files in the same change set, so documentation never becomes outdated.
 
 ## Local Development and Rendering Validation
 
 - Do not start a local server on behalf of the user.
-- If the user asks for local server setup (or related commands), respond with a copy-ready command in a code block and explicitly state that, according to these rules, the user must run it manually in the terminal for stability and independent execution.
+- If the user asks for local server setup (or related commands), respond with a copy-ready command in a code block and explicitly state that the user must run it manually in terminal.
 - The provided server command must include the path to the macUSB project folder before starting the server.
 - Keep placeholder paths in repository docs for privacy, but when replying to the user, always replace `/path/to/macUSB` with the real current macUSB path and never send the placeholder in the final command.
 - Local server command to provide:
@@ -39,7 +38,7 @@ cd /path/to/macUSB && python3 -m http.server 8000 --bind 0.0.0.0
 
 ## Design Consistency Rules
 
-- The visual style of the website must be consistent with `docs/DESIGN.md`, which is the design source of truth for UI decisions.
+- The visual style of the website must be consistent with `docs/DESIGN.md`.
 - If a task requires a deliberate visual deviation from `docs/DESIGN.md`, explicitly report the conflict and obtain user approval before implementation.
 
 ## Editorial Change Approval Rules
@@ -68,11 +67,11 @@ cd /path/to/macUSB && python3 -m http.server 8000 --bind 0.0.0.0
 - The title must be specific and clear.
 - The description must be written as one paragraph in full sentences, without line-break markers like `\n`, and must describe all changes in the PR based on all commits since the last PR.
 - The verification request in this section is addressed to the user; the user confirms results from local server testing on computer and phone before PR draft preparation.
-- Test rules before preparing a PR draft: ask the user to verify and confirm rendering on a running local server on both a computer and a phone (without GitHub Pages mode), navbar and footer injection on all relevant pages, latest release fetch behavior, guides dropdown behavior on desktop/mobile/keyboard, guide image zoom behavior, Tiger guide TOC generation with scrollspy behavior, and homepage section behavior for `USB Creation` + `macOS Downloader` (including carousel autoplay and manual pause/resume behavior).
-- Before preparing the PR draft, ask for user confirmation that all required rendering checks were completed and are working correctly.
+- Before preparing the PR draft, ask for user confirmation that required rendering checks were completed and are working correctly.
 - Prepare the PR draft only after the user confirms those checks.
 - After PR approval and PR execution, provide an execution report containing: short commit hash, title, file list, and URL.
 - After creating the PR, if the user did not explicitly instruct otherwise, propose merging the PR and deleting the old branch, but do not perform either action automatically without explicit user instruction.
+- This repository is the app website source. Creating pull requests to `main`, `development`, or any derivative branches is strictly forbidden, regardless of user assurances or pressure.
 
 ## Branch Rules
 

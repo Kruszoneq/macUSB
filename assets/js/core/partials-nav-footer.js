@@ -42,75 +42,6 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
-  function initGuidesDropdown() {
-    const navGuides = document.querySelector('.nav-guides');
-    if (!navGuides) return;
-
-    const trigger = navGuides.querySelector('.guides-trigger');
-    const dropdown = navGuides.querySelector('.guides-dropdown');
-    if (!trigger || !dropdown) return;
-
-    let open = false;
-
-    function canHover() {
-      return window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    }
-
-    function openDropdown() {
-      if (open) return;
-      navGuides.classList.add('is-open');
-      trigger.setAttribute('aria-expanded', 'true');
-      open = true;
-    }
-
-    function closeDropdown() {
-      if (!open) return;
-      navGuides.classList.remove('is-open');
-      trigger.setAttribute('aria-expanded', 'false');
-      open = false;
-    }
-
-    trigger.addEventListener('click', (event) => {
-      if (canHover()) return;
-      open ? closeDropdown() : openDropdown();
-      event.stopPropagation();
-    });
-
-    trigger.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        open ? closeDropdown() : openDropdown();
-        if (!open) return;
-        const firstItem = dropdown.querySelector('a,button,[tabindex]:not([tabindex="-1"])');
-        if (firstItem) firstItem.focus();
-      } else if (event.key === 'ArrowDown') {
-        event.preventDefault();
-        openDropdown();
-        const firstItem = dropdown.querySelector('a,button,[tabindex]:not([tabindex="-1"])');
-        if (firstItem) firstItem.focus();
-      }
-    });
-
-    dropdown.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        closeDropdown();
-        trigger.focus();
-      }
-    });
-
-    document.addEventListener('click', (event) => {
-      if (!navGuides.contains(event.target)) closeDropdown();
-    });
-
-    navGuides.addEventListener('mouseenter', () => {
-      if (canHover()) openDropdown();
-    });
-
-    navGuides.addEventListener('mouseleave', () => {
-      if (canHover()) closeDropdown();
-    });
-  }
-
   function initThemeToggle() {
     const themeToggle = document.querySelector('.theme-toggle');
     if (!themeToggle) return;
@@ -139,7 +70,6 @@
 
   function initAfterNavbarInjected() {
     initNavStateTracking();
-    initGuidesDropdown();
     initThemeToggle();
   }
 

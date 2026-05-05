@@ -19,22 +19,16 @@
     <header class="page-header">
       <h1 class="page-title">Open Firmware USB Booting for PowerPC Macs</h1>
       <p class="page-lead">
-        Technical procedure for booting a PowerPC Mac from a USB installer via Open Firmware.
+        This guide explains how to boot a PowerPC Mac from a USB installer using Open Firmware.
       </p>
     </header>
 
-    <section class="page-section reveal" id="prerequisites">
+        <section class="page-section reveal" id="prerequisites">
           <span class="section-kicker">Setup</span>
           <h2>Prerequisites</h2>
           <div class="page-card">
-            <ul class="page-list">
-              <li>A wired USB keyboard.</li>
-              <li>
-                <strong>A macUSB-created installer USB drive:</strong>
-                Prepare your installer with <strong>macUSB</strong> to ensure reliable USB booting on PowerPC Macs.
-                <span class="muted">Single‑DVD and Multi‑DVD editions are supported.</span>
-              </li>
-            </ul>
+            <p>A USB installer drive created with <strong>macUSB</strong> is required to ensure reliable booting on PowerPC Macs.</p>
+            <p class="product-preview-note">Single-DVD and Multi-DVD editions are supported.</p>
           </div>
         </section>
 
@@ -43,7 +37,7 @@
           <h2>Enter Open Firmware</h2>
           <div class="page-card">
             <ol class="page-list">
-              <li>Insert the USB drive into a USB port on the computer.</li>
+              <li>Insert the USB drive into your Mac.</li>
               <li>Power on the Mac and immediately press and hold: <span class="kbd">Command (⌘)</span> + <span class="kbd">Option (⌥)</span> + <span class="kbd">O</span> + <span class="kbd">F</span>.</li>
               <li>Release the keys when you see the white screen with the Open Firmware prompt.</li>
             </ol>
@@ -54,33 +48,29 @@
           <span class="section-kicker">Device Discovery</span>
           <h2>Identify the USB Disk Node</h2>
           <div class="page-card">
-            <p class="muted">Determine which Open Firmware USB alias maps to the installer drive.</p>
+            <p class="muted">Find the Open Firmware USB alias that maps to your installer drive.</p>
             <ol class="page-list">
               <li>Type <span class="kbd">dev usb0</span> and press <strong>Enter</strong>.</li>
-              <li>Type <span class="kbd">ls</span> and press <strong>Enter</strong> to see the list of devices.</li>
+              <li>Type <span class="kbd">ls</span> and press <strong>Enter</strong> to list connected devices.</li>
               <li>
-                Look for a disk entry, usually named <span class="kbd">disk@1</span> (or <span class="kbd">disk@2</span>, etc.).
+                Look for a disk entry in the output (typically <span class="kbd">disk@1</span>, <span class="kbd">disk@2</span>, etc.).
                 <ul class="page-list">
-                  <li><strong>If you do not see a disk entry:</strong> Repeat the steps above for other ports by typing <span class="kbd">dev usb1</span>, <span class="kbd">dev usb2</span>, etc., followed by <span class="kbd">ls</span>, until you find the port with the disk.</li>
+                  <li><strong>Note:</strong> If no disk entry appears, check other ports by typing <span class="kbd">dev usb1</span>, <span class="kbd">dev usb2</span>, etc., followed by <span class="kbd">ls</span>, until you locate the disk.</li>
                 </ul>
               </li>
             </ol>
-            <pre class="code-block"><code>dev usb0
-ls</code></pre>
           </div>
         </section>
 
         <section class="page-section reveal" id="step-2">
           <span class="section-kicker">Path Resolution</span>
-          <h2>Resolve the Device Hardware Path</h2>
+          <h2>Resolve the Hardware Path</h2>
           <div class="page-card">
             <ol class="page-list">
-              <li>Select the disk by typing <span class="kbd">dev disk@X</span> (replace <span class="kbd">X</span> with the number found in the previous step, e.g., <span class="kbd">dev disk@1</span>) and press <strong>Enter</strong>.</li>
+              <li>Select the disk using the identifier found in the previous step (e.g., <span class="kbd">dev disk@1</span>) and press <strong>Enter</strong>.</li>
               <li>Type <span class="kbd">pwd</span> and press <strong>Enter</strong>.</li>
-              <li>The screen will display the full hardware path to the device. <strong>Write this path down exactly as it appears.</strong></li>
+              <li>The screen will display the full hardware path (e.g., <span class="kbd">/ht@0,f2000000/pci@2/usb@b/disk@1</span>). <strong>Note this path exactly as it appears.</strong></li>
             </ol>
-            <pre class="code-block"><code>dev disk@1
-pwd</code></pre>
           </div>
         </section>
 
@@ -91,26 +81,22 @@ pwd</code></pre>
             <p>
               Build the boot command from the hardware path obtained in Step 2 and the loader path. In most cases, the OS X loader (<span class="kbd">BootX</span>) is located on partition 3.
             </p>
-            <pre class="code-block"><code>boot [path_from_step_2]:3,\System\Library\CoreServices\BootX</code></pre>
+            <pre class="code-block"><code>boot [your_hardware_path]:3,\System\Library\CoreServices\BootX</code></pre>
+            <p class="muted ppc-example-note">Example:</p>
+            <pre class="code-block"><code>boot /ht@0,f2000000/pci@2/usb@b/disk@1:3,\System\Library\CoreServices\BootX</code></pre>
           </div>
         </section>
 
-        <hr class="page-divider">
-        <section class="page-section reveal" id="example">
-          <span class="section-kicker">Reference Example</span>
-          <h2>iMac G5</h2>
+        <section class="page-section reveal" id="compatibility">
+          <span class="section-kicker">HARDWARE LIMITATIONS</span>
+          <h2>Compatibility</h2>
           <div class="page-card">
-            <p>
-              On iMac systems, the hardware path usually starts with <span class="kbd">/ht@</span>. You must type the full path returned by the <span class="kbd">pwd</span> command.
-            </p>
-            <h3 class="minor">Example context:</h3>
+            <p>USB booting capability is strictly dependent on the Open Firmware version and specific hardware architecture. This procedure may not be supported on all systems, particularly legacy PowerPC models.</p>
+            <p><strong>Field Test Results:</strong></p>
             <ul class="page-list">
-              <li>You found the disk on <span class="kbd">usb0</span> or <span class="kbd">usb1</span>.</li>
-              <li>The <span class="kbd">pwd</span> command returned: <span class="kbd">/ht@0,f2000000/pci@2/usb@b/disk@1</span></li>
+              <li><strong>iMac G5:</strong> Successfully tested; system boots correctly.</li>
+              <li><strong>iBook G4:</strong> Open Firmware identifies the USB media, but is unable to initiate the installer.</li>
             </ul>
-
-            <h3 class="minor">Boot command:</h3>
-            <pre class="code-block"><code>boot /ht@0,f2000000/pci@2/usb@b/disk@1:3,\System\Library\CoreServices\BootX</code></pre>
           </div>
         </section>
 
