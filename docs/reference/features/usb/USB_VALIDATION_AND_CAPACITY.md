@@ -18,6 +18,7 @@ Proceed must remain blocked until selected target passes validation.
 If selected target is APFS:
 - proceed remains blocked,
 - user is instructed to reformat manually in Disk Utility.
+- this APFS block applies to macOS-target flow only; Linux-target flow uses physical whole-disk (`diskX`) selection and does not apply APFS blocking.
 
 ## Unreadable USB Guidance
 
@@ -27,6 +28,7 @@ If at least one external USB medium is physically connected but has no readable/
 - warning copy instructs user to erase medium in Disk Utility,
 - warning card exposes a direct action to open Disk Utility.
 - warning card action must remain clickable even when USB selection UI is disabled by analysis state.
+- warning card appears only after macOS routing is detected; before system recognition it stays hidden.
 
 Detection policy:
 - use `diskutil list -plist external` to enumerate connected external whole disks,
@@ -39,6 +41,9 @@ Detection policy:
 
 UI suppression rule:
 - when unreadable USB warning is shown and there are no readable targets in picker, do not show the generic `Nie wykryto nośnika USB` error card.
+- unreadable USB warning applies to macOS-target flow only; Linux-target flow suppresses this warning and lists physical USB whole disks directly.
+- when any USB is physically connected but system recognition is still pending, analysis UI shows a neutral waiting card in USB section instead of target-selection messages.
+- for Linux flow, selectable target labels use concise physical-media format: `diskX - <size> - <USB standard>`.
 
 In PPC flow, specialized target formatting behavior must not be forced through standard assumptions.
 

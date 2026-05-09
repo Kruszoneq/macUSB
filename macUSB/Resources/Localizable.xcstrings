@@ -168,6 +168,9 @@
         }
       }
     },
+    "•" : {
+
+    },
     "• Brak instalatora? Użyj przycisku „Pobierz”" : {
       "localizations" : {
         "de" : {
@@ -2982,6 +2985,334 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "分析"
+          }
+        }
+      }
+    },
+    "analysis.file.waiting_for_installer_file.description" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wählen Sie eine .dmg-, .iso-, .cdr- oder .app-Datei manuell aus oder ziehen Sie sie hierher."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a .dmg, .iso, .cdr, or .app file manually, or drag it above."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecciona manualmente un archivo .dmg, .iso, .cdr o .app, o arrástralo arriba."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionnez manuellement un fichier .dmg, .iso, .cdr ou .app, ou glissez-le ci-dessus."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleziona manualmente un file .dmg, .iso, .cdr o .app oppure trascinalo qui sopra."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ".dmg、.iso、.cdr、または .app ファイルを手動で選択するか、上にドラッグしてください。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz plik .dmg, .iso, .cdr lub .app ręcznie albo przeciągnij go powyżej."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecione manualmente um arquivo .dmg, .iso, .cdr ou .app, ou arraste-o para cima."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите файл .dmg, .iso, .cdr или .app вручную либо перетащите его выше."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ".dmg, .iso, .cdr veya .app dosyasını elle seçin ya da yukarı sürükleyin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Виберіть файл .dmg, .iso, .cdr або .app вручну або перетягніть його вище."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chọn thủ công tệp .dmg, .iso, .cdr hoặc .app, hoặc kéo tệp đó lên phía trên."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请手动选择 .dmg、.iso、.cdr 或 .app 文件，或将其拖到上方。"
+          }
+        }
+      }
+    },
+    "analysis.file.waiting_for_installer_file.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warten auf Installationsdatei"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for Installer File"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esperando el archivo del instalador"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente du fichier d’installation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In attesa del file di installazione"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "インストーラファイルを待機中"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oczekiwanie na plik instalatora"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aguardando arquivo do instalador"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ожидание файла установщика"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yükleyici dosyası bekleniyor"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очікування файлу інсталятора"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang chờ tệp cài đặt"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等待安装器文件"
+          }
+        }
+      }
+    },
+    "analysis.usb.waiting_for_system_detection.description" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das angeschlossene USB-Laufwerk wird verfügbar, sobald die Systemerkennung abgeschlossen und die erforderlichen Medienanforderungen festgelegt sind."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The connected USB device will become available after system recognition is complete and the required media criteria have been determined."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El dispositivo USB conectado estará disponible cuando se complete el reconocimiento del sistema y se determinen los requisitos del medio."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le périphérique USB connecté sera disponible une fois la reconnaissance du système terminée et les exigences du support définies."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il dispositivo USB collegato sarà disponibile dopo il completamento del riconoscimento del sistema e la definizione dei requisiti del supporto."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "接続されたUSBデバイスは、システム認識が完了し、必要なメディア要件が確定した後に利用可能になります。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podłączony nośnik USB zostanie udostępniony po zakończeniu rozpoznawania systemu i określeniu wymagań dotyczących nośnika."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O dispositivo USB conectado ficará disponível após a conclusão do reconhecimento do sistema e a definição dos critérios exigidos para a mídia."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подключенное USB-устройство станет доступно после завершения распознавания системы и определения требований к носителю."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bağlı USB aygıtı, sistem tanıma tamamlandıktan ve gerekli medya ölçütleri belirlendikten sonra kullanılabilir olacaktır."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Підключений USB-носій стане доступним після завершення розпізнавання системи та визначення вимог до носія."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thiết bị USB đã kết nối sẽ khả dụng sau khi quá trình nhận diện hệ thống hoàn tất và các tiêu chí phương tiện cần thiết được xác định."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接的 USB 设备将在系统识别完成并确定所需介质条件后可用。"
+          }
+        }
+      }
+    },
+    "analysis.usb.waiting_for_system_detection.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warten auf Systemanalyse"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for System Analysis"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esperando el análisis del sistema"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente de l’analyse du système"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In attesa dell’analisi del sistema"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "システム解析を待機中"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oczekiwanie na analizę systemu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aguardando análise do sistema"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ожидание анализа системы"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistem analizi bekleniyor"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очікування аналізу системи"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang chờ phân tích hệ thống"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等待系统分析"
           }
         }
       }
@@ -19480,6 +19811,7 @@
       }
     },
     "Oczekiwanie na plik .dmg, .iso, .cdr lub .app..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -31849,6 +32181,88 @@
         }
       }
     },
+    "welcome.footer.support_project" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unterstütze das Projekt!"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support the project!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Apoya el proyecto!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soutenez le projet !"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sostieni il progetto!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プロジェクトを支援する"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wesprzyj projekt!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apoie o projeto!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поддержите проект!"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projeye destek ol!"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Підтримайте проєкт!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ủng hộ dự án!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支持这个项目！"
+          }
+        }
+      }
+    },
     "Weryfikacja plików nie powiodła się: %@" : {
       "localizations" : {
         "de" : {
@@ -32768,6 +33182,7 @@
       }
     },
     "Wybierz go ręcznie lub przeciągnij powyżej" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

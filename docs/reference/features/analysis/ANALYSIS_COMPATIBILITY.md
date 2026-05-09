@@ -71,6 +71,8 @@ During analysis screen USB target area:
 - this hint does not replace supported-target validation (capacity/APFS) for readable drives,
 - generic `Nie wykryto nośnika USB` message is suppressed when unreadable USB hint is active and picker has no readable targets,
 - Disk Utility action inside this hint remains interactive regardless of analysis-state gating for USB selection controls.
+- this hint is shown only for macOS-target flow; Linux-target flow suppresses this hint and uses physical `diskX` selection.
+- in macOS flow, this hint is shown only after macOS routing is detected (it stays hidden before system detection).
 
 ## Logging and Diagnostics
 

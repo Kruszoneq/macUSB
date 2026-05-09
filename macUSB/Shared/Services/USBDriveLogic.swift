@@ -384,6 +384,121 @@ struct USBDriveLogic {
         return removableOrExternal
     }
 
+    /// Enumerates external physical USB whole-disks (`diskX`) for Linux raw-copy flow.
+    /// By default keeps current safety contract and includes only removable media.
+    /// Non-removable external USB disks are included only when allowExternalHardDrives is true.
+    static func enumerateAvailablePhysicalUSBDrives(allowExternalHardDrives: Bool) -> [USBDrive] {
+        enumerateAvailablePhysicalUSBDrivesWithCapacities(
+            allowExternalHardDrives: allowExternalHardDrives
+        ).drives
+    }
+
+    static func enumerateAvailablePhysicalUSBDrivesWithCapacities(
+        allowExternalHardDrives: Bool
+    ) -> (drives: [USBDrive], capacityByWholeDisk: [String: Int64]) {
+        guard let externalList = runDiskutilPlistCommand(arguments: ["list", "-plist", "external"]),
+              let wholeDisks = externalList["WholeDisks"] as? [String],
+              !wholeDisks.isEmpty else {
+            return ([], [:])
+        }
+
+        var result: [USBDrive] = []
+        var capacityByWholeDisk: [String: Int64] = [:]
+        for wholeDisk in wholeDisks {
+            guard let info = runDiskutilPlistCommand(arguments: ["info", "-plist", "/dev/\(wholeDisk)"]) else {
+                continue
+            }
+
+            guard isPhysicalUSBWholeDisk(info) else { continue }
+            if shouldSkipExternalHardDrive(info: info, allowExternalHardDrives: allowExternalHardDrives) {
+                continue
+            }
+
+            let displayName = physicalDiskDisplayName(info: info, fallbackDiskName: wholeDisk)
+            let totalSizeBytes = totalSizeBytes(fromDiskInfo: info) ?? 0
+            capacityByWholeDisk[wholeDisk] = totalSizeBytes
+            let size = ByteCountFormatter.string(fromByteCount: totalSizeBytes, countStyle: .file)
+            let speed = detectUSBSpeed(forBSDName: wholeDisk)
+            let partitionScheme = detectPartitionScheme(forBSDName: wholeDisk)
+
+            result.append(
+                USBDrive(
+                    name: displayName,
+                    device: wholeDisk,
+                    size: size,
+                    url: URL(fileURLWithPath: "/dev/\(wholeDisk)"),
+                    usbSpeed: speed,
+                    partitionScheme: partitionScheme,
+                    fileSystemFormat: nil
+                )
+            )
+        }
+
+        let sorted = result.sorted { lhs, rhs in
+            lhs.device.localizedStandardCompare(rhs.device) == .orderedAscending
+        }
+        return (sorted, capacityByWholeDisk)
+    }
+
+    static func totalSizeBytesForWholeDiskBSDName(_ wholeDiskBSDName: String) -> Int64? {
+        guard let info = runDiskutilPlistCommand(arguments: ["info", "-plist", "/dev/\(wholeDiskBSDName)"]) else {
+            return nil
+        }
+        return totalSizeBytes(fromDiskInfo: info)
+    }
+
+    private static func isPhysicalUSBWholeDisk(_ info: [String: Any]) -> Bool {
+        let busProtocol = (info["BusProtocol"] as? String)?.uppercased()
+        guard busProtocol == "USB" else { return false }
+
+        let isInternal = (info["Internal"] as? Bool)
+            ?? (info["OSInternalMedia"] as? Bool)
+            ?? true
+        guard !isInternal else { return false }
+
+        let isPhysical = ((info["VirtualOrPhysical"] as? String)?.lowercased() ?? "physical") == "physical"
+        guard isPhysical else { return false }
+
+        let removableOrExternal = (info["RemovableMediaOrExternalDevice"] as? Bool) ?? true
+        return removableOrExternal
+    }
+
+    private static func shouldSkipExternalHardDrive(
+        info: [String: Any],
+        allowExternalHardDrives: Bool
+    ) -> Bool {
+        guard !allowExternalHardDrives else { return false }
+        let isRemovable = (info["RemovableMedia"] as? Bool)
+            ?? (info["Removable"] as? Bool)
+            ?? false
+        return !isRemovable
+    }
+
+    private static func physicalDiskDisplayName(info: [String: Any], fallbackDiskName: String) -> String {
+        let candidates: [String?] = [
+            info["MediaName"] as? String,
+            info["DeviceModel"] as? String,
+            info["IORegistryEntryName"] as? String,
+            info["VolumeName"] as? String
+        ]
+        for candidate in candidates {
+            guard let candidate else { continue }
+            let trimmed = candidate.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmed.isEmpty {
+                return trimmed
+            }
+        }
+        return fallbackDiskName
+    }
+
+    private static func totalSizeBytes(fromDiskInfo info: [String: Any]) -> Int64? {
+        if let number = info["TotalSize"] as? NSNumber { return number.int64Value }
+        if let int64Value = info["TotalSize"] as? Int64 { return int64Value }
+        if let intValue = info["TotalSize"] as? Int { return Int64(intValue) }
+        if let doubleValue = info["TotalSize"] as? Double { return Int64(doubleValue) }
+        return nil
+    }
+
     /// Enumerates external, non-internal, non-network removable mounted volumes and returns them as USBDrive models.
     static func enumerateAvailableDrives() -> [USBDrive] {
         let keys: [URLResourceKey] = [
