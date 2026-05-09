@@ -16,10 +16,11 @@ extension UniversalInstallationView {
         }
 
         let helperTargetBSDName = resolveHelperTargetBSDName(for: drive)
+        let helperTargetVolumePath = "/dev/\(helperTargetBSDName)"
         let requesterUID = Int(getuid())
 
         log(
-            "LinuxInstallFlow: przygotowano helper request (source=\(linuxFlowContext.sourcePath), targetBSD=\(helperTargetBSDName), targetVolume=\(drive.url.path))",
+            "LinuxInstallFlow: przygotowano helper request (source=\(linuxFlowContext.sourcePath), targetBSD=\(helperTargetBSDName), targetVolume=\(helperTargetVolumePath))",
             category: "LinuxInstallFlow"
         )
 
@@ -29,7 +30,7 @@ extension UniversalInstallationView {
             sourceAppPath: linuxFlowContext.sourcePath,
             originalImagePath: nil,
             tempWorkPath: tempWorkURL.path,
-            targetVolumePath: drive.url.path,
+            targetVolumePath: helperTargetVolumePath,
             targetBSDName: helperTargetBSDName,
             targetLabel: drive.url.lastPathComponent,
             needsPreformat: false,

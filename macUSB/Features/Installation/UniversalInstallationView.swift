@@ -84,6 +84,13 @@ struct UniversalInstallationView: View {
     private var showsIdleActions: Bool {
         !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !isCancelling
     }
+    private var selectedDriveSummaryName: String? {
+        if isLinuxWorkflow, let drive = targetDrive {
+            let speedText = drive.usbSpeed?.rawValue ?? "USB"
+            return "\(drive.device) - \(drive.size) - \(speedText)"
+        }
+        return targetDriveDisplayName ?? targetDrive?.displayName
+    }
     private var missingFullDiskAccess: Bool { !menuState.hasFullDiskAccess }
     private var missingHelperBackgroundApproval: Bool { menuState.helperRequiresBackgroundApproval }
     private var shouldShowRequiredPermissionsWarning: Bool {
@@ -146,7 +153,7 @@ struct UniversalInstallationView: View {
                                 Spacer()
                             }
 
-                            if let name = targetDriveDisplayName ?? targetDrive?.displayName {
+                            if let name = selectedDriveSummaryName {
                                 Divider()
                                     .overlay(Color.secondary.opacity(0.18))
 

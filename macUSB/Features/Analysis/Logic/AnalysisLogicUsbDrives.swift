@@ -57,31 +57,80 @@ extension AnalysisLogic {
     }
 
     func refreshDrives() {
-        let currentSelectedURL = selectedDrive?.url
-        var foundDrives = USBDriveLogic.enumerateAvailableDrives()
         let allowExternal = UserDefaults.standard.bool(forKey: "AllowExternalDrives")
+
+        if isLinuxDetected {
+            guard !isLinuxPhysicalDriveRefreshRunning else { return }
+            isLinuxPhysicalDriveRefreshRunning = true
+
+            DispatchQueue.global(qos: .utility).async { [weak self] in
+                let enumerated = USBDriveLogic.enumerateAvailablePhysicalUSBDrivesWithCapacities(
+                    allowExternalHardDrives: allowExternal
+                )
+
+                DispatchQueue.main.async {
+                    guard let self else { return }
+                    self.isLinuxPhysicalDriveRefreshRunning = false
+
+                    guard self.isLinuxDetected else { return }
+
+                    self.linuxWholeDiskCapacityCache = enumerated.capacityByWholeDisk
+                    let activeSelectionID = self.selectedDriveSelectionID ?? self.selectedDrive?.selectionID
+                    let resolvedSelection = activeSelectionID.flatMap { selectionID in
+                        enumerated.drives.first(where: { $0.selectionID == selectionID })
+                    }
+
+                    withAnimation(.easeInOut(duration: 0.18)) {
+                        self.synchronizeDriveSelection {
+                            self.availableDrives = enumerated.drives
+                            self.selectedDrive = resolvedSelection
+                            self.selectedDriveSelectionID = resolvedSelection?.selectionID
+                        }
+                    }
+
+                    if resolvedSelection == nil {
+                        self.capacityCheckFinished = false
+                    }
+
+                    self.isUnreadableUSBDetectionRunning = false
+                    self.unreadableExternalUSBMediaCount = 0
+                    self.hasUnreadableExternalUSBMedia = false
+
+                    if self.selectedDrive != nil {
+                        self.checkCapacity()
+                    }
+                }
+            }
+            return
+        } else {
+            linuxWholeDiskCapacityCache = [:]
+        }
+
+        let currentSelectedSelectionID = selectedDriveSelectionID ?? selectedDrive?.selectionID
+        var volumeDrives = USBDriveLogic.enumerateAvailableDrives()
         if allowExternal {
             let extra = enumerateExternalUSBHardDrives()
             // Merge unique by URL
             for d in extra {
-                if !foundDrives.contains(where: { $0.url == d.url }) {
-                    foundDrives.append(d)
+                if !volumeDrives.contains(where: { $0.url == d.url }) {
+                    volumeDrives.append(d)
                 }
             }
         }
-        self.availableDrives = foundDrives
-        if let currentURL = currentSelectedURL {
-            if let stillConnectedDrive = foundDrives.first(where: { $0.url == currentURL }) {
-                self.selectedDrive = stillConnectedDrive
-            } else {
-                self.selectedDrive = nil
-                self.capacityCheckFinished = false
-            }
-        } else {
-            if self.selectedDrive != nil {
-                self.selectedDrive = nil
-                self.capacityCheckFinished = false
-            }
+        let foundDrives = volumeDrives
+
+        let resolvedSelection = currentSelectedSelectionID.flatMap { selectionID in
+            foundDrives.first(where: { $0.selectionID == selectionID })
+        }
+
+        synchronizeDriveSelection {
+            self.availableDrives = foundDrives
+            self.selectedDrive = resolvedSelection
+            self.selectedDriveSelectionID = resolvedSelection?.selectionID
+        }
+
+        if resolvedSelection == nil {
+            self.capacityCheckFinished = false
         }
 
         refreshUnreadableExternalUSBMediaIfNeeded()
@@ -123,6 +172,21 @@ extension AnalysisLogic {
             capacityCheckFinished = false
             return
         }
+
+        if isLinuxDetected {
+            let wholeDisk = USBDriveLogic.wholeDiskName(from: drive.device)
+            if let capacity = linuxWholeDiskCapacityCache[wholeDisk] {
+                withAnimation {
+                    isCapacitySufficient = capacity >= Int64(minCapacity)
+                    capacityCheckFinished = true
+                }
+            } else {
+                isCapacitySufficient = false
+                capacityCheckFinished = true
+            }
+            return
+        }
+
         if let values = try? drive.url.resourceValues(forKeys: [.volumeTotalCapacityKey]), let capacity = values.volumeTotalCapacity {
             withAnimation { isCapacitySufficient = capacity >= minCapacity; capacityCheckFinished = true }
         } else {

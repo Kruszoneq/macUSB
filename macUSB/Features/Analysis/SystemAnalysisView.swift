@@ -37,7 +37,7 @@ struct SystemAnalysisView: View {
         .padding(.horizontal, 2)
         .padding(.vertical, 2)
     }
-    
+
     private func updateMenuState() {
         // Enable only when analysis has finished with a file that is NOT supported by the app.
         // Hide/disable when the selected system is supported (including PPC flow) or analysis not finished.
@@ -123,6 +123,11 @@ struct SystemAnalysisView: View {
     }
 
     private func handleAPFSSelectionChange() {
+        guard !logic.isLinuxDetected else {
+            lastAPFSAlertedDriveURL = nil
+            return
+        }
+
         guard isAPFSSelected else {
             lastAPFSAlertedDriveURL = nil
             return
@@ -201,15 +206,21 @@ struct SystemAnalysisView: View {
 
     private var waitingForFileHint: some View {
         StatusCard(tone: .subtle, density: .compact) {
-            HStack(alignment: .center) {
+            HStack(alignment: .center, spacing: 10) {
                 Image(systemName: "doc.badge.plus").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Oczekiwanie na plik .dmg, .iso, .cdr lub .app...").font(.subheadline).foregroundColor(.secondary)
-                    Text("Wybierz go ręcznie lub przeciągnij powyżej").font(.caption).foregroundColor(.secondary.opacity(0.8))
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(String(localized: "analysis.file.waiting_for_installer_file.title"))
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    Text(String(localized: "analysis.file.waiting_for_installer_file.description"))
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer()
             }
         }
+        .opacity(0.5)
         .transition(.opacity)
     }
 
@@ -343,7 +354,9 @@ struct SystemAnalysisView: View {
 
     private var windowAccessorBackground: some View {
         WindowAccessor_System { window in
-            if self.analysisWindowHandler == nil {
+            if let existingHandler = window.delegate as? AnalysisWindowHandler {
+                self.analysisWindowHandler = existingHandler
+            } else {
                 let handler = AnalysisWindowHandler(
                     onCleanup: {
                         if let path = self.logic.mountedDMGPath {
@@ -353,8 +366,8 @@ struct SystemAnalysisView: View {
                 )
                 window.delegate = handler
                 self.analysisWindowHandler = handler
-                self.hostingWindow = window
             }
+            self.hostingWindow = window
         }
     }
 
@@ -372,7 +385,7 @@ struct SystemAnalysisView: View {
             && logic.selectedDrive != nil
             && logic.capacityCheckFinished
             && logic.isCapacitySufficient
-            && !isAPFSSelected
+            && (logic.isLinuxDetected || !isAPFSSelected)
     }
     
     var body: some View {
@@ -382,7 +395,7 @@ struct SystemAnalysisView: View {
                     VStack(alignment: .leading, spacing: MacUSBDesignTokens.contentSectionSpacing) {
                         fileSelectionSection
 
-                        if logic.selectedFilePath.isEmpty {
+                        if !logic.isAnalyzing && logic.recognizedVersion.isEmpty {
                             waitingForFileHint
                         } else {
                             if logic.isAnalyzing {
@@ -473,7 +486,8 @@ struct SystemAnalysisView: View {
             logic: logic,
             sectionIconFont: sectionIconFont,
             onOpenDiskUtility: openDiskUtility,
-            isSelectionEnabled: canUseUSBSelection
+            isSelectionEnabled: canUseUSBSelection,
+            isLinuxWorkflow: logic.isLinuxDetected
         )
     }
 }
@@ -483,9 +497,10 @@ struct SystemAnalysisUSBSectionView: View {
     let sectionIconFont: Font
     let onOpenDiskUtility: () -> Void
     let isSelectionEnabled: Bool
+    let isLinuxWorkflow: Bool
 
     private var isAPFSSelected: Bool {
-        logic.selectedDrive?.fileSystemFormat == .apfs
+        !isLinuxWorkflow && logic.selectedDrive?.fileSystemFormat == .apfs
     }
 
     private var unreadableUSBDescription: String {
@@ -494,6 +509,24 @@ struct SystemAnalysisUSBSectionView: View {
         }
 
         return String(localized: "Do Maca jest podłączony zewnętrzny nośnik USB, którego macOS nie może odczytać. Otwórz Narzędzie dyskowe i wymaż nośnik do formatu obsługiwanego przez macOS, a następnie wybierz go ponownie.")
+    }
+
+    private var shouldShowUnreadableUSBHint: Bool {
+        guard !isLinuxWorkflow else { return false }
+        let isMacOSFlowDetected = (logic.sourceAppURL != nil) || logic.isPPC || logic.isMavericks
+        return isMacOSFlowDetected && logic.hasUnreadableExternalUSBMedia
+    }
+
+    private var shouldShowWaitingForSystemDetectionCard: Bool {
+        let isUSBConnected = !logic.availableDrives.isEmpty || logic.hasUnreadableExternalUSBMedia
+        let isAwaitingSystemRecognition = logic.recognizedVersion.isEmpty || logic.isAnalyzing
+        return isUSBConnected && isAwaitingSystemRecognition && !isSelectionEnabled
+    }
+
+    private func pickerDisplayName(for drive: USBDrive) -> String {
+        guard isLinuxWorkflow else { return drive.displayName }
+        let speedText = drive.usbSpeed?.rawValue ?? "USB"
+        return "\(drive.device) - \(drive.size) - \(speedText)"
     }
 
     private func sectionDivider(_ title: LocalizedStringKey) -> some View {
@@ -536,25 +569,48 @@ struct SystemAnalysisUSBSectionView: View {
             }
 
             VStack(alignment: .leading, spacing: 10) {
-                Text("Wybierz docelowy nośnik USB:").font(.subheadline)
-                if logic.availableDrives.isEmpty && !logic.hasUnreadableExternalUSBMedia {
-                    StatusCard(tone: .error, density: .compact) {
-                        HStack {
-                            Image(systemName: "externaldrive.badge.xmark").font(sectionIconFont).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                            VStack(alignment: .leading) {
-                                Text("Nie wykryto nośnika USB").font(.headline).foregroundColor(.red)
-                                Text("Podłącz nośnik USB i poczekaj na wykrycie...").font(.caption).foregroundColor(.red.opacity(0.8))
+                if shouldShowWaitingForSystemDetectionCard {
+                    StatusCard(tone: .subtle, density: .compact) {
+                        HStack(alignment: .center, spacing: 10) {
+                            Image(systemName: "hourglass.circle")
+                                .font(sectionIconFont)
+                                .foregroundColor(.secondary)
+                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(String(localized: "analysis.usb.waiting_for_system_detection.title"))
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                Text(String(localized: "analysis.usb.waiting_for_system_detection.description"))
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
                             }
+                            Spacer()
                         }
                     }
-                } else if !logic.availableDrives.isEmpty {
-                    HStack {
-                        Picker("", selection: $logic.selectedDrive) {
-                            Text("Wybierz...").tag(nil as USBDrive?)
-                            ForEach(logic.availableDrives) { drive in Text(drive.displayName).tag(drive as USBDrive?) }
+                } else {
+                    Text("Wybierz docelowy nośnik USB:").font(.subheadline)
+                    if logic.availableDrives.isEmpty && !logic.hasUnreadableExternalUSBMedia {
+                        StatusCard(tone: .error, density: .compact) {
+                            HStack {
+                                Image(systemName: "externaldrive.badge.xmark").font(sectionIconFont).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                VStack(alignment: .leading) {
+                                    Text("Nie wykryto nośnika USB").font(.headline).foregroundColor(.red)
+                                    Text("Podłącz nośnik USB i poczekaj na wykrycie...").font(.caption).foregroundColor(.red.opacity(0.8))
+                                }
+                            }
                         }
-                        .labelsHidden()
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    } else if !logic.availableDrives.isEmpty {
+                        HStack {
+                            Picker("", selection: $logic.selectedDriveSelectionID) {
+                                Text("Wybierz...").tag(nil as String?)
+                                ForEach(logic.availableDrives) { drive in
+                                    Text(pickerDisplayName(for: drive)).tag(Optional(drive.selectionID))
+                                }
+                            }
+                            .labelsHidden()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                     }
                 }
             }
@@ -562,7 +618,7 @@ struct SystemAnalysisUSBSectionView: View {
             .opacity(isSelectionEnabled ? 1.0 : 0.5)
             .onChange(of: logic.selectedDrive) { _ in logic.checkCapacity() }
 
-            if logic.hasUnreadableExternalUSBMedia {
+            if shouldShowUnreadableUSBHint {
                 StatusCard(tone: .warning, density: .compact) {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack(alignment: .top, spacing: 10) {

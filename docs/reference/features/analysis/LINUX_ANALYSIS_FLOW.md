@@ -94,7 +94,12 @@ Display format:
 Linux recognition is shown as successful detection in analysis UI and enables install handoff:
 
 - `linuxSourceURL` is assigned,
-- USB selection/proceed is available after capacity/APFS validation,
+- USB selection switches to physical external USB whole-disk targets (`diskX`),
+- Linux picker includes physical USB media regardless of mountable volume presence,
+- Linux picker labels use `diskX - <size> - <USB standard>` (no extra suffixes),
+- non-removable external USB disks stay gated by existing `AllowExternalDrives` preference,
+- proceed is available after Linux capacity validation (APFS does not block Linux flow),
+- unreadable-USB warning card from macOS flow is hidden in Linux flow,
 - installation workflow starts from shared summary/progress/finish UI,
 - Linux helper branch uses raw copy (`dd`) stages.
 

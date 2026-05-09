@@ -39,7 +39,6 @@ enum FileSystemFormat: String, Equatable {
 
 // Struktura pomocnicza dla dysków USB
 struct USBDrive: Hashable, Identifiable {
-    let id = UUID()
     let name: String
     let device: String  // np. disk2s1
     let size: String    // np. 16 GB
@@ -79,4 +78,9 @@ struct USBDrive: Hashable, Identifiable {
     
     /// Czy nośnik pracuje w standardzie USB 2.0
     var isUSB2: Bool { usbSpeed?.isUSB2 == true }
+
+    /// Stabilny identyfikator nośnika używany przez Picker i synchronizację wyboru.
+    var selectionID: String { url.absoluteString }
+
+    var id: String { selectionID }
 }

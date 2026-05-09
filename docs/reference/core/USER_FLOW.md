@@ -17,7 +17,7 @@ Destructive start requires explicit confirmation.
 
 Linux-specific runtime behavior:
 - recognized Linux image (`.iso` / `.cdr`) unlocks the same shared install flow,
-- USB validation rules (capacity + APFS block) remain enforced,
+- USB validation keeps capacity gating, while APFS blocking is macOS-only (Linux uses physical `diskX` targets),
 - creation branch uses Linux raw-copy helper stages.
 
 ## Tools Flow: Downloader

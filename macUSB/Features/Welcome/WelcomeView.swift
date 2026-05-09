@@ -9,8 +9,10 @@ struct WelcomeView: View {
     @State private var dummyLock: Bool = false
     @State private var didRunStartupFlow: Bool = false
     @State private var navigateToAnalysis: Bool = false
+    @State private var isSupportProjectHovered: Bool = false
     
     let versionCheckURL = URL(string: "https://raw.githubusercontent.com/Kruszoneq/macUSB/main/version.json")!
+    let supportProjectURL = URL(string: "https://buymeacoffee.com/kruszoneq")!
     
     // Pusty inicjalizator (wymagany dla ContentView)
     init() {}
@@ -63,9 +65,28 @@ struct WelcomeView: View {
             // --- STOPKA (Bottom Bar) ---
             HStack {
                 Spacer()
-                Text("macUSB by Kruszoneq")
-                    .font(.caption)
-                    .foregroundColor(.secondary.opacity(0.6))
+                HStack(spacing: 6) {
+                    Text("macUSB by Kruszoneq")
+                    Text("•")
+                    Link(destination: supportProjectURL) {
+                        Text(String(localized: "welcome.footer.support_project"))
+                            .foregroundColor(.accentColor)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(Color.accentColor.opacity(isSupportProjectHovered ? 0.22 : 0.0))
+                            )
+                    }
+                    .buttonStyle(.plain)
+                    .onHover { isHovered in
+                        withAnimation(.easeInOut(duration: 0.12)) {
+                            isSupportProjectHovered = isHovered
+                        }
+                    }
+                }
+                .font(.caption)
+                .foregroundColor(.secondary.opacity(0.6))
                 Spacer()
             }
             .padding(.horizontal, 25)

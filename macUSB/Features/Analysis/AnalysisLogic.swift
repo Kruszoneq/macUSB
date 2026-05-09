@@ -44,6 +44,41 @@ final class AnalysisLogic: ObservableObject {
     @Published var availableDrives: [USBDrive] = []
     @Published var hasUnreadableExternalUSBMedia: Bool = false
     @Published var unreadableExternalUSBMediaCount: Int = 0
+    @Published var selectedDriveSelectionID: String? {
+        didSet {
+            guard !isSynchronizingDriveSelection else { return }
+
+            let normalizedSelectionID: String?
+            if let selectedDriveSelectionID, selectedDriveSelectionID.isEmpty {
+                normalizedSelectionID = nil
+            } else {
+                normalizedSelectionID = selectedDriveSelectionID
+            }
+
+            if normalizedSelectionID != selectedDriveSelectionID {
+                synchronizeDriveSelection {
+                    self.selectedDriveSelectionID = normalizedSelectionID
+                }
+                return
+            }
+
+            guard let selectionID = normalizedSelectionID else {
+                if selectedDrive != nil {
+                    selectedDrive = nil
+                }
+                return
+            }
+
+            if let matchingDrive = availableDrives.first(where: { $0.selectionID == selectionID }) {
+                if selectedDrive?.selectionID != matchingDrive.selectionID {
+                    selectedDrive = matchingDrive
+                }
+            } else if selectedDrive != nil {
+                selectedDrive = nil
+            }
+        }
+    }
+
     @Published var selectedDrive: USBDrive? {
         didSet {
             // Log only when the detected/selected drive actually changes
@@ -63,6 +98,13 @@ final class AnalysisLogic: ObservableObject {
                         "Wybrano nośnik: \(id) (\(speed)) — Pojemność: \(self.selectedDrive?.size ?? "?"), Schemat: \(partitionScheme), Format: \(fileSystem), Wymaga formatowania w kolejnych etapach: \(needsFormattingText)",
                         category: "USBSelection"
                     )
+                }
+            }
+
+            let newSelectionID = selectedDrive?.selectionID
+            if selectedDriveSelectionID != newSelectionID {
+                synchronizeDriveSelection {
+                    self.selectedDriveSelectionID = newSelectionID
                 }
             }
         }
@@ -92,10 +134,13 @@ final class AnalysisLogic: ObservableObject {
     var lastUnreadableUSBDetectionDate: Date = .distantPast
     let unreadableUSBDetectionInterval: TimeInterval = 2.5
     var isUnreadableUSBDetectionRunning: Bool = false
+    var isLinuxPhysicalDriveRefreshRunning: Bool = false
+    var linuxWholeDiskCapacityCache: [String: Int64] = [:]
     let imageAnalysisTimeoutSeconds: TimeInterval = 20
     var activeImageAnalysisRunID: UUID? = nil
     var imageAnalysisTimeoutWorkItem: DispatchWorkItem? = nil
     var linuxImageAttachSession: LinuxImageAttachSession? = nil
+    private var isSynchronizingDriveSelection: Bool = false
 
     var requiredUSBCapacityDisplayValue: String {
         requiredUSBCapacityGB.map(String.init) ?? "--"
@@ -123,6 +168,17 @@ final class AnalysisLogic: ObservableObject {
 
     func stage(_ title: String) {
         AppLogging.stage(title)
+    }
+
+    func synchronizeDriveSelection(_ updates: () -> Void) {
+        if isSynchronizingDriveSelection {
+            updates()
+            return
+        }
+
+        isSynchronizingDriveSelection = true
+        updates()
+        isSynchronizingDriveSelection = false
     }
 }
 
