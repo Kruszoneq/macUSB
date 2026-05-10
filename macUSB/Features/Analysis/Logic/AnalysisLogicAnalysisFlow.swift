@@ -146,7 +146,7 @@ extension AnalysisLogic {
                             self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "Analiza zatrzymana: obraz źródłowy był już zamontowany")
                             AppLogging.separator()
                         } else {
-                            if ext == "iso" || ext == "cdr" {
+                            if ext == "iso" {
                                 if mountReadTimedOut {
                                     self.log("Po soft-timeout mountAndReadInfo przechodzę bezpośrednio do Linux fallback (bsdtar).")
                                 }

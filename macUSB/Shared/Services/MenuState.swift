@@ -4,6 +4,7 @@ import Combine
 final class MenuState: ObservableObject {
     static let shared = MenuState()
     @Published var skipAnalysisEnabled: Bool = false
+    @Published var skipLinuxManualSelectionEnabled: Bool = false
     @Published var externalDrivesEnabled: Bool = UserDefaults.standard.bool(forKey: "AllowExternalDrives")
     @Published var notificationsEnabled: Bool = false
     @Published var hasFullDiskAccess: Bool = true

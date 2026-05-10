@@ -93,6 +93,11 @@ extension AnalysisLogic {
             self.logError("Nie można wymusić rozpoznania Linux: brak wybranego pliku.")
             return
         }
+        let sourceExtension = sourceURL.pathExtension.lowercased()
+        guard sourceExtension == "iso" else {
+            self.logError("Nie można wymusić rozpoznania Linux dla .\(sourceExtension). Opcja „Pomiń analizowanie pliku -> Linux” jest dostępna tylko dla plików .iso.")
+            return
+        }
 
         self.log("Ręcznie wybrano tryb Linux (pominięcie analizy pliku).")
 

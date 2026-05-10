@@ -140,7 +140,7 @@ struct macUSBApp: App {
                             }
                         }
                     }
-                    .disabled(!menuState.skipAnalysisEnabled)
+                    .disabled(!menuState.skipLinuxManualSelectionEnabled)
                 } label: {
                     Label(String(localized: "Pomiń analizowanie pliku"), systemImage: "doc.text.magnifyingglass")
                 }

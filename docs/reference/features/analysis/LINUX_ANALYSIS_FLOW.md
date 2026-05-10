@@ -7,28 +7,28 @@ This document defines Linux-source detection behavior in `SystemAnalysisView` an
 Linux detection is a fallback path in analysis, with install handoff enabled.
 
 - Primary path remains macOS installer detection.
-- Linux path runs when macOS installer metadata is not detected from `.iso` / `.cdr` sources.
-- Linux path can also be forced manually from `Opcje -> Pomiń analizowanie pliku -> Linux` after unsupported/unrecognized analysis.
+- Linux path runs when macOS installer metadata is not detected from `.iso` source.
+- Linux path can also be forced manually from `Opcje -> Pomiń analizowanie pliku -> Linux` after unsupported/unrecognized analysis, but only when selected source is `.iso`.
 - Positive Linux detection unlocks USB selection and installer creation flow.
 
 ## Trigger and Entry
 
 Linux fallback is entered when all conditions are met:
 
-- selected source is `.iso` or `.cdr`,
+- selected source is `.iso`,
 - source is not blocked by pre-mounted image guard,
 - macOS installer `.app` metadata was not resolved.
 
 Runtime sequence:
 
 - app first attempts standard image attach/read path (same as macOS analysis),
-- for `.iso`/`.cdr`, mount-and-read step has a Linux soft-timeout of `10 s`; after timeout, flow skips mount result and continues Linux fallback,
+- for `.iso`, mount-and-read step has a Linux soft-timeout of `10 s`; after timeout, flow skips mount result and continues Linux fallback,
 - when macOS installer is not found, Linux detection first tries mounted-image metadata if mount path exists,
 - if mounted-image Linux detection does not produce a result (or mount path is unavailable), app falls back to archive reading via `bsdtar` (without mounting).
-- the whole `.iso`/`.cdr` image-analysis session is additionally guarded by a global 20-second timeout; on timeout, analysis is force-finished as unrecognized installer.
+- the whole `.iso` image-analysis session is additionally guarded by a global 20-second timeout; on timeout, analysis is force-finished as unrecognized installer.
 - on timeout, any mounted source image for this analysis session must be force-detached before finalizing state.
 
-If `.iso`/`.cdr` is already mounted manually in macOS, analysis is blocked and user must unmount first (same guard as macOS analysis path).
+If `.iso` is already mounted manually in macOS, Linux fallback entry is blocked and user must unmount first (guard shared with macOS image-analysis path).
 
 ## Detection Inputs (Performance Policy)
 
@@ -109,6 +109,7 @@ Manual Linux force from menu sets Linux workflow state without distro recognitio
 - distro metadata: unresolved (no distro/version/edition),
 - icon: generic Linux fallback (`linux.icns`),
 - source handoff: selected file path is used as `linuxSourceURL`.
+- manual force is available only when selected source extension is `.iso`; for other extensions request is ignored and Linux state is not applied.
 
 Required USB capacity is computed from source file size:
 
@@ -163,7 +164,7 @@ Mount lifecycle behavior remains aligned with existing analysis behavior:
 
 - previous attached image is detached before analyzing another source,
 - attached image path is stored for deterministic cleanup.
-- Linux fallback additionally captures full image session entities (`dev-entry` + `mount-point`) for `.iso`/`.cdr`.
+- Linux fallback additionally captures full image session entities (`dev-entry` + `mount-point`) for `.iso`.
 - Linux cleanup runs on success/failure/timeout/cancel/reset.
 - Linux cleanup order:
   - first: `hdiutil detach -force` for all captured `dev-entry`,

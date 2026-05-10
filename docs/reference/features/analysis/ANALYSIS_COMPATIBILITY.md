@@ -16,10 +16,11 @@ Unsupported detection outcomes must be clearly surfaced and must block unsupport
 
 For Linux fallback:
 
+- fallback entry is limited to `.iso` sources,
 - detection is considered successful when Linux is recognized, including unknown distro case,
 - recognized Linux result unlocks shared install flow (`UniversalInstallationView -> CreationProgressView -> FinishUSBView`),
 - detected Linux state may present dedicated Linux icon resource (`linux.icns`) in analysis UI.
-- manual Linux force from `Opcje -> Pomiń analizowanie pliku -> Linux` is treated as Linux-recognized state for install handoff.
+- manual Linux force from `Opcje -> Pomiń analizowanie pliku -> Linux` is treated as Linux-recognized state for install handoff only when selected source is `.iso`.
 
 ## Current Supported Routing Families
 
@@ -46,7 +47,7 @@ For `.cdr` and `.iso` sources:
 - if the image is already manually mounted in macOS,
 - analysis must stop and instruct user to unmount and retry.
 
-This rule applies to both macOS and Linux fallback paths.
+This rule applies to macOS image analysis and additionally protects Linux fallback entry for `.iso`.
 
 ## Global Image Analysis Timeout
 
@@ -58,7 +59,7 @@ For `.dmg`, `.iso`, and `.cdr` sources:
 - timeout finish keeps existing UI behavior (no new messages/views), and blocks supported-flow routing as for other unrecognized outcomes,
 - delayed callbacks from expired analysis sessions must be ignored and must not overwrite state after timeout.
 
-For Linux fallback on `.iso`/`.cdr`:
+For Linux fallback on `.iso`:
 
 - cleanup scope includes all image entities captured from `hdiutil info -plist` for the selected `image-path`,
 - cleanup is not limited to one mount-point; it must include all captured `dev-entry` and fallback `mount-point` detach attempts,

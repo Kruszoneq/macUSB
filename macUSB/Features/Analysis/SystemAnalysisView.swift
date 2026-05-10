@@ -55,7 +55,16 @@ struct SystemAnalysisView: View {
                                      && !logic.recognizedVersion.isEmpty
                                      && logic.showUnsupportedMessage)
 
-        MenuState.shared.skipAnalysisEnabled = analysisFinished && hasAnySelection && !isValidSelection && (unrecognizedBlocking || recognizedUnsupported)
+        let skipAnalysisEnabled = analysisFinished && hasAnySelection && !isValidSelection && (unrecognizedBlocking || recognizedUnsupported)
+        MenuState.shared.skipAnalysisEnabled = skipAnalysisEnabled
+
+        let sourceExtension: String
+        if let selectedFileUrl = logic.selectedFileUrl {
+            sourceExtension = selectedFileUrl.pathExtension.lowercased()
+        } else {
+            sourceExtension = URL(fileURLWithPath: logic.selectedFilePath).pathExtension.lowercased()
+        }
+        MenuState.shared.skipLinuxManualSelectionEnabled = skipAnalysisEnabled && sourceExtension == "iso"
     }
     
     private func presentMavericksDialog() {
@@ -447,6 +456,7 @@ struct SystemAnalysisView: View {
             selectedDriveForInstallationSnapshot = nil
             linuxFlowContextSnapshot = nil
             MenuState.shared.skipAnalysisEnabled = false
+            MenuState.shared.skipLinuxManualSelectionEnabled = false
         }
         .onChange(of: logic.showUnsupportedMessage) { _ in updateMenuState() }
         .onChange(of: logic.recognizedVersion) { _ in updateMenuState() }

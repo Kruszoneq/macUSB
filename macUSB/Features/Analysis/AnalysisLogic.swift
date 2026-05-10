@@ -256,7 +256,7 @@ extension AnalysisLogic {
         activeImageAnalysisRunID = nil
 
         let ext = sourceURL.pathExtension.lowercased()
-        if ext == "iso" || ext == "cdr" {
+        if ext == "iso" {
             captureLinuxAttachSessionIfNeeded(sourceURL: sourceURL, reason: "timeout_pre_cleanup")
         }
         cleanupLinuxAttachSession(reason: "image_analysis_timeout")
