@@ -29,6 +29,12 @@
 		A10000012F00000100000044 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */; };
 		A10000012F00000100000045 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000046 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift */; };
 		A10000012F00000100000048 /* Workflow/Linux/HelperWorkflowLinuxMountGuard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000047 /* Workflow/Linux/HelperWorkflowLinuxMountGuard.swift */; };
+		A10000012F00000100000049 /* Workflow/Windows/HelperWorkflowWindowsStages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000004A /* Workflow/Windows/HelperWorkflowWindowsStages.swift */; };
+		A10000012F0000010000004B /* Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000004C /* Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift */; };
+		A10000012F0000010000004D /* Workflow/Windows/HelperWorkflowWindowsUnmountLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000004E /* Workflow/Windows/HelperWorkflowWindowsUnmountLogic.swift */; };
+		A10000012F0000010000004F /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000050 /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift */; };
+		A10000012F00000100000051 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000052 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift */; };
+		A10000012F00000100000053 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000054 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift */; };
 		B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */ = {isa = PBXBuildFile; fileRef = B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */; };
 		C10000012F00000100000001 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */; };
 		D10000012F00000100000001 /* macUSB/Resources/Icons/Linux/Distros in Resources */ = {isa = PBXBuildFile; fileRef = D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */; };
@@ -112,6 +118,12 @@
 		A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift; sourceTree = "<group>"; };
 		A10000012F00000100000046 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxVerification.swift; sourceTree = "<group>"; };
 		A10000012F00000100000047 /* Workflow/Linux/HelperWorkflowLinuxMountGuard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Linux/HelperWorkflowLinuxMountGuard.swift; sourceTree = "<group>"; };
+		A10000012F0000010000004A /* Workflow/Windows/HelperWorkflowWindowsStages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsStages.swift; sourceTree = "<group>"; };
+		A10000012F0000010000004C /* Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift; sourceTree = "<group>"; };
+		A10000012F0000010000004E /* Workflow/Windows/HelperWorkflowWindowsUnmountLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsUnmountLogic.swift; sourceTree = "<group>"; };
+		A10000012F00000100000050 /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift; sourceTree = "<group>"; };
+		A10000012F00000100000052 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift; sourceTree = "<group>"; };
+		A10000012F00000100000054 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift; sourceTree = "<group>"; };
 		B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = macUSB/Resources/Sounds/burn_complete.aif; sourceTree = "<group>"; };
 		C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift; sourceTree = "<group>"; };
 		D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */ = {isa = PBXFileReference; lastKnownFileType = folder; path = macUSB/Resources/Icons/Linux/Distros; sourceTree = "<group>"; };
@@ -190,10 +202,14 @@
 				Features/Installation/Linux/CreatorLinuxUnmountRecoveryLogic.swift,
 				Features/Installation/Linux/LinuxInstallationFlowContext.swift,
 				Features/Installation/Linux/LinuxWorkflowErrorPresentation.swift,
+				Features/Installation/Windows/CreationProgressWindowsMapping.swift,
+				Features/Installation/Windows/CreatorWindowsHelperLogic.swift,
+				Features/Installation/Windows/CreatorWindowsLabelLogic.swift,
+				Features/Installation/Windows/CreatorWindowsUnmountRecoveryLogic.swift,
 				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/AppBranding.swift,
 				Features/Welcome/WelcomeView.swift,
-				macUSBIcon.icon,
+				Resources/Assets.xcassets,
 				Resources/Icons/Linux/linux.icns,
 				Resources/Icons/OS/os_10_7_lion.icns,
 				Resources/Icons/OS/os_10_8_mountain_lion.icns,
@@ -287,10 +303,14 @@
 				Features/Installation/Linux/CreatorLinuxUnmountRecoveryLogic.swift,
 				Features/Installation/Linux/LinuxInstallationFlowContext.swift,
 				Features/Installation/Linux/LinuxWorkflowErrorPresentation.swift,
+				Features/Installation/Windows/CreationProgressWindowsMapping.swift,
+				Features/Installation/Windows/CreatorWindowsHelperLogic.swift,
+				Features/Installation/Windows/CreatorWindowsLabelLogic.swift,
+				Features/Installation/Windows/CreatorWindowsUnmountRecoveryLogic.swift,
 				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/AppBranding.swift,
 				Features/Welcome/WelcomeView.swift,
-				macUSBIcon.icon,
+				Resources/Assets.xcassets,
 				Resources/Localizable.xcstrings,
 				Shared/Localization/HelperWorkflowLocalizationKeys.swift,
 				Shared/Models/Models.swift,
@@ -431,6 +451,12 @@
 				A10000012F00000100000043 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift */,
 				A10000012F00000100000046 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift */,
 				A10000012F00000100000047 /* Workflow/Linux/HelperWorkflowLinuxMountGuard.swift */,
+				A10000012F0000010000004A /* Workflow/Windows/HelperWorkflowWindowsStages.swift */,
+				A10000012F0000010000004C /* Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift */,
+				A10000012F0000010000004E /* Workflow/Windows/HelperWorkflowWindowsUnmountLogic.swift */,
+				A10000012F00000100000050 /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift */,
+				A10000012F00000100000052 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift */,
+				A10000012F00000100000054 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift */,
 				A10000012F00000100000029 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift */,
 				A10000012F0000010000002A /* DownloaderAssembly/DownloaderAssemblyProcess.swift */,
 				C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */,
@@ -665,6 +691,12 @@
 				A10000012F00000100000044 /* Workflow/Linux/HelperWorkflowLinuxUnmountLogic.swift in Sources */,
 				A10000012F00000100000045 /* Workflow/Linux/HelperWorkflowLinuxVerification.swift in Sources */,
 				A10000012F00000100000048 /* Workflow/Linux/HelperWorkflowLinuxMountGuard.swift in Sources */,
+				A10000012F00000100000049 /* Workflow/Windows/HelperWorkflowWindowsStages.swift in Sources */,
+				A10000012F0000010000004B /* Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift in Sources */,
+				A10000012F0000010000004D /* Workflow/Windows/HelperWorkflowWindowsUnmountLogic.swift in Sources */,
+				A10000012F0000010000004F /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift in Sources */,
+				A10000012F00000100000051 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift in Sources */,
+				A10000012F00000100000053 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift in Sources */,
 				A10000012F00000100000039 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift in Sources */,
 				A10000012F0000010000003A /* DownloaderAssembly/DownloaderAssemblyProcess.swift in Sources */,
 			);
@@ -827,7 +859,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				ASSETCATALOG_COMPILER_APPICON_NAME = macUSBIcon;
+					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				AUTOMATION_APPLE_EVENTS = YES;
@@ -883,7 +915,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				ASSETCATALOG_COMPILER_APPICON_NAME = macUSBIcon;
+					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				AUTOMATION_APPLE_EVENTS = YES;

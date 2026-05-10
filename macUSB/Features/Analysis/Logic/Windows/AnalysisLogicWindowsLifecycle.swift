@@ -2,6 +2,8 @@ import Foundation
 import AppKit
 
 extension AnalysisLogic {
+    private static let windowsFAT32LimitBytes: Int64 = 4_294_967_295
+
     var windowsFallbackSymbolName: String {
         if #available(macOS 11.0, *), NSImage(systemSymbolName: "pc", accessibilityDescription: nil) != nil {
             return "pc"
@@ -40,9 +42,10 @@ extension AnalysisLogic {
         self.isWindowsARM = false
         self.windowsHasEFI = false
         self.isWindowsWorkflowSupported = false
+        self.windowsWillSplitWIM = false
     }
 
-    func applyWindowsDetectionResult(_ result: WindowsDetectionResult, sourceURL: URL) {
+    func applyWindowsDetectionResult(_ result: WindowsDetectionResult, sourceURL: URL, mountedImagePath: String?) {
         self.isWindowsDetected = true
         self.windowsFamily = result.family
         self.windowsServicePack = result.servicePack
@@ -50,6 +53,7 @@ extension AnalysisLogic {
         self.isWindowsARM = result.isARM
         self.windowsHasEFI = result.efiStatus.hasEFI
         self.isWindowsWorkflowSupported = result.isSupported
+        self.windowsWillSplitWIM = result.isSupported && detectWindowsWimSplitNeed(mountedImagePath: mountedImagePath)
 
         self.recognizedVersion = result.displayName
         self.sourceAppURL = nil
@@ -80,7 +84,38 @@ extension AnalysisLogic {
         self.log("Rozpoznano obraz Windows: \(result.displayName)")
         self.log("Windows support gate: supported=\(result.isSupported ? "TAK" : "NIE"), reason=\(result.supportReason.rawValue), hasEFI=\(result.efiStatus.hasEFI ? "TAK" : "NIE")")
         self.log("Windows workflow flag: isWindowsWorkflowSupported=\(self.isWindowsWorkflowSupported ? "TAK" : "NIE")")
+        self.log("Windows workflow split-wim flag: \(self.windowsWillSplitWIM ? "TAK" : "NIE")")
         self.log("Windows source file: \(sourceURL.path)")
         AppLogging.separator()
+    }
+
+    private func detectWindowsWimSplitNeed(mountedImagePath: String?) -> Bool {
+        guard let mountedImagePath, !mountedImagePath.isEmpty else {
+            return false
+        }
+
+        let sourcesCandidates = [
+            URL(fileURLWithPath: mountedImagePath).appendingPathComponent("sources"),
+            URL(fileURLWithPath: mountedImagePath).appendingPathComponent("Sources")
+        ]
+
+        for sourcesPath in sourcesCandidates where FileManager.default.fileExists(atPath: sourcesPath.path) {
+            let wimCandidates = [
+                sourcesPath.appendingPathComponent("install.wim"),
+                sourcesPath.appendingPathComponent("INSTALL.WIM")
+            ]
+
+            for wimPath in wimCandidates {
+                guard FileManager.default.fileExists(atPath: wimPath.path) else { continue }
+                guard let attributes = try? FileManager.default.attributesOfItem(atPath: wimPath.path),
+                      let sizeValue = attributes[.size] as? NSNumber else {
+                    continue
+                }
+
+                return sizeValue.int64Value > Self.windowsFAT32LimitBytes
+            }
+        }
+
+        return false
     }
 }

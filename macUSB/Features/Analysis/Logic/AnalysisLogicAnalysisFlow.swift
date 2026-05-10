@@ -156,7 +156,11 @@ extension AnalysisLogic {
                                 if let mountedImagePath {
                                     self.log("Nie rozpoznano instalatora macOS. Przechodzę do procesu rozpoznawania Windows (z zamontowanego obrazu).")
                                     if let windowsResult = self.detectWindows(fromMountPath: mountedImagePath, sourceURL: url) {
-                                        self.applyWindowsDetectionResult(windowsResult, sourceURL: url)
+                                        self.applyWindowsDetectionResult(
+                                            windowsResult,
+                                            sourceURL: url,
+                                            mountedImagePath: mountedImagePath
+                                        )
                                         self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "Rozpoznano obraz Windows z zamontowanego źródła")
                                         return
                                     }

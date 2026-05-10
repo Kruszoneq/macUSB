@@ -32,6 +32,18 @@ enum HelperWorkflowLocalizationKeys {
     static let linuxRawCopyStatus = "helper.workflow.linux_raw_copy.status"
     static let linuxVerifyWriteTitle = "helper.workflow.linux_verify_write.title"
     static let linuxVerifyWriteStatus = "helper.workflow.linux_verify_write.status"
+    static let windowsPrepareSourceTitle = "helper.workflow.windows_prepare_source.title"
+    static let windowsPrepareSourceStatus = "helper.workflow.windows_prepare_source.status"
+    static let windowsPrepareTargetTitle = "helper.workflow.windows_prepare_target.title"
+    static let windowsPrepareTargetStatus = "helper.workflow.windows_prepare_target.status"
+    static let windowsCreateMediaTitle = "helper.workflow.windows_create_media.title"
+    static let windowsCreateMediaStatus = "helper.workflow.windows_create_media.status"
+    static let windowsSplitWimTitle = "helper.workflow.windows_split_wim.title"
+    static let windowsSplitWimStatus = "helper.workflow.windows_split_wim.status"
+    static let windowsVerifyMediaTitle = "helper.workflow.windows_verify_media.title"
+    static let windowsVerifyMediaStatus = "helper.workflow.windows_verify_media.status"
+    static let windowsCleanupTempTitle = "helper.workflow.windows_cleanup_temp.title"
+    static let windowsCleanupTempStatus = "helper.workflow.windows_cleanup_temp.status"
     static let startingTitle = "helper.workflow.starting.title"
     static let startingStatus = "helper.workflow.starting.status"
     static let initializingStatus = "helper.workflow.initializing.status"
@@ -71,6 +83,18 @@ enum HelperWorkflowLocalizationKeys {
             return HelperWorkflowStageLocalization(titleKey: linuxRawCopyTitle, statusKey: linuxRawCopyStatus)
         case "linux_verify_write":
             return HelperWorkflowStageLocalization(titleKey: linuxVerifyWriteTitle, statusKey: linuxVerifyWriteStatus)
+        case "windows_prepare_source":
+            return HelperWorkflowStageLocalization(titleKey: windowsPrepareSourceTitle, statusKey: windowsPrepareSourceStatus)
+        case "windows_prepare_target":
+            return HelperWorkflowStageLocalization(titleKey: windowsPrepareTargetTitle, statusKey: windowsPrepareTargetStatus)
+        case "windows_create_media":
+            return HelperWorkflowStageLocalization(titleKey: windowsCreateMediaTitle, statusKey: windowsCreateMediaStatus)
+        case "windows_split_wim":
+            return HelperWorkflowStageLocalization(titleKey: windowsSplitWimTitle, statusKey: windowsSplitWimStatus)
+        case "windows_verify_media":
+            return HelperWorkflowStageLocalization(titleKey: windowsVerifyMediaTitle, statusKey: windowsVerifyMediaStatus)
+        case "windows_cleanup_temp":
+            return HelperWorkflowStageLocalization(titleKey: windowsCleanupTempTitle, statusKey: windowsCleanupTempStatus)
         case "catalina_cleanup":
             return HelperWorkflowStageLocalization(titleKey: catalinaCleanupTitle, statusKey: catalinaCleanupStatus)
         case "catalina_copy":
@@ -110,6 +134,18 @@ enum HelperWorkflowLocalizationExtractionAnchors {
         String(localized: "helper.workflow.linux_raw_copy.status"),
         String(localized: "helper.workflow.linux_verify_write.title"),
         String(localized: "helper.workflow.linux_verify_write.status"),
+        String(localized: "helper.workflow.windows_prepare_source.title"),
+        String(localized: "helper.workflow.windows_prepare_source.status"),
+        String(localized: "helper.workflow.windows_prepare_target.title"),
+        String(localized: "helper.workflow.windows_prepare_target.status"),
+        String(localized: "helper.workflow.windows_create_media.title"),
+        String(localized: "helper.workflow.windows_create_media.status"),
+        String(localized: "helper.workflow.windows_split_wim.title"),
+        String(localized: "helper.workflow.windows_split_wim.status"),
+        String(localized: "helper.workflow.windows_verify_media.title"),
+        String(localized: "helper.workflow.windows_verify_media.status"),
+        String(localized: "helper.workflow.windows_cleanup_temp.title"),
+        String(localized: "helper.workflow.windows_cleanup_temp.status"),
         String(localized: "helper.workflow.starting.title"),
         String(localized: "helper.workflow.starting.status"),
         String(localized: "helper.workflow.initializing.status"),

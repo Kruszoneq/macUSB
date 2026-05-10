@@ -14,6 +14,8 @@ struct SystemAnalysisView: View {
     @State private var selectedDriveForInstallationSnapshot: USBDrive? = nil
     @State private var linuxFlowContextSnapshot: LinuxInstallationFlowContext? = nil
     @State private var windowsWorkflowSupportedSnapshot: Bool = false
+    @State private var windowsMountedSourcePathSnapshot: String? = nil
+    @State private var windowsWillSplitWIMSnapshot: Bool = false
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
     @State private var analysisWindowHandler: AnalysisWindowHandler?
@@ -378,6 +380,8 @@ struct SystemAnalysisView: View {
                         originalImageURL: logic.selectedFileUrl,
                         linuxFlowContext: linuxFlowContextSnapshot,
                         isWindowsWorkflow: windowsWorkflowSupportedSnapshot,
+                        windowsMountedSourcePath: windowsMountedSourcePathSnapshot,
+                        windowsWillSplitWim: windowsWillSplitWIMSnapshot,
                         needsCodesign: logic.needsCodesign,
                         isLegacySystem: logic.isLegacyDetected,
                         isRestoreLegacy: logic.isRestoreLegacy,
@@ -466,6 +470,8 @@ struct SystemAnalysisView: View {
                     selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
                     linuxFlowContextSnapshot = logic.linuxInstallationFlowContext
                     windowsWorkflowSupportedSnapshot = logic.isWindowsWorkflowSupported
+                    windowsMountedSourcePathSnapshot = logic.mountedDMGPath
+                    windowsWillSplitWIMSnapshot = logic.windowsWillSplitWIM
                     isTabLocked = true
                     navigateToInstall = true
                 }) {
@@ -491,6 +497,8 @@ struct SystemAnalysisView: View {
             selectedDriveForInstallationSnapshot = nil
             linuxFlowContextSnapshot = nil
             windowsWorkflowSupportedSnapshot = false
+            windowsMountedSourcePathSnapshot = nil
+            windowsWillSplitWIMSnapshot = false
             MenuState.shared.skipAnalysisEnabled = false
             MenuState.shared.skipLinuxManualSelectionEnabled = false
         }

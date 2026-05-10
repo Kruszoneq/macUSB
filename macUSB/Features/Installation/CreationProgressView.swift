@@ -26,6 +26,8 @@ struct CreationProgressView: View {
     let isMavericks: Bool
     let isPPC: Bool
     let isLinuxWorkflow: Bool
+    let isWindowsWorkflow: Bool
+    let windowsWillSplitWimExpected: Bool
     let shouldDetachMountPoint: Bool
     let targetWholeDiskBSDName: String?
     let needsPreformat: Bool
@@ -66,6 +68,10 @@ struct CreationProgressView: View {
     private var stageDescriptors: [CreationStageDescriptor] {
         if isLinuxWorkflow {
             return CreationProgressLinuxMapping.stageKeys.map(stageDescriptor(for:))
+        }
+        if isWindowsWorkflow {
+            let includeSplit = windowsWillSplitWimExpected || normalizedStageKey(helperCurrentStageKey) == CreationProgressWindowsMapping.splitWimStageKey
+            return CreationProgressWindowsMapping.stageKeys(includeSplitWim: includeSplit).map(stageDescriptor(for:))
         }
 
         var stageKeys: [String] = ["prepare_source"]
@@ -301,6 +307,9 @@ struct CreationProgressView: View {
     }
 
     private func pendingIconForStage(_ stageKey: String) -> String {
+        if let icon = CreationProgressWindowsMapping.pendingIcon(for: stageKey) {
+            return icon
+        }
         if let icon = CreationProgressLinuxMapping.pendingIcon(for: stageKey) {
             return icon
         }
@@ -328,6 +337,9 @@ struct CreationProgressView: View {
     }
 
     private func activeIconForStage(_ stageKey: String) -> String {
+        if let icon = CreationProgressWindowsMapping.activeIcon(for: stageKey) {
+            return icon
+        }
         if let icon = CreationProgressLinuxMapping.activeIcon(for: stageKey) {
             return icon
         }
@@ -355,6 +367,9 @@ struct CreationProgressView: View {
     }
 
     private func shouldShowWriteSpeed(for stageKey: String) -> Bool {
+        if CreationProgressWindowsMapping.showsWriteSpeed(for: stageKey) {
+            return true
+        }
         if CreationProgressLinuxMapping.showsWriteSpeed(for: stageKey) {
             return true
         }
@@ -368,6 +383,9 @@ struct CreationProgressView: View {
     }
 
     private func shouldShowCopyProgress(for stageKey: String) -> Bool {
+        if CreationProgressWindowsMapping.showsCopyProgress(for: stageKey) {
+            return true
+        }
         if CreationProgressLinuxMapping.showsCopyProgress(for: stageKey) {
             return true
         }
@@ -406,6 +424,11 @@ struct CreationProgressView: View {
     }
 
     private func normalizedStageKey(_ rawStageKey: String) -> String {
+        let windowsNormalized = CreationProgressWindowsMapping.canonicalStageKey(rawStageKey)
+        if windowsNormalized != rawStageKey {
+            return windowsNormalized
+        }
+
         let linuxNormalized = CreationProgressLinuxMapping.canonicalStageKey(rawStageKey)
         if linuxNormalized != rawStageKey {
             return linuxNormalized

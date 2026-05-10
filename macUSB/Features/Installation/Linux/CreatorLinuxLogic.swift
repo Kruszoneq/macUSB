@@ -14,6 +14,10 @@ extension UniversalInstallationView {
             return linuxMountPointURLForCleanup
         }
 
+        if isWindowsWorkflow {
+            return FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_windows_no_mount")
+        }
+
         if isLinuxWorkflow {
             return FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_linux_no_mount")
         }
@@ -22,6 +26,10 @@ extension UniversalInstallationView {
     }
 
     var shouldDetachMountPointAfterFinish: Bool {
+        if isWindowsWorkflow {
+            return false
+        }
+
         if isLinuxWorkflow {
             return linuxMountPointURLForCleanup != nil
         }
@@ -31,6 +39,14 @@ extension UniversalInstallationView {
     func performEmergencyCleanupIfNeeded(tempURL: URL) {
         if let mountPoint = linuxMountPointURLForCleanup {
             performEmergencyCleanup(mountPoint: mountPoint, tempURL: tempURL)
+            return
+        }
+
+        if isWindowsWorkflow {
+            log("Cleanup Windows: pomijam odmontowanie źródła (obsługa mountu po stronie helpera).")
+            if FileManager.default.fileExists(atPath: tempURL.path) {
+                try? FileManager.default.removeItem(at: tempURL)
+            }
             return
         }
 

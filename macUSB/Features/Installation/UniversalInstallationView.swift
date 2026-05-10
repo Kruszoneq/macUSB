@@ -13,6 +13,8 @@ struct UniversalInstallationView: View {
     let originalImageURL: URL?
     let linuxFlowContext: LinuxInstallationFlowContext?
     let isWindowsWorkflow: Bool
+    let windowsMountedSourcePath: String?
+    let windowsWillSplitWim: Bool
     
     // Flagi
     let needsCodesign: Bool
@@ -248,6 +250,10 @@ struct UniversalInstallationView: View {
                                         Text("• Pliki obrazu Linux zostaną przygotowane")
                                         Text("• Wybrany nośnik USB zostanie odmontowany")
                                         Text("• Obraz Linux zostanie zapisany na nośniku USB")
+                                    } else if isWindowsWorkflow {
+                                        Text("• Obraz Windows zostanie zweryfikowany i przygotowany do kopiowania")
+                                        Text("• Wybrany nośnik USB zostanie odmontowany i sformatowany do MBR/FAT32")
+                                        Text("• Pliki instalacyjne Windows zostaną skopiowane i zweryfikowane")
                                     } else if isRestoreLegacy {
                                         Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
                                         Text("• Nośnik USB zostanie sformatowany")
@@ -456,6 +462,8 @@ struct UniversalInstallationView: View {
                     isMavericks: isMavericks,
                     isPPC: isPPC,
                     isLinuxWorkflow: isLinuxWorkflow,
+                    isWindowsWorkflow: isWindowsWorkflow,
+                    windowsWillSplitWimExpected: windowsWillSplitWim,
                     shouldDetachMountPoint: shouldDetachMountPointAfterFinish,
                     targetWholeDiskBSDName: targetWholeDiskBSDNameForFinish,
                     needsPreformat: (targetDrive?.needsFormatting ?? false) && !isPPC,

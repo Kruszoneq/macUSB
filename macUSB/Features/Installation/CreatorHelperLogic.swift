@@ -25,15 +25,6 @@ extension UniversalInstallationView {
         startCreationProcessWithHelper()
     }
 
-    func startWindowsCreationProcessWithHelper() {
-        log(
-            "WindowsInstallFlow: start workflow (source=\(sourceAppURL.path), target=\(targetDrive?.device ?? "brak"))",
-            category: "WindowsInstallFlow"
-        )
-        // Dedicated Windows workflow will be implemented separately.
-        startCreationProcessWithHelper()
-    }
-
     func startCreationProcessWithHelper() {
         guard let drive = targetDrive else {
             navigateToCreationProgress = false
@@ -183,6 +174,12 @@ extension UniversalInstallationView {
                                             category: "LinuxInstallFlow"
                                         )
                                     }
+                                    if isWindowsWorkflow, previousStageKey != normalizedStageKey {
+                                        log(
+                                            "WindowsInstallFlow: stage transition \(previousStageKey.isEmpty ? "<start>" : previousStageKey) -> \(normalizedStageKey)",
+                                            category: "WindowsInstallFlow"
+                                        )
+                                    }
                                     helperProgressPercent = max(helperProgressPercent, min(event.percent, 100))
                                     if let localization = HelperWorkflowLocalizationKeys.presentation(for: normalizedStageKey) {
                                         helperStageTitleKey = localization.titleKey
@@ -192,16 +189,23 @@ extension UniversalInstallationView {
                                         helperStatusKey = event.statusKey
                                     }
 
-                                    handleTransferStageTransition(
-                                        from: previousStageKey,
-                                        to: normalizedStageKey,
-                                        drive: drive
-                                    )
+                                    if isWindowsWorkflow {
+                                        updateWindowsCopyProgressFromHelperPercent(
+                                            stageKey: normalizedStageKey,
+                                            overallPercent: event.percent
+                                        )
+                                    } else {
+                                        handleTransferStageTransition(
+                                            from: previousStageKey,
+                                            to: normalizedStageKey,
+                                            drive: drive
+                                        )
 
-                                    if isFormattingHelperStage(normalizedStageKey) {
-                                        helperWriteSpeedText = "- MB/s"
-                                    } else if isFormattingHelperStage(previousStageKey) {
-                                        sampleHelperStageMetrics(for: drive)
+                                        if isFormattingHelperStage(normalizedStageKey) {
+                                            helperWriteSpeedText = "- MB/s"
+                                        } else if isFormattingHelperStage(previousStageKey) {
+                                            sampleHelperStageMetrics(for: drive)
+                                        }
                                     }
                                 },
                                 onCompletion: { result in
@@ -243,6 +247,33 @@ extension UniversalInstallationView {
                                         )
                                         return
                                     }
+                                    if shouldPromptWindowsForceUnmountAlert(for: result) {
+                                        showWindowsForceUnmountAlert(
+                                            onForce: {
+                                                workflowResultDetailMessage = nil
+                                                workflowResultErrorPresentation = nil
+                                                let forcedRequest = makeWindowsForceUnmountRequest(from: workflowRequest)
+                                                workflowRequest = forcedRequest
+                                                helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
+                                                helperStatusKey = HelperWorkflowLocalizationKeys.initializingStatus
+                                                helperCurrentStageKey = ""
+                                                helperProgressPercent = 0
+                                                helperCopyProgressPercent = 0
+                                                helperWriteSpeedText = "- MB/s"
+                                                withAnimation {
+                                                    isHelperWorking = true
+                                                }
+                                                log("WindowsInstallFlow: użytkownik wyraził zgodę na wymuszenie odmontowania nośnika.", category: "WindowsInstallFlow")
+                                                startHelperWorkflow(true)
+                                            },
+                                            onCancel: {
+                                                workflowResultDetailMessage = String(localized: "Nośnik USB był używany przez inną aplikację. Nie wyrażono zgody na wymuszenie odmontowania, dlatego proces został przerwany. Zamknij aplikacje korzystające z nośnika i spróbuj ponownie.")
+                                                log("WindowsInstallFlow: użytkownik odmówił wymuszonego odmontowania nośnika.", category: "WindowsInstallFlow")
+                                                performWindowsUnmountDeclinedCleanupAndCancel()
+                                            }
+                                        )
+                                        return
+                                    }
 
                                     helperOperationFailed = !result.success
                                     if result.success {
@@ -263,6 +294,12 @@ extension UniversalInstallationView {
                                         log(
                                             "LinuxInstallFlow: workflow zakończony (success=\(result.success ? "TAK" : "NIE"), cancelled=\(result.isUserCancelled ? "TAK" : "NIE"), failedStage=\(result.failedStage ?? "brak"))",
                                             category: "LinuxInstallFlow"
+                                        )
+                                    }
+                                    if isWindowsWorkflow {
+                                        log(
+                                            "WindowsInstallFlow: workflow zakończony (success=\(result.success ? "TAK" : "NIE"), cancelled=\(result.isUserCancelled ? "TAK" : "NIE"), failedStage=\(result.failedStage ?? "brak"))",
+                                            category: "WindowsInstallFlow"
                                         )
                                     }
 
@@ -317,7 +354,11 @@ extension UniversalInstallationView {
                                     helperTransferMonitoringTargetVolumePath = workflowRequest.targetVolumePath
                                     helperTransferMonitoringLastKnownPath = workflowRequest.targetVolumePath
                                     MenuState.shared.updateDebugCopiedData(bytes: 0)
-                                    startHelperWriteSpeedMonitoring(for: drive)
+                                    if isWindowsWorkflow {
+                                        helperWriteSpeedText = "- MB/s"
+                                    } else {
+                                        startHelperWriteSpeedMonitoring(for: drive)
+                                    }
                                     log("Uruchomiono helper workflow: \(workflowID)")
                                 }
                             )
@@ -352,6 +393,9 @@ extension UniversalInstallationView {
         if isLinuxWorkflow {
             return try prepareLinuxHelperWorkflowRequest(for: drive)
         }
+        if isWindowsWorkflow {
+            return prepareWindowsHelperWorkflowRequest(for: drive)
+        }
 
         let fileManager = FileManager.default
         let requesterUID = Int(getuid())
@@ -384,7 +428,9 @@ extension UniversalInstallationView {
                 needsCodesign: false,
                 requiresApplicationPathArg: false,
                 requesterUID: requesterUID,
-                linuxForceUnmount: false
+                linuxForceUnmount: false,
+                windowsForceUnmount: false,
+                windowsMountedSourcePath: nil
             )
         }
 
@@ -413,7 +459,9 @@ extension UniversalInstallationView {
                 needsCodesign: false,
                 requiresApplicationPathArg: false,
                 requesterUID: requesterUID,
-                linuxForceUnmount: false
+                linuxForceUnmount: false,
+                windowsForceUnmount: false,
+                windowsMountedSourcePath: nil
             )
         }
 
@@ -433,7 +481,9 @@ extension UniversalInstallationView {
                 needsCodesign: false,
                 requiresApplicationPathArg: false,
                 requesterUID: requesterUID,
-                linuxForceUnmount: false
+                linuxForceUnmount: false,
+                windowsForceUnmount: false,
+                windowsMountedSourcePath: nil
             )
         }
 
@@ -452,7 +502,9 @@ extension UniversalInstallationView {
             needsCodesign: needsCodesign,
             requiresApplicationPathArg: isLegacySystem || isSierra,
             requesterUID: requesterUID,
-            linuxForceUnmount: false
+            linuxForceUnmount: false,
+            windowsForceUnmount: false,
+            windowsMountedSourcePath: nil
         )
     }
 
@@ -766,6 +818,9 @@ extension UniversalInstallationView {
             if let imageBytes = sizeInBytes(at: request.sourceAppPath) {
                 totals["linux_raw_copy"] = imageBytes
             }
+
+        case .windows:
+            break
         }
 
         return totals
@@ -918,6 +973,11 @@ extension UniversalInstallationView {
     }
 
     private func canonicalStageKeyForPresentation(_ stageKey: String) -> String {
+        let windowsCanonical = CreationProgressWindowsMapping.canonicalStageKey(stageKey)
+        if windowsCanonical != stageKey {
+            return windowsCanonical
+        }
+
         let linuxCanonical = CreationProgressLinuxMapping.canonicalStageKey(stageKey)
         if linuxCanonical != stageKey {
             return linuxCanonical

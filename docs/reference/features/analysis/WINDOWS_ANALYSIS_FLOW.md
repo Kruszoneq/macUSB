@@ -9,7 +9,7 @@ Windows detection is a fallback path in analysis between macOS and Linux.
 - Primary path remains macOS installer detection.
 - Windows path runs for `.iso` only when macOS installer metadata is not detected from mounted image.
 - If Windows is not recognized, flow continues to Linux fallback.
-- This iteration does not add Windows USB-creation workflow.
+- Supported Windows detection unlocks dedicated Windows USB-creation workflow.
 
 ## Trigger and Entry
 
@@ -122,7 +122,7 @@ Fallback icon behavior:
 Current workflow gating:
 
 - supported Windows detection is shown as successful detection state in analysis card,
-- proceed to installation remains blocked in this iteration (no Windows creation flow yet),
+- proceed to installation is enabled for supported Windows images,
 - unsupported Windows detection follows unsupported presentation path,
 - unsupported requirement info message is family-aware:
   - desktop uses `Windows 8 + EFI` requirement wording,
@@ -139,7 +139,6 @@ When Windows fallback runs, logs include:
 
 ## Non-goals
 
-- No Windows creation flow in this iteration.
 - No release-channel marketing version extraction (`22H2`, `25H2`).
 - No fallback based only on volume label when mounted metadata is unavailable.
 
