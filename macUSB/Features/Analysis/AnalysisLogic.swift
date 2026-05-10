@@ -46,6 +46,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var windowsArchitecture: WindowsArchitecture? = nil
     @Published var isWindowsARM: Bool = false
     @Published var windowsHasEFI: Bool = false
+    @Published var isWindowsWorkflowSupported: Bool = false
 
     @Published var availableDrives: [USBDrive] = []
     @Published var hasUnreadableExternalUSBMedia: Bool = false

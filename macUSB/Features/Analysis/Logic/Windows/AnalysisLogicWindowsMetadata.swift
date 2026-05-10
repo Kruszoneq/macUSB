@@ -51,8 +51,15 @@ extension AnalysisLogic {
         )
         let cversionFields = parseWindowsIniLikeFields(cversionText)
         let cversionMinClient = cversionFields["minclient"]
-        if cversionMinClient != nil {
+        let cversionMinServer = cversionFields["minserver"]
+        if cversionMinClient != nil || cversionMinServer != nil {
             evidence.append("sources/cversion.ini")
+        }
+        if let cversionMinClient {
+            evidence.append("cversion-minclient:\(cversionMinClient)")
+        }
+        if let cversionMinServer {
+            evidence.append("cversion-minserver:\(cversionMinServer)")
         }
 
         let hasEFIDirectory = exists("efi")
@@ -98,6 +105,8 @@ extension AnalysisLogic {
             hasInstallESD: hasInstallESD,
             hasInstallSWM: hasInstallSWM,
             cversionMinClient: cversionMinClient,
+            cversionMinServer: cversionMinServer,
+            sourceFileName: sourceURL.lastPathComponent,
             efiStatus: efiStatus,
             evidence: Array(Set(evidence)).sorted()
         )

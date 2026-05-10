@@ -1767,78 +1767,78 @@
         }
       }
     },
-    "• Wybrany plik musi zawierać instalator macOS, Mac OS X lub Linux" : {
+    "• Wybrany plik musi zawierać instalator macOS, Windows lub Linux" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Die ausgewählte Datei muss einen macOS-, Mac OS X- oder Linux-Installer enthalten"
+            "value" : "• Die ausgewählte Datei muss einen macOS-, Windows- oder Linux-Installer enthalten"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• The selected file must contain a macOS, Mac OS X, or Linux installer"
+            "value" : "• The selected file must contain a macOS, Windows, or Linux installer"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• El archivo seleccionado debe contener un instalador de macOS, Mac OS X o Linux"
+            "value" : "• El archivo seleccionado debe contener un instalador de macOS, Windows o Linux"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Le fichier sélectionné doit contenir un installateur macOS, Mac OS X ou Linux"
+            "value" : "• Le fichier sélectionné doit contenir un installateur macOS, Windows ou Linux"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Il file selezionato deve contenere l'installer di macOS, Mac OS X o Linux"
+            "value" : "• Il file selezionato deve contenere l'installer di macOS, Windows o Linux"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• 選択したファイルにはmacOS、Mac OS X、またはLinuxのインストーラが含まれている必要があります"
+            "value" : "• 選択したファイルにはmacOS、Windows、またはLinuxのインストーラが含まれている必要があります"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• O arquivo selecionado deve conter um instalador do macOS, Mac OS X ou Linux"
+            "value" : "• O arquivo selecionado deve conter um instalador do macOS, Windows ou Linux"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Выбранный файл должен содержать установщик macOS, Mac OS X или Linux"
+            "value" : "• Выбранный файл должен содержать установщик macOS, Windows или Linux"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Seçilen dosya macOS, Mac OS X veya Linux yükleyicisini içermelidir"
+            "value" : "• Seçilen dosya macOS, Windows veya Linux yükleyicisini içermelidir"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Вибраний файл має містити програму встановлення macOS, Mac OS X або Linux"
+            "value" : "• Вибраний файл має містити програму встановлення macOS, Windows або Linux"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Tệp được chọn phải chứa trình cài đặt macOS, Mac OS X hoặc Linux"
+            "value" : "• Tệp được chọn phải chứa trình cài đặt macOS, Windows hoặc Linux"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• 所选文件必须包含 macOS、Mac OS X 或 Linux 安装程序"
+            "value" : "• 所选文件必须包含 macOS、Windows 或 Linux 安装程序"
           }
         }
       }
@@ -3313,6 +3313,174 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "等待系统分析"
+          }
+        }
+      }
+    },
+    "analysis.windows.server.unsupported_edition.description" : {
+      "comment" : "Unsupported Windows Server edition message",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die erkannte Windows-Server-Edition wird nicht unterstützt. Unterstützt werden nur Windows-Server-2012- oder neuere Installationsmedien mit EFI-Dateien."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The detected Windows Server edition is not supported. Only Windows Server 2012 or later installers that include EFI files are supported."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La edición de Windows Server detectada no es compatible. Solo se admiten instaladores de Windows Server 2012 o posterior que incluyan archivos EFI."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’édition de Windows Server détectée n’est pas prise en charge. Seuls les programmes d’installation de Windows Server 2012 ou version ultérieure contenant des fichiers EFI sont pris en charge."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’edizione di Windows Server rilevata non è supportata. Sono supportati solo i programmi di installazione di Windows Server 2012 o versioni successive che includono file EFI."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検出された Windows Server エディションはサポートされていません。EFI ファイルを含む Windows Server 2012 以降のインストーラのみサポートされています。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wykryta edycja systemu Windows Server nie jest wspierana. Wspierane są tylko instalatory Windows Server 2012 lub nowsze, zawierające pliki EFI."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A edição do Windows Server detectada não é compatível. Somente instaladores do Windows Server 2012 ou posterior que incluam arquivos EFI são compatíveis."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обнаруженная редакция Windows Server не поддерживается. Поддерживаются только установщики Windows Server 2012 и новее, содержащие файлы EFI."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algılanan Windows Server sürümü desteklenmiyor. Yalnızca EFI dosyalarını içeren Windows Server 2012 veya üzeri yükleyiciler desteklenir."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Виявлена редакція Windows Server не підтримується. Підтримуються лише інсталятори Windows Server 2012 або новіших версій, що містять файли EFI."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phiên bản Windows Server được phát hiện không được hỗ trợ. Chỉ hỗ trợ bộ cài Windows Server 2012 trở lên có chứa tệp EFI."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检测到的 Windows Server 版本不受支持。仅支持包含 EFI 文件的 Windows Server 2012 及更高版本安装程序。"
+          }
+        }
+      }
+    },
+    "analysis.windows.unsupported_edition.description" : {
+      "comment" : "Unsupported Windows edition message",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die erkannte Windows-Edition wird nicht unterstützt. Unterstützt werden nur Windows-8- oder neuere Installationsmedien mit EFI-Dateien."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The detected Windows edition is not supported. Only Windows 8 or later installers that include EFI files are supported."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La edición de Windows detectada no es compatible. Solo se admiten instaladores de Windows 8 o posterior que incluyan archivos EFI."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’édition de Windows détectée n’est pas prise en charge. Seuls les programmes d’installation de Windows 8 ou version ultérieure contenant des fichiers EFI sont pris en charge."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’edizione di Windows rilevata non è supportata. Sono supportati solo i programmi di installazione di Windows 8 o versioni successive che includono file EFI."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検出された Windows エディションはサポートされていません。EFI ファイルを含む Windows 8 以降のインストーラのみサポートされています。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wykryta edycja systemu Windows nie jest wspierana. Wspierane są tylko instalatory Windows 8 lub nowsze, zawierające pliki EFI."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A edição do Windows detectada não é compatível. Somente instaladores do Windows 8 ou posterior que incluam arquivos EFI são compatíveis."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обнаруженная редакция Windows не поддерживается. Поддерживаются только установщики Windows 8 и новее, содержащие файлы EFI."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algılanan Windows sürümü desteklenmiyor. Yalnızca EFI dosyalarını içeren Windows 8 veya üzeri yükleyiciler desteklenir."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Виявлена редакція Windows не підтримується. Підтримуються лише інсталятори Windows 8 або новіших версій, що містять файли EFI."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phiên bản Windows được phát hiện không được hỗ trợ. Chỉ hỗ trợ bộ cài Windows 8 trở lên có chứa tệp EFI."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检测到的 Windows 版本不受支持。仅支持包含 EFI 文件的 Windows 8 及更高版本安装程序。"
           }
         }
       }
@@ -34731,89 +34899,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已清除外部驱动器访问权限"
-          }
-        }
-      }
-    },
-    "analysis.windows.unsupported_edition.description" : {
-      "comment" : "Unsupported Windows edition message",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die erkannte Windows-Edition wird nicht unterstützt. Unterstützt werden nur Windows-8- oder neuere Installationsmedien mit EFI-Dateien."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The detected Windows edition is not supported. Only Windows 8 or later installers that include EFI files are supported."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La edición de Windows detectada no es compatible. Solo se admiten instaladores de Windows 8 o posterior que incluyan archivos EFI."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "L’édition de Windows détectée n’est pas prise en charge. Seuls les programmes d’installation de Windows 8 ou version ultérieure contenant des fichiers EFI sont pris en charge."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "L’edizione di Windows rilevata non è supportata. Sono supportati solo i programmi di installazione di Windows 8 o versioni successive che includono file EFI."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "検出された Windows エディションはサポートされていません。EFI ファイルを含む Windows 8 以降のインストーラのみサポートされています。"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wykryta edycja systemu Windows nie jest wspierana. Wspierane są tylko instalatory Windows 8 lub nowsze, zawierające pliki EFI."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A edição do Windows detectada não é compatível. Somente instaladores do Windows 8 ou posterior que incluam arquivos EFI são compatíveis."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Обнаруженная редакция Windows не поддерживается. Поддерживаются только установщики Windows 8 и новее, содержащие файлы EFI."
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Algılanan Windows sürümü desteklenmiyor. Yalnızca EFI dosyalarını içeren Windows 8 veya üzeri yükleyiciler desteklenir."
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Виявлена редакція Windows не підтримується. Підтримуються лише інсталятори Windows 8 або новіших версій, що містять файли EFI."
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Phiên bản Windows được phát hiện không được hỗ trợ. Chỉ hỗ trợ bộ cài Windows 8 trở lên có chứa tệp EFI."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "检测到的 Windows 版本不受支持。仅支持包含 EFI 文件的 Windows 8 及更高版本安装程序。"
           }
         }
       }

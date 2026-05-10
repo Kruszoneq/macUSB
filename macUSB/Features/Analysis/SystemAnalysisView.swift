@@ -13,6 +13,7 @@ struct SystemAnalysisView: View {
     @State private var selectedDriveDisplayNameSnapshot: String? = nil
     @State private var selectedDriveForInstallationSnapshot: USBDrive? = nil
     @State private var linuxFlowContextSnapshot: LinuxInstallationFlowContext? = nil
+    @State private var windowsWorkflowSupportedSnapshot: Bool = false
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
     @State private var analysisWindowHandler: AnalysisWindowHandler?
@@ -164,15 +165,18 @@ struct SystemAnalysisView: View {
     }
     
     private var fileRequirementsBox: some View {
-        StatusCard(tone: .neutral, density: .compact) {
+        let isMacOSFlowDetected = (logic.sourceAppURL != nil) || logic.isPPC || logic.isMavericks
+        return StatusCard(tone: .neutral, density: .compact) {
             HStack(alignment: .top) {
                 Image(systemName: "info.circle.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Wymagania").font(.headline).foregroundColor(.primary)
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("• Wybrany plik musi zawierać instalator macOS, Mac OS X lub Linux")
+                        Text("• Wybrany plik musi zawierać instalator macOS, Windows lub Linux")
                         Text("• Dozwolone formaty plików to .dmg, .iso, .cdr oraz .app")
-                        Text("• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym")
+                        if isMacOSFlowDetected {
+                            Text("• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym")
+                        }
                         Text("• Brak instalatora? Użyj przycisku „Pobierz”")
                     }
                     .font(.subheadline).foregroundColor(.secondary)
@@ -256,8 +260,9 @@ struct SystemAnalysisView: View {
         let windowsRecognized = logic.isWindowsDetected && !logic.recognizedVersion.isEmpty
         let windowsSupportedDetected = windowsRecognized && logic.isSystemDetected && !logic.showUnsupportedMessage
         let isValid = (logic.sourceAppURL != nil) || logic.isPPC || logic.isLinuxDetected || windowsRecognized || windowsSupportedDetected
+        let isWindowsServerFamily = logic.windowsFamily?.isServerFamily == true
         let unsupportedText = logic.isWindowsDetected
-            ? String(localized: "analysis.windows.unsupported_edition.description")
+            ? String(localized: isWindowsServerFamily ? "analysis.windows.server.unsupported_edition.description" : "analysis.windows.unsupported_edition.description")
             : (logic.isUnsupportedSierra
             ? String(localized: "Ta wersja systemu macOS Sierra nie jest wspierana przez aplikację. Potrzebna jest nowsza wersja instalatora.", comment: "Unsupported Sierra (not 12.6.06) message")
             : String(localized: "Wybrany system nie jest wspierany przez aplikację", comment: "Generic unsupported system message"))
@@ -265,7 +270,14 @@ struct SystemAnalysisView: View {
         return VStack(alignment: .leading, spacing: MacUSBDesignTokens.bottomBarContentSpacing) {
             StatusCard(tone: isValid ? .success : .error) {
                 HStack(alignment: .center) {
-                    if isValid, let detectedIcon = logic.detectedSystemIcon {
+                    if isValid, logic.isWindowsDetected, let detectedIcon = logic.detectedSystemIcon {
+                        Image(nsImage: detectedIcon)
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 32, height: 32)
+                            .foregroundColor(.green)
+                    } else if isValid, let detectedIcon = logic.detectedSystemIcon {
                         Image(nsImage: detectedIcon)
                             .resizable()
                             .scaledToFit()
@@ -353,8 +365,9 @@ struct SystemAnalysisView: View {
     }
 
     private var navigationBackgroundLink: some View {
-        Group {
-            if let sourceURL = logic.sourceAppURL ?? logic.linuxInstallationFlowContext?.sourceImageURL {
+        let windowsSourceURL = windowsWorkflowSupportedSnapshot ? logic.selectedFileUrl : nil
+        return Group {
+            if let sourceURL = logic.sourceAppURL ?? logic.linuxInstallationFlowContext?.sourceImageURL ?? windowsSourceURL {
                 NavigationLink(
                     destination: UniversalInstallationView(
                         sourceAppURL: sourceURL,
@@ -364,6 +377,7 @@ struct SystemAnalysisView: View {
                         detectedSystemIcon: logic.detectedSystemIcon,
                         originalImageURL: logic.selectedFileUrl,
                         linuxFlowContext: linuxFlowContextSnapshot,
+                        isWindowsWorkflow: windowsWorkflowSupportedSnapshot,
                         needsCodesign: logic.needsCodesign,
                         isLegacySystem: logic.isLegacyDetected,
                         isRestoreLegacy: logic.isRestoreLegacy,
@@ -401,8 +415,8 @@ struct SystemAnalysisView: View {
     }
 
     private var canUseUSBSelection: Bool {
-        ((logic.sourceAppURL != nil) || logic.isPPC || logic.isLinuxDetected)
-            && (logic.isSystemDetected || logic.isPPC || logic.isMavericks || logic.isLinuxDetected)
+        ((logic.sourceAppURL != nil) || logic.isPPC || logic.isLinuxDetected || logic.isWindowsWorkflowSupported)
+            && (logic.isSystemDetected || logic.isPPC || logic.isMavericks || logic.isLinuxDetected || logic.isWindowsWorkflowSupported)
     }
 
     private var isAPFSSelected: Bool {
@@ -414,7 +428,7 @@ struct SystemAnalysisView: View {
             && logic.selectedDrive != nil
             && logic.capacityCheckFinished
             && logic.isCapacitySufficient
-            && (logic.isLinuxDetected || !isAPFSSelected)
+            && ((logic.isLinuxDetected || logic.isWindowsWorkflowSupported) || !isAPFSSelected)
     }
     
     var body: some View {
@@ -451,6 +465,7 @@ struct SystemAnalysisView: View {
                     selectedDriveDisplayNameSnapshot = logic.selectedDrive?.displayName
                     selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
                     linuxFlowContextSnapshot = logic.linuxInstallationFlowContext
+                    windowsWorkflowSupportedSnapshot = logic.isWindowsWorkflowSupported
                     isTabLocked = true
                     navigateToInstall = true
                 }) {
@@ -475,6 +490,7 @@ struct SystemAnalysisView: View {
             selectedDriveDisplayNameSnapshot = nil
             selectedDriveForInstallationSnapshot = nil
             linuxFlowContextSnapshot = nil
+            windowsWorkflowSupportedSnapshot = false
             MenuState.shared.skipAnalysisEnabled = false
             MenuState.shared.skipLinuxManualSelectionEnabled = false
         }
@@ -517,7 +533,7 @@ struct SystemAnalysisView: View {
             sectionIconFont: sectionIconFont,
             onOpenDiskUtility: openDiskUtility,
             isSelectionEnabled: canUseUSBSelection,
-            isLinuxWorkflow: logic.isLinuxDetected
+            isLinuxWorkflow: logic.isLinuxDetected || logic.isWindowsWorkflowSupported
         )
     }
 }

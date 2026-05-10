@@ -8,8 +8,20 @@ enum WindowsFamily: String {
     case eightOne
     case ten
     case eleven
+    case server2003
+    case server2008R2
+    case server2012
+    case server2012R2
+    case server2016
+    case server2019
+    case server2022
+    case server2025
 
-    var displayName: String {
+    var displayPrefix: String {
+        isServerFamily ? "Windows Server" : "Windows"
+    }
+
+    var displayVersionLabel: String {
         switch self {
         case .xp: return "XP"
         case .vista: return "Vista"
@@ -18,6 +30,23 @@ enum WindowsFamily: String {
         case .eightOne: return "8.1"
         case .ten: return "10"
         case .eleven: return "11"
+        case .server2003: return "2003"
+        case .server2008R2: return "2008 R2"
+        case .server2012: return "2012"
+        case .server2012R2: return "2012 R2"
+        case .server2016: return "2016"
+        case .server2019: return "2019"
+        case .server2022: return "2022"
+        case .server2025: return "2025"
+        }
+    }
+
+    var isServerFamily: Bool {
+        switch self {
+        case .server2003, .server2008R2, .server2012, .server2012R2, .server2016, .server2019, .server2022, .server2025:
+            return true
+        case .xp, .vista, .seven, .eight, .eightOne, .ten, .eleven:
+            return false
         }
     }
 
@@ -25,7 +54,9 @@ enum WindowsFamily: String {
         switch self {
         case .eight, .eightOne, .ten, .eleven:
             return true
-        case .xp, .vista, .seven:
+        case .server2012, .server2012R2, .server2016, .server2019, .server2022, .server2025:
+            return true
+        case .xp, .vista, .seven, .server2003, .server2008R2:
             return false
         }
     }
@@ -71,6 +102,8 @@ struct WindowsImageMetadata {
     let hasInstallESD: Bool
     let hasInstallSWM: Bool
     let cversionMinClient: String?
+    let cversionMinServer: String?
+    let sourceFileName: String
     let efiStatus: WindowsEFIStatus
     let evidence: [String]
 

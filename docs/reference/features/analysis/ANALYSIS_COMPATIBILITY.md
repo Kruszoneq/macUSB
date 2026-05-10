@@ -25,7 +25,9 @@ For Windows fallback:
 - fallback runs only when macOS installer metadata is not detected from mounted image,
 - Windows detection uses mounted-image metadata only (no weak volume-label fallback),
 - recognized Windows result may be marked unsupported by support gate,
-- support gate for current app workflow is: **Windows family >= 8 AND EFI markers present**,
+- support gate for current app workflow is:
+  - desktop: **Windows family >= 8 AND EFI markers present**,
+  - server: **Windows Server family >= 2012 AND EFI markers present**,
 - even for supported Windows detection, current workflow stage keeps proceed-to-install blocked.
 
 For Linux fallback:
@@ -57,11 +59,17 @@ Linux fallback routing includes:
 
 Windows fallback routing includes:
 
-- recognized Windows families: `XP`, `Vista`, `7`, `8`, `8.1`, `10`, `11`,
+- recognized Windows families:
+  - desktop: `XP`, `Vista`, `7`, `8`, `8.1`, `10`, `11`,
+  - server: `Server 2003`, `Server 2008 R2`, `Server 2012`, `Server 2012 R2`, `Server 2016`, `Server 2019`, `Server 2022`, `Server 2025`,
 - optional Service Pack extraction when deterministically available (for legacy families),
 - architecture normalization to `x86` / `ARM`,
 - unsupported result for `XP` / `Vista` / `7` regardless of EFI artifacts,
+- unsupported result for `Server 2003` / `Server 2008 R2` regardless of EFI artifacts,
 - unsupported result for any family missing required EFI markers.
+- unsupported requirement info message is family-aware:
+  - desktop variant: `Windows 8 + EFI`,
+  - server variant: `Windows Server 2012 + EFI`.
 
 ## Special Blocking Rule
 

@@ -12,6 +12,7 @@ struct UniversalInstallationView: View {
     let detectedSystemIcon: NSImage?
     let originalImageURL: URL?
     let linuxFlowContext: LinuxInstallationFlowContext?
+    let isWindowsWorkflow: Bool
     
     // Flagi
     let needsCodesign: Bool
@@ -85,7 +86,7 @@ struct UniversalInstallationView: View {
         !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !isCancelling
     }
     private var selectedDriveSummaryName: String? {
-        if isLinuxWorkflow, let drive = targetDrive {
+        if (isLinuxWorkflow || isWindowsWorkflow), let drive = targetDrive {
             let speedText = drive.usbSpeed?.rawValue ?? "USB"
             return "\(drive.device) - \(drive.size) - \(speedText)"
         }

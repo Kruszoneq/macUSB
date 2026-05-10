@@ -10,7 +10,7 @@ extension AnalysisLogic {
             return nil
         }
 
-        self.log("Windows detection: display=\(result.displayName) family=\(result.family.displayName) supported=\(result.isSupported ? "TAK" : "NIE") arch=\(result.arch.rawValue)")
+        self.log("Windows detection: display=\(result.displayName) family=\(result.family.rawValue) supported=\(result.isSupported ? "TAK" : "NIE") arch=\(result.arch.rawValue)")
         self.log("Windows detection evidence: \(result.evidence.joined(separator: ", "))")
         return result
     }

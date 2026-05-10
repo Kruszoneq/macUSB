@@ -46,7 +46,9 @@ No recursive unpacking and no weak volume-label-only recognition path.
 
 For this app iteration, a detected Windows image is treated as workflow-supported only when both are true:
 
-- detected family is one of: `8`, `8.1`, `10`, `11`,
+- detected family is one of:
+  - desktop: `8`, `8.1`, `10`, `11`,
+  - server: `Server 2012`, `Server 2012 R2`, `Server 2016`, `Server 2019`, `Server 2022`, `Server 2025`,
 - required EFI markers are present:
   - `efi` directory,
   - and at least one EFI boot marker:
@@ -58,13 +60,15 @@ For this app iteration, a detected Windows image is treated as workflow-supporte
 Unsupported policy:
 
 - `XP`, `Vista`, `7` are always unsupported even if EFI artifacts exist.
-- `8+` without required EFI markers is unsupported.
+- `Server 2003` and `Server 2008 R2` are always unsupported even if EFI artifacts exist.
+- desktop `8+` without required EFI markers is unsupported.
+- server `2012+` without required EFI markers is unsupported.
 
 ## Classification Rules
 
 Detection result produces:
 
-- family (`XP`, `Vista`, `7`, `8`, `8.1`, `10`, `11`),
+- family (`XP`, `Vista`, `7`, `8`, `8.1`, `10`, `11`, `Server 2003`, `Server 2008 R2`, `Server 2012`, `Server 2012 R2`, `Server 2016`, `Server 2019`, `Server 2022`, `Server 2025`),
 - optional Service Pack string (`SP1`, `SP2`, `SP3`) when deterministic,
 - normalized architecture (`x86` / `ARM` / `unknown`),
 - support decision and reason.
@@ -78,11 +82,21 @@ Family mapping (current implementation contract):
 - 8: `win8*` branch hints,
 - 10: `vb_release` branch hint,
 - 11: `ge_release` branch hint.
+- Server 2003: `WIN51*` + `I386` with server signal.
+- Server 2008 R2: `win7sp1_*` with server signal.
+- Server 2012: `win8*` with server signal.
+- Server 2012 R2: `winblue*` with server signal.
+- Server 2016: `rs1_release` with server signal.
+- Server 2019: `rs5_release` with server signal.
+- Server 2022: `fe_release` with server signal.
+- Server 2025: `ge_release` with server signal.
 
 Service Pack extraction:
 
 - XP: from `WIN51*.SPx`,
 - Vista/7: from branch SP hint (`sp1` / `sp2` / `sp3`),
+- Server 2003: from `WIN51*.SPx`,
+- Server 2008 R2: from branch SP hint (`sp1`),
 - for unresolved or conflicting legacy signals: no Service Pack suffix.
 
 Architecture normalization:
@@ -94,7 +108,8 @@ Architecture normalization:
 
 Display format:
 
-- `Windows <Family>`
+- desktop: `Windows <Family>`
+- server: `Windows Server <Version>`
 - append ` - Service Pack <nr>` only when Service Pack is deterministic,
 - append ` (ARM)` only for ARM result.
 
@@ -108,7 +123,10 @@ Current workflow gating:
 
 - supported Windows detection is shown as successful detection state in analysis card,
 - proceed to installation remains blocked in this iteration (no Windows creation flow yet),
-- unsupported Windows detection follows unsupported presentation path (same generic unsupported message path).
+- unsupported Windows detection follows unsupported presentation path,
+- unsupported requirement info message is family-aware:
+  - desktop uses `Windows 8 + EFI` requirement wording,
+  - server uses `Windows Server 2012 + EFI` requirement wording.
 
 ## Logging Contract
 

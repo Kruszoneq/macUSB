@@ -18,6 +18,19 @@ extension UniversalInstallationView {
             startLinuxCreationProcessWithHelper()
             return
         }
+        if isWindowsWorkflow {
+            startWindowsCreationProcessWithHelper()
+            return
+        }
+        startCreationProcessWithHelper()
+    }
+
+    func startWindowsCreationProcessWithHelper() {
+        log(
+            "WindowsInstallFlow: start workflow (source=\(sourceAppURL.path), target=\(targetDrive?.device ?? "brak"))",
+            category: "WindowsInstallFlow"
+        )
+        // Dedicated Windows workflow will be implemented separately.
         startCreationProcessWithHelper()
     }
 
