@@ -8,7 +8,8 @@ extension UniversalInstallationView {
         guard !result.success else { return false }
         guard result.failedStage == "windows_prepare_target" else { return false }
         guard let message = result.errorMessage?.lowercased() else { return false }
-        return message.contains("windows_unmount_busy_prompt")
+        return message.contains("windows_unmount_force_prompt")
+            || message.contains("windows_unmount_busy_prompt")
     }
 
     func makeWindowsForceUnmountRequest(from request: HelperWorkflowRequestPayload) -> HelperWorkflowRequestPayload {

@@ -22,19 +22,11 @@ extension HelperWorkflowExecutor {
         }
         let sourceUEFIStatus = evaluateWindowsUEFIStatus(in: sourceURL)
 
-        guard sourceUEFIStatus.hasBootEntry else {
+        guard sourceUEFIStatus.hasCompatibleEFI else {
             throw HelperExecutionError.failed(
                 stage: stage.key,
                 exitCode: -1,
-                description: "W obrazie źródłowym nie znaleziono wymaganych plików UEFI (EFI/BOOT/BOOTX64.EFI lub EFI/BOOT/BOOTAA64.EFI)."
-            )
-        }
-
-        guard sourceUEFIStatus.hasMicrosoftBootDirectory else {
-            throw HelperExecutionError.failed(
-                stage: stage.key,
-                exitCode: -1,
-                description: "W obrazie źródłowym nie znaleziono katalogu EFI/Microsoft/Boot."
+                description: "W obrazie źródłowym nie znaleziono wymaganych markerów UEFI (katalog EFI oraz co najmniej jeden plik: bootmgr.efi, EFI/Microsoft/Boot/cdboot.efi, EFI/BOOT/BOOTX64.EFI, EFI/BOOT/BOOTAA64.EFI)."
             )
         }
 
@@ -88,24 +80,40 @@ extension HelperWorkflowExecutor {
     }
 
     func prepareWindowsSourceMountPath(stage: WorkflowStage) throws -> String {
-        if let mounted = request.windowsMountedSourcePath,
-           !mounted.isEmpty,
-           fileManager.fileExists(atPath: mounted),
-           (
-                fileManager.fileExists(atPath: URL(fileURLWithPath: mounted).appendingPathComponent("sources").path)
-                || fileManager.fileExists(atPath: URL(fileURLWithPath: mounted).appendingPathComponent("Sources").path)
-           ) {
+        let requestedMountPath = request.windowsMountedSourcePath?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if let resolvedMountPath = resolveMountedPathForSourceImage(sourceImagePath: request.sourceAppPath),
+           isWindowsSourceMountReusable(resolvedMountPath) {
             windowsMountedByHelper = false
             windowsMountedImageDevice = nil
+            let reusedFromRequest = requestedMountPath.map { normalizedPath($0) == normalizedPath(resolvedMountPath) } ?? false
+            let reuseLog: String
+            if reusedFromRequest {
+                reuseLog = "Windows source mount reused from analysis: \(resolvedMountPath)"
+            } else {
+                reuseLog = "Windows source mount reused after source-image verification (requestMount=\(requestedMountPath ?? "brak"), verifiedMount=\(resolvedMountPath))."
+            }
             emitProgress(
                 stageKey: stage.key,
                 titleKey: stage.titleKey,
                 percent: latestPercent,
                 statusKey: stage.statusKey,
-                logLine: "Windows source mount reused from analysis: \(mounted)",
+                logLine: reuseLog,
                 shouldAdvancePercent: false
             )
-            return mounted
+            return resolvedMountPath
+        }
+
+        if let requestedMountPath, !requestedMountPath.isEmpty {
+            emitProgress(
+                stageKey: stage.key,
+                titleKey: stage.titleKey,
+                percent: latestPercent,
+                statusKey: stage.statusKey,
+                logLine: "Windows source mount from analysis ignored: does not match selected ISO source (\(requestedMountPath)).",
+                shouldAdvancePercent: false
+            )
         }
 
         let attachResult = try attachWindowsSourceISO(stage: stage)
@@ -179,6 +187,63 @@ extension HelperWorkflowExecutor {
             exitCode: -1,
             description: "Nie udało się ustalić punktu montowania ISO Windows."
         )
+    }
+
+    private func resolveMountedPathForSourceImage(sourceImagePath: String) -> String? {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
+        process.arguments = ["info", "-plist"]
+        process.standardOutput = Pipe()
+        process.standardError = Pipe()
+
+        do {
+            try process.run()
+        } catch {
+            return nil
+        }
+
+        process.waitUntilExit()
+        guard process.terminationStatus == 0 else {
+            return nil
+        }
+
+        let outputData = (process.standardOutput as? Pipe)?.fileHandleForReading.readDataToEndOfFile() ?? Data()
+        guard let plist = try? PropertyListSerialization.propertyList(from: outputData, options: [], format: nil) as? [String: Any],
+              let images = plist["images"] as? [[String: Any]] else {
+            return nil
+        }
+
+        let normalizedSourcePath = normalizedPath(sourceImagePath)
+        for image in images {
+            guard let imagePath = image["image-path"] as? String,
+                  normalizedPath(imagePath) == normalizedSourcePath else {
+                continue
+            }
+
+            guard let entities = image["system-entities"] as? [[String: Any]],
+                  let mountPoint = entities.compactMap({ $0["mount-point"] as? String }).first else {
+                continue
+            }
+
+            return mountPoint
+        }
+
+        return nil
+    }
+
+    private func isWindowsSourceMountReusable(_ mountPath: String) -> Bool {
+        guard fileManager.fileExists(atPath: mountPath) else { return false }
+        let mountURL = URL(fileURLWithPath: mountPath)
+        let lowerSources = mountURL.appendingPathComponent("sources").path
+        let upperSources = mountURL.appendingPathComponent("Sources").path
+        return fileManager.fileExists(atPath: lowerSources) || fileManager.fileExists(atPath: upperSources)
+    }
+
+    private func normalizedPath(_ path: String) -> String {
+        URL(fileURLWithPath: path)
+            .resolvingSymlinksInPath()
+            .standardizedFileURL
+            .path
     }
 
     private func resolveWindowsSourcesDirectory(in mountURL: URL) -> URL {

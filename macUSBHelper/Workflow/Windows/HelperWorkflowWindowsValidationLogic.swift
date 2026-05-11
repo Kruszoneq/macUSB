@@ -1,8 +1,12 @@
 import Foundation
 
 struct WindowsUEFIStatus {
-    let hasBootEntry: Bool
-    let hasMicrosoftBootDirectory: Bool
+    let hasEFIDirectory: Bool
+    let hasAcceptedBootMarker: Bool
+
+    var hasCompatibleEFI: Bool {
+        hasEFIDirectory && hasAcceptedBootMarker
+    }
 }
 
 extension HelperWorkflowExecutor {
@@ -29,19 +33,11 @@ extension HelperWorkflowExecutor {
         }
 
         let uefiStatus = evaluateWindowsUEFIStatus(in: targetURL)
-        guard uefiStatus.hasBootEntry else {
+        guard uefiStatus.hasCompatibleEFI else {
             throw HelperExecutionError.failed(
                 stage: stage.key,
                 exitCode: -1,
-                description: "Na nośniku USB nie znaleziono wymaganych plików UEFI (EFI/BOOT/BOOTX64.EFI lub EFI/BOOT/BOOTAA64.EFI)."
-            )
-        }
-
-        guard uefiStatus.hasMicrosoftBootDirectory else {
-            throw HelperExecutionError.failed(
-                stage: stage.key,
-                exitCode: -1,
-                description: "Na nośniku USB nie znaleziono katalogu EFI/Microsoft/Boot."
+                description: "Na nośniku USB nie znaleziono wymaganych markerów UEFI (katalog EFI oraz co najmniej jeden plik: bootmgr.efi, EFI/Microsoft/Boot/cdboot.efi, EFI/BOOT/BOOTX64.EFI, EFI/BOOT/BOOTAA64.EFI)."
             )
         }
 
@@ -88,7 +84,16 @@ extension HelperWorkflowExecutor {
     }
 
     func evaluateWindowsUEFIStatus(in rootURL: URL) -> WindowsUEFIStatus {
+        let hasEFIDirectory = fileManager.fileExists(atPath: rootURL.appendingPathComponent("EFI").path)
+            || fileManager.fileExists(atPath: rootURL.appendingPathComponent("efi").path)
+
         let bootCandidates = [
+            "bootmgr.efi",
+            "BOOTMGR.EFI",
+            "EFI/Microsoft/Boot/cdboot.efi",
+            "efi/microsoft/boot/cdboot.efi",
+            "EFI/Microsoft/Boot/CDBOOT.EFI",
+            "efi/microsoft/boot/CDBOOT.EFI",
             "EFI/BOOT/BOOTX64.EFI",
             "EFI/BOOT/BOOTAA64.EFI",
             "efi/boot/bootx64.efi",
@@ -99,23 +104,19 @@ extension HelperWorkflowExecutor {
             "EFI/BOOT/bootaa64.efi"
         ]
 
-        let hasBootEntry = bootCandidates.contains { candidate in
+        let hasAcceptedBootMarker = bootCandidates.contains { candidate in
             fileManager.fileExists(atPath: rootURL.appendingPathComponent(candidate).path)
         }
 
-        let hasMicrosoftBootDirectory = fileManager.fileExists(atPath: rootURL.appendingPathComponent("EFI/Microsoft/Boot").path)
-            || fileManager.fileExists(atPath: rootURL.appendingPathComponent("efi/microsoft/boot").path)
-
         return WindowsUEFIStatus(
-            hasBootEntry: hasBootEntry,
-            hasMicrosoftBootDirectory: hasMicrosoftBootDirectory
+            hasEFIDirectory: hasEFIDirectory,
+            hasAcceptedBootMarker: hasAcceptedBootMarker
         )
     }
 
     func detachWindowsMountedSourceIfNeeded() {
         let explicitDevice = windowsMountedImageDevice?.trimmingCharacters(in: .whitespacesAndNewlines)
         let explicitMountPath = windowsActiveSourceMountPath?.trimmingCharacters(in: .whitespacesAndNewlines)
-        let requestMountPath = request.windowsMountedSourcePath?.trimmingCharacters(in: .whitespacesAndNewlines)
 
         var detachTargets: [String] = []
         if let explicitDevice, !explicitDevice.isEmpty {
@@ -123,9 +124,6 @@ extension HelperWorkflowExecutor {
         }
         if let explicitMountPath, !explicitMountPath.isEmpty {
             detachTargets.append(explicitMountPath)
-        }
-        if let requestMountPath, !requestMountPath.isEmpty {
-            detachTargets.append(requestMountPath)
         }
 
         let uniqueTargets = Array(Set(detachTargets))

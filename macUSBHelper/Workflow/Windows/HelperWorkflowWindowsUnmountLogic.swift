@@ -1,13 +1,13 @@
 import Foundation
 
 extension HelperWorkflowExecutor {
-    private static let windowsUnmountBusyPromptMarker = "windows_unmount_busy_prompt"
+    private static let windowsUnmountForcePromptMarker = "windows_unmount_force_prompt"
 
     func shouldDeferCleanupForWindowsUnmountPrompt(failedStage: String, description: String) -> Bool {
         guard request.workflowKind == .windows else { return false }
         guard failedStage == "windows_prepare_target" else { return false }
         guard !request.windowsForceUnmount else { return false }
-        return description.lowercased().contains(Self.windowsUnmountBusyPromptMarker)
+        return description.lowercased().contains(Self.windowsUnmountForcePromptMarker)
     }
 
     func runWindowsPrepareTargetStage(_ stage: WorkflowStage) throws {
@@ -32,7 +32,7 @@ extension HelperWorkflowExecutor {
             let retryCount = 3
             let totalAttempts = retryCount + 1
 
-            var unmounted = false
+            var lastFailure: (exitCode: Int32, lastLine: String?, isBusyFailure: Bool)?
             for attempt in 1...totalAttempts {
                 let unmountStatus = try runWindowsUnmountCommand(
                     stage: stage,
@@ -40,41 +40,39 @@ extension HelperWorkflowExecutor {
                 )
 
                 if unmountStatus.success {
-                    unmounted = true
                     break
                 }
 
-                if unmountStatus.isBusyFailure, attempt <= retryCount {
+                lastFailure = (
+                    exitCode: unmountStatus.exitCode,
+                    lastLine: unmountStatus.lastLine,
+                    isBusyFailure: unmountStatus.isBusyFailure
+                )
+
+                if attempt <= retryCount {
                     emitProgress(
                         stageKey: stage.key,
                         titleKey: stage.titleKey,
                         percent: latestPercent,
                         statusKey: stage.statusKey,
-                        logLine: "Windows unmount retry \(attempt)/\(retryCount): nośnik zajęty, ponawiam za \(retryDelaySeconds)s.",
+                        logLine: "Windows unmount retry \(attempt)/\(retryCount): odmontowanie nieudane (kod \(unmountStatus.exitCode)), ponawiam za \(retryDelaySeconds)s.",
                         shouldAdvancePercent: false
                     )
                     try waitWindowsUnmountRetryDelay(seconds: retryDelaySeconds)
                     continue
                 }
-
-                if unmountStatus.isBusyFailure {
-                    let description = "Nie udało się odmontować nośnika, ponieważ jest używany przez inny proces. \(Self.windowsUnmountBusyPromptMarker)"
-                    throw HelperExecutionError.failed(stage: stage.key, exitCode: unmountStatus.exitCode, description: description)
-                }
-
-                var description = "Nie udało się odmontować nośnika (kod \(unmountStatus.exitCode))."
-                if let line = unmountStatus.lastLine {
-                    description += " Ostatni komunikat: \(line)"
-                }
-                throw HelperExecutionError.failed(stage: stage.key, exitCode: unmountStatus.exitCode, description: description)
             }
 
-            guard unmounted else {
-                throw HelperExecutionError.failed(
-                    stage: stage.key,
-                    exitCode: -1,
-                    description: "Nie udało się odmontować nośnika USB."
-                )
+            if let failure = lastFailure {
+                var description = "Nie udało się odmontować nośnika przed formatowaniem. \(Self.windowsUnmountForcePromptMarker)"
+                description += " Kod: \(failure.exitCode)."
+                if failure.isBusyFailure {
+                    description += " Wykryto sygnał zajętego urządzenia."
+                }
+                if let line = failure.lastLine {
+                    description += " Ostatni komunikat: \(line)"
+                }
+                throw HelperExecutionError.failed(stage: stage.key, exitCode: failure.exitCode, description: description)
             }
         }
 
