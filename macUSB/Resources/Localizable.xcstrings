@@ -38993,6 +38993,252 @@
           }
         }
       }
+    },
+    "finish.nextsteps.windows.pc.point1": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schließe das vorbereitete USB-Laufwerk an deinen PC an"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect the prepared USB drive to your PC"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conecta la unidad USB preparada a tu PC"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connectez la clé USB préparée à votre PC"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collega l'unità USB preparata al tuo PC"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "準備したUSBドライブをPCに接続します"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Podłącz przygotowany nośnik USB do komputera PC"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conecte a unidade USB preparada ao seu PC"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подключите подготовленный USB-накопитель к вашему ПК"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hazırlanan USB sürücüsünü bilgisayarınıza bağlayın"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Підключіть підготовлений USB-накопичувач до вашого ПК"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kết nối ổ USB đã chuẩn bị vào PC của bạn"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将准备好的 USB 驱动器连接到你的 PC"
+          }
+        }
+      }
+    },
+    "finish.nextsteps.windows.pc.point2": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starte deinen PC und öffne das Boot-Menü"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start your PC and open the Boot Menu"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inicia tu PC y abre el menú de arranque"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Démarrez votre PC et ouvrez le menu de démarrage"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avvia il PC e apri il menu di avvio"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PCを起動してブートメニューを開きます"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uruchom komputer PC i otwórz Boot Menu"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inicie o PC e abra o Menu de Boot"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запустите ПК и откройте меню загрузки"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilgisayarınızı başlatın ve Önyükleme Menüsünü açın"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запустіть ПК і відкрийте меню завантаження"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khởi động PC và mở Boot Menu"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "启动你的 PC 并打开启动菜单"
+          }
+        }
+      }
+    },
+    "finish.nextsteps.windows.pc.point3": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle das USB-Laufwerk aus der Liste der Startgeräte und starte das Windows-Setup"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select the USB drive from the boot device list and start Windows Setup"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selecciona la unidad USB de la lista de dispositivos de arranque e inicia la instalación de Windows"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionnez la clé USB dans la liste des périphériques de démarrage et lancez l'installation de Windows"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleziona l'unità USB dall'elenco dei dispositivi di avvio e avvia l'installazione di Windows"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "起動デバイスの一覧からUSBドライブを選択し、Windowsセットアップを開始します"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wybierz nośnik USB z listy urządzeń rozruchowych i rozpocznij instalację Windows"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selecione a unidade USB na lista de dispositivos de inicialização e inicie a Instalação do Windows"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите USB-накопитель в списке загрузочных устройств и начните установку Windows"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Önyükleme aygıtları listesinden USB sürücüsünü seçin ve Windows kurulumunu başlatın"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Виберіть USB-накопичувач зі списку пристроїв завантаження та розпочніть інсталяцію Windows"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chọn ổ USB từ danh sách thiết bị khởi động và bắt đầu cài đặt Windows"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从启动设备列表中选择 USB 驱动器，然后开始安装 Windows"
+          }
+        }
+      }
     }
   },
   "version": "1.1"
