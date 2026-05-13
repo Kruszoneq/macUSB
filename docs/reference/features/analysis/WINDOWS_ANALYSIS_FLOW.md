@@ -127,6 +127,8 @@ Current workflow gating:
 - unsupported requirement info message is family-aware:
   - desktop uses `Windows 8 + EFI` requirement wording,
   - server uses `Windows Server 2012 + EFI` requirement wording.
+- analysis also computes Windows toolchain probe (`brew`, `wimlib-imagex`) for installation-summary pre-start gating.
+- when Windows summary expects `install.wim` split and `wimlib-imagex` is missing, start is blocked in summary until probe refresh confirms `wimlib-imagex` presence.
 
 Required USB capacity is computed from selected Windows source file size:
 

@@ -69,6 +69,8 @@ struct UniversalInstallationView: View {
     @State var helperOperationFailed: Bool = false
     @State var workflowResultDetailMessage: String? = nil
     @State var workflowResultErrorPresentation: LinuxWorkflowErrorPresentation? = nil
+    @State var windowsPrerequisiteToolchainPresence: WindowsToolchainPresence? = WindowsToolchainProbeService.shared.detectPresence()
+    @State var windowsPrerequisiteProbeInProgress: Bool = false
     
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
@@ -117,9 +119,16 @@ struct UniversalInstallationView: View {
             Capsule()
                 .fill(Color.secondary.opacity(0.20))
                 .frame(height: 1)
-            Text("Przebieg tworzenia")
-                .font(.caption)
-                .foregroundColor(.secondary)
+            if windowsPrerequisiteShouldBlockStart {
+                Text(String(localized: "installation.summary.windows.wimlib.divider.warning"))
+                    .font(.caption)
+                    .foregroundColor(.orange)
+                    .fontWeight(.semibold)
+            } else {
+                Text("Przebieg tworzenia")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
             Capsule()
                 .fill(Color.secondary.opacity(0.20))
                 .frame(height: 1)
@@ -261,48 +270,57 @@ struct UniversalInstallationView: View {
 
                     processSectionDivider
 
-                    StatusCard(tone: .neutral, density: .compact) {
-                        HStack(alignment: .top) {
-                            Image(systemName: "gearshape.2").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Przebieg procesu").font(.headline)
-                                VStack(alignment: .leading, spacing: 4) {
-                                    if isLinuxWorkflow {
-                                        Text("• Pliki obrazu Linux zostaną przygotowane")
-                                        Text("• Wybrany nośnik USB zostanie odmontowany")
-                                        Text("• Obraz Linux zostanie zapisany na nośniku USB")
-                                    } else if isWindowsWorkflow {
-                                        Text("installation.summary.process.windows.prepare_source")
-                                        Text("installation.summary.process.windows.prepare_target")
-                                        Text("installation.summary.process.windows.create_and_verify")
-                                    } else if isRestoreLegacy {
-                                        Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
-                                        Text("• Nośnik USB zostanie sformatowany")
-                                        Text("• Obraz systemu zostanie przywrócony")
-                                    } else if isPPC {
-                                        Text("• Nośnik USB zostanie odpowiednio sformatowany")
-                                        Text("• Obraz instalacyjny zostanie przywrócony")
-                                    } else {
-                                        Text("• Pliki systemowe zostaną przygotowane")
-                                        Text("• Nośnik USB zostanie sformatowany")
-                                        Text("• Pliki instalacyjne zostaną skopiowane")
-                                        if isCatalina {
-                                            Text("• Struktura instalatora zostanie sfinalizowana")
+                    if windowsPrerequisiteShouldBlockStart {
+                        CreatorWindowsPrerequisiteCardView(
+                            hasHomebrew: windowsPrerequisiteHasHomebrew,
+                            isRefreshing: windowsPrerequisiteProbeInProgress,
+                            onOpenHomebrewWebsite: openHomebrewWebsite,
+                            onRefreshProbe: refreshWindowsPrerequisiteToolchainPresence
+                        )
+                    } else {
+                        StatusCard(tone: .neutral, density: .compact) {
+                            HStack(alignment: .top) {
+                                Image(systemName: "gearshape.2").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Przebieg procesu").font(.headline)
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        if isLinuxWorkflow {
+                                            Text("• Pliki obrazu Linux zostaną przygotowane")
+                                            Text("• Wybrany nośnik USB zostanie odmontowany")
+                                            Text("• Obraz Linux zostanie zapisany na nośniku USB")
+                                        } else if isWindowsWorkflow {
+                                            Text("installation.summary.process.windows.prepare_source")
+                                            Text("installation.summary.process.windows.prepare_target")
+                                            Text("installation.summary.process.windows.create_and_verify")
+                                        } else if isRestoreLegacy {
+                                            Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
+                                            Text("• Nośnik USB zostanie sformatowany")
+                                            Text("• Obraz systemu zostanie przywrócony")
+                                        } else if isPPC {
+                                            Text("• Nośnik USB zostanie odpowiednio sformatowany")
+                                            Text("• Obraz instalacyjny zostanie przywrócony")
+                                        } else {
+                                            Text("• Pliki systemowe zostaną przygotowane")
+                                            Text("• Nośnik USB zostanie sformatowany")
+                                            Text("• Pliki instalacyjne zostaną skopiowane")
+                                            if isCatalina {
+                                                Text("• Struktura instalatora zostanie sfinalizowana")
+                                            }
                                         }
+                                        Text("installation.summary.process.cleanup_temp")
                                     }
-                                    Text("installation.summary.process.cleanup_temp")
+                                    .font(.subheadline).foregroundColor(.secondary)
                                 }
-                                .font(.subheadline).foregroundColor(.secondary)
+                                Spacer()
                             }
-                            Spacer()
                         }
-                    }
 
-                    StatusCard(tone: .neutral, density: .compact) {
-                        HStack(alignment: .center, spacing: 15) {
-                            Image(systemName: "clock").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                            Text("Cały proces może potrwać kilka minut.").font(.subheadline).foregroundColor(.secondary)
-                            Spacer()
+                        StatusCard(tone: .neutral, density: .compact) {
+                            HStack(alignment: .center, spacing: 15) {
+                                Image(systemName: "clock").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                Text("Cały proces może potrwać kilka minut.").font(.subheadline).foregroundColor(.secondary)
+                                Spacer()
+                            }
                         }
                     }
 
@@ -343,7 +361,8 @@ struct UniversalInstallationView: View {
                             .frame(maxWidth: .infinity)
                             .padding(8)
                         }
-                        .macUSBPrimaryButtonStyle()
+                        .macUSBPrimaryButtonStyle(isEnabled: !windowsPrerequisiteShouldBlockStart)
+                        .disabled(windowsPrerequisiteShouldBlockStart)
 
                         Button(action: returnToAnalysisViewPreservingSelection) {
                             HStack {
@@ -537,6 +556,9 @@ struct UniversalInstallationView: View {
             AppLogging.separator()
             AppLogging.separator()
             refreshRequiredPermissionsState()
+            if isWindowsWorkflow {
+                refreshWindowsPrerequisiteToolchainPresence()
+            }
             if !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !navigateToCreationProgress {
                 startUSBMonitoring()
             }
