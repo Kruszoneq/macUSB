@@ -99,6 +99,13 @@ extension AnalysisLogic {
             return
         }
 
+        InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
+            path: sourceURL.path,
+            family: .linux,
+            mountHint: mountedDMGPath,
+            reason: "linux_manual_selection"
+        )
+
         self.log("Ręcznie wybrano tryb Linux (pominięcie analizy pliku).")
 
         withAnimation {
@@ -133,43 +140,17 @@ extension AnalysisLogic {
             self.capacityCheckFinished = false
         }
 
-        if let values = try? sourceURL.resourceValues(forKeys: [.fileSizeKey]),
-           let fileSize = values.fileSize {
-            let fileSizeBytes = Int64(fileSize)
-            let requiredGB = linuxRequiredUSBCapacityGB(fromFileSizeBytes: fileSizeBytes)
-            self.requiredUSBCapacityGB = requiredGB
-            self.log("Linux manual source size: \(fileSizeBytes) bytes")
-            self.log("Linux manual required USB threshold: \(requiredGB) GB")
-        } else {
-            self.requiredUSBCapacityGB = nil
-            self.logError("Nie udało się odczytać rozmiaru pliku dla ręcznego trybu Linux. Minimalna pojemność USB pozostaje nierozstrzygnięta (-- GB).")
+        let capacityResolution = resolveRequiredUSBCapacityForImageSource(sourceURL)
+        self.requiredUSBCapacityGB = capacityResolution.requiredCapacityGB
+        if let fileSizeBytes = capacityResolution.sourceFileSizeBytes,
+           let fileSizeSource = capacityResolution.sourceFileSizeSource {
+            self.log("Linux manual source size: \(fileSizeBytes) bytes (source=\(fileSizeSource))")
+        } else if capacityResolution.usedFallback {
+            self.log("Linux manual source size unavailable. Applying fallback USB threshold: \(capacityResolution.requiredCapacityGB) GB")
         }
+        self.log("Linux manual required USB threshold: \(capacityResolution.requiredCapacityGB) GB")
 
         self.log("Ustawiono ręczne rozpoznanie Linux: recognizedVersion=\(self.recognizedVersion), source=\(sourceURL.path)")
-    }
-
-    private func linuxRequiredUSBCapacityGB(fromFileSizeBytes fileSizeBytes: Int64) -> Int {
-        if fileSizeBytes > 14_000_000_000 {
-            return 32
-        }
-        if fileSizeBytes > 6_000_000_000 {
-            return 16
-        }
-        return 8
-    }
-
-    private func resolveLinuxSourceFileSizeBytes(for sourceURL: URL) -> (bytes: Int64, source: String)? {
-        if let values = try? sourceURL.resourceValues(forKeys: [.fileSizeKey]),
-           let fileSize = values.fileSize {
-            return (Int64(fileSize), "fileSizeKey")
-        }
-
-        if let attributes = try? FileManager.default.attributesOfItem(atPath: sourceURL.path),
-           let size = attributes[.size] as? NSNumber {
-            return (size.int64Value, "attributesOfItem")
-        }
-
-        return nil
     }
 
     private func loadLinuxDetectedSystemIcon(for distro: String?) -> NSImage? {
@@ -285,6 +266,13 @@ extension AnalysisLogic {
     }
 
     func applyLinuxDetectionResult(_ result: LinuxDetectionResult, sourceURL: URL, mountedImagePath: String?) {
+        InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
+            path: sourceURL.path,
+            family: .linux,
+            mountHint: mountedImagePath,
+            reason: "linux_detection_result"
+        )
+
         self.resetWindowsDetectionState()
         self.isLinuxDetected = result.isLinux
         self.isLinuxDistributionRecognized = result.isDistributionRecognized
@@ -315,15 +303,15 @@ extension AnalysisLogic {
         self.isPPC = false
         self.legacyArchInfo = nil
         self.userSkippedAnalysis = false
-        if let fileSizeResolution = resolveLinuxSourceFileSizeBytes(for: sourceURL) {
-            let requiredGB = linuxRequiredUSBCapacityGB(fromFileSizeBytes: fileSizeResolution.bytes)
-            self.requiredUSBCapacityGB = requiredGB
-            self.log("Linux source size: \(fileSizeResolution.bytes) bytes (source=\(fileSizeResolution.source))")
-            self.log("Linux required USB threshold: \(requiredGB) GB")
-        } else {
-            self.requiredUSBCapacityGB = nil
-            self.logError("Nie udało się odczytać rozmiaru pliku Linux. Minimalna pojemność USB pozostaje nierozstrzygnięta (-- GB).")
+        let capacityResolution = resolveRequiredUSBCapacityForImageSource(sourceURL)
+        self.requiredUSBCapacityGB = capacityResolution.requiredCapacityGB
+        if let fileSizeBytes = capacityResolution.sourceFileSizeBytes,
+           let fileSizeSource = capacityResolution.sourceFileSizeSource {
+            self.log("Linux source size: \(fileSizeBytes) bytes (source=\(fileSizeSource))")
+        } else if capacityResolution.usedFallback {
+            self.log("Linux source size unavailable. Applying fallback USB threshold: \(capacityResolution.requiredCapacityGB) GB")
         }
+        self.log("Linux required USB threshold: \(capacityResolution.requiredCapacityGB) GB")
 
         self.log("Rozpoznano obraz Linux: \(result.displayName)")
         self.log("Linux source file: \(sourceURL.path)")

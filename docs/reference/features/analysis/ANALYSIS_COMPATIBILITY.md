@@ -28,7 +28,6 @@ For Windows fallback:
 - support gate for current app workflow is:
   - desktop: **Windows family >= 8 AND EFI markers present**,
   - server: **Windows Server family >= 2012 AND EFI markers present**,
-- even for supported Windows detection, current workflow stage keeps proceed-to-install blocked.
 
 For Linux fallback:
 
@@ -89,6 +88,12 @@ For `.dmg`, `.iso`, and `.cdr` sources:
 - when timeout is hit, app must force-detach the mounted source image used for analysis (if present),
 - timeout finish keeps existing UI behavior (no new messages/views), and blocks supported-flow routing as for other unrecognized outcomes,
 - delayed callbacks from expired analysis sessions must be ignored and must not overwrite state after timeout.
+
+Global app-termination cleanup invariant for ISO analysis:
+
+- when analysis touches `.iso` source, app registers source-image path for centralized exit cleanup,
+- on app termination, centralized cleanup force-detaches tracked Linux/Windows source-image entities (by `image-path` match from `hdiutil info -plist`),
+- this termination cleanup runs even if user exits during analysis before workflow start.
 
 For Linux fallback on `.iso`:
 

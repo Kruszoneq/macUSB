@@ -11,6 +11,7 @@ struct FinishUSBView: View {
     let onReset: () -> Void
     let isPPC: Bool
     let isLinuxWorkflow: Bool
+    let isWindowsWorkflow: Bool
     let didFail: Bool
     let didCancel: Bool
     let creationStartedAt: Date?
@@ -36,6 +37,7 @@ struct FinishUSBView: View {
         onReset: @escaping () -> Void,
         isPPC: Bool,
         isLinuxWorkflow: Bool = false,
+        isWindowsWorkflow: Bool = false,
         didFail: Bool,
         didCancel: Bool = false,
         creationStartedAt: Date? = nil,
@@ -52,6 +54,7 @@ struct FinishUSBView: View {
         self.onReset = onReset
         self.isPPC = isPPC
         self.isLinuxWorkflow = isLinuxWorkflow
+        self.isWindowsWorkflow = isWindowsWorkflow
         self.didFail = didFail
         self.didCancel = didCancel
         self.creationStartedAt = creationStartedAt
@@ -109,6 +112,15 @@ struct FinishUSBView: View {
         }
     }
     private var sectionIconFont: Font { .title3 }
+    @ViewBuilder
+    private func hangingBullet(_ text: String) -> some View {
+        HStack(alignment: .top, spacing: 8) {
+            Text("•")
+                .frame(width: 10, alignment: .leading)
+            Text(text)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
     private var primaryResultTone: MacUSBSurfaceTone {
         if isCancelledResult { return .warning }
         if isFailedResult { return .error }
@@ -164,10 +176,19 @@ struct FinishUSBView: View {
 
                             HStack(alignment: .center) {
                                 if isSuccessResult, let detectedSystemIcon {
-                                    Image(nsImage: detectedSystemIcon)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 32, height: 32)
+                                    if detectedSystemIcon.isTemplate {
+                                        Image(nsImage: detectedSystemIcon)
+                                            .renderingMode(.template)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 32, height: 32)
+                                            .foregroundColor(primaryResultColor)
+                                    } else {
+                                        Image(nsImage: detectedSystemIcon)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 32, height: 32)
+                                    }
                                 } else {
                                     Image(systemName: "externaldrive.fill")
                                         .font(sectionIconFont)
@@ -175,10 +196,10 @@ struct FinishUSBView: View {
                                         .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 }
                                 VStack(alignment: .leading, spacing: 3) {
-                                    Text(summaryTitleText).font(.headline).foregroundColor(primaryResultColor)
+                                    Text(summaryTitleText).font(.caption).foregroundColor(primaryResultColor.opacity(0.9))
                                     Text(verbatim: systemName)
                                         .font(.headline)
-                                        .foregroundColor(.primary)
+                                        .foregroundColor(primaryResultColor)
                                 }
                                 Spacer()
                             }
@@ -228,12 +249,16 @@ struct FinishUSBView: View {
                             HStack(alignment: .top) {
                                 Image(systemName: "info.circle.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 10) {
-                                    Text(isLinuxWorkflow ? "Co dalej?" : "Co teraz?").font(.headline).foregroundColor(.primary)
+                                    Text("Co dalej?").font(.headline).foregroundColor(.primary)
                                     VStack(alignment: .leading, spacing: 5) {
                                         if isLinuxWorkflow {
                                             Text("• Podłącz nośnik USB do komputera docelowego (Mac lub PC)")
                                             Text("• Uruchom komputer i wybierz rozruch z nośnika USB w menu startowym")
                                             Text("• Po uruchomieniu Linuxa postępuj zgodnie z instrukcjami instalatora systemu")
+                                        } else if isWindowsWorkflow {
+                                            hangingBullet(String(localized: "finish.nextsteps.windows.pc.point1"))
+                                            hangingBullet(String(localized: "finish.nextsteps.windows.pc.point2"))
+                                            hangingBullet(String(localized: "finish.nextsteps.windows.pc.point3"))
                                         } else {
                                             Text("• Podłącz nośnik USB do docelowego komputera Mac")
                                             Text("• Uruchom komputer trzymając przycisk Option (⌥)")

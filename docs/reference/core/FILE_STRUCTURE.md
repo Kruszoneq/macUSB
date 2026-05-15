@@ -75,6 +75,7 @@
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift`
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift`
 - `macUSB/Shared/Services/Helper/HelperService/*`
+- `macUSB/Shared/Services/InstallerSourceImageUnmountRegistry.swift` — centralny rejestr śledzenia źródeł ISO (Windows/Linux) i cleanup odmontowania przy zamknięciu aplikacji.
 
 ### Helper (daemon)
 

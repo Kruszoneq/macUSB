@@ -26,6 +26,7 @@ Use `BottomActionBar` with `safeAreaInset(edge: .bottom)` for bottom action zone
 ## Window/Layout Contract
 
 - Main flow window assumptions: `550 x 750`.
+- Main flow startup position must not be force-centered; window placement should follow system/default restoration behavior.
 - Downloader and helper UI should remain visually coherent with the same design language.
 - DEBUG-only UI must never appear in Release builds.
 

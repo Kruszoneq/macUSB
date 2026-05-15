@@ -140,6 +140,7 @@
 				Features/Analysis/AnalysisSelectionHandoff.swift,
 				Features/Analysis/Logic/AnalysisLogicAnalysisFlow.swift,
 				Features/Analysis/Logic/AnalysisLogicFileSelection.swift,
+				Features/Analysis/Logic/AnalysisLogicSourceCapacityPolicy.swift,
 				Features/Analysis/Logic/AnalysisLogicUsbDrives.swift,
 				Features/Analysis/Logic/Linux/AnalysisLogicLinuxArchitecture.swift,
 				Features/Analysis/Logic/Linux/AnalysisLogicLinuxArchiveReader.swift,
@@ -158,6 +159,7 @@
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsDetection.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsLifecycle.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsMetadata.swift,
+				Features/Analysis/Logic/Windows/AnalysisLogicWindowsToolchainProbe.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsTypes.swift,
 				Features/Analysis/SystemAnalysisView.swift,
 				Features/Downloader/Logic/Assembly/MacOSAssemblyFileUtils.swift,
@@ -202,14 +204,16 @@
 				Features/Installation/Linux/CreatorLinuxUnmountRecoveryLogic.swift,
 				Features/Installation/Linux/LinuxInstallationFlowContext.swift,
 				Features/Installation/Linux/LinuxWorkflowErrorPresentation.swift,
+				Features/Installation/UniversalInstallationView.swift,
 				Features/Installation/Windows/CreationProgressWindowsMapping.swift,
 				Features/Installation/Windows/CreatorWindowsHelperLogic.swift,
 				Features/Installation/Windows/CreatorWindowsLabelLogic.swift,
+				Features/Installation/Windows/CreatorWindowsPrerequisiteCardView.swift,
+				Features/Installation/Windows/CreatorWindowsPrerequisiteGateLogic.swift,
 				Features/Installation/Windows/CreatorWindowsUnmountRecoveryLogic.swift,
-				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/AppBranding.swift,
 				Features/Welcome/WelcomeView.swift,
-				Resources/Assets.xcassets,
+				macUSBIcon.icon,
 				Resources/Icons/Linux/linux.icns,
 				Resources/Icons/OS/os_10_7_lion.icns,
 				Resources/Icons/OS/os_10_8_mountain_lion.icns,
@@ -243,6 +247,7 @@
 				Shared/Services/Helper/HelperService/HelperServiceStatusUI.swift,
 				Shared/Services/Helper/HelperServiceManager.swift,
 				Shared/Services/Helper/PrivilegedOperationClient.swift,
+				Shared/Services/InstallerSourceImageUnmountRegistry.swift,
 				Shared/Services/LanguageManager.swift,
 				Shared/Services/Logging.swift,
 				Shared/Services/MenuState.swift,
@@ -250,6 +255,7 @@
 				Shared/Services/SystemSleepBlocker.swift,
 				Shared/Services/UpdateChecker.swift,
 				Shared/Services/USBDriveLogic.swift,
+				Shared/Services/Windows/WindowsToolchainProbeService.swift,
 				Shared/UI/BottomActionBar.swift,
 				Shared/UI/DesignTokens.swift,
 				Shared/UI/LiquidGlassCompatibility.swift,
@@ -303,14 +309,16 @@
 				Features/Installation/Linux/CreatorLinuxUnmountRecoveryLogic.swift,
 				Features/Installation/Linux/LinuxInstallationFlowContext.swift,
 				Features/Installation/Linux/LinuxWorkflowErrorPresentation.swift,
+				Features/Installation/UniversalInstallationView.swift,
 				Features/Installation/Windows/CreationProgressWindowsMapping.swift,
 				Features/Installation/Windows/CreatorWindowsHelperLogic.swift,
 				Features/Installation/Windows/CreatorWindowsLabelLogic.swift,
+				Features/Installation/Windows/CreatorWindowsPrerequisiteCardView.swift,
+				Features/Installation/Windows/CreatorWindowsPrerequisiteGateLogic.swift,
 				Features/Installation/Windows/CreatorWindowsUnmountRecoveryLogic.swift,
-				Features/Installation/UniversalInstallationView.swift,
 				Features/Welcome/AppBranding.swift,
 				Features/Welcome/WelcomeView.swift,
-				Resources/Assets.xcassets,
+				macUSBIcon.icon,
 				Resources/Localizable.xcstrings,
 				Shared/Localization/HelperWorkflowLocalizationKeys.swift,
 				Shared/Models/Models.swift,
@@ -325,12 +333,14 @@
 				Shared/Services/Helper/HelperService/HelperServiceStatusUI.swift,
 				Shared/Services/Helper/HelperServiceManager.swift,
 				Shared/Services/Helper/PrivilegedOperationClient.swift,
+				Shared/Services/InstallerSourceImageUnmountRegistry.swift,
 				Shared/Services/LanguageManager.swift,
 				Shared/Services/Logging.swift,
 				Shared/Services/MenuState.swift,
 				Shared/Services/NotificationPermissionManager.swift,
 				Shared/Services/SystemSleepBlocker.swift,
 				Shared/Services/UpdateChecker.swift,
+				Shared/Services/Windows/WindowsToolchainProbeService.swift,
 				Shared/UI/BottomActionBar.swift,
 				Shared/UI/DesignTokens.swift,
 				Shared/UI/LiquidGlassCompatibility.swift,
@@ -859,7 +869,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = macUSBIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				AUTOMATION_APPLE_EVENTS = YES;
@@ -868,7 +878,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -915,7 +925,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = macUSBIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				AUTOMATION_APPLE_EVENTS = YES;
@@ -924,7 +934,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;

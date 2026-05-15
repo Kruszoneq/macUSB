@@ -134,4 +134,3 @@ private extension AppLogging {
         return String(cString: buffer)
     }
 }
-

@@ -54,6 +54,18 @@ extension AnalysisLogic {
         let ext = url.pathExtension.lowercased()
         self.log("Wykryto rozszerzenie: \(ext)")
         if ext == "dmg" || ext == "iso" || ext == "cdr" {
+            if ext == "iso" {
+                InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
+                    path: url.path,
+                    family: .windows,
+                    reason: "analysis_iso_start"
+                )
+                InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
+                    path: url.path,
+                    family: .linux,
+                    reason: "analysis_iso_start"
+                )
+            }
             self.stage("Analiza obrazu (DMG/ISO/CDR) — start")
             self.log("Analiza obrazu (DMG/ISO/CDR): montowanie obrazu przez hdiutil (attach -plist -nobrowse -readonly), odczyt Info.plist z aplikacji oraz wykrywanie wersji i trybu instalacji.")
             let analysisRunID = self.beginImageAnalysisRun(sourceURL: url)

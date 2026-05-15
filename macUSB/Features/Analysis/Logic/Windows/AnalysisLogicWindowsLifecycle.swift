@@ -46,6 +46,13 @@ extension AnalysisLogic {
     }
 
     func applyWindowsDetectionResult(_ result: WindowsDetectionResult, sourceURL: URL, mountedImagePath: String?) {
+        InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
+            path: sourceURL.path,
+            family: .windows,
+            mountHint: mountedImagePath,
+            reason: "windows_detection_result"
+        )
+
         self.isWindowsDetected = true
         self.windowsFamily = result.family
         self.windowsServicePack = result.servicePack
@@ -69,7 +76,28 @@ extension AnalysisLogic {
         self.isPPC = false
         self.legacyArchInfo = nil
         self.userSkippedAnalysis = false
-        self.requiredUSBCapacityGB = result.isSupported ? 8 : nil
+
+        let windowsToolchainPresence = detectWindowsToolchainPresence()
+        self.log(
+            "Windows toolchain presence: brew=\(windowsToolchainPresence.hasHomebrew), wimlib=\(windowsToolchainPresence.hasWimlib)"
+        )
+        self.log(
+            "Windows toolchain paths: brew=\(windowsToolchainPresence.homebrewPath ?? "not_found"), wimlib=\(windowsToolchainPresence.wimlibPath ?? "not_found")"
+        )
+
+        if result.isSupported {
+            let capacityResolution = resolveRequiredUSBCapacityForImageSource(sourceURL)
+            self.requiredUSBCapacityGB = capacityResolution.requiredCapacityGB
+            if let fileSizeBytes = capacityResolution.sourceFileSizeBytes,
+               let fileSizeSource = capacityResolution.sourceFileSizeSource {
+                self.log("Windows source size: \(fileSizeBytes) bytes (source=\(fileSizeSource))")
+            } else if capacityResolution.usedFallback {
+                self.log("Windows source size unavailable. Applying fallback USB threshold: \(capacityResolution.requiredCapacityGB) GB")
+            }
+            self.log("Windows required USB threshold: \(capacityResolution.requiredCapacityGB) GB")
+        } else {
+            self.requiredUSBCapacityGB = nil
+        }
 
         if result.isSupported {
             self.isSystemDetected = true

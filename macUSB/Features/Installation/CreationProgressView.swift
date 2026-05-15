@@ -176,6 +176,7 @@ struct CreationProgressView: View {
                     onReset: onReset,
                     isPPC: isPPC,
                     isLinuxWorkflow: isLinuxWorkflow,
+                    isWindowsWorkflow: isWindowsWorkflow,
                     didFail: helperOperationFailed,
                     didCancel: didCancelCreation,
                     creationStartedAt: creationStartedAt,

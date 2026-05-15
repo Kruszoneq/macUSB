@@ -206,8 +206,7 @@ struct WindowConfigurator: NSViewRepresentable {
                     window.toolbarStyle = .unifiedCompact
                 }
                 
-                // 2. Wyśrodkowanie i konfiguracja przycisków
-                window.center()
+                // 2. Konfiguracja zachowania okna i przycisków
                 window.collectionBehavior = [.fullScreenNone, .managed]
                 
                 // Wyłączenie przycisku maksymalizacji (zielony)

@@ -367,7 +367,7 @@ struct SystemAnalysisView: View {
     }
 
     private var navigationBackgroundLink: some View {
-        let windowsSourceURL = windowsWorkflowSupportedSnapshot ? logic.selectedFileUrl : nil
+        let windowsSourceURL = logic.isWindowsWorkflowSupported ? logic.selectedFileUrl : nil
         return Group {
             if let sourceURL = logic.sourceAppURL ?? logic.linuxInstallationFlowContext?.sourceImageURL ?? windowsSourceURL {
                 NavigationLink(
@@ -432,6 +432,7 @@ struct SystemAnalysisView: View {
             && logic.selectedDrive != nil
             && logic.capacityCheckFinished
             && logic.isCapacitySufficient
+            && (!logic.isWindowsWorkflowSupported || logic.selectedFileUrl != nil)
             && ((logic.isLinuxDetected || logic.isWindowsWorkflowSupported) || !isAPFSSelected)
     }
     
@@ -473,7 +474,13 @@ struct SystemAnalysisView: View {
                     windowsMountedSourcePathSnapshot = logic.mountedDMGPath
                     windowsWillSplitWIMSnapshot = logic.windowsWillSplitWIM
                     isTabLocked = true
-                    navigateToInstall = true
+                    if logic.isWindowsWorkflowSupported {
+                        DispatchQueue.main.async {
+                            navigateToInstall = true
+                        }
+                    } else {
+                        navigateToInstall = true
+                    }
                 }) {
                     HStack { Text("Przejdź dalej"); Image(systemName: "arrow.right.circle.fill") }
                         .frame(maxWidth: .infinity)
