@@ -174,6 +174,9 @@ extension HelperWorkflowExecutor {
 
         case .linux:
             context = try prepareLinuxWorkflowContext()
+
+        case .windows:
+            context = PreparedWorkflowContext(sourcePath: request.sourceAppPath, postInstallSourceAppPath: nil)
         }
 
         emitProgress(
@@ -368,6 +371,9 @@ extension HelperWorkflowExecutor {
 
         case .linux:
             stages.append(contentsOf: try buildLinuxWorkflowStages(using: context))
+
+        case .windows:
+            stages.append(contentsOf: try buildWindowsWorkflowStages(using: context))
         }
 
         return stages

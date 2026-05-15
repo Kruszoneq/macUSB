@@ -10,6 +10,12 @@ Thresholds:
 - Linux source size `<= 6_000_000_000` bytes: UI `8 GB`, technical threshold `6_000_000_000` bytes
 - Linux source size `> 6_000_000_000` and `<= 14_000_000_000` bytes: UI `16 GB`, technical threshold `15_000_000_000` bytes
 - Linux source size `> 14_000_000_000` bytes: UI `32 GB`, technical threshold `28_000_000_000` bytes
+- Windows source size `<= 6_000_000_000` bytes: UI `8 GB`, technical threshold `6_000_000_000` bytes
+- Windows source size `> 6_000_000_000` and `<= 14_000_000_000` bytes: UI `16 GB`, technical threshold `15_000_000_000` bytes
+- Windows source size `> 14_000_000_000` bytes: UI `32 GB`, technical threshold `28_000_000_000` bytes
+
+Fallback for Linux and Windows source-size resolution:
+- if source image size cannot be resolved, required capacity falls back to `16 GB` (instead of unresolved `-- GB`).
 
 Proceed must remain blocked until selected target passes validation.
 

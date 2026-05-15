@@ -1,0 +1,8 @@
+Icon set / glyph:
+Font Awesome Free v7.2.0
+https://fontawesome.com
+
+License:
+Font Awesome Free License
+https://fontawesome.com/license/free
+Copyright 2026 Fonticons, Inc.

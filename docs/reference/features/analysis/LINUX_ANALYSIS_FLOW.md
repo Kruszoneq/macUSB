@@ -117,6 +117,8 @@ Required USB capacity is computed from source file size:
 - source size `> 6_000_000_000` and `<= 14_000_000_000` bytes -> `16 GB`,
 - source size `> 14_000_000_000` bytes -> `32 GB`.
 
+If source size cannot be resolved from file metadata, fallback capacity is `16 GB`.
+
 Linux detected state uses icon fallback chain:
 
 - first: distro-specific icon from `macUSB/Resources/Icons/Linux/Distros/*.png` when distro is recognized and mapped,
@@ -151,6 +153,7 @@ When manual Linux force runs, logs must include:
 - selected source path,
 - resolved source file size in bytes (when available),
 - selected USB threshold in GB only.
+- explicit fallback log when source size is unavailable.
 
 ## Reset and Lifecycle Rules
 

@@ -45,6 +45,10 @@
 - `macUSB/Features/Installation/Linux/CreatorLinuxLogic.swift` — Linux-specific summary/cleanup helpers.
 - `macUSB/Features/Installation/Linux/CreatorLinuxHelperLogic.swift` — Linux helper request construction and start routing.
 - `macUSB/Features/Installation/Linux/CreationProgressLinuxMapping.swift` — Linux stage mapping for shared progress UI.
+- `macUSB/Features/Installation/Windows/CreatorWindowsLabelLogic.swift` — Windows target volume-label mapping policy.
+- `macUSB/Features/Installation/Windows/CreatorWindowsHelperLogic.swift` — Windows helper request construction and workflow start routing.
+- `macUSB/Features/Installation/Windows/CreatorWindowsUnmountRecoveryLogic.swift` — Windows unmount-busy prompt/retry recovery flow.
+- `macUSB/Features/Installation/Windows/CreationProgressWindowsMapping.swift` — Windows stage mapping for shared progress UI.
 
 ### Shared UI layout
 
@@ -71,6 +75,7 @@
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift`
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift`
 - `macUSB/Shared/Services/Helper/HelperService/*`
+- `macUSB/Shared/Services/InstallerSourceImageUnmountRegistry.swift` — centralny rejestr śledzenia źródeł ISO (Windows/Linux) i cleanup odmontowania przy zamknięciu aplikacji.
 
 ### Helper (daemon)
 
@@ -79,6 +84,7 @@
 - `macUSBHelper/Service/*`
 - `macUSBHelper/Workflow/*`
 - `macUSBHelper/Workflow/Linux/*` — Linux raw-copy stage builder, parser, and disk ops.
+- `macUSBHelper/Workflow/Windows/*` — Windows ISO-copy stage builder, source/target preparation, progress parsing, and verification.
 - `macUSBHelper/DownloaderAssembly/*`
 
 ## Localization catalog

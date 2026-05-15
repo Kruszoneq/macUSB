@@ -27,7 +27,9 @@ extension UniversalInstallationView {
             needsCodesign: request.needsCodesign,
             requiresApplicationPathArg: request.requiresApplicationPathArg,
             requesterUID: request.requesterUID,
-            linuxForceUnmount: true
+            linuxForceUnmount: true,
+            windowsForceUnmount: request.windowsForceUnmount,
+            windowsMountedSourcePath: request.windowsMountedSourcePath
         )
     }
 

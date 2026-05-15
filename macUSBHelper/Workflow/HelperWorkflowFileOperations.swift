@@ -14,6 +14,26 @@ extension HelperWorkflowExecutor {
             try runLinuxVerifyWriteStage(stage)
             return
         }
+        if stage.key == "windows_prepare_source" {
+            try runWindowsPrepareSourceStage(stage)
+            return
+        }
+        if stage.key == "windows_prepare_target" {
+            try runWindowsPrepareTargetStage(stage)
+            return
+        }
+        if stage.key == "windows_create_media" {
+            try runWindowsCreateMediaStage(stage)
+            return
+        }
+        if stage.key == "windows_split_wim" {
+            try runWindowsSplitWimStage(stage)
+            return
+        }
+        if stage.key == "windows_verify_media" {
+            try runWindowsVerifyMediaStage(stage)
+            return
+        }
 
         let process = Process()
         if let requesterUID = request.requesterUID, requesterUID > 0 {
@@ -87,9 +107,18 @@ extension HelperWorkflowExecutor {
         }
     }
     func runBestEffortTempCleanupStage() {
-        let stageKey = "cleanup_temp"
-        let stageTitleKey = HelperWorkflowLocalizationKeys.cleanupTempTitle
-        let statusKey = HelperWorkflowLocalizationKeys.cleanupTempStatus
+        let stageKey: String
+        let stageTitleKey: String
+        let statusKey: String
+        if request.workflowKind == .windows {
+            stageKey = "windows_cleanup_temp"
+            stageTitleKey = HelperWorkflowLocalizationKeys.windowsCleanupTempTitle
+            statusKey = HelperWorkflowLocalizationKeys.windowsCleanupTempStatus
+        } else {
+            stageKey = "cleanup_temp"
+            stageTitleKey = HelperWorkflowLocalizationKeys.cleanupTempTitle
+            statusKey = HelperWorkflowLocalizationKeys.cleanupTempStatus
+        }
         let stageStart = max(latestPercent, 99)
 
         emitProgress(
@@ -98,6 +127,10 @@ extension HelperWorkflowExecutor {
             percent: stageStart,
             statusKey: statusKey
         )
+
+        if request.workflowKind == .windows {
+            detachWindowsMountedSourceIfNeeded()
+        }
 
         guard !request.tempWorkPath.isEmpty else {
             emitProgress(

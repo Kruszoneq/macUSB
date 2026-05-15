@@ -6,6 +6,7 @@ enum HelperWorkflowKind: String, Codable {
     case mavericks
     case ppc
     case linux
+    case windows
 }
 
 struct HelperWorkflowRequestPayload: Codable {
@@ -24,6 +25,8 @@ struct HelperWorkflowRequestPayload: Codable {
     let requiresApplicationPathArg: Bool
     let requesterUID: Int?
     let linuxForceUnmount: Bool
+    let windowsForceUnmount: Bool
+    let windowsMountedSourcePath: String?
 }
 
 struct HelperProgressEventPayload: Codable {

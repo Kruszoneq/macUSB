@@ -135,6 +135,11 @@ extension UniversalInstallationView {
     }
 
     func unmountSourceImageIfNeeded() {
+        if isWindowsWorkflow {
+            log("Unmount Windows image: pomijam (obsługa mountu po stronie helpera).")
+            return
+        }
+
         if let linuxMountPoint = linuxFlowContext?.mountPointURLForCleanup {
             let mountPath = linuxMountPoint.path
             log("Unmount Linux image: próba odmontowania \(mountPath)")

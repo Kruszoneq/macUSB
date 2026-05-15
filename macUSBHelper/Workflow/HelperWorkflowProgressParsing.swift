@@ -20,6 +20,13 @@ extension HelperWorkflowExecutor {
         emit(stage: stage, percent: percent, statusKey: stage.statusKey, logLine: line)
     }
     func extractToolPercent(from line: String, stageKey: String) -> Double? {
+        if stageKey == "windows_create_media" {
+            return extractWindowsCopyProgressPercent(from: line)
+        }
+        if stageKey == "windows_split_wim" {
+            return extractWindowsWimSplitProgressPercent(from: line)
+        }
+
         if stageKey == "createinstallmedia" {
             let lowered = line.lowercased()
             if lowered.contains("erasing disk") {

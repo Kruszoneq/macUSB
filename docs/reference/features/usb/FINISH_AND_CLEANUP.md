@@ -20,6 +20,9 @@ Finish screen must report:
 
 Cleanup ownership and ordering must remain deterministic.
 Fallback cleanup UX should remain explicit for failure cases.
+App-termination path must execute centralized source-image cleanup for Windows/Linux workflows:
+- tracked source ISO image entities are force-detached on app termination (final shutdown step),
+- this applies regardless of active screen (`analysis`, `summary`, `progress`, `finish`) to prevent stale mounted installer images after app exit.
 
 Downloader-specific cleanup behavior is detailed in `docs/reference/features/downloader/DOWNLOADER.md`.
 

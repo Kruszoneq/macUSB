@@ -39,7 +39,9 @@ extension UniversalInstallationView {
             needsCodesign: false,
             requiresApplicationPathArg: false,
             requesterUID: requesterUID,
-            linuxForceUnmount: false
+            linuxForceUnmount: false,
+            windowsForceUnmount: false,
+            windowsMountedSourcePath: nil
         )
     }
 }

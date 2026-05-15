@@ -24,6 +24,7 @@ Use this map before reading feature-specific references:
 
 ### Analysis and compatibility routing
 - `docs/reference/features/analysis/ANALYSIS_COMPATIBILITY.md`
+- `docs/reference/features/analysis/WINDOWS_ANALYSIS_FLOW.md`
 - `docs/reference/features/analysis/LINUX_ANALYSIS_FLOW.md`
 
 ### USB target validation and capacity

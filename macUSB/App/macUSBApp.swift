@@ -37,6 +37,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 )
             }
         }
+
+        // Last-step cleanup for tracked Windows/Linux source images.
+        InstallerSourceImageUnmountRegistry.shared.detachAllTrackedImagesOnAppTermination()
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {

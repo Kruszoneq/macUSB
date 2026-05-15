@@ -59,7 +59,7 @@ extension AnalysisLogic {
     func refreshDrives() {
         let allowExternal = UserDefaults.standard.bool(forKey: "AllowExternalDrives")
 
-        if isLinuxDetected {
+        if isLinuxDetected || isWindowsWorkflowSupported {
             guard !isLinuxPhysicalDriveRefreshRunning else { return }
             isLinuxPhysicalDriveRefreshRunning = true
 
@@ -72,7 +72,7 @@ extension AnalysisLogic {
                     guard let self else { return }
                     self.isLinuxPhysicalDriveRefreshRunning = false
 
-                    guard self.isLinuxDetected else { return }
+                    guard self.isLinuxDetected || self.isWindowsWorkflowSupported else { return }
 
                     self.linuxWholeDiskCapacityCache = enumerated.capacityByWholeDisk
                     let activeSelectionID = self.selectedDriveSelectionID ?? self.selectedDrive?.selectionID
@@ -173,7 +173,7 @@ extension AnalysisLogic {
             return
         }
 
-        if isLinuxDetected {
+        if isLinuxDetected || isWindowsWorkflowSupported {
             let wholeDisk = USBDriveLogic.wholeDiskName(from: drive.device)
             if let capacity = linuxWholeDiskCapacityCache[wholeDisk] {
                 withAnimation {

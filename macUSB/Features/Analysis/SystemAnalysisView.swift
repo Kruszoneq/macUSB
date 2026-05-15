@@ -13,6 +13,9 @@ struct SystemAnalysisView: View {
     @State private var selectedDriveDisplayNameSnapshot: String? = nil
     @State private var selectedDriveForInstallationSnapshot: USBDrive? = nil
     @State private var linuxFlowContextSnapshot: LinuxInstallationFlowContext? = nil
+    @State private var windowsWorkflowSupportedSnapshot: Bool = false
+    @State private var windowsMountedSourcePathSnapshot: String? = nil
+    @State private var windowsWillSplitWIMSnapshot: Bool = false
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
     @State private var analysisWindowHandler: AnalysisWindowHandler?
@@ -43,7 +46,8 @@ struct SystemAnalysisView: View {
         // Hide/disable when the selected system is supported (including PPC flow) or analysis not finished.
         let analysisFinished = !logic.isAnalyzing
         let hasAnySelection = !logic.selectedFilePath.isEmpty || logic.selectedFileUrl != nil
-        let isValidSelection = (logic.sourceAppURL != nil) || logic.isPPC || logic.isMavericks || logic.isLinuxDetected
+        let windowsSupportedDetected = logic.isWindowsDetected && logic.isSystemDetected && !logic.showUnsupportedMessage
+        let isValidSelection = (logic.sourceAppURL != nil) || logic.isPPC || logic.isMavericks || logic.isLinuxDetected || windowsSupportedDetected
 
         let unrecognizedBlocking = (!logic.isSystemDetected
                                     && !logic.recognizedVersion.isEmpty
@@ -163,15 +167,18 @@ struct SystemAnalysisView: View {
     }
     
     private var fileRequirementsBox: some View {
-        StatusCard(tone: .neutral, density: .compact) {
+        let isMacOSFlowDetected = (logic.sourceAppURL != nil) || logic.isPPC || logic.isMavericks
+        return StatusCard(tone: .neutral, density: .compact) {
             HStack(alignment: .top) {
                 Image(systemName: "info.circle.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Wymagania").font(.headline).foregroundColor(.primary)
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("• Wybrany plik musi zawierać instalator macOS, Mac OS X lub Linux")
+                        Text("• Wybrany plik musi zawierać instalator macOS, Windows lub Linux")
                         Text("• Dozwolone formaty plików to .dmg, .iso, .cdr oraz .app")
-                        Text("• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym")
+                        if isMacOSFlowDetected {
+                            Text("• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym")
+                        }
                         Text("• Brak instalatora? Użyj przycisku „Pobierz”")
                     }
                     .font(.subheadline).foregroundColor(.secondary)
@@ -181,8 +188,22 @@ struct SystemAnalysisView: View {
     }
 
     private var fileSelectionControls: some View {
-        HStack {
-            TextField(String(localized: "Ścieżka..."), text: $logic.selectedFilePath)
+        let selectedFileDisplayName: String = {
+            if let selectedFileURL = logic.selectedFileUrl {
+                return selectedFileURL.lastPathComponent
+            }
+            guard !logic.selectedFilePath.isEmpty else { return "" }
+            return URL(fileURLWithPath: logic.selectedFilePath).lastPathComponent
+        }()
+
+        return HStack {
+            TextField(
+                String(localized: "Plik źródłowy..."),
+                text: Binding(
+                    get: { selectedFileDisplayName },
+                    set: { _ in }
+                )
+            )
                 .textFieldStyle(.roundedBorder)
                 .disabled(true)
             Button(String(localized: "Wybierz")) { logic.selectDMGFile() }
@@ -252,19 +273,46 @@ struct SystemAnalysisView: View {
     }
 
     private var detectedOrUnsupportedView: some View {
-        let isValid = (logic.sourceAppURL != nil) || logic.isPPC || logic.isLinuxDetected
-        let unsupportedText = logic.isUnsupportedSierra
+        let windowsRecognized = logic.isWindowsDetected && !logic.recognizedVersion.isEmpty
+        let windowsSupportedDetected = windowsRecognized && logic.isSystemDetected && !logic.showUnsupportedMessage
+        let isValid = (logic.sourceAppURL != nil) || logic.isPPC || logic.isLinuxDetected || windowsRecognized || windowsSupportedDetected
+        let isWindowsServerFamily = logic.windowsFamily?.isServerFamily == true
+        let unsupportedText = logic.isWindowsDetected
+            ? String(localized: isWindowsServerFamily ? "analysis.windows.server.unsupported_edition.description" : "analysis.windows.unsupported_edition.description")
+            : (logic.isUnsupportedSierra
             ? String(localized: "Ta wersja systemu macOS Sierra nie jest wspierana przez aplikację. Potrzebna jest nowsza wersja instalatora.", comment: "Unsupported Sierra (not 12.6.06) message")
-            : String(localized: "Wybrany system nie jest wspierany przez aplikację", comment: "Generic unsupported system message")
+            : String(localized: "Wybrany system nie jest wspierany przez aplikację", comment: "Generic unsupported system message"))
 
         return VStack(alignment: .leading, spacing: MacUSBDesignTokens.bottomBarContentSpacing) {
             StatusCard(tone: isValid ? .success : .error) {
                 HStack(alignment: .center) {
-                    if isValid, let detectedIcon = logic.detectedSystemIcon {
+                    if isValid, logic.isWindowsDetected, let detectedIcon = logic.detectedSystemIcon {
+                        Image(nsImage: detectedIcon)
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 32, height: 32)
+                            .foregroundColor(.green)
+                    } else if isValid, let detectedIcon = logic.detectedSystemIcon {
                         Image(nsImage: detectedIcon)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 32, height: 32)
+                    } else if isValid, logic.isWindowsDetected {
+                        if #available(macOS 11.0, *),
+                           let symbolImage = NSImage(systemSymbolName: logic.windowsFallbackSymbolName, accessibilityDescription: nil) {
+                            Image(nsImage: symbolImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 28, height: 28)
+                                .foregroundColor(.green)
+                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                        } else {
+                            Image(systemName: "desktopcomputer")
+                                .font(sectionIconFont)
+                                .foregroundColor(.green)
+                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                        }
                     } else if logic.isLinuxDetected {
                         Image(systemName: "desktopcomputer")
                             .font(sectionIconFont)
@@ -313,16 +361,16 @@ struct SystemAnalysisView: View {
                 }
             }
 
-            if !isValid && logic.showUnsupportedMessage {
-                StatusCard(tone: .subtle, density: .compact) {
-                    HStack(alignment: .top, spacing: 10) {
-                        Image(systemName: "exclamationmark.triangle")
+            if logic.showUnsupportedMessage && (!isValid || logic.isWindowsDetected) {
+                StatusCard(tone: logic.isWindowsDetected ? .warning : .subtle, density: .compact) {
+                    HStack(alignment: .center, spacing: 10) {
+                        Image(systemName: logic.isWindowsDetected ? "exclamationmark.triangle.fill" : "exclamationmark.triangle")
                             .font(sectionIconFont)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(logic.isWindowsDetected ? .orange : .secondary)
                             .frame(width: MacUSBDesignTokens.iconColumnWidth)
                         Text(unsupportedText)
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(logic.isWindowsDetected ? .orange : .secondary)
                         Spacer()
                     }
                 }
@@ -333,8 +381,9 @@ struct SystemAnalysisView: View {
     }
 
     private var navigationBackgroundLink: some View {
-        Group {
-            if let sourceURL = logic.sourceAppURL ?? logic.linuxInstallationFlowContext?.sourceImageURL {
+        let windowsSourceURL = logic.isWindowsWorkflowSupported ? logic.selectedFileUrl : nil
+        return Group {
+            if let sourceURL = logic.sourceAppURL ?? logic.linuxInstallationFlowContext?.sourceImageURL ?? windowsSourceURL {
                 NavigationLink(
                     destination: UniversalInstallationView(
                         sourceAppURL: sourceURL,
@@ -344,6 +393,9 @@ struct SystemAnalysisView: View {
                         detectedSystemIcon: logic.detectedSystemIcon,
                         originalImageURL: logic.selectedFileUrl,
                         linuxFlowContext: linuxFlowContextSnapshot,
+                        isWindowsWorkflow: windowsWorkflowSupportedSnapshot,
+                        windowsMountedSourcePath: windowsMountedSourcePathSnapshot,
+                        windowsWillSplitWim: windowsWillSplitWIMSnapshot,
                         needsCodesign: logic.needsCodesign,
                         isLegacySystem: logic.isLegacyDetected,
                         isRestoreLegacy: logic.isRestoreLegacy,
@@ -381,8 +433,8 @@ struct SystemAnalysisView: View {
     }
 
     private var canUseUSBSelection: Bool {
-        ((logic.sourceAppURL != nil) || logic.isPPC || logic.isLinuxDetected)
-            && (logic.isSystemDetected || logic.isPPC || logic.isMavericks || logic.isLinuxDetected)
+        ((logic.sourceAppURL != nil) || logic.isPPC || logic.isLinuxDetected || logic.isWindowsWorkflowSupported)
+            && (logic.isSystemDetected || logic.isPPC || logic.isMavericks || logic.isLinuxDetected || logic.isWindowsWorkflowSupported)
     }
 
     private var isAPFSSelected: Bool {
@@ -394,7 +446,8 @@ struct SystemAnalysisView: View {
             && logic.selectedDrive != nil
             && logic.capacityCheckFinished
             && logic.isCapacitySufficient
-            && (logic.isLinuxDetected || !isAPFSSelected)
+            && (!logic.isWindowsWorkflowSupported || logic.selectedFileUrl != nil)
+            && ((logic.isLinuxDetected || logic.isWindowsWorkflowSupported) || !isAPFSSelected)
     }
     
     var body: some View {
@@ -416,7 +469,7 @@ struct SystemAnalysisView: View {
                             }
                         }
 
-                        Spacer().frame(height: 12)
+                        Spacer().frame(height: logic.showUnsupportedMessage ? 4 : 12)
                         usbSelectionSection
                             .id("usbSection")
                     }
@@ -431,8 +484,17 @@ struct SystemAnalysisView: View {
                     selectedDriveDisplayNameSnapshot = logic.selectedDrive?.displayName
                     selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
                     linuxFlowContextSnapshot = logic.linuxInstallationFlowContext
+                    windowsWorkflowSupportedSnapshot = logic.isWindowsWorkflowSupported
+                    windowsMountedSourcePathSnapshot = logic.mountedDMGPath
+                    windowsWillSplitWIMSnapshot = logic.windowsWillSplitWIM
                     isTabLocked = true
-                    navigateToInstall = true
+                    if logic.isWindowsWorkflowSupported {
+                        DispatchQueue.main.async {
+                            navigateToInstall = true
+                        }
+                    } else {
+                        navigateToInstall = true
+                    }
                 }) {
                     HStack { Text("Przejdź dalej"); Image(systemName: "arrow.right.circle.fill") }
                         .frame(maxWidth: .infinity)
@@ -455,6 +517,9 @@ struct SystemAnalysisView: View {
             selectedDriveDisplayNameSnapshot = nil
             selectedDriveForInstallationSnapshot = nil
             linuxFlowContextSnapshot = nil
+            windowsWorkflowSupportedSnapshot = false
+            windowsMountedSourcePathSnapshot = nil
+            windowsWillSplitWIMSnapshot = false
             MenuState.shared.skipAnalysisEnabled = false
             MenuState.shared.skipLinuxManualSelectionEnabled = false
         }
@@ -497,7 +562,7 @@ struct SystemAnalysisView: View {
             sectionIconFont: sectionIconFont,
             onOpenDiskUtility: openDiskUtility,
             isSelectionEnabled: canUseUSBSelection,
-            isLinuxWorkflow: logic.isLinuxDetected
+            isLinuxWorkflow: logic.isLinuxDetected || logic.isWindowsWorkflowSupported
         )
     }
 }

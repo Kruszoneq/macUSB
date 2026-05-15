@@ -15,6 +15,22 @@ final class HelperWorkflowExecutor {
     var lastStageOutputLine: String?
     var linuxSourceImageSizeBytes: Int64?
     var linuxMountGuard: HelperWorkflowLinuxMountGuard?
+    var windowsMountedByHelper = false
+    var windowsMountedImageDevice: String?
+    var windowsActiveSourceMountPath: String?
+    var windowsInstallWimPath: String?
+    var windowsInstallWimRelativePath: String?
+    var windowsInstallWimSizeBytes: Int64?
+    var windowsShouldSplitWim = false
+    var windowsHasInstallESD = false
+    var windowsWimlibExecutablePath: String?
+    var windowsPreparedTargetVolumePath: String?
+    var windowsCopyStageTotalBytes: Int64?
+    var windowsRsyncProgressMode: String?
+    var windowsLegacyRsyncCurrentFilePath: String?
+    var windowsLegacyRsyncCurrentFileSizeBytes: Int64 = 0
+    var windowsLegacyRsyncCompletedBytes: Int64 = 0
+    var windowsLegacyRsyncToCheckUsesProcessedCount: Bool?
     var currentStageKey: String?
 
     init(request: HelperWorkflowRequestPayload, workflowID: String, sendEvent: @escaping (HelperProgressEventPayload) -> Void) {
@@ -50,6 +66,9 @@ final class HelperWorkflowExecutor {
             try startLinuxMountGuardIfNeeded(stages: stages)
 
             for stage in stages {
+                if shouldSkipWindowsStage(stage) {
+                    continue
+                }
                 currentStageKey = stage.key
                 try throwIfCancelled()
                 if stage.key == "catalina_copy" {
@@ -107,7 +126,8 @@ final class HelperWorkflowExecutor {
             if linuxMountGuardReleaseReason == "verify_failed" {
                 stopLinuxMountGuardIfNeeded(reason: "verify_failed")
             }
-            if !shouldDeferCleanupForLinuxUnmountPrompt(failedStage: stage, description: description) {
+            if !shouldDeferCleanupForLinuxUnmountPrompt(failedStage: stage, description: description)
+                && !shouldDeferCleanupForWindowsUnmountPrompt(failedStage: stage, description: description) {
                 runBestEffortTempCleanupStage()
             }
             return HelperWorkflowResultPayload(
