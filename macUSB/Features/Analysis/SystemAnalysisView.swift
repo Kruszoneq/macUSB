@@ -188,8 +188,22 @@ struct SystemAnalysisView: View {
     }
 
     private var fileSelectionControls: some View {
-        HStack {
-            TextField(String(localized: "Ścieżka..."), text: $logic.selectedFilePath)
+        let selectedFileDisplayName: String = {
+            if let selectedFileURL = logic.selectedFileUrl {
+                return selectedFileURL.lastPathComponent
+            }
+            guard !logic.selectedFilePath.isEmpty else { return "" }
+            return URL(fileURLWithPath: logic.selectedFilePath).lastPathComponent
+        }()
+
+        return HStack {
+            TextField(
+                String(localized: "Plik źródłowy..."),
+                text: Binding(
+                    get: { selectedFileDisplayName },
+                    set: { _ in }
+                )
+            )
                 .textFieldStyle(.roundedBorder)
                 .disabled(true)
             Button(String(localized: "Wybierz")) { logic.selectDMGFile() }

@@ -29343,78 +29343,78 @@
         }
       }
     },
-    "Ścieżka...": {
+    "Plik źródłowy...": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pfad..."
+            "value": "Quelldatei..."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Path..."
+            "value": "Source File..."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ruta..."
+            "value": "Archivo de origen..."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chemin..."
+            "value": "Fichier source..."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Percorso..."
+            "value": "File sorgente..."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "パス..."
+            "value": "ソースファイル..."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Caminho..."
+            "value": "Arquivo de origem..."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Путь..."
+            "value": "Исходный файл..."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yol..."
+            "value": "Kaynak dosya..."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Шлях..."
+            "value": "Вихідний файл..."
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Con đường..."
+            "value": "Tệp nguồn..."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "路径..."
+            "value": "源文件..."
           }
         }
       }
