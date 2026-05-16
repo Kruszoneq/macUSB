@@ -222,7 +222,7 @@ macOS versions recognized and supported for USB creation:
 
 [^2]: Only **10.12.6** is supported.
 [^3]: Fully verified with the image from [Mavericks Forever](https://mavericksforever.com/). Other sources may fail.
-[^4]: **Single DVD** is auto-detected. **Multi-DVD** guide: [Tiger Multi-DVD Guide](https://kruszoneq.github.io/macUSB/pages/guides/multidvd_tiger.html).
+[^4]: **Single-DVD** images are auto-detected. For **Multi-DVD** images, only the first disc is recognized correctly. Other discs may appear as unrecognized or be identified incorrectly. To use them, force detection manually from **Options** → **Skip file analysis** → **Mac OS X Tiger 10.4 (Multi DVD)**.
 
 ---
 
