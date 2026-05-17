@@ -29,5 +29,6 @@ macUSB_temp/
 *.dSYM
 *.zip
 
-# Xcode DerivedData (jeśli kiedyś zmienisz lokalizację)
+# Xcode DerivedData
 DerivedData/
+.deriveddata*/
