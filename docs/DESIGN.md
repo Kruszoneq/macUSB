@@ -53,6 +53,7 @@ It describes how interfaces should look and behave, not what exact marketing cop
 - Alternate media/copy placement can be used for scan rhythm.
 - Kicker labels should be short, uppercase-style section identifiers.
 - Avoid dense multi-column copy blocks in landing sections.
+- Legal-style clarifications and product caveats should appear as restrained fine print above the footer, separated by a thin divider and styled with low visual emphasis.
 
 ## Screenshot Carousel Rules
 

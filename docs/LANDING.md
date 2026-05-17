@@ -26,10 +26,10 @@ This document describes the actual structure, content, and behavior of `index.ht
 - Note: `The optimal flashing method is applied dynamically based on the source image format.`
 - Carousel screenshots:
   - `assets/screenshots/app-v2/01-welcome.png`
-  - `assets/screenshots/app-v2/02-analysis.png`
-  - `assets/screenshots/app-v2/03-overview.png`
-  - `assets/screenshots/app-v2/04-progress.png`
-  - `assets/screenshots/app-v2/05-finish.png`
+  - `assets/screenshots/app-v2/02-source-target-analysis.png`
+  - `assets/screenshots/app-v2/03-operation-overview.png`
+  - `assets/screenshots/app-v2/04-creation-progress.png`
+  - `assets/screenshots/app-v2/05-operation-result.png`
 
 3. macOS Downloader (`#downloader`)
 - Kicker: `macOS Downloader`
@@ -41,18 +41,20 @@ This document describes the actual structure, content, and behavior of `index.ht
   - `assets/screenshots/downloader/02-download-progress.png`
   - `assets/screenshots/downloader/03-download-summary.png`
 
-4. Linux Support (`#linux-support`)
-- Kicker: `Linux Support`
-- Heading: `Smart Linux distro validation`
-- Lead: `Drop an ISO to instantly verify the exact OS release and system architecture before flashing.`
-- Note: `Visual confirmation prevents accidental flashing of incorrect versions or unsupported architecture images.`
+4. Windows + Linux (`#platform-support`)
+- Kicker: `Windows + Linux`
+- Heading: `Smart Windows and Linux image validation`
+- Lead: `Drop a Windows or Linux ISO to instantly verify the exact OS release, edition, and architecture before flashing.`
+- Note: `Oversized Windows .wim files are split automatically to fit within FAT32 limitations.¹`
 - Carousel screenshots:
-  - `assets/screenshots/linux/01-debian.png`
-  - `assets/screenshots/linux/02-ubuntu.png`
-  - `assets/screenshots/linux/03-mint.png`
-  - `assets/screenshots/linux/04-opensuse.png`
-  - `assets/screenshots/linux/05-kali.png`
-  - `assets/screenshots/linux/06-gentoo.png`
+  - `assets/screenshots/windows-linux/01-windows-11.png`
+  - `assets/screenshots/windows-linux/02-windows-10.png`
+  - `assets/screenshots/windows-linux/03-windows-server-2025.png`
+  - `assets/screenshots/windows-linux/04-windows-server-2022.png`
+  - `assets/screenshots/windows-linux/05-debian.png`
+  - `assets/screenshots/windows-linux/06-ubuntu.png`
+  - `assets/screenshots/windows-linux/07-opensuse.png`
+  - `assets/screenshots/windows-linux/08-linux-mint.png`
 
 5. Legacy macOS (`#why`)
 - Kicker: `Legacy macOS`
@@ -69,6 +71,11 @@ This document describes the actual structure, content, and behavior of `index.ht
 - Heading: `Fully open, always free`
 - Copy: `macUSB is open source and free. Explore the code on GitHub, report issues, and help shape upcoming releases.`
 - CTA: `View on GitHub` -> `https://github.com/Kruszoneq/macUSB`
+
+8. Fine Print
+- Placement: directly above the shared footer
+- Style: low-emphasis, legal-style fine print separated by a thin divider, centered in a narrower container than the main content, with softer contrast and slower line wrapping
+- Footnote `1`: `1. Splitting Windows .wim files requires the free wimlib package. It isn’t included with macUSB and must be installed separately, for example with Homebrew. macUSB checks for it only when a Windows installer requires .wim splitting to fit within FAT32 limitations.`
 
 ## Carousel Behavior Rules
 

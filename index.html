@@ -102,10 +102,10 @@
                 <div class="product-preview-media screenshot-carousel">
                     <div class="screenshot-stage" aria-label="macUSB app screenshots">
                         <img src="assets/screenshots/app-v2/01-welcome.png" alt="macUSB welcome screen" loading="lazy" decoding="async" data-step="1" class="is-active">
-                        <img src="assets/screenshots/app-v2/02-analysis.png" alt="macUSB source and target configuration" loading="lazy" decoding="async" data-step="2">
-                        <img src="assets/screenshots/app-v2/03-overview.png" alt="macUSB operation overview" loading="lazy" decoding="async" data-step="3">
-                        <img src="assets/screenshots/app-v2/04-progress.png" alt="macUSB creation progress" loading="lazy" decoding="async" data-step="4">
-                        <img src="assets/screenshots/app-v2/05-finish.png" alt="macUSB operation result" loading="lazy" decoding="async" data-step="5">
+                        <img src="assets/screenshots/app-v2/02-source-target-analysis.png" alt="macUSB source and target configuration" loading="lazy" decoding="async" data-step="2">
+                        <img src="assets/screenshots/app-v2/03-operation-overview.png" alt="macUSB operation overview" loading="lazy" decoding="async" data-step="3">
+                        <img src="assets/screenshots/app-v2/04-creation-progress.png" alt="macUSB creation progress" loading="lazy" decoding="async" data-step="4">
+                        <img src="assets/screenshots/app-v2/05-operation-result.png" alt="macUSB operation result" loading="lazy" decoding="async" data-step="5">
                     </div>
 
                     <div class="screenshot-dots" aria-label="Screenshot controls">
@@ -144,32 +144,36 @@
             </div>
         </section>
 
-        <section class="home-section reveal" id="linux-support" aria-labelledby="linux-support-title">
+        <section class="home-section reveal" id="platform-support" aria-labelledby="platform-support-title">
             <div class="product-preview-grid">
                 <div class="product-preview-copy">
-                    <span class="section-kicker">Linux Support</span>
-                    <h2 id="linux-support-title" class="product-preview-title">Smart Linux distro validation</h2>
-                    <p class="product-preview-lead">Drop an ISO to instantly verify the exact OS release and system architecture before flashing.</p>
-                    <p class="product-preview-note">Visual confirmation prevents accidental flashing of incorrect versions or unsupported architecture images.</p>
+                    <span class="section-kicker">Windows + Linux</span>
+                    <h2 id="platform-support-title" class="product-preview-title">Smart Windows and Linux image validation</h2>
+                    <p class="product-preview-lead">Drop a Windows or Linux ISO to instantly verify the exact OS release, edition, and architecture before flashing.</p>
+                    <p class="product-preview-note">Oversized Windows .wim files are split automatically to fit within FAT32 limitations.<sup><a href="#footnote-wimlib" aria-label="Read the note about wimlib requirements">1</a></sup></p>
                 </div>
 
                 <div class="product-preview-media screenshot-carousel">
-                    <div class="screenshot-stage" aria-label="macUSB Linux distro detection screenshots">
-                        <img src="assets/screenshots/linux/01-debian.png" alt="macUSB detection result for Debian" loading="lazy" decoding="async" data-step="1" class="is-active">
-                        <img src="assets/screenshots/linux/02-ubuntu.png" alt="macUSB detection result for Ubuntu" loading="lazy" decoding="async" data-step="2">
-                        <img src="assets/screenshots/linux/03-mint.png" alt="macUSB detection result for Linux Mint" loading="lazy" decoding="async" data-step="3">
-                        <img src="assets/screenshots/linux/04-opensuse.png" alt="macUSB detection result for openSUSE" loading="lazy" decoding="async" data-step="4">
-                        <img src="assets/screenshots/linux/05-kali.png" alt="macUSB detection result for Kali Linux" loading="lazy" decoding="async" data-step="5">
-                        <img src="assets/screenshots/linux/06-gentoo.png" alt="macUSB detection result for Gentoo" loading="lazy" decoding="async" data-step="6">
+                    <div class="screenshot-stage" aria-label="macUSB Windows and Linux detection screenshots">
+                        <img src="assets/screenshots/windows-linux/01-windows-11.png" alt="macUSB detection result for Windows 11" loading="lazy" decoding="async" data-step="1" class="is-active">
+                        <img src="assets/screenshots/windows-linux/02-windows-10.png" alt="macUSB detection result for Windows 10" loading="lazy" decoding="async" data-step="2">
+                        <img src="assets/screenshots/windows-linux/03-windows-server-2025.png" alt="macUSB detection result for Windows Server 2025" loading="lazy" decoding="async" data-step="3">
+                        <img src="assets/screenshots/windows-linux/04-windows-server-2022.png" alt="macUSB detection result for Windows Server 2022" loading="lazy" decoding="async" data-step="4">
+                        <img src="assets/screenshots/windows-linux/05-debian.png" alt="macUSB detection result for Debian" loading="lazy" decoding="async" data-step="5">
+                        <img src="assets/screenshots/windows-linux/06-ubuntu.png" alt="macUSB detection result for Ubuntu" loading="lazy" decoding="async" data-step="6">
+                        <img src="assets/screenshots/windows-linux/07-opensuse.png" alt="macUSB detection result for openSUSE Leap" loading="lazy" decoding="async" data-step="7">
+                        <img src="assets/screenshots/windows-linux/08-linux-mint.png" alt="macUSB detection result for Linux Mint" loading="lazy" decoding="async" data-step="8">
                     </div>
 
-                    <div class="screenshot-dots" aria-label="Linux screenshot controls">
-                        <button class="screenshot-dot is-active" type="button" data-step="1" aria-label="Show Linux screenshot 1" aria-pressed="true"></button>
-                        <button class="screenshot-dot" type="button" data-step="2" aria-label="Show Linux screenshot 2" aria-pressed="false"></button>
-                        <button class="screenshot-dot" type="button" data-step="3" aria-label="Show Linux screenshot 3" aria-pressed="false"></button>
-                        <button class="screenshot-dot" type="button" data-step="4" aria-label="Show Linux screenshot 4" aria-pressed="false"></button>
-                        <button class="screenshot-dot" type="button" data-step="5" aria-label="Show Linux screenshot 5" aria-pressed="false"></button>
-                        <button class="screenshot-dot" type="button" data-step="6" aria-label="Show Linux screenshot 6" aria-pressed="false"></button>
+                    <div class="screenshot-dots" aria-label="Windows and Linux screenshot controls">
+                        <button class="screenshot-dot is-active" type="button" data-step="1" aria-label="Show platform screenshot 1" aria-pressed="true"></button>
+                        <button class="screenshot-dot" type="button" data-step="2" aria-label="Show platform screenshot 2" aria-pressed="false"></button>
+                        <button class="screenshot-dot" type="button" data-step="3" aria-label="Show platform screenshot 3" aria-pressed="false"></button>
+                        <button class="screenshot-dot" type="button" data-step="4" aria-label="Show platform screenshot 4" aria-pressed="false"></button>
+                        <button class="screenshot-dot" type="button" data-step="5" aria-label="Show platform screenshot 5" aria-pressed="false"></button>
+                        <button class="screenshot-dot" type="button" data-step="6" aria-label="Show platform screenshot 6" aria-pressed="false"></button>
+                        <button class="screenshot-dot" type="button" data-step="7" aria-label="Show platform screenshot 7" aria-pressed="false"></button>
+                        <button class="screenshot-dot" type="button" data-step="8" aria-label="Show platform screenshot 8" aria-pressed="false"></button>
                     </div>
                 </div>
             </div>
@@ -205,6 +209,12 @@
                     <span>View on GitHub</span>
                 </a>
             </p>
+        </section>
+
+        <section class="home-fine-print" aria-label="Important information">
+            <div class="home-fine-print-inner">
+                <p id="footnote-wimlib" class="home-fine-print-copy"><span class="home-fine-print-index">1.</span><span class="home-fine-print-text">Splitting Windows .wim files requires the free <a href="https://wimlib.net/" target="_blank" rel="noopener">wimlib</a> package. It isn’t included with macUSB and must be installed separately, for example with Homebrew. macUSB checks for it only when a Windows installer requires .wim splitting to fit within FAT32 limitations.</span></p>
+            </div>
         </section>
     </main>
 

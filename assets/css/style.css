@@ -891,6 +891,23 @@ h1 {
   line-height: 1.5;
 }
 
+.home-page sup {
+  font-size: 0.75em;
+  line-height: 0;
+  vertical-align: super;
+  margin-left: 2px;
+}
+
+.home-page sup a {
+  color: var(--color-ink);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.home-page sup a:hover {
+  text-decoration: underline;
+}
+
 .product-preview-media {
   display: flex;
   flex-direction: column;
@@ -1055,6 +1072,44 @@ body.scrolled .scroll-cue {
   margin-right: auto;
   padding-left: 20px;
   padding-right: 20px;
+}
+
+.home-fine-print {
+  max-width: none;
+  margin-top: 80px;
+  padding: 0 20px;
+}
+
+.home-fine-print-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-hairline-soft);
+}
+
+.home-fine-print-copy {
+  margin: 0 auto;
+  max-width: 100%;
+  color: var(--color-muted-soft);
+  font-size: 12px;
+  line-height: 1.6;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 6px;
+  align-items: start;
+}
+
+.home-fine-print-index {
+  white-space: nowrap;
+}
+
+.home-fine-print-text {
+  min-width: 0;
+}
+
+.home-fine-print-copy a {
+  color: inherit;
+  text-underline-offset: 0.14em;
 }
 
 .section-head {
@@ -1285,7 +1340,8 @@ footer .cta-button:hover {
   }
 
   .home-section.home-section-full .section-head,
-  .home-section.home-section-full .section-actions {
+  .home-section.home-section-full .section-actions,
+  .home-fine-print-inner {
     padding-left: 14px;
     padding-right: 14px;
   }
