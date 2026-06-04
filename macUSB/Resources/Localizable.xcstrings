@@ -39976,6 +39976,498 @@
           }
         }
       }
+    },
+    "raw_linux_img.alert.continue_button": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fortfahren und .img-Datei auswählen…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue and Choose .img File…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuar y seleccionar archivo .img…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer et choisir le fichier .img…"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continua e scegli il file .img…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "続けて.imgファイルを選択…"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kontynuuj i wybierz plik .img…"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuar e escolher arquivo .img…"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продолжить и выбрать файл .img…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sürdür ve .img dosyası seç…"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продовжити й вибрати файл .img…"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiếp tục và chọn tệp .img…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "继续并选择 .img 文件…"
+          }
+        }
+      }
+    },
+    "raw_linux_img.alert.message": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Option zwingt macUSB, die ausgewählte .img-Datei als Linux-Image zu erkennen. Die Datei wird von macUSB nicht überprüft, und das erstellte USB-Medium startet möglicherweise nicht korrekt. Möchten Sie fortfahren?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This option forces macUSB to recognize the selected .img file as a Linux image. The file will not be checked by macUSB, and the USB media you create may not boot correctly. Do you want to continue?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta opción obliga a macUSB a reconocer el archivo .img seleccionado como una imagen de Linux. macUSB no comprobará el archivo, y el medio USB que crees podría no arrancar correctamente. ¿Quieres continuar?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette option force macUSB à reconnaître le fichier .img sélectionné comme une image Linux. Le fichier ne sera pas vérifié par macUSB, et le support USB créé pourrait ne pas démarrer correctement. Voulez-vous continuer ?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questa opzione forza macUSB a riconoscere il file .img selezionato come immagine Linux. Il file non verrà controllato da macUSB e il supporto USB creato potrebbe non avviarsi correttamente. Vuoi continuare?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このオプションは、選択した.imgファイルをLinuxイメージとしてmacUSBに強制的に認識させます。ファイルはmacUSBで検証されず、作成したUSBメディアが正しく起動しない場合があります。続けますか？"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta opcja wymusi rozpoznanie wybranego pliku .img jako obrazu Linux. Plik nie zostanie sprawdzony przez macUSB, a utworzony nośnik USB może nie uruchomić systemu poprawnie. Czy chcesz kontynuować?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta opção força o macUSB a reconhecer o arquivo .img selecionado como uma imagem Linux. O arquivo não será verificado pelo macUSB, e a mídia USB criada pode não inicializar corretamente. Deseja continuar?"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Этот параметр принудительно распознает выбранный файл .img в macUSB как образ Linux. Файл не будет проверен macUSB, а созданный USB-носитель может не загрузиться корректно. Продолжить?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu seçenek, seçilen .img dosyasının macUSB tarafından Linux imajı olarak tanınmasını zorlar. Dosya macUSB tarafından denetlenmez ve oluşturulan USB ortamı doğru şekilde önyüklenmeyebilir. Sürdürmek istiyor musunuz?"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цей параметр примусово розпізнає вибраний файл .img у macUSB як образ Linux. Файл не буде перевірено macUSB, а створений USB-носій може не завантажуватися належним чином. Продовжити?"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tùy chọn này buộc macUSB nhận dạng tệp .img đã chọn là ảnh đĩa Linux. Tệp sẽ không được macUSB kiểm tra, và phương tiện USB được tạo có thể không khởi động đúng cách. Bạn có muốn tiếp tục không?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此选项会强制 macUSB 将所选 .img 文件识别为 Linux 镜像。macUSB 不会检查该文件，创建的 USB 介质可能无法正确启动。要继续吗？"
+          }
+        }
+      }
+    },
+    "raw_linux_img.alert.title": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rohes Linux-Image schreiben"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write Raw Linux Image"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escribir imagen Linux sin procesar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écrire une image Linux brute"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scrivi immagine Linux raw"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LinuxのRAWイメージを書き込む"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zapis surowego obrazu Linux"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gravar imagem Linux bruta"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запись необработанного образа Linux"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ham Linux imajını yaz"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запис необробленого образу Linux"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ghi ảnh đĩa Linux thô"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "写入原始 Linux 镜像"
+          }
+        }
+      }
+    },
+    "raw_linux_img.menu.write": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rohes Linux-Image (.img) schreiben..."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write Raw Linux Image (.img)..."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escribir imagen Linux sin procesar (.img)..."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écrire une image Linux brute (.img)..."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scrivi immagine Linux raw (.img)..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LinuxのRAWイメージ（.img）を書き込む..."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zapisz surowy obraz Linux (.img)..."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gravar imagem Linux bruta (.img)..."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записать необработанный образ Linux (.img)..."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ham Linux imajı (.img) yaz..."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Записати необроблений образ Linux (.img)..."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ghi ảnh đĩa Linux thô (.img)..."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "写入原始 Linux 镜像 (.img)..."
+          }
+        }
+      }
+    },
+    "raw_linux_img.panel.message": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wählen Sie ein rohes Linux-Image im .img-Format aus."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a raw Linux image in .img format."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selecciona una imagen Linux sin procesar en formato .img."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez une image Linux brute au format .img."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli un'immagine Linux raw in formato .img."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ".img形式のLinux RAWイメージを選択してください。"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wybierz surowy obraz Linux w formacie .img."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha uma imagem Linux bruta no formato .img."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите необработанный образ Linux в формате .img."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ".img biçiminde bir ham Linux imajı seçin."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Виберіть необроблений образ Linux у форматі .img."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chọn ảnh đĩa Linux thô ở định dạng .img."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请选择 .img 格式的原始 Linux 镜像。"
+          }
+        }
+      }
+    },
+    "raw_linux_img.panel.title": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ".img-Datei auswählen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose .img File"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seleccionar archivo .img"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir le fichier .img"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli file .img"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ".imgファイルを選択"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wybierz plik .img"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolher arquivo .img"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите файл .img"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ".img dosyası seç"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Виберіть файл .img"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chọn tệp .img"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择 .img 文件"
+          }
+        }
+      }
     }
   },
   "version": "1.1"

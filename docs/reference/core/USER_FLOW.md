@@ -17,12 +17,14 @@ Destructive start requires explicit confirmation.
 
 Linux-specific runtime behavior:
 - recognized Linux image (`.iso`) unlocks the same shared install flow,
+- `Tools -> Write Raw Linux Image (.img)...` can force a selected `.img` file into Linux raw-copy flow from Welcome or an empty analysis screen after a warning and dedicated `.img` picker,
 - USB validation keeps capacity gating, while APFS blocking is macOS-only (Linux uses physical `diskX` targets),
 - creation branch uses Linux raw-copy helper stages.
 
 ## Tools Flow: Downloader
 
 - `Tools -> Download macOS installer...` opens downloader window.
+- `Tools -> Write Raw Linux Image (.img)...` is placed under the downloader action, separated by a divider, and is enabled only on Welcome or on `SystemAnalysisView` before any source file is selected.
 - `SystemAnalysisView` also exposes `Pobierz` between `Wybierz` and `Analizuj` for direct downloader access.
 - Downloader opening is blocked during USB creation operation stages (`UniversalInstallationView`, `CreationProgressView`, `FinishUSBView`), and `Tools -> Pobierz instalator macOS...` is disabled there.
 - Discovery starts on entering downloader window (never on app startup).

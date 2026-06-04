@@ -12,7 +12,7 @@ Workflow selection must respect analyzed compatibility flags.
 - Mavericks restore path
 - PPC dedicated formatting/restore path
 - Catalina and Sierra dedicated handling where required
-- Linux raw-copy path (`dd`)
+- Linux raw-copy path (`dd`) for recognized `.iso` sources and exceptional forced raw `.img` sources
 - Windows ISO copy path (FAT32/MBR + optional WIM split)
 
 Linux raw-copy stages:

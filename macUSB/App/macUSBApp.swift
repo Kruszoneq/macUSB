@@ -303,6 +303,13 @@ struct macUSBApp: App {
                 .disabled(menuState.isDownloaderAccessBlocked)
                 Divider()
                 Button {
+                    RawLinuxImageSelectionCoordinator.shared.presentSelectionFlow()
+                } label: {
+                    Label(String(localized: "raw_linux_img.menu.write"), systemImage: "externaldrive.fill.badge.plus")
+                }
+                .disabled(!menuState.rawLinuxImageSelectionEnabled)
+                Divider()
+                Button {
                     if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.DiskUtility") {
                         NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration(), completionHandler: nil)
                     } else {

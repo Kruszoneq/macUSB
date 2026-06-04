@@ -105,9 +105,13 @@ struct WelcomeView: View {
             navigateToAnalysis = true
         }
         .onAppear {
+            MenuState.shared.rawLinuxImageSelectionEnabled = true
             guard !didRunStartupFlow else { return }
             didRunStartupFlow = true
             runStartupFlow()
+        }
+        .onDisappear {
+            MenuState.shared.rawLinuxImageSelectionEnabled = false
         }
     }
 

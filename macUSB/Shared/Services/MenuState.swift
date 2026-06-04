@@ -9,6 +9,7 @@ final class MenuState: ObservableObject {
     @Published var notificationsEnabled: Bool = false
     @Published var hasFullDiskAccess: Bool = true
     @Published var helperRequiresBackgroundApproval: Bool = false
+    @Published var rawLinuxImageSelectionEnabled: Bool = false
     @Published private(set) var isDownloaderAccessBlocked: Bool = false
     @Published var debugCopiedDataLabel: String = String(
         format: String(localized: "Przekopiowane dane: %.1f GB"),
