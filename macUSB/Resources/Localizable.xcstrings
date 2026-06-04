@@ -12277,7 +12277,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schreiben des Linux-Images auf den Zieldatenträger..."
+            "value": "Windows-Installationsdateien werden auf das USB-Medium kopiert..."
           }
         },
         "en": {
@@ -12289,25 +12289,25 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Escribiendo la imagen de Linux en el disco de destino..."
+            "value": "Copiando los archivos del instalador de Windows al medio USB..."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Écriture de l’image Linux sur le disque cible..."
+            "value": "Copie des fichiers du programme d’installation Windows sur le support USB..."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Scrittura dell’immagine Linux sul disco di destinazione..."
+            "value": "Copia dei file del programma di installazione di Windows sul supporto USB..."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Linux イメージを対象ディスクに書き込み中..."
+            "value": "Windows インストーラファイルを USB メディアにコピー中..."
           }
         },
         "pl": {
@@ -12319,37 +12319,37 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gravando a imagem Linux no disco de destino..."
+            "value": "Copiando os arquivos do instalador do Windows para a mídia USB..."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Запись образа Linux на целевой диск..."
+            "value": "Копирование файлов установщика Windows на USB-носитель..."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Linux imajı hedef diske yazılıyor..."
+            "value": "Windows yükleyici dosyaları USB ortamına kopyalanıyor..."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Запис образу Linux на цільовий диск..."
+            "value": "Копіювання файлів інсталятора Windows на USB-носій..."
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Đang ghi ảnh đĩa Linux vào ổ đích..."
+            "value": "Đang sao chép các tệp trình cài đặt Windows vào phương tiện USB..."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "正在将 Linux 镜像写入目标磁盘..."
+            "value": "正在将 Windows 安装程序文件复制到 USB 介质..."
           }
         }
       }
@@ -12359,7 +12359,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erstellen des Linux-Mediums"
+            "value": "Erstellen des Windows-Mediums"
           }
         },
         "en": {
@@ -12371,25 +12371,25 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Creando medio Linux"
+            "value": "Creando medio de Windows"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Création du support Linux"
+            "value": "Création du support Windows"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Creazione del supporto Linux"
+            "value": "Creazione del supporto Windows"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Linux メディアを作成中"
+            "value": "Windows メディアを作成中"
           }
         },
         "pl": {
@@ -12401,37 +12401,37 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Criando mídia Linux"
+            "value": "Criando mídia do Windows"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Создание носителя Linux"
+            "value": "Создание носителя Windows"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Linux ortamı oluşturuluyor"
+            "value": "Windows ortamı oluşturuluyor"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Створення носія Linux"
+            "value": "Створення носія Windows"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Đang tạo phương tiện Linux"
+            "value": "Đang tạo phương tiện Windows"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "正在创建 Linux 介质"
+            "value": "正在创建 Windows 介质"
           }
         }
       }
@@ -13015,7 +13015,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verifizieren des Linux-Mediums"
+            "value": "Verifizieren des Windows-Mediums"
           }
         },
         "en": {
@@ -13027,25 +13027,25 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verificando el medio Linux"
+            "value": "Verificando el medio de Windows"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vérification du support Linux"
+            "value": "Vérification du support Windows"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verifica del supporto Linux"
+            "value": "Verifica del supporto Windows"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Linuxメディアを検証中"
+            "value": "Windows メディアを検証中"
           }
         },
         "pl": {
@@ -13057,37 +13057,37 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Verificando mídia Linux"
+            "value": "Verificando mídia do Windows"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Проверка носителя Linux"
+            "value": "Проверка носителя Windows"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Linux ortamı doğrulanıyor"
+            "value": "Windows ortamı doğrulanıyor"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Перевірка носія Linux"
+            "value": "Перевірка носія Windows"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Đang xác minh phương tiện Linux"
+            "value": "Đang xác minh phương tiện Windows"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "正在验证 Linux 介质"
+            "value": "正在验证 Windows 介质"
           }
         }
       }
