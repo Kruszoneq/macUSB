@@ -9,4 +9,5 @@ extension Notification.Name {
     static let macUSBDebugGoToLinuxSummary = Notification.Name("macUSB.debugGoToLinuxSummary")
     static let macUSBNavigateToAnalysis = Notification.Name("macUSB.navigateToAnalysis")
     static let macUSBApplyPendingDownloaderInstaller = Notification.Name("macUSB.applyPendingDownloaderInstaller")
+    static let macUSBApplyPendingRawLinuxImage = Notification.Name("macUSB.applyPendingRawLinuxImage")
 }
