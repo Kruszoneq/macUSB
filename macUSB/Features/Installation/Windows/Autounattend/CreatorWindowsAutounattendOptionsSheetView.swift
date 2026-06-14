@@ -34,6 +34,11 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
                 isOn: binding(\.preventDeviceEncryption)
             )
 
+            Toggle(
+                String(localized: "installation.summary.windows.autounattend.option.disable_data_collection"),
+                isOn: binding(\.disableDataCollection)
+            )
+
             Toggle(isOn: binding(\.skipLicenseScreen)) {
                 HStack(spacing: 4) {
                     Text(String(localized: "installation.summary.windows.autounattend.option.skip_license"))
@@ -42,9 +47,16 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
             }
 
             Toggle(
+                String(localized: "installation.summary.windows.autounattend.option.skip_wireless_setup"),
+                isOn: binding(\.skipWirelessSetup)
+            )
+
+            Toggle(
                 String(localized: "installation.summary.windows.autounattend.option.skip_microsoft_account"),
                 isOn: binding(\.skipMicrosoftAccountRequirement)
             )
+            .disabled(configuration.skipWirelessSetup)
+            .opacity(configuration.skipWirelessSetup ? 0.55 : 1)
 
             Toggle(
                 String(localized: "installation.summary.windows.autounattend.option.local_account"),

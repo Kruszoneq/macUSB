@@ -12,7 +12,9 @@ enum HelperWorkflowKind: String, Codable {
 struct WindowsAutounattendConfigurationPayload: Codable {
     let skipHardwareRequirements: Bool
     let preventDeviceEncryption: Bool
+    let disableDataCollection: Bool
     let skipLicenseScreen: Bool
+    let skipWirelessSetup: Bool
     let skipMicrosoftAccountRequirement: Bool
     let createLocalAccount: Bool
     let localAccountName: String?
@@ -20,14 +22,18 @@ struct WindowsAutounattendConfigurationPayload: Codable {
     init(
         skipHardwareRequirements: Bool,
         preventDeviceEncryption: Bool = false,
+        disableDataCollection: Bool = false,
         skipLicenseScreen: Bool,
+        skipWirelessSetup: Bool = false,
         skipMicrosoftAccountRequirement: Bool = false,
         createLocalAccount: Bool,
         localAccountName: String?
     ) {
         self.skipHardwareRequirements = skipHardwareRequirements
         self.preventDeviceEncryption = preventDeviceEncryption
+        self.disableDataCollection = disableDataCollection
         self.skipLicenseScreen = skipLicenseScreen
+        self.skipWirelessSetup = skipWirelessSetup
         self.skipMicrosoftAccountRequirement = skipMicrosoftAccountRequirement
         self.createLocalAccount = createLocalAccount
         self.localAccountName = localAccountName
@@ -36,7 +42,9 @@ struct WindowsAutounattendConfigurationPayload: Codable {
     private enum CodingKeys: String, CodingKey {
         case skipHardwareRequirements
         case preventDeviceEncryption
+        case disableDataCollection
         case skipLicenseScreen
+        case skipWirelessSetup
         case skipMicrosoftAccountRequirement
         case createLocalAccount
         case localAccountName
@@ -46,7 +54,9 @@ struct WindowsAutounattendConfigurationPayload: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         skipHardwareRequirements = try container.decode(Bool.self, forKey: .skipHardwareRequirements)
         preventDeviceEncryption = try container.decodeIfPresent(Bool.self, forKey: .preventDeviceEncryption) ?? false
+        disableDataCollection = try container.decodeIfPresent(Bool.self, forKey: .disableDataCollection) ?? false
         skipLicenseScreen = try container.decode(Bool.self, forKey: .skipLicenseScreen)
+        skipWirelessSetup = try container.decodeIfPresent(Bool.self, forKey: .skipWirelessSetup) ?? false
         skipMicrosoftAccountRequirement = try container.decodeIfPresent(Bool.self, forKey: .skipMicrosoftAccountRequirement) ?? false
         createLocalAccount = try container.decode(Bool.self, forKey: .createLocalAccount)
         localAccountName = try container.decodeIfPresent(String.self, forKey: .localAccountName)

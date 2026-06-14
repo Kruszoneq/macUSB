@@ -33,7 +33,9 @@ enum CreatorWindowsAutounattendExistingFileDecision: String {
 struct CreatorWindowsAutounattendConfiguration: Equatable {
     var skipHardwareRequirements: Bool = false
     var preventDeviceEncryption: Bool = false
+    var disableDataCollection: Bool = false
     var skipLicenseScreen: Bool = false
+    var skipWirelessSetup: Bool = false
     var skipMicrosoftAccountRequirement: Bool = false
     var createLocalAccount: Bool = false
     var localAccountName: String = ""
@@ -44,7 +46,13 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
     }
 
     var hasSelectedOption: Bool {
-        skipHardwareRequirements || preventDeviceEncryption || skipLicenseScreen || skipMicrosoftAccountRequirement || createLocalAccount
+        skipHardwareRequirements
+            || preventDeviceEncryption
+            || disableDataCollection
+            || skipLicenseScreen
+            || skipWirelessSetup
+            || skipMicrosoftAccountRequirement
+            || createLocalAccount
     }
 
     var shouldGenerateMacUSBFile: Bool {
@@ -67,6 +75,9 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
         if createLocalAccount {
             skipMicrosoftAccountRequirement = true
         }
+        if skipWirelessSetup {
+            skipMicrosoftAccountRequirement = true
+        }
         if !skipMicrosoftAccountRequirement {
             createLocalAccount = false
         }
@@ -80,7 +91,9 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
         return WindowsAutounattendConfigurationPayload(
             skipHardwareRequirements: skipHardwareRequirements,
             preventDeviceEncryption: preventDeviceEncryption,
+            disableDataCollection: disableDataCollection,
             skipLicenseScreen: skipLicenseScreen,
+            skipWirelessSetup: skipWirelessSetup,
             skipMicrosoftAccountRequirement: skipMicrosoftAccountRequirement,
             createLocalAccount: createLocalAccount,
             localAccountName: createLocalAccount ? trimmedLocalAccountName : nil

@@ -60,20 +60,23 @@ extension HelperWorkflowExecutor {
                 )
             }
         }
-
         let root = XMLElement(name: "unattend")
         root.addNamespace(XMLNode.namespace(withName: "", stringValue: "urn:schemas-microsoft-com:unattend") as! XMLNode)
         root.addNamespace(XMLNode.namespace(withName: "wcm", stringValue: "http://schemas.microsoft.com/WMIConfig/2002/State") as! XMLNode)
 
         if configuration.skipHardwareRequirements {
-            root.addChild(windowsPESettingsElement())
+            root.addChild(windowsPESettingsElement(configuration: configuration))
         }
 
         if configuration.preventDeviceEncryption {
-            root.addChild(specializeSettingsElement())
+            root.addChild(specializeSettingsElement(configuration: configuration))
         }
 
-        if configuration.skipLicenseScreen || configuration.skipMicrosoftAccountRequirement || configuration.createLocalAccount {
+        if configuration.disableDataCollection
+            || configuration.skipLicenseScreen
+            || configuration.skipWirelessSetup
+            || configuration.skipMicrosoftAccountRequirement
+            || configuration.createLocalAccount {
             root.addChild(oobeSystemSettingsElement(configuration: configuration))
         }
 
@@ -83,10 +86,17 @@ extension HelperWorkflowExecutor {
         return document.xmlData(options: [.nodePrettyPrint])
     }
 
-    private func windowsPESettingsElement() -> XMLElement {
+    private func windowsPESettingsElement(configuration: WindowsAutounattendConfigurationPayload) -> XMLElement {
         let settings = XMLElement(name: "settings")
         settings.addAttribute(XMLNode.attribute(withName: "pass", stringValue: "windowsPE") as! XMLNode)
 
+        if configuration.skipHardwareRequirements {
+            settings.addChild(windowsPESetupComponentElement())
+        }
+        return settings
+    }
+
+    private func windowsPESetupComponentElement() -> XMLElement {
         let component = componentElement(named: "Microsoft-Windows-Setup")
         let runSynchronous = XMLElement(name: "RunSynchronous")
         let commands = [
@@ -104,14 +114,20 @@ extension HelperWorkflowExecutor {
         }
 
         component.addChild(runSynchronous)
-        settings.addChild(component)
-        return settings
+        return component
     }
 
-    private func specializeSettingsElement() -> XMLElement {
+    private func specializeSettingsElement(configuration: WindowsAutounattendConfigurationPayload) -> XMLElement {
         let settings = XMLElement(name: "settings")
         settings.addAttribute(XMLNode.attribute(withName: "pass", stringValue: "specialize") as! XMLNode)
 
+        if configuration.preventDeviceEncryption {
+            settings.addChild(deploymentComponentElement())
+        }
+        return settings
+    }
+
+    private func deploymentComponentElement() -> XMLElement {
         let component = componentElement(named: "Microsoft-Windows-Deployment")
         let runSynchronous = XMLElement(name: "RunSynchronous")
         let commandElement = XMLElement(name: "RunSynchronousCommand")
@@ -124,8 +140,7 @@ extension HelperWorkflowExecutor {
 
         runSynchronous.addChild(commandElement)
         component.addChild(runSynchronous)
-        settings.addChild(component)
-        return settings
+        return component
     }
 
     private func oobeSystemSettingsElement(configuration: WindowsAutounattendConfigurationPayload) -> XMLElement {
@@ -133,17 +148,23 @@ extension HelperWorkflowExecutor {
         settings.addAttribute(XMLNode.attribute(withName: "pass", stringValue: "oobeSystem") as! XMLNode)
 
         let component = componentElement(named: "Microsoft-Windows-Shell-Setup")
+        let oobe = XMLElement(name: "OOBE")
 
         if configuration.skipLicenseScreen {
-            let oobe = XMLElement(name: "OOBE")
             oobe.addChild(textElement(name: "HideEULAPage", value: "true"))
             if configuration.skipMicrosoftAccountRequirement || configuration.createLocalAccount {
                 oobe.addChild(textElement(name: "HideOnlineAccountScreens", value: "true"))
             }
-            component.addChild(oobe)
         } else if configuration.skipMicrosoftAccountRequirement || configuration.createLocalAccount {
-            let oobe = XMLElement(name: "OOBE")
             oobe.addChild(textElement(name: "HideOnlineAccountScreens", value: "true"))
+        }
+        if configuration.skipWirelessSetup {
+            oobe.addChild(textElement(name: "HideWirelessSetupInOOBE", value: "true"))
+        }
+        if configuration.disableDataCollection {
+            oobe.addChild(textElement(name: "ProtectYourPC", value: "3"))
+        }
+        if oobe.childCount > 0 {
             component.addChild(oobe)
         }
 

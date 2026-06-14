@@ -50,9 +50,10 @@ Windows summary screen (`UniversalInstallationView`) should show an informationa
 Windows automatic configuration card:
 - card is visible only for recognized Windows 10 and Windows 11 images,
 - state is session-only and keyed to the selected ISO path plus file identity when available,
-- Windows 10 offers automatic BitLocker device-encryption prevention, automatic EULA acceptance, Microsoft-account requirement bypass, and local-account options,
+- Windows 10 offers automatic BitLocker device-encryption prevention, privacy data-collection opt-out, automatic EULA acceptance, Wi-Fi/network setup skip, Microsoft-account requirement bypass, and local-account options,
 - Windows 11 additionally offers a combined TPM 2.0/Secure Boot/RAM hardware-bypass option,
 - local account names are restricted to ASCII letters and digits for v1,
+- Wi-Fi/network setup skip automatically enables Microsoft-account requirement bypass and locks that option while selected,
 - automatic local-account creation is available only after Microsoft-account requirement bypass is selected,
 - if the mounted source already contains a root-level `Autounattend.xml` with any casing and automatic configuration is enabled, app-side pre-start flow must show a warning alert before destructive confirmation,
 - choosing the source file sends no autounattend payload and hides `windows_create_autounattend`,
@@ -76,6 +77,8 @@ Windows summary pre-start prerequisites:
 - Linux raw-copy must target whole-disk device, never a partition node.
 - Windows workflow must copy installer files 1:1 from ISO payload (no UEFI fallback file synthesis).
 - Windows automatic configuration may add or replace only root-level `Autounattend.xml` after the ISO payload copy, when explicitly enabled by the user. When automatic BitLocker device-encryption prevention is enabled, macUSB writes a `specialize` pass command that sets `HKLM\SYSTEM\CurrentControlSet\Control\BitLocker\PreventDeviceEncryption` to `1`.
+- Windows automatic configuration may set `OOBE/ProtectYourPC` to `3` when privacy data-collection opt-out is enabled.
+- Windows automatic configuration may set `OOBE/HideWirelessSetupInOOBE` to `true` when Wi-Fi/network setup skip is enabled.
 - Windows target format must be `MS-DOS (FAT32)` + `MBR`.
 
 ## Power Management Invariant

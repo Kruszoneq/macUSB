@@ -2,12 +2,19 @@ import Foundation
 
 extension WindowsAutounattendConfigurationPayload {
     var shouldGenerateFile: Bool {
-        skipHardwareRequirements || preventDeviceEncryption || skipLicenseScreen || skipMicrosoftAccountRequirement || createLocalAccount
+        skipHardwareRequirements
+            || preventDeviceEncryption
+            || disableDataCollection
+            || skipLicenseScreen
+            || skipWirelessSetup
+            || skipMicrosoftAccountRequirement
+            || createLocalAccount
     }
 
     var normalizedLocalAccountName: String? {
         localAccountName?.trimmingCharacters(in: .whitespacesAndNewlines)
     }
+
 }
 
 extension HelperWorkflowExecutor {
