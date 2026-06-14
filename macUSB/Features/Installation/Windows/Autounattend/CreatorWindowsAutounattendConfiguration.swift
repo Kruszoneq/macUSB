@@ -32,7 +32,9 @@ enum CreatorWindowsAutounattendExistingFileDecision: String {
 
 struct CreatorWindowsAutounattendConfiguration: Equatable {
     var skipHardwareRequirements: Bool = false
+    var preventDeviceEncryption: Bool = false
     var skipLicenseScreen: Bool = false
+    var skipMicrosoftAccountRequirement: Bool = false
     var createLocalAccount: Bool = false
     var localAccountName: String = ""
     var existingFileDecision: CreatorWindowsAutounattendExistingFileDecision?
@@ -42,7 +44,7 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
     }
 
     var hasSelectedOption: Bool {
-        skipHardwareRequirements || skipLicenseScreen || createLocalAccount
+        skipHardwareRequirements || preventDeviceEncryption || skipLicenseScreen || skipMicrosoftAccountRequirement || createLocalAccount
     }
 
     var shouldGenerateMacUSBFile: Bool {
@@ -62,6 +64,12 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
         if version?.supportsHardwareBypass != true {
             skipHardwareRequirements = false
         }
+        if createLocalAccount {
+            skipMicrosoftAccountRequirement = true
+        }
+        if !skipMicrosoftAccountRequirement {
+            createLocalAccount = false
+        }
         if !createLocalAccount {
             localAccountName = ""
         }
@@ -71,7 +79,9 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
         guard shouldGenerateMacUSBFile else { return nil }
         return WindowsAutounattendConfigurationPayload(
             skipHardwareRequirements: skipHardwareRequirements,
+            preventDeviceEncryption: preventDeviceEncryption,
             skipLicenseScreen: skipLicenseScreen,
+            skipMicrosoftAccountRequirement: skipMicrosoftAccountRequirement,
             createLocalAccount: createLocalAccount,
             localAccountName: createLocalAccount ? trimmedLocalAccountName : nil
         )

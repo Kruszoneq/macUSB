@@ -21,13 +21,15 @@ struct CreatorWindowsAutounattendDividerView: View {
 struct CreatorWindowsAutounattendCardView: View {
     let windowsVersion: CreatorWindowsAutounattendWindowsVersion
     @Binding var configuration: CreatorWindowsAutounattendConfiguration
-    @Binding var isPopoverPresented: Bool
+    @Binding var isOptionsPresented: Bool
     let onConfigurationChanged: (CreatorWindowsAutounattendConfiguration) -> Void
 
     private var selectedSummary: String? {
         let selectedCount = [
             configuration.skipHardwareRequirements,
+            configuration.preventDeviceEncryption,
             configuration.skipLicenseScreen,
+            configuration.skipMicrosoftAccountRequirement,
             configuration.createLocalAccount
         ].filter { $0 }.count
 
@@ -62,7 +64,7 @@ struct CreatorWindowsAutounattendCardView: View {
                             .foregroundColor(.secondary)
                     }
 
-                    Button(action: { isPopoverPresented.toggle() }) {
+                    Button(action: { isOptionsPresented = true }) {
                         HStack {
                             Text(String(localized: "installation.summary.windows.autounattend.configure.button"))
                             Image(systemName: "slider.horizontal.3")
@@ -71,8 +73,8 @@ struct CreatorWindowsAutounattendCardView: View {
                         .padding(8)
                     }
                     .macUSBSecondaryButtonStyle()
-                    .popover(isPresented: $isPopoverPresented, arrowEdge: .bottom) {
-                        CreatorWindowsAutounattendPopoverView(
+                    .sheet(isPresented: $isOptionsPresented) {
+                        CreatorWindowsAutounattendOptionsSheetView(
                             windowsVersion: windowsVersion,
                             configuration: $configuration,
                             onConfigurationChanged: onConfigurationChanged

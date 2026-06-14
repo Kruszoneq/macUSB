@@ -7338,6 +7338,7 @@
         }
       }
     },
+    "EULA": {},
     "finish.eject.button.action": {
       "extractionState": "stale",
       "localizations": {
@@ -15615,79 +15616,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Windows 11-Hardwareanforderungen überspringen"
+            "value": "Windows 11-Hardwareanforderungen überspringen (TPM 2.0, Secure Boot und RAM)"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skip Windows 11 hardware requirements"
+            "value": "Skip Windows 11 hardware requirements (TPM 2.0, Secure Boot, and RAM)"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Omitir los requisitos de hardware de Windows 11"
+            "value": "Omitir los requisitos de hardware de Windows 11 (TPM 2.0, Secure Boot y RAM)"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ignorer les exigences matérielles de Windows 11"
+            "value": "Ignorer les exigences matérielles de Windows 11 (TPM 2.0, Secure Boot et RAM)"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ignora i requisiti hardware di Windows 11"
+            "value": "Ignora i requisiti hardware di Windows 11 (TPM 2.0, Secure Boot e RAM)"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Windows 11のハードウェア要件をスキップ"
+            "value": "Windows 11のハードウェア要件をスキップ（TPM 2.0、Secure Boot、RAM）"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pomiń wymagania sprzętowe Windows 11"
+            "value": "Pomiń wymagania sprzętowe Windows 11 (TPM 2.0, Secure Boot i RAM)"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ignorar os requisitos de hardware do Windows 11"
+            "value": "Ignorar os requisitos de hardware do Windows 11 (TPM 2.0, Secure Boot e RAM)"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пропустить требования к оборудованию Windows 11"
+            "value": "Пропустить требования к оборудованию Windows 11 (TPM 2.0, Secure Boot и RAM)"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Windows 11 donanım gereksinimlerini atla"
+            "value": "Windows 11 donanım gereksinimlerini atla (TPM 2.0, Secure Boot ve RAM)"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пропустити вимоги до обладнання Windows 11"
+            "value": "Пропустити вимоги до обладнання Windows 11 (TPM 2.0, Secure Boot і RAM)"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bỏ qua yêu cầu phần cứng của Windows 11"
+            "value": "Bỏ qua yêu cầu phần cứng của Windows 11 (TPM 2.0, Secure Boot và RAM)"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "跳过 Windows 11 硬件要求"
+            "value": "跳过 Windows 11 硬件要求（TPM 2.0、Secure Boot 和 RAM）"
           }
         }
       }
@@ -15697,79 +15698,161 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lokales Konto erstellen"
+            "value": "Lokales Konto automatisch erstellen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create a local account"
+            "value": "Automatically create a local account"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Crear una cuenta local"
+            "value": "Crear automáticamente una cuenta local"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Créer un compte local"
+            "value": "Créer automatiquement un compte local"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Crea un account locale"
+            "value": "Crea automaticamente un account locale"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ローカルアカウントを作成"
+            "value": "ローカルアカウントを自動作成"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Utwórz konto lokalne"
+            "value": "Automatycznie utwórz konto lokalne"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Criar uma conta local"
+            "value": "Criar automaticamente uma conta local"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Создать локальную учетную запись"
+            "value": "Автоматически создать локальную учетную запись"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yerel hesap oluştur"
+            "value": "Yerel hesabı otomatik oluştur"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Створити локальний обліковий запис"
+            "value": "Автоматично створити локальний обліковий запис"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tạo tài khoản cục bộ"
+            "value": "Tự động tạo tài khoản cục bộ"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "创建本地帐户"
+            "value": "自动创建本地帐户"
+          }
+        }
+      }
+    },
+    "installation.summary.windows.autounattend.option.prevent_device_encryption": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatische BitLocker-Verschlüsselung verhindern"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prevent automatic BitLocker encryption"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impedir el cifrado automático de BitLocker"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empêcher le chiffrement BitLocker automatique"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impedisci la crittografia automatica con BitLocker"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BitLockerの自動暗号化を防止"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zapobiegaj automatycznemu szyfrowaniu BitLockerem"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impedir a criptografia automática do BitLocker"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запретить автоматическое шифрование BitLocker"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otomatik BitLocker şifrelemesini engelle"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Заборонити автоматичне шифрування BitLocker"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ngăn mã hóa BitLocker tự động"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "阻止自动 BitLocker 加密"
           }
         }
       }
@@ -15779,79 +15862,161 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lizenzbildschirm überspringen"
+            "value": "Automatisch zustimmen:"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skip the license screen"
+            "value": "Automatically accept:"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Omitir la pantalla de licencia"
+            "value": "Aceptar automáticamente:"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ignorer l’écran de licence"
+            "value": "Accepter automatiquement :"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ignora la schermata della licenza"
+            "value": "Accetta automaticamente:"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ライセンス画面をスキップ"
+            "value": "自動的に同意："
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pomiń ekran licencji"
+            "value": "Automatycznie zaakceptuj:"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ignorar a tela de licença"
+            "value": "Aceitar automaticamente:"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пропустить экран лицензии"
+            "value": "Автоматически принять:"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lisans ekranını atla"
+            "value": "Otomatik kabul et:"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пропустити екран ліцензії"
+            "value": "Автоматично прийняти:"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bỏ qua màn hình giấy phép"
+            "value": "Tự động chấp nhận:"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "跳过许可屏幕"
+            "value": "自动接受："
+          }
+        }
+      }
+    },
+    "installation.summary.windows.autounattend.option.skip_microsoft_account": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microsoft-Kontoanforderung deaktivieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disable the Microsoft account requirement"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desactivar el requisito de cuenta Microsoft"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Désactiver l’obligation d’utiliser un compte Microsoft"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disattiva il requisito dell’account Microsoft"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microsoftアカウント要件を無効にする"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wyłącz wymóg konta Microsoft"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desativar a exigência de conta Microsoft"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отключить требование учетной записи Microsoft"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microsoft hesabı gereksinimini devre dışı bırak"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вимкнути вимогу облікового запису Microsoft"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tắt yêu cầu tài khoản Microsoft"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "停用 Microsoft 帐户要求"
           }
         }
       }

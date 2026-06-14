@@ -11,9 +11,46 @@ enum HelperWorkflowKind: String, Codable {
 
 struct WindowsAutounattendConfigurationPayload: Codable {
     let skipHardwareRequirements: Bool
+    let preventDeviceEncryption: Bool
     let skipLicenseScreen: Bool
+    let skipMicrosoftAccountRequirement: Bool
     let createLocalAccount: Bool
     let localAccountName: String?
+
+    init(
+        skipHardwareRequirements: Bool,
+        preventDeviceEncryption: Bool = false,
+        skipLicenseScreen: Bool,
+        skipMicrosoftAccountRequirement: Bool = false,
+        createLocalAccount: Bool,
+        localAccountName: String?
+    ) {
+        self.skipHardwareRequirements = skipHardwareRequirements
+        self.preventDeviceEncryption = preventDeviceEncryption
+        self.skipLicenseScreen = skipLicenseScreen
+        self.skipMicrosoftAccountRequirement = skipMicrosoftAccountRequirement
+        self.createLocalAccount = createLocalAccount
+        self.localAccountName = localAccountName
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case skipHardwareRequirements
+        case preventDeviceEncryption
+        case skipLicenseScreen
+        case skipMicrosoftAccountRequirement
+        case createLocalAccount
+        case localAccountName
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        skipHardwareRequirements = try container.decode(Bool.self, forKey: .skipHardwareRequirements)
+        preventDeviceEncryption = try container.decodeIfPresent(Bool.self, forKey: .preventDeviceEncryption) ?? false
+        skipLicenseScreen = try container.decode(Bool.self, forKey: .skipLicenseScreen)
+        skipMicrosoftAccountRequirement = try container.decodeIfPresent(Bool.self, forKey: .skipMicrosoftAccountRequirement) ?? false
+        createLocalAccount = try container.decode(Bool.self, forKey: .createLocalAccount)
+        localAccountName = try container.decodeIfPresent(String.self, forKey: .localAccountName)
+    }
 }
 
 struct HelperWorkflowRequestPayload: Codable {

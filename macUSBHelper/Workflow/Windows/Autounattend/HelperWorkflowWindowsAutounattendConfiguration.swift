@@ -2,7 +2,7 @@ import Foundation
 
 extension WindowsAutounattendConfigurationPayload {
     var shouldGenerateFile: Bool {
-        skipHardwareRequirements || skipLicenseScreen || createLocalAccount
+        skipHardwareRequirements || preventDeviceEncryption || skipLicenseScreen || skipMicrosoftAccountRequirement || createLocalAccount
     }
 
     var normalizedLocalAccountName: String? {

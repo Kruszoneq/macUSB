@@ -72,7 +72,7 @@ struct UniversalInstallationView: View {
     @State var windowsPrerequisiteToolchainPresence: WindowsToolchainPresence? = WindowsToolchainProbeService.shared.detectPresence()
     @State var windowsPrerequisiteProbeInProgress: Bool = false
     @State var windowsAutounattendConfiguration: CreatorWindowsAutounattendConfiguration = CreatorWindowsAutounattendConfiguration()
-    @State var windowsAutounattendPopoverPresented: Bool = false
+    @State var windowsAutounattendOptionsPresented: Bool = false
     
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
@@ -245,7 +245,7 @@ struct UniversalInstallationView: View {
                         CreatorWindowsAutounattendCardView(
                             windowsVersion: windowsAutounattendVersion,
                             configuration: $windowsAutounattendConfiguration,
-                            isPopoverPresented: $windowsAutounattendPopoverPresented,
+                            isOptionsPresented: $windowsAutounattendOptionsPresented,
                             onConfigurationChanged: { _ in
                                 persistWindowsAutounattendConfiguration()
                             }

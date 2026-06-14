@@ -69,7 +69,11 @@ extension HelperWorkflowExecutor {
             root.addChild(windowsPESettingsElement())
         }
 
-        if configuration.skipLicenseScreen || configuration.createLocalAccount {
+        if configuration.preventDeviceEncryption {
+            root.addChild(specializeSettingsElement())
+        }
+
+        if configuration.skipLicenseScreen || configuration.skipMicrosoftAccountRequirement || configuration.createLocalAccount {
             root.addChild(oobeSystemSettingsElement(configuration: configuration))
         }
 
@@ -104,6 +108,26 @@ extension HelperWorkflowExecutor {
         return settings
     }
 
+    private func specializeSettingsElement() -> XMLElement {
+        let settings = XMLElement(name: "settings")
+        settings.addAttribute(XMLNode.attribute(withName: "pass", stringValue: "specialize") as! XMLNode)
+
+        let component = componentElement(named: "Microsoft-Windows-Deployment")
+        let runSynchronous = XMLElement(name: "RunSynchronous")
+        let commandElement = XMLElement(name: "RunSynchronousCommand")
+        commandElement.addAttribute(XMLNode.attribute(withName: "wcm:action", stringValue: "add") as! XMLNode)
+        commandElement.addChild(textElement(name: "Order", value: "1"))
+        commandElement.addChild(textElement(
+            name: "Path",
+            value: "cmd /c reg add HKLM\\SYSTEM\\CurrentControlSet\\Control\\BitLocker /v PreventDeviceEncryption /t REG_DWORD /d 1 /f"
+        ))
+
+        runSynchronous.addChild(commandElement)
+        component.addChild(runSynchronous)
+        settings.addChild(component)
+        return settings
+    }
+
     private func oobeSystemSettingsElement(configuration: WindowsAutounattendConfigurationPayload) -> XMLElement {
         let settings = XMLElement(name: "settings")
         settings.addAttribute(XMLNode.attribute(withName: "pass", stringValue: "oobeSystem") as! XMLNode)
@@ -113,11 +137,11 @@ extension HelperWorkflowExecutor {
         if configuration.skipLicenseScreen {
             let oobe = XMLElement(name: "OOBE")
             oobe.addChild(textElement(name: "HideEULAPage", value: "true"))
-            if configuration.createLocalAccount {
+            if configuration.skipMicrosoftAccountRequirement || configuration.createLocalAccount {
                 oobe.addChild(textElement(name: "HideOnlineAccountScreens", value: "true"))
             }
             component.addChild(oobe)
-        } else if configuration.createLocalAccount {
+        } else if configuration.skipMicrosoftAccountRequirement || configuration.createLocalAccount {
             let oobe = XMLElement(name: "OOBE")
             oobe.addChild(textElement(name: "HideOnlineAccountScreens", value: "true"))
             component.addChild(oobe)
