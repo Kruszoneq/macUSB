@@ -73,6 +73,13 @@ extension HelperWorkflowExecutor {
             }
         }
 
+        if request.windowsAutounattendConfiguration?.shouldGenerateFile == true {
+            try validateWindowsAutounattendFile(
+                at: targetURL.appendingPathComponent("Autounattend.xml"),
+                stage: stage.key
+            )
+        }
+
         emitProgress(
             stageKey: stage.key,
             titleKey: stage.titleKey,

@@ -27,6 +27,7 @@ Windows workflow stages:
 - `windows_prepare_target` — target USB unmount with retry/force prompt path and FAT32/MBR formatting (indeterminate stage),
 - `windows_create_media` — ISO file copy to USB (`rsync`) with determinate progress + write speed,
 - `windows_split_wim` — conditional `install.wim` split via `wimlib-imagex` with determinate progress + write speed (stage appears only when needed),
+- `windows_create_autounattend` — conditional `Autounattend.xml` generation and XML validation (indeterminate stage; appears only when macUSB generates its own file),
 - `windows_verify_media` — boot file and structure validation (`boot.wim`, UEFI markers, `install.wim`/`install.swm`) (indeterminate stage),
 - `windows_cleanup_temp` — deterministic cleanup of temp files and helper-managed hidden image mount,
 - `finalize` — terminal state transition.
@@ -46,6 +47,16 @@ Windows summary screen (`UniversalInstallationView`) should show an informationa
 - card uses accent tone (`.active`) with SF Symbol `info.circle.fill`,
 - copy clearly states that prepared media is UEFI-only and that Legacy BIOS boot is not supported.
 
+Windows automatic configuration card:
+- card is visible only for recognized Windows 10 and Windows 11 images,
+- state is session-only and keyed to the selected ISO path plus file identity when available,
+- Windows 10 offers OOBE/license/local-account options only,
+- Windows 11 additionally offers a combined TPM/Secure Boot/RAM hardware-bypass option,
+- local account names are restricted to ASCII letters and digits for v1,
+- if the mounted source already contains a root-level `Autounattend.xml` with any casing and automatic configuration is enabled, app-side pre-start flow must show a warning alert before destructive confirmation,
+- choosing the source file sends no autounattend payload and hides `windows_create_autounattend`,
+- choosing the macUSB file sends the autounattend payload and helper writes root-level `Autounattend.xml` after media copy and optional WIM split, before media verification.
+
 Windows summary pre-start prerequisites:
 - if Windows workflow requires `install.wim` split and `wimlib-imagex` is not detected, start action is blocked before workflow start.
 - in blocked state, summary keeps a divider with warning label and replaces process/time cards with an orange prerequisites card.
@@ -63,6 +74,7 @@ Windows summary pre-start prerequisites:
 - Stage progression shown in UI must remain deterministic.
 - Linux raw-copy must target whole-disk device, never a partition node.
 - Windows workflow must copy installer files 1:1 from ISO payload (no UEFI fallback file synthesis).
+- Windows automatic configuration may add or replace only root-level `Autounattend.xml` after the ISO payload copy, when explicitly enabled by the user.
 - Windows target format must be `MS-DOS (FAT32)` + `MBR`.
 
 ## Power Management Invariant

@@ -9,6 +9,13 @@ enum HelperWorkflowKind: String, Codable {
     case windows
 }
 
+struct WindowsAutounattendConfigurationPayload: Codable {
+    let skipHardwareRequirements: Bool
+    let skipLicenseScreen: Bool
+    let createLocalAccount: Bool
+    let localAccountName: String?
+}
+
 struct HelperWorkflowRequestPayload: Codable {
     let workflowKind: HelperWorkflowKind
     let systemName: String
@@ -27,6 +34,47 @@ struct HelperWorkflowRequestPayload: Codable {
     let linuxForceUnmount: Bool
     let windowsForceUnmount: Bool
     let windowsMountedSourcePath: String?
+    let windowsAutounattendConfiguration: WindowsAutounattendConfigurationPayload?
+
+    init(
+        workflowKind: HelperWorkflowKind,
+        systemName: String,
+        sourceAppPath: String,
+        originalImagePath: String?,
+        tempWorkPath: String,
+        targetVolumePath: String,
+        targetBSDName: String,
+        targetLabel: String,
+        needsPreformat: Bool,
+        isCatalina: Bool,
+        isSierra: Bool,
+        needsCodesign: Bool,
+        requiresApplicationPathArg: Bool,
+        requesterUID: Int?,
+        linuxForceUnmount: Bool,
+        windowsForceUnmount: Bool,
+        windowsMountedSourcePath: String?,
+        windowsAutounattendConfiguration: WindowsAutounattendConfigurationPayload? = nil
+    ) {
+        self.workflowKind = workflowKind
+        self.systemName = systemName
+        self.sourceAppPath = sourceAppPath
+        self.originalImagePath = originalImagePath
+        self.tempWorkPath = tempWorkPath
+        self.targetVolumePath = targetVolumePath
+        self.targetBSDName = targetBSDName
+        self.targetLabel = targetLabel
+        self.needsPreformat = needsPreformat
+        self.isCatalina = isCatalina
+        self.isSierra = isSierra
+        self.needsCodesign = needsCodesign
+        self.requiresApplicationPathArg = requiresApplicationPathArg
+        self.requesterUID = requesterUID
+        self.linuxForceUnmount = linuxForceUnmount
+        self.windowsForceUnmount = windowsForceUnmount
+        self.windowsMountedSourcePath = windowsMountedSourcePath
+        self.windowsAutounattendConfiguration = windowsAutounattendConfiguration
+    }
 }
 
 struct HelperProgressEventPayload: Codable {

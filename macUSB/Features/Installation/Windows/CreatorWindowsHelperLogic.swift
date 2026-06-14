@@ -36,7 +36,8 @@ extension UniversalInstallationView {
             requesterUID: requesterUID,
             linuxForceUnmount: false,
             windowsForceUnmount: false,
-            windowsMountedSourcePath: windowsMountedSourcePath
+            windowsMountedSourcePath: windowsMountedSourcePath,
+            windowsAutounattendConfiguration: windowsAutounattendConfiguration.helperPayload()
         )
     }
 

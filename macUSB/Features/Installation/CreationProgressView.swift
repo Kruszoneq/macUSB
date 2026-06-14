@@ -28,6 +28,7 @@ struct CreationProgressView: View {
     let isLinuxWorkflow: Bool
     let isWindowsWorkflow: Bool
     let windowsWillSplitWimExpected: Bool
+    let windowsWillCreateAutounattendExpected: Bool
     let shouldDetachMountPoint: Bool
     let targetWholeDiskBSDName: String?
     let needsPreformat: Bool
@@ -71,7 +72,12 @@ struct CreationProgressView: View {
         }
         if isWindowsWorkflow {
             let includeSplit = windowsWillSplitWimExpected || normalizedStageKey(helperCurrentStageKey) == CreationProgressWindowsMapping.splitWimStageKey
-            return CreationProgressWindowsMapping.stageKeys(includeSplitWim: includeSplit).map(stageDescriptor(for:))
+            let includeAutounattend = windowsWillCreateAutounattendExpected
+                || normalizedStageKey(helperCurrentStageKey) == CreationProgressWindowsMapping.createAutounattendStageKey
+            return CreationProgressWindowsMapping.stageKeys(
+                includeSplitWim: includeSplit,
+                includeAutounattend: includeAutounattend
+            ).map(stageDescriptor(for:))
         }
 
         var stageKeys: [String] = ["prepare_source"]

@@ -30,6 +30,10 @@ extension HelperWorkflowExecutor {
             try runWindowsSplitWimStage(stage)
             return
         }
+        if stage.key == "windows_create_autounattend" {
+            try runWindowsCreateAutounattendStage(stage)
+            return
+        }
         if stage.key == "windows_verify_media" {
             try runWindowsVerifyMediaStage(stage)
             return

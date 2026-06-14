@@ -1,0 +1,159 @@
+import Foundation
+
+extension HelperWorkflowExecutor {
+    func runWindowsCreateAutounattendStage(_ stage: WorkflowStage) throws {
+        guard let configuration = request.windowsAutounattendConfiguration,
+              configuration.shouldGenerateFile else {
+            return
+        }
+
+        let targetVolumePath = windowsPreparedTargetVolumePath ?? "/Volumes/\(request.targetLabel)"
+        let targetURL = URL(fileURLWithPath: targetVolumePath)
+        guard fileManager.fileExists(atPath: targetURL.path) else {
+            throw HelperExecutionError.failed(
+                stage: stage.key,
+                exitCode: -1,
+                description: "Nie znaleziono zamontowanego woluminu docelowego przed utworzeniem Autounattend.xml."
+            )
+        }
+
+        let xmlData = try buildWindowsAutounattendXMLData(
+            configuration: configuration,
+            stage: stage
+        )
+        try validateWindowsAutounattendXMLData(xmlData, stage: stage.key)
+
+        let outputURL = targetURL.appendingPathComponent("Autounattend.xml")
+        do {
+            try xmlData.write(to: outputURL, options: .atomic)
+        } catch {
+            throw HelperExecutionError.failed(
+                stage: stage.key,
+                exitCode: -1,
+                description: "Nie udało się zapisać Autounattend.xml: \(error.localizedDescription)"
+            )
+        }
+
+        try validateWindowsAutounattendFile(at: outputURL, stage: stage.key)
+
+        emitProgress(
+            stageKey: stage.key,
+            titleKey: stage.titleKey,
+            percent: latestPercent,
+            statusKey: stage.statusKey,
+            logLine: "Windows Autounattend.xml generated at \(outputURL.path)",
+            shouldAdvancePercent: false
+        )
+    }
+
+    private func buildWindowsAutounattendXMLData(
+        configuration: WindowsAutounattendConfigurationPayload,
+        stage: WorkflowStage
+    ) throws -> Data {
+        if configuration.createLocalAccount {
+            guard let accountName = configuration.normalizedLocalAccountName,
+                  isWindowsAutounattendLocalAccountNameValid(accountName) else {
+                throw HelperExecutionError.failed(
+                    stage: stage.key,
+                    exitCode: -1,
+                    description: "Nazwa konta lokalnego dla Autounattend.xml jest nieprawidłowa."
+                )
+            }
+        }
+
+        let root = XMLElement(name: "unattend")
+        root.addNamespace(XMLNode.namespace(withName: "", stringValue: "urn:schemas-microsoft-com:unattend") as! XMLNode)
+        root.addNamespace(XMLNode.namespace(withName: "wcm", stringValue: "http://schemas.microsoft.com/WMIConfig/2002/State") as! XMLNode)
+
+        if configuration.skipHardwareRequirements {
+            root.addChild(windowsPESettingsElement())
+        }
+
+        if configuration.skipLicenseScreen || configuration.createLocalAccount {
+            root.addChild(oobeSystemSettingsElement(configuration: configuration))
+        }
+
+        let document = XMLDocument(rootElement: root)
+        document.version = "1.0"
+        document.characterEncoding = "utf-8"
+        return document.xmlData(options: [.nodePrettyPrint])
+    }
+
+    private func windowsPESettingsElement() -> XMLElement {
+        let settings = XMLElement(name: "settings")
+        settings.addAttribute(XMLNode.attribute(withName: "pass", stringValue: "windowsPE") as! XMLNode)
+
+        let component = componentElement(named: "Microsoft-Windows-Setup")
+        let runSynchronous = XMLElement(name: "RunSynchronous")
+        let commands = [
+            "cmd /c reg add HKLM\\SYSTEM\\Setup\\LabConfig /v BypassTPMCheck /t REG_DWORD /d 1 /f",
+            "cmd /c reg add HKLM\\SYSTEM\\Setup\\LabConfig /v BypassSecureBootCheck /t REG_DWORD /d 1 /f",
+            "cmd /c reg add HKLM\\SYSTEM\\Setup\\LabConfig /v BypassRAMCheck /t REG_DWORD /d 1 /f"
+        ]
+
+        for (index, command) in commands.enumerated() {
+            let commandElement = XMLElement(name: "RunSynchronousCommand")
+            commandElement.addAttribute(XMLNode.attribute(withName: "wcm:action", stringValue: "add") as! XMLNode)
+            commandElement.addChild(textElement(name: "Order", value: "\(index + 1)"))
+            commandElement.addChild(textElement(name: "Path", value: command))
+            runSynchronous.addChild(commandElement)
+        }
+
+        component.addChild(runSynchronous)
+        settings.addChild(component)
+        return settings
+    }
+
+    private func oobeSystemSettingsElement(configuration: WindowsAutounattendConfigurationPayload) -> XMLElement {
+        let settings = XMLElement(name: "settings")
+        settings.addAttribute(XMLNode.attribute(withName: "pass", stringValue: "oobeSystem") as! XMLNode)
+
+        let component = componentElement(named: "Microsoft-Windows-Shell-Setup")
+
+        if configuration.skipLicenseScreen {
+            let oobe = XMLElement(name: "OOBE")
+            oobe.addChild(textElement(name: "HideEULAPage", value: "true"))
+            if configuration.createLocalAccount {
+                oobe.addChild(textElement(name: "HideOnlineAccountScreens", value: "true"))
+            }
+            component.addChild(oobe)
+        } else if configuration.createLocalAccount {
+            let oobe = XMLElement(name: "OOBE")
+            oobe.addChild(textElement(name: "HideOnlineAccountScreens", value: "true"))
+            component.addChild(oobe)
+        }
+
+        if configuration.createLocalAccount,
+           let accountName = configuration.normalizedLocalAccountName {
+            let userAccounts = XMLElement(name: "UserAccounts")
+            let localAccounts = XMLElement(name: "LocalAccounts")
+            let localAccount = XMLElement(name: "LocalAccount")
+            localAccount.addAttribute(XMLNode.attribute(withName: "wcm:action", stringValue: "add") as! XMLNode)
+            localAccount.addChild(textElement(name: "Name", value: accountName))
+            localAccount.addChild(textElement(name: "DisplayName", value: accountName))
+            localAccount.addChild(textElement(name: "Group", value: "Administrators"))
+            localAccounts.addChild(localAccount)
+            userAccounts.addChild(localAccounts)
+            component.addChild(userAccounts)
+        }
+
+        settings.addChild(component)
+        return settings
+    }
+
+    private func componentElement(named name: String) -> XMLElement {
+        let component = XMLElement(name: "component")
+        component.addAttribute(XMLNode.attribute(withName: "name", stringValue: name) as! XMLNode)
+        component.addAttribute(XMLNode.attribute(withName: "processorArchitecture", stringValue: windowsAutounattendProcessorArchitecture) as! XMLNode)
+        component.addAttribute(XMLNode.attribute(withName: "publicKeyToken", stringValue: "31bf3856ad364e35") as! XMLNode)
+        component.addAttribute(XMLNode.attribute(withName: "language", stringValue: "neutral") as! XMLNode)
+        component.addAttribute(XMLNode.attribute(withName: "versionScope", stringValue: "nonSxS") as! XMLNode)
+        return component
+    }
+
+    private func textElement(name: String, value: String) -> XMLElement {
+        let element = XMLElement(name: name)
+        element.stringValue = value
+        return element
+    }
+}
