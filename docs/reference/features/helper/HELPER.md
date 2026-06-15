@@ -148,8 +148,8 @@ Contract invariants:
 - Progress events are emitted with stage/status keys and percent updates.
 - Cancellation and failure return deterministic result payloads.
 - Linux raw-copy branch uses helper-side Disk Arbitration mount guard for target USB (`diskX` and `diskXsY`) from `linux_unmount_target` start until `linux_verify_write` terminal outcome, then always releases guard immediately after verify.
-- Windows workflow may include optional `windowsAutounattendConfiguration`; when present, daemon inserts `windows_create_autounattend` after `windows_split_wim` if the split stage exists, otherwise after `windows_create_media`, and always before `windows_verify_media`.
-- `windows_create_autounattend` writes root-level `Autounattend.xml` through Foundation XML APIs, validates XML before and after writing, and media verification validates the saved file again.
+- Windows 11 workflow may include optional `windowsAutounattendConfiguration`; when present, daemon inserts `windows_create_autounattend` after `windows_split_wim` if the split stage exists, otherwise after `windows_create_media`, and always before `windows_verify_media`.
+- `windows_create_autounattend` writes root-level `Autounattend.xml` through Foundation XML APIs, validates XML before and after writing, and media verification validates the saved file again. The `windowsPE` pass is generated only for options that require Windows PE setup commands, such as the Windows 11 hardware-requirements bypass.
 
 ### Downloader Assembly Flow
 - App sends `DownloaderAssemblyRequestPayload`.

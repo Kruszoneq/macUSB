@@ -5,7 +5,6 @@ extension WindowsAutounattendConfigurationPayload {
         skipHardwareRequirements
             || preventDeviceEncryption
             || disableDataCollection
-            || skipLicenseScreen
             || skipWirelessSetup
             || skipMicrosoftAccountRequirement
             || createLocalAccount

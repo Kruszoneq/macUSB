@@ -48,10 +48,9 @@ Windows summary screen (`UniversalInstallationView`) should show an informationa
 - copy clearly states that prepared media is UEFI-only and that Legacy BIOS boot is not supported.
 
 Windows automatic configuration card:
-- card is visible only for recognized Windows 10 and Windows 11 images,
+- card is visible only for recognized Windows 11 images,
 - state is session-only and keyed to the selected ISO path plus file identity when available,
-- Windows 10 offers automatic BitLocker device-encryption prevention, privacy data-collection opt-out, automatic EULA acceptance, Wi-Fi/network setup skip, Microsoft-account requirement bypass, and local-account options,
-- Windows 11 additionally offers a combined TPM 2.0/Secure Boot/RAM hardware-bypass option,
+- Windows 11 offers automatic BitLocker device-encryption prevention, privacy data-collection opt-out, Wi-Fi/network setup skip, Microsoft-account requirement bypass, local-account options, and a combined TPM 2.0/Secure Boot/RAM hardware-bypass option,
 - local account names are restricted to ASCII letters and digits for v1,
 - Wi-Fi/network setup skip automatically enables Microsoft-account requirement bypass and locks that option while selected,
 - automatic local-account creation is available only after Microsoft-account requirement bypass is selected,
@@ -76,7 +75,7 @@ Windows summary pre-start prerequisites:
 - Stage progression shown in UI must remain deterministic.
 - Linux raw-copy must target whole-disk device, never a partition node.
 - Windows workflow must copy installer files 1:1 from ISO payload (no UEFI fallback file synthesis).
-- Windows automatic configuration may add or replace only root-level `Autounattend.xml` after the ISO payload copy, when explicitly enabled by the user. When automatic BitLocker device-encryption prevention is enabled, macUSB writes a `specialize` pass command that sets `HKLM\SYSTEM\CurrentControlSet\Control\BitLocker\PreventDeviceEncryption` to `1`.
+- Windows automatic configuration may add or replace only root-level `Autounattend.xml` after the ISO payload copy, when explicitly enabled by the user. The `windowsPE` pass is generated only for options that require Windows PE setup commands, such as the Windows 11 hardware-requirements bypass. When automatic BitLocker device-encryption prevention is enabled, macUSB writes a `specialize` pass command that sets `HKLM\SYSTEM\CurrentControlSet\Control\BitLocker\PreventDeviceEncryption` to `1`.
 - Windows automatic configuration may set `OOBE/ProtectYourPC` to `3` when privacy data-collection opt-out is enabled.
 - Windows automatic configuration may set `OOBE/HideWirelessSetupInOOBE` to `true` when Wi-Fi/network setup skip is enabled.
 - Windows target format must be `MS-DOS (FAT32)` + `MBR`.

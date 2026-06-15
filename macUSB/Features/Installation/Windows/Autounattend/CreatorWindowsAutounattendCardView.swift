@@ -29,7 +29,6 @@ struct CreatorWindowsAutounattendCardView: View {
             configuration.skipHardwareRequirements,
             configuration.preventDeviceEncryption,
             configuration.disableDataCollection,
-            configuration.skipLicenseScreen,
             configuration.skipWirelessSetup,
             configuration.skipMicrosoftAccountRequirement,
             configuration.createLocalAccount

@@ -73,7 +73,6 @@ extension HelperWorkflowExecutor {
         }
 
         if configuration.disableDataCollection
-            || configuration.skipLicenseScreen
             || configuration.skipWirelessSetup
             || configuration.skipMicrosoftAccountRequirement
             || configuration.createLocalAccount {
@@ -150,12 +149,7 @@ extension HelperWorkflowExecutor {
         let component = componentElement(named: "Microsoft-Windows-Shell-Setup")
         let oobe = XMLElement(name: "OOBE")
 
-        if configuration.skipLicenseScreen {
-            oobe.addChild(textElement(name: "HideEULAPage", value: "true"))
-            if configuration.skipMicrosoftAccountRequirement || configuration.createLocalAccount {
-                oobe.addChild(textElement(name: "HideOnlineAccountScreens", value: "true"))
-            }
-        } else if configuration.skipMicrosoftAccountRequirement || configuration.createLocalAccount {
+        if configuration.skipMicrosoftAccountRequirement || configuration.createLocalAccount {
             oobe.addChild(textElement(name: "HideOnlineAccountScreens", value: "true"))
         }
         if configuration.skipWirelessSetup {

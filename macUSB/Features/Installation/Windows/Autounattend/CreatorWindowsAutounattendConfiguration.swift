@@ -1,11 +1,10 @@
 import Foundation
 
 enum CreatorWindowsAutounattendWindowsVersion {
-    case windows10
     case windows11
 
     var supportsHardwareBypass: Bool {
-        self == .windows11
+        true
     }
 
     static func detected(from systemName: String) -> CreatorWindowsAutounattendWindowsVersion? {
@@ -16,9 +15,6 @@ enum CreatorWindowsAutounattendWindowsVersion {
         }
         if normalized.contains("windows 11") {
             return .windows11
-        }
-        if normalized.contains("windows 10") {
-            return .windows10
         }
         return nil
     }
@@ -34,7 +30,6 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
     var skipHardwareRequirements: Bool = false
     var preventDeviceEncryption: Bool = false
     var disableDataCollection: Bool = false
-    var skipLicenseScreen: Bool = false
     var skipWirelessSetup: Bool = false
     var skipMicrosoftAccountRequirement: Bool = false
     var createLocalAccount: Bool = false
@@ -49,7 +44,6 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
         skipHardwareRequirements
             || preventDeviceEncryption
             || disableDataCollection
-            || skipLicenseScreen
             || skipWirelessSetup
             || skipMicrosoftAccountRequirement
             || createLocalAccount
@@ -92,7 +86,6 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
             skipHardwareRequirements: skipHardwareRequirements,
             preventDeviceEncryption: preventDeviceEncryption,
             disableDataCollection: disableDataCollection,
-            skipLicenseScreen: skipLicenseScreen,
             skipWirelessSetup: skipWirelessSetup,
             skipMicrosoftAccountRequirement: skipMicrosoftAccountRequirement,
             createLocalAccount: createLocalAccount,
@@ -115,12 +108,22 @@ final class CreatorWindowsAutounattendSessionStore {
     private init() {}
 
     func configuration(for sourceURL: URL, systemName: String) -> CreatorWindowsAutounattendConfiguration {
+        guard CreatorWindowsAutounattendWindowsVersion.detected(from: systemName) != nil else {
+            configurations.removeValue(forKey: key(for: sourceURL))
+            return CreatorWindowsAutounattendConfiguration()
+        }
+
         var configuration = configurations[key(for: sourceURL)] ?? CreatorWindowsAutounattendConfiguration()
         configuration.normalize(for: CreatorWindowsAutounattendWindowsVersion.detected(from: systemName))
         return configuration
     }
 
     func store(_ configuration: CreatorWindowsAutounattendConfiguration, for sourceURL: URL, systemName: String) {
+        guard CreatorWindowsAutounattendWindowsVersion.detected(from: systemName) != nil else {
+            configurations.removeValue(forKey: key(for: sourceURL))
+            return
+        }
+
         var normalized = configuration
         normalized.normalize(for: CreatorWindowsAutounattendWindowsVersion.detected(from: systemName))
         normalized.existingFileDecision = nil

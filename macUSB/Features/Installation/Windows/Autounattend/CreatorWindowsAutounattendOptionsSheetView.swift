@@ -5,7 +5,6 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
     @Binding var configuration: CreatorWindowsAutounattendConfiguration
     let onConfigurationChanged: (CreatorWindowsAutounattendConfiguration) -> Void
     @Environment(\.dismiss) private var dismiss
-    private let windowsEULAURL = URL(string: "https://www.microsoft.com/en-us/useterms")!
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -38,13 +37,6 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
                 String(localized: "installation.summary.windows.autounattend.option.disable_data_collection"),
                 isOn: binding(\.disableDataCollection)
             )
-
-            Toggle(isOn: binding(\.skipLicenseScreen)) {
-                HStack(spacing: 4) {
-                    Text(String(localized: "installation.summary.windows.autounattend.option.skip_license"))
-                    Link("EULA", destination: windowsEULAURL)
-                }
-            }
 
             Toggle(
                 String(localized: "installation.summary.windows.autounattend.option.skip_wireless_setup"),
