@@ -23,14 +23,19 @@ extension HelperWorkflowExecutor {
         )
         try validateWindowsAutounattendXMLData(xmlData, stage: stage.key)
 
-        let outputURL = targetURL.appendingPathComponent("Autounattend.xml")
+        let outputURL = windowsAutounattendOutputURL(
+            in: targetURL,
+            configuration: configuration
+        )
+        try prepareWindowsAutounattendOutputDirectory(for: outputURL, stage: stage.key)
+
         do {
             try xmlData.write(to: outputURL, options: .atomic)
         } catch {
             throw HelperExecutionError.failed(
                 stage: stage.key,
                 exitCode: -1,
-                description: "Nie udało się zapisać Autounattend.xml: \(error.localizedDescription)"
+                description: "Nie udało się zapisać pliku odpowiedzi Windows: \(error.localizedDescription)"
             )
         }
 
@@ -41,9 +46,46 @@ extension HelperWorkflowExecutor {
             titleKey: stage.titleKey,
             percent: latestPercent,
             statusKey: stage.statusKey,
-            logLine: "Windows Autounattend.xml generated at \(outputURL.path)",
+            logLine: "Windows answer file generated at \(outputURL.path)",
             shouldAdvancePercent: false
         )
+    }
+
+    func windowsAutounattendOutputURL(
+        in targetURL: URL,
+        configuration: WindowsAutounattendConfigurationPayload
+    ) -> URL {
+        if configuration.requiresWindowsPE {
+            return targetURL.appendingPathComponent("Autounattend.xml")
+        }
+
+        return targetURL
+            .appendingPathComponent("sources")
+            .appendingPathComponent("$OEM$")
+            .appendingPathComponent("$$")
+            .appendingPathComponent("Panther")
+            .appendingPathComponent("unattend.xml")
+    }
+
+    private func prepareWindowsAutounattendOutputDirectory(for outputURL: URL, stage: String) throws {
+        let directoryURL = outputURL.deletingLastPathComponent()
+        guard !fileManager.fileExists(atPath: directoryURL.path) else {
+            return
+        }
+
+        do {
+            try fileManager.createDirectory(
+                at: directoryURL,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
+        } catch {
+            throw HelperExecutionError.failed(
+                stage: stage,
+                exitCode: -1,
+                description: "Nie udało się utworzyć katalogu dla pliku odpowiedzi Windows: \(error.localizedDescription)"
+            )
+        }
     }
 
     private func buildWindowsAutounattendXMLData(

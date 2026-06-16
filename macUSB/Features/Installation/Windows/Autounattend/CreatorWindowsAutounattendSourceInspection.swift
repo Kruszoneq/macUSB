@@ -8,8 +8,33 @@ enum CreatorWindowsAutounattendSourceInspection {
         }
 
         let rootURL = URL(fileURLWithPath: mountedSourcePath)
+        if let rootAutounattendPath = childURL(
+            named: "Autounattend.xml",
+            in: rootURL
+        )?.path {
+            return rootAutounattendPath
+        }
+
+        return nestedChildURL(
+            from: rootURL,
+            components: ["sources", "$OEM$", "$$", "Panther", "unattend.xml"]
+        )?.path
+    }
+
+    private static func nestedChildURL(from rootURL: URL, components: [String]) -> URL? {
+        var currentURL = rootURL
+        for component in components {
+            guard let nextURL = childURL(named: component, in: currentURL) else {
+                return nil
+            }
+            currentURL = nextURL
+        }
+        return currentURL
+    }
+
+    private static func childURL(named name: String, in directoryURL: URL) -> URL? {
         guard let contents = try? FileManager.default.contentsOfDirectory(
-            at: rootURL,
+            at: directoryURL,
             includingPropertiesForKeys: nil,
             options: [.skipsHiddenFiles]
         ) else {
@@ -17,7 +42,7 @@ enum CreatorWindowsAutounattendSourceInspection {
         }
 
         return contents.first {
-            $0.lastPathComponent.caseInsensitiveCompare("Autounattend.xml") == .orderedSame
-        }?.path
+            $0.lastPathComponent.caseInsensitiveCompare(name) == .orderedSame
+        }
     }
 }

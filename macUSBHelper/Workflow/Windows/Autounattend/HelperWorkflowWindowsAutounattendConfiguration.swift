@@ -10,6 +10,10 @@ extension WindowsAutounattendConfigurationPayload {
             || createLocalAccount
     }
 
+    var requiresWindowsPE: Bool {
+        skipHardwareRequirements
+    }
+
     var normalizedLocalAccountName: String? {
         localAccountName?.trimmingCharacters(in: .whitespacesAndNewlines)
     }

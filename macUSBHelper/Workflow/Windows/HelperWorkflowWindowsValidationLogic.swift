@@ -73,9 +73,13 @@ extension HelperWorkflowExecutor {
             }
         }
 
-        if request.windowsAutounattendConfiguration?.shouldGenerateFile == true {
+        if let configuration = request.windowsAutounattendConfiguration,
+           configuration.shouldGenerateFile {
             try validateWindowsAutounattendFile(
-                at: targetURL.appendingPathComponent("Autounattend.xml"),
+                at: windowsAutounattendOutputURL(
+                    in: targetURL,
+                    configuration: configuration
+                ),
                 stage: stage.key
             )
         }

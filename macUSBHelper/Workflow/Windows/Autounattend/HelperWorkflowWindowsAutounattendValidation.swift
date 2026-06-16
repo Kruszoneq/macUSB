@@ -6,7 +6,7 @@ extension HelperWorkflowExecutor {
             throw HelperExecutionError.failed(
                 stage: stage,
                 exitCode: -1,
-                description: "Nie znaleziono pliku Autounattend.xml po zapisie."
+                description: "Nie znaleziono pliku odpowiedzi Windows po zapisie."
             )
         }
 
@@ -19,7 +19,7 @@ extension HelperWorkflowExecutor {
             throw HelperExecutionError.failed(
                 stage: stage,
                 exitCode: -1,
-                description: "Nie udało się odczytać Autounattend.xml do walidacji: \(error.localizedDescription)"
+                description: "Nie udało się odczytać pliku odpowiedzi Windows do walidacji: \(error.localizedDescription)"
             )
         }
     }
@@ -29,7 +29,7 @@ extension HelperWorkflowExecutor {
             throw HelperExecutionError.failed(
                 stage: stage,
                 exitCode: -1,
-                description: "Autounattend.xml jest pusty."
+                description: "Plik odpowiedzi Windows jest pusty."
             )
         }
 
@@ -39,7 +39,7 @@ extension HelperWorkflowExecutor {
                 throw HelperExecutionError.failed(
                     stage: stage,
                     exitCode: -1,
-                    description: "Autounattend.xml nie zawiera poprawnego elementu głównego unattend."
+                    description: "Plik odpowiedzi Windows nie zawiera poprawnego elementu głównego unattend."
                 )
             }
         } catch let error as HelperExecutionError {
@@ -48,7 +48,7 @@ extension HelperWorkflowExecutor {
             throw HelperExecutionError.failed(
                 stage: stage,
                 exitCode: -1,
-                description: "Autounattend.xml nie jest poprawnym plikiem XML: \(error.localizedDescription)"
+                description: "Plik odpowiedzi Windows nie jest poprawnym plikiem XML: \(error.localizedDescription)"
             )
         }
     }

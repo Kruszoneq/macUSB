@@ -90,7 +90,7 @@ Primary protocols:
 
 Primary request types:
 - `HelperWorkflowRequestPayload` for USB workflows.
-- `WindowsAutounattendConfigurationPayload` as an optional Windows workflow sub-payload for root-level `Autounattend.xml` generation.
+- `WindowsAutounattendConfigurationPayload` as an optional Windows workflow sub-payload for Windows answer-file generation.
 - `DownloaderAssemblyRequestPayload` for downloader `.pkg` to `.app` assembly.
 - `DownloaderCleanupRequestPayload` for downloader session-temp cleanup.
 
@@ -149,7 +149,7 @@ Contract invariants:
 - Cancellation and failure return deterministic result payloads.
 - Linux raw-copy branch uses helper-side Disk Arbitration mount guard for target USB (`diskX` and `diskXsY`) from `linux_unmount_target` start until `linux_verify_write` terminal outcome, then always releases guard immediately after verify.
 - Windows 11 workflow may include optional `windowsAutounattendConfiguration`; when present, daemon inserts `windows_create_autounattend` after `windows_split_wim` if the split stage exists, otherwise after `windows_create_media`, and always before `windows_verify_media`.
-- `windows_create_autounattend` writes root-level `Autounattend.xml` through Foundation XML APIs, validates XML before and after writing, and media verification validates the saved file again. The `windowsPE` pass is generated only for options that require Windows PE setup commands, such as the Windows 11 hardware-requirements bypass.
+- `windows_create_autounattend` writes the answer file through Foundation XML APIs, validates XML before and after writing, and media verification validates the saved file again. If the generated XML contains `windowsPE`, helper writes root-level `Autounattend.xml`; otherwise it writes `sources/$OEM$/$$/Panther/unattend.xml` for later setup passes. The `windowsPE` pass is generated only for options that require Windows PE setup commands, such as the Windows 11 hardware-requirements bypass.
 
 ### Downloader Assembly Flow
 - App sends `DownloaderAssemblyRequestPayload`.

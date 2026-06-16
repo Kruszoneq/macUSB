@@ -54,9 +54,9 @@ Windows automatic configuration card:
 - local account names are restricted to ASCII letters and digits for v1,
 - Wi-Fi/network setup skip automatically enables Microsoft-account requirement bypass and locks that option while selected,
 - automatic local-account creation is available only after Microsoft-account requirement bypass is selected,
-- if the mounted source already contains a root-level `Autounattend.xml` with any casing and automatic configuration is enabled, app-side pre-start flow must show a warning alert before destructive confirmation,
+- if the mounted source already contains a root-level `Autounattend.xml` or `sources/$OEM$/$$/Panther/unattend.xml` with any casing and automatic configuration is enabled, app-side pre-start flow must show a warning alert before destructive confirmation,
 - choosing the source file sends no autounattend payload and hides `windows_create_autounattend`,
-- choosing the macUSB file sends the autounattend payload and helper writes root-level `Autounattend.xml` after media copy and optional WIM split, before media verification.
+- choosing the macUSB file sends the autounattend payload and helper writes the answer file after media copy and optional WIM split, before media verification.
 
 Windows summary pre-start prerequisites:
 - if Windows workflow requires `install.wim` split and `wimlib-imagex` is not detected, start action is blocked before workflow start.
@@ -75,7 +75,7 @@ Windows summary pre-start prerequisites:
 - Stage progression shown in UI must remain deterministic.
 - Linux raw-copy must target whole-disk device, never a partition node.
 - Windows workflow must copy installer files 1:1 from ISO payload (no UEFI fallback file synthesis).
-- Windows automatic configuration may add or replace only root-level `Autounattend.xml` after the ISO payload copy, when explicitly enabled by the user. The `windowsPE` pass is generated only for options that require Windows PE setup commands, such as the Windows 11 hardware-requirements bypass. When automatic BitLocker device-encryption prevention is enabled, macUSB writes a `specialize` pass command that sets `HKLM\SYSTEM\CurrentControlSet\Control\BitLocker\PreventDeviceEncryption` to `1`.
+- Windows automatic configuration may add or replace only the Windows answer-file location selected by the generated passes, when explicitly enabled by the user. If the generated XML contains `windowsPE`, helper writes root-level `Autounattend.xml`; otherwise it writes `sources/$OEM$/$$/Panther/unattend.xml` so Windows Setup copies it to `%WINDIR%/Panther/unattend.xml` for later passes. The `windowsPE` pass is generated only for options that require Windows PE setup commands, such as the Windows 11 hardware-requirements bypass. When automatic BitLocker device-encryption prevention is enabled, macUSB writes a `specialize` pass command that sets `HKLM\SYSTEM\CurrentControlSet\Control\BitLocker\PreventDeviceEncryption` to `1`.
 - Windows automatic configuration may set `OOBE/ProtectYourPC` to `3` when privacy data-collection opt-out is enabled.
 - Windows automatic configuration may set `OOBE/HideWirelessSetupInOOBE` to `true` when Wi-Fi/network setup skip is enabled.
 - Windows target format must be `MS-DOS (FAT32)` + `MBR`.
