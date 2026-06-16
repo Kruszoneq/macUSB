@@ -14713,79 +14713,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Namen eingeben"
+            "value": "Accountnamen eingeben"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter a name"
+            "value": "Enter an account name"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Introduce un nombre"
+            "value": "Introduce un nombre de cuenta"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Saisissez un nom"
+            "value": "Saisissez un nom de compte"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Inserisci un nome"
+            "value": "Inserisci un nome account"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "名前を入力"
+            "value": "アカウント名を入力"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wpisz nazwę"
+            "value": "Wpisz nazwę konta"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Digite um nome"
+            "value": "Digite um nome de conta"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Введите имя"
+            "value": "Введите имя учетной записи"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bir ad girin"
+            "value": "Bir hesap adı girin"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Введіть ім’я"
+            "value": "Введіть ім’я облікового запису"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nhập tên"
+            "value": "Nhập tên tài khoản"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "输入名称"
+            "value": "输入帐户名称"
           }
         }
       }
@@ -14877,79 +14877,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSB kann dem Laufwerk eine Autounattend.xml-Datei hinzufügen, um die Windows-Installation zu vereinfachen. Je nach Auswahl kann das Setup bestimmte Anforderungen und Einrichtungsbildschirme überspringen und ein lokales Konto erstellen."
+            "value": "Umgehe ausgewählte Windows-Einschränkungen und vereinfache die Ersteinrichtung des Systems."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSB can add an Autounattend.xml file to the drive to simplify Windows installation. Depending on your choices, Setup can skip selected requirements and setup screens, and create a local account."
+            "value": "Bypass selected Windows restrictions and simplify initial system setup."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSB puede añadir un archivo Autounattend.xml al dispositivo para simplificar la instalación de Windows. Según las opciones que elijas, el instalador puede omitir determinados requisitos y pantallas de configuración, y crear una cuenta local."
+            "value": "Omite determinadas restricciones de Windows y simplifica la configuración inicial del sistema."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSB peut ajouter un fichier Autounattend.xml au support afin de simplifier l’installation de Windows. Selon vos choix, le programme d’installation peut ignorer certaines exigences et certains écrans de configuration, et créer un compte local."
+            "value": "Contournez certaines restrictions de Windows et simplifiez la configuration initiale du système."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSB può aggiungere al supporto un file Autounattend.xml per semplificare l’installazione di Windows. In base alle opzioni scelte, il programma di installazione può ignorare alcuni requisiti e schermate di configurazione e creare un account locale."
+            "value": "Aggira alcune restrizioni di Windows e semplifica la configurazione iniziale del sistema."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSBは、Windowsのインストールを簡単にするため、ドライブにAutounattend.xmlファイルを追加できます。選択内容に応じて、セットアップは一部の要件や設定画面をスキップし、ローカルアカウントを作成できます。"
+            "value": "選択したWindowsの制限を回避し、システムの初期設定を簡単にします。"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSB może dodać do nośnika plik Autounattend.xml, aby uprościć instalację Windows. W zależności od wybranych opcji instalator może pominąć wybrane wymagania, ekrany konfiguracji oraz utworzyć konto lokalne."
+            "value": "Pomiń wybrane restrykcje Windows i uprość pierwszą konfigurację systemu."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "O macUSB pode adicionar um arquivo Autounattend.xml à unidade para simplificar a instalação do Windows. Dependendo das opções escolhidas, o Instalador pode ignorar requisitos e telas de configuração selecionados e criar uma conta local."
+            "value": "Contorne algumas restrições do Windows e simplifique a configuração inicial do sistema."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSB может добавить на носитель файл Autounattend.xml, чтобы упростить установку Windows. В зависимости от выбранных параметров установщик может пропустить отдельные требования и экраны настройки, а также создать локальную учетную запись."
+            "value": "Обойдите выбранные ограничения Windows и упростите начальную настройку системы."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSB, Windows kurulumunu kolaylaştırmak için sürücüye bir Autounattend.xml dosyası ekleyebilir. Seçimlerinize bağlı olarak Kurulum, belirli gereksinimleri ve ayar ekranlarını atlayabilir ve yerel bir hesap oluşturabilir."
+            "value": "Seçilen Windows kısıtlamalarını atlayın ve sistemin ilk kurulumunu kolaylaştırın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSB може додати на носій файл Autounattend.xml, щоб спростити інсталяцію Windows. Залежно від вибраних параметрів інсталятор може пропустити окремі вимоги та екрани налаштування, а також створити локальний обліковий запис."
+            "value": "Обійдіть вибрані обмеження Windows і спростіть початкове налаштування системи."
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSB có thể thêm tệp Autounattend.xml vào ổ đĩa để đơn giản hóa quá trình cài đặt Windows. Tùy theo lựa chọn của bạn, Trình thiết lập có thể bỏ qua một số yêu cầu và màn hình thiết lập, đồng thời tạo tài khoản cục bộ."
+            "value": "Bỏ qua các hạn chế Windows đã chọn và đơn giản hóa thiết lập ban đầu của hệ thống."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSB 可以向驱动器添加 Autounattend.xml 文件，以简化 Windows 安装。根据你的选择，安装程序可以跳过所选要求和设置屏幕，并创建本地帐户。"
+            "value": "绕过所选 Windows 限制，并简化系统的初始设置。"
           }
         }
       }
@@ -14959,79 +14959,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Datei für automatische Konfiguration"
+            "value": "Konfiguration der Windows-Installation"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Automatic Configuration File"
+            "value": "Windows Installation Configuration"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Archivo de configuración automática"
+            "value": "Configuración de la instalación de Windows"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fichier de configuration automatique"
+            "value": "Configuration de l’installation de Windows"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "File di configurazione automatica"
+            "value": "Configurazione dell’installazione di Windows"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "自動構成ファイル"
+            "value": "Windowsインストールの構成"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plik automatycznej konfiguracji"
+            "value": "Konfiguracja instalacji Windows"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Arquivo de configuração automática"
+            "value": "Configuração da instalação do Windows"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Файл автоматической настройки"
+            "value": "Настройка установки Windows"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Otomatik Yapılandırma Dosyası"
+            "value": "Windows Kurulum Yapılandırması"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Файл автоматичної конфігурації"
+            "value": "Налаштування інсталяції Windows"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tệp cấu hình tự động"
+            "value": "Cấu hình cài đặt Windows"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "自动配置文件"
+            "value": "Windows 安装配置"
           }
         }
       }
@@ -15123,79 +15123,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Das ausgewählte Windows-Image enthält eine eigene Datei für automatische Konfiguration. Du kannst sie beibehalten, durch die in macUSB vorbereitete Konfiguration ersetzen oder das Erstellen des Mediums abbrechen."
+            "value": "Das ausgewählte Windows-Image enthält eine eigene automatische Konfiguration. Du kannst sie beibehalten, durch die macUSB-Konfiguration ersetzen oder das Erstellen des Mediums abbrechen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The selected Windows image includes its own automatic configuration file. You can keep it, replace it with the configuration prepared in macUSB, or stop creating the drive."
+            "value": "The selected Windows image includes its own automatic configuration. You can keep it, replace it with the macUSB configuration, or stop creating the drive."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La imagen de Windows seleccionada incluye su propio archivo de configuración automática. Puedes conservarlo, sustituirlo por la configuración preparada en macUSB o detener la creación del dispositivo."
+            "value": "La imagen de Windows seleccionada incluye su propia configuración automática. Puedes conservarla, sustituirla por la configuración de macUSB o detener la creación del dispositivo."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "L’image Windows sélectionnée contient son propre fichier de configuration automatique. Vous pouvez le conserver, le remplacer par la configuration préparée dans macUSB ou arrêter la création du support."
+            "value": "L’image Windows sélectionnée contient sa propre configuration automatique. Vous pouvez la conserver, la remplacer par la configuration macUSB ou arrêter la création du support."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "L’immagine Windows selezionata include un proprio file di configurazione automatica. Puoi mantenerlo, sostituirlo con la configurazione preparata in macUSB oppure interrompere la creazione del supporto."
+            "value": "L’immagine Windows selezionata include una propria configurazione automatica. Puoi mantenerla, sostituirla con la configurazione di macUSB oppure interrompere la creazione del supporto."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "選択したWindowsイメージには独自の自動構成ファイルが含まれています。そのまま使用するか、macUSBで準備した構成に置き換えるか、ドライブの作成を停止できます。"
+            "value": "選択したWindowsイメージには独自の自動構成が含まれています。そのまま使用するか、macUSBの構成に置き換えるか、ドライブの作成を停止できます。"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wybrany obraz Windows zawiera własny plik automatycznej konfiguracji. Możesz go zachować, zastąpić konfiguracją przygotowaną w macUSB albo przerwać tworzenie nośnika."
+            "value": "Wybrany obraz Windows zawiera własną konfigurację automatyczną. Możesz ją zachować, zastąpić konfiguracją macUSB albo przerwać tworzenie nośnika."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "A imagem do Windows selecionada inclui seu próprio arquivo de configuração automática. Você pode mantê-lo, substituí-lo pela configuração preparada no macUSB ou interromper a criação da unidade."
+            "value": "A imagem do Windows selecionada inclui sua própria configuração automática. Você pode mantê-la, substituí-la pela configuração do macUSB ou interromper a criação da unidade."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выбранный образ Windows содержит собственный файл автоматической настройки. Вы можете оставить его, заменить конфигурацией, подготовленной в macUSB, или остановить создание носителя."
+            "value": "Выбранный образ Windows содержит собственную автоматическую настройку. Вы можете оставить ее, заменить настройкой macUSB или остановить создание носителя."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seçilen Windows imajı kendi otomatik yapılandırma dosyasını içeriyor. Bunu koruyabilir, macUSB’de hazırlanan yapılandırmayla değiştirebilir veya sürücünün oluşturulmasını durdurabilirsiniz."
+            "value": "Seçilen Windows imajı kendi otomatik yapılandırmasını içeriyor. Bunu koruyabilir, macUSB yapılandırmasıyla değiştirebilir veya sürücünün oluşturulmasını durdurabilirsiniz."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Вибраний образ Windows містить власний файл автоматичної конфігурації. Ви можете залишити його, замінити конфігурацією, підготовленою в macUSB, або зупинити створення носія."
+            "value": "Вибраний образ Windows містить власну автоматичну конфігурацію. Ви можете залишити її, замінити конфігурацією macUSB або зупинити створення носія."
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ảnh Windows đã chọn có tệp cấu hình tự động riêng. Bạn có thể giữ tệp đó, thay bằng cấu hình được chuẩn bị trong macUSB hoặc dừng tạo ổ đĩa."
+            "value": "Ảnh Windows đã chọn có cấu hình tự động riêng. Bạn có thể giữ cấu hình đó, thay bằng cấu hình macUSB hoặc dừng tạo ổ đĩa."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "所选 Windows 映像包含自己的自动配置文件。你可以保留该文件、用 macUSB 准备的配置替换它，或停止创建驱动器。"
+            "value": "所选 Windows 映像包含自己的自动配置。你可以保留它、替换为 macUSB 配置，或停止创建驱动器。"
           }
         }
       }
@@ -15205,79 +15205,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Durch macUSB-Datei ersetzen"
+            "value": "macUSB-Konfiguration verwenden"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Replace with macUSB File"
+            "value": "Use macUSB Configuration"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sustituir por archivo de macUSB"
+            "value": "Usar configuración de macUSB"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Remplacer par le fichier macUSB"
+            "value": "Utiliser la configuration macUSB"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sostituisci con il file macUSB"
+            "value": "Usa la configurazione di macUSB"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSBのファイルに置き換える"
+            "value": "macUSBの構成を使用"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zastąp plikiem macUSB"
+            "value": "Użyj konfiguracji macUSB"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Substituir pelo arquivo do macUSB"
+            "value": "Usar configuração do macUSB"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Заменить файлом macUSB"
+            "value": "Использовать настройку macUSB"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "macUSB Dosyasıyla Değiştir"
+            "value": "macUSB Yapılandırmasını Kullan"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Замінити файлом macUSB"
+            "value": "Використати конфігурацію macUSB"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Thay bằng tệp macUSB"
+            "value": "Dùng cấu hình macUSB"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "替换为 macUSB 文件"
+            "value": "使用 macUSB 配置"
           }
         }
       }
@@ -15375,13 +15375,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This image already includes Autounattend.xml"
+            "value": "This image already contains Autounattend.xml"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Esta imagen ya incluye Autounattend.xml"
+            "value": "Esta imagen ya contiene Autounattend.xml"
           }
         },
         "fr": {
@@ -15393,37 +15393,37 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Questa immagine include già Autounattend.xml"
+            "value": "Questa immagine contiene già Autounattend.xml"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "このイメージにはAutounattend.xmlがすでに含まれています"
+            "value": "このイメージにはすでにAutounattend.xmlが含まれています"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Na obrazie jest już plik Autounattend.xml"
+            "value": "Ten obraz zawiera już Autounattend.xml"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Esta imagem já inclui Autounattend.xml"
+            "value": "Esta imagem já contém Autounattend.xml"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "В этом образе уже есть Autounattend.xml"
+            "value": "Этот образ уже содержит Autounattend.xml"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bu imajda zaten Autounattend.xml var"
+            "value": "Bu imaj zaten Autounattend.xml içeriyor"
           }
         },
         "uk": {
@@ -15451,79 +15451,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Image-Datei verwenden"
+            "value": "Image-Datei beibehalten"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Use Image File"
+            "value": "Keep Image File"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Usar archivo de la imagen"
+            "value": "Conservar archivo de la imagen"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Utiliser le fichier de l’image"
+            "value": "Conserver le fichier de l’image"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Usa il file dell’immagine"
+            "value": "Mantieni il file dell’immagine"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "イメージのファイルを使用"
+            "value": "イメージのファイルを保持"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Użyj pliku z obrazu"
+            "value": "Zachowaj plik z obrazu"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Usar arquivo da imagem"
+            "value": "Manter arquivo da imagem"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Использовать файл из образа"
+            "value": "Оставить файл из образа"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "İmajdaki Dosyayı Kullan"
+            "value": "İmajdaki Dosyayı Koru"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Використати файл з образу"
+            "value": "Залишити файл з образу"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dùng tệp trong ảnh"
+            "value": "Giữ tệp trong ảnh"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "使用映像文件"
+            "value": "保留映像文件"
           }
         }
       }
@@ -15610,84 +15610,166 @@
         }
       }
     },
-    "installation.summary.windows.autounattend.option.hardware_bypass": {
+    "installation.summary.windows.autounattend.done.button": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Windows 11-Hardwareanforderungen überspringen (TPM 2.0, Secure Boot und RAM)"
+            "value": "Fertig"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skip Windows 11 hardware requirements (TPM 2.0, Secure Boot, and RAM)"
+            "value": "Done"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Omitir los requisitos de hardware de Windows 11 (TPM 2.0, Secure Boot y RAM)"
+            "value": "Listo"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ignorer les exigences matérielles de Windows 11 (TPM 2.0, Secure Boot et RAM)"
+            "value": "Terminé"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ignora i requisiti hardware di Windows 11 (TPM 2.0, Secure Boot e RAM)"
+            "value": "Fine"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Windows 11のハードウェア要件をスキップ（TPM 2.0、Secure Boot、RAM）"
+            "value": "完了"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pomiń wymagania sprzętowe Windows 11 (TPM 2.0, Secure Boot i RAM)"
+            "value": "Gotowe"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ignorar os requisitos de hardware do Windows 11 (TPM 2.0, Secure Boot e RAM)"
+            "value": "Concluído"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пропустить требования к оборудованию Windows 11 (TPM 2.0, Secure Boot и RAM)"
+            "value": "Готово"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Windows 11 donanım gereksinimlerini atla (TPM 2.0, Secure Boot ve RAM)"
+            "value": "Bitti"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пропустити вимоги до обладнання Windows 11 (TPM 2.0, Secure Boot і RAM)"
+            "value": "Готово"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bỏ qua yêu cầu phần cứng của Windows 11 (TPM 2.0, Secure Boot và RAM)"
+            "value": "Xong"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "跳过 Windows 11 硬件要求（TPM 2.0、Secure Boot 和 RAM）"
+            "value": "完成"
+          }
+        }
+      }
+    },
+    "installation.summary.windows.autounattend.option.hardware_bypass": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows 11-Hardwareanforderungen umgehen, einschließlich TPM 2.0, Secure Boot und RAM"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bypass Windows 11 hardware requirements, including TPM 2.0, Secure Boot, and RAM"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omitir los requisitos de hardware de Windows 11, incluidos TPM 2.0, Secure Boot y RAM"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contourner les exigences matérielles de Windows 11, notamment TPM 2.0, Secure Boot et RAM"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aggira i requisiti hardware di Windows 11, inclusi TPM 2.0, Secure Boot e RAM"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows 11のハードウェア要件を回避（TPM 2.0、Secure Boot、RAMを含む）"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omiń wymagania sprzętowe Windows 11, w tym TPM 2.0, Secure Boot i RAM"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contornar os requisitos de hardware do Windows 11, incluindo TPM 2.0, Secure Boot e RAM"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обойти требования к оборудованию Windows 11, включая TPM 2.0, Secure Boot и RAM"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TPM 2.0, Secure Boot ve RAM dahil Windows 11 donanım gereksinimlerini aş"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обійти вимоги до обладнання Windows 11, зокрема TPM 2.0, Secure Boot і RAM"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bỏ qua yêu cầu phần cứng của Windows 11, bao gồm TPM 2.0, Secure Boot và RAM"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "绕过 Windows 11 硬件要求，包括 TPM 2.0、Secure Boot 和 RAM"
           }
         }
       }
@@ -15703,13 +15785,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Automatically create a local account"
+            "value": "Create a local account automatically"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Crear automáticamente una cuenta local"
+            "value": "Crear una cuenta local automáticamente"
           }
         },
         "fr": {
@@ -15727,37 +15809,37 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ローカルアカウントを自動作成"
+            "value": "ローカルアカウントを自動的に作成"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Automatycznie utwórz konto lokalne"
+            "value": "Utwórz konto lokalne automatycznie"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Criar automaticamente uma conta local"
+            "value": "Criar uma conta local automaticamente"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Автоматически создать локальную учетную запись"
+            "value": "Создать локальную учетную запись автоматически"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Yerel hesabı otomatik oluştur"
+            "value": "Yerel hesabı otomatik olarak oluştur"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Автоматично створити локальний обліковий запис"
+            "value": "Створити локальний обліковий запис автоматично"
           }
         },
         "vi": {
@@ -15815,7 +15897,7 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zapobiegaj automatycznemu szyfrowaniu BitLockerem"
+            "value": "Zapobiegaj automatycznemu szyfrowaniu funkcją BitLocker"
           }
         },
         "pt-BR": {
@@ -15861,79 +15943,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Datenerfassung deaktivieren und Datenschutzfragen überspringen"
+            "value": "Datenerfassung einschränken und Datenschutzfragen überspringen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Turn off data collection and skip privacy questions"
+            "value": "Limit data collection and skip privacy questions"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Desactivar la recopilación de datos y omitir las preguntas de privacidad"
+            "value": "Limitar la recopilación de datos y omitir las preguntas de privacidad"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Désactiver la collecte de données et ignorer les questions de confidentialité"
+            "value": "Limiter la collecte de données et ignorer les questions de confidentialité"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Disattiva la raccolta dati e salta le domande sulla privacy"
+            "value": "Limita la raccolta dati e salta le domande sulla privacy"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "データ収集をオフにしてプライバシーの質問をスキップ"
+            "value": "データ収集を制限し、プライバシーの質問をスキップ"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wyłącz zbieranie danych i pomiń pytania prywatności"
+            "value": "Ogranicz zbieranie danych i pomiń pytania o prywatność"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Desativar a coleta de dados e ignorar perguntas de privacidade"
+            "value": "Limitar a coleta de dados e ignorar perguntas de privacidade"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Отключить сбор данных и пропустить вопросы конфиденциальности"
+            "value": "Ограничить сбор данных и пропустить вопросы конфиденциальности"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Veri toplamayı kapat ve gizlilik sorularını atla"
+            "value": "Veri toplamayı sınırla ve gizlilik sorularını atla"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Вимкнути збирання даних і пропустити питання конфіденційності"
+            "value": "Обмежити збирання даних і пропустити питання конфіденційності"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tắt thu thập dữ liệu và bỏ qua câu hỏi về quyền riêng tư"
+            "value": "Giới hạn thu thập dữ liệu và bỏ qua câu hỏi về quyền riêng tư"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "关闭数据收集并跳过隐私问题"
+            "value": "限制数据收集并跳过隐私问题"
           }
         }
       }
@@ -15943,79 +16025,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "WLAN-Netzwerkeinrichtung überspringen"
+            "value": "Anforderung zur WLAN-Netzwerkeinrichtung umgehen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skip Wi-Fi network setup"
+            "value": "Bypass the Wi-Fi network setup requirement"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Omitir la configuración de la red Wi-Fi"
+            "value": "Omitir el requisito de configuración de la red Wi-Fi"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ignorer la configuration du réseau Wi-Fi"
+            "value": "Contourner l’obligation de configurer le réseau Wi-Fi"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Salta la configurazione della rete Wi-Fi"
+            "value": "Aggira il requisito di configurazione della rete Wi-Fi"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wi-Fiネットワーク設定をスキップ"
+            "value": "Wi-Fiネットワーク設定の要件を回避"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pomiń konfigurację sieci Wi-Fi"
+            "value": "Omiń wymóg konfiguracji sieci Wi-Fi"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ignorar a configuração da rede Wi-Fi"
+            "value": "Contornar o requisito de configuração da rede Wi-Fi"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пропустить настройку сети Wi-Fi"
+            "value": "Обойти требование настройки сети Wi-Fi"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wi-Fi ağ kurulumunu atla"
+            "value": "Wi-Fi ağı kurulumu gereksinimini aş"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пропустити налаштування мережі Wi-Fi"
+            "value": "Обійти вимогу налаштування мережі Wi-Fi"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bỏ qua thiết lập mạng Wi-Fi"
+            "value": "Bỏ qua yêu cầu thiết lập mạng Wi-Fi"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "跳过 Wi-Fi 网络设置"
+            "value": "绕过 Wi-Fi 网络设置要求"
           }
         }
       }
@@ -16025,79 +16107,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Microsoft-Kontoanforderung deaktivieren"
+            "value": "Microsoft-Kontoanforderung umgehen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Disable the Microsoft account requirement"
+            "value": "Bypass the Microsoft account requirement"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Desactivar el requisito de cuenta Microsoft"
+            "value": "Omitir el requisito de cuenta Microsoft"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Désactiver l’obligation d’utiliser un compte Microsoft"
+            "value": "Contourner l’obligation d’utiliser un compte Microsoft"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Disattiva il requisito dell’account Microsoft"
+            "value": "Aggira il requisito dell’account Microsoft"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Microsoftアカウント要件を無効にする"
+            "value": "Microsoftアカウントの要件を回避"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wyłącz wymóg konta Microsoft"
+            "value": "Omiń wymóg konta Microsoft"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Desativar a exigência de conta Microsoft"
+            "value": "Contornar a exigência de conta Microsoft"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Отключить требование учетной записи Microsoft"
+            "value": "Обойти требование учетной записи Microsoft"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Microsoft hesabı gereksinimini devre dışı bırak"
+            "value": "Microsoft hesabı gereksinimini aş"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Вимкнути вимогу облікового запису Microsoft"
+            "value": "Обійти вимогу облікового запису Microsoft"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tắt yêu cầu tài khoản Microsoft"
+            "value": "Bỏ qua yêu cầu tài khoản Microsoft"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "停用 Microsoft 帐户要求"
+            "value": "绕过 Microsoft 帐户要求"
           }
         }
       }
@@ -16107,79 +16189,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ausgewählte Optionen: %d"
+            "value": "Ausgewählt: %d"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selected options: %d"
+            "value": "Selected: %d"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opciones seleccionadas: %d"
+            "value": "Seleccionadas: %d"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Options sélectionnées : %d"
+            "value": "Sélection : %d"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opzioni selezionate: %d"
+            "value": "Selezionate: %d"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "選択したオプション：%d"
+            "value": "選択済み：%d"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wybrane opcje: %d"
+            "value": "Wybrane: %d"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opções selecionadas: %d"
+            "value": "Selecionadas: %d"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выбрано параметров: %d"
+            "value": "Выбрано: %d"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seçilen seçenekler: %d"
+            "value": "Seçili: %d"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Вибрано параметрів: %d"
+            "value": "Вибрано: %d"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tùy chọn đã chọn: %d"
+            "value": "Đã chọn: %d"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "已选选项：%d"
+            "value": "已选择：%d"
           }
         }
       }

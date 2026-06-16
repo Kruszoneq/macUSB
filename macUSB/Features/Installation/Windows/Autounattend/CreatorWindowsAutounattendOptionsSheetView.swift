@@ -82,7 +82,7 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text(String(localized: "OK"))
+                    Text(String(localized: "installation.summary.windows.autounattend.done.button"))
                         .padding(.horizontal, 16)
                         .padding(.vertical, 6)
                 }

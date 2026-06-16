@@ -44,7 +44,7 @@ struct CreatorWindowsAutounattendCardView: View {
     var body: some View {
         StatusCard(tone: .active, density: .compact) {
             HStack(alignment: .top) {
-                Image(systemName: "gearshape.2")
+                Image(systemName: "doc.badge.gearshape.fill")
                     .font(.title3)
                     .foregroundColor(.accentColor)
                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
