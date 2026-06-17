@@ -14,6 +14,7 @@ struct UniversalInstallationView: View {
     let linuxFlowContext: LinuxInstallationFlowContext?
     let isWindowsWorkflow: Bool
     let windowsMountedSourcePath: String?
+    let windowsAutounattendMacLocale: CreatorWindowsAutounattendMacLocale?
     let windowsWillSplitWim: Bool
     
     // Flagi
@@ -71,6 +72,8 @@ struct UniversalInstallationView: View {
     @State var workflowResultErrorPresentation: LinuxWorkflowErrorPresentation? = nil
     @State var windowsPrerequisiteToolchainPresence: WindowsToolchainPresence? = WindowsToolchainProbeService.shared.detectPresence()
     @State var windowsPrerequisiteProbeInProgress: Bool = false
+    @State var windowsAutounattendConfiguration: CreatorWindowsAutounattendConfiguration = CreatorWindowsAutounattendConfiguration()
+    @State var windowsAutounattendOptionsPresented: Bool = false
     
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
@@ -114,6 +117,17 @@ struct UniversalInstallationView: View {
         }
     }
     private var sectionIconFont: Font { .title3 }
+    private var windowsAutounattendVersion: CreatorWindowsAutounattendWindowsVersion? {
+        guard isWindowsWorkflow else { return nil }
+        return CreatorWindowsAutounattendWindowsVersion.detected(from: systemName)
+    }
+    private var windowsAutounattendShouldBlockStart: Bool {
+        guard isWindowsWorkflow, windowsAutounattendConfiguration.hasSelectedOption else { return false }
+        return !windowsAutounattendConfiguration.canStartWorkflow
+    }
+    private var shouldBlockStartAction: Bool {
+        windowsPrerequisiteShouldBlockStart || windowsAutounattendShouldBlockStart
+    }
     private var processSectionDivider: some View {
         HStack(spacing: 10) {
             Capsule()
@@ -224,6 +238,17 @@ struct UniversalInstallationView: View {
                             }
                         }
                         .transition(.opacity)
+                    }
+
+                    if let windowsAutounattendVersion {
+                        CreatorWindowsAutounattendCardView(
+                            windowsVersion: windowsAutounattendVersion,
+                            configuration: $windowsAutounattendConfiguration,
+                            isOptionsPresented: $windowsAutounattendOptionsPresented,
+                            onConfigurationChanged: { _ in
+                                persistWindowsAutounattendConfiguration()
+                            }
+                        )
                     }
 
                     if shouldShowRequiredPermissionsWarning {
@@ -361,8 +386,8 @@ struct UniversalInstallationView: View {
                             .frame(maxWidth: .infinity)
                             .padding(8)
                         }
-                        .macUSBPrimaryButtonStyle(isEnabled: !windowsPrerequisiteShouldBlockStart)
-                        .disabled(windowsPrerequisiteShouldBlockStart)
+                        .macUSBPrimaryButtonStyle(isEnabled: !shouldBlockStartAction)
+                        .disabled(shouldBlockStartAction)
 
                         Button(action: returnToAnalysisViewPreservingSelection) {
                             HStack {
@@ -504,6 +529,7 @@ struct UniversalInstallationView: View {
                     isLinuxWorkflow: isLinuxWorkflow,
                     isWindowsWorkflow: isWindowsWorkflow,
                     windowsWillSplitWimExpected: windowsWillSplitWim,
+                    windowsWillCreateAutounattendExpected: windowsAutounattendConfiguration.shouldGenerateMacUSBFile,
                     shouldDetachMountPoint: shouldDetachMountPointAfterFinish,
                     targetWholeDiskBSDName: targetWholeDiskBSDNameForFinish,
                     needsPreformat: (targetDrive?.needsFormatting ?? false) && !isPPC,
@@ -534,6 +560,7 @@ struct UniversalInstallationView: View {
         )
         .onAppear {
             if isWindowsWorkflow {
+                loadWindowsAutounattendConfiguration()
                 InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
                     path: sourceAppURL.path,
                     family: .windows,

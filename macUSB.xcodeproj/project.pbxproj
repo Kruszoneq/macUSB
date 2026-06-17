@@ -35,6 +35,9 @@
 		A10000012F0000010000004F /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000050 /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift */; };
 		A10000012F00000100000051 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000052 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift */; };
 		A10000012F00000100000053 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000054 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift */; };
+		A10000012F00000100000055 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000056 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendConfiguration.swift */; };
+		A10000012F00000100000057 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000058 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendGenerator.swift */; };
+		A10000012F00000100000059 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000005A /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendValidation.swift */; };
 		B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */ = {isa = PBXBuildFile; fileRef = B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */; };
 		C10000012F00000100000001 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */; };
 		D10000012F00000100000001 /* macUSB/Resources/Icons/Linux/Distros in Resources */ = {isa = PBXBuildFile; fileRef = D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */; };
@@ -124,6 +127,9 @@
 		A10000012F00000100000050 /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift; sourceTree = "<group>"; };
 		A10000012F00000100000052 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift; sourceTree = "<group>"; };
 		A10000012F00000100000054 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift; sourceTree = "<group>"; };
+		A10000012F00000100000056 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendConfiguration.swift; sourceTree = "<group>"; };
+		A10000012F00000100000058 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendGenerator.swift; sourceTree = "<group>"; };
+		A10000012F0000010000005A /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendValidation.swift; sourceTree = "<group>"; };
 		B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = macUSB/Resources/Sounds/burn_complete.aif; sourceTree = "<group>"; };
 		C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift; sourceTree = "<group>"; };
 		D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */ = {isa = PBXFileReference; lastKnownFileType = folder; path = macUSB/Resources/Icons/Linux/Distros; sourceTree = "<group>"; };
@@ -207,6 +213,11 @@
 				Features/Installation/Linux/LinuxInstallationFlowContext.swift,
 				Features/Installation/Linux/LinuxWorkflowErrorPresentation.swift,
 				Features/Installation/UniversalInstallationView.swift,
+				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendAlertLogic.swift,
+				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendCardView.swift,
+				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendConfiguration.swift,
+				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendOptionsSheetView.swift,
+				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendSourceInspection.swift,
 				Features/Installation/Windows/CreationProgressWindowsMapping.swift,
 				Features/Installation/Windows/CreatorWindowsHelperLogic.swift,
 				Features/Installation/Windows/CreatorWindowsLabelLogic.swift,
@@ -312,6 +323,11 @@
 				Features/Installation/Linux/LinuxInstallationFlowContext.swift,
 				Features/Installation/Linux/LinuxWorkflowErrorPresentation.swift,
 				Features/Installation/UniversalInstallationView.swift,
+				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendAlertLogic.swift,
+				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendCardView.swift,
+				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendConfiguration.swift,
+				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendOptionsSheetView.swift,
+				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendSourceInspection.swift,
 				Features/Installation/Windows/CreationProgressWindowsMapping.swift,
 				Features/Installation/Windows/CreatorWindowsHelperLogic.swift,
 				Features/Installation/Windows/CreatorWindowsLabelLogic.swift,
@@ -469,6 +485,9 @@
 				A10000012F00000100000050 /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift */,
 				A10000012F00000100000052 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift */,
 				A10000012F00000100000054 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift */,
+				A10000012F00000100000056 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendConfiguration.swift */,
+				A10000012F00000100000058 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendGenerator.swift */,
+				A10000012F0000010000005A /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendValidation.swift */,
 				A10000012F00000100000029 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift */,
 				A10000012F0000010000002A /* DownloaderAssembly/DownloaderAssemblyProcess.swift */,
 				C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */,
@@ -709,6 +728,9 @@
 				A10000012F0000010000004F /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift in Sources */,
 				A10000012F00000100000051 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift in Sources */,
 				A10000012F00000100000053 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift in Sources */,
+				A10000012F00000100000055 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendConfiguration.swift in Sources */,
+				A10000012F00000100000057 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendGenerator.swift in Sources */,
+				A10000012F00000100000059 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendValidation.swift in Sources */,
 				A10000012F00000100000039 /* DownloaderAssembly/DownloaderAssemblyExecutor.swift in Sources */,
 				A10000012F0000010000003A /* DownloaderAssembly/DownloaderAssemblyProcess.swift in Sources */,
 			);
@@ -880,7 +902,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -936,7 +958,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;

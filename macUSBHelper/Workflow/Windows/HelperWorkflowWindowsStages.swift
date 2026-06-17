@@ -53,13 +53,29 @@ extension HelperWorkflowExecutor {
                 key: "windows_verify_media",
                 titleKey: HelperWorkflowLocalizationKeys.windowsVerifyMediaTitle,
                 statusKey: HelperWorkflowLocalizationKeys.windowsVerifyMediaStatus,
-                startPercent: 95,
+                startPercent: request.windowsAutounattendConfiguration?.shouldGenerateFile == true ? 97 : 95,
                 endPercent: 98,
                 executable: "/usr/bin/true",
                 arguments: [],
                 parseToolPercent: false
             )
         )
+
+        if request.windowsAutounattendConfiguration?.shouldGenerateFile == true {
+            stages.insert(
+                WorkflowStage(
+                    key: "windows_create_autounattend",
+                    titleKey: HelperWorkflowLocalizationKeys.windowsCreateAutounattendTitle,
+                    statusKey: HelperWorkflowLocalizationKeys.windowsCreateAutounattendStatus,
+                    startPercent: 95,
+                    endPercent: 97,
+                    executable: "/usr/bin/true",
+                    arguments: [],
+                    parseToolPercent: false
+                ),
+                at: stages.count - 1
+            )
+        }
 
         return stages
     }

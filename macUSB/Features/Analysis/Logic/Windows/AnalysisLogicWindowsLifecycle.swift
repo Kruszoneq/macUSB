@@ -43,6 +43,7 @@ extension AnalysisLogic {
         self.windowsHasEFI = false
         self.isWindowsWorkflowSupported = false
         self.windowsWillSplitWIM = false
+        self.windowsAutounattendMacLocale = nil
     }
 
     func applyWindowsDetectionResult(_ result: WindowsDetectionResult, sourceURL: URL, mountedImagePath: String?) {
@@ -61,6 +62,10 @@ extension AnalysisLogic {
         self.windowsHasEFI = result.efiStatus.hasEFI
         self.isWindowsWorkflowSupported = result.isSupported
         self.windowsWillSplitWIM = result.isSupported && detectWindowsWimSplitNeed(mountedImagePath: mountedImagePath)
+        self.windowsAutounattendMacLocale = resolveWindowsAutounattendMacLocaleIfNeeded(
+            for: result,
+            mountedImagePath: mountedImagePath
+        )
 
         self.recognizedVersion = result.displayName
         self.sourceAppURL = nil
@@ -115,6 +120,33 @@ extension AnalysisLogic {
         self.log("Windows workflow split-wim flag: \(self.windowsWillSplitWIM ? "TAK" : "NIE")")
         self.log("Windows source file: \(sourceURL.path)")
         AppLogging.separator()
+    }
+
+    private func resolveWindowsAutounattendMacLocaleIfNeeded(
+        for result: WindowsDetectionResult,
+        mountedImagePath: String?
+    ) -> CreatorWindowsAutounattendMacLocale? {
+        guard result.isSupported,
+              CreatorWindowsAutounattendWindowsVersion.detected(from: result.displayName) != nil else {
+            self.log("Windows autounattend language check: pominięto, bo obraz nie jest wspieranym Windows 11 dla tej funkcji.")
+            return nil
+        }
+
+        let macLanguage = CreatorWindowsAutounattendMacLocale.normalizedWindowsTag(Locale.preferredLanguages.first) ?? "unknown"
+        let macRegion = CreatorWindowsAutounattendMacLocale.normalizedWindowsTag(Locale.current.identifier) ?? "unknown"
+        self.log(
+            "Windows autounattend language check: odczytuję sources/lang.ini z obrazu Windows (mount=\(mountedImagePath ?? "nil"))."
+        )
+
+        let isoLanguageTags = CreatorWindowsAutounattendSourceInspection.availableLanguageTags(in: mountedImagePath)
+        let isoLanguagesDescription = isoLanguageTags?.sorted().joined(separator: ", ") ?? "brak/nie odczytano"
+        let macLocale = CreatorWindowsAutounattendMacLocale.current(availableLanguageTags: isoLanguageTags)
+
+        self.log(
+            "Windows autounattend language check: języki ISO=\(isoLanguagesDescription); język macOS=\(macLanguage); region macOS=\(macRegion); zgodność=\((macLocale?.languageIsAvailableInSource == true) ? "TAK" : "NIE")."
+        )
+
+        return macLocale
     }
 
     private func detectWindowsWimSplitNeed(mountedImagePath: String?) -> Bool {

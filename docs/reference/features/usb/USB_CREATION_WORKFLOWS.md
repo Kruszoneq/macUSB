@@ -27,6 +27,7 @@ Windows workflow stages:
 - `windows_prepare_target` — target USB unmount with retry/force prompt path and FAT32/MBR formatting (indeterminate stage),
 - `windows_create_media` — ISO file copy to USB (`rsync`) with determinate progress + write speed,
 - `windows_split_wim` — conditional `install.wim` split via `wimlib-imagex` with determinate progress + write speed (stage appears only when needed),
+- `windows_create_autounattend` — conditional `Autounattend.xml` generation and XML validation (indeterminate stage; appears only when macUSB generates its own file),
 - `windows_verify_media` — boot file and structure validation (`boot.wim`, UEFI markers, `install.wim`/`install.swm`) (indeterminate stage),
 - `windows_cleanup_temp` — deterministic cleanup of temp files and helper-managed hidden image mount,
 - `finalize` — terminal state transition.
@@ -46,6 +47,18 @@ Windows summary screen (`UniversalInstallationView`) should show an informationa
 - card uses accent tone (`.active`) with SF Symbol `info.circle.fill`,
 - copy clearly states that prepared media is UEFI-only and that Legacy BIOS boot is not supported.
 
+Windows automatic configuration card:
+- card is visible only for recognized Windows 11 images,
+- state is session-only and keyed to the selected ISO path plus file identity when available,
+- Windows 11 offers automatic BitLocker device-encryption prevention, privacy data-collection opt-out, Wi-Fi/network setup skip, Microsoft-account requirement bypass, local-account options, language/region transfer from the current Mac, and a combined TPM 2.0/Secure Boot/RAM hardware-bypass option,
+- language/region transfer reads the current macOS preferred language and locale, verifies the language against `sources/lang.ini` immediately after a supported Windows 11 image is detected, uses the language tag as Windows `InputLocale` so Windows picks its default keyboard for that language, and is shown disabled when the ISO language cannot be verified,
+- local-account creation accepts a Windows display name in the UI; the display name must be non-empty, max 256 characters, not `NONE`, and must not contain Microsoft-forbidden account-name characters (`/ \ [ ] : | < > + = ; , ? * % @`); app side derives a separate local account `Name` from it using only ASCII letters and digits, max 20 characters, with a deterministic ASCII fallback when the display name contains no usable characters,
+- Wi-Fi/network setup skip automatically enables Microsoft-account requirement bypass and locks that option while selected,
+- automatic local-account creation is available only after Microsoft-account requirement bypass is selected,
+- if the mounted source already contains a root-level `Autounattend.xml` or `sources/$OEM$/$$/Panther/unattend.xml` with any casing and automatic configuration is enabled, app-side pre-start flow must show a warning alert before destructive confirmation,
+- choosing the source file sends no autounattend payload and hides `windows_create_autounattend`,
+- choosing the macUSB file sends the autounattend payload and helper writes the answer file after media copy and optional WIM split, before media verification.
+
 Windows summary pre-start prerequisites:
 - if Windows workflow requires `install.wim` split and `wimlib-imagex` is not detected, start action is blocked before workflow start.
 - in blocked state, summary keeps a divider with warning label and replaces process/time cards with an orange prerequisites card.
@@ -63,6 +76,11 @@ Windows summary pre-start prerequisites:
 - Stage progression shown in UI must remain deterministic.
 - Linux raw-copy must target whole-disk device, never a partition node.
 - Windows workflow must copy installer files 1:1 from ISO payload (no UEFI fallback file synthesis).
+- Windows automatic configuration may add or replace only the Windows answer-file location selected by the generated passes, when explicitly enabled by the user. If the generated XML contains `windowsPE`, helper writes root-level `Autounattend.xml`; otherwise it writes `sources/$OEM$/$$/Panther/unattend.xml` so Windows Setup copies it to `%WINDIR%/Panther/unattend.xml` for later passes. The `windowsPE` pass is generated for options that require Windows PE setup data, such as the Windows 11 hardware-requirements bypass. When automatic BitLocker device-encryption prevention is enabled, macUSB writes a `specialize` pass command that sets `HKLM\SYSTEM\CurrentControlSet\Control\BitLocker\PreventDeviceEncryption` to `1`.
+- Windows automatic configuration may set `Microsoft-Windows-International-Core` language, input, system locale, and user locale values in `oobeSystem` when Mac language/region transfer is enabled.
+- Windows automatic configuration may set `OOBE/ProtectYourPC` to `3` when privacy data-collection opt-out is enabled.
+- Windows automatic configuration may set `OOBE/HideWirelessSetupInOOBE` to `true` when Wi-Fi/network setup skip is enabled.
+- Windows automatic local-account creation writes both `Name` and `DisplayName` for `Microsoft-Windows-Shell-Setup/UserAccounts/LocalAccounts/LocalAccount`; `DisplayName` preserves the user-entered display name, while `Name` is generated without spaces or special characters and limited to 20 ASCII letters/digits.
 - Windows target format must be `MS-DOS (FAT32)` + `MBR`.
 
 ## Power Management Invariant

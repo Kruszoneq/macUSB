@@ -9,6 +9,75 @@ enum HelperWorkflowKind: String, Codable {
     case windows
 }
 
+struct WindowsAutounattendConfigurationPayload: Codable {
+    let skipHardwareRequirements: Bool
+    let useMacLanguageAndRegion: Bool
+    let languageTag: String?
+    let regionLocaleTag: String?
+    let preventDeviceEncryption: Bool
+    let disableDataCollection: Bool
+    let skipWirelessSetup: Bool
+    let skipMicrosoftAccountRequirement: Bool
+    let createLocalAccount: Bool
+    let localAccountName: String?
+    let localAccountDisplayName: String?
+
+    init(
+        skipHardwareRequirements: Bool,
+        useMacLanguageAndRegion: Bool = false,
+        languageTag: String? = nil,
+        regionLocaleTag: String? = nil,
+        preventDeviceEncryption: Bool = false,
+        disableDataCollection: Bool = false,
+        skipWirelessSetup: Bool = false,
+        skipMicrosoftAccountRequirement: Bool = false,
+        createLocalAccount: Bool,
+        localAccountName: String?,
+        localAccountDisplayName: String? = nil
+    ) {
+        self.skipHardwareRequirements = skipHardwareRequirements
+        self.useMacLanguageAndRegion = useMacLanguageAndRegion
+        self.languageTag = languageTag
+        self.regionLocaleTag = regionLocaleTag
+        self.preventDeviceEncryption = preventDeviceEncryption
+        self.disableDataCollection = disableDataCollection
+        self.skipWirelessSetup = skipWirelessSetup
+        self.skipMicrosoftAccountRequirement = skipMicrosoftAccountRequirement
+        self.createLocalAccount = createLocalAccount
+        self.localAccountName = localAccountName
+        self.localAccountDisplayName = localAccountDisplayName
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case skipHardwareRequirements
+        case useMacLanguageAndRegion
+        case languageTag
+        case regionLocaleTag
+        case preventDeviceEncryption
+        case disableDataCollection
+        case skipWirelessSetup
+        case skipMicrosoftAccountRequirement
+        case createLocalAccount
+        case localAccountName
+        case localAccountDisplayName
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        skipHardwareRequirements = try container.decode(Bool.self, forKey: .skipHardwareRequirements)
+        useMacLanguageAndRegion = try container.decodeIfPresent(Bool.self, forKey: .useMacLanguageAndRegion) ?? false
+        languageTag = try container.decodeIfPresent(String.self, forKey: .languageTag)
+        regionLocaleTag = try container.decodeIfPresent(String.self, forKey: .regionLocaleTag)
+        preventDeviceEncryption = try container.decodeIfPresent(Bool.self, forKey: .preventDeviceEncryption) ?? false
+        disableDataCollection = try container.decodeIfPresent(Bool.self, forKey: .disableDataCollection) ?? false
+        skipWirelessSetup = try container.decodeIfPresent(Bool.self, forKey: .skipWirelessSetup) ?? false
+        skipMicrosoftAccountRequirement = try container.decodeIfPresent(Bool.self, forKey: .skipMicrosoftAccountRequirement) ?? false
+        createLocalAccount = try container.decode(Bool.self, forKey: .createLocalAccount)
+        localAccountName = try container.decodeIfPresent(String.self, forKey: .localAccountName)
+        localAccountDisplayName = try container.decodeIfPresent(String.self, forKey: .localAccountDisplayName)
+    }
+}
+
 struct HelperWorkflowRequestPayload: Codable {
     let workflowKind: HelperWorkflowKind
     let systemName: String
@@ -27,6 +96,47 @@ struct HelperWorkflowRequestPayload: Codable {
     let linuxForceUnmount: Bool
     let windowsForceUnmount: Bool
     let windowsMountedSourcePath: String?
+    let windowsAutounattendConfiguration: WindowsAutounattendConfigurationPayload?
+
+    init(
+        workflowKind: HelperWorkflowKind,
+        systemName: String,
+        sourceAppPath: String,
+        originalImagePath: String?,
+        tempWorkPath: String,
+        targetVolumePath: String,
+        targetBSDName: String,
+        targetLabel: String,
+        needsPreformat: Bool,
+        isCatalina: Bool,
+        isSierra: Bool,
+        needsCodesign: Bool,
+        requiresApplicationPathArg: Bool,
+        requesterUID: Int?,
+        linuxForceUnmount: Bool,
+        windowsForceUnmount: Bool,
+        windowsMountedSourcePath: String?,
+        windowsAutounattendConfiguration: WindowsAutounattendConfigurationPayload? = nil
+    ) {
+        self.workflowKind = workflowKind
+        self.systemName = systemName
+        self.sourceAppPath = sourceAppPath
+        self.originalImagePath = originalImagePath
+        self.tempWorkPath = tempWorkPath
+        self.targetVolumePath = targetVolumePath
+        self.targetBSDName = targetBSDName
+        self.targetLabel = targetLabel
+        self.needsPreformat = needsPreformat
+        self.isCatalina = isCatalina
+        self.isSierra = isSierra
+        self.needsCodesign = needsCodesign
+        self.requiresApplicationPathArg = requiresApplicationPathArg
+        self.requesterUID = requesterUID
+        self.linuxForceUnmount = linuxForceUnmount
+        self.windowsForceUnmount = windowsForceUnmount
+        self.windowsMountedSourcePath = windowsMountedSourcePath
+        self.windowsAutounattendConfiguration = windowsAutounattendConfiguration
+    }
 }
 
 struct HelperProgressEventPayload: Codable {
