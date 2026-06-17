@@ -19,6 +19,10 @@ extension WindowsAutounattendConfigurationPayload {
         localAccountName?.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
+    var normalizedLocalAccountDisplayName: String? {
+        localAccountDisplayName?.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     var normalizedLanguageTag: String? {
         normalizedWindowsLocaleTag(languageTag)
     }

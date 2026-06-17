@@ -101,6 +101,14 @@ extension HelperWorkflowExecutor {
                     description: "Nazwa konta lokalnego dla Autounattend.xml jest nieprawidłowa."
                 )
             }
+            if let displayName = configuration.normalizedLocalAccountDisplayName,
+               !isWindowsAutounattendLocalAccountDisplayNameValid(displayName) {
+                throw HelperExecutionError.failed(
+                    stage: stage.key,
+                    exitCode: -1,
+                    description: "Nazwa wyświetlana konta lokalnego dla Autounattend.xml jest nieprawidłowa."
+                )
+            }
         }
         if configuration.useMacLanguageAndRegion {
             guard let languageTag = configuration.normalizedLanguageTag,
@@ -234,12 +242,13 @@ extension HelperWorkflowExecutor {
 
         if configuration.createLocalAccount,
            let accountName = configuration.normalizedLocalAccountName {
+            let displayName = configuration.normalizedLocalAccountDisplayName ?? accountName
             let userAccounts = XMLElement(name: "UserAccounts")
             let localAccounts = XMLElement(name: "LocalAccounts")
             let localAccount = XMLElement(name: "LocalAccount")
             localAccount.addAttribute(XMLNode.attribute(withName: "wcm:action", stringValue: "add") as! XMLNode)
             localAccount.addChild(textElement(name: "Name", value: accountName))
-            localAccount.addChild(textElement(name: "DisplayName", value: accountName))
+            localAccount.addChild(textElement(name: "DisplayName", value: displayName))
             localAccount.addChild(textElement(name: "Group", value: "Administrators"))
             localAccounts.addChild(localAccount)
             userAccounts.addChild(localAccounts)

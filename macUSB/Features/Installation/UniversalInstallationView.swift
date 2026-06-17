@@ -241,8 +241,6 @@ struct UniversalInstallationView: View {
                     }
 
                     if let windowsAutounattendVersion {
-                        CreatorWindowsAutounattendDividerView()
-
                         CreatorWindowsAutounattendCardView(
                             windowsVersion: windowsAutounattendVersion,
                             configuration: $windowsAutounattendConfiguration,

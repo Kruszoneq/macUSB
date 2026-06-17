@@ -74,6 +74,9 @@ struct CreatorWindowsAutounattendMacLocale: Equatable {
 }
 
 struct CreatorWindowsAutounattendConfiguration: Equatable {
+    static let localAccountNameMaximumLength = 20
+    static let localAccountDisplayNameMaximumLength = 256
+
     var skipHardwareRequirements: Bool = false
     var useMacLanguageAndRegion: Bool = false
     var macLocale: CreatorWindowsAutounattendMacLocale?
@@ -82,11 +85,15 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
     var skipWirelessSetup: Bool = false
     var skipMicrosoftAccountRequirement: Bool = false
     var createLocalAccount: Bool = false
-    var localAccountName: String = ""
+    var localAccountDisplayName: String = ""
     var existingFileDecision: CreatorWindowsAutounattendExistingFileDecision?
 
-    var trimmedLocalAccountName: String {
-        localAccountName.trimmingCharacters(in: .whitespacesAndNewlines)
+    var trimmedLocalAccountDisplayName: String {
+        localAccountDisplayName.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var generatedLocalAccountName: String? {
+        Self.generatedLocalAccountName(from: trimmedLocalAccountDisplayName)
     }
 
     var hasSelectedOption: Bool {
@@ -103,9 +110,10 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
         hasSelectedOption && existingFileDecision != .useExisting
     }
 
-    var isLocalAccountNameValid: Bool {
+    var isLocalAccountDisplayNameValid: Bool {
         guard createLocalAccount else { return true }
-        return Self.isValidLocalAccountName(trimmedLocalAccountName)
+        return Self.isValidLocalAccountDisplayName(trimmedLocalAccountDisplayName)
+            && generatedLocalAccountName != nil
     }
 
     var canUseMacLanguageAndRegion: Bool {
@@ -113,7 +121,11 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
     }
 
     var canStartWorkflow: Bool {
-        hasSelectedOption ? isLocalAccountNameValid : true
+        hasSelectedOption ? isLocalAccountDisplayNameValid : true
+    }
+
+    var canDismissOptionsSheet: Bool {
+        isLocalAccountDisplayNameValid
     }
 
     mutating func normalize(for version: CreatorWindowsAutounattendWindowsVersion?) {
@@ -133,7 +145,7 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
             createLocalAccount = false
         }
         if !createLocalAccount {
-            localAccountName = ""
+            localAccountDisplayName = ""
         }
     }
 
@@ -149,13 +161,75 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
             skipWirelessSetup: skipWirelessSetup,
             skipMicrosoftAccountRequirement: skipMicrosoftAccountRequirement,
             createLocalAccount: createLocalAccount,
-            localAccountName: createLocalAccount ? trimmedLocalAccountName : nil
+            localAccountName: createLocalAccount ? generatedLocalAccountName : nil,
+            localAccountDisplayName: createLocalAccount ? trimmedLocalAccountDisplayName : nil
         )
     }
 
+    static func isValidLocalAccountDisplayName(_ displayName: String) -> Bool {
+        !displayName.isEmpty
+            && displayName.count <= localAccountDisplayNameMaximumLength
+            && !containsMicrosoftForbiddenAccountNameCharacter(displayName)
+            && displayName.uppercased() != "NONE"
+    }
+
     static func isValidLocalAccountName(_ name: String) -> Bool {
-        guard !name.isEmpty else { return false }
-        return name.range(of: #"^[A-Za-z0-9]+$"#, options: .regularExpression) != nil
+        guard !name.isEmpty, name.count <= localAccountNameMaximumLength else { return false }
+        guard name.range(of: #"^[A-Za-z0-9]+$"#, options: .regularExpression) != nil else { return false }
+        return name.uppercased() != "NONE"
+    }
+
+    static func containsMicrosoftForbiddenAccountNameCharacter(_ value: String) -> Bool {
+        let forbiddenScalars = Set(#"/\[]:|<>+=;,?*%@"#.unicodeScalars)
+        return value.unicodeScalars.contains { forbiddenScalars.contains($0) }
+    }
+
+    static func generatedLocalAccountName(from displayName: String) -> String? {
+        let trimmed = displayName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard isValidLocalAccountDisplayName(trimmed) else { return nil }
+
+        let folded = asciiTransliteratedDisplayName(trimmed)
+            .folding(options: [.diacriticInsensitive, .widthInsensitive], locale: Locale(identifier: "en_US_POSIX"))
+        let asciiAlphanumerics = folded.unicodeScalars.compactMap { scalar -> Character? in
+            switch scalar.value {
+            case 48...57, 65...90, 97...122:
+                return Character(scalar)
+            default:
+                return nil
+            }
+        }
+        let candidate = String(asciiAlphanumerics.prefix(localAccountNameMaximumLength))
+        let normalizedCandidate = candidate.uppercased()
+        if isValidLocalAccountName(candidate), normalizedCandidate != "NONE" {
+            return candidate
+        }
+
+        let fallback = fallbackLocalAccountName(for: trimmed)
+        return isValidLocalAccountName(fallback) ? fallback : nil
+    }
+
+    private static func fallbackLocalAccountName(for displayName: String) -> String {
+        let bytes = Array(displayName.utf8)
+        let hash = bytes.reduce(UInt32(2_166_136_261)) { partial, byte in
+            (partial ^ UInt32(byte)) &* 16_777_619
+        }
+        return "User\(String(hash, radix: 16, uppercase: true))"
+    }
+
+    private static func asciiTransliteratedDisplayName(_ displayName: String) -> String {
+        let replacements = [
+            "Ł": "L", "ł": "l",
+            "Æ": "AE", "æ": "ae",
+            "Œ": "OE", "œ": "oe",
+            "Ø": "O", "ø": "o",
+            "Ð": "D", "ð": "d",
+            "Đ": "D", "đ": "d",
+            "Þ": "Th", "þ": "th",
+            "ß": "ss"
+        ]
+        return replacements.reduce(displayName) { result, replacement in
+            result.replacingOccurrences(of: replacement.key, with: replacement.value)
+        }
     }
 }
 

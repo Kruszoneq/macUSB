@@ -80,15 +80,13 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
 
                     TextField(
                         String(localized: "installation.summary.windows.autounattend.account_name.placeholder"),
-                        text: binding(\.localAccountName)
+                        text: binding(\.localAccountDisplayName)
                     )
                     .textFieldStyle(.roundedBorder)
 
-                    if !configuration.isLocalAccountNameValid {
-                        Text(String(localized: "installation.summary.windows.autounattend.account_name.validation"))
-                            .font(.caption)
-                            .foregroundColor(.orange)
-                    }
+                    Text(String(localized: "installation.summary.windows.autounattend.account_name.first_boot_password_note"))
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
             }
 
@@ -101,7 +99,8 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
                         .padding(.horizontal, 16)
                         .padding(.vertical, 6)
                 }
-                .macUSBPrimaryButtonStyle()
+                .macUSBPrimaryButtonStyle(isEnabled: configuration.canDismissOptionsSheet)
+                .disabled(!configuration.canDismissOptionsSheet)
             }
         }
         .toggleStyle(.checkbox)

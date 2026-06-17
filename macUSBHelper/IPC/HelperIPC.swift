@@ -20,6 +20,7 @@ struct WindowsAutounattendConfigurationPayload: Codable {
     let skipMicrosoftAccountRequirement: Bool
     let createLocalAccount: Bool
     let localAccountName: String?
+    let localAccountDisplayName: String?
 
     init(
         skipHardwareRequirements: Bool,
@@ -31,7 +32,8 @@ struct WindowsAutounattendConfigurationPayload: Codable {
         skipWirelessSetup: Bool = false,
         skipMicrosoftAccountRequirement: Bool = false,
         createLocalAccount: Bool,
-        localAccountName: String?
+        localAccountName: String?,
+        localAccountDisplayName: String? = nil
     ) {
         self.skipHardwareRequirements = skipHardwareRequirements
         self.useMacLanguageAndRegion = useMacLanguageAndRegion
@@ -43,6 +45,7 @@ struct WindowsAutounattendConfigurationPayload: Codable {
         self.skipMicrosoftAccountRequirement = skipMicrosoftAccountRequirement
         self.createLocalAccount = createLocalAccount
         self.localAccountName = localAccountName
+        self.localAccountDisplayName = localAccountDisplayName
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -56,6 +59,7 @@ struct WindowsAutounattendConfigurationPayload: Codable {
         case skipMicrosoftAccountRequirement
         case createLocalAccount
         case localAccountName
+        case localAccountDisplayName
     }
 
     init(from decoder: Decoder) throws {
@@ -70,6 +74,7 @@ struct WindowsAutounattendConfigurationPayload: Codable {
         skipMicrosoftAccountRequirement = try container.decodeIfPresent(Bool.self, forKey: .skipMicrosoftAccountRequirement) ?? false
         createLocalAccount = try container.decode(Bool.self, forKey: .createLocalAccount)
         localAccountName = try container.decodeIfPresent(String.self, forKey: .localAccountName)
+        localAccountDisplayName = try container.decodeIfPresent(String.self, forKey: .localAccountDisplayName)
     }
 }
 

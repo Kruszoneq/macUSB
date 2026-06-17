@@ -25,7 +25,7 @@ extension UniversalInstallationView {
     func resolveWindowsAutounattendStartReadiness() -> Bool {
         guard isWindowsWorkflow else { return true }
         guard windowsAutounattendConfiguration.canStartWorkflow else {
-            errorMessage = String(localized: "installation.summary.windows.autounattend.account_name.validation")
+            errorMessage = String(localized: "installation.summary.windows.autounattend.account_name.placeholder")
             return false
         }
         errorMessage = ""

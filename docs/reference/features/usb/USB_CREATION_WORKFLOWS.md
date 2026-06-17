@@ -52,7 +52,7 @@ Windows automatic configuration card:
 - state is session-only and keyed to the selected ISO path plus file identity when available,
 - Windows 11 offers automatic BitLocker device-encryption prevention, privacy data-collection opt-out, Wi-Fi/network setup skip, Microsoft-account requirement bypass, local-account options, language/region transfer from the current Mac, and a combined TPM 2.0/Secure Boot/RAM hardware-bypass option,
 - language/region transfer reads the current macOS preferred language and locale, verifies the language against `sources/lang.ini` immediately after a supported Windows 11 image is detected, uses the language tag as Windows `InputLocale` so Windows picks its default keyboard for that language, and is shown disabled when the ISO language cannot be verified,
-- local account names are restricted to ASCII letters and digits for v1,
+- local-account creation accepts a Windows display name in the UI; the display name must be non-empty, max 256 characters, not `NONE`, and must not contain Microsoft-forbidden account-name characters (`/ \ [ ] : | < > + = ; , ? * % @`); app side derives a separate local account `Name` from it using only ASCII letters and digits, max 20 characters, with a deterministic ASCII fallback when the display name contains no usable characters,
 - Wi-Fi/network setup skip automatically enables Microsoft-account requirement bypass and locks that option while selected,
 - automatic local-account creation is available only after Microsoft-account requirement bypass is selected,
 - if the mounted source already contains a root-level `Autounattend.xml` or `sources/$OEM$/$$/Panther/unattend.xml` with any casing and automatic configuration is enabled, app-side pre-start flow must show a warning alert before destructive confirmation,
@@ -80,6 +80,7 @@ Windows summary pre-start prerequisites:
 - Windows automatic configuration may set `Microsoft-Windows-International-Core` language, input, system locale, and user locale values in `oobeSystem` when Mac language/region transfer is enabled.
 - Windows automatic configuration may set `OOBE/ProtectYourPC` to `3` when privacy data-collection opt-out is enabled.
 - Windows automatic configuration may set `OOBE/HideWirelessSetupInOOBE` to `true` when Wi-Fi/network setup skip is enabled.
+- Windows automatic local-account creation writes both `Name` and `DisplayName` for `Microsoft-Windows-Shell-Setup/UserAccounts/LocalAccounts/LocalAccount`; `DisplayName` preserves the user-entered display name, while `Name` is generated without spaces or special characters and limited to 20 ASCII letters/digits.
 - Windows target format must be `MS-DOS (FAT32)` + `MBR`.
 
 ## Power Management Invariant
