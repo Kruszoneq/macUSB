@@ -11,6 +11,9 @@ enum HelperWorkflowKind: String, Codable {
 
 struct WindowsAutounattendConfigurationPayload: Codable {
     let skipHardwareRequirements: Bool
+    let useMacLanguageAndRegion: Bool
+    let languageTag: String?
+    let regionLocaleTag: String?
     let preventDeviceEncryption: Bool
     let disableDataCollection: Bool
     let skipWirelessSetup: Bool
@@ -20,6 +23,9 @@ struct WindowsAutounattendConfigurationPayload: Codable {
 
     init(
         skipHardwareRequirements: Bool,
+        useMacLanguageAndRegion: Bool = false,
+        languageTag: String? = nil,
+        regionLocaleTag: String? = nil,
         preventDeviceEncryption: Bool = false,
         disableDataCollection: Bool = false,
         skipWirelessSetup: Bool = false,
@@ -28,6 +34,9 @@ struct WindowsAutounattendConfigurationPayload: Codable {
         localAccountName: String?
     ) {
         self.skipHardwareRequirements = skipHardwareRequirements
+        self.useMacLanguageAndRegion = useMacLanguageAndRegion
+        self.languageTag = languageTag
+        self.regionLocaleTag = regionLocaleTag
         self.preventDeviceEncryption = preventDeviceEncryption
         self.disableDataCollection = disableDataCollection
         self.skipWirelessSetup = skipWirelessSetup
@@ -38,6 +47,9 @@ struct WindowsAutounattendConfigurationPayload: Codable {
 
     private enum CodingKeys: String, CodingKey {
         case skipHardwareRequirements
+        case useMacLanguageAndRegion
+        case languageTag
+        case regionLocaleTag
         case preventDeviceEncryption
         case disableDataCollection
         case skipWirelessSetup
@@ -49,6 +61,9 @@ struct WindowsAutounattendConfigurationPayload: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         skipHardwareRequirements = try container.decode(Bool.self, forKey: .skipHardwareRequirements)
+        useMacLanguageAndRegion = try container.decodeIfPresent(Bool.self, forKey: .useMacLanguageAndRegion) ?? false
+        languageTag = try container.decodeIfPresent(String.self, forKey: .languageTag)
+        regionLocaleTag = try container.decodeIfPresent(String.self, forKey: .regionLocaleTag)
         preventDeviceEncryption = try container.decodeIfPresent(Bool.self, forKey: .preventDeviceEncryption) ?? false
         disableDataCollection = try container.decodeIfPresent(Bool.self, forKey: .disableDataCollection) ?? false
         skipWirelessSetup = try container.decodeIfPresent(Bool.self, forKey: .skipWirelessSetup) ?? false

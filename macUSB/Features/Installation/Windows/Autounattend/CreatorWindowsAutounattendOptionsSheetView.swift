@@ -28,6 +28,21 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
                 )
             }
 
+            VStack(alignment: .leading, spacing: 6) {
+                Toggle(
+                    String(localized: "installation.summary.windows.autounattend.option.use_mac_language_region"),
+                    isOn: binding(\.useMacLanguageAndRegion)
+                )
+                .disabled(!configuration.canUseMacLanguageAndRegion)
+                .opacity(configuration.canUseMacLanguageAndRegion ? 1 : 0.55)
+
+                if !configuration.canUseMacLanguageAndRegion {
+                    Text(String(localized: "installation.summary.windows.autounattend.option.use_mac_language_region.unavailable"))
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+
             Toggle(
                 String(localized: "installation.summary.windows.autounattend.option.prevent_device_encryption"),
                 isOn: binding(\.preventDeviceEncryption)

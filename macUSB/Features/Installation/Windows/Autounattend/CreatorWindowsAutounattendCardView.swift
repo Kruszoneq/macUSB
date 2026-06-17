@@ -27,6 +27,7 @@ struct CreatorWindowsAutounattendCardView: View {
     private var selectedSummary: String? {
         let selectedCount = [
             configuration.skipHardwareRequirements,
+            configuration.useMacLanguageAndRegion,
             configuration.preventDeviceEncryption,
             configuration.disableDataCollection,
             configuration.skipWirelessSetup,

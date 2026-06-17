@@ -26,8 +26,57 @@ enum CreatorWindowsAutounattendExistingFileDecision: String {
     case stop
 }
 
+struct CreatorWindowsAutounattendMacLocale: Equatable {
+    let languageTag: String
+    let regionLocaleTag: String
+    let languageIsAvailableInSource: Bool
+
+    static func current(availableLanguageTags: Set<String>?) -> CreatorWindowsAutounattendMacLocale? {
+        guard let languageTag = normalizedWindowsTag(Locale.preferredLanguages.first) else {
+            return nil
+        }
+
+        let regionLocaleTag = normalizedWindowsTag(Locale.current.identifier) ?? languageTag
+        let languageIsAvailableInSource = languageTagIsAvailable(languageTag, in: availableLanguageTags)
+        return CreatorWindowsAutounattendMacLocale(
+            languageTag: languageTag,
+            regionLocaleTag: regionLocaleTag,
+            languageIsAvailableInSource: languageIsAvailableInSource
+        )
+    }
+
+    static func normalizedWindowsTag(_ value: String?) -> String? {
+        guard let value else { return nil }
+        let stripped = value
+            .split(separator: "@", maxSplits: 1, omittingEmptySubsequences: true)
+            .first
+            .map(String.init) ?? value
+        let normalized = stripped
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "_", with: "-")
+        guard !normalized.isEmpty else { return nil }
+        return normalized
+    }
+
+    private static func languageTagIsAvailable(_ languageTag: String, in availableLanguageTags: Set<String>?) -> Bool {
+        guard let availableLanguageTags else { return false }
+        let normalized = languageTag.lowercased()
+        if availableLanguageTags.contains(normalized) {
+            return true
+        }
+
+        let languageCode = normalized.split(separator: "-", maxSplits: 1).first.map(String.init) ?? normalized
+        guard !languageCode.isEmpty else { return false }
+        return availableLanguageTags.contains { availableTag in
+            availableTag == languageCode || availableTag.hasPrefix("\(languageCode)-")
+        }
+    }
+}
+
 struct CreatorWindowsAutounattendConfiguration: Equatable {
     var skipHardwareRequirements: Bool = false
+    var useMacLanguageAndRegion: Bool = false
+    var macLocale: CreatorWindowsAutounattendMacLocale?
     var preventDeviceEncryption: Bool = false
     var disableDataCollection: Bool = false
     var skipWirelessSetup: Bool = false
@@ -42,6 +91,7 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
 
     var hasSelectedOption: Bool {
         skipHardwareRequirements
+            || useMacLanguageAndRegion
             || preventDeviceEncryption
             || disableDataCollection
             || skipWirelessSetup
@@ -58,6 +108,10 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
         return Self.isValidLocalAccountName(trimmedLocalAccountName)
     }
 
+    var canUseMacLanguageAndRegion: Bool {
+        macLocale?.languageIsAvailableInSource == true
+    }
+
     var canStartWorkflow: Bool {
         hasSelectedOption ? isLocalAccountNameValid : true
     }
@@ -65,6 +119,9 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
     mutating func normalize(for version: CreatorWindowsAutounattendWindowsVersion?) {
         if version?.supportsHardwareBypass != true {
             skipHardwareRequirements = false
+        }
+        if !canUseMacLanguageAndRegion {
+            useMacLanguageAndRegion = false
         }
         if createLocalAccount {
             skipMicrosoftAccountRequirement = true
@@ -84,6 +141,9 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
         guard shouldGenerateMacUSBFile else { return nil }
         return WindowsAutounattendConfigurationPayload(
             skipHardwareRequirements: skipHardwareRequirements,
+            useMacLanguageAndRegion: useMacLanguageAndRegion,
+            languageTag: useMacLanguageAndRegion ? macLocale?.languageTag : nil,
+            regionLocaleTag: useMacLanguageAndRegion ? macLocale?.regionLocaleTag : nil,
             preventDeviceEncryption: preventDeviceEncryption,
             disableDataCollection: disableDataCollection,
             skipWirelessSetup: skipWirelessSetup,

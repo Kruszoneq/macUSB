@@ -57,4 +57,11 @@ extension HelperWorkflowExecutor {
         guard !name.isEmpty else { return false }
         return name.range(of: #"^[A-Za-z0-9]+$"#, options: .regularExpression) != nil
     }
+
+    func isWindowsAutounattendLocaleTagValid(_ tag: String) -> Bool {
+        tag.range(
+            of: #"^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$"#,
+            options: .regularExpression
+        ) != nil
+    }
 }

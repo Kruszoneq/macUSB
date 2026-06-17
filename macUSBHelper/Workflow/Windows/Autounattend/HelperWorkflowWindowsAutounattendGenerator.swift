@@ -102,11 +102,23 @@ extension HelperWorkflowExecutor {
                 )
             }
         }
+        if configuration.useMacLanguageAndRegion {
+            guard let languageTag = configuration.normalizedLanguageTag,
+                  let regionLocaleTag = configuration.normalizedRegionLocaleTag,
+                  isWindowsAutounattendLocaleTagValid(languageTag),
+                  isWindowsAutounattendLocaleTagValid(regionLocaleTag) else {
+                throw HelperExecutionError.failed(
+                    stage: stage.key,
+                    exitCode: -1,
+                    description: "Ustawienia języka i regionu dla Autounattend.xml są nieprawidłowe."
+                )
+            }
+        }
         let root = XMLElement(name: "unattend")
         root.addNamespace(XMLNode.namespace(withName: "", stringValue: "urn:schemas-microsoft-com:unattend") as! XMLNode)
         root.addNamespace(XMLNode.namespace(withName: "wcm", stringValue: "http://schemas.microsoft.com/WMIConfig/2002/State") as! XMLNode)
 
-        if configuration.skipHardwareRequirements {
+        if configuration.requiresWindowsPE {
             root.addChild(windowsPESettingsElement(configuration: configuration))
         }
 
@@ -117,7 +129,8 @@ extension HelperWorkflowExecutor {
         if configuration.disableDataCollection
             || configuration.skipWirelessSetup
             || configuration.skipMicrosoftAccountRequirement
-            || configuration.createLocalAccount {
+            || configuration.createLocalAccount
+            || configuration.useMacLanguageAndRegion {
             root.addChild(oobeSystemSettingsElement(configuration: configuration))
         }
 
@@ -188,6 +201,21 @@ extension HelperWorkflowExecutor {
         let settings = XMLElement(name: "settings")
         settings.addAttribute(XMLNode.attribute(withName: "pass", stringValue: "oobeSystem") as! XMLNode)
 
+        if configuration.disableDataCollection
+            || configuration.skipWirelessSetup
+            || configuration.skipMicrosoftAccountRequirement
+            || configuration.createLocalAccount {
+            settings.addChild(shellSetupComponentElement(configuration: configuration))
+        }
+
+        if configuration.useMacLanguageAndRegion {
+            settings.addChild(internationalCoreComponentElement(configuration: configuration))
+        }
+
+        return settings
+    }
+
+    private func shellSetupComponentElement(configuration: WindowsAutounattendConfigurationPayload) -> XMLElement {
         let component = componentElement(named: "Microsoft-Windows-Shell-Setup")
         let oobe = XMLElement(name: "OOBE")
 
@@ -218,8 +246,31 @@ extension HelperWorkflowExecutor {
             component.addChild(userAccounts)
         }
 
-        settings.addChild(component)
-        return settings
+        return component
+    }
+
+    private func internationalCoreComponentElement(configuration: WindowsAutounattendConfigurationPayload) -> XMLElement {
+        let component = componentElement(named: "Microsoft-Windows-International-Core")
+        if let languageTag = configuration.normalizedLanguageTag,
+           let regionLocaleTag = configuration.normalizedRegionLocaleTag {
+            addInternationalLocaleElements(
+                to: component,
+                languageTag: languageTag,
+                regionLocaleTag: regionLocaleTag
+            )
+        }
+        return component
+    }
+
+    private func addInternationalLocaleElements(
+        to component: XMLElement,
+        languageTag: String,
+        regionLocaleTag: String
+    ) {
+        component.addChild(textElement(name: "InputLocale", value: languageTag))
+        component.addChild(textElement(name: "SystemLocale", value: regionLocaleTag))
+        component.addChild(textElement(name: "UILanguage", value: languageTag))
+        component.addChild(textElement(name: "UserLocale", value: regionLocaleTag))
     }
 
     private func componentElement(named name: String) -> XMLElement {

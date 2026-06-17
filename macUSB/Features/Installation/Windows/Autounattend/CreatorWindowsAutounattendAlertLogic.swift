@@ -13,10 +13,13 @@ extension UniversalInstallationView {
 
     func loadWindowsAutounattendConfiguration() {
         guard isWindowsWorkflow else { return }
-        windowsAutounattendConfiguration = CreatorWindowsAutounattendSessionStore.shared.configuration(
+        var configuration = CreatorWindowsAutounattendSessionStore.shared.configuration(
             for: sourceAppURL,
             systemName: systemName
         )
+        configuration.macLocale = windowsAutounattendMacLocale
+        configuration.normalize(for: CreatorWindowsAutounattendWindowsVersion.detected(from: systemName))
+        windowsAutounattendConfiguration = configuration
     }
 
     func resolveWindowsAutounattendStartReadiness() -> Bool {

@@ -14,6 +14,7 @@ struct UniversalInstallationView: View {
     let linuxFlowContext: LinuxInstallationFlowContext?
     let isWindowsWorkflow: Bool
     let windowsMountedSourcePath: String?
+    let windowsAutounattendMacLocale: CreatorWindowsAutounattendMacLocale?
     let windowsWillSplitWim: Bool
     
     // Flagi

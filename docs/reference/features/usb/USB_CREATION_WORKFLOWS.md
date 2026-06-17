@@ -50,7 +50,8 @@ Windows summary screen (`UniversalInstallationView`) should show an informationa
 Windows automatic configuration card:
 - card is visible only for recognized Windows 11 images,
 - state is session-only and keyed to the selected ISO path plus file identity when available,
-- Windows 11 offers automatic BitLocker device-encryption prevention, privacy data-collection opt-out, Wi-Fi/network setup skip, Microsoft-account requirement bypass, local-account options, and a combined TPM 2.0/Secure Boot/RAM hardware-bypass option,
+- Windows 11 offers automatic BitLocker device-encryption prevention, privacy data-collection opt-out, Wi-Fi/network setup skip, Microsoft-account requirement bypass, local-account options, language/region transfer from the current Mac, and a combined TPM 2.0/Secure Boot/RAM hardware-bypass option,
+- language/region transfer reads the current macOS preferred language and locale, verifies the language against `sources/lang.ini` immediately after a supported Windows 11 image is detected, uses the language tag as Windows `InputLocale` so Windows picks its default keyboard for that language, and is shown disabled when the ISO language cannot be verified,
 - local account names are restricted to ASCII letters and digits for v1,
 - Wi-Fi/network setup skip automatically enables Microsoft-account requirement bypass and locks that option while selected,
 - automatic local-account creation is available only after Microsoft-account requirement bypass is selected,
@@ -75,7 +76,8 @@ Windows summary pre-start prerequisites:
 - Stage progression shown in UI must remain deterministic.
 - Linux raw-copy must target whole-disk device, never a partition node.
 - Windows workflow must copy installer files 1:1 from ISO payload (no UEFI fallback file synthesis).
-- Windows automatic configuration may add or replace only the Windows answer-file location selected by the generated passes, when explicitly enabled by the user. If the generated XML contains `windowsPE`, helper writes root-level `Autounattend.xml`; otherwise it writes `sources/$OEM$/$$/Panther/unattend.xml` so Windows Setup copies it to `%WINDIR%/Panther/unattend.xml` for later passes. The `windowsPE` pass is generated only for options that require Windows PE setup commands, such as the Windows 11 hardware-requirements bypass. When automatic BitLocker device-encryption prevention is enabled, macUSB writes a `specialize` pass command that sets `HKLM\SYSTEM\CurrentControlSet\Control\BitLocker\PreventDeviceEncryption` to `1`.
+- Windows automatic configuration may add or replace only the Windows answer-file location selected by the generated passes, when explicitly enabled by the user. If the generated XML contains `windowsPE`, helper writes root-level `Autounattend.xml`; otherwise it writes `sources/$OEM$/$$/Panther/unattend.xml` so Windows Setup copies it to `%WINDIR%/Panther/unattend.xml` for later passes. The `windowsPE` pass is generated for options that require Windows PE setup data, such as the Windows 11 hardware-requirements bypass. When automatic BitLocker device-encryption prevention is enabled, macUSB writes a `specialize` pass command that sets `HKLM\SYSTEM\CurrentControlSet\Control\BitLocker\PreventDeviceEncryption` to `1`.
+- Windows automatic configuration may set `Microsoft-Windows-International-Core` language, input, system locale, and user locale values in `oobeSystem` when Mac language/region transfer is enabled.
 - Windows automatic configuration may set `OOBE/ProtectYourPC` to `3` when privacy data-collection opt-out is enabled.
 - Windows automatic configuration may set `OOBE/HideWirelessSetupInOOBE` to `true` when Wi-Fi/network setup skip is enabled.
 - Windows target format must be `MS-DOS (FAT32)` + `MBR`.

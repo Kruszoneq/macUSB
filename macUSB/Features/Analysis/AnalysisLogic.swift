@@ -48,6 +48,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var windowsHasEFI: Bool = false
     @Published var isWindowsWorkflowSupported: Bool = false
     @Published var windowsWillSplitWIM: Bool = false
+    @Published var windowsAutounattendMacLocale: CreatorWindowsAutounattendMacLocale? = nil
 
     @Published var availableDrives: [USBDrive] = []
     @Published var hasUnreadableExternalUSBMedia: Bool = false
