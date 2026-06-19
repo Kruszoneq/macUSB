@@ -182,7 +182,7 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
     static func isValidLocalAccountDisplayName(_ displayName: String) -> Bool {
         !displayName.isEmpty
             && displayName.count <= localAccountDisplayNameMaximumLength
-            && !containsMicrosoftForbiddenAccountNameCharacter(displayName)
+            && !containsInvalidLocalAccountDisplayNameCharacter(displayName)
             && displayName.uppercased() != "NONE"
     }
 
@@ -192,9 +192,14 @@ struct CreatorWindowsAutounattendConfiguration: Equatable {
         return name.uppercased() != "NONE"
     }
 
-    static func containsMicrosoftForbiddenAccountNameCharacter(_ value: String) -> Bool {
-        let forbiddenScalars = Set(#"/\[]:|<>+=;,?*%@"#.unicodeScalars)
-        return value.unicodeScalars.contains { forbiddenScalars.contains($0) }
+    static func containsInvalidLocalAccountDisplayNameCharacter(_ value: String) -> Bool {
+        value.unicodeScalars.contains { !isAllowedLocalAccountDisplayNameScalar($0) }
+    }
+
+    private static func isAllowedLocalAccountDisplayNameScalar(_ scalar: UnicodeScalar) -> Bool {
+        CharacterSet.letters.contains(scalar)
+            || CharacterSet.decimalDigits.contains(scalar)
+            || scalar == " "
     }
 
     static func generatedLocalAccountName(from displayName: String) -> String? {

@@ -6,6 +6,12 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
     let onConfigurationChanged: (CreatorWindowsAutounattendConfiguration) -> Void
     @Environment(\.dismiss) private var dismiss
 
+    private var shouldShowLocalAccountDisplayNameInvalidCharacters: Bool {
+        let displayName = configuration.localAccountDisplayName
+        return !displayName.isEmpty
+            && CreatorWindowsAutounattendConfiguration.containsInvalidLocalAccountDisplayNameCharacter(displayName)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 10) {
@@ -83,6 +89,12 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
                         text: binding(\.localAccountDisplayName)
                     )
                     .textFieldStyle(.roundedBorder)
+
+                    if shouldShowLocalAccountDisplayNameInvalidCharacters {
+                        Text(String(localized: "installation.summary.windows.autounattend.account_name.invalid_characters"))
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
 
                     Text(String(localized: "installation.summary.windows.autounattend.account_name.first_boot_password_note"))
                         .font(.caption)

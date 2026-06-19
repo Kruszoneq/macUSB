@@ -62,13 +62,18 @@ extension HelperWorkflowExecutor {
     func isWindowsAutounattendLocalAccountDisplayNameValid(_ displayName: String) -> Bool {
         !displayName.isEmpty
             && displayName.count <= 256
-            && !containsWindowsAutounattendForbiddenAccountNameCharacter(displayName)
+            && !containsWindowsAutounattendInvalidDisplayNameCharacter(displayName)
             && displayName.uppercased() != "NONE"
     }
 
-    func containsWindowsAutounattendForbiddenAccountNameCharacter(_ value: String) -> Bool {
-        let forbiddenScalars = Set(#"/\[]:|<>+=;,?*%@"#.unicodeScalars)
-        return value.unicodeScalars.contains { forbiddenScalars.contains($0) }
+    func containsWindowsAutounattendInvalidDisplayNameCharacter(_ value: String) -> Bool {
+        value.unicodeScalars.contains { !isWindowsAutounattendDisplayNameScalarAllowed($0) }
+    }
+
+    private func isWindowsAutounattendDisplayNameScalarAllowed(_ scalar: UnicodeScalar) -> Bool {
+        CharacterSet.letters.contains(scalar)
+            || CharacterSet.decimalDigits.contains(scalar)
+            || scalar == " "
     }
 
     func isWindowsAutounattendLocaleTagValid(_ tag: String) -> Bool {
