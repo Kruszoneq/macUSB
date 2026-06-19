@@ -16,6 +16,7 @@ struct SystemAnalysisView: View {
     @State private var windowsWorkflowSupportedSnapshot: Bool = false
     @State private var windowsMountedSourcePathSnapshot: String? = nil
     @State private var windowsAutounattendMacLocaleSnapshot: CreatorWindowsAutounattendMacLocale? = nil
+    @State private var windowsArchitectureSnapshot: WindowsArchitecture? = nil
     @State private var windowsWillSplitWIMSnapshot: Bool = false
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
@@ -421,6 +422,7 @@ struct SystemAnalysisView: View {
                         isWindowsWorkflow: windowsWorkflowSupportedSnapshot,
                         windowsMountedSourcePath: windowsMountedSourcePathSnapshot,
                         windowsAutounattendMacLocale: windowsAutounattendMacLocaleSnapshot,
+                        windowsArchitecture: windowsArchitectureSnapshot,
                         windowsWillSplitWim: windowsWillSplitWIMSnapshot,
                         needsCodesign: logic.needsCodesign,
                         isLegacySystem: logic.isLegacyDetected,
@@ -483,6 +485,7 @@ struct SystemAnalysisView: View {
         windowsWorkflowSupportedSnapshot = logic.isWindowsWorkflowSupported
         windowsMountedSourcePathSnapshot = logic.mountedDMGPath
         windowsAutounattendMacLocaleSnapshot = logic.windowsAutounattendMacLocale
+        windowsArchitectureSnapshot = logic.windowsArchitecture
         windowsWillSplitWIMSnapshot = logic.windowsWillSplitWIM
         isTabLocked = true
         if logic.isWindowsWorkflowSupported {

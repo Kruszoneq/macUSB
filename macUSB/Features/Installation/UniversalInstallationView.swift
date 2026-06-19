@@ -15,6 +15,7 @@ struct UniversalInstallationView: View {
     let isWindowsWorkflow: Bool
     let windowsMountedSourcePath: String?
     let windowsAutounattendMacLocale: CreatorWindowsAutounattendMacLocale?
+    let windowsArchitecture: WindowsArchitecture?
     let windowsWillSplitWim: Bool
     
     // Flagi
@@ -119,7 +120,10 @@ struct UniversalInstallationView: View {
     private var sectionIconFont: Font { .title3 }
     private var windowsAutounattendVersion: CreatorWindowsAutounattendWindowsVersion? {
         guard isWindowsWorkflow else { return nil }
-        return CreatorWindowsAutounattendWindowsVersion.detected(from: systemName)
+        return CreatorWindowsAutounattendWindowsVersion.detected(
+            from: systemName,
+            architecture: windowsArchitecture
+        )
     }
     private var windowsAutounattendShouldBlockStart: Bool {
         guard isWindowsWorkflow, windowsAutounattendConfiguration.hasSelectedOption else { return false }

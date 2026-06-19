@@ -127,8 +127,11 @@ extension AnalysisLogic {
         mountedImagePath: String?
     ) -> CreatorWindowsAutounattendMacLocale? {
         guard result.isSupported,
-              CreatorWindowsAutounattendWindowsVersion.detected(from: result.displayName) != nil else {
-            self.log("Windows autounattend language check: pominięto, bo obraz nie jest wspieranym Windows 11 dla tej funkcji.")
+              CreatorWindowsAutounattendWindowsVersion.detected(
+                from: result.displayName,
+                architecture: result.arch
+              ) != nil else {
+            self.log("Windows autounattend language check: pominięto, bo obraz nie jest wspieranym Windows 10 64-bit/11 dla tej funkcji.")
             return nil
         }
 

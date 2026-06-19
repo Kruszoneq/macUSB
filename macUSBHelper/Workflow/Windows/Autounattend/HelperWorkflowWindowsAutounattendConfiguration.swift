@@ -47,6 +47,13 @@ extension WindowsAutounattendConfigurationPayload {
 
 extension HelperWorkflowExecutor {
     var windowsAutounattendProcessorArchitecture: String {
-        request.systemName.lowercased().contains("arm") ? "arm64" : "amd64"
+        let normalizedSystemName = request.systemName.lowercased()
+        if normalizedSystemName.contains("arm") {
+            return "arm64"
+        }
+        if normalizedSystemName.contains("32-bit") {
+            return "x86"
+        }
+        return "amd64"
     }
 }
