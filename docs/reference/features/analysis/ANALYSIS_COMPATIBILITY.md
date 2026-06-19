@@ -64,7 +64,7 @@ Windows fallback routing includes:
   - desktop: `XP`, `Vista`, `7`, `8`, `8.1`, `10`, `11`,
   - server: `Server 2003`, `Server 2008 R2`, `Server 2012`, `Server 2012 R2`, `Server 2016`, `Server 2019`, `Server 2022`, `Server 2025`,
 - optional Service Pack extraction when deterministically available (for legacy families),
-- architecture normalization to `x86` / `ARM`,
+- architecture normalization to `32-bit` / `64-bit` / `ARM` / `unknown`,
 - unsupported result for `XP` / `Vista` / `7` regardless of EFI artifacts,
 - unsupported result for `Server 2003` / `Server 2008 R2` regardless of EFI artifacts,
 - unsupported result for any family missing required EFI markers.

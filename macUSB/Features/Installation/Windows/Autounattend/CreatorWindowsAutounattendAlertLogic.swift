@@ -7,7 +7,8 @@ extension UniversalInstallationView {
         CreatorWindowsAutounattendSessionStore.shared.store(
             windowsAutounattendConfiguration,
             for: sourceAppURL,
-            systemName: systemName
+            systemName: systemName,
+            architecture: windowsArchitecture
         )
     }
 
@@ -15,10 +16,14 @@ extension UniversalInstallationView {
         guard isWindowsWorkflow else { return }
         var configuration = CreatorWindowsAutounattendSessionStore.shared.configuration(
             for: sourceAppURL,
-            systemName: systemName
+            systemName: systemName,
+            architecture: windowsArchitecture
         )
         configuration.macLocale = windowsAutounattendMacLocale
-        configuration.normalize(for: CreatorWindowsAutounattendWindowsVersion.detected(from: systemName))
+        configuration.normalize(for: CreatorWindowsAutounattendWindowsVersion.detected(
+            from: systemName,
+            architecture: windowsArchitecture
+        ))
         windowsAutounattendConfiguration = configuration
     }
 

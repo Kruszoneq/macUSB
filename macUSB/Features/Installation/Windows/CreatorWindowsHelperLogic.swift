@@ -19,7 +19,10 @@ extension UniversalInstallationView {
             category: "WindowsInstallFlow"
         )
 
-        let autounattendPayload = CreatorWindowsAutounattendWindowsVersion.detected(from: systemName) == .windows11
+        let autounattendPayload = CreatorWindowsAutounattendWindowsVersion.detected(
+            from: systemName,
+            architecture: windowsArchitecture
+        ) != nil
             ? windowsAutounattendConfiguration.helperPayload()
             : nil
 

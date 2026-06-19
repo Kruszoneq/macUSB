@@ -232,7 +232,7 @@ macUSB recognizes Windows `.iso` images starting from **Windows XP** and **Windo
 
 Bootable Windows USB creation is currently supported for **Windows 8 and newer** and **Windows Server 2012 and newer**. Prepared media is **UEFI-only**.[^5]
 
-When a Windows image is recognized, macUSB detects the edition automatically. For ARM builds, the architecture is labeled directly in the detected name, for example `Windows 11 (ARM)`.
+When a Windows image is recognized, macUSB detects the edition automatically. 64-bit builds keep the standard detected name, while 32-bit and ARM builds are labeled directly, for example `Windows 10 (32-bit)` or `Windows 11 (ARM)`.
 
 During Windows USB creation, macUSB formats the selected target as **MBR** with **FAT32**. Because FAT32 has a **4 GB per-file limit**, some modern Windows images may require extra preparation. If `install.wim` exceeds that limit, macUSB automatically splits it into smaller `.swm` parts using `wimlib`.
 

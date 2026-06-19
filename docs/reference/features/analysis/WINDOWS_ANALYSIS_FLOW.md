@@ -70,7 +70,7 @@ Detection result produces:
 
 - family (`XP`, `Vista`, `7`, `8`, `8.1`, `10`, `11`, `Server 2003`, `Server 2008 R2`, `Server 2012`, `Server 2012 R2`, `Server 2016`, `Server 2019`, `Server 2022`, `Server 2025`),
 - optional Service Pack string (`SP1`, `SP2`, `SP3`) when deterministic,
-- normalized architecture (`x86` / `ARM` / `unknown`),
+- normalized architecture (`32-bit` / `64-bit` / `ARM` / `unknown`),
 - support decision and reason.
 
 Family mapping (current implementation contract):
@@ -101,7 +101,8 @@ Service Pack extraction:
 
 Architecture normalization:
 
-- `amd64`, `x86_64`, `x86`, `i386` -> `x86`,
+- `amd64`, `x86_64`, `efi/boot/bootx64.efi` marker -> `64-bit`,
+- `x86`, `i386`, top-level `I386` marker -> `32-bit`,
 - `arm64`, `aarch64`, `bootaa64` marker -> `ARM`.
 
 ## UI Output and Gating
@@ -111,7 +112,10 @@ Display format:
 - desktop: `Windows <Family>`
 - server: `Windows Server <Version>`
 - append ` - Service Pack <nr>` only when Service Pack is deterministic,
+- append `(32-bit)` only for 32-bit result,
+- keep 64-bit result display unchanged,
 - append ` (ARM)` only for ARM result.
+- keep unknown architecture display unchanged.
 
 Fallback icon behavior:
 

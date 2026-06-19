@@ -25,7 +25,9 @@ extension AnalysisLogic {
             let servicePackNumber = servicePack.uppercased().replacingOccurrences(of: "SP", with: "")
             displayName += " - Service Pack \(servicePackNumber)"
         }
-        if arch == .arm {
+        if arch == .x86_32 {
+            displayName += " (32-bit)"
+        } else if arch == .arm {
             displayName += " (ARM)"
         }
 
@@ -193,16 +195,17 @@ extension AnalysisLogic {
     }
 
     private func normalizeWindowsArchitecture(from metadata: WindowsImageMetadata) -> WindowsArchitecture {
-        let candidates = [
-            metadata.buildArchRaw ?? "",
-            metadata.efiStatus.evidence.joined(separator: " ")
-        ].joined(separator: " ").lowercased()
+        let buildArch = metadata.buildArchRaw?.lowercased() ?? ""
+        let efiEvidence = metadata.efiStatus.evidence.joined(separator: " ").lowercased()
 
-        if candidates.contains("arm64") || candidates.contains("aarch64") || candidates.contains("bootaa64") {
+        if buildArch.contains("arm64") || buildArch.contains("aarch64") || efiEvidence.contains("bootaa64") {
             return .arm
         }
-        if candidates.contains("amd64") || candidates.contains("x86_64") || candidates.contains("x86") || metadata.hasI386 {
-            return .x86
+        if buildArch.contains("amd64") || buildArch.contains("x86_64") || efiEvidence.contains("bootx64") {
+            return .x86_64
+        }
+        if buildArch.contains("i386") || buildArch.contains("x86") || metadata.hasI386 {
+            return .x86_32
         }
         return .unknown
     }
