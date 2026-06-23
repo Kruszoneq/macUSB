@@ -115,6 +115,19 @@ During analysis screen USB target area:
 - this hint is shown only for macOS-target flow; Linux-target flow suppresses this hint and uses physical `diskX` selection.
 - in macOS flow, this hint is shown only after macOS routing is detected (it stays hidden before system detection).
 
+## Manual ISO Checksum Action
+
+After a successful analysis result for a selected `.iso` source, the analysis success area exposes a manual SHA-256 checksum action.
+This action is optional and user-triggered only; it must not run during automatic analysis and must not affect compatibility flags, USB target validation, workflow routing, downloader behavior, helper behavior, or USB creation.
+
+Checksum calculation:
+
+- is available for successful `.iso` recognition, including manually forced Linux `.iso` selection,
+- stays hidden for non-ISO sources, unsupported results, unrecognized results, and active analysis,
+- reads the ISO in one pass with POSIX file I/O and a fixed 4 MiB buffer,
+- runs in the app process as a background utility task,
+- supports progress, cancellation, and cancellation on sheet dismissal.
+
 ## Logging and Diagnostics
 
 Analysis should log:
@@ -124,6 +137,13 @@ Analysis should log:
 - image-analysis timeout start/finish events for `.dmg`/`.iso`/`.cdr`,
 - timeout-triggered image detach result (success/failure + mount path),
 - ignored stale callbacks when an expired image-analysis session returns results after timeout.
+
+Manual ISO checksum action should additionally log:
+
+- checksum start with selected source path and file size,
+- POSIX cache policy result when `F_NOCACHE` is attempted,
+- percentage progress at bounded intervals,
+- cancellation, failure, and final SHA-256 result.
 
 Linux fallback should additionally log:
 

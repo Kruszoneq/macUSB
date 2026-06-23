@@ -19,6 +19,7 @@
 - `macUSB/Features/Analysis/AnalysisLogic.swift` — analysis state + facade API for UI bindings.
 - `macUSB/Features/Analysis/AnalysisSelectionHandoff.swift` — handoff bridge for pending installer URL from downloader flow.
 - `macUSB/Features/Analysis/AnalysisNotifications.swift` — shared `Notification.Name` constants used by analysis/flow wiring.
+- `macUSB/Features/Analysis/Checksums/*` — manual post-analysis SHA-256 checksum action for successful `.iso` sources, including POSIX streaming service, sheet state model, and SwiftUI views.
 - `macUSB/Features/Analysis/Logic/AnalysisLogicFileSelection.swift` — file selection/drop/open-panel logic.
 - `macUSB/Features/Analysis/Logic/AnalysisLogicAnalysisFlow.swift` — orchestration of analysis execution for `.app` and image sources.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSCompatibility.swift` — macOS-only compatibility/version-family detection rules and flag mapping.

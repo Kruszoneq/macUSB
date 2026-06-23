@@ -20,6 +20,8 @@ struct SystemAnalysisView: View {
     @State private var windowsWillSplitWIMSnapshot: Bool = false
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
+    @State private var isChecksumSheetPresented: Bool = false
+    @State private var checksumSheetSourceURL: URL?
     @State private var analysisWindowHandler: AnalysisWindowHandler?
     @State private var hostingWindow: NSWindow? = nil
     @State private var lastAPFSAlertedDriveURL: URL? = nil
@@ -167,6 +169,8 @@ struct SystemAnalysisView: View {
     }
 
     private func handleResetToStartNotification() {
+        isChecksumSheetPresented = false
+        checksumSheetSourceURL = nil
         logic.resetAll()
         isTabLocked = false
         navigateToInstall = false
@@ -190,6 +194,43 @@ struct SystemAnalysisView: View {
         if logic.shouldShowMavericksDialog {
             presentMavericksDialog()
         }
+    }
+
+    private var selectedISOChecksumSourceURL: URL? {
+        let sourceURL: URL?
+        if let selectedFileUrl = logic.selectedFileUrl {
+            sourceURL = selectedFileUrl
+        } else if !logic.selectedFilePath.isEmpty {
+            sourceURL = URL(fileURLWithPath: logic.selectedFilePath)
+        } else {
+            sourceURL = nil
+        }
+
+        guard let sourceURL, sourceURL.pathExtension.lowercased() == "iso" else {
+            return nil
+        }
+        return sourceURL
+    }
+
+    private var shouldShowISOChecksumAction: Bool {
+        guard !logic.isAnalyzing,
+              !logic.showUnsupportedMessage,
+              !logic.isUnsupportedSierra,
+              selectedISOChecksumSourceURL != nil else {
+            return false
+        }
+
+        let hasSupportedMacOSSource = logic.sourceAppURL != nil && logic.isSystemDetected
+        return hasSupportedMacOSSource
+            || logic.isPPC
+            || logic.isLinuxDetected
+            || logic.isWindowsWorkflowSupported
+    }
+
+    private func presentChecksumSheet() {
+        guard let sourceURL = selectedISOChecksumSourceURL else { return }
+        checksumSheetSourceURL = sourceURL
+        isChecksumSheetPresented = true
     }
     
     private var fileRequirementsBox: some View {
@@ -360,6 +401,12 @@ struct SystemAnalysisView: View {
                             .foregroundColor(isValid ? .green : .red)
                     }
                     Spacer()
+                }
+            }
+
+            if shouldShowISOChecksumAction {
+                AnalysisChecksumTriggerView {
+                    presentChecksumSheet()
                 }
             }
 
@@ -576,6 +623,10 @@ struct SystemAnalysisView: View {
                 .onChange(of: logic.isAnalyzing) { _ in updateMenuState() }
                 .onChange(of: logic.isSystemDetected) { _ in updateMenuState() }
                 .onChange(of: logic.selectedFilePath) { _ in updateMenuState() }
+                .onChange(of: logic.selectedFilePath) { _ in
+                    isChecksumSheetPresented = false
+                    checksumSheetSourceURL = nil
+                }
                 .onChange(of: logic.isPPC) { _ in updateMenuState() }
                 .onChange(of: logic.isLinuxDetected) { _ in updateMenuState() }
                 .onChange(of: logic.sourceAppURL) { _ in updateMenuState() }
@@ -625,6 +676,13 @@ struct SystemAnalysisView: View {
         analysisContentWithNotificationHandlers
             .navigationTitle("Konfiguracja źródła i celu")
             .navigationBarBackButtonHidden(true)
+            .sheet(isPresented: $isChecksumSheetPresented, onDismiss: {
+                checksumSheetSourceURL = nil
+            }) {
+                if let sourceURL = checksumSheetSourceURL {
+                    AnalysisChecksumSheetView(sourceURL: sourceURL)
+                }
+            }
     }
     
     var usbSelectionSection: some View {
