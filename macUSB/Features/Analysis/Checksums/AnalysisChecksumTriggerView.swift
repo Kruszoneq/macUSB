@@ -10,7 +10,6 @@ struct AnalysisChecksumTriggerView: View {
                     .font(.subheadline)
                 Text(String(localized: "checksum.analysis.trigger"))
                     .font(.subheadline.weight(.medium))
-                Spacer()
             }
             .foregroundColor(.accentColor)
             .contentShape(Rectangle())

@@ -2,6 +2,8 @@ import SwiftUI
 
 struct AnalysisChecksumSheetView: View {
     @StateObject private var viewModel: AnalysisChecksumViewModel
+    @State private var didCopyChecksum = false
+    @State private var copyFeedbackTask: Task<Void, Never>?
     @Environment(\.dismiss) private var dismiss
 
     init(sourceURL: URL) {
@@ -10,15 +12,21 @@ struct AnalysisChecksumSheetView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            header
-            content
+            VStack(alignment: .leading, spacing: 16) {
+                header
+                content
+            }
+
+            Spacer(minLength: 0)
             footer
         }
         .font(.subheadline)
         .padding(18)
-        .frame(width: 420)
+        .frame(width: 420, alignment: .top)
+        .frame(minHeight: 240, alignment: .top)
         .interactiveDismissDisabled(viewModel.isRunning)
         .onDisappear {
+            copyFeedbackTask?.cancel()
             viewModel.cancelIfRunningForSheetClose()
         }
     }
@@ -28,7 +36,8 @@ struct AnalysisChecksumSheetView: View {
             HStack(spacing: 10) {
                 Image(systemName: "checkmark.shield")
                     .font(.title3)
-                    .foregroundColor(.accentColor)
+                    .symbolRenderingMode(.monochrome)
+                    .foregroundColor(.primary)
                 Text(String(localized: "checksum.sheet.title"))
                     .font(.headline)
                 Spacer()
@@ -88,9 +97,9 @@ struct AnalysisChecksumSheetView: View {
             Spacer()
             if viewModel.phase == .completed, viewModel.checksum != nil {
                 Button {
-                    viewModel.copyChecksumToPasteboard()
+                    copyChecksum()
                 } label: {
-                    Image(systemName: "doc.on.doc")
+                    copyButtonIcon
                         .padding(.horizontal, 10)
                         .padding(.vertical, 6)
                 }
@@ -107,6 +116,19 @@ struct AnalysisChecksumSheetView: View {
             }
             .macUSBPrimaryButtonStyle()
         }
+    }
+
+    private var copyButtonIcon: some View {
+        ZStack {
+            Image(systemName: "doc.on.doc")
+                .opacity(didCopyChecksum ? 0 : 1)
+                .scaleEffect(didCopyChecksum ? 0.8 : 1)
+            Image(systemName: "checkmark")
+                .opacity(didCopyChecksum ? 1 : 0)
+                .scaleEffect(didCopyChecksum ? 1 : 0.8)
+        }
+        .frame(width: 18, height: 18)
+        .animation(.easeInOut(duration: 0.18), value: didCopyChecksum)
     }
 
     private var primaryButtonTitle: String {
@@ -128,6 +150,27 @@ struct AnalysisChecksumSheetView: View {
             viewModel.cancelFromUser()
         case .completed, .cancelled, .failed:
             dismiss()
+        }
+    }
+
+    private func copyChecksum() {
+        viewModel.copyChecksumToPasteboard()
+        copyFeedbackTask?.cancel()
+
+        withAnimation(.easeInOut(duration: 0.18)) {
+            didCopyChecksum = true
+        }
+
+        copyFeedbackTask = Task {
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            guard !Task.isCancelled else { return }
+
+            await MainActor.run {
+                withAnimation(.easeInOut(duration: 0.18)) {
+                    didCopyChecksum = false
+                }
+                copyFeedbackTask = nil
+            }
         }
     }
 }

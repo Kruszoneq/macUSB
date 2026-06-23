@@ -3,6 +3,12 @@ import AppKit
 import UniformTypeIdentifiers
 import Combine
 
+private struct AnalysisChecksumSheetPresentation: Identifiable {
+    let sourceURL: URL
+
+    var id: URL { sourceURL }
+}
+
 struct SystemAnalysisView: View {
     
     @ObservedObject private var menuState = MenuState.shared
@@ -20,8 +26,7 @@ struct SystemAnalysisView: View {
     @State private var windowsWillSplitWIMSnapshot: Bool = false
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
-    @State private var isChecksumSheetPresented: Bool = false
-    @State private var checksumSheetSourceURL: URL?
+    @State private var checksumSheetPresentation: AnalysisChecksumSheetPresentation?
     @State private var analysisWindowHandler: AnalysisWindowHandler?
     @State private var hostingWindow: NSWindow? = nil
     @State private var lastAPFSAlertedDriveURL: URL? = nil
@@ -169,8 +174,7 @@ struct SystemAnalysisView: View {
     }
 
     private func handleResetToStartNotification() {
-        isChecksumSheetPresented = false
-        checksumSheetSourceURL = nil
+        checksumSheetPresentation = nil
         logic.resetAll()
         isTabLocked = false
         navigateToInstall = false
@@ -229,8 +233,7 @@ struct SystemAnalysisView: View {
 
     private func presentChecksumSheet() {
         guard let sourceURL = selectedISOChecksumSourceURL else { return }
-        checksumSheetSourceURL = sourceURL
-        isChecksumSheetPresented = true
+        checksumSheetPresentation = AnalysisChecksumSheetPresentation(sourceURL: sourceURL)
     }
     
     private var fileRequirementsBox: some View {
@@ -408,6 +411,7 @@ struct SystemAnalysisView: View {
                 AnalysisChecksumTriggerView {
                     presentChecksumSheet()
                 }
+                .frame(maxWidth: .infinity, alignment: .trailing)
             }
 
             if isValid && (logic.userSkippedAnalysis || ((logic.legacyArchInfo ?? "").isEmpty == false)) {
@@ -624,8 +628,7 @@ struct SystemAnalysisView: View {
                 .onChange(of: logic.isSystemDetected) { _ in updateMenuState() }
                 .onChange(of: logic.selectedFilePath) { _ in updateMenuState() }
                 .onChange(of: logic.selectedFilePath) { _ in
-                    isChecksumSheetPresented = false
-                    checksumSheetSourceURL = nil
+                    checksumSheetPresentation = nil
                 }
                 .onChange(of: logic.isPPC) { _ in updateMenuState() }
                 .onChange(of: logic.isLinuxDetected) { _ in updateMenuState() }
@@ -676,12 +679,8 @@ struct SystemAnalysisView: View {
         analysisContentWithNotificationHandlers
             .navigationTitle("Konfiguracja źródła i celu")
             .navigationBarBackButtonHidden(true)
-            .sheet(isPresented: $isChecksumSheetPresented, onDismiss: {
-                checksumSheetSourceURL = nil
-            }) {
-                if let sourceURL = checksumSheetSourceURL {
-                    AnalysisChecksumSheetView(sourceURL: sourceURL)
-                }
+            .sheet(item: $checksumSheetPresentation) { presentation in
+                AnalysisChecksumSheetView(sourceURL: presentation.sourceURL)
             }
     }
     
