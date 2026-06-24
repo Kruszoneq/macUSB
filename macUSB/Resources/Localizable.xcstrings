@@ -43181,79 +43181,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die SHA-256-Prüfsumme wurde berechnet."
+            "value": "Die SHA-256-Prüfsumme wurde berechnet"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The SHA-256 checksum has been calculated."
+            "value": "The SHA-256 checksum has been calculated"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Se ha calculado la suma SHA-256."
+            "value": "Se ha calculado la suma SHA-256"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La somme de contrôle SHA-256 a été calculée."
+            "value": "La somme de contrôle SHA-256 a été calculée"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il checksum SHA-256 è stato calcolato."
+            "value": "Il checksum SHA-256 è stato calcolato"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "SHA-256チェックサムを計算しました。"
+            "value": "SHA-256チェックサムを計算しました"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Suma SHA-256 została obliczona."
+            "value": "Suma SHA-256 została obliczona"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "A soma SHA-256 foi calculada."
+            "value": "A soma SHA-256 foi calculada"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Контрольная сумма SHA-256 рассчитана."
+            "value": "Контрольная сумма SHA-256 рассчитана"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "SHA-256 sağlama toplamı hesaplandı."
+            "value": "SHA-256 sağlama toplamı hesaplandı"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Контрольну суму SHA-256 обчислено."
+            "value": "Контрольну суму SHA-256 обчислено"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Đã tính xong checksum SHA-256."
+            "value": "Đã tính xong checksum SHA-256"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "已计算 SHA-256 校验和。"
+            "value": "已计算 SHA-256 校验和"
           }
         }
       }
@@ -43591,79 +43591,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die SHA-256-Prüfsumme wird berechnet."
+            "value": "Die SHA-256-Prüfsumme wird berechnet…"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculating the SHA-256 checksum."
+            "value": "Calculating the SHA-256 checksum…"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculando la suma SHA-256."
+            "value": "Calculando la suma SHA-256…"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calcul de la somme de contrôle SHA-256."
+            "value": "Calcul de la somme de contrôle SHA-256…"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calcolo del checksum SHA-256."
+            "value": "Calcolo del checksum SHA-256…"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "SHA-256チェックサムを計算中です。"
+            "value": "SHA-256チェックサムを計算中です…"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Trwa obliczanie sumy SHA-256."
+            "value": "Trwa obliczanie sumy SHA-256…"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculando a soma SHA-256."
+            "value": "Calculando a soma SHA-256…"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Выполняется расчет суммы SHA-256."
+            "value": "Выполняется расчет суммы SHA-256…"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "SHA-256 sağlama toplamı hesaplanıyor."
+            "value": "SHA-256 sağlama toplamı hesaplanıyor…"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Обчислюється сума SHA-256."
+            "value": "Обчислюється сума SHA-256…"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Đang tính checksum SHA-256."
+            "value": "Đang tính checksum SHA-256…"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "正在计算 SHA-256 校验和。"
+            "value": "正在计算 SHA-256 校验和…"
           }
         }
       }

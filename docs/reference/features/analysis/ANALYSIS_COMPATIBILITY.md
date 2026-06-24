@@ -124,7 +124,7 @@ Checksum calculation:
 
 - is available for successful `.iso` recognition, including manually forced Linux `.iso` selection,
 - stays hidden for non-ISO sources, unsupported results, unrecognized results, and active analysis,
-- presents the checksum sheet only when the selected ISO source URL is already bound, so the 420 px-wide sheet opens directly with ready content and keeps a 240 px minimum height while allowing taller content,
+- presents the checksum sheet only when the selected ISO source URL is already bound, so the 420 px-wide sheet opens and starts calculation immediately while keeping a 240 px minimum height and allowing taller content,
 - reads the ISO in one pass with POSIX file I/O and a fixed 4 MiB buffer,
 - runs in the app process as a background utility task,
 - supports progress, cancellation, and cancellation on sheet dismissal.
@@ -143,7 +143,7 @@ Manual ISO checksum action should additionally log:
 
 - checksum start with selected source path and file size,
 - POSIX cache policy result when `F_NOCACHE` is attempted,
-- percentage progress at bounded intervals,
+- percentage progress at 25% bounded intervals,
 - cancellation, failure, and final SHA-256 result.
 
 Linux fallback should additionally log:

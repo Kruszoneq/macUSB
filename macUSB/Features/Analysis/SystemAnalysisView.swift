@@ -34,6 +34,10 @@ struct SystemAnalysisView: View {
     let driveRefreshTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     private var visualMode: VisualSystemMode { currentVisualMode() }
     private var sectionIconFont: Font { .title3 }
+    private var usbSectionTopSpacerHeight: CGFloat {
+        shouldShowISOChecksumAction ? 2 : (logic.showUnsupportedMessage ? 4 : 12)
+    }
+
     private func sectionDivider(_ title: LocalizedStringKey) -> some View {
         HStack(spacing: 10) {
             Capsule()
@@ -567,7 +571,7 @@ struct SystemAnalysisView: View {
                             }
                         }
 
-                        Spacer().frame(height: logic.showUnsupportedMessage ? 4 : 12)
+                        Spacer().frame(height: usbSectionTopSpacerHeight)
                         usbSelectionSection
                             .id("usbSection")
                     }

@@ -25,6 +25,9 @@ struct AnalysisChecksumSheetView: View {
         .frame(width: 420, alignment: .top)
         .frame(minHeight: 240, alignment: .top)
         .interactiveDismissDisabled(viewModel.isRunning)
+        .task {
+            viewModel.start()
+        }
         .onDisappear {
             copyFeedbackTask?.cancel()
             viewModel.cancelIfRunningForSheetClose()
@@ -107,14 +110,16 @@ struct AnalysisChecksumSheetView: View {
                 .macUSBSecondaryButtonStyle()
             }
 
-            Button {
-                handlePrimaryButton()
-            } label: {
-                Text(primaryButtonTitle)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 6)
+            if viewModel.phase != .ready {
+                Button {
+                    handlePrimaryButton()
+                } label: {
+                    Text(primaryButtonTitle)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 6)
+                }
+                .macUSBPrimaryButtonStyle()
             }
-            .macUSBPrimaryButtonStyle()
         }
     }
 
@@ -133,22 +138,18 @@ struct AnalysisChecksumSheetView: View {
 
     private var primaryButtonTitle: String {
         switch viewModel.phase {
-        case .ready:
-            return String(localized: "checksum.sheet.check.button")
         case .running:
             return String(localized: "Anuluj")
-        case .completed, .cancelled, .failed:
+        case .ready, .completed, .cancelled, .failed:
             return String(localized: "Zamknij")
         }
     }
 
     private func handlePrimaryButton() {
         switch viewModel.phase {
-        case .ready:
-            viewModel.start()
         case .running:
             viewModel.cancelFromUser()
-        case .completed, .cancelled, .failed:
+        case .ready, .completed, .cancelled, .failed:
             dismiss()
         }
     }

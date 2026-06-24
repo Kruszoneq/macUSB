@@ -44,6 +44,7 @@ enum AnalysisChecksumError: LocalizedError {
 struct AnalysisChecksumService: Sendable {
     private let bufferSize = 4 * 1_024 * 1_024
     private let bufferAlignment = 4_096
+    private let progressLogIntervalPercent = 25
 
     nonisolated func calculateSHA256(
         for fileURL: URL,
@@ -77,7 +78,7 @@ struct AnalysisChecksumService: Sendable {
 
         var hasher = SHA256()
         var processedBytes: Int64 = 0
-        var nextLoggedPercent = 5
+        var nextLoggedPercent = progressLogIntervalPercent
         progressHandler(AnalysisChecksumProgress(processedBytes: 0, totalBytes: fileSize))
 
         while true {
@@ -163,7 +164,7 @@ struct AnalysisChecksumService: Sendable {
         let percent = min(100, Int((Double(progress.processedBytes) / Double(progress.totalBytes)) * 100))
         while percent >= nextLoggedPercent {
             await logInfo("Postęp obliczania SHA-256 ISO: \(nextLoggedPercent)%")
-            nextLoggedPercent += 5
+            nextLoggedPercent += progressLogIntervalPercent
         }
     }
 
