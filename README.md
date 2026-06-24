@@ -127,9 +127,9 @@ As adoption grew and feedback continued to come in, especially through Reddit di
     <td align="center" valign="top">
       <strong>Windows Installer</strong><br>
       <a href="docs/readme-assets/app-screens/workflow-windows-details.png">
-        <img src="docs/readme-assets/app-screens/workflow-windows-details.png" alt="Windows workflow details" width="190">
+        <img src="docs/readme-assets/app-screens/workflow-windows-details.png" alt="Windows setup configuration options" width="190">
       </a><br>
-      <sub>Windows workflow highlights UEFI-only media preparation and the MBR/FAT32 target format.</sub>
+      <sub>Windows workflow includes optional setup configuration for selected Windows restrictions and first-run setup choices.</sub>
     </td>
   </tr>
 </table>
