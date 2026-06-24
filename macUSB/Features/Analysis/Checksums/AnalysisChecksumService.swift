@@ -53,9 +53,9 @@ struct AnalysisChecksumService: Sendable {
         try Task.checkCancellation()
 
         let fileSize = try resolveFileSize(for: fileURL)
-        await logStage("SHA-256 ISO - start")
-        await logInfo("Rozpoczynam obliczanie SHA-256 dla ISO: \(fileURL.path)")
-        await logInfo("Rozmiar pliku ISO: \(fileSize) bytes")
+        await logStage("SHA-256 pliku źródłowego - start")
+        await logInfo("Rozpoczynam obliczanie SHA-256 dla pliku źródłowego: \(fileURL.path)")
+        await logInfo("Rozmiar pliku źródłowego: \(fileSize) bytes")
 
         let fd = open(fileURL.path, O_RDONLY)
         guard fd >= 0 else {
@@ -115,7 +115,7 @@ struct AnalysisChecksumService: Sendable {
         try Task.checkCancellation()
 
         let digest = hasher.finalize().map { String(format: "%02x", $0) }.joined()
-        await logInfo("Zakończono obliczanie SHA-256 dla ISO: \(digest)")
+        await logInfo("Zakończono obliczanie SHA-256 dla pliku źródłowego: \(digest)")
         await logSeparator()
         return digest
     }
@@ -132,9 +132,9 @@ struct AnalysisChecksumService: Sendable {
         #if os(macOS)
         let result = fcntl(fileDescriptor, F_NOCACHE, 1)
         if result == 0 {
-            await logInfo("Włączono F_NOCACHE dla odczytu ISO.")
+            await logInfo("Włączono F_NOCACHE dla odczytu pliku źródłowego.")
         } else {
-            await logInfo("Nie udało się włączyć F_NOCACHE dla odczytu ISO: \(String(cString: strerror(errno)))")
+            await logInfo("Nie udało się włączyć F_NOCACHE dla odczytu pliku źródłowego: \(String(cString: strerror(errno)))")
         }
         #else
         await logInfo("F_NOCACHE jest niedostępne poza macOS.")
@@ -163,7 +163,7 @@ struct AnalysisChecksumService: Sendable {
 
         let percent = min(100, Int((Double(progress.processedBytes) / Double(progress.totalBytes)) * 100))
         while percent >= nextLoggedPercent {
-            await logInfo("Postęp obliczania SHA-256 ISO: \(nextLoggedPercent)%")
+            await logInfo("Postęp obliczania SHA-256 pliku źródłowego: \(nextLoggedPercent)%")
             nextLoggedPercent += progressLogIntervalPercent
         }
     }

@@ -5,14 +5,13 @@ import Combine
 @MainActor
 final class AnalysisChecksumViewModel: ObservableObject {
     enum Phase: Equatable {
-        case ready
         case running
         case completed
         case cancelled
         case failed
     }
 
-    @Published private(set) var phase: Phase = .ready
+    @Published private(set) var phase: Phase = .running
     @Published private(set) var progress: Double = 0
     @Published private(set) var checksum: String?
     @Published private(set) var failureMessage: String?
@@ -34,7 +33,7 @@ final class AnalysisChecksumViewModel: ObservableObject {
     }
 
     func start() {
-        guard phase != .running else { return }
+        guard phase == .running, checksumTask == nil else { return }
 
         checksumTask?.cancel()
         checksum = nil
@@ -65,7 +64,7 @@ final class AnalysisChecksumViewModel: ObservableObject {
             } catch is CancellationError {
                 await MainActor.run {
                     AppLogging.info(
-                        "Anulowano obliczanie SHA-256 dla ISO: \(sourceURL.path)",
+                        "Anulowano obliczanie SHA-256 dla pliku źródłowego: \(sourceURL.path)",
                         category: "Checksum"
                     )
                 }
@@ -75,7 +74,7 @@ final class AnalysisChecksumViewModel: ObservableObject {
             } catch {
                 await MainActor.run {
                     AppLogging.error(
-                        "Błąd obliczania SHA-256 dla ISO \(sourceURL.path): \(error.localizedDescription)",
+                        "Błąd obliczania SHA-256 dla pliku źródłowego \(sourceURL.path): \(error.localizedDescription)",
                         category: "Checksum"
                     )
                 }
@@ -103,7 +102,7 @@ final class AnalysisChecksumViewModel: ObservableObject {
         guard let checksum else { return }
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(checksum, forType: .string)
-        AppLogging.info("Skopiowano SHA-256 ISO do schowka.", category: "Checksum")
+        AppLogging.info("Skopiowano SHA-256 pliku źródłowego do schowka.", category: "Checksum")
     }
 
     private func markCancelled() {

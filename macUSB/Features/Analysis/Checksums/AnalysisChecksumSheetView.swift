@@ -53,10 +53,6 @@ struct AnalysisChecksumSheetView: View {
     @ViewBuilder
     private var content: some View {
         switch viewModel.phase {
-        case .ready:
-            Text(String(localized: "checksum.sheet.ready.description"))
-                .foregroundColor(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
         case .running:
             VStack(alignment: .leading, spacing: 10) {
                 Text(String(localized: "checksum.sheet.running.description"))
@@ -110,16 +106,14 @@ struct AnalysisChecksumSheetView: View {
                 .macUSBSecondaryButtonStyle()
             }
 
-            if viewModel.phase != .ready {
-                Button {
-                    handlePrimaryButton()
-                } label: {
-                    Text(primaryButtonTitle)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 6)
-                }
-                .macUSBPrimaryButtonStyle()
+            Button {
+                handlePrimaryButton()
+            } label: {
+                Text(primaryButtonTitle)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 6)
             }
+            .macUSBPrimaryButtonStyle()
         }
     }
 
@@ -140,7 +134,7 @@ struct AnalysisChecksumSheetView: View {
         switch viewModel.phase {
         case .running:
             return String(localized: "Anuluj")
-        case .ready, .completed, .cancelled, .failed:
+        case .completed, .cancelled, .failed:
             return String(localized: "Zamknij")
         }
     }
@@ -149,7 +143,7 @@ struct AnalysisChecksumSheetView: View {
         switch viewModel.phase {
         case .running:
             viewModel.cancelFromUser()
-        case .ready, .completed, .cancelled, .failed:
+        case .completed, .cancelled, .failed:
             dismiss()
         }
     }

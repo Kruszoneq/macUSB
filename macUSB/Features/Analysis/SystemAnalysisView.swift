@@ -9,6 +9,10 @@ private struct AnalysisChecksumSheetPresentation: Identifiable {
     var id: URL { sourceURL }
 }
 
+private enum AnalysisChecksumSourcePolicy {
+    static let supportedFileExtensions: Set<String> = ["dmg", "iso", "cdr", "img"]
+}
+
 struct SystemAnalysisView: View {
     
     @ObservedObject private var menuState = MenuState.shared
@@ -35,7 +39,7 @@ struct SystemAnalysisView: View {
     private var visualMode: VisualSystemMode { currentVisualMode() }
     private var sectionIconFont: Font { .title3 }
     private var usbSectionTopSpacerHeight: CGFloat {
-        shouldShowISOChecksumAction ? 2 : (logic.showUnsupportedMessage ? 4 : 12)
+        shouldShowChecksumAction ? 2 : (logic.showUnsupportedMessage ? 4 : 12)
     }
 
     private func sectionDivider(_ title: LocalizedStringKey) -> some View {
@@ -204,7 +208,7 @@ struct SystemAnalysisView: View {
         }
     }
 
-    private var selectedISOChecksumSourceURL: URL? {
+    private var selectedChecksumSourceURL: URL? {
         let sourceURL: URL?
         if let selectedFileUrl = logic.selectedFileUrl {
             sourceURL = selectedFileUrl
@@ -214,17 +218,18 @@ struct SystemAnalysisView: View {
             sourceURL = nil
         }
 
-        guard let sourceURL, sourceURL.pathExtension.lowercased() == "iso" else {
+        guard let sourceURL,
+              AnalysisChecksumSourcePolicy.supportedFileExtensions.contains(sourceURL.pathExtension.lowercased()) else {
             return nil
         }
         return sourceURL
     }
 
-    private var shouldShowISOChecksumAction: Bool {
+    private var shouldShowChecksumAction: Bool {
         guard !logic.isAnalyzing,
               !logic.showUnsupportedMessage,
               !logic.isUnsupportedSierra,
-              selectedISOChecksumSourceURL != nil else {
+              selectedChecksumSourceURL != nil else {
             return false
         }
 
@@ -236,7 +241,7 @@ struct SystemAnalysisView: View {
     }
 
     private func presentChecksumSheet() {
-        guard let sourceURL = selectedISOChecksumSourceURL else { return }
+        guard let sourceURL = selectedChecksumSourceURL else { return }
         checksumSheetPresentation = AnalysisChecksumSheetPresentation(sourceURL: sourceURL)
     }
     
@@ -411,7 +416,7 @@ struct SystemAnalysisView: View {
                 }
             }
 
-            if shouldShowISOChecksumAction {
+            if shouldShowChecksumAction {
                 AnalysisChecksumTriggerView {
                     presentChecksumSheet()
                 }

@@ -115,17 +115,17 @@ During analysis screen USB target area:
 - this hint is shown only for macOS-target flow; Linux-target flow suppresses this hint and uses physical `diskX` selection.
 - in macOS flow, this hint is shown only after macOS routing is detected (it stays hidden before system detection).
 
-## Manual ISO Checksum Action
+## Manual Source Checksum Action
 
-After a successful analysis result for a selected `.iso` source, the analysis success area exposes a manual SHA-256 checksum action.
+After a successful analysis result for a selected source file, the analysis success area exposes a manual SHA-256 checksum action for supported non-`.app` source formats.
 This action is optional and user-triggered only; it must not run during automatic analysis and must not affect compatibility flags, USB target validation, workflow routing, downloader behavior, helper behavior, or USB creation.
 
 Checksum calculation:
 
-- is available for successful `.iso` recognition, including manually forced Linux `.iso` selection,
-- stays hidden for non-ISO sources, unsupported results, unrecognized results, and active analysis,
-- presents the checksum sheet only when the selected ISO source URL is already bound, so the 420 px-wide sheet opens and starts calculation immediately while keeping a 240 px minimum height and allowing taller content,
-- reads the ISO in one pass with POSIX file I/O and a fixed 4 MiB buffer,
+- is available for successful `.dmg`, `.iso`, `.cdr`, and raw Linux `.img` recognition, including manually forced Linux `.iso` selection and raw Linux `.img` selection,
+- stays hidden for `.app` sources, unsupported results, unrecognized results, and active analysis,
+- presents the checksum sheet only when the selected source URL is already bound, so the 420 px-wide sheet opens and starts calculation immediately while keeping a 240 px minimum height and allowing taller content,
+- reads the source file in one pass with POSIX file I/O and a fixed 4 MiB buffer,
 - runs in the app process as a background utility task,
 - supports progress, cancellation, and cancellation on sheet dismissal.
 
@@ -139,7 +139,7 @@ Analysis should log:
 - timeout-triggered image detach result (success/failure + mount path),
 - ignored stale callbacks when an expired image-analysis session returns results after timeout.
 
-Manual ISO checksum action should additionally log:
+Manual source checksum action should additionally log:
 
 - checksum start with selected source path and file size,
 - POSIX cache policy result when `F_NOCACHE` is attempted,

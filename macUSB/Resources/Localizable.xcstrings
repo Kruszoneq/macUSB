@@ -42643,7 +42643,7 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oblicz sumę SHA-256 dla tego pliku ISO"
+            "value": "Oblicz sumę SHA-256 dla wybranego pliku źródłowego"
           }
         },
         "pt-BR": {
@@ -42807,7 +42807,7 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nie udało się odczytać rozmiaru pliku ISO."
+            "value": "Nie udało się odczytać rozmiaru pliku źródłowego."
           }
         },
         "pt-BR": {
@@ -42889,7 +42889,7 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nie udało się otworzyć pliku ISO: %@"
+            "value": "Nie udało się otworzyć pliku źródłowego: %@"
           }
         },
         "pt-BR": {
@@ -42971,7 +42971,7 @@
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nie udało się odczytać pliku ISO: %@"
+            "value": "Nie udało się odczytać pliku źródłowego: %@"
           }
         },
         "pt-BR": {
@@ -43090,88 +43090,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "校验和计算已取消。"
-          }
-        }
-      }
-    },
-    "checksum.sheet.check.button": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prüfen"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Check"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comprobar"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vérifier"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verifica"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "確認"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sprawdź"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verificar"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Проверить"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Denetle"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Перевірити"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kiểm tra"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "检查"
           }
         }
       }
@@ -43500,88 +43418,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "已完成 %d%%"
-          }
-        }
-      }
-    },
-    "checksum.sheet.ready.description": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Klicke auf die Taste unten, um die SHA-256-Prüfsumme der ausgewählten ISO-Datei zu berechnen."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Click the button below to calculate the SHA-256 checksum for the selected ISO file."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Haz clic en el botón de abajo para calcular la suma SHA-256 del archivo ISO seleccionado."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cliquez sur le bouton ci-dessous pour calculer la somme de contrôle SHA-256 du fichier ISO sélectionné."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fai clic sul pulsante qui sotto per calcolare il checksum SHA-256 del file ISO selezionato."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "下のボタンをクリックして、選択したISOファイルのSHA-256チェックサムを計算します。"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kliknij przycisk poniżej, aby obliczyć sumę SHA-256 wybranego pliku ISO."
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Clique no botão abaixo para calcular a soma SHA-256 do arquivo ISO selecionado."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нажмите кнопку ниже, чтобы рассчитать сумму SHA-256 для выбранного файла ISO."
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Seçilen ISO dosyasının SHA-256 sağlama toplamını hesaplamak için aşağıdaki düğmeyi tıklayın."
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Натисніть кнопку нижче, щоб обчислити суму SHA-256 вибраного файла ISO."
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bấm nút bên dưới để tính checksum SHA-256 cho tệp ISO đã chọn."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "点按下方按钮以计算所选 ISO 文件的 SHA-256 校验和。"
           }
         }
       }
