@@ -3,6 +3,16 @@ import AppKit
 import UniformTypeIdentifiers
 import Combine
 
+private struct AnalysisChecksumSheetPresentation: Identifiable {
+    let sourceURL: URL
+
+    var id: URL { sourceURL }
+}
+
+private enum AnalysisChecksumSourcePolicy {
+    static let supportedFileExtensions: Set<String> = ["dmg", "iso", "cdr", "img"]
+}
+
 struct SystemAnalysisView: View {
     
     @ObservedObject private var menuState = MenuState.shared
@@ -20,6 +30,7 @@ struct SystemAnalysisView: View {
     @State private var windowsWillSplitWIMSnapshot: Bool = false
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
+    @State private var checksumSheetPresentation: AnalysisChecksumSheetPresentation?
     @State private var analysisWindowHandler: AnalysisWindowHandler?
     @State private var hostingWindow: NSWindow? = nil
     @State private var lastAPFSAlertedDriveURL: URL? = nil
@@ -27,6 +38,10 @@ struct SystemAnalysisView: View {
     let driveRefreshTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     private var visualMode: VisualSystemMode { currentVisualMode() }
     private var sectionIconFont: Font { .title3 }
+    private var usbSectionTopSpacerHeight: CGFloat {
+        shouldShowChecksumAction ? 2 : (logic.showUnsupportedMessage ? 4 : 12)
+    }
+
     private func sectionDivider(_ title: LocalizedStringKey) -> some View {
         HStack(spacing: 10) {
             Capsule()
@@ -167,6 +182,7 @@ struct SystemAnalysisView: View {
     }
 
     private func handleResetToStartNotification() {
+        checksumSheetPresentation = nil
         logic.resetAll()
         isTabLocked = false
         navigateToInstall = false
@@ -190,6 +206,43 @@ struct SystemAnalysisView: View {
         if logic.shouldShowMavericksDialog {
             presentMavericksDialog()
         }
+    }
+
+    private var selectedChecksumSourceURL: URL? {
+        let sourceURL: URL?
+        if let selectedFileUrl = logic.selectedFileUrl {
+            sourceURL = selectedFileUrl
+        } else if !logic.selectedFilePath.isEmpty {
+            sourceURL = URL(fileURLWithPath: logic.selectedFilePath)
+        } else {
+            sourceURL = nil
+        }
+
+        guard let sourceURL,
+              AnalysisChecksumSourcePolicy.supportedFileExtensions.contains(sourceURL.pathExtension.lowercased()) else {
+            return nil
+        }
+        return sourceURL
+    }
+
+    private var shouldShowChecksumAction: Bool {
+        guard !logic.isAnalyzing,
+              !logic.showUnsupportedMessage,
+              !logic.isUnsupportedSierra,
+              selectedChecksumSourceURL != nil else {
+            return false
+        }
+
+        let hasSupportedMacOSSource = logic.sourceAppURL != nil && logic.isSystemDetected
+        return hasSupportedMacOSSource
+            || logic.isPPC
+            || logic.isLinuxDetected
+            || logic.isWindowsWorkflowSupported
+    }
+
+    private func presentChecksumSheet() {
+        guard let sourceURL = selectedChecksumSourceURL else { return }
+        checksumSheetPresentation = AnalysisChecksumSheetPresentation(sourceURL: sourceURL)
     }
     
     private var fileRequirementsBox: some View {
@@ -363,6 +416,13 @@ struct SystemAnalysisView: View {
                 }
             }
 
+            if shouldShowChecksumAction {
+                AnalysisChecksumTriggerView {
+                    presentChecksumSheet()
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+
             if isValid && (logic.userSkippedAnalysis || ((logic.legacyArchInfo ?? "").isEmpty == false)) {
                 StatusCard(tone: .subtle, density: .compact) {
                     HStack(alignment: .top, spacing: 10) {
@@ -516,7 +576,7 @@ struct SystemAnalysisView: View {
                             }
                         }
 
-                        Spacer().frame(height: logic.showUnsupportedMessage ? 4 : 12)
+                        Spacer().frame(height: usbSectionTopSpacerHeight)
                         usbSelectionSection
                             .id("usbSection")
                     }
@@ -576,6 +636,9 @@ struct SystemAnalysisView: View {
                 .onChange(of: logic.isAnalyzing) { _ in updateMenuState() }
                 .onChange(of: logic.isSystemDetected) { _ in updateMenuState() }
                 .onChange(of: logic.selectedFilePath) { _ in updateMenuState() }
+                .onChange(of: logic.selectedFilePath) { _ in
+                    checksumSheetPresentation = nil
+                }
                 .onChange(of: logic.isPPC) { _ in updateMenuState() }
                 .onChange(of: logic.isLinuxDetected) { _ in updateMenuState() }
                 .onChange(of: logic.sourceAppURL) { _ in updateMenuState() }
@@ -625,6 +688,9 @@ struct SystemAnalysisView: View {
         analysisContentWithNotificationHandlers
             .navigationTitle("Konfiguracja źródła i celu")
             .navigationBarBackButtonHidden(true)
+            .sheet(item: $checksumSheetPresentation) { presentation in
+                AnalysisChecksumSheetView(sourceURL: presentation.sourceURL)
+            }
     }
     
     var usbSelectionSection: some View {
