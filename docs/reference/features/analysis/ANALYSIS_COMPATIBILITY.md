@@ -36,6 +36,7 @@ For Linux fallback:
 - recognized Linux result unlocks shared install flow (`UniversalInstallationView -> CreationProgressView -> FinishUSBView`),
 - detected Linux state may present dedicated Linux icon resource (`linux.icns`) in analysis UI.
 - manual Linux force from `Opcje -> Pomiń analizowanie pliku -> Linux` is treated as Linux-recognized state for install handoff only when selected source is `.iso`.
+- raw Linux `.img` force from `Narzędzia -> Zapisz surowy obraz Linux (.img)...` is a separate exceptional entry point; it is not part of standard source selection or fallback detection and treats the selected `.img` as Linux-recognized without content inspection.
 
 ## Current Supported Routing Families
 
@@ -55,6 +56,7 @@ Linux fallback routing includes:
 - recognized Linux distro,
 - Linux with unknown distro (`Linux - nierozpoznana dystrybucja`).
 - manually forced Linux (`Linux`).
+- manually forced raw Linux image (`Linux (.img)`).
 
 Windows fallback routing includes:
 
@@ -62,7 +64,7 @@ Windows fallback routing includes:
   - desktop: `XP`, `Vista`, `7`, `8`, `8.1`, `10`, `11`,
   - server: `Server 2003`, `Server 2008 R2`, `Server 2012`, `Server 2012 R2`, `Server 2016`, `Server 2019`, `Server 2022`, `Server 2025`,
 - optional Service Pack extraction when deterministically available (for legacy families),
-- architecture normalization to `x86` / `ARM`,
+- architecture normalization to `32-bit` / `64-bit` / `ARM` / `unknown`,
 - unsupported result for `XP` / `Vista` / `7` regardless of EFI artifacts,
 - unsupported result for `Server 2003` / `Server 2008 R2` regardless of EFI artifacts,
 - unsupported result for any family missing required EFI markers.
@@ -95,6 +97,8 @@ Global app-termination cleanup invariant for ISO analysis:
 - on app termination, centralized cleanup force-detaches tracked Linux/Windows source-image entities (by `image-path` match from `hdiutil info -plist`),
 - this termination cleanup runs even if user exits during analysis before workflow start.
 
+Raw Linux `.img` force path registers the selected source as a Linux image for centralized termination cleanup, but it does not mount or inspect the source image during analysis.
+
 For Linux fallback on `.iso`:
 
 - cleanup scope includes all image entities captured from `hdiutil info -plist` for the selected `image-path`,
@@ -111,6 +115,20 @@ During analysis screen USB target area:
 - this hint is shown only for macOS-target flow; Linux-target flow suppresses this hint and uses physical `diskX` selection.
 - in macOS flow, this hint is shown only after macOS routing is detected (it stays hidden before system detection).
 
+## Manual Source Checksum Action
+
+After a successful analysis result for a selected source file, the analysis success area exposes a manual SHA-256 checksum action for supported non-`.app` source formats.
+This action is optional and user-triggered only; it must not run during automatic analysis and must not affect compatibility flags, USB target validation, workflow routing, downloader behavior, helper behavior, or USB creation.
+
+Checksum calculation:
+
+- is available for successful `.dmg`, `.iso`, `.cdr`, and raw Linux `.img` recognition, including manually forced Linux `.iso` selection and raw Linux `.img` selection,
+- stays hidden for `.app` sources, unsupported results, unrecognized results, and active analysis,
+- presents the checksum sheet only when the selected source URL is already bound, so the 420 px-wide sheet opens and starts calculation immediately while keeping a 240 px minimum height and allowing taller content,
+- reads the source file in one pass with POSIX file I/O and a fixed 4 MiB buffer,
+- runs in the app process as a background utility task,
+- supports progress, cancellation, and cancellation on sheet dismissal.
+
 ## Logging and Diagnostics
 
 Analysis should log:
@@ -120,6 +138,13 @@ Analysis should log:
 - image-analysis timeout start/finish events for `.dmg`/`.iso`/`.cdr`,
 - timeout-triggered image detach result (success/failure + mount path),
 - ignored stale callbacks when an expired image-analysis session returns results after timeout.
+
+Manual source checksum action should additionally log:
+
+- checksum start with selected source path and file size,
+- POSIX cache policy result when `F_NOCACHE` is attempted,
+- percentage progress at 25% bounded intervals,
+- cancellation, failure, and final SHA-256 result.
 
 Linux fallback should additionally log:
 
@@ -132,6 +157,7 @@ Linux fallback should additionally log:
 - archive-reader diagnostics relevant to bounded execution (`bsdtar` timeout/errors),
 - install handoff readiness (`linuxSourceURL` present, capacity computed).
 - manual-force diagnostics when Linux is forced from menu.
+- raw `.img` force diagnostics when Linux is forced from the Tools menu.
 
 Windows fallback should additionally log:
 

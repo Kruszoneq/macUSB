@@ -73,6 +73,17 @@ extension HelperWorkflowExecutor {
             }
         }
 
+        if let configuration = request.windowsAutounattendConfiguration,
+           configuration.shouldGenerateFile {
+            try validateWindowsAutounattendFile(
+                at: windowsAutounattendOutputURL(
+                    in: targetURL,
+                    configuration: configuration
+                ),
+                stage: stage.key
+            )
+        }
+
         emitProgress(
             stageKey: stage.key,
             titleKey: stage.titleKey,

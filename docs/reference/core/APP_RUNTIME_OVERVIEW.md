@@ -5,6 +5,7 @@ This file defines high-level runtime scope and global contracts.
 ## Purpose and Scope
 
 `macUSB` creates bootable macOS/OS X/Mac OS X installer media from `.dmg`, `.iso`, `.cdr`, and `.app` sources.
+Linux `.img` support is an exceptional Tools-menu raw-write path only; it is not part of standard source selection or analysis fallback.
 
 Primary runtime goals:
 - detect installer type/version and route to the correct workflow,

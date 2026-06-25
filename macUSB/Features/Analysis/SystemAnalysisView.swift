@@ -3,6 +3,16 @@ import AppKit
 import UniformTypeIdentifiers
 import Combine
 
+private struct AnalysisChecksumSheetPresentation: Identifiable {
+    let sourceURL: URL
+
+    var id: URL { sourceURL }
+}
+
+private enum AnalysisChecksumSourcePolicy {
+    static let supportedFileExtensions: Set<String> = ["dmg", "iso", "cdr", "img"]
+}
+
 struct SystemAnalysisView: View {
     
     @ObservedObject private var menuState = MenuState.shared
@@ -15,9 +25,12 @@ struct SystemAnalysisView: View {
     @State private var linuxFlowContextSnapshot: LinuxInstallationFlowContext? = nil
     @State private var windowsWorkflowSupportedSnapshot: Bool = false
     @State private var windowsMountedSourcePathSnapshot: String? = nil
+    @State private var windowsAutounattendMacLocaleSnapshot: CreatorWindowsAutounattendMacLocale? = nil
+    @State private var windowsArchitectureSnapshot: WindowsArchitecture? = nil
     @State private var windowsWillSplitWIMSnapshot: Bool = false
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
+    @State private var checksumSheetPresentation: AnalysisChecksumSheetPresentation?
     @State private var analysisWindowHandler: AnalysisWindowHandler?
     @State private var hostingWindow: NSWindow? = nil
     @State private var lastAPFSAlertedDriveURL: URL? = nil
@@ -25,6 +38,10 @@ struct SystemAnalysisView: View {
     let driveRefreshTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     private var visualMode: VisualSystemMode { currentVisualMode() }
     private var sectionIconFont: Font { .title3 }
+    private var usbSectionTopSpacerHeight: CGFloat {
+        shouldShowChecksumAction ? 2 : (logic.showUnsupportedMessage ? 4 : 12)
+    }
+
     private func sectionDivider(_ title: LocalizedStringKey) -> some View {
         HStack(spacing: 10) {
             Capsule()
@@ -69,6 +86,7 @@ struct SystemAnalysisView: View {
             sourceExtension = URL(fileURLWithPath: logic.selectedFilePath).pathExtension.lowercased()
         }
         MenuState.shared.skipLinuxManualSelectionEnabled = skipAnalysisEnabled && sourceExtension == "iso"
+        MenuState.shared.rawLinuxImageSelectionEnabled = analysisFinished && !hasAnySelection
     }
     
     private func presentMavericksDialog() {
@@ -157,13 +175,74 @@ struct SystemAnalysisView: View {
         logic.applySelectedURLAndStartAnalysis(installerURL)
     }
 
+    private func consumePendingRawLinuxImageAndApply() {
+        guard let imageURL = AnalysisSelectionHandoff.shared.consumePendingRawLinuxImageURL() else { return }
+        logic.forceRawLinuxImageSelection(imageURL)
+        updateMenuState()
+    }
+
+    private func handleResetToStartNotification() {
+        checksumSheetPresentation = nil
+        logic.resetAll()
+        isTabLocked = false
+        navigateToInstall = false
+        selectedDriveDisplayNameSnapshot = nil
+        selectedDriveForInstallationSnapshot = nil
+        linuxFlowContextSnapshot = nil
+        windowsWorkflowSupportedSnapshot = false
+        windowsMountedSourcePathSnapshot = nil
+        windowsAutounattendMacLocaleSnapshot = nil
+        windowsWillSplitWIMSnapshot = false
+        MenuState.shared.skipAnalysisEnabled = false
+        MenuState.shared.skipLinuxManualSelectionEnabled = false
+        updateMenuState()
+    }
+
     private func handleViewAppear() {
         logic.refreshDrives()
         updateMenuState()
         consumePendingDownloaderInstallerAndAnalyze()
+        consumePendingRawLinuxImageAndApply()
         if logic.shouldShowMavericksDialog {
             presentMavericksDialog()
         }
+    }
+
+    private var selectedChecksumSourceURL: URL? {
+        let sourceURL: URL?
+        if let selectedFileUrl = logic.selectedFileUrl {
+            sourceURL = selectedFileUrl
+        } else if !logic.selectedFilePath.isEmpty {
+            sourceURL = URL(fileURLWithPath: logic.selectedFilePath)
+        } else {
+            sourceURL = nil
+        }
+
+        guard let sourceURL,
+              AnalysisChecksumSourcePolicy.supportedFileExtensions.contains(sourceURL.pathExtension.lowercased()) else {
+            return nil
+        }
+        return sourceURL
+    }
+
+    private var shouldShowChecksumAction: Bool {
+        guard !logic.isAnalyzing,
+              !logic.showUnsupportedMessage,
+              !logic.isUnsupportedSierra,
+              selectedChecksumSourceURL != nil else {
+            return false
+        }
+
+        let hasSupportedMacOSSource = logic.sourceAppURL != nil && logic.isSystemDetected
+        return hasSupportedMacOSSource
+            || logic.isPPC
+            || logic.isLinuxDetected
+            || logic.isWindowsWorkflowSupported
+    }
+
+    private func presentChecksumSheet() {
+        guard let sourceURL = selectedChecksumSourceURL else { return }
+        checksumSheetPresentation = AnalysisChecksumSheetPresentation(sourceURL: sourceURL)
     }
     
     private var fileRequirementsBox: some View {
@@ -337,6 +416,13 @@ struct SystemAnalysisView: View {
                 }
             }
 
+            if shouldShowChecksumAction {
+                AnalysisChecksumTriggerView {
+                    presentChecksumSheet()
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+
             if isValid && (logic.userSkippedAnalysis || ((logic.legacyArchInfo ?? "").isEmpty == false)) {
                 StatusCard(tone: .subtle, density: .compact) {
                     HStack(alignment: .top, spacing: 10) {
@@ -395,6 +481,8 @@ struct SystemAnalysisView: View {
                         linuxFlowContext: linuxFlowContextSnapshot,
                         isWindowsWorkflow: windowsWorkflowSupportedSnapshot,
                         windowsMountedSourcePath: windowsMountedSourcePathSnapshot,
+                        windowsAutounattendMacLocale: windowsAutounattendMacLocaleSnapshot,
+                        windowsArchitecture: windowsArchitectureSnapshot,
                         windowsWillSplitWim: windowsWillSplitWIMSnapshot,
                         needsCodesign: logic.needsCodesign,
                         isLegacySystem: logic.isLegacyDetected,
@@ -449,8 +537,27 @@ struct SystemAnalysisView: View {
             && (!logic.isWindowsWorkflowSupported || logic.selectedFileUrl != nil)
             && ((logic.isLinuxDetected || logic.isWindowsWorkflowSupported) || !isAPFSSelected)
     }
-    
-    var body: some View {
+
+    private func handleProceedToInstall() {
+        selectedDriveDisplayNameSnapshot = logic.selectedDrive?.displayName
+        selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
+        linuxFlowContextSnapshot = logic.linuxInstallationFlowContext
+        windowsWorkflowSupportedSnapshot = logic.isWindowsWorkflowSupported
+        windowsMountedSourcePathSnapshot = logic.mountedDMGPath
+        windowsAutounattendMacLocaleSnapshot = logic.windowsAutounattendMacLocale
+        windowsArchitectureSnapshot = logic.windowsArchitecture
+        windowsWillSplitWIMSnapshot = logic.windowsWillSplitWIM
+        isTabLocked = true
+        if logic.isWindowsWorkflowSupported {
+            DispatchQueue.main.async {
+                navigateToInstall = true
+            }
+        } else {
+            navigateToInstall = true
+        }
+    }
+
+    private var analysisContent: some View {
         VStack(spacing: 0) {
             ScrollViewReader { _ in
                 ScrollView {
@@ -469,7 +576,7 @@ struct SystemAnalysisView: View {
                             }
                         }
 
-                        Spacer().frame(height: logic.showUnsupportedMessage ? 4 : 12)
+                        Spacer().frame(height: usbSectionTopSpacerHeight)
                         usbSelectionSection
                             .id("usbSection")
                     }
@@ -478,82 +585,112 @@ struct SystemAnalysisView: View {
                 }
             }
         }
-        .safeAreaInset(edge: .bottom) {
-            BottomActionBar {
-                Button(action: {
-                    selectedDriveDisplayNameSnapshot = logic.selectedDrive?.displayName
-                    selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
-                    linuxFlowContextSnapshot = logic.linuxInstallationFlowContext
-                    windowsWorkflowSupportedSnapshot = logic.isWindowsWorkflowSupported
-                    windowsMountedSourcePathSnapshot = logic.mountedDMGPath
-                    windowsWillSplitWIMSnapshot = logic.windowsWillSplitWIM
-                    isTabLocked = true
-                    if logic.isWindowsWorkflowSupported {
-                        DispatchQueue.main.async {
-                            navigateToInstall = true
-                        }
-                    } else {
-                        navigateToInstall = true
-                    }
-                }) {
-                    HStack { Text("Przejdź dalej"); Image(systemName: "arrow.right.circle.fill") }
-                        .frame(maxWidth: .infinity)
-                        .padding(8)
-                }
-                .macUSBPrimaryButtonStyle(isEnabled: canProceedToInstall)
-                .disabled(!canProceedToInstall)
+    }
+
+    private var proceedActionBar: some View {
+        BottomActionBar {
+            Button(action: handleProceedToInstall) {
+                HStack { Text("Przejdź dalej"); Image(systemName: "arrow.right.circle.fill") }
+                    .frame(maxWidth: .infinity)
+                    .padding(8)
             }
+            .macUSBPrimaryButtonStyle(isEnabled: canProceedToInstall)
+            .disabled(!canProceedToInstall)
         }
-        .background(navigationBackgroundLink)
-        .background(windowAccessorBackground)
-        .onReceive(driveRefreshTimer) { _ in
-            logic.refreshDrives()
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .macUSBResetToStart)) { _ in
-            // Reset logic state and UI as if first launch
-            logic.resetAll()
-            isTabLocked = false
-            navigateToInstall = false
-            selectedDriveDisplayNameSnapshot = nil
-            selectedDriveForInstallationSnapshot = nil
-            linuxFlowContextSnapshot = nil
-            windowsWorkflowSupportedSnapshot = false
-            windowsMountedSourcePathSnapshot = nil
-            windowsWillSplitWIMSnapshot = false
-            MenuState.shared.skipAnalysisEnabled = false
-            MenuState.shared.skipLinuxManualSelectionEnabled = false
-        }
-        .onChange(of: logic.showUnsupportedMessage) { _ in updateMenuState() }
-        .onChange(of: logic.recognizedVersion) { _ in updateMenuState() }
-        .onChange(of: logic.isAnalyzing) { _ in updateMenuState() }
-        .onChange(of: logic.isSystemDetected) { _ in updateMenuState() }
-        .onChange(of: logic.selectedFilePath) { _ in updateMenuState() }
-        .onChange(of: logic.isPPC) { _ in updateMenuState() }
-        .onChange(of: logic.isLinuxDetected) { _ in updateMenuState() }
-        .onChange(of: logic.sourceAppURL) { _ in updateMenuState() }
-        .onChange(of: logic.shouldShowMavericksDialog) { show in
-            if show { presentMavericksDialog() }
-        }
-        .onChange(of: logic.shouldShowAlreadyMountedSourceAlert) { show in
-            if show { presentAlreadyMountedSourceDialog() }
-        }
-        .onChange(of: logic.selectedDrive?.url) { _ in
-            handleAPFSSelectionChange()
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .macUSBStartTigerMultiDVD)) { _ in
-            logic.forceTigerMultiDVDSelection()
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .macUSBStartLinuxManualSelection)) { _ in
-            logic.forceLinuxManualSelection()
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .macUSBApplyPendingDownloaderInstaller)) { _ in
-            consumePendingDownloaderInstallerAndAnalyze()
-        }
-        .onAppear {
-            handleViewAppear()
-        }
-        .navigationTitle("Konfiguracja źródła i celu")
-        .navigationBarBackButtonHidden(true)
+    }
+
+    private var analysisContentWithActionBar: AnyView {
+        AnyView(
+            analysisContent
+                .safeAreaInset(edge: .bottom) {
+                    proceedActionBar
+                }
+        )
+    }
+
+    private var analysisContentWithBackgrounds: AnyView {
+        AnyView(
+            analysisContentWithActionBar
+                .background(navigationBackgroundLink)
+                .background(windowAccessorBackground)
+        )
+    }
+
+    private var analysisContentWithResetHandlers: AnyView {
+        AnyView(
+            analysisContentWithBackgrounds
+                .onReceive(driveRefreshTimer) { _ in
+                    logic.refreshDrives()
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .macUSBResetToStart)) { _ in
+                    handleResetToStartNotification()
+                }
+        )
+    }
+
+    private var analysisContentWithMenuStateHandlers: AnyView {
+        AnyView(
+            analysisContentWithResetHandlers
+                .onChange(of: logic.showUnsupportedMessage) { _ in updateMenuState() }
+                .onChange(of: logic.recognizedVersion) { _ in updateMenuState() }
+                .onChange(of: logic.isAnalyzing) { _ in updateMenuState() }
+                .onChange(of: logic.isSystemDetected) { _ in updateMenuState() }
+                .onChange(of: logic.selectedFilePath) { _ in updateMenuState() }
+                .onChange(of: logic.selectedFilePath) { _ in
+                    checksumSheetPresentation = nil
+                }
+                .onChange(of: logic.isPPC) { _ in updateMenuState() }
+                .onChange(of: logic.isLinuxDetected) { _ in updateMenuState() }
+                .onChange(of: logic.sourceAppURL) { _ in updateMenuState() }
+        )
+    }
+
+    private var analysisContentWithDialogHandlers: AnyView {
+        AnyView(
+            analysisContentWithMenuStateHandlers
+                .onChange(of: logic.shouldShowMavericksDialog) { show in
+                    if show { presentMavericksDialog() }
+                }
+                .onChange(of: logic.shouldShowAlreadyMountedSourceAlert) { show in
+                    if show { presentAlreadyMountedSourceDialog() }
+                }
+                .onChange(of: logic.selectedDrive?.url) { _ in
+                    handleAPFSSelectionChange()
+                }
+        )
+    }
+
+    private var analysisContentWithNotificationHandlers: AnyView {
+        AnyView(
+            analysisContentWithDialogHandlers
+                .onReceive(NotificationCenter.default.publisher(for: .macUSBStartTigerMultiDVD)) { _ in
+                    logic.forceTigerMultiDVDSelection()
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .macUSBStartLinuxManualSelection)) { _ in
+                    logic.forceLinuxManualSelection()
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .macUSBApplyPendingDownloaderInstaller)) { _ in
+                    consumePendingDownloaderInstallerAndAnalyze()
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .macUSBApplyPendingRawLinuxImage)) { _ in
+                    consumePendingRawLinuxImageAndApply()
+                }
+                .onAppear {
+                    handleViewAppear()
+                }
+                .onDisappear {
+                    MenuState.shared.rawLinuxImageSelectionEnabled = false
+                }
+        )
+    }
+    
+    var body: some View {
+        analysisContentWithNotificationHandlers
+            .navigationTitle("Konfiguracja źródła i celu")
+            .navigationBarBackButtonHidden(true)
+            .sheet(item: $checksumSheetPresentation) { presentation in
+                AnalysisChecksumSheetView(sourceURL: presentation.sourceURL)
+            }
     }
     
     var usbSelectionSection: some View {

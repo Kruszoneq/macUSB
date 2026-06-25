@@ -3,8 +3,9 @@ import Foundation
 enum CreationProgressWindowsMapping {
     static let splitWimStageKey = "windows_split_wim"
     static let createStageKey = "windows_create_media"
+    static let createAutounattendStageKey = "windows_create_autounattend"
 
-    static func stageKeys(includeSplitWim: Bool) -> [String] {
+    static func stageKeys(includeSplitWim: Bool, includeAutounattend: Bool = false) -> [String] {
         var keys: [String] = [
             "windows_prepare_source",
             "windows_prepare_target",
@@ -13,6 +14,10 @@ enum CreationProgressWindowsMapping {
 
         if includeSplitWim {
             keys.append(splitWimStageKey)
+        }
+
+        if includeAutounattend {
+            keys.append(createAutounattendStageKey)
         }
 
         keys.append("windows_verify_media")
@@ -30,6 +35,8 @@ enum CreationProgressWindowsMapping {
             return "square.and.arrow.down"
         case "windows_split_wim":
             return "doc.on.doc"
+        case "windows_create_autounattend":
+            return "doc.badge.gearshape"
         case "windows_verify_media":
             return "checkmark.seal"
         case "windows_cleanup_temp":
@@ -49,6 +56,8 @@ enum CreationProgressWindowsMapping {
             return "square.and.arrow.down.fill"
         case "windows_split_wim":
             return "doc.on.doc.fill"
+        case "windows_create_autounattend":
+            return "doc.badge.gearshape.fill"
         case "windows_verify_media":
             return "checkmark.seal.fill"
         case "windows_cleanup_temp":

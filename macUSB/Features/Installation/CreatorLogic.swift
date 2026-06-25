@@ -4,6 +4,15 @@ import AppKit
 // Shared installation utilities used by the helper-only flow
 extension UniversalInstallationView {
     func showStartCreationAlert() {
+        guard resolveWindowsAutounattendStartReadiness() else { return }
+
+        resolveWindowsAutounattendExistingFileIfNeeded { shouldContinue in
+            guard shouldContinue else { return }
+            self.showConfirmedStartCreationAlert()
+        }
+    }
+
+    private func showConfirmedStartCreationAlert() {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
@@ -18,6 +27,9 @@ extension UniversalInstallationView {
                     self.navigateToCreationProgress = true
                 }
                 self.startCreationProcessEntry()
+            } else if self.isWindowsWorkflow {
+                self.windowsAutounattendConfiguration.existingFileDecision = nil
+                self.persistWindowsAutounattendConfiguration()
             }
         }
 

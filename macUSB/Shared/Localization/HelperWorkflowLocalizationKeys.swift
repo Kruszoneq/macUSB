@@ -40,6 +40,8 @@ enum HelperWorkflowLocalizationKeys {
     static let windowsCreateMediaStatus = "helper.workflow.windows_create_media.status"
     static let windowsSplitWimTitle = "helper.workflow.windows_split_wim.title"
     static let windowsSplitWimStatus = "helper.workflow.windows_split_wim.status"
+    static let windowsCreateAutounattendTitle = "helper.workflow.windows_create_autounattend.title"
+    static let windowsCreateAutounattendStatus = "helper.workflow.windows_create_autounattend.status"
     static let windowsVerifyMediaTitle = "helper.workflow.windows_verify_media.title"
     static let windowsVerifyMediaStatus = "helper.workflow.windows_verify_media.status"
     static let windowsCleanupTempTitle = "helper.workflow.windows_cleanup_temp.title"
@@ -91,6 +93,8 @@ enum HelperWorkflowLocalizationKeys {
             return HelperWorkflowStageLocalization(titleKey: windowsCreateMediaTitle, statusKey: windowsCreateMediaStatus)
         case "windows_split_wim":
             return HelperWorkflowStageLocalization(titleKey: windowsSplitWimTitle, statusKey: windowsSplitWimStatus)
+        case "windows_create_autounattend":
+            return HelperWorkflowStageLocalization(titleKey: windowsCreateAutounattendTitle, statusKey: windowsCreateAutounattendStatus)
         case "windows_verify_media":
             return HelperWorkflowStageLocalization(titleKey: windowsVerifyMediaTitle, statusKey: windowsVerifyMediaStatus)
         case "windows_cleanup_temp":
@@ -142,6 +146,8 @@ enum HelperWorkflowLocalizationExtractionAnchors {
         String(localized: "helper.workflow.windows_create_media.status"),
         String(localized: "helper.workflow.windows_split_wim.title"),
         String(localized: "helper.workflow.windows_split_wim.status"),
+        String(localized: "helper.workflow.windows_create_autounattend.title"),
+        String(localized: "helper.workflow.windows_create_autounattend.status"),
         String(localized: "helper.workflow.windows_verify_media.title"),
         String(localized: "helper.workflow.windows_verify_media.status"),
         String(localized: "helper.workflow.windows_cleanup_temp.title"),

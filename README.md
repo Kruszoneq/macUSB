@@ -57,10 +57,11 @@ As adoption grew and feedback continued to come in, especially through Reddit di
 
 - **Built-in Downloader:** discover and download macOS installers available from Apple servers.
 - **Local source support:** create bootable USB media from local `.dmg`, `.iso`, `.cdr`, and `.app` files.
+- **Checksum insight:** calculate SHA-256 checksums for recognized `.iso`, `.cdr`, and `.dmg` source images.
 - **One guided flow:** from source selection or download to finished bootable media.
 - **Apple Silicon legacy support:** automatic compatibility handling for older macOS installers during USB creation.
 - **Automatic media prep:** partition and format checks with conversion when required.[^1]
-- **Linux and Windows support:** create bootable USB media from supported Linux and Windows `.iso` images.
+- **Linux and Windows support:** create bootable USB media from supported Linux and Windows `.iso` images, with optional Windows setup automation.
 
 [^1]: When creating macOS bootable media, APFS-formatted targets are not converted automatically. If the selected drive uses APFS, macUSB requires manual reformatting in Disk Utility before continuing.
 
@@ -126,9 +127,9 @@ As adoption grew and feedback continued to come in, especially through Reddit di
     <td align="center" valign="top">
       <strong>Windows Installer</strong><br>
       <a href="docs/readme-assets/app-screens/workflow-windows-details.png">
-        <img src="docs/readme-assets/app-screens/workflow-windows-details.png" alt="Windows workflow details" width="190">
+        <img src="docs/readme-assets/app-screens/workflow-windows-details.png" alt="Windows setup configuration options" width="190">
       </a><br>
-      <sub>Windows workflow highlights UEFI-only media preparation and the MBR/FAT32 target format.</sub>
+      <sub>Windows workflow includes optional setup configuration for selected Windows restrictions and first-run setup choices.</sub>
     </td>
   </tr>
 </table>
@@ -232,7 +233,9 @@ macUSB recognizes Windows `.iso` images starting from **Windows XP** and **Windo
 
 Bootable Windows USB creation is currently supported for **Windows 8 and newer** and **Windows Server 2012 and newer**. Prepared media is **UEFI-only**.[^5]
 
-When a Windows image is recognized, macUSB detects the edition automatically. For ARM builds, the architecture is labeled directly in the detected name, for example `Windows 11 (ARM)`.
+When a Windows image is recognized, macUSB detects the edition automatically. 64-bit builds keep the standard detected name, while 32-bit and ARM builds are labeled directly, for example `Windows 10 (32-bit)` or `Windows 11 (ARM)`.
+
+For Windows 10 and Windows 11 sources, macUSB can prepare optional setup automation with `autounattend.xml`, helping configure selected out-of-box experience (OOBE) choices, skip the Microsoft Account requirement, and bypass Windows 11 hardware requirement checks as Windows Setup starts.
 
 During Windows USB creation, macUSB formats the selected target as **MBR** with **FAT32**. Because FAT32 has a **4 GB per-file limit**, some modern Windows images may require extra preparation. If `install.wim` exceeds that limit, macUSB automatically splits it into smaller `.swm` parts using `wimlib`.
 
@@ -257,9 +260,12 @@ When a Linux image is recognized, macUSB detects the distribution, version, and 
 
 If a selected file is a valid Linux image but is not recognized automatically, you can force Linux mode manually from **Options** → **Skip file analysis** → **Linux**.
 
-> Linux support has been tested with 19 distributions using the latest available releases as of April 30, 2026, with boot behavior verified on real hardware.[^6]
+Linux-based `.img` images can also be written from **Tools** → **Write Raw Linux Image (.img)…**.[^6]
 
-[^6]: Validated distributions: *Ubuntu*, *Kali Linux*, *NixOS*, *Garuda Linux*, *openSUSE Leap*, *Gentoo*, *Rocky Linux*, *Linux Mint*, *Fedora Workstation*, *Manjaro*, *Zorin OS*, *CachyOS*, *AlmaLinux*, *Debian*, *Arch Linux*, *MX Linux*, *Pop!_OS*, *EndeavourOS*, and *elementary OS*. Boot behavior was verified on a MacBook Air 2017, a Dell OptiPlex 5040 with UEFI, and an Asus F52Q with Legacy BIOS.
+> Linux support has been tested with 19 distributions using the latest available releases as of April 30, 2026, with boot behavior verified on real hardware.[^7]
+
+[^6]: Added in response to issue #69 as an additional raw image write path. It is not part of the officially boot-tested Linux `.iso` support matrix.
+[^7]: Validated distributions: *Ubuntu*, *Kali Linux*, *NixOS*, *Garuda Linux*, *openSUSE Leap*, *Gentoo*, *Rocky Linux*, *Linux Mint*, *Fedora Workstation*, *Manjaro*, *Zorin OS*, *CachyOS*, *AlmaLinux*, *Debian*, *Arch Linux*, *MX Linux*, *Pop!_OS*, *EndeavourOS*, and *elementary OS*. Boot behavior was verified on a MacBook Air 2017, a Dell OptiPlex 5040 with UEFI, and an Asus F52Q with Legacy BIOS.
 
 ---
 

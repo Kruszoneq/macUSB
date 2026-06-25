@@ -63,8 +63,9 @@ enum WindowsFamily: String {
 }
 
 enum WindowsArchitecture: String {
-    case x86
-    case arm
+    case x86_32 = "32-bit"
+    case x86_64 = "64-bit"
+    case arm = "ARM"
     case unknown
 }
 

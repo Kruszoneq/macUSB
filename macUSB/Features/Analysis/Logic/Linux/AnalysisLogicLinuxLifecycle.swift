@@ -153,7 +153,7 @@ extension AnalysisLogic {
         self.log("Ustawiono ręczne rozpoznanie Linux: recognizedVersion=\(self.recognizedVersion), source=\(sourceURL.path)")
     }
 
-    private func loadLinuxDetectedSystemIcon(for distro: String?) -> NSImage? {
+    func loadLinuxDetectedSystemIcon(for distro: String?) -> NSImage? {
         if let distro, let distroIcon = loadLinuxDistroIcon(for: distro) {
             self.log("Załadowano ikonę Linux distro: \(distro)")
             return distroIcon

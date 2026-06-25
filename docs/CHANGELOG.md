@@ -2,6 +2,29 @@
 
 ---
 
+## v2.3
+
+macUSB v2.3 expands the Windows 10 and Windows 11 installer creation process with new autounattend-based configuration options, allowing prepared USB media to automate selected setup steps and bypass specific installation requirements. This release also adds SHA-256 checksum calculation for recognized disk images.
+
+### ADDED: WINDOWS
+Added automated Windows 10 and Windows 11 installer configuration options (#72) to:
+- Bypass hardware requirement checks, including TPM 2.0, Secure Boot, and a minimum of 4 GB RAM (Windows 11 only).
+- Automatically synchronize language and region settings with the host macOS system.
+- Bypass the mandatory Microsoft Account sign-in requirement.
+- Bypass the Wi-Fi network connection requirement during initial setup.
+- Disable automatic BitLocker partition encryption on the target volume.
+- Provision a predefined local user account automatically.
+- Automatically decline diagnostic telemetry and privacy-tracking prompts.
+
+### ADDED: OTHER
+- Added SHA-256 checksum calculation for successfully recognized `.iso`, `.cdr`, and `.dmg` source images.
+- Added the capability to write Linux-based `.img` images via **Tools → Write Raw Linux Image (.img)…** (#69).
+
+### FIXED
+- Fixed a localization issue across certain language packs that caused "Linux" branding to erroneously appear during Windows installer creation stages.
+
+---
+
 ## v2.2
 
 macUSB v2.2 adds support for recognizing Windows and Linux `.iso` files and for creating bootable USB media for both systems.

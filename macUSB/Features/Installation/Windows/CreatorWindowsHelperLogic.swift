@@ -19,6 +19,13 @@ extension UniversalInstallationView {
             category: "WindowsInstallFlow"
         )
 
+        let autounattendPayload = CreatorWindowsAutounattendWindowsVersion.detected(
+            from: systemName,
+            architecture: windowsArchitecture
+        ) != nil
+            ? windowsAutounattendConfiguration.helperPayload()
+            : nil
+
         return HelperWorkflowRequestPayload(
             workflowKind: .windows,
             systemName: systemName,
@@ -36,7 +43,8 @@ extension UniversalInstallationView {
             requesterUID: requesterUID,
             linuxForceUnmount: false,
             windowsForceUnmount: false,
-            windowsMountedSourcePath: windowsMountedSourcePath
+            windowsMountedSourcePath: windowsMountedSourcePath,
+            windowsAutounattendConfiguration: autounattendPayload
         )
     }
 
