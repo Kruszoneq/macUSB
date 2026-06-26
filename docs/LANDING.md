@@ -61,18 +61,23 @@ This document describes the actual structure, content, and behavior of `index.ht
 - Heading: `Bypass Apple Silicon restrictions`
 - Copy: `Creating older macOS installers on Apple Silicon frequently fails due to expired certificates. macUSB automatically handles the validation errors to guarantee a successful flash.`
 
-6. Native App (`#native-performance`)
+6. Windows Setup (`#windows-setup`)
+- Kicker: `Windows Setup`
+- Heading: `Simplify Windows installation`
+- Copy: `Skip strict Windows 11 hardware checks, remove the mandatory Microsoft account requirement, and disable automatic BitLocker encryption. macUSB handles all deployment configurations automatically during the flashing process.`
+
+7. Native App (`#native-performance`)
 - Kicker: `Native App`
 - Heading: `Built natively with Swift`
 - Copy: `No Electron, no web wrappers. macUSB is a lightweight, natively compiled application designed exclusively for macOS, with blazing-fast performance, minimal memory footprint, and tight system integration.`
 
-7. Open Source (`#open-source`)
+8. Open Source (`#open-source`)
 - Kicker: `Open Source`
 - Heading: `Fully open, always free`
 - Copy: `macUSB is open source and free. Explore the code on GitHub, report issues, and help shape upcoming releases.`
 - CTA: `View on GitHub` -> `https://github.com/Kruszoneq/macUSB`
 
-8. Fine Print
+9. Fine Print
 - Placement: directly above the shared footer
 - Style: low-emphasis, legal-style fine print separated by a thin divider, centered in a narrower container than the main content, with softer contrast and slower line wrapping
 - Footnote `1`: `1. Splitting Windows .wim files requires the free wimlib package. It isn’t included with macUSB and must be installed separately, for example with Homebrew. macUSB checks for it only when a Windows installer requires .wim splitting to fit within FAT32 limitations.`
