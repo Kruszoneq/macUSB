@@ -7,6 +7,7 @@ private let machServiceName = "com.kruszoneq.macusb.helper.debug"
 private let machServiceName = "com.kruszoneq.macusb.helper"
 #endif
 private let listener = NSXPCListener(machServiceName: machServiceName)
+HelperConnectionSecurityPolicy.configure(listener, machServiceName: machServiceName)
 listener.delegate = delegate
 listener.resume()
 dispatchMain()

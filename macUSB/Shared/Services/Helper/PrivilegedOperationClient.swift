@@ -55,7 +55,7 @@ final class PrivilegedOperationClient: NSObject {
             }
         }
 
-        guard let proxy = helperProxy(onError: { message in
+        guard let proxy = helperProxy(presentsTrustFailureAlert: true, onError: { message in
             failStart(message)
         }) else {
             failStart(String(localized: "Nie udało się uzyskać połączenia XPC z helperem."))
@@ -115,7 +115,7 @@ final class PrivilegedOperationClient: NSObject {
     }
 
     func cancelWorkflow(_ workflowID: String, completion: @escaping (Bool, String?) -> Void) {
-        guard let proxy = helperProxy(onError: { message in
+        guard let proxy = helperProxy(presentsTrustFailureAlert: true, onError: { message in
             DispatchQueue.main.async {
                 completion(false, message)
             }
@@ -165,7 +165,7 @@ final class PrivilegedOperationClient: NSObject {
             }
         }
 
-        guard let proxy = helperProxy(onError: { message in
+        guard let proxy = helperProxy(presentsTrustFailureAlert: true, onError: { message in
             failStart(message)
         }) else {
             failStart(String(localized: "Nie udało się uzyskać połączenia XPC z helperem."))
@@ -222,7 +222,7 @@ final class PrivilegedOperationClient: NSObject {
     }
 
     func cancelDownloaderAssembly(_ workflowID: String, completion: @escaping (Bool, String?) -> Void = { _, _ in }) {
-        guard let proxy = helperProxy(onError: { message in
+        guard let proxy = helperProxy(presentsTrustFailureAlert: true, onError: { message in
             DispatchQueue.main.async {
                 completion(false, message)
             }
@@ -251,7 +251,7 @@ final class PrivilegedOperationClient: NSObject {
             }
         }
 
-        guard let proxy = helperProxy(onError: { message in
+        guard let proxy = helperProxy(presentsTrustFailureAlert: true, onError: { message in
             fail(message)
         }) else {
             fail(String(localized: "Nie udało się uzyskać połączenia XPC z helperem."))
@@ -296,6 +296,14 @@ final class PrivilegedOperationClient: NSObject {
     }
 
     func queryHealth(withTimeout timeout: TimeInterval, completion: @escaping (Bool, String) -> Void) {
+        queryHealth(withTimeout: timeout, presentsTrustFailureAlert: false, completion: completion)
+    }
+
+    func queryHealth(
+        withTimeout timeout: TimeInterval,
+        presentsTrustFailureAlert: Bool,
+        completion: @escaping (Bool, String) -> Void
+    ) {
         let stateLock = NSLock()
         var didFinish = false
         let finishOnce: (_ ok: Bool, _ details: String) -> Void = { ok, details in
@@ -318,7 +326,7 @@ final class PrivilegedOperationClient: NSObject {
             }
         }
 
-        guard let proxy = helperProxy(onError: { message in
+        guard let proxy = helperProxy(presentsTrustFailureAlert: presentsTrustFailureAlert, onError: { message in
             failHealth(message)
         }) else {
             failHealth(String(localized: "Nie udało się utworzyć proxy XPC helpera."))
@@ -370,10 +378,23 @@ final class PrivilegedOperationClient: NSObject {
         existingConnection?.invalidate()
     }
 
-    private func helperProxy(onError: @escaping (String) -> Void) -> PrivilegedHelperToolXPCProtocol? {
+    private func helperProxy(
+        presentsTrustFailureAlert: Bool = false,
+        onError: @escaping (String) -> Void
+    ) -> PrivilegedHelperToolXPCProtocol? {
         let connection = ensureConnection()
         let proxy = connection.remoteObjectProxyWithErrorHandler { error in
             DispatchQueue.main.async {
+                if HelperConnectionSecurityPolicy.isCodeSigningRequirementFailure(error) {
+                    AppLogging.error(
+                        "Weryfikacja podpisu helpera XPC nie powiodła się: \(HelperConnectionSecurityPolicy.diagnosticSummary(for: error)).",
+                        category: "HelperService"
+                    )
+                    if presentsTrustFailureAlert {
+                        HelperServiceManager.shared.presentHelperTrustVerificationFailureAlert()
+                    }
+                }
+
                 let message = String(
                     format: String(localized: "Błąd połączenia z helperem: %@"),
                     self.diagnosticErrorDescription(for: error)
@@ -401,6 +422,10 @@ final class PrivilegedOperationClient: NSObject {
         let newConnection = NSXPCConnection(
             machServiceName: HelperServiceManager.machServiceName,
             options: .privileged
+        )
+        HelperConnectionSecurityPolicy.configure(
+            newConnection,
+            machServiceName: HelperServiceManager.machServiceName
         )
         newConnection.remoteObjectInterface = NSXPCInterface(with: PrivilegedHelperToolXPCProtocol.self)
         newConnection.exportedInterface = NSXPCInterface(with: PrivilegedHelperClientXPCProtocol.self)
@@ -466,6 +491,10 @@ final class PrivilegedOperationClient: NSObject {
     }
 
     private func diagnosticErrorDescription(for error: Error) -> String {
+        if HelperConnectionSecurityPolicy.isCodeSigningRequirementFailure(error) {
+            return HelperConnectionSecurityPolicy.diagnosticFailureDescription(for: error)
+        }
+
         let nsError = error as NSError
         var details: [String] = ["domain=\(nsError.domain)", "code=\(nsError.code)"]
 

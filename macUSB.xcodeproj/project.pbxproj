@@ -38,6 +38,7 @@
 		A10000012F00000100000055 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000056 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendConfiguration.swift */; };
 		A10000012F00000100000057 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000058 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendGenerator.swift */; };
 		A10000012F00000100000059 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000005A /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendValidation.swift */; };
+		A10000012F0000010000005C /* Security/HelperConnectionSecurityPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000005B /* Security/HelperConnectionSecurityPolicy.swift */; };
 		B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */ = {isa = PBXBuildFile; fileRef = B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */; };
 		C10000012F00000100000001 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */; };
 		D10000012F00000100000001 /* macUSB/Resources/Icons/Linux/Distros in Resources */ = {isa = PBXBuildFile; fileRef = D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */; };
@@ -130,6 +131,7 @@
 		A10000012F00000100000056 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendConfiguration.swift; sourceTree = "<group>"; };
 		A10000012F00000100000058 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendGenerator.swift; sourceTree = "<group>"; };
 		A10000012F0000010000005A /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendValidation.swift; sourceTree = "<group>"; };
+		A10000012F0000010000005B /* Security/HelperConnectionSecurityPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Security/HelperConnectionSecurityPolicy.swift; sourceTree = "<group>"; };
 		B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = macUSB/Resources/Sounds/burn_complete.aif; sourceTree = "<group>"; };
 		C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift; sourceTree = "<group>"; };
 		D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */ = {isa = PBXFileReference; lastKnownFileType = folder; path = macUSB/Resources/Icons/Linux/Distros; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				Shared/Localization/HelperWorkflowLocalizationKeys.swift,
 				Shared/Models/Models.swift,
 				Shared/Services/FullDiskAccessPermissionManager.swift,
+				Shared/Services/Helper/HelperConnectionSecurityPolicy.swift,
 				Shared/Services/Helper/HelperIPC.swift,
 				Shared/Services/Helper/HelperService/HelperServiceBootstrap.swift,
 				Shared/Services/Helper/HelperService/HelperServiceDiagnostics.swift,
@@ -345,6 +348,7 @@
 				Shared/Localization/HelperWorkflowLocalizationKeys.swift,
 				Shared/Models/Models.swift,
 				Shared/Services/FullDiskAccessPermissionManager.swift,
+				Shared/Services/Helper/HelperConnectionSecurityPolicy.swift,
 				Shared/Services/Helper/HelperIPC.swift,
 				Shared/Services/Helper/HelperService/HelperServiceBootstrap.swift,
 				Shared/Services/Helper/HelperService/HelperServiceDiagnostics.swift,
@@ -469,6 +473,7 @@
 			isa = PBXGroup;
 			children = (
 				A10000012F00000100000006 /* main.swift */,
+				A10000012F0000010000005B /* Security/HelperConnectionSecurityPolicy.swift */,
 				A10000012F00000100000021 /* IPC/HelperIPC.swift */,
 				A10000012F00000100000022 /* Service/PrivilegedHelperService.swift */,
 				A10000012F00000100000023 /* Service/HelperListenerDelegate.swift */,
@@ -712,6 +717,7 @@
 			files = (
 				C10000012F00000100000001 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift in Sources */,
 				A10000012F00000100000001 /* main.swift in Sources */,
+				A10000012F0000010000005C /* Security/HelperConnectionSecurityPolicy.swift in Sources */,
 				A10000012F00000100000031 /* IPC/HelperIPC.swift in Sources */,
 				A10000012F00000100000032 /* Service/PrivilegedHelperService.swift in Sources */,
 				A10000012F00000100000033 /* Service/HelperListenerDelegate.swift in Sources */,
@@ -906,7 +912,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 29;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -929,7 +935,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.3;
+				MARKETING_VERSION = 2.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -962,7 +968,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 29;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -985,7 +991,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.3;
+				MARKETING_VERSION = 2.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

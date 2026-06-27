@@ -31,6 +31,7 @@ final class HelperServiceManager: NSObject {
     weak var statusCheckAlertParentWindow: NSWindow?
     var statusCheckAlertWindow: NSWindow?
     var didPresentStartupApprovalPrompt = false
+    var helperTrustVerificationAlertWindow: NSWindow?
     let repairLogFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss"

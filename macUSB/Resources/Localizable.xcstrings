@@ -7918,6 +7918,88 @@
         }
       }
     },
+    "Nie można zweryfikować helpera macUSB": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB kann den Helper nicht verifizieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB Can’t Verify the Helper"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB no puede verificar el helper"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB ne peut pas vérifier l’assistant"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB non può verificare l’helper"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB はヘルパーを検証できません"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie można zweryfikować helpera macUSB"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O macUSB não consegue verificar o auxiliar"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB не может проверить вспомогательную программу"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB yardımcıyı doğrulayamıyor"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB не може перевірити допоміжний інструмент"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB không thể xác minh trình trợ giúp"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB 无法验证辅助工具"
+          }
+        }
+      }
+    },
     "finish.eject.success.description": {
       "extractionState": "stale",
       "localizations": {
@@ -17110,6 +17192,88 @@
           "stringUnit": {
             "state": "translated",
             "value": "macUSB by Kruszoneq"
+          }
+        }
+      }
+    },
+    "macUSB nie może potwierdzić, że komunikuje się z zaufanym, podpisanym helperem. Operacja została przerwana. Uruchom aktualną aplikację macUSB z katalogu Applications, a następnie wybierz Narzędzia → Napraw helpera.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB kann nicht bestätigen, dass es mit einem vertrauenswürdigen, signierten Helper kommuniziert. Der Vorgang wurde gestoppt. Öffne die aktuelle macUSB App aus dem Ordner „Programme“ und wähle anschließend Werkzeuge → Helper reparieren."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB can’t confirm that it is communicating with a trusted, signed helper. The operation was stopped. Open the current macUSB app from the Applications folder, then choose Tools → Repair Helper."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB no puede confirmar que se esté comunicando con un helper firmado y de confianza. La operación se detuvo. Abre la app macUSB actual desde la carpeta Aplicaciones y luego elige Herramientas → Reparar helper."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB ne peut pas confirmer qu’il communique avec un assistant signé et de confiance. L’opération a été arrêtée. Ouvrez l’app macUSB actuelle depuis le dossier Applications, puis choisissez Outils → Réparer l’assistant."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB non può confermare che stia comunicando con un helper firmato e attendibile. L’operazione è stata interrotta. Apri l’app macUSB corrente dalla cartella Applicazioni, quindi scegli Strumenti → Ripara helper."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB は、信頼された署名済みヘルパーと通信していることを確認できません。操作は停止されました。現在の macUSB アプリを「アプリケーション」フォルダから開き、ツール → ヘルパーを修復 を選択してください。"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB nie może potwierdzić, że komunikuje się z zaufanym, podpisanym helperem. Operacja została przerwana. Uruchom aktualną aplikację macUSB z katalogu Applications, a następnie wybierz Narzędzia → Napraw helpera."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O macUSB não consegue confirmar que está se comunicando com um auxiliar assinado e confiável. A operação foi interrompida. Abra o app macUSB atual pela pasta Aplicativos e escolha Ferramentas → Reparar helper."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB не может подтвердить, что обменивается данными с доверенной подписанной вспомогательной программой. Операция остановлена. Откройте актуальное приложение macUSB из папки «Программы», затем выберите Инструменты → Восстановить helper."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB, güvenilir ve imzalı bir yardımcıyla iletişim kurduğunu doğrulayamıyor. İşlem durduruldu. Güncel macUSB uygulamasını Uygulamalar klasöründen açın, ardından Araçlar → Yardımcıyı düzelt’i seçin."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB не може підтвердити, що обмінюється даними з довіреним підписаним допоміжним інструментом. Операцію зупинено. Відкрийте актуальну програму macUSB з папки «Програми», а потім виберіть Інструменти → Виправити помічника."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB không thể xác nhận rằng ứng dụng đang giao tiếp với một trình trợ giúp tin cậy, đã được ký. Thao tác đã dừng. Mở ứng dụng macUSB hiện tại từ thư mục Ứng dụng, rồi chọn Công cụ → Sửa chữa trình trợ giúp."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macUSB 无法确认它正在与受信任且已签名的辅助工具通信。操作已停止。请从“应用程序”文件夹打开当前的 macUSB App，然后选择工具 → 修复辅助工具。"
           }
         }
       }
