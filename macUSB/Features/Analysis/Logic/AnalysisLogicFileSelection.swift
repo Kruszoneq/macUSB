@@ -63,6 +63,14 @@ extension AnalysisLogic {
         DispatchQueue.main.async {
             let ext = url.pathExtension.lowercased()
             self.log("Wybrano plik w formacie .\(ext). Resetuję stan i przygotowuję analizę.")
+            if ext == "app" && !self.isValidInstallerApp(url) {
+                self.selectedFilePath = ""
+                self.selectedFileUrl = nil
+                self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
+                self.isSystemDetected = false
+                self.showUnsupportedMessage = true
+                return
+            }
             if ext == "dmg" || ext == "app" || ext == "iso" || ext == "cdr" {
                 self.cancelActiveImageAnalysisRun(reason: "Zmiana wybranego pliku podczas analizy")
                 let previousMountedPath = self.mountedDMGPath
@@ -103,6 +111,15 @@ extension AnalysisLogic {
             return
         }
 
+        if ext == "app" && !isValidInstallerApp(url) {
+            self.selectedFilePath = ""
+            self.selectedFileUrl = nil
+            self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
+            self.isSystemDetected = false
+            self.showUnsupportedMessage = true
+            return
+        }
+
         processDroppedURL(url)
         DispatchQueue.main.async { [weak self] in
             self?.startAnalysis()
@@ -120,6 +137,14 @@ extension AnalysisLogic {
             if $0 == .OK, let url = p.url {
                 let ext = url.pathExtension.lowercased()
                 guard ext == "dmg" || ext == "iso" || ext == "cdr" || ext == "app" else { return }
+                if ext == "app" && !self.isValidInstallerApp(url) {
+                    self.selectedFilePath = ""
+                    self.selectedFileUrl = nil
+                    self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
+                    self.isSystemDetected = false
+                    self.showUnsupportedMessage = true
+                    return
+                }
                 self.cancelActiveImageAnalysisRun(reason: "Wybrano nowy plik źródłowy")
                 let previousMountedPath = self.mountedDMGPath
                 withAnimation {

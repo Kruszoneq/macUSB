@@ -189,6 +189,65 @@ final class AnalysisLogic: ObservableObject {
         updates()
         isSynchronizingDriveSelection = false
     }
+
+    private func isValidMacOSInstaller(at url: URL) -> Bool {
+        let fileManager = FileManager.default
+        
+        // check for createinstallmedia (as a file, just in case..)
+        let createinstallmedia = url.appendingPathComponent("Contents/Resources/createinstallmedia")
+        var isDirectory: ObjCBool = false
+        if fileManager.fileExists(atPath: createinstallmedia.path, isDirectory: &isDirectory) {
+            if !isDirectory.boolValue {
+                return true
+            }
+        }
+        
+        // check for InstallESD.dmg, in case of older installers
+        let installESD = url.appendingPathComponent("Contents/SharedSupport/InstallESD.dmg")
+        if fileManager.fileExists(atPath: installESD.path) {
+            return true
+        }
+        
+        // check bundle identifier
+        let infoPlist = url.appendingPathComponent("Contents/Info.plist")
+        guard let dict = NSDictionary(contentsOf: infoPlist) as? [String: Any],
+              let bundleID = dict["CFBundleIdentifier"] as? String else {
+            return false
+        }
+        
+        // list of valid app bundle IDS/prefixes, corresponding to installers
+        let installerIDs = [
+            "com.apple.InstallAssistant",
+            "com.apple.InstallOSX",
+            "com.apple.InstallMacOSX"
+        ]
+        
+        if installerIDs.contains(where: { bundleID.hasPrefix($0) }) {
+            return true
+        }
+        
+        return false
+    }
+ 
+    func isValidInstallerApp(_ url: URL) -> Bool {
+        let ext = url.pathExtension.lowercased()
+
+        if ext == "app" {
+            guard isValidMacOSInstaller(at: url) else {
+                DispatchQueue.main.async {
+                    self.recognizedVersion = String(localized: "Nie rozpoznano instalatora")
+                    self.isSystemDetected = false
+                    self.showUnsupportedMessage = true
+                    self.sourceAppURL = nil
+                    self.isAnalyzing = false
+                    self.detectedSystemIcon = nil
+                }
+                return false
+            }
+        }
+        
+        return true
+    }
 }
 
 extension AnalysisLogic {

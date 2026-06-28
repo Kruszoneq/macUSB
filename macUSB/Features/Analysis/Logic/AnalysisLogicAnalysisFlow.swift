@@ -36,6 +36,7 @@ extension AnalysisLogic {
     func startAnalysis() {
         cancelActiveImageAnalysisRun(reason: "Start nowej analizy")
         guard let url = selectedFileUrl else { return }
+        guard isValidInstallerApp(url) else { return }
         self.stage("Analiza pliku — start")
         self.log("Rozpoczynam analizę pliku")
         self.log("Źródło pliku do odczytu wersji: \(url.path)")
