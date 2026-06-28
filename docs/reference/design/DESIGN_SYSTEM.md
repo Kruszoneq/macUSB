@@ -10,6 +10,7 @@ Core contract:
 - consistent panel/docked surface semantics,
 - consistent hierarchy of status cards,
 - consistent CTA behavior and bottom action bars,
+- neutral in-app toast surfaces for transient status changes,
 - consistent inactive/active visual behavior across windows and states.
 
 ## Required UI Primitives
@@ -22,6 +23,7 @@ Use wrappers from `LiquidGlassCompatibility.swift`:
 
 Use spacing/radius tokens from `MacUSBDesignTokens`.
 Use `BottomActionBar` with `safeAreaInset(edge: .bottom)` for bottom action zones.
+Use global in-app toasts only for transient, non-blocking state changes; they should use a neutral native SwiftUI glass surface on systems that support Liquid Glass and a neutral fallback surface on older macOS versions.
 
 ## Window/Layout Contract
 

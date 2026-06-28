@@ -57,6 +57,9 @@ extension HelperServiceManager {
             reportHelperServiceEvent(
                 "Auto-aktualizacja helpera: wykryto zmianę wersji/builda aplikacji lub brak poprzedniego fingerprintu (stary=\(previousDescription), nowy=\(currentFingerprint))."
             )
+            Task { @MainActor in
+                AppToastCenter.shared.showHelperAutoUpdateRunning()
+            }
 
             performFullRepairFromMenu { ready, message in
                 if ready {
@@ -64,6 +67,9 @@ extension HelperServiceManager {
                     self.reportHelperServiceEvent(
                         "Auto-aktualizacja helpera zakończona sukcesem dla fingerprintu \(currentFingerprint)."
                     )
+                    Task { @MainActor in
+                        AppToastCenter.shared.showHelperAutoUpdateCompleted(visibleFor: 5)
+                    }
                     completion(true)
                     return
                 }
@@ -73,6 +79,7 @@ extension HelperServiceManager {
                     "Auto-aktualizacja helpera zakończona błędem: \(details)."
                 )
                 DispatchQueue.main.async {
+                    AppToastCenter.shared.dismiss()
                     self.presentAutomaticHelperUpdateFailureAlert()
                 }
                 completion(false)

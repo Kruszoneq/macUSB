@@ -133,7 +133,7 @@ Contract invariants:
 - Entry point: `bootstrapIfNeededAtStartup`.
 - After successful non-interactive ensure-ready, app compares current app fingerprint (`CFBundleShortVersionString` + `CFBundleVersion`) with last successful helper-repair fingerprint stored in `UserDefaults`.
 - If fingerprint changed, or no previous fingerprint exists (upgrade from older app versions), app runs automatic full helper repair in background.
-- Successful automatic repair updates stored fingerprint and remains visible only in logs.
+- Successful automatic repair updates stored fingerprint, remains visible in logs, and shows a short in-app toast at the bottom of the main window.
 - Failed automatic repair presents one warning `NSAlert` with guidance to run `Tools → Repair helper` manually.
 
 ### Hard-Repair Flow

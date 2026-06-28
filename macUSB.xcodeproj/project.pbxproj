@@ -276,6 +276,7 @@
 				Shared/Services/UpdateChecker.swift,
 				Shared/Services/USBDriveLogic.swift,
 				Shared/Services/Windows/WindowsToolchainProbeService.swift,
+				Shared/UI/AppToastCenter.swift,
 				Shared/UI/BottomActionBar.swift,
 				Shared/UI/DesignTokens.swift,
 				Shared/UI/LiquidGlassCompatibility.swift,
@@ -367,6 +368,7 @@
 				Shared/Services/SystemSleepBlocker.swift,
 				Shared/Services/UpdateChecker.swift,
 				Shared/Services/Windows/WindowsToolchainProbeService.swift,
+				Shared/UI/AppToastCenter.swift,
 				Shared/UI/BottomActionBar.swift,
 				Shared/UI/DesignTokens.swift,
 				Shared/UI/LiquidGlassCompatibility.swift,
@@ -912,7 +914,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 31;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -968,7 +970,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 31;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;

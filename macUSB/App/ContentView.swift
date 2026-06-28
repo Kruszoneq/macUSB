@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var path = NavigationPath()
     @EnvironmentObject private var languageManager: LanguageManager
     @State private var pendingDebugNavigationWorkItem: DispatchWorkItem?
+    @ObservedObject private var appToastCenter = AppToastCenter.shared
 
     private var debugMountPointURL: URL {
         FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_debug_mount_point")
@@ -102,6 +103,9 @@ struct ContentView: View {
         }
         // Sztywny rozmiar kontentu
         .frame(width: MacUSBDesignTokens.windowWidth, height: MacUSBDesignTokens.windowHeight)
+        .overlay {
+            AppToastOverlay(toast: appToastCenter.toast)
+        }
         // Podpięcie konfiguratora okna
         .background(WindowConfigurator())
         // Wstrzyknięcie języka
