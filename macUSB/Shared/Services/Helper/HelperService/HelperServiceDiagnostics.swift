@@ -96,6 +96,32 @@ extension HelperServiceManager {
         alert.addButton(withTitle: String(localized: "Rozumiem"))
         presentAlert(alert)
     }
+    func presentHelperTrustVerificationFailureAlert() {
+        DispatchQueue.main.async {
+            guard self.helperTrustVerificationAlertWindow == nil else { return }
+
+            let alert = NSAlert()
+            alert.alertStyle = .warning
+            alert.messageText = HelperConnectionSecurityPolicy.localizedFailureTitle
+            alert.informativeText = HelperConnectionSecurityPolicy.localizedFailureMessage
+            alert.addButton(withTitle: String(localized: "OK"))
+
+            let clearWindow: (NSApplication.ModalResponse) -> Void = { _ in
+                self.helperTrustVerificationAlertWindow = nil
+            }
+
+            if let window = NSApp.keyWindow ?? NSApp.mainWindow {
+                self.helperTrustVerificationAlertWindow = alert.window
+                alert.beginSheetModal(for: window, completionHandler: clearWindow)
+            } else {
+                self.helperTrustVerificationAlertWindow = alert.window
+                clearWindow(alert.runModal())
+            }
+        }
+    }
+    func isHelperTrustVerificationFailureMessage(_ message: String) -> Bool {
+        HelperConnectionSecurityPolicy.isTrustVerificationFailureMessage(message)
+    }
     func isOperationNotPermitted(_ error: Error) -> Bool {
         let nsError = error as NSError
         if nsError.code == Int(EPERM) || nsError.code == 1 {

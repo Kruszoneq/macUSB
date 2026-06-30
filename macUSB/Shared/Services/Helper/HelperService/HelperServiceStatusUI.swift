@@ -21,6 +21,8 @@ extension HelperServiceManager {
 
                     if snapshot.isHealthy {
                         self.presentHealthyStatusAlert(detailsText: snapshot.detailedText)
+                    } else if self.isHelperTrustVerificationFailureMessage(snapshot.detailedText) {
+                        self.presentHelperTrustVerificationFailureAlert()
                     } else if snapshot.serviceStatus == .requiresApproval {
                         self.presentApprovalRequiredStatusAlert(detailsText: snapshot.detailedText)
                     } else {
@@ -79,7 +81,10 @@ extension HelperServiceManager {
             #endif
         }
 
-        PrivilegedOperationClient.shared.queryHealth(withTimeout: statusHealthTimeout) { ok, details in
+        PrivilegedOperationClient.shared.queryHealth(
+            withTimeout: statusHealthTimeout,
+            presentsTrustFailureAlert: true
+        ) { ok, details in
             let xpcHealthValue = ok ? String(localized: "OK") : String(localized: "BŁĄD")
             let lines: [String] = [
                 serviceStatusLine,

@@ -53,6 +53,11 @@ extension HelperServiceManager {
     func finishRepairPresentation(success: Bool, message: String) {
         appendRepairTechnicalLogLine(message)
         dismissRepairProgressAlertIfNeeded()
+        if !success, isHelperTrustVerificationFailureMessage(message) {
+            presentHelperTrustVerificationFailureAlert()
+            setRepairProgressSink(nil)
+            return
+        }
         presentRepairSummaryAlert(success: success, message: message)
         setRepairProgressSink(nil)
     }
