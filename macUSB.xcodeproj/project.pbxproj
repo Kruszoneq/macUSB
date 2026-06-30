@@ -167,6 +167,7 @@
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSImageMounting.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerIcon.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerMetadata.swift,
+				Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerValidation.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSLifecycle.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsClassification.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsDetection.swift,

@@ -224,15 +224,16 @@ extension AnalysisLogic {
         }
         else if ext == "app" {
             self.stage("Analiza aplikacji (.app) — start")
-            self.log("Analiza aplikacji (.app): odczyt Info.plist (CFBundleDisplayName, CFBundleShortVersionString) oraz wykrywanie wersji i trybu instalacji.")
+            self.log("Analiza aplikacji (.app): odczyt Info.plist, sprawdzenie payloadu instalatora (createinstallmedia/InstallESD.dmg) oraz wykrywanie wersji i trybu instalacji.")
             self.log("Źródło pliku do odczytu wersji: \(url.path)")
             DispatchQueue.global(qos: .userInitiated).async {
-                let result = self.readAppInfo(appUrl: url)
+                let inspection = self.inspectMacOSInstallerApp(at: url)
                 DispatchQueue.main.async {
                     withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
                         self.isAnalyzing = false
                         self.mountedDMGPath = nil
-                        if let (name, rawVer, appURL) = result {
+                        self.log("Walidacja aplikacji instalatora macOS: \(inspection.logSummary)")
+                        if let (name, rawVer, appURL) = inspection.appInfo {
                             let friendlyVer = self.formatMarketingVersion(raw: rawVer, name: name)
                             var cleanName = name
                             cleanName = cleanName.replacingOccurrences(of: "Install ", with: "")
@@ -250,7 +251,7 @@ extension AnalysisLogic {
                                 return
                             }
                         } else {
-                            self.applyUnrecognizedInstallerState()
+                            self.applyInvalidMacOSInstallerAppState(reason: inspection.decisionReason)
                         }
                     }
                 }
