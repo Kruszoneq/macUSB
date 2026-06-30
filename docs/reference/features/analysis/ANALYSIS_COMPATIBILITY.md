@@ -19,14 +19,16 @@ Windows-specific behavior details are documented in:
 Analysis flags are the source of truth for workflow branch selection.
 Unsupported detection outcomes must be clearly surfaced and must block unsupported paths.
 
-For selected macOS `.app` sources:
+For selected macOS `.app` sources and macOS `.app` bundles found inside mounted `.dmg`, `.iso`, and `.cdr` sources:
 
 - analysis must read installer metadata from `Contents/Info.plist`,
 - analysis must inspect installer payload markers before accepting the app as a valid source:
   - `Contents/Resources/createinstallmedia` must exist as a file for standard app-installer workflows,
   - `Contents/SharedSupport/InstallESD.dmg` must exist as a file and is sufficient only for restore-legacy metadata (`Lion` / `Mountain Lion`, `10.7` / `10.8`),
+- mounted images may accept legacy Mac OS X installer apps without these payload markers only when the mounted image exposes `System/Library/CoreServices/SystemVersion.plist` with `ProductUserVisibleVersion` from `10.3` through `10.6`; Panther remains an unsupported detection outcome,
 - bundle identifier is diagnostic metadata only and must not be treated as proof that the app contains installer payload,
 - invalid `.app` selections must keep the selected source visible but clear install-handoff state (`sourceAppURL`, detected icon, USB section, target selection, capacity result, and workflow flags),
+- invalid `.app` bundles found inside mounted images must not set macOS install-handoff state; `.iso` sources may still continue into Windows/Linux fallback when no valid macOS app is accepted,
 - explicitly recognized unsupported macOS outcomes, including Panther, remain unsupported detection results rather than generic invalid-app results.
 
 For Windows fallback:
