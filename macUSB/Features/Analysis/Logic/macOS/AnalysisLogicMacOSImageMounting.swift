@@ -1,34 +1,38 @@
 import Foundation
 
 extension AnalysisLogic {
-    private func readLegacyInstallMacOSXInfo(from mountURL: URL) -> (String, String, URL)? {
-        let legacyInstallers = [
+    private typealias MountedInstallerReadInfo = (name: String, rawVersion: String, appURL: URL, mountPoint: String)
+
+    private var legacyInstallMacOSXCandidateNames: [String] {
+        [
             "Install Mac OS X",
             "Install Mac OS X.app"
         ]
+    }
 
+    private func readLegacyInstallMacOSXInfo(
+        from mountURL: URL,
+        mountPoint: String,
+        mountedSystemVersion: String?
+    ) -> MountedInstallerReadInfo? {
         var foundLegacyPath = false
-        for installerName in legacyInstallers {
+        for installerName in legacyInstallMacOSXCandidateNames {
             let installerURL = mountURL.appendingPathComponent(installerName, isDirectory: true)
-            let plistURL = installerURL.appendingPathComponent("Contents/Info.plist")
-            guard FileManager.default.fileExists(atPath: plistURL.path) else {
+            guard FileManager.default.fileExists(atPath: installerURL.path) else {
                 continue
             }
 
             foundLegacyPath = true
             self.log("Znaleziono legacy installer path: \(installerURL.path)")
-            self.log("Odczyt Info.plist (legacy): \(plistURL.path)")
 
-            guard let data = try? Data(contentsOf: plistURL),
-                  let dict = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] else {
-                self.logError("Nie udało się odczytać Info.plist (legacy): \(plistURL.path)")
-                continue
+            if let installerInfo = validatedMountedInstallerInfo(
+                from: installerURL,
+                mountPoint: mountPoint,
+                mountedSystemVersion: mountedSystemVersion,
+                context: "legacy_path"
+            ) {
+                return installerInfo
             }
-
-            let name = (dict["CFBundleDisplayName"] as? String) ?? installerURL.lastPathComponent
-            let version = (dict["CFBundleShortVersionString"] as? String) ?? "?"
-            self.log("Odczytano Info.plist (legacy): name=\(name), version=\(version)")
-            return (name, version, installerURL)
         }
 
         if !foundLegacyPath {
@@ -36,6 +40,98 @@ extension AnalysisLogic {
         }
 
         return nil
+    }
+
+    private func validatedMountedInstallerInfo(
+        from installerURL: URL,
+        mountPoint: String,
+        mountedSystemVersion: String?,
+        context: String
+    ) -> MountedInstallerReadInfo? {
+        let inspection = inspectMacOSInstallerApp(at: installerURL)
+        self.log("Walidacja aplikacji instalatora macOS z obrazu (\(context)): \(inspection.logSummary)")
+
+        guard let (name, rawVersion, appURL) = inspection.appInfo else {
+            if let legacyInfo = mountedLegacyInstallerInfoIfCompatible(
+                inspection: inspection,
+                mountedSystemVersion: mountedSystemVersion,
+                context: context
+            ) {
+                self.log("Zaakceptowano legacy instalator macOS z obrazu na podstawie zamontowanego SystemVersion.plist: name=\(legacyInfo.name), version=\(legacyInfo.rawVersion), mountedSystemVersion=\(mountedSystemVersion ?? "brak")")
+                return (legacyInfo.name, legacyInfo.rawVersion, legacyInfo.appURL, mountPoint)
+            }
+
+            self.logError("Odrzucono aplikację .app w obrazie jako instalator macOS: \(inspection.decisionReason) [path=\(installerURL.path)]")
+            return nil
+        }
+
+        self.log("Rozpoznano poprawny instalator macOS z obrazu: name=\(name), version=\(rawVersion)")
+        return (name, rawVersion, appURL, mountPoint)
+    }
+
+    private func mountedLegacyInstallerInfoIfCompatible(
+        inspection: MacOSInstallerAppInspection,
+        mountedSystemVersion: String?,
+        context: String
+    ) -> (name: String, rawVersion: String, appURL: URL)? {
+        guard inspection.decisionReason == "missing_required_installer_payload" ||
+                inspection.decisionReason == "installesd_without_restore_legacy_metadata" else {
+            return nil
+        }
+        guard isMountedLegacyMacOSVersion(mountedSystemVersion),
+              let name = inspection.displayName,
+              let rawVersion = inspection.rawVersion else {
+            return nil
+        }
+
+        let candidateText = "\(name) \(inspection.appURL.lastPathComponent)".lowercased()
+        guard candidateText.contains("install") ||
+                candidateText.contains("mac os x") ||
+                candidateText.contains("tiger") ||
+                candidateText.contains("leopard") ||
+                candidateText.contains("panther") else {
+            self.log("Znaleziono legacy SystemVersion.plist, ale nazwa .app nie wygląda jak instalator macOS (\(context)): \(inspection.appURL.path)")
+            return nil
+        }
+
+        return (name, rawVersion, inspection.appURL)
+    }
+
+    private func isMountedLegacyMacOSVersion(_ version: String?) -> Bool {
+        guard let version else { return false }
+        return version.hasPrefix("10.3") ||
+            version.hasPrefix("10.4") ||
+            version.hasPrefix("10.5") ||
+            version.hasPrefix("10.6")
+    }
+
+    private func mountedSystemUserVisibleVersion(from mountURL: URL) -> String? {
+        let sysVerPlist = mountURL.appendingPathComponent("System/Library/CoreServices/SystemVersion.plist")
+        guard let data = try? Data(contentsOf: sysVerPlist),
+              let dict = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any],
+              let userVisible = dict["ProductUserVisibleVersion"] as? String else {
+            return nil
+        }
+        return userVisible
+    }
+
+    private func rootAppCandidates(in mountURL: URL) -> [URL]? {
+        guard let dirContents = try? FileManager.default.contentsOfDirectory(at: mountURL, includingPropertiesForKeys: nil) else {
+            return nil
+        }
+
+        let legacyCandidatePaths = Set(
+            legacyInstallMacOSXCandidateNames.map {
+                mountURL.appendingPathComponent($0, isDirectory: true).standardizedFileURL.path
+            }
+        )
+
+        return dirContents
+            .filter { $0.pathExtension.lowercased() == "app" }
+            .filter { !legacyCandidatePaths.contains($0.standardizedFileURL.path) }
+            .sorted {
+                $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending
+            }
     }
 
     private func normalizedImagePath(_ path: String) -> String {
@@ -166,31 +262,42 @@ extension AnalysisLogic {
 
                 self.log("Zamontowano obraz: \(mp) [id: \(mountId)]")
                 let mUrl = URL(fileURLWithPath: mp)
-                if let (legacyName, legacyVersion, legacyInstallerURL) = self.readLegacyInstallMacOSXInfo(from: mUrl) {
-                    self.log("Rozpoznano instalator legacy z obrazu: name=\(legacyName), version=\(legacyVersion)")
-                    return (mountedReadInfo: (legacyName, legacyVersion, legacyInstallerURL, mp), sourceAlreadyMountedPath: nil, mountedImagePath: mp)
+                let mountedSystemVersion = mountedSystemUserVisibleVersion(from: mUrl)
+                if let mountedSystemVersion {
+                    self.log("Odczytano wersję systemu z zamontowanego obrazu: \(mountedSystemVersion)")
                 }
-                let dirContents = try? FileManager.default.contentsOfDirectory(at: mUrl, includingPropertiesForKeys: nil)
-                if let item = dirContents?.first(where: { $0.pathExtension == "app" }) {
-                    let plistUrl = item.appendingPathComponent("Contents/Info.plist")
-                    self.log("Odczyt Info.plist: \(plistUrl.path)")
-                    if let d = try? Data(contentsOf: plistUrl), let dict = try? PropertyListSerialization.propertyList(from: d, format: nil) as? [String: Any] {
-                        let name = (dict["CFBundleDisplayName"] as? String) ?? item.lastPathComponent
-                        let ver = (dict["CFBundleShortVersionString"] as? String) ?? "?"
-                        self.log("Odczytano Info.plist z obrazu: name=\(name), version=\(ver)")
-                        return (mountedReadInfo: (name, ver, item, mp), sourceAlreadyMountedPath: nil, mountedImagePath: mp)
+
+                if let installerInfo = self.readLegacyInstallMacOSXInfo(
+                    from: mUrl,
+                    mountPoint: mp,
+                    mountedSystemVersion: mountedSystemVersion
+                ) {
+                    return (mountedReadInfo: installerInfo, sourceAlreadyMountedPath: nil, mountedImagePath: mp)
+                }
+
+                if let appCandidates = rootAppCandidates(in: mUrl) {
+                    if appCandidates.isEmpty {
+                        self.log("Nie znaleziono pakietu .app w zamontowanym obrazie: \(mp)")
                     } else {
-                        self.logError("Nie udało się odczytać Info.plist z obrazu: \(plistUrl.path)")
+                        self.log("Znaleziono pakiety .app w zamontowanym obrazie (\(appCandidates.count)). Sprawdzam deterministycznie według nazwy.")
+                        for appCandidate in appCandidates {
+                            if let installerInfo = validatedMountedInstallerInfo(
+                                from: appCandidate,
+                                mountPoint: mp,
+                                mountedSystemVersion: mountedSystemVersion,
+                                context: "root_app"
+                            ) {
+                                return (mountedReadInfo: installerInfo, sourceAlreadyMountedPath: nil, mountedImagePath: mp)
+                            }
+                        }
+                        self.log("Żaden pakiet .app w zamontowanym obrazie nie przeszedł walidacji instalatora macOS: \(mp)")
                     }
                 } else {
-                    self.log("Nie znaleziono pakietu .app w zamontowanym obrazie: \(mp)")
-                    if let names = dirContents?.map({ $0.lastPathComponent }).prefix(10) {
-                        self.log("Zawartość katalogu (\(mp)) [pierwsze 10]: \(names.joined(separator: ", "))")
-                    }
+                    self.log("Nie udało się odczytać zawartości katalogu zamontowanego obrazu: \(mp)")
                 }
             }
         }
-        self.log("Próbowano zamontować obraz i znaleźć pakiet .app oraz plik Info.plist, ale nie zostały odnalezione.")
+        self.log("Próbowano zamontować obraz i znaleźć poprawny pakiet instalatora macOS .app, ale nie został odnaleziony.")
         if let firstMountedImagePath {
             self.log("Brak instalatora macOS .app na zamontowanym obrazie. Zachowuję mount-point do dalszej analizy: \(firstMountedImagePath)")
             return (mountedReadInfo: nil, sourceAlreadyMountedPath: nil, mountedImagePath: firstMountedImagePath)

@@ -167,6 +167,7 @@
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSImageMounting.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerIcon.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerMetadata.swift,
+				Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerValidation.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSLifecycle.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsClassification.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsDetection.swift,
@@ -914,7 +915,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 33;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -970,7 +971,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 33;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
