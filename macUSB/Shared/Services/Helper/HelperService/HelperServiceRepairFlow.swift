@@ -285,7 +285,10 @@ extension HelperServiceManager {
         maxAttempts: Int,
         completion: @escaping EnsureCompletion
     ) {
-        PrivilegedOperationClient.shared.queryHealth(withTimeout: 2.4) { ok, details in
+        PrivilegedOperationClient.shared.queryHealth(
+            withTimeout: 2.4,
+            presentsTrustFailureAlert: true
+        ) { ok, details in
             self.coordinationQueue.async {
                 let finalStatus = service.status
                 if ok, finalStatus == .enabled {

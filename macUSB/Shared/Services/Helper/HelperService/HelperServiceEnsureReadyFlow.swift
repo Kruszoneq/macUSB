@@ -150,7 +150,10 @@ extension HelperServiceManager {
                     "Rejestracja helpera z uruchomienia Xcode została zablokowana przez system (Operation not permitted).",
                     category: "Installation"
                 )
-                PrivilegedOperationClient.shared.queryHealth(withTimeout: 1.2) { ok, details in
+                PrivilegedOperationClient.shared.queryHealth(
+                    withTimeout: 1.2,
+                    presentsTrustFailureAlert: interactive
+                ) { ok, details in
                     if ok {
                         self.reportHelperServiceEvent("Health XPC po błędzie register() jest poprawny.")
                         completion(true, nil)
@@ -213,7 +216,10 @@ extension HelperServiceManager {
         completion: @escaping (Bool, String?) -> Void
     ) {
         reportHelperServiceEvent("Rozpoczynam weryfikację health XPC helpera.")
-        PrivilegedOperationClient.shared.queryHealth { ok, details in
+        PrivilegedOperationClient.shared.queryHealth(
+            withTimeout: 5,
+            presentsTrustFailureAlert: interactive
+        ) { ok, details in
             if ok {
                 self.reportHelperServiceEvent("Health XPC: OK (\(details)).")
                 completion(true, nil)
@@ -234,7 +240,10 @@ extension HelperServiceManager {
             self.reportHelperServiceEvent("Zresetowano połączenie XPC. Ponawiam health-check.")
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-                PrivilegedOperationClient.shared.queryHealth { retryOK, retryDetails in
+                PrivilegedOperationClient.shared.queryHealth(
+                    withTimeout: 5,
+                    presentsTrustFailureAlert: interactive
+                ) { retryOK, retryDetails in
                     if retryOK {
                         self.reportHelperServiceEvent("Health XPC po resecie: OK (\(retryDetails)).")
                         completion(true, nil)
@@ -273,7 +282,10 @@ extension HelperServiceManager {
                             return
                         }
 
-                        PrivilegedOperationClient.shared.queryHealth { recovered, recoveredDetails in
+                        PrivilegedOperationClient.shared.queryHealth(
+                            withTimeout: 5,
+                            presentsTrustFailureAlert: interactive
+                        ) { recovered, recoveredDetails in
                             if recovered {
                                 self.reportHelperServiceEvent("Health XPC po odzyskiwaniu: OK (\(recoveredDetails)).")
                                 completion(true, nil)
@@ -339,7 +351,10 @@ extension HelperServiceManager {
         }
 
         if isRunningFromXcodeSession() && isOperationNotPermitted(error) {
-            PrivilegedOperationClient.shared.queryHealth(withTimeout: 1.2) { ok, details in
+            PrivilegedOperationClient.shared.queryHealth(
+                withTimeout: 1.2,
+                presentsTrustFailureAlert: interactive
+            ) { ok, details in
                 if ok {
                     self.reportHelperServiceEvent("W sesji Xcode recovery zablokowany, ale helper odpowiada przez XPC.")
                     completion(true, nil)

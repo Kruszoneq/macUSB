@@ -2,6 +2,8 @@ import Foundation
 
 final class HelperListenerDelegate: NSObject, NSXPCListenerDelegate {
     func listener(_ listener: NSXPCListener, shouldAcceptNewConnection newConnection: NSXPCConnection) -> Bool {
+        HelperConnectionSecurityPolicy.logAcceptedConnection(newConnection)
+
         let service = PrivilegedHelperService()
         service.connection = newConnection
 

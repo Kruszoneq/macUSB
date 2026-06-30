@@ -79,6 +79,10 @@ High-level model:
 Core invariant:
 - No terminal fallback privileged path.
 - Privileged operations must run through `SMAppService` plus launchd helper and XPC.
+- The XPC channel is mutually code-signing-gated:
+  - the daemon listener accepts only the signed macUSB app for the active build configuration,
+  - the app-side connection trusts only the signed macUSB helper for the active build configuration.
+  - Code-signing requirement failures must stop privileged work before helper service methods run.
 
 ---
 
@@ -122,19 +126,20 @@ Contract invariants:
 - Entry point: `HelperServiceManager` ensure-ready path.
 - Checks app location and helper service status.
 - Handles status states (`enabled`, `requiresApproval`, `notRegistered`, `notFound`).
-- Performs health validation via XPC.
+- Performs health validation via XPC after configuring app-side helper code-signing requirements.
 - Uses controlled recovery when enabled service is unhealthy.
 
 ### Startup Auto-Repair Flow (version/build change)
 - Entry point: `bootstrapIfNeededAtStartup`.
 - After successful non-interactive ensure-ready, app compares current app fingerprint (`CFBundleShortVersionString` + `CFBundleVersion`) with last successful helper-repair fingerprint stored in `UserDefaults`.
 - If fingerprint changed, or no previous fingerprint exists (upgrade from older app versions), app runs automatic full helper repair in background.
-- Successful automatic repair updates stored fingerprint and remains visible only in logs.
+- Successful automatic repair updates stored fingerprint, remains visible in logs, and shows a short in-app toast at the bottom of the main window.
 - Failed automatic repair presents one warning `NSAlert` with guidance to run `Tools → Repair helper` manually.
 
 ### Hard-Repair Flow
 - Triggered from Tools menu repair action.
 - Full reset sequence: unregister, stabilization delay, teardown validation, register, health-check.
+- `register`/`unregister` remain `SMAppService` lifecycle operations; trust verification is confirmed by the XPC health-check after registration.
 - Includes bounded retry/backoff for transient registration/health race conditions.
 - Produces detailed progress logs for diagnostics.
 - UI surface uses `NSAlert`:
@@ -172,8 +177,10 @@ App-side helper integration:
 
 - `macUSB/Shared/Services/Helper/HelperIPC.swift`
   - app-side IPC contracts and compatibility decode logic.
+- `macUSB/Shared/Services/Helper/HelperConnectionSecurityPolicy.swift`
+  - app-side helper code-signing requirement, trust-failure diagnostics, and user-facing trust-failure text.
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift`
-  - XPC connection handling and app-facing helper calls.
+  - XPC connection handling, app-side helper trust requirement setup, and app-facing helper calls.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift`
   - central state/facade for helper lifecycle.
 - `macUSB/Shared/Services/Helper/HelperService/HelperServiceBootstrap.swift`
@@ -194,7 +201,9 @@ App-side helper integration:
 Daemon helper runtime:
 
 - `macUSBHelper/main.swift`
-  - listener bootstrap entry only.
+  - listener bootstrap entry only, including listener-side trust requirement configuration before `resume()`.
+- `macUSBHelper/Security/HelperConnectionSecurityPolicy.swift`
+  - daemon-side trusted-client code-signing requirement and XPC trust logging.
 - `macUSBHelper/IPC/HelperIPC.swift`
   - daemon-side IPC contracts and payload types.
 - `macUSBHelper/Service/PrivilegedHelperService.swift`
@@ -254,6 +263,7 @@ Diagnostics should allow answering:
 - Which phase failed.
 - What status the helper had at that moment.
 - Whether XPC health passed or failed.
+- Whether app-helper code-signing trust validation was configured and whether XPC rejected the connection for a requirement mismatch.
 - Whether recovery was attempted and with what outcome.
 - Whether startup auto-repair was triggered by app fingerprint change or by missing previous fingerprint.
 
@@ -265,6 +275,7 @@ Diagnostics should allow answering:
 - Runtime helper invariants are identical across build configurations.
 - Any debug convenience path must not alter production helper semantics.
 - DEBUG and Release must use isolated helper identity tuples (`bundle id`, daemon plist name, daemon label, mach service) to avoid BTM/TCC cross-environment collisions.
+- DEBUG and Release also use isolated XPC code-signing requirements matching those identity tuples.
 
 ---
 
