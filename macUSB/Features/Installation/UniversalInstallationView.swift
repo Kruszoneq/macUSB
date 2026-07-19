@@ -16,6 +16,7 @@ struct UniversalInstallationView: View {
     let windowsMountedSourcePath: String?
     let windowsAutounattendMacLocale: CreatorWindowsAutounattendMacLocale?
     let windowsArchitecture: WindowsArchitecture?
+    let windowsBootCapabilities: WindowsBootCapabilities?
     let windowsWillSplitWim: Bool
     
     // Flagi

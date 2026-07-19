@@ -36,6 +36,8 @@ For Windows fallback:
 - fallback entry is limited to `.iso` sources,
 - fallback runs only when macOS installer metadata is not detected from mounted image,
 - Windows detection uses mounted-image metadata only (no weak volume-label fallback),
+- Windows detection independently records case-insensitive BIOS and UEFI marker evidence,
+- detected boot modes are filtered by family/architecture policy and handed to the installation summary as non-rendered future-flow data,
 - recognized Windows result may be marked unsupported by support gate,
 - support gate for current app workflow is:
   - desktop: **Windows family >= 8 AND EFI markers present**,
@@ -77,6 +79,14 @@ Windows fallback routing includes:
   - server: `Server 2003`, `Server 2008 R2`, `Server 2012`, `Server 2012 R2`, `Server 2016`, `Server 2019`, `Server 2022`, `Server 2025`,
 - optional Service Pack extraction when deterministically available (for legacy families),
 - architecture normalization to `32-bit` / `64-bit` / `ARM` / `unknown`,
+- BIOS detection from `bootmgr` + `boot/BCD` + `sources/boot.wim`, with additional diagnostic BIOS markers,
+- UEFI detection from the existing EFI directory/boot-marker rule,
+- eligible boot-mode mapping:
+  - `Vista`, `7`, and `Server 2008 R2`: BIOS,
+  - `8` through `10` and `Server 2012` through `Server 2022`: every detected mode,
+  - `11` and `Server 2025`: UEFI only,
+  - `XP` and `Server 2003`: no eligible modes,
+  - ARM: UEFI only when otherwise eligible for its Windows family,
 - unsupported result for `XP` / `Vista` / `7` regardless of EFI artifacts,
 - unsupported result for `Server 2003` / `Server 2008 R2` regardless of EFI artifacts,
 - unsupported result for any family missing required EFI markers.
@@ -176,6 +186,8 @@ Windows fallback should additionally log:
 - fallback transition from macOS detection to Windows detection,
 - parsed Windows details (`family`, `service_pack`, `arch`, `isARM`),
 - support gate decision (`is_supported`, `support_reason`, `has_efi`),
+- detected and eligible BIOS/UEFI modes after family/architecture qualification,
+- present and missing required marker evidence for both boot modes,
 - evidence summary used for recognition.
 
 ## Update Trigger

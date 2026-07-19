@@ -169,6 +169,8 @@
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerMetadata.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerValidation.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSLifecycle.swift,
+				Features/Analysis/Logic/Windows/AnalysisLogicWindowsBootMarkers.swift,
+				Features/Analysis/Logic/Windows/AnalysisLogicWindowsBootPolicy.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsClassification.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsDetection.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsLifecycle.swift,
@@ -915,7 +917,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -938,7 +940,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.3.1;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -971,7 +973,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -994,7 +996,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.3.1;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

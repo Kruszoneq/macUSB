@@ -28,6 +28,8 @@
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerIcon.swift` — installer icon discovery.
 - `macUSB/Features/Analysis/Logic/AnalysisLogicUsbDrives.swift` — USB drive enumeration/refresh/capacity checks.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSLifecycle.swift` — reset/cleanup/manual Tiger flow helpers.
+- `macUSB/Features/Analysis/Logic/Windows/AnalysisLogicWindowsBootMarkers.swift` — bounded, case-insensitive BIOS/UEFI marker indexing for mounted Windows ISO sources.
+- `macUSB/Features/Analysis/Logic/Windows/AnalysisLogicWindowsBootPolicy.swift` — Windows family/architecture policy that maps detected boot markers to eligible boot modes.
 - `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicLinuxDetection.swift` — Linux fallback entrypoint and result shaping.
 - `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicLinuxMetadata.swift` — bounded Linux metadata reads from mounted ISO/CDR.
 - `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicLinuxClassification.swift` — Linux distro/version/edition classification rules.

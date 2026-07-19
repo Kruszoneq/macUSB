@@ -8,9 +8,14 @@ extension AnalysisLogic {
 
         let arch = normalizeWindowsArchitecture(from: metadata)
         let servicePack = extractWindowsServicePack(family: family, metadata: metadata)
+        let bootCapabilities = qualifyWindowsBootCapabilities(
+            metadata.bootCapabilities,
+            for: family,
+            architecture: arch
+        )
 
         let isFamilySupported = family.supportsWorkflow
-        let hasEFI = metadata.efiStatus.hasEFI
+        let hasEFI = bootCapabilities.hasUEFI
         let isSupported = isFamilySupported && hasEFI
         let supportReason: WindowsSupportReason
         switch (isFamilySupported, hasEFI) {
@@ -49,7 +54,7 @@ extension AnalysisLogic {
             displayName: displayName,
             isSupported: isSupported,
             supportReason: supportReason,
-            efiStatus: metadata.efiStatus,
+            bootCapabilities: bootCapabilities,
             evidence: Array(Set(evidence)).sorted()
         )
     }
@@ -196,7 +201,7 @@ extension AnalysisLogic {
 
     private func normalizeWindowsArchitecture(from metadata: WindowsImageMetadata) -> WindowsArchitecture {
         let buildArch = metadata.buildArchRaw?.lowercased() ?? ""
-        let efiEvidence = metadata.efiStatus.evidence.joined(separator: " ").lowercased()
+        let efiEvidence = metadata.bootCapabilities.uefiPresentMarkers.joined(separator: " ").lowercased()
 
         if buildArch.contains("arm64") || buildArch.contains("aarch64") || efiEvidence.contains("bootaa64") {
             return .arm

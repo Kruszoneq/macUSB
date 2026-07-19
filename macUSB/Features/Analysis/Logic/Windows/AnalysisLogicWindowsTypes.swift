@@ -69,9 +69,37 @@ enum WindowsArchitecture: String {
     case unknown
 }
 
-struct WindowsEFIStatus {
-    let hasEFI: Bool
-    let evidence: [String]
+enum WindowsBootMode: String, CaseIterable, Hashable {
+    case bios = "BIOS"
+    case uefi = "UEFI"
+}
+
+struct WindowsBootCapabilities {
+    let detectedModes: Set<WindowsBootMode>
+    let eligibleModes: Set<WindowsBootMode>
+    let biosPresentMarkers: [String]
+    let biosMissingRequiredMarkers: [String]
+    let uefiPresentMarkers: [String]
+    let uefiMissingRequiredMarkers: [String]
+
+    var hasBIOS: Bool {
+        detectedModes.contains(.bios)
+    }
+
+    var hasUEFI: Bool {
+        detectedModes.contains(.uefi)
+    }
+
+    func withEligibleModes(_ modes: Set<WindowsBootMode>) -> WindowsBootCapabilities {
+        WindowsBootCapabilities(
+            detectedModes: detectedModes,
+            eligibleModes: modes,
+            biosPresentMarkers: biosPresentMarkers,
+            biosMissingRequiredMarkers: biosMissingRequiredMarkers,
+            uefiPresentMarkers: uefiPresentMarkers,
+            uefiMissingRequiredMarkers: uefiMissingRequiredMarkers
+        )
+    }
 }
 
 enum WindowsSupportReason: String {
@@ -89,7 +117,7 @@ struct WindowsDetectionResult {
     let displayName: String
     let isSupported: Bool
     let supportReason: WindowsSupportReason
-    let efiStatus: WindowsEFIStatus
+    let bootCapabilities: WindowsBootCapabilities
     let evidence: [String]
 }
 
@@ -105,7 +133,7 @@ struct WindowsImageMetadata {
     let cversionMinClient: String?
     let cversionMinServer: String?
     let sourceFileName: String
-    let efiStatus: WindowsEFIStatus
+    let bootCapabilities: WindowsBootCapabilities
     let evidence: [String]
 
     var hasInstallImage: Bool {

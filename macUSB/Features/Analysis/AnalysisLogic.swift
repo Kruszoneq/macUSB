@@ -46,6 +46,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var windowsArchitecture: WindowsArchitecture? = nil
     @Published var isWindowsARM: Bool = false
     @Published var windowsHasEFI: Bool = false
+    @Published var windowsBootCapabilities: WindowsBootCapabilities? = nil
     @Published var isWindowsWorkflowSupported: Bool = false
     @Published var windowsWillSplitWIM: Bool = false
     @Published var windowsAutounattendMacLocale: CreatorWindowsAutounattendMacLocale? = nil
