@@ -13,7 +13,12 @@ Finish screen must report:
   - run safe eject for whole-disk target,
   - disable action when target is no longer available,
   - on successful eject, transition to localized success confirmation card,
-  - on eject failure, show localized error card and allow retry.
+  - when standard eject fails and `stderr` identifies `mds_stores`, show a localized orange Spotlight warning card above the eject action and replace the action with force eject,
+  - force eject immediately with `diskutil eject force /dev/diskX`, without an additional confirmation alert,
+  - on successful standard or force eject, transition to the same localized success confirmation card,
+  - on force-eject failure, show a localized error card and allow force-eject retry,
+  - on any other eject failure, show the existing localized generic error card and allow standard retry,
+  - keep raw `stderr` in installation logs only; never expose it in finish-screen UI.
 - debug finish routes keep the eject card visible with a disabled `DEBUG` action.
 
 ## Cleanup Determinism
@@ -32,7 +37,8 @@ Downloader-specific cleanup behavior is detailed in `docs/reference/features/dow
 Cleanup logs should include:
 - requested cleanup scope,
 - cleanup executor (app/helper),
-- result and error details when cleanup fails.
+- result and error details when cleanup fails,
+- finish-eject mode (`standard` or `force`) and Spotlight classification when applicable.
 
 ## Update Trigger
 

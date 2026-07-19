@@ -7504,6 +7504,89 @@
         }
       }
     },
+    "finish.eject.button.force": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auswerfen erzwingen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Force Eject"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forzar expulsión"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forcer l’éjection"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forza espulsione"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "強制的に取り出す"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wymuś wysunięcie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forçar ejeção"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Принудительно извлечь"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zorla Çıkar"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Примусово вийняти"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buộc tháo ổ đĩa"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "强制推出"
+          }
+        }
+      }
+    },
     "finish.eject.card.description": {
       "extractionState": "stale",
       "localizations": {
@@ -7918,6 +8001,172 @@
         }
       }
     },
+    "finish.eject.force.error.description": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS kann den Datenträger weiterhin nicht auswerfen. Schließen Sie Apps, die ihn möglicherweise verwenden, und versuchen Sie es erneut."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS still can’t eject the drive. Close any apps that may be using it, then try again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS sigue sin poder expulsar la unidad. Cierra las apps que puedan estar usándola e inténtalo de nuevo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS ne parvient toujours pas à éjecter le disque. Fermez les apps susceptibles de l’utiliser, puis réessayez."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS non riesce ancora a espellere l’unità. Chiudi le app che potrebbero utilizzarla e riprova."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOSはまだドライブを取り出せません。ドライブを使用している可能性のあるアプリを終了して、もう一度お試しください。"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS nadal nie może wysunąć nośnika. Zamknij aplikacje, które mogą z niego korzystać, i spróbuj ponownie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O macOS ainda não consegue ejetar o dispositivo. Feche os apps que possam estar usando-o e tente novamente."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS по-прежнему не может извлечь накопитель. Закройте приложения, которые могут его использовать, и повторите попытку."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS sürücüyü hâlâ çıkaramıyor. Sürücüyü kullanıyor olabilecek uygulamaları kapatıp tekrar deneyin."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS усе ще не може вийняти накопичувач. Закрийте програми, які можуть його використовувати, і спробуйте ще раз."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS vẫn không thể tháo ổ đĩa. Hãy đóng các ứng dụng có thể đang sử dụng ổ đĩa rồi thử lại."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS 仍无法推出驱动器。请关闭可能正在使用该驱动器的 App，然后重试。"
+          }
+        }
+      }
+    },
+    "finish.eject.force.error.title": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datenträger konnte nicht zwangsweise ausgeworfen werden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unable to force eject the drive"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede forzar la expulsión de la unidad"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de forcer l’éjection du disque"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile forzare l’espulsione dell’unità"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドライブを強制的に取り出せません"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie można wymusić wysunięcia nośnika"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível forçar a ejeção do dispositivo"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удается принудительно извлечь накопитель"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sürücü zorla çıkarılamıyor"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не вдається примусово вийняти накопичувач"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không thể buộc tháo ổ đĩa"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法强制推出驱动器"
+          }
+        }
+      }
+    },
     "Nie można zweryfikować helpera macUSB": {
       "localizations": {
         "de": {
@@ -7996,6 +8245,172 @@
           "stringUnit": {
             "state": "translated",
             "value": "macUSB 无法验证辅助工具"
+          }
+        }
+      }
+    },
+    "finish.eject.spotlight.warning.description": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight indiziert diesen Datenträger, deshalb kann macOS ihn nicht sicher auswerfen. Sie können das Auswerfen erzwingen, um diesen Vorgang zu beenden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight is indexing this drive, so macOS can’t eject it safely. You can force eject the drive to stop this process."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight está indexando esta unidad, por lo que macOS no puede expulsarla de forma segura. Puedes forzar la expulsión para interrumpir este proceso."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight indexe ce disque, macOS ne peut donc pas l’éjecter en toute sécurité. Vous pouvez forcer l’éjection pour interrompre ce processus."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight sta indicizzando questa unità, quindi macOS non può espellerla in modo sicuro. Puoi forzare l’espulsione per interrompere questo processo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlightがこのドライブの索引を作成中のため、macOSはドライブを安全に取り出せません。強制的に取り出すと、この処理を中断できます。"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight indeksuje ten nośnik, dlatego macOS nie może go bezpiecznie wysunąć. Możesz wymusić wysunięcie, aby przerwać ten proces."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Spotlight está indexando este dispositivo, por isso o macOS não pode ejetá-lo com segurança. Você pode forçar a ejeção para interromper esse processo."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight индексирует этот накопитель, поэтому macOS не может безопасно извлечь его. Можно выполнить принудительное извлечение, чтобы прервать этот процесс."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight bu sürücüyü dizinliyor, bu nedenle macOS sürücüyü güvenli bir şekilde çıkaramıyor. Bu işlemi durdurmak için sürücüyü zorla çıkarabilirsiniz."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight індексує цей накопичувач, тому macOS не може безпечно його вийняти. Можна примусово вийняти накопичувач, щоб перервати цей процес."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight đang lập chỉ mục ổ đĩa này nên macOS không thể tháo ổ đĩa một cách an toàn. Bạn có thể buộc tháo ổ đĩa để dừng quá trình này."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“聚焦”正在索引此驱动器，因此 macOS 无法安全推出它。你可以强制推出驱动器以中断此过程。"
+          }
+        }
+      }
+    },
+    "finish.eject.spotlight.warning.title": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight verhindert das Auswerfen des Datenträgers"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight is preventing ejection"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight impide expulsar la unidad"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight empêche l’éjection du disque"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight impedisce di espellere l’unità"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlightのためドライブを取り出せません"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight uniemożliwia wysunięcie nośnika"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Spotlight está impedindo a ejeção do dispositivo"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight препятствует извлечению накопителя"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight sürücünün çıkarılmasını engelliyor"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight перешкоджає вийманню накопичувача"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spotlight đang ngăn không cho tháo ổ đĩa"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“聚焦”导致无法推出驱动器"
           }
         }
       }
