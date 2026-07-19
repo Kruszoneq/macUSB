@@ -14298,6 +14298,252 @@
         }
       }
     },
+    "installation.summary.windows.bios_only.body": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses USB-Medium wird ausschließlich für den Start im Legacy-BIOS-Modus vorbereitet. Der UEFI-Start wird nicht unterstützt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This USB media will be prepared for Legacy BIOS boot only. UEFI boot is not supported."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este medio USB se preparará solo para arrancar en modo BIOS heredado. El arranque UEFI no es compatible."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce support USB sera préparé uniquement pour un démarrage en mode BIOS hérité. Le démarrage UEFI n’est pas pris en charge."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo supporto USB verrà preparato esclusivamente per l’avvio in modalità BIOS legacy. L’avvio UEFI non è supportato."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このUSBメディアはLegacy BIOS起動専用として準備されます。UEFI起動には対応していません。"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ten nośnik USB zostanie przygotowany wyłącznie do uruchamiania w trybie Legacy BIOS. Uruchamianie w trybie UEFI nie jest obsługiwane."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta mídia USB será preparada apenas para inicialização no modo BIOS legado. A inicialização UEFI não é compatível."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Этот USB-носитель будет подготовлен только для загрузки в режиме Legacy BIOS. Загрузка в режиме UEFI не поддерживается."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu USB ortamı yalnızca Legacy BIOS modunda önyükleme için hazırlanacaktır. UEFI önyükleme desteklenmez."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цей USB-носій буде підготовлено лише для завантаження в режимі Legacy BIOS. Завантаження в режимі UEFI не підтримується."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phương tiện USB này sẽ chỉ được chuẩn bị để khởi động ở chế độ Legacy BIOS. Khởi động UEFI không được hỗ trợ."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此 USB 介质将仅用于 Legacy BIOS 模式启动。不支持 UEFI 启动。"
+          }
+        }
+      }
+    },
+    "installation.summary.windows.bios_only.title": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BIOS-kompatibles Medium"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BIOS-Compatible Media"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medio compatible con BIOS"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support compatible avec le BIOS"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supporto compatibile con BIOS"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BIOS対応メディア"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nośnik zgodny z BIOS"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mídia compatível com BIOS"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Носитель с поддержкой BIOS"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BIOS uyumlu ortam"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Носій із підтримкою BIOS"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phương tiện tương thích BIOS"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "兼容 BIOS 的介质"
+          }
+        }
+      }
+    },
+    "installation.summary.windows.boot_mode.body": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle einen Startmodus, den der Computer unterstützt, auf dem Windows installiert wird"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a boot mode supported by the computer where Windows will be installed"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un modo de arranque compatible con el ordenador en el que se instalará Windows"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez un mode de démarrage pris en charge par l’ordinateur sur lequel Windows sera installé"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli una modalità di avvio supportata dal computer su cui verrà installato Windows"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windowsのインストール先となるコンピュータが対応している起動モードを選択してください"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wybierz tryb uruchamiania obsługiwany przez komputer, na którym będzie instalowany Windows"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha um modo de inicialização compatível com o computador no qual o Windows será instalado"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите режим загрузки, поддерживаемый компьютером, на который будет установлена Windows"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows’un yükleneceği bilgisayar tarafından desteklenen bir önyükleme modu seçin"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Виберіть режим завантаження, який підтримує комп’ютер, на якому буде інстальовано Windows"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chọn chế độ khởi động tương thích với máy tính mà Windows sẽ được cài đặt trên đó"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择 Windows 将安装到的电脑所支持的启动模式"
+          }
+        }
+      }
+    },
     "installation.summary.windows.uefi_only.body": {
       "localizations": {
         "de": {

@@ -42,10 +42,13 @@ Linux summary screen (`UniversalInstallationView`) should show an informational 
 - card uses accent tone (`.active`) with SF Symbol `info.circle.fill`,
 - copy explains that macOS may show an unreadable-disk dialog and user should choose `Ignore`.
 
-Windows summary screen (`UniversalInstallationView`) should show an informational card before the process-stages section:
-- card is visible only for Windows workflow,
-- card uses accent tone (`.active`) with SF Symbol `info.circle.fill`,
-- copy clearly states that prepared media is UEFI-only and that Legacy BIOS boot is not supported.
+Windows summary screen (`UniversalInstallationView`) shows boot-mode information before the process-stages section:
+- all variants use an accent card (`.active`) with SF Symbol `info.circle.fill`,
+- `Vista`, `7`, and `Server 2008 R2` show a BIOS-only informational card,
+- `8` through `10` and `Server 2012` through `Server 2022` show a segmented BIOS/UEFI control driven by analyzed eligible modes,
+- dual-mode selection defaults to UEFI; a single eligible mode remains selected in a disabled control,
+- `11` and `Server 2025` retain the UEFI-only informational card,
+- the selected mode is session-only and logged; it is not included in helper/XPC payloads.
 
 Windows automatic configuration card:
 - card is visible only for recognized desktop Windows 10 64-bit and Windows 11 images; Windows 10 32-bit, Windows 10 ARM, and Windows Server do not show this card,
@@ -61,6 +64,7 @@ Windows automatic configuration card:
 - choosing the macUSB file sends the autounattend payload and helper writes the answer file after media copy and optional WIM split, before media verification.
 
 Windows summary pre-start prerequisites:
+- BIOS selection blocks start before the destructive confirmation because macUSBoot installation is not implemented yet; the summary does not display a separate explanation for this temporary block.
 - if Windows workflow requires `install.wim` split and `wimlib-imagex` is not detected, start action is blocked before workflow start.
 - in blocked state, summary keeps a divider with warning label and replaces process/time cards with an orange prerequisites card.
 - prerequisites card includes:
@@ -77,6 +81,7 @@ Windows summary pre-start prerequisites:
 - Stage progression shown in UI must remain deterministic.
 - Linux raw-copy must target whole-disk device, never a partition node.
 - Windows workflow must copy installer files 1:1 from ISO payload (no UEFI fallback file synthesis).
+- Windows helper stages remain unchanged and do not install macUSBoot; BIOS selection cannot start the helper workflow in this iteration.
 - Windows automatic configuration may add or replace only the Windows answer-file location selected by the generated passes, when explicitly enabled by the user. If the generated XML contains `windowsPE`, helper writes root-level `Autounattend.xml`; otherwise it writes `sources/$OEM$/$$/Panther/unattend.xml` so Windows Setup copies it to `%WINDIR%/Panther/unattend.xml` for later passes. The `windowsPE` pass is generated for options that require Windows PE setup data, such as the Windows 11 hardware-requirements bypass. Windows 10 64-bit automatic configuration does not generate the TPM 2.0/Secure Boot/RAM bypass. When automatic BitLocker device-encryption prevention is enabled, macUSB writes a `specialize` pass command that sets `HKLM\SYSTEM\CurrentControlSet\Control\BitLocker\PreventDeviceEncryption` to `1`.
 - Windows automatic configuration may set `Microsoft-Windows-International-Core` language, input, system locale, and user locale values in `oobeSystem` when Mac language/region transfer is enabled.
 - Windows automatic configuration may set `OOBE/ProtectYourPC` to `3` when privacy data-collection opt-out is enabled.
@@ -98,6 +103,8 @@ Creation workflow logs should include:
 - helper progress mapping,
 - cancellation/failure shaping,
 - critical command outcomes used for diagnosis.
+
+Windows summary logs additionally include boot-mode initialization, user selection changes, and attempts blocked for BIOS before destructive confirmation.
 
 Linux workflow logs should additionally include:
 - source image path and size,

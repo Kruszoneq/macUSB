@@ -77,24 +77,25 @@ Detected modes are filtered into eligible modes by family and architecture:
 - ARM images retain UEFI eligibility and never receive BIOS eligibility,
 - unknown architecture does not block BIOS eligibility.
 
-The resolved boot capabilities, including detected modes, eligible modes, and marker evidence, are retained in analysis state and handed to the installation summary for future boot-mode selection. The summary does not render or use this information yet.
+The resolved boot capabilities, including detected modes, eligible modes, and marker evidence, are retained in analysis state and handed to the installation summary together with the detected family. The summary uses this data to render the applicable BIOS/UEFI presentation and initialize the selected boot mode.
 
 ## Current Workflow Support Gate
 
-For this app iteration, a detected Windows image is treated as workflow-supported only when both are true:
+For this app iteration, a detected Windows image can proceed to the installation summary when its family is supported and qualification produces at least one eligible boot mode.
 
-- detected family is one of:
-  - desktop: `8`, `8.1`, `10`, `11`,
-  - server: `Server 2012`, `Server 2012 R2`, `Server 2016`, `Server 2019`, `Server 2022`, `Server 2025`,
-- required UEFI markers are detected.
+Supported summary families and requirements:
+
+- `Vista`, `7`, and `Server 2008 R2`: detected BIOS,
+- `8`, `8.1`, `10`, and `Server 2012` through `Server 2022`: detected BIOS or UEFI,
+- `11` and `Server 2025`: detected UEFI.
 
 Unsupported policy:
 
-- `XP`, `Vista`, `7` are always unsupported even if EFI artifacts exist.
-- `Server 2003` and `Server 2008 R2` are always unsupported even if EFI artifacts exist.
+- `XP` and `Server 2003` are always unsupported.
+- a supported family with no eligible boot mode is unsupported,
+- `Vista`, `7`, and `Server 2008 R2` remain unsupported when BIOS is not detected,
+- `11` and `Server 2025` remain unsupported when UEFI is not detected,
 - ARM images follow the same family support gate and remain UEFI-only.
-- desktop `8+` without required EFI markers is unsupported.
-- server `2012+` without required EFI markers is unsupported.
 
 ## Classification Rules
 
@@ -162,10 +163,12 @@ Current workflow gating:
 - proceed to installation is enabled for supported Windows images,
 - unsupported Windows detection follows unsupported presentation path,
 - supported ARM detection follows the existing UEFI workflow,
-- boot capabilities are passed to the summary only as non-rendered handoff data,
-- unsupported requirement info message is family-aware:
-  - desktop uses `Windows 8 + EFI` requirement wording,
-  - server uses `Windows Server 2012 + EFI` requirement wording.
+- boot capabilities and detected family are passed to the summary as rendered handoff data,
+- `8` through `10` and `Server 2012` through `Server 2022` show a segmented BIOS/UEFI control; dual-mode defaults to UEFI and single-mode locks the control to its only eligible mode,
+- `Vista`, `7`, and `Server 2008 R2` show a BIOS-only informational card,
+- `11` and `Server 2025` retain the UEFI-only informational card,
+- the selected boot mode is session-only and logged in the installation summary,
+- selecting or receiving BIOS blocks workflow start before destructive confirmation until macUSBoot integration is implemented; no helper/XPC payload is changed in this iteration,
 - analysis also computes Windows toolchain probe (`brew`, `wimlib-imagex`) for installation-summary pre-start gating.
 - when Windows summary expects `install.wim` split and `wimlib-imagex` is missing, start is blocked in summary until probe refresh confirms `wimlib-imagex` presence.
 
@@ -183,7 +186,7 @@ When Windows fallback runs, logs include:
 
 - transition entry from macOS detection to Windows detection,
 - parsed details (`family`, `service_pack`, `arch`, `isARM`),
-- support gate summary (`is_supported`, `support_reason`, `has_efi`),
+- support gate summary (`is_supported`, `support_reason`, eligible-mode presence, `has_efi`),
 - final boot capability summary (`detected`, `eligible`, family, architecture, workflow support),
 - present and missing required BIOS/UEFI marker evidence,
 - evidence list used for classification.

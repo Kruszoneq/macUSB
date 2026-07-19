@@ -117,7 +117,9 @@ extension AnalysisLogic {
         }
 
         self.log("Rozpoznano obraz Windows: \(result.displayName)")
-        self.log("Windows support gate: supported=\(result.isSupported ? "TAK" : "NIE"), reason=\(result.supportReason.rawValue), hasEFI=\(result.bootCapabilities.hasUEFI ? "TAK" : "NIE")")
+        self.log(
+            "Windows support gate: supported=\(result.isSupported ? "TAK" : "NIE"), reason=\(result.supportReason.rawValue), has_eligible_boot_mode=\(result.bootCapabilities.eligibleModes.isEmpty ? "NIE" : "TAK"), hasEFI=\(result.bootCapabilities.hasUEFI ? "TAK" : "NIE")"
+        )
         self.log("Windows workflow flag: isWindowsWorkflowSupported=\(self.isWindowsWorkflowSupported ? "TAK" : "NIE")")
         self.log("Windows workflow split-wim flag: \(self.windowsWillSplitWIM ? "TAK" : "NIE")")
         self.log("Windows source file: \(sourceURL.path)")

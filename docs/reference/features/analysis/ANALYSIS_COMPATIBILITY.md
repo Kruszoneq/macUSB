@@ -37,11 +37,13 @@ For Windows fallback:
 - fallback runs only when macOS installer metadata is not detected from mounted image,
 - Windows detection uses mounted-image metadata only (no weak volume-label fallback),
 - Windows detection independently records case-insensitive BIOS and UEFI marker evidence,
-- detected boot modes are filtered by family/architecture policy and handed to the installation summary as non-rendered future-flow data,
+- detected boot modes are filtered by family/architecture policy and handed to the installation summary together with the detected family,
 - recognized Windows result may be marked unsupported by support gate,
-- support gate for current app workflow is:
-  - desktop: **Windows family >= 8 AND EFI markers present**,
-  - server: **Windows Server family >= 2012 AND EFI markers present**,
+- current summary-handoff support gate requires at least one eligible mode for a supported family:
+  - `Vista`, `7`, `Server 2008 R2`: BIOS,
+  - `8` through `10`, `Server 2012` through `Server 2022`: BIOS or UEFI,
+  - `11`, `Server 2025`: UEFI,
+  - `XP`, `Server 2003`: unsupported,
 
 For Linux fallback:
 
@@ -87,12 +89,14 @@ Windows fallback routing includes:
   - `11` and `Server 2025`: UEFI only,
   - `XP` and `Server 2003`: no eligible modes,
   - ARM: UEFI only when otherwise eligible for its Windows family,
-- unsupported result for `XP` / `Vista` / `7` regardless of EFI artifacts,
-- unsupported result for `Server 2003` / `Server 2008 R2` regardless of EFI artifacts,
-- unsupported result for any family missing required EFI markers.
-- unsupported requirement info message is family-aware:
-  - desktop variant: `Windows 8 + EFI`,
-  - server variant: `Windows Server 2012 + EFI`.
+- unsupported result for `XP` and `Server 2003`,
+- unsupported result for any otherwise supported family with no eligible boot mode,
+- summary boot-mode presentation and pre-start behavior:
+  - `Vista`, `7`, and `Server 2008 R2`: BIOS-only informational card,
+  - `8` through `10` and `Server 2012` through `Server 2022`: segmented BIOS/UEFI control driven by eligible modes; UEFI is the dual-mode default and a single eligible mode locks the control,
+  - `11` and `Server 2025`: existing UEFI-only informational card,
+  - BIOS selection is logged and blocks start before destructive confirmation until macUSBoot integration is implemented,
+  - no selected boot mode is sent through helper/XPC in this iteration.
 
 ## Special Blocking Rule
 

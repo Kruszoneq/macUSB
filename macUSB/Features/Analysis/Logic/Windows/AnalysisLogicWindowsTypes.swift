@@ -52,11 +52,11 @@ enum WindowsFamily: String {
 
     var supportsWorkflow: Bool {
         switch self {
-        case .eight, .eightOne, .ten, .eleven:
+        case .vista, .seven, .eight, .eightOne, .ten, .eleven:
             return true
-        case .server2012, .server2012R2, .server2016, .server2019, .server2022, .server2025:
+        case .server2008R2, .server2012, .server2012R2, .server2016, .server2019, .server2022, .server2025:
             return true
-        case .xp, .vista, .seven, .server2003, .server2008R2:
+        case .xp, .server2003:
             return false
         }
     }
@@ -105,8 +105,8 @@ struct WindowsBootCapabilities {
 enum WindowsSupportReason: String {
     case supported
     case unsupportedFamily
-    case missingEFI
-    case unsupportedFamilyAndMissingEFI
+    case missingEligibleBootMode
+    case unsupportedFamilyAndMissingEligibleBootMode
 }
 
 struct WindowsDetectionResult {

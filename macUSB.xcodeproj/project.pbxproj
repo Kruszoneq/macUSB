@@ -228,6 +228,7 @@
 				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendOptionsSheetView.swift,
 				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendSourceInspection.swift,
 				Features/Installation/Windows/CreationProgressWindowsMapping.swift,
+				Features/Installation/Windows/CreatorWindowsBootModeCardView.swift,
 				Features/Installation/Windows/CreatorWindowsHelperLogic.swift,
 				Features/Installation/Windows/CreatorWindowsLabelLogic.swift,
 				Features/Installation/Windows/CreatorWindowsPrerequisiteCardView.swift,

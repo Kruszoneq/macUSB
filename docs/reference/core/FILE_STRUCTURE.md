@@ -49,6 +49,7 @@
 - `macUSB/Features/Installation/Linux/CreatorLinuxHelperLogic.swift` — Linux helper request construction and start routing.
 - `macUSB/Features/Installation/Linux/CreationProgressLinuxMapping.swift` — Linux stage mapping for shared progress UI.
 - `macUSB/Features/Installation/Windows/CreatorWindowsLabelLogic.swift` — Windows target volume-label mapping policy.
+- `macUSB/Features/Installation/Windows/CreatorWindowsBootModeCardView.swift` — Windows summary BIOS/UEFI presentation, session selection, logging, and temporary BIOS start gate.
 - `macUSB/Features/Installation/Windows/CreatorWindowsHelperLogic.swift` — Windows helper request construction and workflow start routing.
 - `macUSB/Features/Installation/Windows/CreatorWindowsUnmountRecoveryLogic.swift` — Windows unmount-busy prompt/retry recovery flow.
 - `macUSB/Features/Installation/Windows/CreationProgressWindowsMapping.swift` — Windows stage mapping for shared progress UI.

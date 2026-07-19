@@ -15,14 +15,14 @@ extension AnalysisLogic {
         )
 
         let isFamilySupported = family.supportsWorkflow
-        let hasEFI = bootCapabilities.hasUEFI
-        let isSupported = isFamilySupported && hasEFI
+        let hasEligibleBootMode = !bootCapabilities.eligibleModes.isEmpty
+        let isSupported = isFamilySupported && hasEligibleBootMode
         let supportReason: WindowsSupportReason
-        switch (isFamilySupported, hasEFI) {
+        switch (isFamilySupported, hasEligibleBootMode) {
         case (true, true): supportReason = .supported
         case (false, true): supportReason = .unsupportedFamily
-        case (true, false): supportReason = .missingEFI
-        case (false, false): supportReason = .unsupportedFamilyAndMissingEFI
+        case (true, false): supportReason = .missingEligibleBootMode
+        case (false, false): supportReason = .unsupportedFamilyAndMissingEligibleBootMode
         }
 
         var displayName = "\(family.displayPrefix) \(family.displayVersionLabel)"

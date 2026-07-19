@@ -4,6 +4,14 @@ import AppKit
 // Shared installation utilities used by the helper-only flow
 extension UniversalInstallationView {
     func showStartCreationAlert() {
+        guard !windowsBIOSSelectionShouldBlockStart else {
+            log(
+                "WindowsBootMode: zablokowano rozpoczęcie dla trybu BIOS (macUSBoot nie jest jeszcze dostępny)",
+                category: "WindowsInstallFlow"
+            )
+            return
+        }
+
         guard resolveWindowsAutounattendStartReadiness() else { return }
 
         resolveWindowsAutounattendExistingFileIfNeeded { shouldContinue in
