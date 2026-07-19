@@ -42,6 +42,17 @@
 		B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */ = {isa = PBXBuildFile; fileRef = B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */; };
 		C10000012F00000100000001 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */; };
 		D10000012F00000100000001 /* macUSB/Resources/Icons/Linux/Distros in Resources */ = {isa = PBXBuildFile; fileRef = D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */; };
+		E10000012F00000100000001 /* macUSB/Resources/Bootloaders/macUSBoot in Resources */ = {isa = PBXBuildFile; fileRef = E10000012F00000100000002 /* macUSB/Resources/Bootloaders/macUSBoot */; };
+		F10000012F00000100000001 /* Service/PrivilegedHelperServiceCapabilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F00000100000011 /* Service/PrivilegedHelperServiceCapabilities.swift */; };
+		F10000012F00000100000002 /* Workflow/Windows/HelperWorkflowWindowsBootValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F00000100000012 /* Workflow/Windows/HelperWorkflowWindowsBootValidation.swift */; };
+		F10000012F00000100000003 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F00000100000013 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootTypes.swift */; };
+		F10000012F00000100000004 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootArtifact.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F00000100000014 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootArtifact.swift */; };
+		F10000012F00000100000005 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootRawDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F00000100000015 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootRawDevice.swift */; };
+		F10000012F00000100000006 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootLayoutValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F00000100000016 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootLayoutValidator.swift */; };
+		F10000012F00000100000007 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F00000100000017 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootTransaction.swift */; };
+		F10000012F00000100000008 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootMountGuard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F00000100000018 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootMountGuard.swift */; };
+		F10000012F00000100000009 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F00000100000019 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift */; };
+		F10000012F0000010000000A /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F0000010000001A /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +146,17 @@
 		B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = macUSB/Resources/Sounds/burn_complete.aif; sourceTree = "<group>"; };
 		C10000012F00000100000002 /* ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift; sourceTree = "<group>"; };
 		D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */ = {isa = PBXFileReference; lastKnownFileType = folder; path = macUSB/Resources/Icons/Linux/Distros; sourceTree = "<group>"; };
+		E10000012F00000100000002 /* macUSB/Resources/Bootloaders/macUSBoot */ = {isa = PBXFileReference; lastKnownFileType = folder; path = macUSB/Resources/Bootloaders/macUSBoot; sourceTree = "<group>"; };
+		F10000012F00000100000011 /* Service/PrivilegedHelperServiceCapabilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service/PrivilegedHelperServiceCapabilities.swift; sourceTree = "<group>"; };
+		F10000012F00000100000012 /* Workflow/Windows/HelperWorkflowWindowsBootValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsBootValidation.swift; sourceTree = "<group>"; };
+		F10000012F00000100000013 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootTypes.swift; sourceTree = "<group>"; };
+		F10000012F00000100000014 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootArtifact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootArtifact.swift; sourceTree = "<group>"; };
+		F10000012F00000100000015 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootRawDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootRawDevice.swift; sourceTree = "<group>"; };
+		F10000012F00000100000016 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootLayoutValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootLayoutValidator.swift; sourceTree = "<group>"; };
+		F10000012F00000100000017 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootTransaction.swift; sourceTree = "<group>"; };
+		F10000012F00000100000018 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootMountGuard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootMountGuard.swift; sourceTree = "<group>"; };
+		F10000012F00000100000019 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift; sourceTree = "<group>"; };
+		F10000012F0000010000001A /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -169,6 +191,8 @@
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerMetadata.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerValidation.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSLifecycle.swift,
+				Features/Analysis/Logic/Windows/AnalysisLogicWindowsBootMarkers.swift,
+				Features/Analysis/Logic/Windows/AnalysisLogicWindowsBootPolicy.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsClassification.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsDetection.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsLifecycle.swift,
@@ -226,8 +250,11 @@
 				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendOptionsSheetView.swift,
 				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendSourceInspection.swift,
 				Features/Installation/Windows/CreationProgressWindowsMapping.swift,
+				Features/Installation/Windows/CreatorWindowsBootModeCardView.swift,
 				Features/Installation/Windows/CreatorWindowsHelperLogic.swift,
 				Features/Installation/Windows/CreatorWindowsLabelLogic.swift,
+				Features/Installation/Windows/CreatorWindowsMacUSBootErrorLogic.swift,
+				Features/Installation/Windows/CreatorWindowsMacUSBootPreflightLogic.swift,
 				Features/Installation/Windows/CreatorWindowsPrerequisiteCardView.swift,
 				Features/Installation/Windows/CreatorWindowsPrerequisiteGateLogic.swift,
 				Features/Installation/Windows/CreatorWindowsUnmountRecoveryLogic.swift,
@@ -268,6 +295,7 @@
 				Shared/Services/Helper/HelperService/HelperServiceStatusUI.swift,
 				Shared/Services/Helper/HelperServiceManager.swift,
 				Shared/Services/Helper/PrivilegedOperationClient.swift,
+				Shared/Services/Helper/PrivilegedOperationClientCapabilities.swift,
 				Shared/Services/InstallerSourceImageUnmountRegistry.swift,
 				Shared/Services/LanguageManager.swift,
 				Shared/Services/Logging.swift,
@@ -340,6 +368,8 @@
 				Features/Installation/Windows/CreationProgressWindowsMapping.swift,
 				Features/Installation/Windows/CreatorWindowsHelperLogic.swift,
 				Features/Installation/Windows/CreatorWindowsLabelLogic.swift,
+				Features/Installation/Windows/CreatorWindowsMacUSBootErrorLogic.swift,
+				Features/Installation/Windows/CreatorWindowsMacUSBootPreflightLogic.swift,
 				Features/Installation/Windows/CreatorWindowsPrerequisiteCardView.swift,
 				Features/Installation/Windows/CreatorWindowsPrerequisiteGateLogic.swift,
 				Features/Installation/Windows/CreatorWindowsUnmountRecoveryLogic.swift,
@@ -361,6 +391,7 @@
 				Shared/Services/Helper/HelperService/HelperServiceStatusUI.swift,
 				Shared/Services/Helper/HelperServiceManager.swift,
 				Shared/Services/Helper/PrivilegedOperationClient.swift,
+				Shared/Services/Helper/PrivilegedOperationClientCapabilities.swift,
 				Shared/Services/InstallerSourceImageUnmountRegistry.swift,
 				Shared/Services/LanguageManager.swift,
 				Shared/Services/Logging.swift,
@@ -468,6 +499,7 @@
 				A10000012F00000100000042 /* macUSB/Resources/LaunchDaemons/com.kruszoneq.macusb.helper.debug.plist */,
 				B10000012F00000100000002 /* macUSB/Resources/Sounds/burn_complete.aif */,
 				D10000012F00000100000002 /* macUSB/Resources/Icons/Linux/Distros */,
+				E10000012F00000100000002 /* macUSB/Resources/Bootloaders/macUSBoot */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -479,6 +511,7 @@
 				A10000012F0000010000005B /* Security/HelperConnectionSecurityPolicy.swift */,
 				A10000012F00000100000021 /* IPC/HelperIPC.swift */,
 				A10000012F00000100000022 /* Service/PrivilegedHelperService.swift */,
+				F10000012F00000100000011 /* Service/PrivilegedHelperServiceCapabilities.swift */,
 				A10000012F00000100000023 /* Service/HelperListenerDelegate.swift */,
 				A10000012F00000100000024 /* Workflow/HelperWorkflowExecutor.swift */,
 				A10000012F00000100000025 /* Workflow/HelperWorkflowStages.swift */,
@@ -497,6 +530,15 @@
 				A10000012F00000100000050 /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift */,
 				A10000012F00000100000052 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift */,
 				A10000012F00000100000054 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift */,
+				F10000012F00000100000012 /* Workflow/Windows/HelperWorkflowWindowsBootValidation.swift */,
+				F10000012F00000100000013 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootTypes.swift */,
+				F10000012F00000100000014 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootArtifact.swift */,
+				F10000012F00000100000015 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootRawDevice.swift */,
+				F10000012F00000100000016 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootLayoutValidator.swift */,
+				F10000012F00000100000017 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootTransaction.swift */,
+				F10000012F00000100000018 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootMountGuard.swift */,
+				F10000012F00000100000019 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift */,
+				F10000012F0000010000001A /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift */,
 				A10000012F00000100000056 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendConfiguration.swift */,
 				A10000012F00000100000058 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendGenerator.swift */,
 				A10000012F0000010000005A /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendValidation.swift */,
@@ -665,6 +707,7 @@
 				0F0460D42EF45FFC00C6F937 /* version.json in Resources */,
 				B10000012F00000100000001 /* macUSB/Resources/Sounds/burn_complete.aif in Resources */,
 				D10000012F00000100000001 /* macUSB/Resources/Icons/Linux/Distros in Resources */,
+				E10000012F00000100000001 /* macUSB/Resources/Bootloaders/macUSBoot in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -723,6 +766,7 @@
 				A10000012F0000010000005C /* Security/HelperConnectionSecurityPolicy.swift in Sources */,
 				A10000012F00000100000031 /* IPC/HelperIPC.swift in Sources */,
 				A10000012F00000100000032 /* Service/PrivilegedHelperService.swift in Sources */,
+				F10000012F00000100000001 /* Service/PrivilegedHelperServiceCapabilities.swift in Sources */,
 				A10000012F00000100000033 /* Service/HelperListenerDelegate.swift in Sources */,
 				A10000012F00000100000034 /* Workflow/HelperWorkflowExecutor.swift in Sources */,
 				A10000012F00000100000035 /* Workflow/HelperWorkflowStages.swift in Sources */,
@@ -741,6 +785,15 @@
 				A10000012F0000010000004F /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift in Sources */,
 				A10000012F00000100000051 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift in Sources */,
 				A10000012F00000100000053 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift in Sources */,
+				F10000012F00000100000002 /* Workflow/Windows/HelperWorkflowWindowsBootValidation.swift in Sources */,
+				F10000012F00000100000003 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootTypes.swift in Sources */,
+				F10000012F00000100000004 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootArtifact.swift in Sources */,
+				F10000012F00000100000005 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootRawDevice.swift in Sources */,
+				F10000012F00000100000006 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootLayoutValidator.swift in Sources */,
+				F10000012F00000100000007 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootTransaction.swift in Sources */,
+				F10000012F00000100000008 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootMountGuard.swift in Sources */,
+				F10000012F00000100000009 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift in Sources */,
+				F10000012F0000010000000A /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift in Sources */,
 				A10000012F00000100000055 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendConfiguration.swift in Sources */,
 				A10000012F00000100000057 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendGenerator.swift in Sources */,
 				A10000012F00000100000059 /* Workflow/Windows/Autounattend/HelperWorkflowWindowsAutounattendValidation.swift in Sources */,
@@ -915,7 +968,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 37;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -938,7 +991,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.3.1;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -971,7 +1024,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 37;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -994,7 +1047,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.3.1;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

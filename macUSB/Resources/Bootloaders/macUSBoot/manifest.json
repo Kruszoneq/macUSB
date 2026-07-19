@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "productVersion": "1.0",
+  "binaryFileName": "macUSBoot-v1.0.bin",
+  "checksumFileName": "macUSBoot-v1.0.bin.sha256",
+  "container": {
+    "formatVersion": 1,
+    "headerSize": 32,
+    "flags": 0,
+    "size": 3032,
+    "sha256": "729a0852f86a5c7da58dc807f9920159cfc09f97661f0ce4099c80f290253585"
+  },
+  "mbrPayload": {
+    "offset": 32,
+    "size": 440,
+    "sha256": "1eb3bf65781393f8bccbb04c4ad30bb8acc6aed8e3396f150b764e789f816c54"
+  },
+  "stageTwo": {
+    "formatVersion": 1,
+    "headerSize": 16,
+    "entryOffset": 16,
+    "flags": 0,
+    "offset": 472,
+    "size": 2560,
+    "sectorCount": 5,
+    "sha256": "be00204b4c465eb0f09daa7e245cedea741762964e2c9fa20792c19eeb53e11f"
+  }
+}

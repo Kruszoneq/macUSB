@@ -16,6 +16,8 @@ struct UniversalInstallationView: View {
     let windowsMountedSourcePath: String?
     let windowsAutounattendMacLocale: CreatorWindowsAutounattendMacLocale?
     let windowsArchitecture: WindowsArchitecture?
+    let windowsFamily: WindowsFamily?
+    let windowsBootCapabilities: WindowsBootCapabilities?
     let windowsWillSplitWim: Bool
     
     // Flagi
@@ -75,6 +77,9 @@ struct UniversalInstallationView: View {
     @State var windowsPrerequisiteProbeInProgress: Bool = false
     @State var windowsAutounattendConfiguration: CreatorWindowsAutounattendConfiguration = CreatorWindowsAutounattendConfiguration()
     @State var windowsAutounattendOptionsPresented: Bool = false
+    @State var selectedWindowsBootMode: WindowsBootMode? = nil
+    @State var lastLoggedWindowsBootMode: WindowsBootMode? = nil
+    @State var windowsMacUSBootPreflightInProgress: Bool = false
     
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
@@ -130,7 +135,9 @@ struct UniversalInstallationView: View {
         return !windowsAutounattendConfiguration.canStartWorkflow
     }
     private var shouldBlockStartAction: Bool {
-        windowsPrerequisiteShouldBlockStart || windowsAutounattendShouldBlockStart
+        windowsPrerequisiteShouldBlockStart
+            || windowsAutounattendShouldBlockStart
+            || windowsMacUSBootPreflightInProgress
     }
     private var processSectionDivider: some View {
         HStack(spacing: 10) {
@@ -223,24 +230,12 @@ struct UniversalInstallationView: View {
                         .transition(.opacity)
                     }
 
-                    if isWindowsWorkflow {
-                        StatusCard(tone: .active, density: .compact) {
-                            HStack(alignment: .center) {
-                                Image(systemName: "info.circle.fill")
-                                    .font(sectionIconFont)
-                                    .foregroundColor(.accentColor)
-                                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(String(localized: "installation.summary.windows.uefi_only.title"))
-                                        .font(.headline)
-                                        .foregroundColor(.accentColor)
-                                    Text(String(localized: "installation.summary.windows.uefi_only.body"))
-                                        .font(.subheadline)
-                                        .foregroundColor(.accentColor)
-                                }
-                                Spacer()
-                            }
-                        }
+                    if let windowsBootModeCardStyle {
+                        CreatorWindowsBootModeCardView(
+                            style: windowsBootModeCardStyle,
+                            eligibleModes: windowsBootCapabilities?.eligibleModes ?? [],
+                            selectedMode: $selectedWindowsBootMode
+                        )
                         .transition(.opacity)
                     }
 
@@ -321,6 +316,9 @@ struct UniversalInstallationView: View {
                                             Text("installation.summary.process.windows.prepare_source")
                                             Text("installation.summary.process.windows.prepare_target")
                                             Text("installation.summary.process.windows.create_and_verify")
+                                            if resolvedWindowsBootMode == .bios {
+                                                Text("installation.summary.windows.macusboot")
+                                            }
                                         } else if isRestoreLegacy {
                                             Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
                                             Text("• Nośnik USB zostanie sformatowany")
@@ -534,6 +532,7 @@ struct UniversalInstallationView: View {
                     isWindowsWorkflow: isWindowsWorkflow,
                     windowsWillSplitWimExpected: windowsWillSplitWim,
                     windowsWillCreateAutounattendExpected: windowsAutounattendConfiguration.shouldGenerateMacUSBFile,
+                    windowsWillInstallMacUSBootExpected: resolvedWindowsBootMode == .bios,
                     shouldDetachMountPoint: shouldDetachMountPointAfterFinish,
                     targetWholeDiskBSDName: targetWholeDiskBSDNameForFinish,
                     needsPreformat: (targetDrive?.needsFormatting ?? false) && !isPPC,
@@ -543,7 +542,9 @@ struct UniversalInstallationView: View {
                         self.rootIsActive = false
                     },
                     onCancelRequested: showCreationProgressCancelAlert,
-                    canCancelWorkflow: !didCancelCreation && !navigateToFinish,
+                    canCancelWorkflow: !didCancelCreation
+                        && !navigateToFinish
+                        && !isWindowsMacUSBootCancellationBlocked,
                     helperStageTitleKey: $helperStageTitleKey,
                     helperStatusKey: $helperStatusKey,
                     helperCurrentStageKey: $helperCurrentStageKey,
@@ -564,6 +565,7 @@ struct UniversalInstallationView: View {
         )
         .onAppear {
             if isWindowsWorkflow {
+                initializeWindowsBootModeSelectionIfNeeded()
                 loadWindowsAutounattendConfiguration()
                 InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
                     path: sourceAppURL.path,
@@ -593,6 +595,9 @@ struct UniversalInstallationView: View {
             if !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !navigateToCreationProgress {
                 startUSBMonitoring()
             }
+        }
+        .onChange(of: selectedWindowsBootMode) { mode in
+            logWindowsBootModeChangeIfNeeded(mode)
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             refreshRequiredPermissionsState()

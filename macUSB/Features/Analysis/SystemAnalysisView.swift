@@ -27,6 +27,8 @@ struct SystemAnalysisView: View {
     @State private var windowsMountedSourcePathSnapshot: String? = nil
     @State private var windowsAutounattendMacLocaleSnapshot: CreatorWindowsAutounattendMacLocale? = nil
     @State private var windowsArchitectureSnapshot: WindowsArchitecture? = nil
+    @State private var windowsFamilySnapshot: WindowsFamily? = nil
+    @State private var windowsBootCapabilitiesSnapshot: WindowsBootCapabilities? = nil
     @State private var windowsWillSplitWIMSnapshot: Bool = false
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
@@ -192,6 +194,9 @@ struct SystemAnalysisView: View {
         windowsWorkflowSupportedSnapshot = false
         windowsMountedSourcePathSnapshot = nil
         windowsAutounattendMacLocaleSnapshot = nil
+        windowsArchitectureSnapshot = nil
+        windowsFamilySnapshot = nil
+        windowsBootCapabilitiesSnapshot = nil
         windowsWillSplitWIMSnapshot = false
         MenuState.shared.skipAnalysisEnabled = false
         MenuState.shared.skipLinuxManualSelectionEnabled = false
@@ -483,6 +488,8 @@ struct SystemAnalysisView: View {
                         windowsMountedSourcePath: windowsMountedSourcePathSnapshot,
                         windowsAutounattendMacLocale: windowsAutounattendMacLocaleSnapshot,
                         windowsArchitecture: windowsArchitectureSnapshot,
+                        windowsFamily: windowsFamilySnapshot,
+                        windowsBootCapabilities: windowsBootCapabilitiesSnapshot,
                         windowsWillSplitWim: windowsWillSplitWIMSnapshot,
                         needsCodesign: logic.needsCodesign,
                         isLegacySystem: logic.isLegacyDetected,
@@ -546,6 +553,8 @@ struct SystemAnalysisView: View {
         windowsMountedSourcePathSnapshot = logic.mountedDMGPath
         windowsAutounattendMacLocaleSnapshot = logic.windowsAutounattendMacLocale
         windowsArchitectureSnapshot = logic.windowsArchitecture
+        windowsFamilySnapshot = logic.windowsFamily
+        windowsBootCapabilitiesSnapshot = logic.windowsBootCapabilities
         windowsWillSplitWIMSnapshot = logic.windowsWillSplitWIM
         isTabLocked = true
         if logic.isWindowsWorkflowSupported {

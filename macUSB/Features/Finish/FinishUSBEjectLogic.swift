@@ -6,14 +6,16 @@ final class FinishUSBEjectLogic: ObservableObject {
     enum State: Equatable {
         case ready
         case inProgress
+        case forceInProgress
         case ejected
         case unavailable
+        case spotlightBlocked
         case failed
+        case forceFailed
         case debugDisabled
     }
 
     @Published private(set) var state: State = .unavailable
-    @Published private(set) var failureMessage: String?
 
     private let targetWholeDiskBSDName: String?
     private let isDebugMode: Bool
@@ -33,8 +35,6 @@ final class FinishUSBEjectLogic: ObservableObject {
     }
 
     func prepareForPresentation() {
-        failureMessage = nil
-
         if isDebugMode {
             state = .debugDisabled
             return
@@ -64,7 +64,7 @@ final class FinishUSBEjectLogic: ObservableObject {
             return
         }
 
-        guard state != .inProgress else { return }
+        guard state != .inProgress, state != .forceInProgress else { return }
 
         guard let disk = targetWholeDiskBSDName else {
             AppLogging.info("FinishEject: brak identyfikatora whole disk, oznaczam nośnik jako niedostępny.", category: "Installation")
@@ -78,41 +78,44 @@ final class FinishUSBEjectLogic: ObservableObject {
             return
         }
 
-        failureMessage = nil
-        state = .inProgress
+        let shouldForceEject = state == .spotlightBlocked || state == .forceFailed
+        state = shouldForceEject ? .forceInProgress : .inProgress
 
         DispatchQueue.global(qos: .userInitiated).async {
-            let result = Self.executeDiskutilEject(for: disk)
+            let result = Self.executeDiskutilEject(for: disk, force: shouldForceEject)
 
             DispatchQueue.main.async {
                 if result.exitCode == 0 {
-                    AppLogging.info("FinishEject: pomyślnie wysunięto /dev/\(disk).", category: "Installation")
+                    let mode = shouldForceEject ? "force" : "standard"
+                    AppLogging.info("FinishEject: pomyślnie wysunięto /dev/\(disk), tryb=\(mode).", category: "Installation")
                     self.state = .ejected
-                    self.failureMessage = nil
                     return
                 }
 
                 if !self.isDiskAvailable(disk) {
                     AppLogging.info("FinishEject: nośnik /dev/\(disk) został odłączony podczas operacji.", category: "Installation")
                     self.state = .unavailable
-                    self.failureMessage = nil
                     return
                 }
 
                 let stderrText = result.stderr.trimmingCharacters(in: .whitespacesAndNewlines)
-                let fallbackMessage = "Zamknij aplikacje używające nośnika i spróbuj ponownie."
-                let localizedMessage = String(localized: "finish.eject.error.description")
-                let message = stderrText.isEmpty
-                    ? (localizedMessage == "finish.eject.error.description" ? fallbackMessage : localizedMessage)
-                    : stderrText
+                let isSpotlightDissenter = !shouldForceEject
+                    && stderrText.range(of: "mds_stores", options: .caseInsensitive) != nil
+                let mode = shouldForceEject ? "force" : "standard"
+                let classification = isSpotlightDissenter ? "spotlight_mds_stores" : "generic"
 
                 AppLogging.error(
-                    "FinishEject: nie udało się wysunąć /dev/\(disk), kod=\(result.exitCode), stderr=\(stderrText)",
+                    "FinishEject: nie udało się wysunąć /dev/\(disk), tryb=\(mode), klasyfikacja=\(classification), kod=\(result.exitCode), stderr=\(stderrText)",
                     category: "Installation"
                 )
 
-                self.state = .failed
-                self.failureMessage = message
+                if shouldForceEject {
+                    self.state = .forceFailed
+                } else if isSpotlightDissenter {
+                    self.state = .spotlightBlocked
+                } else {
+                    self.state = .failed
+                }
             }
         }
     }
@@ -135,19 +138,17 @@ final class FinishUSBEjectLogic: ObservableObject {
         guard !isDebugMode else { return }
 
         switch state {
-        case .ready, .failed:
+        case .ready, .spotlightBlocked, .failed, .forceFailed:
             guard let disk = targetWholeDiskBSDName else {
                 state = .unavailable
-                failureMessage = nil
                 return
             }
 
             if !isDiskAvailable(disk) {
                 AppLogging.info("FinishEject: wykryto odłączenie nośnika /dev/\(disk), dezaktywuję akcję wysuwania.", category: "Installation")
                 state = .unavailable
-                failureMessage = nil
             }
-        case .inProgress, .ejected, .unavailable, .debugDisabled:
+        case .inProgress, .forceInProgress, .ejected, .unavailable, .debugDisabled:
             break
         }
     }
@@ -157,10 +158,15 @@ final class FinishUSBEjectLogic: ObservableObject {
         return FileManager.default.fileExists(atPath: devicePath)
     }
 
-    nonisolated private static func executeDiskutilEject(for wholeDiskBSDName: String) -> (exitCode: Int32, stderr: String) {
+    nonisolated private static func executeDiskutilEject(
+        for wholeDiskBSDName: String,
+        force: Bool
+    ) -> (exitCode: Int32, stderr: String) {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/sbin/diskutil")
-        process.arguments = ["eject", "/dev/\(wholeDiskBSDName)"]
+        process.arguments = force
+            ? ["eject", "force", "/dev/\(wholeDiskBSDName)"]
+            : ["eject", "/dev/\(wholeDiskBSDName)"]
 
         let stdoutPipe = Pipe()
         let stderrPipe = Pipe()

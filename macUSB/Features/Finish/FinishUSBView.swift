@@ -98,6 +98,11 @@ struct FinishUSBView: View {
         if ejectLogic.state == .debugDisabled {
             return finishEjectText("finish.eject.button.debug", "DEBUG")
         }
+        if ejectLogic.state == .spotlightBlocked
+            || ejectLogic.state == .forceInProgress
+            || ejectLogic.state == .forceFailed {
+            return finishEjectText("finish.eject.button.force", "Wymuś wysunięcie")
+        }
         if ejectLogic.state == .failed {
             return finishEjectText("finish.eject.error.retry", "Spróbuj ponownie")
         }
@@ -105,11 +110,14 @@ struct FinishUSBView: View {
     }
     private var isEjectActionEnabled: Bool {
         switch ejectLogic.state {
-        case .ready, .failed:
+        case .ready, .spotlightBlocked, .failed, .forceFailed:
             return true
-        case .inProgress, .unavailable, .ejected, .debugDisabled:
+        case .inProgress, .forceInProgress, .unavailable, .ejected, .debugDisabled:
             return false
         }
+    }
+    private var isEjectActionInProgress: Bool {
+        ejectLogic.state == .inProgress || ejectLogic.state == .forceInProgress
     }
     private var sectionIconFont: Font { .title3 }
     @ViewBuilder
@@ -434,7 +442,26 @@ struct FinishUSBView: View {
 
         default:
             VStack(spacing: MacUSBDesignTokens.sectionGroupSpacing) {
-                if ejectLogic.state == .failed {
+                if ejectLogic.state == .spotlightBlocked {
+                    StatusCard(tone: .warning, density: .compact) {
+                        HStack(alignment: .center) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .font(sectionIconFont)
+                                .foregroundColor(.orange)
+                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(finishEjectText("finish.eject.spotlight.warning.title", "Spotlight uniemożliwia wysunięcie nośnika"))
+                                    .font(.headline)
+                                    .foregroundColor(.orange)
+                                Text(finishEjectText("finish.eject.spotlight.warning.description", "Spotlight indeksuje ten nośnik, dlatego macOS nie może go bezpiecznie wysunąć. Możesz wymusić wysunięcie, aby przerwać ten proces."))
+                                    .font(.subheadline)
+                                    .foregroundColor(.orange.opacity(0.85))
+                            }
+                            Spacer()
+                        }
+                    }
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+                } else if ejectLogic.state == .failed || ejectLogic.state == .forceFailed {
                     StatusCard(tone: .error, density: .compact) {
                         HStack(alignment: .center) {
                             Image(systemName: "xmark.octagon.fill")
@@ -442,10 +469,18 @@ struct FinishUSBView: View {
                                 .foregroundColor(.red)
                                 .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 3) {
-                                Text(finishEjectText("finish.eject.error.title", "Nie można wysunąć nośnika"))
+                                Text(
+                                    ejectLogic.state == .forceFailed
+                                    ? finishEjectText("finish.eject.force.error.title", "Nie można wymusić wysunięcia nośnika")
+                                    : finishEjectText("finish.eject.error.title", "Nie można wysunąć nośnika")
+                                )
                                     .font(.headline)
                                     .foregroundColor(.red)
-                                Text(ejectLogic.failureMessage ?? finishEjectText("finish.eject.error.description", "Zamknij aplikacje używające nośnika i spróbuj ponownie."))
+                                Text(
+                                    ejectLogic.state == .forceFailed
+                                    ? finishEjectText("finish.eject.force.error.description", "macOS nadal nie może wysunąć nośnika. Zamknij aplikacje, które mogą z niego korzystać, i spróbuj ponownie.")
+                                    : finishEjectText("finish.eject.error.description", "Zamknij aplikacje używające nośnika i spróbuj ponownie.")
+                                )
                                     .font(.subheadline)
                                     .foregroundColor(.red.opacity(0.85))
                             }
@@ -488,7 +523,7 @@ struct FinishUSBView: View {
                         }) {
                             HStack {
                                 Text(ejectActionButtonLabel)
-                                if ejectLogic.state == .inProgress {
+                                if isEjectActionInProgress {
                                     ProgressView()
                                         .controlSize(.small)
                                 } else {

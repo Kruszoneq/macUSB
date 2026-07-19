@@ -36,10 +36,14 @@ For Windows fallback:
 - fallback entry is limited to `.iso` sources,
 - fallback runs only when macOS installer metadata is not detected from mounted image,
 - Windows detection uses mounted-image metadata only (no weak volume-label fallback),
+- Windows detection independently records case-insensitive BIOS and UEFI marker evidence,
+- detected boot modes are filtered by family/architecture policy and handed to the installation summary together with the detected family,
 - recognized Windows result may be marked unsupported by support gate,
-- support gate for current app workflow is:
-  - desktop: **Windows family >= 8 AND EFI markers present**,
-  - server: **Windows Server family >= 2012 AND EFI markers present**,
+- current summary-handoff support gate requires at least one eligible mode for a supported family:
+  - `Vista`, `7`, `Server 2008 R2`: BIOS,
+  - `8` through `10`, `Server 2012` through `Server 2022`: BIOS or UEFI,
+  - `11`, `Server 2025`: UEFI,
+  - `XP`, `Server 2003`: unsupported,
 
 For Linux fallback:
 
@@ -77,12 +81,23 @@ Windows fallback routing includes:
   - server: `Server 2003`, `Server 2008 R2`, `Server 2012`, `Server 2012 R2`, `Server 2016`, `Server 2019`, `Server 2022`, `Server 2025`,
 - optional Service Pack extraction when deterministically available (for legacy families),
 - architecture normalization to `32-bit` / `64-bit` / `ARM` / `unknown`,
-- unsupported result for `XP` / `Vista` / `7` regardless of EFI artifacts,
-- unsupported result for `Server 2003` / `Server 2008 R2` regardless of EFI artifacts,
-- unsupported result for any family missing required EFI markers.
-- unsupported requirement info message is family-aware:
-  - desktop variant: `Windows 8 + EFI`,
-  - server variant: `Windows Server 2012 + EFI`.
+- BIOS detection from `bootmgr` + `boot/BCD` + `sources/boot.wim`, with additional diagnostic BIOS markers,
+- UEFI detection from the existing EFI directory/boot-marker rule,
+- eligible boot-mode mapping:
+  - `Vista`, `7`, and `Server 2008 R2`: BIOS,
+  - `8` through `10` and `Server 2012` through `Server 2022`: every detected mode,
+  - `11` and `Server 2025`: UEFI only,
+  - `XP` and `Server 2003`: no eligible modes,
+  - ARM: UEFI only when otherwise eligible for its Windows family,
+- unsupported result for `XP` and `Server 2003`,
+- unsupported result for any otherwise supported family with no eligible boot mode,
+- summary boot-mode presentation and pre-start behavior:
+  - `Vista`, `7`, and `Server 2008 R2`: BIOS-only informational card,
+  - `8` through `10` and `Server 2012` through `Server 2022`: segmented BIOS/UEFI control driven by eligible modes; UEFI is the dual-mode default and a single eligible mode locks the control,
+  - `11` and `Server 2025`: existing UEFI-only informational card,
+  - selected mode is session-only, logged, and sent through helper/XPC as required `windowsBootMode`,
+  - BIOS selection runs the `windows.macusboot.v1` helper capability preflight before destructive confirmation; one controlled helper reload is attempted when needed, and start remains blocked with repair guidance only if the capability is still unavailable,
+  - UEFI selection uses the existing Windows media-creation path without loading or installing macUSBoot.
 
 ## Special Blocking Rule
 
@@ -176,6 +191,8 @@ Windows fallback should additionally log:
 - fallback transition from macOS detection to Windows detection,
 - parsed Windows details (`family`, `service_pack`, `arch`, `isARM`),
 - support gate decision (`is_supported`, `support_reason`, `has_efi`),
+- detected and eligible BIOS/UEFI modes after family/architecture qualification,
+- present and missing required marker evidence for both boot modes,
 - evidence summary used for recognition.
 
 ## Update Trigger

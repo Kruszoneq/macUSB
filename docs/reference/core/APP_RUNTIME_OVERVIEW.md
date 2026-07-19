@@ -4,11 +4,18 @@ This file defines high-level runtime scope and global contracts.
 
 ## Purpose and Scope
 
-`macUSB` creates bootable macOS/OS X/Mac OS X installer media from `.dmg`, `.iso`, `.cdr`, and `.app` sources.
-Linux `.img` support is an exceptional Tools-menu raw-write path only; it is not part of standard source selection or analysis fallback.
+`macUSB` creates bootable USB media for:
+
+- macOS/OS X/Mac OS X installers from `.dmg`, `.iso`, `.cdr`, and `.app` sources,
+- supported Windows families from original `.iso` images using a boot-mode-aware BIOS or UEFI workflow,
+- recognized Linux `.iso` images using the shared analysis and installation flow.
+
+Linux `.img` support is an exceptional Tools-menu raw-write path only; it is not part of standard source selection or analysis fallback. Modified Windows images are outside the tested workflow contract; source-image selection and provenance remain the user's responsibility.
 
 Primary runtime goals:
+
 - detect installer type/version and route to the correct workflow,
+- resolve supported Windows boot modes and preserve the selected mode through helper execution,
 - safely prepare target USB media,
 - execute privileged operations through helper architecture,
 - keep the user flow guided and non-technical.

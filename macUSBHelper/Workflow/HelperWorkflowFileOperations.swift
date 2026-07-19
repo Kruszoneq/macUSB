@@ -38,6 +38,10 @@ extension HelperWorkflowExecutor {
             try runWindowsVerifyMediaStage(stage)
             return
         }
+        if stage.key == "windows_install_macusboot" {
+            try runWindowsMacUSBootStage(stage)
+            return
+        }
 
         let process = Process()
         if let requesterUID = request.requesterUID, requesterUID > 0 {

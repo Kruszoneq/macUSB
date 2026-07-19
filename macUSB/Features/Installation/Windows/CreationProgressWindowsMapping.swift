@@ -4,8 +4,13 @@ enum CreationProgressWindowsMapping {
     static let splitWimStageKey = "windows_split_wim"
     static let createStageKey = "windows_create_media"
     static let createAutounattendStageKey = "windows_create_autounattend"
+    static let installMacUSBootStageKey = "windows_install_macusboot"
 
-    static func stageKeys(includeSplitWim: Bool, includeAutounattend: Bool = false) -> [String] {
+    static func stageKeys(
+        includeSplitWim: Bool,
+        includeAutounattend: Bool = false,
+        includeMacUSBoot: Bool = false
+    ) -> [String] {
         var keys: [String] = [
             "windows_prepare_source",
             "windows_prepare_target",
@@ -21,6 +26,9 @@ enum CreationProgressWindowsMapping {
         }
 
         keys.append("windows_verify_media")
+        if includeMacUSBoot {
+            keys.append(installMacUSBootStageKey)
+        }
         keys.append("windows_cleanup_temp")
         return keys
     }
@@ -39,6 +47,8 @@ enum CreationProgressWindowsMapping {
             return "doc.badge.gearshape"
         case "windows_verify_media":
             return "checkmark.seal"
+        case installMacUSBootStageKey:
+            return "apple.terminal"
         case "windows_cleanup_temp":
             return "trash"
         default:
@@ -60,6 +70,8 @@ enum CreationProgressWindowsMapping {
             return "doc.badge.gearshape.fill"
         case "windows_verify_media":
             return "checkmark.seal.fill"
+        case installMacUSBootStageKey:
+            return "apple.terminal.fill"
         case "windows_cleanup_temp":
             return "trash.fill"
         default:
