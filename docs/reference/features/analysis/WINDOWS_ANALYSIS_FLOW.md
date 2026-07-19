@@ -11,6 +11,12 @@ Windows detection is a fallback path in analysis between macOS and Linux.
 - If Windows is not recognized, flow continues to Linux fallback.
 - Supported Windows detection unlocks dedicated Windows USB-creation workflow.
 
+## Source Image Trust Boundary
+
+The supported and tested input contract covers original Microsoft Windows ISO images. Modified, repacked, or otherwise customized images are not tested and are outside the compatibility guarantee.
+
+The app detects bounded metadata, required payload markers, and eligible boot modes; these checks do not certify image provenance or establish that an arbitrary ISO is trustworthy. Selecting the correct, independently verified source image remains the user's responsibility. The optional manual SHA-256 action reports the selected file's digest but does not compare it with an authoritative Microsoft checksum automatically.
+
 ## Trigger and Entry
 
 Windows fallback is entered when all conditions are met:
@@ -168,7 +174,8 @@ Current workflow gating:
 - `Vista`, `7`, and `Server 2008 R2` show a BIOS-only informational card,
 - `11` and `Server 2025` retain the UEFI-only informational card,
 - the selected boot mode is session-only and logged in the installation summary,
-- the resolved boot mode is sent to the helper as `windowsBootMode`; BIOS selection triggers a macUSBoot capability preflight before destructive confirmation, while UEFI keeps the existing media-creation path,
+- the resolved boot mode is sent to the helper as required `windowsBootMode`; BIOS selection triggers a `windows.macusboot.v1` capability preflight before destructive confirmation, including at most one controlled helper reload, while UEFI keeps the existing media-creation path,
+- the helper advertises the BIOS capability only when its bundled macUSBoot resource set validates against artifact identity and SHA-256 pins compiled into the helper; persistent preflight failure blocks start with helper-repair guidance,
 - analysis also computes Windows toolchain probe (`brew`, `wimlib-imagex`) for installation-summary pre-start gating.
 - when Windows summary expects `install.wim` split and `wimlib-imagex` is missing, start is blocked in summary until probe refresh confirms `wimlib-imagex` presence.
 

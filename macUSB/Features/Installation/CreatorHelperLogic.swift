@@ -335,8 +335,19 @@ extension UniversalInstallationView {
                                 onStarted: { workflowID in
                                     activeHelperWorkflowID = workflowID
                                     if cancellationRequestedBeforeWorkflowStart {
-                                        cancelHelperWorkflowIfNeeded {
-                                            completeCancellationFlow()
+                                        cancelHelperWorkflowIfNeeded { cancellationAccepted in
+                                            if cancellationAccepted {
+                                                completeCancellationFlow()
+                                            } else {
+                                                cancellationRequestedBeforeWorkflowStart = false
+                                                withAnimation(.easeInOut(duration: 0.2)) {
+                                                    isCancelling = false
+                                                }
+                                                log(
+                                                    "Helper odrzucił oczekujące żądanie anulowania; aplikacja pozostaje w aktywnym workflow.",
+                                                    category: isWindowsWorkflow ? "WindowsInstallFlow" : "Installation"
+                                                )
+                                            }
                                         }
                                         return
                                     }
@@ -552,23 +563,34 @@ extension UniversalInstallationView {
         }
     }
 
-    func cancelHelperWorkflowIfNeeded(completion: @escaping () -> Void) {
+    func cancelHelperWorkflowIfNeeded(completion: @escaping (Bool) -> Void) {
         guard let workflowID = activeHelperWorkflowID else {
             releaseUSBProcessSleepBlockIfNeeded()
-            completion()
+            completion(true)
             return
         }
 
         log("Wysyłam żądanie anulowania helper workflow: \(workflowID)")
 
-        PrivilegedOperationClient.shared.cancelWorkflow(workflowID) { _, _ in
+        PrivilegedOperationClient.shared.cancelWorkflow(workflowID) { cancelled, errorMessage in
+            guard cancelled else {
+                if let errorMessage {
+                    logError(
+                        "Żądanie anulowania helper workflow nie powiodło się: \(errorMessage)",
+                        category: "Installation"
+                    )
+                }
+                completion(false)
+                return
+            }
+
             PrivilegedOperationClient.shared.clearHandlers(for: workflowID)
             activeHelperWorkflowID = nil
             isHelperWorking = false
             stopHelperWriteSpeedMonitoring()
             usbProcessStartedAt = nil
             releaseUSBProcessSleepBlockIfNeeded()
-            completion()
+            completion(true)
         }
     }
 

@@ -114,7 +114,7 @@ Contract invariants:
 - App-side localization rendering must stay compatible with helper payload content.
 - Helper workflow `stageTitleKey` and `statusKey` values must be localization catalog keys only (no user-facing literal strings in payload fields).
 - IPC shape changes are major helper changes and require explicit confirmation before implementation.
-- `queryCapabilities` returns `HelperCapabilitiesPayload`; a macUSBoot-compatible helper advertises `windows.macusboot.v1` only after the signed bundle resource set passes full artifact validation. Capability versions describe functional contract compatibility; app version/build fingerprint changes remain responsible for helper re-registration.
+- `queryCapabilities` returns `HelperCapabilitiesPayload`; a macUSBoot-compatible helper advertises `windows.macusboot.v1` only after the signed bundle resource set passes full artifact validation against names, sizes, and SHA-256 values compiled into the helper executable. The manifest and checksum file are consistency metadata and cannot authorize a different artifact. Capability versions describe functional contract compatibility; app version/build fingerprint changes remain responsible for helper re-registration.
 
 ---
 
@@ -256,7 +256,7 @@ Daemon helper runtime:
 Design expectations:
 - Errors are explicit and stage-aware.
 - Cancellation is deterministic and not treated as generic failure.
-- Cancellation returns `false` and does not mutate cancellation state while `windows_install_macusboot` is active; the app also disables the cancel action for that stage.
+- Cancellation returns `false` and does not mutate cancellation state while `windows_install_macusboot` is active; the app also disables the cancel action for that stage, rechecks the stage before dispatch, and treats a rejected helper request as authoritative without clearing handlers or presenting a cancelled result.
 - Recovery should be bounded and observable, not infinite retry loops.
 
 Important behavior:

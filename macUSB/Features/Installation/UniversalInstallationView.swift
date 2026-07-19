@@ -544,7 +544,7 @@ struct UniversalInstallationView: View {
                     onCancelRequested: showCreationProgressCancelAlert,
                     canCancelWorkflow: !didCancelCreation
                         && !navigateToFinish
-                        && helperCurrentStageKey != CreationProgressWindowsMapping.installMacUSBootStageKey,
+                        && !isWindowsMacUSBootCancellationBlocked,
                     helperStageTitleKey: $helperStageTitleKey,
                     helperStatusKey: $helperStatusKey,
                     helperCurrentStageKey: $helperCurrentStageKey,

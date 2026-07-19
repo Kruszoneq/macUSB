@@ -37,6 +37,14 @@ private struct MacUSBootManifest: Decodable {
 
 enum HelperWorkflowWindowsMacUSBootArtifactLoader {
     private static let processPathBufferSize = 4_096
+    private static let manifestFileName = "manifest.json"
+    private static let pinnedProductVersion = "1.0"
+    private static let pinnedBinaryFileName = "macUSBoot-v1.0.bin"
+    private static let pinnedChecksumFileName = "macUSBoot-v1.0.bin.sha256"
+    private static let pinnedContainerSize = 3_032
+    private static let pinnedContainerSHA256 = "729a0852f86a5c7da58dc807f9920159cfc09f97661f0ce4099c80f290253585"
+    private static let pinnedMBRPayloadSHA256 = "1eb3bf65781393f8bccbb04c4ad30bb8acc6aed8e3396f150b764e789f816c54"
+    private static let pinnedStageTwoSHA256 = "be00204b4c465eb0f09daa7e245cedea741762964e2c9fa20792c19eeb53e11f"
 
     static func load() throws -> HelperWorkflowWindowsMacUSBootArtifact {
         do {
@@ -52,8 +60,9 @@ enum HelperWorkflowWindowsMacUSBootArtifactLoader {
 
     private static func loadValidatedArtifact() throws -> HelperWorkflowWindowsMacUSBootArtifact {
         let directory = try resourceDirectory()
-        let manifestURL = directory.appendingPathComponent("manifest.json")
-        try requireRegularFile(manifestURL)
+        try validateDirectory(directory)
+
+        let manifestURL = directory.appendingPathComponent(manifestFileName)
 
         let manifest: MacUSBootManifest
         do {
@@ -63,21 +72,18 @@ enum HelperWorkflowWindowsMacUSBootArtifactLoader {
         }
 
         try validateManifest(manifest)
-        try validateDirectory(directory, manifest: manifest)
 
-        let binaryURL = directory.appendingPathComponent(manifest.binaryFileName)
-        let checksumURL = directory.appendingPathComponent(manifest.checksumFileName)
-        try requireRegularFile(binaryURL)
-        try requireRegularFile(checksumURL)
+        let binaryURL = directory.appendingPathComponent(pinnedBinaryFileName)
+        let checksumURL = directory.appendingPathComponent(pinnedChecksumFileName)
 
         let container = try Data(contentsOf: binaryURL, options: [.mappedIfSafe])
-        guard container.count == manifest.container.size else {
-            throw HelperWorkflowWindowsMacUSBootFailure.invalidArtifact("container size=\(container.count), expected=\(manifest.container.size)")
+        guard container.count == pinnedContainerSize else {
+            throw HelperWorkflowWindowsMacUSBootFailure.invalidArtifact("container size=\(container.count), expected=\(pinnedContainerSize)")
         }
-        guard sha256(container) == manifest.container.sha256.lowercased() else {
-            throw HelperWorkflowWindowsMacUSBootFailure.invalidArtifact("container SHA-256 mismatch")
+        guard sha256(container) == pinnedContainerSHA256 else {
+            throw HelperWorkflowWindowsMacUSBootFailure.invalidArtifact("container SHA-256 mismatch against helper pin")
         }
-        try validateChecksumFile(checksumURL, manifest: manifest)
+        try validateChecksumFile(checksumURL)
         try validateContainerHeader(container, manifest: manifest)
 
         let mbrPayload = container.subdata(
@@ -86,19 +92,19 @@ enum HelperWorkflowWindowsMacUSBootArtifactLoader {
         let stageTwo = container.subdata(
             in: manifest.stageTwo.offset..<(manifest.stageTwo.offset + manifest.stageTwo.size)
         )
-        guard sha256(mbrPayload) == manifest.mbrPayload.sha256.lowercased() else {
-            throw HelperWorkflowWindowsMacUSBootFailure.invalidArtifact("MBR payload SHA-256 mismatch")
+        guard sha256(mbrPayload) == pinnedMBRPayloadSHA256 else {
+            throw HelperWorkflowWindowsMacUSBootFailure.invalidArtifact("MBR payload SHA-256 mismatch against helper pin")
         }
-        guard sha256(stageTwo) == manifest.stageTwo.sha256.lowercased() else {
-            throw HelperWorkflowWindowsMacUSBootFailure.invalidArtifact("StageTwo SHA-256 mismatch")
+        guard sha256(stageTwo) == pinnedStageTwoSHA256 else {
+            throw HelperWorkflowWindowsMacUSBootFailure.invalidArtifact("StageTwo SHA-256 mismatch against helper pin")
         }
         try validateStageTwo(stageTwo, manifest: manifest)
 
         return HelperWorkflowWindowsMacUSBootArtifact(
-            productVersion: manifest.productVersion,
-            binaryFileName: manifest.binaryFileName,
+            productVersion: pinnedProductVersion,
+            binaryFileName: pinnedBinaryFileName,
             completeSize: container.count,
-            completeSHA256: manifest.container.sha256.lowercased(),
+            completeSHA256: pinnedContainerSHA256,
             mbrPayload: mbrPayload,
             stageTwo: stageTwo
         )
@@ -141,35 +147,37 @@ enum HelperWorkflowWindowsMacUSBootArtifactLoader {
     }
 
     private static func validateManifest(_ manifest: MacUSBootManifest) throws {
-        let expectedBinaryName = "macUSBoot-v\(manifest.productVersion).bin"
         guard manifest.schemaVersion == 1,
-              manifest.productVersion == "1.0",
-              manifest.binaryFileName == expectedBinaryName,
-              manifest.checksumFileName == expectedBinaryName + ".sha256",
+              manifest.productVersion == pinnedProductVersion,
+              manifest.binaryFileName == pinnedBinaryFileName,
+              manifest.checksumFileName == pinnedChecksumFileName,
               manifest.container.formatVersion == 1,
               manifest.container.headerSize == 32,
               manifest.container.flags == 0,
-              manifest.container.size == 3032,
+              manifest.container.size == pinnedContainerSize,
+              manifest.container.sha256.lowercased() == pinnedContainerSHA256,
               manifest.mbrPayload.offset == 32,
               manifest.mbrPayload.size == 440,
+              manifest.mbrPayload.sha256.lowercased() == pinnedMBRPayloadSHA256,
               manifest.stageTwo.formatVersion == 1,
               manifest.stageTwo.headerSize == 16,
               manifest.stageTwo.entryOffset == 16,
               manifest.stageTwo.flags == 0,
               manifest.stageTwo.offset == 472,
               manifest.stageTwo.size == 2560,
-              manifest.stageTwo.sectorCount == 5 else {
+              manifest.stageTwo.sectorCount == 5,
+              manifest.stageTwo.sha256.lowercased() == pinnedStageTwoSHA256 else {
             throw HelperWorkflowWindowsMacUSBootFailure.invalidArtifact("unsupported or inconsistent manifest")
         }
     }
 
-    private static func validateDirectory(_ directory: URL, manifest: MacUSBootManifest) throws {
+    private static func validateDirectory(_ directory: URL) throws {
         let entries = try FileManager.default.contentsOfDirectory(
             at: directory,
             includingPropertiesForKeys: [.isRegularFileKey, .isSymbolicLinkKey],
             options: []
         )
-        let expected = Set(["manifest.json", manifest.binaryFileName, manifest.checksumFileName])
+        let expected = Set([manifestFileName, pinnedBinaryFileName, pinnedChecksumFileName])
         guard Set(entries.map(\.lastPathComponent)) == expected else {
             throw HelperWorkflowWindowsMacUSBootFailure.invalidArtifact("resource directory contains missing or additional files")
         }
@@ -185,9 +193,9 @@ enum HelperWorkflowWindowsMacUSBootArtifactLoader {
         }
     }
 
-    private static func validateChecksumFile(_ url: URL, manifest: MacUSBootManifest) throws {
+    private static func validateChecksumFile(_ url: URL) throws {
         let text = try String(contentsOf: url, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
-        guard text == "\(manifest.container.sha256)  \(manifest.binaryFileName)" else {
+        guard text == "\(pinnedContainerSHA256)  \(pinnedBinaryFileName)" else {
             throw HelperWorkflowWindowsMacUSBootFailure.invalidArtifact("checksum file mismatch")
         }
     }

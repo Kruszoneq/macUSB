@@ -52,6 +52,12 @@ Windows summary screen (`UniversalInstallationView`) shows boot-mode information
 - the selected mode is session-only, logged, and included in the helper request as required `windowsBootMode` for Windows workflows,
 - BIOS summary states that macUSBoot will be installed and includes the conditional stage in progress UI; UEFI does not show or execute that stage.
 
+Windows source trust boundary:
+
+- the tested creation contract covers original Microsoft Windows ISO images,
+- modified or repacked images are outside the tested compatibility scope,
+- structural analysis and boot-marker verification do not certify image provenance; selecting an appropriate, independently verified ISO remains the user's responsibility.
+
 Windows automatic configuration card:
 - card is visible only for recognized desktop Windows 10 64-bit and Windows 11 images; Windows 10 32-bit, Windows 10 ARM, and Windows Server do not show this card,
 - state is session-only and keyed to the selected ISO path plus file identity when available,
@@ -87,7 +93,7 @@ Windows summary pre-start prerequisites:
 - Windows BIOS source and target verification require case-insensitive `BOOTMGR`, `boot/BCD`, and `sources/boot.wim`. UEFI verification retains the EFI-directory plus accepted EFI-loader-marker contract and also requires `sources/boot.wim` on target media.
 - `windows_install_macusboot` is appended only for BIOS after `windows_verify_media` and before `windows_cleanup_temp`; the UEFI stage graph and media contents remain unchanged.
 - macUSBoot accepts only the pinned, exact three-file bundled resource set and the supported 512-byte logical-sector MBR layout. It writes StageTwo first, synchronizes and fully reads it back, then writes the MBR boot-code bytes while preserving the target partition table/signature bytes, synchronizes and reads back again, and finally verifies the protected range.
-- macUSBoot has no retry, rollback, or checkpoint. Cancellation is disabled and helper cancellation requests are ignored while this stage is active. The Disk Arbitration guard and raw descriptor are released on every terminal path, followed by exactly one whole-disk mount attempt.
+- macUSBoot has no retry, rollback, or checkpoint. Cancellation is disabled and helper cancellation requests are ignored while this stage is active. The app rechecks this gate before dispatch and remains in the active workflow when the helper rejects a racing cancellation request; it must not present a cancelled result. The Disk Arbitration guard and raw descriptor are released on every terminal path, followed by exactly one whole-disk mount attempt.
 - Windows automatic configuration may add or replace only the Windows answer-file location selected by the generated passes, when explicitly enabled by the user. If the generated XML contains `windowsPE`, helper writes root-level `Autounattend.xml`; otherwise it writes `sources/$OEM$/$$/Panther/unattend.xml` so Windows Setup copies it to `%WINDIR%/Panther/unattend.xml` for later passes. The `windowsPE` pass is generated for options that require Windows PE setup data, such as the Windows 11 hardware-requirements bypass. Windows 10 64-bit automatic configuration does not generate the TPM 2.0/Secure Boot/RAM bypass. When automatic BitLocker device-encryption prevention is enabled, macUSB writes a `specialize` pass command that sets `HKLM\SYSTEM\CurrentControlSet\Control\BitLocker\PreventDeviceEncryption` to `1`.
 - Windows automatic configuration may set `Microsoft-Windows-International-Core` language, input, system locale, and user locale values in `oobeSystem` when Mac language/region transfer is enabled.
 - Windows automatic configuration may set `OOBE/ProtectYourPC` to `3` when privacy data-collection opt-out is enabled.

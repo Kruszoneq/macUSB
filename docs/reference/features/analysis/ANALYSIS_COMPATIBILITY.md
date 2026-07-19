@@ -95,8 +95,9 @@ Windows fallback routing includes:
   - `Vista`, `7`, and `Server 2008 R2`: BIOS-only informational card,
   - `8` through `10` and `Server 2012` through `Server 2022`: segmented BIOS/UEFI control driven by eligible modes; UEFI is the dual-mode default and a single eligible mode locks the control,
   - `11` and `Server 2025`: existing UEFI-only informational card,
-  - BIOS selection is logged and blocks start before destructive confirmation until macUSBoot integration is implemented,
-  - no selected boot mode is sent through helper/XPC in this iteration.
+  - selected mode is session-only, logged, and sent through helper/XPC as required `windowsBootMode`,
+  - BIOS selection runs the `windows.macusboot.v1` helper capability preflight before destructive confirmation; one controlled helper reload is attempted when needed, and start remains blocked with repair guidance only if the capability is still unavailable,
+  - UEFI selection uses the existing Windows media-creation path without loading or installing macUSBoot.
 
 ## Special Blocking Rule
 

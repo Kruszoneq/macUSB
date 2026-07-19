@@ -21,6 +21,15 @@ Linux-specific runtime behavior:
 - USB validation keeps capacity gating, while APFS blocking is macOS-only (Linux uses physical `diskX` targets),
 - creation branch uses Linux raw-copy helper stages.
 
+Windows-specific runtime behavior:
+
+- analysis recognizes supported Windows families from original `.iso` images and resolves eligible BIOS/UEFI modes from bounded boot-marker evidence,
+- the summary presents the family-appropriate boot-mode state; dual-mode images default to UEFI and retain the user's session-only selection,
+- the selected mode is sent to the helper as required `windowsBootMode`,
+- BIOS selection validates helper capability `windows.macusboot.v1` before destructive confirmation; persistent capability failure blocks start with helper-repair guidance,
+- BIOS execution appends the non-cancellable `windows_install_macusboot` transaction after media verification and before cleanup, while UEFI never loads or writes the macUSBoot artifact,
+- if a cancellation request races with entry into macUSBoot, helper rejection keeps the progress flow active and must not produce a cancelled finish result.
+
 ## Tools Flow: Downloader
 
 - `Tools -> Download macOS installer...` opens downloader window.

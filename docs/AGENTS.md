@@ -211,6 +211,7 @@ Minor helper changes that do not alter behavior may proceed, but must still be r
 
 ## Documentation hygiene
 
+- The root `README.md` is protected documentation and must never be edited automatically, including as part of a general documentation update. Any README change requires a separate explicit user request that names `README.md` as in scope.
 - If runtime behavior changed, update relevant file(s) from `docs/reference/README.md`.
 - If release-relevant user-facing behavior changed, update `docs/CHANGELOG.md` only when the user explicitly asks for changelog edits.
 - Keep process rules only in `docs/AGENTS.md`.

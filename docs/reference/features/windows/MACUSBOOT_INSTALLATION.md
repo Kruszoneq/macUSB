@@ -18,6 +18,8 @@ The application bundle contains exactly this directory:
 
 The helper rejects missing or additional entries, symbolic links, non-regular files, unsupported manifest values, malformed headers, checksum-file drift, size drift, or any component hash mismatch.
 
+The helper executable is the source of trust for artifact identity. It contains compiled pins for the exact resource names, product version, container size, complete-container SHA-256, MBR-payload SHA-256, and StageTwo SHA-256. Runtime validation compares the binary and both components directly with those compiled pins. The manifest and checksum file must independently agree with the same pinned values, but neither file can authorize a different artifact.
+
 The helper resolves its absolute executable path from the running process, locates the enclosing `.app/Contents`, and then reads `Resources/macUSBoot`. It must not derive the bundle location from `CommandLine.arguments[0]`, because `SMAppService` may launch a `BundleProgram` using a relative program identifier.
 
 Pinned values:
@@ -70,7 +72,7 @@ Some raw character devices and USB storage bridges do not support `F_FULLFSYNC`.
 
 ## Cancellation, Release, and Remount
 
-Cancellation is disabled in the progress UI and helper cancellation requests return `false` without setting cancellation state while `windows_install_macusboot` is active.
+Cancellation is disabled in the progress UI and helper cancellation requests return `false` without setting cancellation state while `windows_install_macusboot` is active. The app rechecks the active stage when a previously opened cancellation alert is confirmed and again before sending the request. A `false` helper response is authoritative: the app keeps the workflow handlers and active state, clears its transient cancelling indicator, and must not navigate to a cancelled result.
 
 Every terminal path closes the raw descriptor and releases the Disk Arbitration guard. The stage then issues exactly one logical `diskutil mountDisk` attempt. A remount failure is logged as a warning but does not invalidate a completed, fully verified transaction. Workflow cleanup and finalization continue normally.
 

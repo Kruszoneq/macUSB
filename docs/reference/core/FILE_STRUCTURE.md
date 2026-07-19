@@ -42,8 +42,8 @@
 
 - `macUSB/Features/Installation/UniversalInstallationView.swift` — shared summary screen before start.
 - `macUSB/Features/Installation/CreationProgressView.swift` — shared stage/progress UI.
-- `macUSB/Features/Installation/CreatorLogic.swift` — shared install actions/cancel/cleanup orchestration.
-- `macUSB/Features/Installation/CreatorHelperLogic.swift` — shared helper workflow orchestration and transfer metrics.
+- `macUSB/Features/Installation/CreatorLogic.swift` — shared install actions/cancel/cleanup orchestration, including app-side non-cancellable macUSBoot gating.
+- `macUSB/Features/Installation/CreatorHelperLogic.swift` — shared helper workflow orchestration, authoritative cancellation-response handling, and transfer metrics.
 - `macUSB/Features/Installation/Linux/LinuxInstallationFlowContext.swift` — Linux flow context payload.
 - `macUSB/Features/Installation/Linux/CreatorLinuxLogic.swift` — Linux-specific summary/cleanup helpers.
 - `macUSB/Features/Installation/Linux/CreatorLinuxHelperLogic.swift` — Linux helper request construction and start routing.
