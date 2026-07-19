@@ -39,10 +39,13 @@ final class HelperWorkflowExecutor {
         self.sendEvent = sendEvent
     }
 
-    func cancel() {
+    func cancel() -> Bool {
         stateQueue.sync {
+            guard currentStageKey != "windows_install_macusboot" else {
+                return false
+            }
             isCancelled = true
-            guard let process = activeProcess, process.isRunning else { return }
+            guard let process = activeProcess, process.isRunning else { return true }
             process.terminate()
             let pid = process.processIdentifier
             DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
@@ -50,6 +53,7 @@ final class HelperWorkflowExecutor {
                     kill(pid, SIGKILL)
                 }
             }
+            return true
         }
     }
 
@@ -69,7 +73,9 @@ final class HelperWorkflowExecutor {
                 if shouldSkipWindowsStage(stage) {
                     continue
                 }
-                currentStageKey = stage.key
+                stateQueue.sync {
+                    currentStageKey = stage.key
+                }
                 try throwIfCancelled()
                 if stage.key == "catalina_copy" {
                     let transitionMessage = "Catalina: zakończono createinstallmedia, przejście do etapu ditto."
@@ -91,7 +97,9 @@ final class HelperWorkflowExecutor {
                 }
             }
 
-            currentStageKey = nil
+            stateQueue.sync {
+                currentStageKey = nil
+            }
             runBestEffortTempCleanupStage()
             runFinalizeStage()
 

@@ -49,8 +49,10 @@
 - `macUSB/Features/Installation/Linux/CreatorLinuxHelperLogic.swift` — Linux helper request construction and start routing.
 - `macUSB/Features/Installation/Linux/CreationProgressLinuxMapping.swift` — Linux stage mapping for shared progress UI.
 - `macUSB/Features/Installation/Windows/CreatorWindowsLabelLogic.swift` — Windows target volume-label mapping policy.
-- `macUSB/Features/Installation/Windows/CreatorWindowsBootModeCardView.swift` — Windows summary BIOS/UEFI presentation, session selection, logging, and temporary BIOS start gate.
+- `macUSB/Features/Installation/Windows/CreatorWindowsBootModeCardView.swift` — Windows summary BIOS/UEFI presentation, session selection, and logging.
 - `macUSB/Features/Installation/Windows/CreatorWindowsHelperLogic.swift` — Windows helper request construction and workflow start routing.
+- `macUSB/Features/Installation/Windows/CreatorWindowsMacUSBootPreflightLogic.swift` — BIOS-only helper capability preflight and one-shot helper reload recovery before destructive confirmation.
+- `macUSB/Features/Installation/Windows/CreatorWindowsMacUSBootErrorLogic.swift` — localized macUSBoot stage-failure presentation.
 - `macUSB/Features/Installation/Windows/CreatorWindowsUnmountRecoveryLogic.swift` — Windows unmount-busy prompt/retry recovery flow.
 - `macUSB/Features/Installation/Windows/CreationProgressWindowsMapping.swift` — Windows stage mapping for shared progress UI.
 
@@ -77,6 +79,7 @@
 
 - `macUSB/Shared/Services/Helper/HelperIPC.swift`
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift`
+- `macUSB/Shared/Services/Helper/PrivilegedOperationClientCapabilities.swift` — helper capability query used by BIOS preflight.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift`
 - `macUSB/Shared/Services/Helper/HelperService/*`
 - `macUSB/Shared/Services/InstallerSourceImageUnmountRegistry.swift` — centralny rejestr śledzenia źródeł ISO (Windows/Linux) i cleanup odmontowania przy zamknięciu aplikacji.
@@ -88,12 +91,17 @@
 - `macUSBHelper/Service/*`
 - `macUSBHelper/Workflow/*`
 - `macUSBHelper/Workflow/Linux/*` — Linux raw-copy stage builder, parser, and disk ops.
-- `macUSBHelper/Workflow/Windows/*` — Windows ISO-copy stage builder, source/target preparation, progress parsing, and verification.
+- `macUSBHelper/Workflow/Windows/*` — Windows ISO-copy stage builder, boot-mode-aware source/target validation, progress parsing, and verification.
+- `macUSBHelper/Workflow/Windows/MacUSBoot/*` — BIOS-only macUSBoot artifact validation, Disk Arbitration guard, raw-disk layout validation, transaction, disk operations, and orchestration.
 - `macUSBHelper/DownloaderAssembly/*`
 
 ## Localization catalog
 
 - `macUSB/Resources/Localizable.xcstrings`
+
+## Bundled bootloader resources
+
+- `macUSB/Resources/Bootloaders/macUSBoot/*` — pinned macUSBoot binary, manifest, and SHA-256 checksum bundled at `Contents/Resources/macUSBoot`.
 
 ## Update Trigger
 

@@ -29,6 +29,7 @@ struct CreationProgressView: View {
     let isWindowsWorkflow: Bool
     let windowsWillSplitWimExpected: Bool
     let windowsWillCreateAutounattendExpected: Bool
+    let windowsWillInstallMacUSBootExpected: Bool
     let shouldDetachMountPoint: Bool
     let targetWholeDiskBSDName: String?
     let needsPreformat: Bool
@@ -76,7 +77,9 @@ struct CreationProgressView: View {
                 || normalizedStageKey(helperCurrentStageKey) == CreationProgressWindowsMapping.createAutounattendStageKey
             return CreationProgressWindowsMapping.stageKeys(
                 includeSplitWim: includeSplit,
-                includeAutounattend: includeAutounattend
+                includeAutounattend: includeAutounattend,
+                includeMacUSBoot: windowsWillInstallMacUSBootExpected
+                    || normalizedStageKey(helperCurrentStageKey) == CreationProgressWindowsMapping.installMacUSBootStageKey
             ).map(stageDescriptor(for:))
         }
 

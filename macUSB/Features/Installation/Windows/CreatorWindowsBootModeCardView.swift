@@ -42,7 +42,7 @@ extension UniversalInstallationView {
         selectedWindowsBootMode ?? preferredWindowsBootMode
     }
 
-    var windowsBIOSSelectionShouldBlockStart: Bool {
+    var windowsMacUSBootPreflightRequired: Bool {
         isWindowsWorkflow && resolvedWindowsBootMode == .bios
     }
 

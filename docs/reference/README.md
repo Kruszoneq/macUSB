@@ -32,6 +32,7 @@ Use this map before reading feature-specific references:
 
 ### USB creation execution
 - `docs/reference/features/usb/USB_CREATION_WORKFLOWS.md`
+- `docs/reference/features/windows/MACUSBOOT_INSTALLATION.md`
 
 ### Finish and cleanup behavior
 - `docs/reference/features/usb/FINISH_AND_CLEANUP.md`

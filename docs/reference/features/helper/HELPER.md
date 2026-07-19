@@ -94,6 +94,7 @@ Primary protocols:
 
 Primary request types:
 - `HelperWorkflowRequestPayload` for USB workflows.
+- `HelperWindowsBootMode` (`bios` / `uefi`) as the required `windowsBootMode` value for every Windows workflow request.
 - `WindowsAutounattendConfigurationPayload` as an optional Windows workflow sub-payload for Windows answer-file generation, including separate local-account `Name` and `DisplayName` values when automatic local-account creation is enabled.
 - `DownloaderAssemblyRequestPayload` for downloader `.pkg` to `.app` assembly.
 - `DownloaderCleanupRequestPayload` for downloader session-temp cleanup.
@@ -113,6 +114,7 @@ Contract invariants:
 - App-side localization rendering must stay compatible with helper payload content.
 - Helper workflow `stageTitleKey` and `statusKey` values must be localization catalog keys only (no user-facing literal strings in payload fields).
 - IPC shape changes are major helper changes and require explicit confirmation before implementation.
+- `queryCapabilities` returns `HelperCapabilitiesPayload`; a macUSBoot-compatible helper advertises `windows.macusboot.v1` only after the signed bundle resource set passes full artifact validation. Capability versions describe functional contract compatibility; app version/build fingerprint changes remain responsible for helper re-registration.
 
 ---
 
@@ -157,6 +159,10 @@ Contract invariants:
 - `windows_create_autounattend` writes the answer file through Foundation XML APIs, validates XML before and after writing, and media verification validates the saved file again. If the generated XML contains `windowsPE`, helper writes root-level `Autounattend.xml`; otherwise it writes `sources/$OEM$/$$/Panther/unattend.xml` for later setup passes. The `windowsPE` pass is generated for options that require Windows PE setup data, such as the Windows 11 hardware-requirements bypass; Windows 10 64-bit automatic configuration does not generate that bypass.
 - Automatic local-account creation writes the generated local account `Name` separately from the user-facing `DisplayName`. The helper validates `Name` as non-empty ASCII letters/digits, max 20 characters, and not `NONE`; `DisplayName` is non-empty, max 256 characters, not `NONE`, and contains only letters, digits, and spaces.
 - Mac language/region transfer receives app-side validated Windows locale tags, writes `Microsoft-Windows-International-Core` in `oobeSystem`, and uses the language tag as `InputLocale` so Windows selects its default keyboard for that language.
+- Every Windows request must include `windowsBootMode`; the service rejects requests without it before creating an executor.
+- BIOS mode appends `windows_install_macusboot` after `windows_verify_media` and before cleanup. UEFI retains the existing stage graph.
+- The BIOS stage validates the pinned bundled artifact and the target MBR gap, installs StageTwo at LBA 1...5 before MBR boot code, synchronizes and reads back each write, then verifies the full protected range. It blocks Disk Arbitration auto-mounts, ignores cancellation while active, and performs exactly one final `mountDisk` attempt after releasing raw-device ownership.
+- Full macUSBoot invariants and failure categories are defined in `docs/reference/features/windows/MACUSBOOT_INSTALLATION.md`.
 
 ### Downloader Assembly Flow
 - App sends `DownloaderAssemblyRequestPayload`.
@@ -181,6 +187,8 @@ App-side helper integration:
   - app-side helper code-signing requirement, trust-failure diagnostics, and user-facing trust-failure text.
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift`
   - XPC connection handling, app-side helper trust requirement setup, and app-facing helper calls.
+- `macUSB/Shared/Services/Helper/PrivilegedOperationClientCapabilities.swift`
+  - bounded helper capability query for the Windows BIOS preflight.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift`
   - central state/facade for helper lifecycle.
 - `macUSB/Shared/Services/Helper/HelperService/HelperServiceBootstrap.swift`
@@ -208,6 +216,8 @@ Daemon helper runtime:
   - daemon-side IPC contracts and payload types.
 - `macUSBHelper/Service/PrivilegedHelperService.swift`
   - XPC service entrypoints and active executor lifecycle, including downloader session cleanup endpoint.
+- `macUSBHelper/Service/PrivilegedHelperServiceCapabilities.swift`
+  - helper capability identifiers and advertised capability payload.
 - `macUSBHelper/Service/HelperListenerDelegate.swift`
   - listener delegate and connection wiring.
 - `macUSBHelper/Workflow/HelperWorkflowExecutor.swift`
@@ -230,6 +240,10 @@ Daemon helper runtime:
   - Linux Disk Arbitration mount-approval guard blocking target auto-mount until verify phase completes.
 - `macUSBHelper/Workflow/Windows/Autounattend/*`
   - Windows `Autounattend.xml` configuration helpers, XML generation, and XML validation.
+- `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsBootValidation.swift`
+  - boot-mode-aware, case-insensitive BIOS/UEFI source and target marker validation.
+- `macUSBHelper/Workflow/Windows/MacUSBoot/*`
+  - macUSBoot artifact/parser, MBR-gap validation, exclusive raw-device I/O, Disk Arbitration guard, diskutil operations, write transaction, and stage orchestration.
 - `macUSBHelper/DownloaderAssembly/DownloaderAssemblyExecutor.swift`
   - downloader assembly execution orchestration and final `.app` ownership normalization.
 - `macUSBHelper/DownloaderAssembly/DownloaderAssemblyProcess.swift`
@@ -242,6 +256,7 @@ Daemon helper runtime:
 Design expectations:
 - Errors are explicit and stage-aware.
 - Cancellation is deterministic and not treated as generic failure.
+- Cancellation returns `false` and does not mutate cancellation state while `windows_install_macusboot` is active; the app also disables the cancel action for that stage.
 - Recovery should be bounded and observable, not infinite retry loops.
 
 Important behavior:
@@ -258,6 +273,7 @@ Rules:
 - Important runtime events should be routed through `AppLogging` on app-side.
 - Repair flow should produce readable operational logs.
 - Helper live tool output is diagnostic and must not become the UI source of truth for stage semantics.
+- macUSBoot phase status keys are stable localization identifiers carried in progress events; live log lines remain technical diagnostics and never include binary contents.
 
 Diagnostics should allow answering:
 - Which phase failed.

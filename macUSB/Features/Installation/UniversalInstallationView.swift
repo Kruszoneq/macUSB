@@ -79,6 +79,7 @@ struct UniversalInstallationView: View {
     @State var windowsAutounattendOptionsPresented: Bool = false
     @State var selectedWindowsBootMode: WindowsBootMode? = nil
     @State var lastLoggedWindowsBootMode: WindowsBootMode? = nil
+    @State var windowsMacUSBootPreflightInProgress: Bool = false
     
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
@@ -136,7 +137,7 @@ struct UniversalInstallationView: View {
     private var shouldBlockStartAction: Bool {
         windowsPrerequisiteShouldBlockStart
             || windowsAutounattendShouldBlockStart
-            || windowsBIOSSelectionShouldBlockStart
+            || windowsMacUSBootPreflightInProgress
     }
     private var processSectionDivider: some View {
         HStack(spacing: 10) {
@@ -315,6 +316,9 @@ struct UniversalInstallationView: View {
                                             Text("installation.summary.process.windows.prepare_source")
                                             Text("installation.summary.process.windows.prepare_target")
                                             Text("installation.summary.process.windows.create_and_verify")
+                                            if resolvedWindowsBootMode == .bios {
+                                                Text("installation.summary.windows.macusboot")
+                                            }
                                         } else if isRestoreLegacy {
                                             Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
                                             Text("• Nośnik USB zostanie sformatowany")
@@ -528,6 +532,7 @@ struct UniversalInstallationView: View {
                     isWindowsWorkflow: isWindowsWorkflow,
                     windowsWillSplitWimExpected: windowsWillSplitWim,
                     windowsWillCreateAutounattendExpected: windowsAutounattendConfiguration.shouldGenerateMacUSBFile,
+                    windowsWillInstallMacUSBootExpected: resolvedWindowsBootMode == .bios,
                     shouldDetachMountPoint: shouldDetachMountPointAfterFinish,
                     targetWholeDiskBSDName: targetWholeDiskBSDNameForFinish,
                     needsPreformat: (targetDrive?.needsFormatting ?? false) && !isPPC,
@@ -537,7 +542,9 @@ struct UniversalInstallationView: View {
                         self.rootIsActive = false
                     },
                     onCancelRequested: showCreationProgressCancelAlert,
-                    canCancelWorkflow: !didCancelCreation && !navigateToFinish,
+                    canCancelWorkflow: !didCancelCreation
+                        && !navigateToFinish
+                        && helperCurrentStageKey != CreationProgressWindowsMapping.installMacUSBootStageKey,
                     helperStageTitleKey: $helperStageTitleKey,
                     helperStatusKey: $helperStatusKey,
                     helperCurrentStageKey: $helperCurrentStageKey,

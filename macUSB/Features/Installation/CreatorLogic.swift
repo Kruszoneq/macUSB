@@ -4,14 +4,21 @@ import AppKit
 // Shared installation utilities used by the helper-only flow
 extension UniversalInstallationView {
     func showStartCreationAlert() {
-        guard !windowsBIOSSelectionShouldBlockStart else {
-            log(
-                "WindowsBootMode: zablokowano rozpoczęcie dla trybu BIOS (macUSBoot nie jest jeszcze dostępny)",
-                category: "WindowsInstallFlow"
-            )
+        guard windowsMacUSBootPreflightRequired else {
+            continueStartCreationAlert()
             return
         }
 
+        runWindowsMacUSBootPreflight { ready, message in
+            guard ready else {
+                errorMessage = message ?? String(localized: "Nie udało się automatycznie odświeżyć helpera. Otwórz Narzędzia → Napraw helpera i spróbuj ponownie.")
+                return
+            }
+            continueStartCreationAlert()
+        }
+    }
+
+    private func continueStartCreationAlert() {
         guard resolveWindowsAutounattendStartReadiness() else { return }
 
         resolveWindowsAutounattendExistingFileIfNeeded { shouldContinue in

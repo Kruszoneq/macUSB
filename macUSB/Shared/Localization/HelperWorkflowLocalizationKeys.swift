@@ -44,6 +44,14 @@ enum HelperWorkflowLocalizationKeys {
     static let windowsCreateAutounattendStatus = "helper.workflow.windows_create_autounattend.status"
     static let windowsVerifyMediaTitle = "helper.workflow.windows_verify_media.title"
     static let windowsVerifyMediaStatus = "helper.workflow.windows_verify_media.status"
+    static let windowsInstallMacUSBootTitle = "helper.workflow.windows_install_macusboot.title"
+    static let windowsInstallMacUSBootCheckingArtifact = "helper.workflow.windows_install_macusboot.checking_artifact"
+    static let windowsInstallMacUSBootUnmounting = "helper.workflow.windows_install_macusboot.unmounting"
+    static let windowsInstallMacUSBootCheckingLayout = "helper.workflow.windows_install_macusboot.checking_layout"
+    static let windowsInstallMacUSBootWritingStageTwo = "helper.workflow.windows_install_macusboot.writing_stage_two"
+    static let windowsInstallMacUSBootWritingMBR = "helper.workflow.windows_install_macusboot.writing_mbr"
+    static let windowsInstallMacUSBootVerifying = "helper.workflow.windows_install_macusboot.verifying"
+    static let windowsInstallMacUSBootRemounting = "helper.workflow.windows_install_macusboot.remounting"
     static let windowsCleanupTempTitle = "helper.workflow.windows_cleanup_temp.title"
     static let windowsCleanupTempStatus = "helper.workflow.windows_cleanup_temp.status"
     static let startingTitle = "helper.workflow.starting.title"
@@ -97,6 +105,11 @@ enum HelperWorkflowLocalizationKeys {
             return HelperWorkflowStageLocalization(titleKey: windowsCreateAutounattendTitle, statusKey: windowsCreateAutounattendStatus)
         case "windows_verify_media":
             return HelperWorkflowStageLocalization(titleKey: windowsVerifyMediaTitle, statusKey: windowsVerifyMediaStatus)
+        case "windows_install_macusboot":
+            return HelperWorkflowStageLocalization(
+                titleKey: windowsInstallMacUSBootTitle,
+                statusKey: windowsInstallMacUSBootCheckingArtifact
+            )
         case "windows_cleanup_temp":
             return HelperWorkflowStageLocalization(titleKey: windowsCleanupTempTitle, statusKey: windowsCleanupTempStatus)
         case "catalina_cleanup":
@@ -150,6 +163,14 @@ enum HelperWorkflowLocalizationExtractionAnchors {
         String(localized: "helper.workflow.windows_create_autounattend.status"),
         String(localized: "helper.workflow.windows_verify_media.title"),
         String(localized: "helper.workflow.windows_verify_media.status"),
+        String(localized: "helper.workflow.windows_install_macusboot.title"),
+        String(localized: "helper.workflow.windows_install_macusboot.checking_artifact"),
+        String(localized: "helper.workflow.windows_install_macusboot.unmounting"),
+        String(localized: "helper.workflow.windows_install_macusboot.checking_layout"),
+        String(localized: "helper.workflow.windows_install_macusboot.writing_stage_two"),
+        String(localized: "helper.workflow.windows_install_macusboot.writing_mbr"),
+        String(localized: "helper.workflow.windows_install_macusboot.verifying"),
+        String(localized: "helper.workflow.windows_install_macusboot.remounting"),
         String(localized: "helper.workflow.windows_cleanup_temp.title"),
         String(localized: "helper.workflow.windows_cleanup_temp.status"),
         String(localized: "helper.workflow.starting.title"),

@@ -35,6 +35,16 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
                 return
             }
 
+            guard request.workflowKind != .windows || request.windowsBootMode != nil else {
+                let error = NSError(
+                    domain: "macUSBHelper",
+                    code: 422,
+                    userInfo: [NSLocalizedDescriptionKey: "Żądanie workflow Windows nie zawiera wymaganego trybu rozruchu."]
+                )
+                reply(nil, error)
+                return
+            }
+
             let workflowID = UUID().uuidString
             let executor = HelperWorkflowExecutor(
                 request: request,
@@ -65,8 +75,7 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
                 reply(false, nil)
                 return
             }
-            executor.cancel()
-            reply(true, nil)
+            reply(executor.cancel(), nil)
         }
     }
 
@@ -195,6 +204,31 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
         let euid = geteuid()
         let pid = getpid()
         reply(true, "Helper odpowiada poprawnie (uid=\(uid), euid=\(euid), pid=\(pid))" as NSString)
+    }
+
+    func queryCapabilities(_ reply: @escaping (NSData?, NSError?) -> Void) {
+        do {
+            let payload = HelperCapabilitiesPayload(
+                capabilities: try PrivilegedHelperServiceCapabilities.validatedCapabilities()
+            )
+            reply(try HelperXPCCodec.encode(payload) as NSData, nil)
+        } catch {
+            reply(
+                nil,
+                NSError(
+                    domain: "macUSBHelper",
+                    code: 503,
+                    userInfo: [NSLocalizedDescriptionKey: "Capability macUSBoot jest niedostępna: \(macUSBootCapabilityErrorDescription(error))"]
+                )
+            )
+        }
+    }
+
+    private func macUSBootCapabilityErrorDescription(_ error: Error) -> String {
+        if let failure = error as? HelperWorkflowWindowsMacUSBootFailure {
+            return failure.diagnosticDescription
+        }
+        return error.localizedDescription
     }
 
     private func sendProgress(_ event: HelperProgressEventPayload) {

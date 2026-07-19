@@ -183,7 +183,7 @@ extension UniversalInstallationView {
                                     helperProgressPercent = max(helperProgressPercent, min(event.percent, 100))
                                     if let localization = HelperWorkflowLocalizationKeys.presentation(for: normalizedStageKey) {
                                         helperStageTitleKey = localization.titleKey
-                                        helperStatusKey = localization.statusKey
+                                        helperStatusKey = event.statusKey
                                     } else {
                                         helperStageTitleKey = event.stageTitleKey
                                         helperStatusKey = event.statusKey
@@ -282,6 +282,9 @@ extension UniversalInstallationView {
                                     } else if isLinuxWorkflow {
                                         workflowResultDetailMessage = nil
                                         workflowResultErrorPresentation = LinuxWorkflowErrorMapper.presentation(for: result)
+                                    } else if let macUSBootMessage = windowsMacUSBootErrorMessage(for: result) {
+                                        workflowResultDetailMessage = macUSBootMessage
+                                        workflowResultErrorPresentation = nil
                                     } else {
                                         workflowResultDetailMessage = result.errorMessage
                                         workflowResultErrorPresentation = nil

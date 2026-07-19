@@ -2,6 +2,9 @@ import Foundation
 
 extension HelperWorkflowExecutor {
     func buildWindowsWorkflowStages(using _: PreparedWorkflowContext) throws -> [WorkflowStage] {
+        guard let windowsBootMode = request.windowsBootMode else {
+            throw HelperExecutionError.invalidRequest("Brak wymaganego trybu rozruchu dla workflow Windows.")
+        }
         var stages: [WorkflowStage] = [
             WorkflowStage(
                 key: "windows_prepare_source",
@@ -74,6 +77,21 @@ extension HelperWorkflowExecutor {
                     parseToolPercent: false
                 ),
                 at: stages.count - 1
+            )
+        }
+
+        if windowsBootMode == .bios {
+            stages.append(
+                WorkflowStage(
+                    key: "windows_install_macusboot",
+                    titleKey: HelperWorkflowLocalizationKeys.windowsInstallMacUSBootTitle,
+                    statusKey: HelperWorkflowLocalizationKeys.windowsInstallMacUSBootCheckingArtifact,
+                    startPercent: 98,
+                    endPercent: 99,
+                    executable: "/usr/bin/true",
+                    arguments: [],
+                    parseToolPercent: false
+                )
             )
         }
 

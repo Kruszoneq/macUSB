@@ -168,7 +168,7 @@ Current workflow gating:
 - `Vista`, `7`, and `Server 2008 R2` show a BIOS-only informational card,
 - `11` and `Server 2025` retain the UEFI-only informational card,
 - the selected boot mode is session-only and logged in the installation summary,
-- selecting or receiving BIOS blocks workflow start before destructive confirmation until macUSBoot integration is implemented; no helper/XPC payload is changed in this iteration,
+- the resolved boot mode is sent to the helper as `windowsBootMode`; BIOS selection triggers a macUSBoot capability preflight before destructive confirmation, while UEFI keeps the existing media-creation path,
 - analysis also computes Windows toolchain probe (`brew`, `wimlib-imagex`) for installation-summary pre-start gating.
 - when Windows summary expects `install.wim` split and `wimlib-imagex` is missing, start is blocked in summary until probe refresh confirms `wimlib-imagex` presence.
 

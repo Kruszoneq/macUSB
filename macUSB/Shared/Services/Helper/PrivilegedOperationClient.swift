@@ -378,7 +378,7 @@ final class PrivilegedOperationClient: NSObject {
         existingConnection?.invalidate()
     }
 
-    private func helperProxy(
+    func helperProxy(
         presentsTrustFailureAlert: Bool = false,
         onError: @escaping (String) -> Void
     ) -> PrivilegedHelperToolXPCProtocol? {

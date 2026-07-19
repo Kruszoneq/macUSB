@@ -20,6 +20,7 @@ Finish screen must report:
 
 Cleanup ownership and ordering must remain deterministic.
 Fallback cleanup UX should remain explicit for failure cases.
+For Windows BIOS creation, macUSBoot owns one final whole-disk mount attempt after its raw-write transaction. A mount failure is logged as a warning and does not turn an otherwise verified installation into a failure; normal temporary-file cleanup and finalization continue afterward.
 App-termination path must execute centralized source-image cleanup for Windows/Linux workflows:
 - tracked source ISO image entities are force-detached on app termination (final shutdown step),
 - this applies regardless of active screen (`analysis`, `summary`, `progress`, `finish`) to prevent stale mounted installer images after app exit.
