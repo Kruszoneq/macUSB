@@ -90,28 +90,36 @@ final class FullDiskAccessPermissionManager {
     }
 
     private func evaluateFullDiskAccess() -> Bool {
+        // High-reliability FDA probe targets (macOS 10.15 through macOS 27+)
+        let testPaths = [
+            "/Library/Preferences/com.apple.TimeMachine.plist",
+            NSHomeDirectory() + "/Library/Safari/Bookmarks.plist",
+            NSHomeDirectory() + "/Library/Safari/History.db",
+            NSHomeDirectory() + "/Library/Containers/com.apple.Safari/Data/Library/Safari/Bookmarks.plist"
+        ]
+
+        for path in testPaths {
+            if FileManager.default.isReadableFile(atPath: path) {
+                return true
+            }
+            if let handle = try? FileHandle(forReadingFrom: URL(fileURLWithPath: path)) {
+                try? handle.close()
+                return true
+            }
+        }
+
+        // Legacy check for older macOS releases where reading TCC.db directly was permitted
         let tccDatabaseURL = URL(fileURLWithPath: NSHomeDirectory())
             .appendingPathComponent("Library/Application Support/com.apple.TCC/TCC.db", isDirectory: false)
 
-        guard FileManager.default.fileExists(atPath: tccDatabaseURL.path) else {
-            return false
-        }
-
-        do {
-            let handle = try FileHandle(forReadingFrom: tccDatabaseURL)
-            defer {
+        if FileManager.default.fileExists(atPath: tccDatabaseURL.path) {
+            if let handle = try? FileHandle(forReadingFrom: tccDatabaseURL) {
                 try? handle.close()
+                return true
             }
-
-            if #available(macOS 10.15.4, *) {
-                _ = try handle.read(upToCount: 1)
-            } else {
-                _ = handle.readData(ofLength: 1)
-            }
-            return true
-        } catch {
-            return false
         }
+
+        return false
     }
 
     private func presentStartupPrompt(completion: @escaping () -> Void) {
