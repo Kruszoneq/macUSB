@@ -60,6 +60,7 @@ Windows source trust boundary:
 
 Windows automatic configuration card:
 - card is visible only for recognized desktop Windows 10 64-bit and Windows 11 images; Windows 10 32-bit, Windows 10 ARM, and Windows Server do not show this card,
+- when the card appears together with the configurable BIOS/UEFI selector, the generic process-duration card is omitted to keep the fixed-height summary within the visible area,
 - state is session-only and keyed to the selected ISO path plus file identity when available,
 - Windows 10 64-bit and Windows 11 offer automatic BitLocker device-encryption prevention, privacy data-collection opt-out, Wi-Fi/network setup skip, Microsoft-account requirement bypass, local-account options, and language/region transfer from the current Mac,
 - only Windows 11 offers the combined TPM 2.0/Secure Boot/RAM hardware-bypass option,
