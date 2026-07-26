@@ -11,7 +11,7 @@ extension MacOSDownloaderWindowShellView {
                 Spacer()
 
                 Button {
-                    logic.startDiscovery()
+                    logic.startDiscovery(includeBetaVersions: showBetaVersions)
                 } label: {
                     Image(systemName: "arrow.clockwise")
                         .padding(.horizontal, 10)
@@ -225,9 +225,23 @@ extension MacOSDownloaderWindowShellView {
                 installerIconView(for: entry)
 
                 VStack(alignment: .leading, spacing: 1) {
-                    Text("\(entry.name) \(entry.version)")
-                        .font(.body.weight(.medium))
-                        .foregroundStyle(.primary)
+                    HStack(spacing: 7) {
+                        Text("\(entry.family) \(entry.version)")
+                            .font(.body.weight(.medium))
+                            .foregroundStyle(.primary)
+
+                        if let channelText = releaseChannelText(for: entry.releaseChannel) {
+                            Text(channelText)
+                                .font(.caption2.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(
+                                    Capsule(style: .continuous)
+                                        .fill(Color.secondary.opacity(0.14))
+                                )
+                        }
+                    }
 
                     if let secondaryText = entrySecondaryText(for: entry) {
                         Text(secondaryText)
@@ -294,10 +308,12 @@ extension MacOSDownloaderWindowShellView {
         }
 
         return logic.familyGroups.compactMap { group in
-            guard let newest = group.entries.first else {
-                return nil
+            var seenChannels: Set<MacOSInstallerReleaseChannel> = []
+            let newestPerChannel = group.entries.filter { entry in
+                seenChannels.insert(entry.releaseChannel).inserted
             }
-            return MacOSInstallerFamilyGroup(family: group.family, entries: [newest])
+            guard !newestPerChannel.isEmpty else { return nil }
+            return MacOSInstallerFamilyGroup(family: group.family, entries: newestPerChannel)
         }
     }
 
@@ -320,7 +336,7 @@ extension MacOSDownloaderWindowShellView {
     func resolveInstallerIcon(for entry: MacOSInstallerEntry) -> NSImage? {
         let versionKey = normalizedVersionKey(from: entry.version)
         let majorVersionKey = normalizedMajorVersionKey(from: entry.version)
-        let nameKey = normalizedSystemNameKey(from: entry.name)
+        let nameKey = normalizedSystemNameKey(from: entry.family)
         let nameAliases = iconNameAliases(for: nameKey)
 
         for alias in nameAliases {
@@ -389,6 +405,17 @@ extension MacOSDownloaderWindowShellView {
             return ["mavericks", "maverics"]
         }
         return [key]
+    }
+
+    func releaseChannelText(for channel: MacOSInstallerReleaseChannel) -> String? {
+        switch channel {
+        case .stable:
+            return nil
+        case .publicBeta:
+            return String(localized: "downloader.channel.publicBeta")
+        case .developerBeta:
+            return String(localized: "downloader.channel.developerBeta")
+        }
     }
 
     func shouldShowBuild(_ build: String) -> Bool {

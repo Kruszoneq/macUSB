@@ -97,13 +97,38 @@ extension MacOSCatalogService {
         result.reserveCapacity(entries.count)
 
         for entry in entries {
-            let key = "\(entry.name)|\(entry.version)|\(entry.build)"
+            let key = "\(entry.releaseChannel.rawValue)|\(entry.name)|\(entry.version)|\(entry.build)"
             if seen.insert(key).inserted {
                 result.append(entry)
             }
         }
 
         return result
+    }
+
+    func isSupportedDownloadTarget(_ entry: MacOSInstallerEntry) -> Bool {
+        if isOldestInstallerTarget(entry) {
+            return true
+        }
+
+        let normalizedName = entry.name.lowercased()
+        let majorVersion = entry.version.split(separator: ".").first.map(String.init) ?? ""
+        let supportedMajors: Set<String> = ["11", "12", "13", "14", "15", "26", "27"]
+        let supportedNameTokens = [
+            "high sierra",
+            "mojave",
+            "catalina",
+            "big sur",
+            "monterey",
+            "ventura",
+            "sonoma",
+            "sequoia",
+            "tahoe",
+            "golden gate"
+        ]
+        let hasSupportedName = supportedNameTokens.contains { normalizedName.contains($0) }
+        let isCatalina = normalizedName.contains("catalina") && entry.version.hasPrefix("10.15")
+        return supportedMajors.contains(majorVersion) || hasSupportedName || isCatalina
     }
 
     func isDownloadAssetURL(_ url: URL) -> Bool {

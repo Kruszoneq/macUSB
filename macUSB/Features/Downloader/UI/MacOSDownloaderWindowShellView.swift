@@ -10,6 +10,7 @@ struct MacOSDownloaderWindowShellView: View {
     @StateObject var downloadFlowModel = MontereyDownloadFlowModel()
     @State var isOptionsPresented = false
     @State var showAllAvailableVersions = false
+    @State var showBetaVersions = false
     @State var selectedInstallerID: String?
     @State var activeDownloadEntry: MacOSInstallerEntry?
 
@@ -58,11 +59,14 @@ struct MacOSDownloaderWindowShellView: View {
         .sheet(isPresented: $isOptionsPresented) {
             MacOSDownloaderOptionsSheetView(
                 showAllAvailableVersions: $showAllAvailableVersions,
+                showBetaVersions: showBetaVersions,
                 preserveDownloadedFilesInDebug: $downloadFlowModel.preserveDownloadedFilesInDebug
-            )
+            ) { newValue in
+                applyBetaVersionsOption(newValue)
+            }
         }
         .task {
-            logic.startDiscovery()
+            logic.startDiscovery(includeBetaVersions: showBetaVersions)
         }
         .onChange(of: logic.familyGroups) {
             ensureSelectedEntryIsVisible()
@@ -178,40 +182,25 @@ struct MacOSDownloaderWindowShellView: View {
     }
 
     func supportsProductionDownload(_ entry: MacOSInstallerEntry) -> Bool {
-        if logic.isOldestDownloadTarget(entry) {
-            return true
-        }
+        logic.supportsProductionDownload(entry)
+    }
 
-        let normalizedName = entry.name.lowercased()
-        let major = entry.version.split(separator: ".").first.map(String.init) ?? ""
-        let supportedMajors: Set<String> = ["11", "12", "13", "14", "15", "26"]
-        if supportedMajors.contains(major) {
-            return true
-        }
-        if normalizedName.contains("catalina") && entry.version.hasPrefix("10.15") {
-            return true
-        }
-        if normalizedName.contains("mojave") && entry.version.hasPrefix("10.14") {
-            return true
-        }
-        if normalizedName.contains("high sierra") && entry.version.hasPrefix("10.13") {
-            return true
-        }
-        return normalizedName.contains("big sur")
-            || normalizedName.contains("catalina")
-            || normalizedName.contains("mojave")
-            || normalizedName.contains("high sierra")
-            || normalizedName.contains("monterey")
-            || normalizedName.contains("ventura")
-            || normalizedName.contains("sonoma")
-            || normalizedName.contains("sequoia")
-            || normalizedName.contains("tahoe")
+    func applyBetaVersionsOption(_ newValue: Bool) {
+        guard newValue != showBetaVersions else { return }
+
+        showBetaVersions = newValue
+        selectedInstallerID = nil
+        logic.startDiscovery(includeBetaVersions: newValue)
+        AppLogging.info(
+            "Zmieniono widocznosc kanalow beta na \(newValue). Ponowne sprawdzanie katalogow Apple.",
+            category: "Downloader"
+        )
     }
 
     func handleDownloadTap(for entry: MacOSInstallerEntry) {
         guard supportsProductionDownload(entry) else {
             AppLogging.info(
-                "Pobieranie jest obecnie dostepne tylko dla: macOS High Sierra, Mojave, Catalina, Big Sur, Monterey, Ventura, Sonoma, Sequoia i Tahoe.",
+                "Pobieranie jest obecnie dostepne tylko dla: macOS High Sierra, Mojave, Catalina, Big Sur, Monterey, Ventura, Sonoma, Sequoia, Tahoe i Golden Gate.",
                 category: "Downloader"
             )
             return
@@ -265,7 +254,21 @@ struct MacOSDownloaderWindowShellView: View {
 private struct MacOSDownloaderOptionsSheetView: View {
     @Binding var showAllAvailableVersions: Bool
     @Binding var preserveDownloadedFilesInDebug: Bool
+    let onConfirmBetaVersions: (Bool) -> Void
+    @State private var draftShowBetaVersions: Bool
     @Environment(\.dismiss) private var dismiss
+
+    init(
+        showAllAvailableVersions: Binding<Bool>,
+        showBetaVersions: Bool,
+        preserveDownloadedFilesInDebug: Binding<Bool>,
+        onConfirmBetaVersions: @escaping (Bool) -> Void
+    ) {
+        _showAllAvailableVersions = showAllAvailableVersions
+        _preserveDownloadedFilesInDebug = preserveDownloadedFilesInDebug
+        self.onConfirmBetaVersions = onConfirmBetaVersions
+        _draftShowBetaVersions = State(initialValue: showBetaVersions)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -274,6 +277,12 @@ private struct MacOSDownloaderOptionsSheetView: View {
 
             Toggle(String(localized: "Pokaż wszystkie wersje"), isOn: $showAllAvailableVersions)
                 .toggleStyle(.checkbox)
+
+            Toggle(
+                String(localized: "downloader.options.showBetaVersions"),
+                isOn: $draftShowBetaVersions
+            )
+            .toggleStyle(.checkbox)
 
             #if DEBUG
             HStack(spacing: 10) {
@@ -298,6 +307,7 @@ private struct MacOSDownloaderOptionsSheetView: View {
             HStack {
                 Spacer()
                 Button {
+                    onConfirmBetaVersions(draftShowBetaVersions)
                     dismiss()
                 } label: {
                     Text(String(localized: "OK"))

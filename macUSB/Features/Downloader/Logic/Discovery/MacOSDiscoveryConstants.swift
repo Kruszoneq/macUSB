@@ -7,11 +7,23 @@ struct MacOSCatalogService {
 }
 
 extension MacOSCatalogService {
-    struct CatalogCandidate {
+    struct CatalogSource: Sendable {
+        let channel: MacOSInstallerReleaseChannel
+        let url: URL
+    }
+
+    struct CatalogCandidate: Sendable {
         let productID: String
         let distributionURL: URL
         let sourceURL: URL
         let catalogSizeBytes: Int64?
+        let releaseChannel: MacOSInstallerReleaseChannel
+        let catalogURL: URL
+    }
+
+    struct CatalogCandidateBatch: Sendable {
+        let source: CatalogSource
+        let candidates: [CatalogCandidate]
     }
 
     struct LegacySupportEntry {
@@ -21,7 +33,9 @@ extension MacOSCatalogService {
     }
 
     enum Constants {
-        static let catalogURL = URL(string: "https://swscan.apple.com/content/catalogs/others/index-15-14-13-12-10.16-10.15-10.14-10.13-10.12-10.11-10.10-10.9-mountainlion-lion-snowleopard-leopard.merged-1.sucatalog.gz")!
+        static let stableCatalogURL = URL(string: "https://swscan.apple.com/content/catalogs/others/index-15-14-13-12-10.16-10.15-10.14-10.13-10.12-10.11-10.10-10.9-mountainlion-lion-snowleopard-leopard.merged-1.sucatalog.gz")!
+        static let publicBetaCatalogURL = URL(string: "https://swscan.apple.com/content/catalogs/others/index-27beta-27-26-15-14-13-12-10.16-10.15-10.14-10.13-10.12-10.11-10.10-10.9-mountainlion-lion-snowleopard-leopard.merged-1.sucatalog.gz")!
+        static let developerBetaCatalogURL = URL(string: "https://swscan.apple.com/content/catalogs/others/index-27seed-27-26-15-14-13-12-10.16-10.15-10.14-10.13-10.12-10.11-10.10-10.9-mountainlion-lion-snowleopard-leopard.merged-1.sucatalog.gz")!
         static let supportArticleURL = URL(string: "https://support.apple.com/en-us/102662")!
         static let requestTimeout: TimeInterval = 30
         static let byteRangeProbe = "bytes=0-0"
@@ -78,6 +92,17 @@ extension MacOSCatalogService {
             "RecoveryHDMetaDmg.pkg",
             "InstallESDDmg.pkg"
         ]
+
+        static func catalogSources(includeBetaVersions: Bool) -> [CatalogSource] {
+            var sources = [
+                CatalogSource(channel: .stable, url: stableCatalogURL)
+            ]
+            if includeBetaVersions {
+                sources.append(CatalogSource(channel: .publicBeta, url: publicBetaCatalogURL))
+                sources.append(CatalogSource(channel: .developerBeta, url: developerBetaCatalogURL))
+            }
+            return sources
+        }
     }
 
     enum ProbeMethod: String {

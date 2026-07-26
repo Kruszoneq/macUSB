@@ -14,7 +14,7 @@ extension MacOSDownloaderWindowShellView {
                                 .frame(width: 36, height: 36)
 
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("\(entry.name) \(entry.version)")
+                                Text("\(entry.family) \(entry.version)")
                                     .font(.headline)
                                     .foregroundStyle(.primary)
 

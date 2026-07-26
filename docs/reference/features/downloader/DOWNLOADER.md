@@ -13,7 +13,7 @@ Scope note:
 3. [Architecture Overview](#3-architecture-overview)
 4. [Data Model and State](#4-data-model-and-state)
 5. [Discovery Flow (Apple Catalog)](#5-discovery-flow-apple-catalog)
-6. [Production Download Flow (Catalina to Tahoe)](#6-production-download-flow-catalina-to-tahoe)
+6. [Production Download Flow (Catalina to Golden Gate)](#6-production-download-flow-catalina-to-golden-gate)
 7. [Verification Strategy](#7-verification-strategy)
 8. [Helper Integration](#8-helper-integration)
 9. [UI Contract](#9-ui-contract)
@@ -35,9 +35,10 @@ Downloader provides:
 - deterministic temp cleanup and end-state summary.
 
 Current production scope:
-- full download pipeline is enabled for selected Catalina, Big Sur, Monterey, Ventura, Sonoma, Sequoia, and Tahoe entries,
+- full download pipeline is enabled for selected Catalina, Big Sur, Monterey, Ventura, Sonoma, Sequoia, Tahoe, and Golden Gate entries,
 - full download pipeline is enabled for Sierra and older official Apple Support installers distributed as `.dmg`,
-- discovery includes broad Apple-official stable entries across families.
+- discovery includes broad Apple-official stable entries across families,
+- optional beta discovery includes separate Apple Public Beta and Developer Beta channels.
 
 ---
 
@@ -67,7 +68,7 @@ Downloader split:
 Runtime orchestration:
 - `MacOSDownloaderWindowShellView` owns:
   - `MacOSDownloaderLogic` for discovery,
-  - `MontereyDownloadFlowModel` for staged download pipeline (Catalina through Tahoe scope).
+  - `MontereyDownloadFlowModel` for staged download pipeline (Catalina through Golden Gate scope).
 
 ---
 
@@ -75,7 +76,9 @@ Runtime orchestration:
 
 Core models:
 - `MacOSInstallerEntry`
-  - identity, family, display name, version, build, source URL, optional product ID.
+  - identity, family, catalog name, version, build, source URL, optional product ID, release channel, and source catalog URL.
+- `MacOSInstallerReleaseChannel`
+  - `stable`, `publicBeta`, or `developerBeta`.
 - `MacOSInstallerFamilyGroup`
   - grouped installer entries by system family.
 - `DownloaderDiscoveryState`
@@ -96,33 +99,38 @@ Process runtime state:
 ## 5. Discovery Flow (Apple Catalog)
 
 Discovery pipeline (`MacOSCatalogService`, orchestrated by `MacOSDownloaderLogic`):
-1. Download Apple catalog (`swscan.apple.com`).
+1. Download the stable Apple catalog and, when enabled, Public Beta and Developer Beta catalogs from `swscan.apple.com`.
 2. Parse InstallAssistant candidates from products metadata.
 3. Parse `.dist` metadata from Apple distribution hosts.
-4. Filter to stable entries (exclude pre-release markers).
-5. Deduplicate by normalized identity.
+4. Keep non-prerelease entries from stable and prerelease entries from beta catalogs.
+5. Deduplicate by normalized identity within each release channel; identical Public Beta and Developer Beta builds remain separate.
 6. Enrich legacy official entries from Apple Support list.
 7. Probe installer sizes (catalog-prefill + network probe fallback).
-8. Group by family and sort newest-first.
+8. Canonicalize Golden Gate entries under the `macOS Golden Gate` family.
+9. Group by family and sort newest-first, with stable before Public Beta and Developer Beta for equal builds.
 
 Discovery UX contract:
 - starts automatically on entering downloader window,
+- starts with beta channels disabled whenever the downloader window is opened,
+- reruns after the beta option is changed and confirmed,
+- manual refresh uses the currently selected channel set,
 - inline progress panel is shown in list area,
 - cancel is available during scanning,
-- after completion panel transitions out and list appears.
+- after completion panel transitions out and list appears,
+- failure of any requested catalog uses the standard discovery failure screen without silently falling back to fewer channels.
 
 ---
 
-## 6. Production Download Flow (Sierra and Older + Catalina to Tahoe)
+## 6. Production Download Flow (Sierra and Older + Catalina to Golden Gate)
 
 Production pipeline (`MontereyDownloadFlowModel`) uses three compatible distribution modes:
-- `Modern`: Big Sur, Monterey, Ventura, Sonoma, Sequoia, Tahoe (`InstallAssistant.pkg -> .app`).
+- `Modern`: Big Sur, Monterey, Ventura, Sonoma, Sequoia, Tahoe, Golden Gate (`InstallAssistant.pkg -> .app`).
 - `Legacy`: High Sierra, Mojave, Catalina (`InstallAssistantAuto.pkg` + `RecoveryHDMetaDmg.pkg` + `InstallESDDmg.pkg`).
 - `Oldest`: Sierra and older Apple Support downloads (`.dmg -> .pkg -> .app`), with Yosemite/El Capitan/Sierra routed through helper-based `installer`.
 
 Both modes share the same staged UI and runtime skeleton:
 1. Connection / preflight
-  - fetch real manifest for selected supported entry,
+  - fetch the real manifest for the selected supported entry from the catalog URL retained during discovery,
   - validate temporary disk capacity against 250% of total expected installer bytes.
 2. Sequential file download
   - one file at a time,
@@ -207,9 +215,13 @@ Window:
 
 List screen:
 - grouped families,
-- default mode shows newest entry per family,
+- default mode shows the newest stable entry and the newest entry from each enabled beta channel per family,
+- Public Beta and Developer Beta entries remain visible separately even when version and build are identical,
+- `Pokaż wszystkie wersje` shows every available version from each enabled channel,
+- beta entries use localized channel badges,
 - options sheet includes:
   - show all versions,
+  - show macOS beta versions (Public Beta and Developer Beta together; session-only and off by default),
   - DEBUG retain-files toggle (Debug only).
 
 Process screen:
@@ -268,6 +280,8 @@ Release:
 
 Downloader logs should include:
 - discovery phase transitions and counts,
+- active release channels and per-channel candidate/accepted counts,
+- source channel and catalog URL used for manifest lookup,
 - manifest contents summary per item,
 - verification step outputs (expected vs actual),
 - helper assembly progress and movement logs,
