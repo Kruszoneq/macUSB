@@ -1,5 +1,6 @@
 name: "Feature Request"
 description: "Suggest a new idea or improvement for macUSB."
+title: "[Feature Request] "
 labels: ["enhancement"]
 body:
   - type: markdown
@@ -30,3 +31,11 @@ body:
       placeholder: "Mention specific commands, libraries, or methods if applicable."
     validations:
       required: false
+  - type: upload
+    id: proposal_media
+    attributes:
+      label: "Reference images"
+      description: "Optionally attach a screenshot or image that helps illustrate the proposal."
+    validations:
+      required: false
+      accept: ".png,.jpg,.jpeg,.gif,.webp"
