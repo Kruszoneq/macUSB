@@ -7833,7 +7833,8 @@
             "value": "请关闭正在使用该驱动器的应用，然后重试。"
           }
         }
-      }
+      },
+      "extractionState": "stale"
     },
     "finish.eject.error.retry": {
       "extractionState": "stale",
@@ -44245,7 +44246,8 @@
             "value": "辅助工具已更新并可供使用。"
           }
         }
-      }
+      },
+      "extractionState": "stale"
     },
     "app.toast.helper_auto_update.completed.title": {
       "localizations": {
@@ -44327,7 +44329,8 @@
             "value": "成功"
           }
         }
-      }
+      },
+      "extractionState": "stale"
     },
     "app.toast.helper_auto_update.running.message": {
       "localizations": {
@@ -44409,7 +44412,8 @@
             "value": "正在更新辅助工具…"
           }
         }
-      }
+      },
+      "extractionState": "stale"
     },
     "app.toast.helper_auto_update.running.title": {
       "localizations": {
@@ -44491,7 +44495,8 @@
             "value": "更新"
           }
         }
-      }
+      },
+      "extractionState": "stale"
     },
     "checksum.analysis.trigger": {
       "localizations": {
@@ -45639,7 +45644,8 @@
             "value": "Developer Beta"
           }
         }
-      }
+      },
+      "extractionState": "stale"
     },
     "downloader.channel.publicBeta": {
       "localizations": {
@@ -45721,86 +45727,87 @@
             "value": "Public Beta"
           }
         }
-      }
+      },
+      "extractionState": "stale"
     },
     "downloader.options.showBetaVersions": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "macOS-Betaversionen anzeigen"
+            "value": "Beta-Versionen anzeigen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Show macOS beta versions"
+            "value": "Show beta versions"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mostrar versiones beta de macOS"
+            "value": "Mostrar versiones beta"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Afficher les versions bêta de macOS"
+            "value": "Afficher les versions bêta"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mostra le versioni beta di macOS"
+            "value": "Mostra le versioni beta"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "macOSのベータ版を表示"
+            "value": "ベータ版を表示"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pokaż wersje beta systemu macOS"
+            "value": "Pokaż wersje beta"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mostrar versões beta do macOS"
+            "value": "Mostrar versões beta"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Показывать бета-версии macOS"
+            "value": "Показывать бета-версии"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "macOS beta sürümlerini göster"
+            "value": "Beta sürümlerini göster"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Показувати бета-версії macOS"
+            "value": "Показувати бета-версії"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hiển thị các phiên bản macOS beta"
+            "value": "Hiển thị các phiên bản beta"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "显示 macOS Beta 版"
+            "value": "显示 Beta 版"
           }
         }
       }
