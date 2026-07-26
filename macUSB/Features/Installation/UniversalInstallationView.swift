@@ -134,6 +134,17 @@ struct UniversalInstallationView: View {
         guard isWindowsWorkflow, windowsAutounattendConfiguration.hasSelectedOption else { return false }
         return !windowsAutounattendConfiguration.canStartWorkflow
     }
+    private var shouldShowProcessDurationCard: Bool {
+        guard windowsAutounattendVersion != nil,
+              let windowsBootModeCardStyle else {
+            return true
+        }
+
+        if case .configurable = windowsBootModeCardStyle {
+            return false
+        }
+        return true
+    }
     private var shouldBlockStartAction: Bool {
         windowsPrerequisiteShouldBlockStart
             || windowsAutounattendShouldBlockStart
@@ -342,11 +353,13 @@ struct UniversalInstallationView: View {
                             }
                         }
 
-                        StatusCard(tone: .neutral, density: .compact) {
-                            HStack(alignment: .center, spacing: 15) {
-                                Image(systemName: "clock").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                                Text("Cały proces może potrwać kilka minut.").font(.subheadline).foregroundColor(.secondary)
-                                Spacer()
+                        if shouldShowProcessDurationCard {
+                            StatusCard(tone: .neutral, density: .compact) {
+                                HStack(alignment: .center, spacing: 15) {
+                                    Image(systemName: "clock").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                    Text("Cały proces może potrwać kilka minut.").font(.subheadline).foregroundColor(.secondary)
+                                    Spacer()
+                                }
                             }
                         }
                     }
