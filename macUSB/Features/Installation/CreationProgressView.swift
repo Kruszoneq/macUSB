@@ -21,6 +21,7 @@ struct CreationProgressView: View {
     let systemName: String
     let mountPoint: URL
     let detectedSystemIcon: NSImage?
+    let isBetaInstaller: Bool
     let isCatalina: Bool
     let isRestoreLegacy: Bool
     let isMavericks: Bool
@@ -133,10 +134,15 @@ struct CreationProgressView: View {
                                 Text("Wybrany system")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
-                                Text(systemName)
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
-                                    .bold()
+                                HStack(spacing: 8) {
+                                    Text(systemName)
+                                        .font(.headline)
+                                        .foregroundColor(.primary)
+                                        .bold()
+                                    if isBetaInstaller {
+                                        MacOSBetaBadge(tint: .secondary)
+                                    }
+                                }
                             }
                             Spacer()
                         }
@@ -184,6 +190,7 @@ struct CreationProgressView: View {
                     mountPoint: mountPoint,
                     onReset: onReset,
                     isPPC: isPPC,
+                    isBetaInstaller: isBetaInstaller,
                     isLinuxWorkflow: isLinuxWorkflow,
                     isWindowsWorkflow: isWindowsWorkflow,
                     didFail: helperOperationFailed,

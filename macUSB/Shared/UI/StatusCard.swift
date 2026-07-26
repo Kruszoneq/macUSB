@@ -39,3 +39,23 @@ struct StatusCard<Content: View>: View {
             .macUSBPanelSurface(tone, cornerRadius: cornerRadius)
     }
 }
+
+struct MacOSBetaBadge: View {
+    let tint: Color
+
+    var body: some View {
+        Text(verbatim: "BETA")
+            .font(.caption2.weight(.bold))
+            .foregroundStyle(tint)
+            .padding(.horizontal, 7)
+            .padding(.vertical, 2)
+            .background(
+                Capsule(style: .continuous)
+                    .fill(tint.opacity(0.14))
+            )
+            .overlay(
+                Capsule(style: .continuous)
+                    .stroke(tint.opacity(0.46), lineWidth: 0.7)
+            )
+    }
+}

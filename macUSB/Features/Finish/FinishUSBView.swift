@@ -10,6 +10,7 @@ struct FinishUSBView: View {
     let mountPoint: URL
     let onReset: () -> Void
     let isPPC: Bool
+    let isBetaInstaller: Bool
     let isLinuxWorkflow: Bool
     let isWindowsWorkflow: Bool
     let didFail: Bool
@@ -36,6 +37,7 @@ struct FinishUSBView: View {
         mountPoint: URL,
         onReset: @escaping () -> Void,
         isPPC: Bool,
+        isBetaInstaller: Bool = false,
         isLinuxWorkflow: Bool = false,
         isWindowsWorkflow: Bool = false,
         didFail: Bool,
@@ -53,6 +55,7 @@ struct FinishUSBView: View {
         self.mountPoint = mountPoint
         self.onReset = onReset
         self.isPPC = isPPC
+        self.isBetaInstaller = isBetaInstaller
         self.isLinuxWorkflow = isLinuxWorkflow
         self.isWindowsWorkflow = isWindowsWorkflow
         self.didFail = didFail
@@ -205,9 +208,14 @@ struct FinishUSBView: View {
                                 }
                                 VStack(alignment: .leading, spacing: 3) {
                                     Text(summaryTitleText).font(.caption).foregroundColor(primaryResultColor.opacity(0.9))
-                                    Text(verbatim: systemName)
-                                        .font(.headline)
-                                        .foregroundColor(primaryResultColor)
+                                    HStack(spacing: 8) {
+                                        Text(verbatim: systemName)
+                                            .font(.headline)
+                                            .foregroundColor(primaryResultColor)
+                                        if isBetaInstaller {
+                                            MacOSBetaBadge(tint: primaryResultColor)
+                                        }
+                                    }
                                 }
                                 Spacer()
                             }

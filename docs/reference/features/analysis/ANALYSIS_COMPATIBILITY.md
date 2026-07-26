@@ -22,6 +22,9 @@ Unsupported detection outcomes must be clearly surfaced and must block unsupport
 For selected macOS `.app` sources and macOS `.app` bundles found inside mounted `.dmg`, `.iso`, and `.cdr` sources:
 
 - analysis must read installer metadata from `Contents/Info.plist`,
+- prerelease state is detected from prerelease markers in `CFBundleDisplayName` (`Beta`, `Seed`, `Preview`, `Release Candidate`, or `RC`) and from the Apple seed-bundle identifier marker in `CFBundleIdentifier`,
+- a detected prerelease installer keeps the normalized system name free of prerelease suffixes and exposes a separate `BETA` badge in the analysis result and every subsequent main-flow screen through finish,
+- Golden Gate metadata is normalized to the user-facing name `macOS 27 Golden Gate`, regardless of the internal installer-app version, and Golden Gate is routed as a modern installer,
 - analysis must inspect installer payload markers before accepting the app as a valid source:
   - `Contents/Resources/createinstallmedia` must exist as a file for standard app-installer workflows,
   - `Contents/SharedSupport/InstallESD.dmg` must exist as a file and is sufficient only for restore-legacy metadata (`Lion` / `Mountain Lion`, `10.7` / `10.8`),
@@ -161,6 +164,7 @@ Checksum calculation:
 Analysis should log:
 - selected source type,
 - detected compatibility family/flags,
+- macOS prerelease classification signals and decision,
 - explicit block reasons (for example mounted image conflict),
 - image-analysis timeout start/finish events for `.dmg`/`.iso`/`.cdr`,
 - timeout-triggered image detach result (success/failure + mount path),

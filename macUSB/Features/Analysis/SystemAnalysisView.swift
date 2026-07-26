@@ -22,6 +22,7 @@ struct SystemAnalysisView: View {
     
     @State private var selectedDriveDisplayNameSnapshot: String? = nil
     @State private var selectedDriveForInstallationSnapshot: USBDrive? = nil
+    @State private var isBetaInstallerSnapshot: Bool = false
     @State private var linuxFlowContextSnapshot: LinuxInstallationFlowContext? = nil
     @State private var windowsWorkflowSupportedSnapshot: Bool = false
     @State private var windowsMountedSourcePathSnapshot: String? = nil
@@ -190,6 +191,7 @@ struct SystemAnalysisView: View {
         navigateToInstall = false
         selectedDriveDisplayNameSnapshot = nil
         selectedDriveForInstallationSnapshot = nil
+        isBetaInstallerSnapshot = false
         linuxFlowContextSnapshot = nil
         windowsWorkflowSupportedSnapshot = false
         windowsMountedSourcePathSnapshot = nil
@@ -413,9 +415,14 @@ struct SystemAnalysisView: View {
                         Text(isValid ? "Pomyślnie wykryto system" : "Błąd analizy")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Text(isValid ? (logic.recognizedVersion.isEmpty ? String(localized: "Wykryto kompatybilny instalator") : logic.recognizedVersion) : unsupportedText)
-                            .font(.headline)
-                            .foregroundColor(isValid ? .green : .red)
+                        HStack(spacing: 8) {
+                            Text(isValid ? (logic.recognizedVersion.isEmpty ? String(localized: "Wykryto kompatybilny instalator") : logic.recognizedVersion) : unsupportedText)
+                                .font(.headline)
+                                .foregroundColor(isValid ? .green : .red)
+                            if isValid, logic.isBetaInstaller {
+                                MacOSBetaBadge(tint: .green)
+                            }
+                        }
                     }
                     Spacer()
                 }
@@ -482,6 +489,7 @@ struct SystemAnalysisView: View {
                         targetDriveDisplayName: selectedDriveDisplayNameSnapshot,
                         systemName: logic.recognizedVersion,
                         detectedSystemIcon: logic.detectedSystemIcon,
+                        isBetaInstaller: isBetaInstallerSnapshot,
                         originalImageURL: logic.selectedFileUrl,
                         linuxFlowContext: linuxFlowContextSnapshot,
                         isWindowsWorkflow: windowsWorkflowSupportedSnapshot,
@@ -548,6 +556,7 @@ struct SystemAnalysisView: View {
     private func handleProceedToInstall() {
         selectedDriveDisplayNameSnapshot = logic.selectedDrive?.displayName
         selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
+        isBetaInstallerSnapshot = logic.isBetaInstaller
         linuxFlowContextSnapshot = logic.linuxInstallationFlowContext
         windowsWorkflowSupportedSnapshot = logic.isWindowsWorkflowSupported
         windowsMountedSourcePathSnapshot = logic.mountedDMGPath

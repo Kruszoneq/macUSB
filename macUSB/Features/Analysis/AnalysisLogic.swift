@@ -10,6 +10,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var recognizedVersion: String = ""
     @Published var sourceAppURL: URL?
     @Published var detectedSystemIcon: NSImage?
+    @Published var isBetaInstaller: Bool = false
     @Published var mountedDMGPath: String? = nil
 
     @Published var isAnalyzing: Bool = false
@@ -250,6 +251,7 @@ extension AnalysisLogic {
         requiredUSBCapacityGB = nil
         sourceAppURL = nil
         detectedSystemIcon = nil
+        isBetaInstaller = false
         isSystemDetected = false
         showUSBSection = false
         showUnsupportedMessage = false

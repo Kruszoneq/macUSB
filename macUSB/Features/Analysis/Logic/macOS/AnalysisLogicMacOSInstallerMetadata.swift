@@ -17,7 +17,8 @@ extension AnalysisLogic {
 
     func formatMarketingVersion(raw: String, name: String) -> String {
         let n = name.lowercased()
-        if n.contains("tahoe") { return "26" } // Dodano Tahoe
+        if n.contains("golden gate") { return "27" }
+        if n.contains("tahoe") { return "26" }
         if n.contains("sequoia") { return "15" }
         if n.contains("sonoma") { return "14" }
         if n.contains("ventura") { return "13" }
@@ -35,6 +36,62 @@ extension AnalysisLogic {
         if n.contains("snow leopard") { return "10.6" }
         if n.contains("panther") { return "10.3" }
         return raw
+    }
+
+    func formatDetectedMacOSName(rawVersion: String, name: String) -> String {
+        if name.localizedCaseInsensitiveContains("golden gate") {
+            return "macOS 27 Golden Gate"
+        }
+
+        var cleanName = name
+        cleanName = cleanName.replacingOccurrences(of: "Install ", with: "")
+        cleanName = cleanName.replacingOccurrences(of: "macOS ", with: "")
+        cleanName = cleanName.replacingOccurrences(of: "Mac OS X ", with: "")
+        cleanName = cleanName.replacingOccurrences(of: "OS X ", with: "")
+        cleanName = cleanName.replacingOccurrences(
+            of: #"\s+(?:(?:Public|Developer)\s+)?(?:Beta|Seed|Preview)(?:\s+\d+)?$"#,
+            with: "",
+            options: [.regularExpression, .caseInsensitive]
+        )
+        cleanName = cleanName.replacingOccurrences(
+            of: #"\s+(?:Release Candidate|RC)(?:\s+\d+)?$"#,
+            with: "",
+            options: [.regularExpression, .caseInsensitive]
+        )
+        cleanName = cleanName.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        let prefix = name.contains("macOS") ? "macOS" : (name.contains("OS X") ? "OS X" : "macOS")
+        let marketingVersion = formatMarketingVersion(raw: rawVersion, name: name)
+        return "\(prefix) \(cleanName) \(marketingVersion)"
+    }
+
+    func detectBetaInstaller(name: String, appURL: URL) -> Bool {
+        let infoPlistURL = appURL.appendingPathComponent("Contents/Info.plist")
+        var bundleIdentifier = ""
+
+        if let data = try? Data(contentsOf: infoPlistURL),
+           let dictionary = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] {
+            bundleIdentifier = dictionary["CFBundleIdentifier"] as? String ?? ""
+        }
+
+        let normalizedName = name.lowercased()
+        let normalizedBundleIdentifier = bundleIdentifier.lowercased()
+        let nameSignals = [
+            "beta",
+            "seed",
+            "release candidate",
+            " preview"
+        ]
+        let detectedFromName = nameSignals.contains { normalizedName.contains($0) }
+            || normalizedName.range(of: #"\brc(?:\s+\d+)?\b"#, options: .regularExpression) != nil
+        let detectedFromBundleIdentifier = normalizedBundleIdentifier.contains(".seed.")
+            || normalizedBundleIdentifier.hasSuffix(".seed")
+
+        let isBeta = detectedFromName || detectedFromBundleIdentifier
+        log(
+            "Klasyfikacja prerelease instalatora: beta=\(isBeta), name_signal=\(detectedFromName), seed_bundle_id=\(detectedFromBundleIdentifier), bundle_id=\(bundleIdentifier.isEmpty ? "brak" : bundleIdentifier)"
+        )
+        return isBeta
     }
 
     func readAppInfo(appUrl: URL) -> (String, String, URL)? {

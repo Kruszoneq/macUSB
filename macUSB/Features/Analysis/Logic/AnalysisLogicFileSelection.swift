@@ -73,6 +73,7 @@ extension AnalysisLogic {
                     self.isSystemDetected = false
                     self.sourceAppURL = nil
                     self.detectedSystemIcon = nil
+                    self.isBetaInstaller = false
                     self.selectedDrive = nil
                     self.capacityCheckFinished = false
                     self.showUSBSection = false
@@ -129,6 +130,7 @@ extension AnalysisLogic {
                     self.isSystemDetected = false
                     self.sourceAppURL = nil
                     self.detectedSystemIcon = nil
+                    self.isBetaInstaller = false
                     self.selectedDrive = nil
                     self.capacityCheckFinished = false
                     self.showUSBSection = false
