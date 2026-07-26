@@ -2,15 +2,15 @@ import Foundation
 
 extension MacOSCatalogService {
     func fetchInstallers(
-        includeBetaVersions: Bool,
+        includePublicBetaVersions: Bool,
         phase: @escaping PhaseSink
     ) async throws -> [MacOSInstallerEntry] {
         try Task.checkCancellation()
 
         phase(String(localized: "Pobieranie katalogu Apple..."))
-        let sources = Constants.catalogSources(includeBetaVersions: includeBetaVersions)
+        let sources = Constants.catalogSources(includePublicBetaVersions: includePublicBetaVersions)
         AppLogging.info(
-            "Pobieranie katalogow installerow z Apple. Kanaly: \(sources.map(\.channel.rawValue).joined(separator: ", ")).",
+            "Pobieranie katalogow installerow z Apple: \(sources.map { "\($0.channel.rawValue)=\($0.url.lastPathComponent)" }.joined(separator: ", ")).",
             category: "Downloader"
         )
 
@@ -90,7 +90,7 @@ extension MacOSCatalogService {
             catalogURL: source.url
         )
         AppLogging.info(
-            "Kanal \(source.channel.rawValue): znaleziono \(candidates.count) kandydatow InstallAssistant.",
+            "Kanal \(source.channel.rawValue), katalog \(source.url.lastPathComponent): znaleziono \(candidates.count) kandydatow InstallAssistant.",
             category: "Downloader"
         )
         return CatalogCandidateBatch(source: source, candidates: candidates)
@@ -111,7 +111,7 @@ extension MacOSCatalogService {
         }
 
         AppLogging.info(
-            "Kanal \(source.channel.rawValue): przeanalizowano \(candidates.count) z \(totalCandidateCount) kandydatow, zaakceptowano \(entries.count) wpisow.",
+            "Kanal \(source.channel.rawValue), katalog \(source.url.lastPathComponent): przeanalizowano \(candidates.count) z \(totalCandidateCount) kandydatow, zaakceptowano \(entries.count) wpisow.",
             category: "Downloader"
         )
         return entries

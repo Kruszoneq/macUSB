@@ -53,13 +53,28 @@ extension MacOSCatalogService {
     }
 
     func normalizeFamilyName(from name: String) -> String {
-        if name.localizedCaseInsensitiveContains("golden gate") {
+        var family = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        if family.hasPrefix("Install ") {
+            family = String(family.dropFirst("Install ".count))
+        }
+
+        let prereleaseSuffixPatterns = [
+            #"\s+(?:(?:Public|Developer)\s+)?(?:Beta|Seed|Preview)(?:\s+\d+)?$"#,
+            #"\s+(?:Release Candidate|RC)(?:\s+\d+)?$"#,
+        ]
+        for pattern in prereleaseSuffixPatterns {
+            family = family.replacingOccurrences(
+                of: pattern,
+                with: "",
+                options: [.regularExpression, .caseInsensitive]
+            )
+        }
+        family = family.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if family.localizedCaseInsensitiveContains("golden gate") {
             return "macOS Golden Gate"
         }
-        if name.hasPrefix("Install ") {
-            return String(name.dropFirst("Install ".count))
-        }
-        return name
+        return family
     }
 
     func isPrerelease(name: String, version: String, build: String) -> Bool {

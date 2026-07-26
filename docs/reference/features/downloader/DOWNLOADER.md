@@ -38,7 +38,7 @@ Current production scope:
 - full download pipeline is enabled for selected Catalina, Big Sur, Monterey, Ventura, Sonoma, Sequoia, Tahoe, and Golden Gate entries,
 - full download pipeline is enabled for Sierra and older official Apple Support installers distributed as `.dmg`,
 - discovery includes broad Apple-official stable entries across families,
-- optional beta discovery includes separate Apple Public Beta and Developer Beta channels.
+- optional beta discovery uses Apple Public Beta catalogs for the current macOS families supported by discovery.
 
 ---
 
@@ -78,7 +78,7 @@ Core models:
 - `MacOSInstallerEntry`
   - identity, family, catalog name, version, build, source URL, optional product ID, release channel, and source catalog URL.
 - `MacOSInstallerReleaseChannel`
-  - `stable`, `publicBeta`, or `developerBeta`.
+  - `stable` or `publicBeta`.
 - `MacOSInstallerFamilyGroup`
   - grouped installer entries by system family.
 - `DownloaderDiscoveryState`
@@ -99,19 +99,19 @@ Process runtime state:
 ## 5. Discovery Flow (Apple Catalog)
 
 Discovery pipeline (`MacOSCatalogService`, orchestrated by `MacOSDownloaderLogic`):
-1. Download the stable Apple catalog and, when enabled, Public Beta and Developer Beta catalogs from `swscan.apple.com`.
+1. Download the stable Apple catalog and, when enabled, Public Beta catalogs for macOS 27, 26, and 15 from `swscan.apple.com`.
 2. Parse InstallAssistant candidates from products metadata.
 3. Parse `.dist` metadata from Apple distribution hosts.
 4. Keep non-prerelease entries from stable and prerelease entries from beta catalogs.
-5. Deduplicate by normalized identity within each release channel; identical Public Beta and Developer Beta builds remain separate.
+5. Deduplicate by normalized identity within each release channel and across overlapping Public Beta catalogs.
 6. Enrich legacy official entries from Apple Support list.
 7. Probe installer sizes (catalog-prefill + network probe fallback).
-8. Canonicalize Golden Gate entries under the `macOS Golden Gate` family.
-9. Group by family and sort newest-first, with stable before Public Beta and Developer Beta for equal builds.
+8. Remove prerelease suffixes from family names so beta entries share the stable family section and icon; canonicalize Golden Gate entries under the `macOS Golden Gate` family.
+9. Group by family and sort newest-first, with stable before Public Beta for equal builds.
 
 Discovery UX contract:
 - starts automatically on entering downloader window,
-- starts with beta channels disabled whenever the downloader window is opened,
+- starts with Public Beta discovery disabled whenever the downloader window is opened,
 - reruns after the beta option is changed and confirmed,
 - manual refresh uses the currently selected channel set,
 - inline progress panel is shown in list area,
@@ -215,13 +215,13 @@ Window:
 
 List screen:
 - grouped families,
-- default mode shows the newest stable entry and the newest entry from each enabled beta channel per family,
-- Public Beta and Developer Beta entries remain visible separately even when version and build are identical,
+- default mode shows the newest stable entry and the newest Public Beta entry per family,
+- overlapping Public Beta catalogs are deduplicated by system identity, version, and build,
 - `Pokaż wszystkie wersje` shows every available version from each enabled channel,
-- beta entries use localized channel badges,
+- beta entries use an accent-colored `BETA` badge in both the selection list and the active download view,
 - options sheet includes:
   - show all versions,
-  - show macOS beta versions (Public Beta and Developer Beta together; session-only and off by default),
+  - show macOS Public Beta versions (session-only and off by default),
   - DEBUG retain-files toggle (Debug only).
 
 Process screen:

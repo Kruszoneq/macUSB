@@ -3,7 +3,6 @@ import Foundation
 enum MacOSInstallerReleaseChannel: String, Hashable, Sendable {
     case stable
     case publicBeta
-    case developerBeta
 
     var sortPriority: Int {
         switch self {
@@ -11,8 +10,6 @@ enum MacOSInstallerReleaseChannel: String, Hashable, Sendable {
             return 0
         case .publicBeta:
             return 1
-        case .developerBeta:
-            return 2
         }
     }
 }
@@ -28,6 +25,10 @@ struct MacOSInstallerEntry: Identifiable, Hashable {
     let catalogProductID: String?
     let releaseChannel: MacOSInstallerReleaseChannel
     let catalogURL: URL?
+
+    var isBeta: Bool {
+        releaseChannel == .publicBeta
+    }
 
     var displayTitle: String {
         "\(family) \(version) (\(build))"

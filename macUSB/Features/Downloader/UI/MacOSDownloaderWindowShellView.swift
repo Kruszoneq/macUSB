@@ -66,7 +66,7 @@ struct MacOSDownloaderWindowShellView: View {
             }
         }
         .task {
-            logic.startDiscovery(includeBetaVersions: showBetaVersions)
+            logic.startDiscovery(includePublicBetaVersions: showBetaVersions)
         }
         .onChange(of: logic.familyGroups) {
             ensureSelectedEntryIsVisible()
@@ -190,9 +190,9 @@ struct MacOSDownloaderWindowShellView: View {
 
         showBetaVersions = newValue
         selectedInstallerID = nil
-        logic.startDiscovery(includeBetaVersions: newValue)
+        logic.startDiscovery(includePublicBetaVersions: newValue)
         AppLogging.info(
-            "Zmieniono widocznosc kanalow beta na \(newValue). Ponowne sprawdzanie katalogow Apple.",
+            "Zmieniono widocznosc publicznych wersji beta na \(newValue). Ponowne sprawdzanie katalogow Apple.",
             category: "Downloader"
         )
     }

@@ -11,7 +11,7 @@ extension MacOSDownloaderWindowShellView {
                 Spacer()
 
                 Button {
-                    logic.startDiscovery(includeBetaVersions: showBetaVersions)
+                    logic.startDiscovery(includePublicBetaVersions: showBetaVersions)
                 } label: {
                     Image(systemName: "arrow.clockwise")
                         .padding(.horizontal, 10)
@@ -230,17 +230,7 @@ extension MacOSDownloaderWindowShellView {
                             .font(.body.weight(.medium))
                             .foregroundStyle(.primary)
 
-                        if let channelText = releaseChannelText(for: entry.releaseChannel) {
-                            Text(channelText)
-                                .font(.caption2.weight(.semibold))
-                                .foregroundStyle(.secondary)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(
-                                    Capsule(style: .continuous)
-                                        .fill(Color.secondary.opacity(0.14))
-                                )
-                        }
+                        betaBadge(for: entry)
                     }
 
                     if let secondaryText = entrySecondaryText(for: entry) {
@@ -407,14 +397,22 @@ extension MacOSDownloaderWindowShellView {
         return [key]
     }
 
-    func releaseChannelText(for channel: MacOSInstallerReleaseChannel) -> String? {
-        switch channel {
-        case .stable:
-            return nil
-        case .publicBeta:
-            return String(localized: "downloader.channel.publicBeta")
-        case .developerBeta:
-            return String(localized: "downloader.channel.developerBeta")
+    @ViewBuilder
+    func betaBadge(for entry: MacOSInstallerEntry) -> some View {
+        if entry.isBeta {
+            Text(verbatim: "BETA")
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(Color.accentColor)
+                .padding(.horizontal, 7)
+                .padding(.vertical, 2)
+                .background(
+                    Capsule(style: .continuous)
+                        .fill(Color.accentColor.opacity(0.14))
+                )
+                .overlay(
+                    Capsule(style: .continuous)
+                        .stroke(Color.accentColor.opacity(0.46), lineWidth: 0.7)
+                )
         }
     }
 
