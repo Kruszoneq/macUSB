@@ -1,5 +1,19 @@
 import Foundation
 
+enum MacOSInstallerReleaseChannel: String, Hashable, Sendable {
+    case stable
+    case publicBeta
+
+    var sortPriority: Int {
+        switch self {
+        case .stable:
+            return 0
+        case .publicBeta:
+            return 1
+        }
+    }
+}
+
 struct MacOSInstallerEntry: Identifiable, Hashable {
     let id: String
     let family: String
@@ -9,9 +23,15 @@ struct MacOSInstallerEntry: Identifiable, Hashable {
     let installerSizeText: String?
     let sourceURL: URL
     let catalogProductID: String?
+    let releaseChannel: MacOSInstallerReleaseChannel
+    let catalogURL: URL?
+
+    var isBeta: Bool {
+        releaseChannel == .publicBeta
+    }
 
     var displayTitle: String {
-        "\(name) \(version) (\(build))"
+        "\(family) \(version) (\(build))"
     }
 
     func with(installerSizeText: String?) -> MacOSInstallerEntry {
@@ -23,7 +43,9 @@ struct MacOSInstallerEntry: Identifiable, Hashable {
             build: build,
             installerSizeText: installerSizeText,
             sourceURL: sourceURL,
-            catalogProductID: catalogProductID
+            catalogProductID: catalogProductID,
+            releaseChannel: releaseChannel,
+            catalogURL: catalogURL
         )
     }
 }

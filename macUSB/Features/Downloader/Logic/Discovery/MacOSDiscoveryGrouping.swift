@@ -13,6 +13,9 @@ extension MacOSDownloaderLogic {
                     if lhs.build.compare(rhs.build, options: .numeric) != .orderedSame {
                         return lhs.build.compare(rhs.build, options: .numeric) == .orderedDescending
                     }
+                    if lhs.releaseChannel.sortPriority != rhs.releaseChannel.sortPriority {
+                        return lhs.releaseChannel.sortPriority < rhs.releaseChannel.sortPriority
+                    }
                     return lhs.name < rhs.name
                 }
             )

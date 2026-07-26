@@ -98,6 +98,7 @@ extension AnalysisLogic {
         recognizedVersion = String(localized: "Nie rozpoznano instalatora")
         sourceAppURL = nil
         detectedSystemIcon = nil
+        isBetaInstaller = false
         mountedDMGPath = nil
         isAnalyzing = false
         isSystemDetected = false

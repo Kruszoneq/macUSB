@@ -94,13 +94,15 @@ extension AnalysisLogic {
 
         // Modern (Big Sur+)
         let isModern =
-            nameLower.contains("tahoe") || // Dodano Tahoe
+            nameLower.contains("golden gate") ||
+            nameLower.contains("tahoe") ||
             nameLower.contains("sur") ||
             nameLower.contains("monterey") ||
             nameLower.contains("ventura") ||
             nameLower.contains("sonoma") ||
             nameLower.contains("sequoia") ||
-            rawVer.starts(with: "21.") || // Dodano Tahoe (v26/21.x)
+            rawVer.starts(with: "22.") ||
+            rawVer.starts(with: "21.") ||
             rawVer.starts(with: "11.") ||
             (rawVer.starts(with: "12.") && !isExplicitlyUnsupported) ||
             (rawVer.starts(with: "13.") && !nameLower.contains("high")) ||
@@ -241,13 +243,15 @@ extension AnalysisLogic {
 
         // Modern (Big Sur+)
         let isModern =
-            nameLower.contains("tahoe") || // Dodano Tahoe
+            nameLower.contains("golden gate") ||
+            nameLower.contains("tahoe") ||
             nameLower.contains("sur") ||
             nameLower.contains("monterey") ||
             nameLower.contains("ventura") ||
             nameLower.contains("sonoma") ||
             nameLower.contains("sequoia") ||
-            rawVer.starts(with: "21.") || // Dodano Tahoe (v26/21.x)
+            rawVer.starts(with: "22.") ||
+            rawVer.starts(with: "21.") ||
             rawVer.starts(with: "11.") ||
             (rawVer.starts(with: "12.") && !isExplicitlyUnsupported) ||
             (rawVer.starts(with: "13.") && !nameLower.contains("high")) ||

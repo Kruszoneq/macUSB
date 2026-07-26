@@ -1,24 +1,63 @@
 import Foundation
 
 extension MacOSCatalogService {
-    func fetchStableInstallers(phase: @escaping PhaseSink) async throws -> [MacOSInstallerEntry] {
+    func fetchInstallers(
+        includePublicBetaVersions: Bool,
+        phase: @escaping PhaseSink
+    ) async throws -> [MacOSInstallerEntry] {
         try Task.checkCancellation()
 
         phase(String(localized: "Pobieranie katalogu Apple..."))
-        AppLogging.info("Pobieranie katalogu installerow z Apple.", category: "Downloader")
-        let catalogData = try await fetchData(from: Constants.catalogURL)
-        let candidates = try parseCatalogCandidates(from: catalogData)
-        AppLogging.info("W katalogu znaleziono \(candidates.count) kandydatow InstallAssistant.", category: "Downloader")
+        let sources = Constants.catalogSources(includePublicBetaVersions: includePublicBetaVersions)
+        AppLogging.info(
+            "Pobieranie katalogow installerow z Apple: \(sources.map { "\($0.channel.rawValue)=\($0.url.lastPathComponent)" }.joined(separator: ", ")).",
+            category: "Downloader"
+        )
+
+        var batches: [CatalogCandidateBatch] = []
+        try await withThrowingTaskGroup(of: CatalogCandidateBatch.self) { group in
+            for source in sources {
+                group.addTask {
+                    try await fetchCatalogCandidateBatch(from: source)
+                }
+            }
+
+            for try await batch in group {
+                batches.append(batch)
+            }
+        }
+
+        let stableProductIDs = Set(
+            batches
+                .first(where: { $0.source.channel == .stable })?
+                .candidates
+                .map(\.productID) ?? []
+        )
 
         phase(String(localized: "Analizowanie metadanych wersji..."))
-        AppLogging.info("Rozpoczecie parsowania plikow .dist.", category: "Downloader")
         var entries: [MacOSInstallerEntry] = []
-        entries.reserveCapacity(candidates.count + Constants.legacySupportMap.count)
+        try await withThrowingTaskGroup(of: [MacOSInstallerEntry].self) { group in
+            for batch in batches {
+                let eligibleCandidates: [CatalogCandidate]
+                if batch.source.channel == .stable {
+                    eligibleCandidates = batch.candidates
+                } else {
+                    eligibleCandidates = batch.candidates.filter {
+                        !stableProductIDs.contains($0.productID)
+                    }
+                }
 
-        for candidate in candidates {
-            try Task.checkCancellation()
-            if let parsed = try await parseDistributionCandidate(candidate) {
-                entries.append(parsed)
+                group.addTask {
+                    try await parseCatalogEntries(
+                        eligibleCandidates,
+                        source: batch.source,
+                        totalCandidateCount: batch.candidates.count
+                    )
+                }
+            }
+
+            for try await sourceEntries in group {
+                entries.append(contentsOf: sourceEntries)
             }
         }
 
@@ -28,7 +67,10 @@ extension MacOSCatalogService {
         entries.append(contentsOf: legacyEntries)
 
         let uniqueEntries = deduplicated(entries)
-        AppLogging.info("Po deduplikacji pozostalo \(uniqueEntries.count) wpisow stable.", category: "Downloader")
+        AppLogging.info(
+            "Po deduplikacji pozostalo \(uniqueEntries.count) wpisow ze wszystkich aktywnych kanalow.",
+            category: "Downloader"
+        )
 
         phase(String(localized: "Sprawdzanie rozmiarów instalatorów..."))
         AppLogging.info("Rozpoczecie sprawdzania rozmiarow instalatorow.", category: "Downloader")
@@ -36,6 +78,43 @@ extension MacOSCatalogService {
         AppLogging.info("Zakonczono sprawdzanie rozmiarow instalatorow.", category: "Downloader")
         logSizeProbeSummary(sizeProbeResult.summary)
         return sizeProbeResult.entries
+    }
+
+    private func fetchCatalogCandidateBatch(from source: CatalogSource) async throws -> CatalogCandidateBatch {
+        try Task.checkCancellation()
+
+        let catalogData = try await fetchData(from: source.url)
+        let candidates = try parseCatalogCandidates(
+            from: catalogData,
+            releaseChannel: source.channel,
+            catalogURL: source.url
+        )
+        AppLogging.info(
+            "Kanal \(source.channel.rawValue), katalog \(source.url.lastPathComponent): znaleziono \(candidates.count) kandydatow InstallAssistant.",
+            category: "Downloader"
+        )
+        return CatalogCandidateBatch(source: source, candidates: candidates)
+    }
+
+    private func parseCatalogEntries(
+        _ candidates: [CatalogCandidate],
+        source: CatalogSource,
+        totalCandidateCount: Int
+    ) async throws -> [MacOSInstallerEntry] {
+        var entries: [MacOSInstallerEntry] = []
+        entries.reserveCapacity(candidates.count)
+        for candidate in candidates {
+            try Task.checkCancellation()
+            if let parsed = try await parseDistributionCandidate(candidate) {
+                entries.append(parsed)
+            }
+        }
+
+        AppLogging.info(
+            "Kanal \(source.channel.rawValue), katalog \(source.url.lastPathComponent): przeanalizowano \(candidates.count) z \(totalCandidateCount) kandydatow, zaakceptowano \(entries.count) wpisow.",
+            category: "Downloader"
+        )
+        return entries
     }
 
     func fetchDownloadManifest(
@@ -48,21 +127,22 @@ extension MacOSCatalogService {
             return try await fetchOldestDownloadManifest(for: entry, phase: phase)
         }
 
-        let majorVersion = entry.version.split(separator: ".").first.map(String.init) ?? ""
-        let normalizedName = entry.name.lowercased()
-        let supportedMajors: Set<String> = ["11", "12", "13", "14", "15", "26"]
-        let supportedNameTokens = ["high sierra", "mojave", "catalina", "big sur", "monterey", "ventura", "sonoma", "sequoia", "tahoe"]
-        let hasSupportedName = supportedNameTokens.contains { normalizedName.contains($0) }
-        let isCatalina = normalizedName.contains("catalina") && entry.version.hasPrefix("10.15")
-        guard supportedMajors.contains(majorVersion) || hasSupportedName || isCatalina else {
+        guard isSupportedDownloadTarget(entry) else {
             throw DiscoveryError.unsupportedEntry
         }
         guard let productID = entry.catalogProductID, !productID.isEmpty else {
             throw DiscoveryError.unsupportedEntry
         }
+        guard let catalogURL = entry.catalogURL, isAllowedHost(catalogURL) else {
+            throw DiscoveryError.unsupportedEntry
+        }
 
         phase(String(localized: "Pobieranie manifestu wybranego systemu..."))
-        let catalogData = try await fetchData(from: Constants.catalogURL)
+        AppLogging.info(
+            "Pobieranie manifestu productID=\(productID), channel=\(entry.releaseChannel.rawValue), catalog=\(catalogURL.absoluteString)",
+            category: "Downloader"
+        )
+        let catalogData = try await fetchData(from: catalogURL)
         let products = try parseCatalogProducts(from: catalogData)
         guard let product = products[productID] else {
             throw DiscoveryError.productNotFound(productID)
@@ -202,7 +282,11 @@ extension MacOSCatalogService {
         return products
     }
 
-    func parseCatalogCandidates(from data: Data) throws -> [CatalogCandidate] {
+    func parseCatalogCandidates(
+        from data: Data,
+        releaseChannel: MacOSInstallerReleaseChannel,
+        catalogURL: URL
+    ) throws -> [CatalogCandidate] {
         let products = try parseCatalogProducts(from: data)
 
         var candidates: [CatalogCandidate] = []
@@ -231,7 +315,9 @@ extension MacOSCatalogService {
                     productID: productID,
                     distributionURL: distributionURL,
                     sourceURL: sourceURL,
-                    catalogSizeBytes: catalogSizeBytes
+                    catalogSizeBytes: catalogSizeBytes,
+                    releaseChannel: releaseChannel,
+                    catalogURL: catalogURL
                 )
             )
         }

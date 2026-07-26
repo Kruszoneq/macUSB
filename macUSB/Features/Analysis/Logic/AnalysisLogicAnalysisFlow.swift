@@ -41,6 +41,7 @@ extension AnalysisLogic {
         self.log("Źródło pliku do odczytu wersji: \(url.path)")
         withAnimation { isAnalyzing = true }
         detectedSystemIcon = nil
+        isBetaInstaller = false
         selectedDrive = nil; capacityCheckFinished = false
         showUSBSection = false; showUnsupportedMessage = false
         isUnsupportedSierra = false
@@ -103,15 +104,8 @@ extension AnalysisLogic {
                             self.mountedDMGPath = mountedImagePath
                         }
                         if let (name, rawVer, appURL, _) = mountedReadInfo {
-                            let friendlyVer = self.formatMarketingVersion(raw: rawVer, name: name)
-                            var cleanName = name
-                            cleanName = cleanName.replacingOccurrences(of: "Install ", with: "")
-                            cleanName = cleanName.replacingOccurrences(of: "macOS ", with: "")
-                            cleanName = cleanName.replacingOccurrences(of: "Mac OS X ", with: "")
-                            cleanName = cleanName.replacingOccurrences(of: "OS X ", with: "")
-                            let prefix = name.contains("macOS") ? "macOS" : (name.contains("OS X") ? "OS X" : "macOS")
-
-                            self.recognizedVersion = "\(prefix) \(cleanName) \(friendlyVer)"
+                            self.recognizedVersion = self.formatDetectedMacOSName(rawVersion: rawVer, name: name)
+                            self.isBetaInstaller = self.detectBetaInstaller(name: name, appURL: appURL)
                             self.updateRequiredUSBCapacity(rawVersion: rawVer, name: name)
                             self.sourceAppURL = appURL
                             self.updateDetectedSystemIcon(from: appURL)
@@ -140,6 +134,7 @@ extension AnalysisLogic {
                             self.recognizedVersion = ""
                             self.sourceAppURL = nil
                             self.detectedSystemIcon = nil
+                            self.isBetaInstaller = false
                             self.isSystemDetected = false
                             self.showUSBSection = false
                             self.showUnsupportedMessage = false
@@ -234,15 +229,8 @@ extension AnalysisLogic {
                         self.mountedDMGPath = nil
                         self.log("Walidacja aplikacji instalatora macOS: \(inspection.logSummary)")
                         if let (name, rawVer, appURL) = inspection.appInfo {
-                            let friendlyVer = self.formatMarketingVersion(raw: rawVer, name: name)
-                            var cleanName = name
-                            cleanName = cleanName.replacingOccurrences(of: "Install ", with: "")
-                            cleanName = cleanName.replacingOccurrences(of: "macOS ", with: "")
-                            cleanName = cleanName.replacingOccurrences(of: "Mac OS X ", with: "")
-                            cleanName = cleanName.replacingOccurrences(of: "OS X ", with: "")
-                            let prefix = name.contains("macOS") ? "macOS" : (name.contains("OS X") ? "OS X" : "macOS")
-
-                            self.recognizedVersion = "\(prefix) \(cleanName) \(friendlyVer)"
+                            self.recognizedVersion = self.formatDetectedMacOSName(rawVersion: rawVer, name: name)
+                            self.isBetaInstaller = self.detectBetaInstaller(name: name, appURL: appURL)
                             self.updateRequiredUSBCapacity(rawVersion: rawVer, name: name)
                             self.sourceAppURL = appURL
                             self.updateDetectedSystemIcon(from: appURL)

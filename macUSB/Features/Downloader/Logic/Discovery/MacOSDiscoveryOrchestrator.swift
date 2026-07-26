@@ -19,7 +19,7 @@ final class MacOSDownloaderLogic: ObservableObject {
         self.catalogService = MacOSCatalogService(session: session)
     }
 
-    func startDiscovery() {
+    func startDiscovery(includePublicBetaVersions: Bool = false) {
         cancelDiscovery(updateState: false)
         state = .loading
         errorText = nil
@@ -30,7 +30,7 @@ final class MacOSDownloaderLogic: ObservableObject {
 
         discoveryTask = Task { [weak self] in
             guard let self else { return }
-            await self.runDiscovery()
+            await self.runDiscovery(includePublicBetaVersions: includePublicBetaVersions)
         }
     }
 
@@ -61,9 +61,15 @@ final class MacOSDownloaderLogic: ObservableObject {
         catalogService.isLegacyAssemblyTarget(entry)
     }
 
-    private func runDiscovery() async {
+    func supportsProductionDownload(_ entry: MacOSInstallerEntry) -> Bool {
+        catalogService.isSupportedDownloadTarget(entry)
+    }
+
+    private func runDiscovery(includePublicBetaVersions: Bool) async {
         do {
-            let entries = try await catalogService.fetchStableInstallers { [weak self] phase in
+            let entries = try await catalogService.fetchInstallers(
+                includePublicBetaVersions: includePublicBetaVersions
+            ) { [weak self] phase in
                 Task { @MainActor [weak self] in
                     self?.statusText = phase
                 }

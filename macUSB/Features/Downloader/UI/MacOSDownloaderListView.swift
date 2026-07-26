@@ -11,7 +11,7 @@ extension MacOSDownloaderWindowShellView {
                 Spacer()
 
                 Button {
-                    logic.startDiscovery()
+                    logic.startDiscovery(includePublicBetaVersions: showBetaVersions)
                 } label: {
                     Image(systemName: "arrow.clockwise")
                         .padding(.horizontal, 10)
@@ -225,9 +225,13 @@ extension MacOSDownloaderWindowShellView {
                 installerIconView(for: entry)
 
                 VStack(alignment: .leading, spacing: 1) {
-                    Text("\(entry.name) \(entry.version)")
-                        .font(.body.weight(.medium))
-                        .foregroundStyle(.primary)
+                    HStack(spacing: 7) {
+                        Text("\(entry.family) \(entry.version)")
+                            .font(.body.weight(.medium))
+                            .foregroundStyle(.primary)
+
+                        betaBadge(for: entry)
+                    }
 
                     if let secondaryText = entrySecondaryText(for: entry) {
                         Text(secondaryText)
@@ -294,10 +298,12 @@ extension MacOSDownloaderWindowShellView {
         }
 
         return logic.familyGroups.compactMap { group in
-            guard let newest = group.entries.first else {
-                return nil
+            var seenChannels: Set<MacOSInstallerReleaseChannel> = []
+            let newestPerChannel = group.entries.filter { entry in
+                seenChannels.insert(entry.releaseChannel).inserted
             }
-            return MacOSInstallerFamilyGroup(family: group.family, entries: [newest])
+            guard !newestPerChannel.isEmpty else { return nil }
+            return MacOSInstallerFamilyGroup(family: group.family, entries: newestPerChannel)
         }
     }
 
@@ -320,7 +326,7 @@ extension MacOSDownloaderWindowShellView {
     func resolveInstallerIcon(for entry: MacOSInstallerEntry) -> NSImage? {
         let versionKey = normalizedVersionKey(from: entry.version)
         let majorVersionKey = normalizedMajorVersionKey(from: entry.version)
-        let nameKey = normalizedSystemNameKey(from: entry.name)
+        let nameKey = normalizedSystemNameKey(from: entry.family)
         let nameAliases = iconNameAliases(for: nameKey)
 
         for alias in nameAliases {
@@ -389,6 +395,25 @@ extension MacOSDownloaderWindowShellView {
             return ["mavericks", "maverics"]
         }
         return [key]
+    }
+
+    @ViewBuilder
+    func betaBadge(for entry: MacOSInstallerEntry) -> some View {
+        if entry.isBeta {
+            Text(verbatim: "BETA")
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(Color.accentColor)
+                .padding(.horizontal, 7)
+                .padding(.vertical, 2)
+                .background(
+                    Capsule(style: .continuous)
+                        .fill(Color.accentColor.opacity(0.14))
+                )
+                .overlay(
+                    Capsule(style: .continuous)
+                        .stroke(Color.accentColor.opacity(0.46), lineWidth: 0.7)
+                )
+        }
     }
 
     func shouldShowBuild(_ build: String) -> Bool {

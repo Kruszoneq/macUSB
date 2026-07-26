@@ -277,6 +277,7 @@
 				Resources/Icons/OS/os_14_8_sonoma.icns,
 				Resources/Icons/OS/os_15_7_sequoia.icns,
 				Resources/Icons/OS/os_26_2_tahoe.icns,
+				Resources/Icons/OS/os_27_0_golden_gate.icns,
 				Resources/Icons/Windows/SOURCE_AND_LICENSE.txt,
 				Resources/Icons/Windows/Win10.svg,
 				Resources/Icons/Windows/Win11.svg,
@@ -968,7 +969,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 38;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -1024,7 +1025,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 38;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;

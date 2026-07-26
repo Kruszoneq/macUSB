@@ -6,6 +6,7 @@ Finish screen must report:
 - success/failure/cancel,
 - relevant final metrics/status,
 - cleanup result state.
+- for a macOS installer classified as prerelease during analysis, keep the separate `BETA` badge visible beside the normalized system name; its tint follows the finish result card tone.
 - for Linux workflow failures, show a localized warning card (orange tone) with localized title + localized error description mapped from helper failure context (not raw helper error text).
 - after successful creation, show a localized eject-action card for safe ejection of the selected target whole-disk (`diskX`).
 - eject card behavior:

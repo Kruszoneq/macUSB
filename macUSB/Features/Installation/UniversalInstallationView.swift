@@ -10,6 +10,7 @@ struct UniversalInstallationView: View {
     let targetDriveDisplayName: String?
     let systemName: String
     let detectedSystemIcon: NSImage?
+    let isBetaInstaller: Bool
     let originalImageURL: URL?
     let linuxFlowContext: LinuxInstallationFlowContext?
     let isWindowsWorkflow: Bool
@@ -196,7 +197,12 @@ struct UniversalInstallationView: View {
                                 }
                                 VStack(alignment: .leading, spacing: 3) {
                                     Text("Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
-                                    Text(systemName).font(.headline).foregroundColor(.primary).bold()
+                                    HStack(spacing: 8) {
+                                        Text(systemName).font(.headline).foregroundColor(.primary).bold()
+                                        if isBetaInstaller {
+                                            MacOSBetaBadge(tint: .secondary)
+                                        }
+                                    }
                                 }
                                 Spacer()
                             }
@@ -537,6 +543,7 @@ struct UniversalInstallationView: View {
                     systemName: systemName,
                     mountPoint: effectiveMountPointForCreation,
                     detectedSystemIcon: detectedSystemIcon,
+                    isBetaInstaller: isBetaInstaller,
                     isCatalina: isCatalina,
                     isRestoreLegacy: isRestoreLegacy,
                     isMavericks: isMavericks,

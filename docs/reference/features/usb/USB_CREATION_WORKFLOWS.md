@@ -43,6 +43,12 @@ Linux summary screen (`UniversalInstallationView`) should show an informational 
 - card uses accent tone (`.active`) with SF Symbol `info.circle.fill`,
 - copy explains that macOS may show an unreadable-disk dialog and user should choose `Ignore`.
 
+For a macOS installer classified as prerelease during analysis:
+
+- summary and creation-progress system cards show a separate `BETA` badge next to the normalized system name,
+- badge tint follows the tone of the status card in which it appears,
+- prerelease state is presentation metadata only and does not change helper requests or workflow stage sequencing.
+
 Windows summary screen (`UniversalInstallationView`) shows boot-mode information before the process-stages section:
 - all variants use an accent card (`.active`) with SF Symbol `info.circle.fill`,
 - `Vista`, `7`, and `Server 2008 R2` show a BIOS-only informational card,

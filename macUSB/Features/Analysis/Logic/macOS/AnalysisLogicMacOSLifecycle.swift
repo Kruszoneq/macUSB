@@ -29,6 +29,7 @@ extension AnalysisLogic {
                     self.recognizedVersion = "Mac OS X Tiger 10.4"
                     self.sourceAppURL = effectiveSourceAppURL
                     self.updateDetectedSystemIcon(from: effectiveSourceAppURL)
+                    self.isBetaInstaller = false
                     self.mountedDMGPath = mountPoint
                     self.isSystemDetected = true
                     self.showUnsupportedMessage = false
@@ -71,6 +72,7 @@ extension AnalysisLogic {
                 self.recognizedVersion = ""
                 self.sourceAppURL = nil
                 self.detectedSystemIcon = nil
+                self.isBetaInstaller = false
                 self.mountedDMGPath = nil
 
                 self.isAnalyzing = false
