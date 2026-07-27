@@ -5,7 +5,7 @@ Keep this file current with operational hotspots that can cause regressions.
 ## High-Risk Areas
 
 - Version/compatibility heuristics with many special cases.
-- Physical host architecture and Mach-O slice detection: process architecture is not authoritative when macUSB runs under Rosetta, and unknown `createinstallmedia` output must fail closed.
+- Physical host architecture and local Mach-O slice detection: process architecture is not authoritative when macUSB runs under Rosetta; CoreFoundation architecture results must be normalized consistently, and unknown `createinstallmedia` formats must fail closed.
 - Rosetta installation through the privileged helper: license confirmation, fixed executable/arguments, one-task exclusion, pipe draining, and bounded post-install probes must remain aligned.
 - USB formatting and APFS-to-physical-store mapping.
 - Helper registration/signing/environment drift causing late-stage failures.

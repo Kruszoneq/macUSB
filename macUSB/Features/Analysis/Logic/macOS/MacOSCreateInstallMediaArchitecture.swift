@@ -1,3 +1,4 @@
+import CoreFoundation
 import Foundation
 
 enum MacOSCreateInstallMediaArchitecture: Equatable {
@@ -37,43 +38,22 @@ struct MacOSCreateInstallMediaInspection: Equatable {
 
 enum MacOSCreateInstallMediaArchitectureInspector {
     static func inspect(executableURL: URL) -> MacOSCreateInstallMediaInspection {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/lipo")
-        process.arguments = ["-archs", executableURL.path]
-
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        process.standardError = pipe
-
-        do {
-            try process.run()
-            process.waitUntilExit()
-        } catch {
+        guard let cpuTypes = CFBundleCopyExecutableArchitecturesForURL(
+            executableURL as CFURL
+        ) as? [NSNumber],
+        !cpuTypes.isEmpty else {
             return MacOSCreateInstallMediaInspection(
                 architecture: .unknown,
                 rawArchitectures: [],
-                failureReason: "lipo_launch_failed: \(error.localizedDescription)"
+                failureReason: "core_foundation_architecture_inspection_failed"
             )
         }
 
-        let output = String(
-            decoding: pipe.fileHandleForReading.readDataToEndOfFile(),
-            as: UTF8.self
-        ).trimmingCharacters(in: .whitespacesAndNewlines)
-
-        guard process.terminationStatus == 0 else {
-            return MacOSCreateInstallMediaInspection(
-                architecture: .unknown,
-                rawArchitectures: [],
-                failureReason: "lipo_exit_\(process.terminationStatus): \(output)"
-            )
-        }
-
-        let architectures = output
-            .split(whereSeparator: \.isWhitespace)
-            .map(String.init)
-        let normalized = Set(architectures.map { $0.lowercased() })
-        let containsAppleSilicon = normalized.contains("arm64") || normalized.contains("arm64e")
+        let rawArchitectures = uniqueArchitectureNames(
+            cpuTypes.map { architectureName(for: $0.intValue) }
+        )
+        let normalized = Set(rawArchitectures)
+        let containsAppleSilicon = normalized.contains("arm64")
         let containsIntel = normalized.contains("x86_64")
 
         let architecture: MacOSCreateInstallMediaArchitecture
@@ -90,10 +70,30 @@ enum MacOSCreateInstallMediaArchitectureInspector {
 
         return MacOSCreateInstallMediaInspection(
             architecture: architecture,
-            rawArchitectures: architectures,
+            rawArchitectures: rawArchitectures,
             failureReason: architecture == .unknown
-                ? "unrecognized_architectures: \(output)"
+                ? "unsupported_architectures: \(rawArchitectures.joined(separator: ", "))"
                 : nil
         )
+    }
+
+    private static func architectureName(for cpuType: Int) -> String {
+        switch cpuType {
+        case kCFBundleExecutableArchitectureX86_64:
+            return "x86_64"
+        case kCFBundleExecutableArchitectureARM64:
+            // arm64e uses the same CPU type and follows the same compatibility policy.
+            return "arm64"
+        default:
+            return String(
+                format: "cpu_0x%08x",
+                UInt32(truncatingIfNeeded: cpuType)
+            )
+        }
+    }
+
+    private static func uniqueArchitectureNames(_ names: [String]) -> [String] {
+        var seen = Set<String>()
+        return names.filter { seen.insert($0).inserted }
     }
 }

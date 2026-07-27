@@ -28,7 +28,8 @@ For selected macOS `.app` sources and macOS `.app` bundles found inside mounted 
 - analysis must inspect installer payload markers before accepting the app as a valid source:
   - `Contents/Resources/createinstallmedia` must exist as a file for standard app-installer workflows,
   - `Contents/SharedSupport/InstallESD.dmg` must exist as a file and is sufficient only for restore-legacy metadata (`Lion` / `Mountain Lion`, `10.7` / `10.8`),
-- standard app-installer workflows inspect `Contents/Resources/createinstallmedia` with `/usr/bin/lipo -archs` and normalize `arm64`/`arm64e`, `x86_64`, universal, or unknown results,
+- standard app-installer workflows inspect `Contents/Resources/createinstallmedia` locally through the system `CFBundleCopyExecutableArchitecturesForURL` API, without launching external tools or requiring Xcode Command Line Tools,
+- CoreFoundation handles thin and Fat/Universal Mach-O formats; analysis normalizes the returned `x86_64` and ARM64 CPU types, treats `arm64e` as Apple Silicon, and fails closed for unreadable, unsupported, or non-Mach-O results,
 - the physical Mac architecture is detected through `hw.optional.arm64` with a controlled `uname` fallback; compile-time or current-process architecture must not drive compatibility,
 - Intel Mac plus ARM-only `createinstallmedia` is an unsupported result that blocks USB selection and cannot be bypassed through manual analysis skipping,
 - an unreadable/unknown `createinstallmedia` architecture, or unknown physical host architecture when a decision is required, fails closed,
