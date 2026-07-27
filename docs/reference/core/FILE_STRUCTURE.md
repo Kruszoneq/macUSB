@@ -60,6 +60,12 @@
 
 - `macUSB/Shared/UI/TouchBar/TouchbarSupport.swift` — global, fixed Touch Bar configuration (app branding).
 
+### Permissions layout
+
+- `macUSB/Shared/Services/FullDiskAccessPermissionManager.swift` — Full Disk Access state orchestration, startup prompt flow, System Settings opening, and app-state publication.
+- `macUSB/Shared/Services/FullDiskAccessProbe.swift` — non-destructive POSIX probes for Full Disk Access-protected files and directories.
+- `macUSB/Shared/Services/FullDiskAccessTypes.swift` — internal Full Disk Access statuses, triggers, probe signals, and evaluation result types.
+
 ### Analysis docs
 
 - `docs/reference/features/analysis/ANALYSIS_COMPATIBILITY.md` — analysis contract and routing invariants.

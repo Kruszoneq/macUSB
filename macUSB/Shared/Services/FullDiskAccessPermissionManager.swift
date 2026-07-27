@@ -21,27 +21,25 @@ final class FullDiskAccessPermissionManager {
         NotificationCenter.default.removeObserver(self)
     }
 
-    func refreshState(completion: ((Bool) -> Void)? = nil) {
-        hasFullDiskAccess { hasAccess in
+    func refreshState(
+        trigger: FullDiskAccessCheckTrigger,
+        completion: ((FullDiskAccessStatus) -> Void)? = nil
+    ) {
+        probeQueue.async {
+            let evaluation = self.evaluateFullDiskAccess(trigger: trigger)
             DispatchQueue.main.async {
-                MenuState.shared.hasFullDiskAccess = hasAccess
-                completion?(hasAccess)
+                self.publish(evaluation.status)
+                completion?(evaluation.status)
             }
         }
     }
 
-    func hasFullDiskAccess(completion: @escaping (Bool) -> Void) {
-        probeQueue.async {
-            let hasAccess = self.evaluateFullDiskAccess()
-            completion(hasAccess)
-        }
-    }
-
     func handleStartupPromptIfNeeded(completion: @escaping () -> Void) {
-        hasFullDiskAccess { hasAccess in
+        probeQueue.async {
+            let evaluation = self.evaluateFullDiskAccess(trigger: .startup)
             DispatchQueue.main.async {
-                MenuState.shared.hasFullDiskAccess = hasAccess
-                guard !hasAccess else {
+                self.publish(evaluation.status)
+                guard !evaluation.status.hasConfirmedAccess else {
                     completion()
                     return
                 }
@@ -52,16 +50,13 @@ final class FullDiskAccessPermissionManager {
 
     @discardableResult
     func openFullDiskAccessSettings(showFallbackAlertIfNeeded: Bool) -> Bool {
-        let deepLinkCandidates = [
-            "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles",
-            "x-apple.systempreferences:com.apple.settings.PrivacySecurity.extension?Privacy_AllFiles",
-            "x-apple.systempreferences:com.apple.preference.security?Privacy"
-        ]
+        let evaluation = evaluateFullDiskAccess(trigger: .settingsPanel)
+        publish(evaluation.status)
 
-        for candidate in deepLinkCandidates {
-            if let url = URL(string: candidate), NSWorkspace.shared.open(url) {
-                return true
-            }
+        let fullDiskAccessSettingsURL =
+            "x-apple.systempreferences:com.apple.settings.PrivacySecurity.extension?Privacy_AllFiles"
+        if let url = URL(string: fullDiskAccessSettingsURL), NSWorkspace.shared.open(url) {
+            return true
         }
 
         let settingsBundleIDs = ["com.apple.systempreferences", "com.apple.SystemSettings"]
@@ -83,34 +78,48 @@ final class FullDiskAccessPermissionManager {
 
     @objc
     private func handleAppDidBecomeActive() {
-        refreshState()
-
         guard awaitingAppReactivationAfterSettingsOpen else { return }
         finishPendingStartupContinuationIfNeeded()
     }
 
-    private func evaluateFullDiskAccess() -> Bool {
-        let tccDatabaseURL = URL(fileURLWithPath: NSHomeDirectory())
-            .appendingPathComponent("Library/Application Support/com.apple.TCC/TCC.db", isDirectory: false)
+    private func evaluateFullDiskAccess(
+        trigger: FullDiskAccessCheckTrigger
+    ) -> FullDiskAccessEvaluation {
+        AppLogging.info(
+            "FDA check started: trigger=\(trigger.rawValue).",
+            category: "Permissions"
+        )
 
-        guard FileManager.default.fileExists(atPath: tccDatabaseURL.path) else {
-            return false
+        let evaluation = FullDiskAccessProbe.evaluate()
+        for result in evaluation.results {
+            var message =
+                "FDA probe: trigger=\(trigger.rawValue), id=\(result.identifier.rawValue), " +
+                "operation=\(result.operation.rawValue), path=\(result.path)"
+            if let errnoCode = result.errnoCode {
+                let description = result.errorDescription ?? "Unknown error"
+                message += ", errno=\(errnoCode) (\(description))"
+            } else {
+                message += ", errno=none"
+            }
+            message += ", signal=\(result.signal.rawValue)."
+            AppLogging.info(message, category: "Permissions")
         }
 
-        do {
-            let handle = try FileHandle(forReadingFrom: tccDatabaseURL)
-            defer {
-                try? handle.close()
-            }
+        AppLogging.info(
+            "FDA check completed: trigger=\(trigger.rawValue), status=\(evaluation.status.rawValue).",
+            category: "Permissions"
+        )
+        return evaluation
+    }
 
-            if #available(macOS 10.15.4, *) {
-                _ = try handle.read(upToCount: 1)
-            } else {
-                _ = handle.readData(ofLength: 1)
-            }
-            return true
-        } catch {
-            return false
+    private func publish(_ status: FullDiskAccessStatus) {
+        let update = {
+            MenuState.shared.hasFullDiskAccess = status.hasConfirmedAccess
+        }
+        if Thread.isMainThread {
+            update()
+        } else {
+            DispatchQueue.main.sync(execute: update)
         }
     }
 
