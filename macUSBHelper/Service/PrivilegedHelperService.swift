@@ -8,11 +8,14 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
     private var activeExecutor: HelperWorkflowExecutor?
     private var activeDownloaderAssemblyID: String?
     private var activeDownloaderAssemblyExecutor: DownloaderAssemblyExecutor?
+    private var isRosettaInstallationActive = false
     private let queue = DispatchQueue(label: "macUSB.helper.service")
 
     func startWorkflow(_ requestData: NSData, reply: @escaping (NSString?, NSError?) -> Void) {
         queue.async {
-            guard self.activeExecutor == nil, self.activeDownloaderAssemblyExecutor == nil else {
+            guard self.activeExecutor == nil,
+                  self.activeDownloaderAssemblyExecutor == nil,
+                  !self.isRosettaInstallationActive else {
                 let error = NSError(
                     domain: "macUSBHelper",
                     code: 409,
@@ -81,7 +84,9 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
 
     func startDownloaderAssembly(_ requestData: NSData, reply: @escaping (NSString?, NSError?) -> Void) {
         queue.async {
-            guard self.activeExecutor == nil, self.activeDownloaderAssemblyExecutor == nil else {
+            guard self.activeExecutor == nil,
+                  self.activeDownloaderAssemblyExecutor == nil,
+                  !self.isRosettaInstallationActive else {
                 let error = NSError(
                     domain: "macUSBHelper",
                     code: 409,
@@ -144,7 +149,9 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
 
     func cleanupDownloaderSession(_ requestData: NSData, reply: @escaping (NSData?, NSError?) -> Void) {
         queue.async {
-            guard self.activeExecutor == nil, self.activeDownloaderAssemblyExecutor == nil else {
+            guard self.activeExecutor == nil,
+                  self.activeDownloaderAssemblyExecutor == nil,
+                  !self.isRosettaInstallationActive else {
                 let error = NSError(
                     domain: "macUSBHelper",
                     code: 409,
@@ -195,6 +202,51 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
                     userInfo: [NSLocalizedDescriptionKey: "Nie udało się zakodować wyniku cleanupu: \(error.localizedDescription)"]
                 )
                 reply(nil, err)
+            }
+        }
+    }
+
+    func installRosetta(_ reply: @escaping (NSData?, NSError?) -> Void) {
+        queue.async {
+            guard self.activeExecutor == nil,
+                  self.activeDownloaderAssemblyExecutor == nil,
+                  !self.isRosettaInstallationActive else {
+                reply(
+                    nil,
+                    NSError(
+                        domain: "macUSBHelper",
+                        code: 409,
+                        userInfo: [NSLocalizedDescriptionKey: "Helper realizuje już inne zadanie."]
+                    )
+                )
+                return
+            }
+
+            do {
+                try HelperRosettaInstaller.validateEnvironment()
+            } catch {
+                reply(nil, error as NSError)
+                return
+            }
+
+            self.isRosettaInstallationActive = true
+            DispatchQueue.global(qos: .userInitiated).async {
+                let result = HelperRosettaInstaller.run()
+                self.queue.async {
+                    self.isRosettaInstallationActive = false
+                    do {
+                        reply(try HelperXPCCodec.encode(result) as NSData, nil)
+                    } catch {
+                        reply(
+                            nil,
+                            NSError(
+                                domain: "macUSBHelper",
+                                code: 500,
+                                userInfo: [NSLocalizedDescriptionKey: "Nie udało się zakodować wyniku instalacji Rosetty."]
+                            )
+                        )
+                    }
+                }
             }
         }
     }

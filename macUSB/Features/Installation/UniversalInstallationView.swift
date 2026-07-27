@@ -20,6 +20,7 @@ struct UniversalInstallationView: View {
     let windowsFamily: WindowsFamily?
     let windowsBootCapabilities: WindowsBootCapabilities?
     let windowsWillSplitWim: Bool
+    let macOSRosettaRequirement: MacOSRosettaRequirement
     
     // Flagi
     let needsCodesign: Bool
@@ -81,12 +82,15 @@ struct UniversalInstallationView: View {
     @State var selectedWindowsBootMode: WindowsBootMode? = nil
     @State var lastLoggedWindowsBootMode: WindowsBootMode? = nil
     @State var windowsMacUSBootPreflightInProgress: Bool = false
+    @State var macOSRosettaState: CreatorMacOSRosettaState? = nil
+    @State var macOSRosettaRetryGeneration: UUID? = nil
     
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
     @State var usbProcessSleepBlockToken: UUID? = nil
     
     @State var windowHandler: UniversalWindowHandler?
+    @State var hostingWindow: NSWindow?
     
     var tempWorkURL: URL {
         return FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_temp")
@@ -150,6 +154,7 @@ struct UniversalInstallationView: View {
         windowsPrerequisiteShouldBlockStart
             || windowsAutounattendShouldBlockStart
             || windowsMacUSBootPreflightInProgress
+            || macOSRosettaShouldBlockStart
     }
     private var processSectionDivider: some View {
         HStack(spacing: 10) {
@@ -224,6 +229,14 @@ struct UniversalInstallationView: View {
                                 }
                             }
                         }
+                    }
+
+                    if macOSRosettaShouldShowCard {
+                        CreatorMacOSRosettaCardView(
+                            state: effectiveMacOSRosettaState,
+                            action: performMacOSRosettaPrimaryAction
+                        )
+                        .transition(.opacity)
                     }
 
                     if isLinuxWorkflow {
@@ -419,6 +432,7 @@ struct UniversalInstallationView: View {
                             .padding(8)
                         }
                         .macUSBSecondaryButtonStyle()
+                        .disabled(macOSRosettaIsBusy)
                     }
                     .transition(.opacity)
                 }
@@ -521,6 +535,7 @@ struct UniversalInstallationView: View {
         .navigationBarBackButtonHidden(isTabLocked)
         .background(
             WindowAccessor_Universal { window in
+                self.hostingWindow = window
                 window.styleMask.remove(NSWindow.StyleMask.resizable)
                 
                 if self.windowHandler == nil {
@@ -584,6 +599,7 @@ struct UniversalInstallationView: View {
             .hidden()
         )
         .onAppear {
+            initializeMacOSRosettaStateIfNeeded()
             if isWindowsWorkflow {
                 initializeWindowsBootModeSelectionIfNeeded()
                 loadWindowsAutounattendConfiguration()
@@ -620,6 +636,7 @@ struct UniversalInstallationView: View {
             logWindowsBootModeChangeIfNeeded(mode)
         }
         .onDisappear {
+            invalidateMacOSRosettaChecks()
             menuState.setDownloaderAccessBlocked(false, reason: downloaderBlockReason)
             stopUSBMonitoring()
             if !navigateToCreationProgress && !isHelperWorking {

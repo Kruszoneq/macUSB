@@ -15,6 +15,15 @@ Workflow selection must respect analyzed compatibility flags.
 - Linux raw-copy path (`dd`) for recognized `.iso` sources and exceptional forced raw `.img` sources
 - Windows ISO copy path (FAT32/MBR + optional WIM split), with a conditional macUSBoot final write for BIOS media
 
+macOS architecture preflight:
+
+- standard `createinstallmedia` workflows require a readable Mach-O architecture classification before USB selection,
+- Intel hosts reject ARM-only `createinstallmedia`,
+- Apple Silicon hosts require available Rosetta at summary start for Yosemite–Catalina installers whose `createinstallmedia` is Intel-only,
+- universal binaries do not require Rosetta,
+- restore-legacy, Mavericks, and PPC workflow routing remains unchanged,
+- Rosetta installation is a separate helper task before workflow start and does not change destructive workflow stages or cancellation semantics.
+
 Linux raw-copy stages:
 - `linux_unmount_target` — target USB unmount (indeterminate stage),
 - `linux_raw_copy` — raw image copy to whole disk (`/dev/rdiskX`) with progress + write speed,

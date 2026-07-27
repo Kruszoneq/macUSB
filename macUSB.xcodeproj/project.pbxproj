@@ -53,6 +53,7 @@
 		F10000012F00000100000008 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootMountGuard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F00000100000018 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootMountGuard.swift */; };
 		F10000012F00000100000009 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F00000100000019 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift */; };
 		F10000012F0000010000000A /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F0000010000001A /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift */; };
+		G10000012F00000100000001 /* Rosetta/HelperRosettaInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = G10000012F00000100000002 /* Rosetta/HelperRosettaInstaller.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -157,6 +158,7 @@
 		F10000012F00000100000018 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootMountGuard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootMountGuard.swift; sourceTree = "<group>"; };
 		F10000012F00000100000019 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift; sourceTree = "<group>"; };
 		F10000012F0000010000001A /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift; sourceTree = "<group>"; };
+		G10000012F00000100000002 /* Rosetta/HelperRosettaInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rosetta/HelperRosettaInstaller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -185,12 +187,14 @@
 				Features/Analysis/Logic/Linux/AnalysisLogicLinuxLifecycle.swift,
 				Features/Analysis/Logic/Linux/AnalysisLogicLinuxMetadata.swift,
 				Features/Analysis/Logic/Linux/AnalysisLogicRawLinuxImageLifecycle.swift,
+				Features/Analysis/Logic/macOS/AnalysisLogicMacOSArchitectureCompatibility.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSCompatibility.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSImageMounting.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerIcon.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerMetadata.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerValidation.swift,
 				Features/Analysis/Logic/macOS/AnalysisLogicMacOSLifecycle.swift,
+				Features/Analysis/Logic/macOS/MacOSCreateInstallMediaArchitecture.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsBootMarkers.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsBootPolicy.swift,
 				Features/Analysis/Logic/Windows/AnalysisLogicWindowsClassification.swift,
@@ -243,6 +247,8 @@
 				Features/Installation/Linux/CreatorLinuxUnmountRecoveryLogic.swift,
 				Features/Installation/Linux/LinuxInstallationFlowContext.swift,
 				Features/Installation/Linux/LinuxWorkflowErrorPresentation.swift,
+				Features/Installation/macOS/CreatorMacOSRosettaCardView.swift,
+				Features/Installation/macOS/CreatorMacOSRosettaLogic.swift,
 				Features/Installation/UniversalInstallationView.swift,
 				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendAlertLogic.swift,
 				Features/Installation/Windows/Autounattend/CreatorWindowsAutounattendCardView.swift,
@@ -299,11 +305,14 @@
 				Shared/Services/Helper/HelperServiceManager.swift,
 				Shared/Services/Helper/PrivilegedOperationClient.swift,
 				Shared/Services/Helper/PrivilegedOperationClientCapabilities.swift,
+				Shared/Services/Helper/PrivilegedOperationClientRosetta.swift,
 				Shared/Services/InstallerSourceImageUnmountRegistry.swift,
 				Shared/Services/LanguageManager.swift,
 				Shared/Services/Logging.swift,
+				Shared/Services/MacHardwareArchitecture.swift,
 				Shared/Services/MenuState.swift,
 				Shared/Services/NotificationPermissionManager.swift,
+				Shared/Services/RosettaAvailabilityProbe.swift,
 				Shared/Services/SystemSleepBlocker.swift,
 				Shared/Services/UpdateChecker.swift,
 				Shared/Services/USBDriveLogic.swift,
@@ -518,6 +527,7 @@
 				A10000012F00000100000022 /* Service/PrivilegedHelperService.swift */,
 				F10000012F00000100000011 /* Service/PrivilegedHelperServiceCapabilities.swift */,
 				A10000012F00000100000023 /* Service/HelperListenerDelegate.swift */,
+				G10000012F00000100000002 /* Rosetta/HelperRosettaInstaller.swift */,
 				A10000012F00000100000024 /* Workflow/HelperWorkflowExecutor.swift */,
 				A10000012F00000100000025 /* Workflow/HelperWorkflowStages.swift */,
 				A10000012F00000100000026 /* Workflow/HelperWorkflowProgressParsing.swift */,
@@ -773,6 +783,7 @@
 				A10000012F00000100000032 /* Service/PrivilegedHelperService.swift in Sources */,
 				F10000012F00000100000001 /* Service/PrivilegedHelperServiceCapabilities.swift in Sources */,
 				A10000012F00000100000033 /* Service/HelperListenerDelegate.swift in Sources */,
+				G10000012F00000100000001 /* Rosetta/HelperRosettaInstaller.swift in Sources */,
 				A10000012F00000100000034 /* Workflow/HelperWorkflowExecutor.swift in Sources */,
 				A10000012F00000100000035 /* Workflow/HelperWorkflowStages.swift in Sources */,
 				A10000012F00000100000036 /* Workflow/HelperWorkflowProgressParsing.swift in Sources */,
@@ -973,7 +984,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 38;
+				CURRENT_PROJECT_VERSION = 39;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -1029,7 +1040,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 38;
+				CURRENT_PROJECT_VERSION = 39;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;

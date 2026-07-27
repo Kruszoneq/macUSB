@@ -9,6 +9,7 @@ struct MacOSInstallerAppInspection {
     let installESDURL: URL
     let hasCreateinstallmedia: Bool
     let hasInstallESD: Bool
+    let createInstallMediaInspection: MacOSCreateInstallMediaInspection
     let isAccepted: Bool
     let decisionReason: String
 }
@@ -24,7 +25,9 @@ extension MacOSInstallerAppInspection {
         let version = rawVersion ?? "brak"
         let bundleID = bundleIdentifier ?? "brak"
         let decision = isAccepted ? "accepted" : "rejected"
-        return "name=\(name), version=\(version), bundleID=\(bundleID), createinstallmedia=\(hasCreateinstallmedia), InstallESD=\(hasInstallESD), decision=\(decision), reason=\(decisionReason)"
+        let architecture = createInstallMediaInspection.architecture.diagnosticLabel
+        let rawArchitectures = createInstallMediaInspection.rawArchitectures.joined(separator: ",")
+        return "name=\(name), version=\(version), bundleID=\(bundleID), createinstallmedia=\(hasCreateinstallmedia), createinstallmediaArchitecture=\(architecture), rawArchitectures=\(rawArchitectures.isEmpty ? "brak" : rawArchitectures), InstallESD=\(hasInstallESD), decision=\(decision), reason=\(decisionReason)"
     }
 }
 
@@ -37,6 +40,9 @@ extension AnalysisLogic {
 
         let hasCreateinstallmedia = fileManager.isRegularFile(at: createinstallmediaURL)
         let hasInstallESD = fileManager.isRegularFile(at: installESDURL)
+        let createInstallMediaInspection = hasCreateinstallmedia
+            ? MacOSCreateInstallMediaArchitectureInspector.inspect(executableURL: createinstallmediaURL)
+            : .notApplicable
 
         guard let data = try? Data(contentsOf: infoPlistURL),
               let dict = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] else {
@@ -49,6 +55,7 @@ extension AnalysisLogic {
                 installESDURL: installESDURL,
                 hasCreateinstallmedia: hasCreateinstallmedia,
                 hasInstallESD: hasInstallESD,
+                createInstallMediaInspection: createInstallMediaInspection,
                 isAccepted: false,
                 decisionReason: "missing_or_invalid_info_plist"
             )
@@ -88,6 +95,7 @@ extension AnalysisLogic {
             installESDURL: installESDURL,
             hasCreateinstallmedia: hasCreateinstallmedia,
             hasInstallESD: hasInstallESD,
+            createInstallMediaInspection: createInstallMediaInspection,
             isAccepted: isAccepted,
             decisionReason: decisionReason
         )
@@ -112,6 +120,9 @@ extension AnalysisLogic {
         isMavericks = false
         isUnsupportedSierra = false
         isPPC = false
+        createInstallMediaInspection = .notApplicable
+        macOSArchitectureBlockReason = nil
+        macOSRosettaRequirement = .notRequired
         legacyArchInfo = nil
         userSkippedAnalysis = false
         shouldShowMavericksDialog = false

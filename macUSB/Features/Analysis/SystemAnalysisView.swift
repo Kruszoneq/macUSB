@@ -31,6 +31,7 @@ struct SystemAnalysisView: View {
     @State private var windowsFamilySnapshot: WindowsFamily? = nil
     @State private var windowsBootCapabilitiesSnapshot: WindowsBootCapabilities? = nil
     @State private var windowsWillSplitWIMSnapshot: Bool = false
+    @State private var macOSRosettaRequirementSnapshot: MacOSRosettaRequirement = .notRequired
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
     @State private var checksumSheetPresentation: AnalysisChecksumSheetPresentation?
@@ -79,7 +80,11 @@ struct SystemAnalysisView: View {
                                      && !logic.recognizedVersion.isEmpty
                                      && logic.showUnsupportedMessage)
 
-        let skipAnalysisEnabled = analysisFinished && hasAnySelection && !isValidSelection && (unrecognizedBlocking || recognizedUnsupported)
+        let skipAnalysisEnabled = analysisFinished
+            && hasAnySelection
+            && !isValidSelection
+            && logic.macOSArchitectureBlockReason == nil
+            && (unrecognizedBlocking || recognizedUnsupported)
         MenuState.shared.skipAnalysisEnabled = skipAnalysisEnabled
 
         let sourceExtension: String
@@ -200,6 +205,7 @@ struct SystemAnalysisView: View {
         windowsFamilySnapshot = nil
         windowsBootCapabilitiesSnapshot = nil
         windowsWillSplitWIMSnapshot = false
+        macOSRosettaRequirementSnapshot = .notRequired
         MenuState.shared.skipAnalysisEnabled = false
         MenuState.shared.skipLinuxManualSelectionEnabled = false
         updateMenuState()
@@ -474,6 +480,28 @@ struct SystemAnalysisView: View {
                 }
                 .transition(.opacity)
             }
+
+            if let architectureBlockReason = logic.macOSArchitectureBlockReason {
+                StatusCard(tone: .warning, density: .compact) {
+                    HStack(alignment: .center, spacing: 10) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(sectionIconFont)
+                            .foregroundColor(.orange)
+                            .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text(String(localized: architectureBlockReason.titleLocalizationKey))
+                                .font(.headline)
+                                .foregroundColor(.orange)
+                            Text(String(localized: architectureBlockReason.descriptionLocalizationKey))
+                                .font(.subheadline)
+                                .foregroundColor(.orange.opacity(0.8))
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        Spacer()
+                    }
+                }
+                .transition(.opacity)
+            }
         }
         .transition(.opacity)
     }
@@ -499,6 +527,7 @@ struct SystemAnalysisView: View {
                         windowsFamily: windowsFamilySnapshot,
                         windowsBootCapabilities: windowsBootCapabilitiesSnapshot,
                         windowsWillSplitWim: windowsWillSplitWIMSnapshot,
+                        macOSRosettaRequirement: macOSRosettaRequirementSnapshot,
                         needsCodesign: logic.needsCodesign,
                         isLegacySystem: logic.isLegacyDetected,
                         isRestoreLegacy: logic.isRestoreLegacy,
@@ -565,6 +594,7 @@ struct SystemAnalysisView: View {
         windowsFamilySnapshot = logic.windowsFamily
         windowsBootCapabilitiesSnapshot = logic.windowsBootCapabilities
         windowsWillSplitWIMSnapshot = logic.windowsWillSplitWIM
+        macOSRosettaRequirementSnapshot = logic.macOSRosettaRequirement
         isTabLocked = true
         if logic.isWindowsWorkflowSupported {
             DispatchQueue.main.async {

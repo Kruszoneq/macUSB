@@ -11,9 +11,18 @@ Destructive start requires explicit confirmation.
 
 - User selects source and runs analysis.
 - Analysis resolves compatibility flags and workflow branch.
+- For macOS installers, analysis also compares the physical Mac architecture with `createinstallmedia`; Intel hosts reject ARM-only tools and unreadable architectures fail closed.
 - User selects target USB and confirms destructive start.
 - Progress screen reflects helper-driven stages.
 - Finish screen reports success/failure/cancel plus cleanup status.
+
+Apple Silicon and Rosetta behavior:
+
+- Yosemite through Catalina installers with Intel-only `createinstallmedia` continue to the summary with a Rosetta requirement,
+- missing or indeterminate Rosetta availability blocks `Start`, while installer analysis itself remains successful,
+- the summary requires explicit acceptance of Apple software license terms before the privileged helper runs the fixed Rosetta installation command,
+- while installation or availability checking is active, both `Start` and `Back` are disabled,
+- successful installation is followed by at most five availability probes; unresolved and failed outcomes remain blocked and expose a localized retry action.
 
 Linux-specific runtime behavior:
 - recognized Linux image (`.iso`) unlocks the same shared install flow,

@@ -23,6 +23,8 @@
 - `macUSB/Features/Analysis/Logic/AnalysisLogicFileSelection.swift` — file selection/drop/open-panel logic.
 - `macUSB/Features/Analysis/Logic/AnalysisLogicAnalysisFlow.swift` — orchestration of analysis execution for `.app` and image sources.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSCompatibility.swift` — macOS-only compatibility/version-family detection rules and flag mapping.
+- `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSArchitectureCompatibility.swift` — host/`createinstallmedia` architecture policy and Rosetta requirement handoff.
+- `macUSB/Features/Analysis/Logic/macOS/MacOSCreateInstallMediaArchitecture.swift` — CoreFoundation-backed local executable architecture inspection and normalized Apple Silicon/Intel/universal classification.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSImageMounting.swift` — image mounting + mounted-source guard + legacy image read logic.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerMetadata.swift` — installer metadata/version parsing and USB capacity mapping helpers.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerIcon.swift` — installer icon discovery.
@@ -44,6 +46,8 @@
 - `macUSB/Features/Installation/CreationProgressView.swift` — shared stage/progress UI.
 - `macUSB/Features/Installation/CreatorLogic.swift` — shared install actions/cancel/cleanup orchestration, including app-side non-cancellable macUSBoot gating.
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` — shared helper workflow orchestration, authoritative cancellation-response handling, and transfer metrics.
+- `macUSB/Features/Installation/macOS/CreatorMacOSRosettaLogic.swift` — summary-side Rosetta check, license confirmation, installation, and bounded post-install verification.
+- `macUSB/Features/Installation/macOS/CreatorMacOSRosettaCardView.swift` — localized Rosetta status card and retry actions.
 - `macUSB/Features/Installation/Linux/LinuxInstallationFlowContext.swift` — Linux flow context payload.
 - `macUSB/Features/Installation/Linux/CreatorLinuxLogic.swift` — Linux-specific summary/cleanup helpers.
 - `macUSB/Features/Installation/Linux/CreatorLinuxHelperLogic.swift` — Linux helper request construction and start routing.
@@ -59,6 +63,11 @@
 ### Shared UI layout
 
 - `macUSB/Shared/UI/TouchBar/TouchbarSupport.swift` — global, fixed Touch Bar configuration (app branding).
+
+### Shared platform services
+
+- `macUSB/Shared/Services/MacHardwareArchitecture.swift` — physical Mac architecture detection independent of the current process architecture.
+- `macUSB/Shared/Services/RosettaAvailabilityProbe.swift` — execution-based Rosetta availability probe.
 
 ### Permissions layout
 
@@ -86,6 +95,7 @@
 - `macUSB/Shared/Services/Helper/HelperIPC.swift`
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift`
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClientCapabilities.swift` — helper capability query used by BIOS preflight.
+- `macUSB/Shared/Services/Helper/PrivilegedOperationClientRosetta.swift` — app-side Rosetta installation IPC wrapper.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift`
 - `macUSB/Shared/Services/Helper/HelperService/*`
 - `macUSB/Shared/Services/InstallerSourceImageUnmountRegistry.swift` — centralny rejestr śledzenia źródeł ISO (Windows/Linux) i cleanup odmontowania przy zamknięciu aplikacji.
@@ -100,6 +110,7 @@
 - `macUSBHelper/Workflow/Windows/*` — Windows ISO-copy stage builder, boot-mode-aware source/target validation, progress parsing, and verification.
 - `macUSBHelper/Workflow/Windows/MacUSBoot/*` — BIOS-only macUSBoot artifact validation, Disk Arbitration guard, raw-disk layout validation, transaction, disk operations, and orchestration.
 - `macUSBHelper/DownloaderAssembly/*`
+- `macUSBHelper/Rosetta/HelperRosettaInstaller.swift` — fixed-command, root-only Rosetta installer with bounded diagnostics.
 
 ## Localization catalog
 
