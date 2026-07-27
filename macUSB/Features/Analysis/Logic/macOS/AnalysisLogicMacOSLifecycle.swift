@@ -42,6 +42,9 @@ extension AnalysisLogic {
                     self.isMavericks = false
                     self.isUnsupportedSierra = false
                     self.isPPC = true
+                    self.createInstallMediaInspection = .notApplicable
+                    self.macOSArchitectureBlockReason = nil
+                    self.macOSRosettaRequirement = .notRequired
                     self.legacyArchInfo = nil
                     self.selectedDrive = nil
                     self.capacityCheckFinished = false
@@ -88,6 +91,9 @@ extension AnalysisLogic {
                 self.isMavericks = false
                 self.isUnsupportedSierra = false
                 self.isPPC = false
+                self.createInstallMediaInspection = .notApplicable
+                self.macOSArchitectureBlockReason = nil
+                self.macOSRosettaRequirement = .notRequired
                 self.legacyArchInfo = nil
                 self.shouldShowAlreadyMountedSourceAlert = false
                 self.userSkippedAnalysis = false

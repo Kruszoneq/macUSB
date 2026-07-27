@@ -47,6 +47,9 @@ extension AnalysisLogic {
         isUnsupportedSierra = false
         isPPC = false
         isMavericks = false
+        createInstallMediaInspection = .notApplicable
+        macOSArchitectureBlockReason = nil
+        macOSRosettaRequirement = .notRequired
         shouldShowAlreadyMountedSourceAlert = false
         requiredUSBCapacityGB = nil
         resetLinuxDetectionState()
@@ -109,6 +112,19 @@ extension AnalysisLogic {
                             self.updateRequiredUSBCapacity(rawVersion: rawVer, name: name)
                             self.sourceAppURL = appURL
                             self.updateDetectedSystemIcon(from: appURL)
+
+                            let architectureInspection = self.inspectMacOSInstallerApp(at: appURL)
+                            guard self.applyMacOSArchitecturePreflight(
+                                inspection: architectureInspection,
+                                name: name,
+                                rawVersion: rawVer
+                            ) else {
+                                self.completeImageAnalysisRunIfCurrent(
+                                    analysisRunID,
+                                    reason: "Zablokowano instalator macOS przez zgodność architektury"
+                                )
+                                return
+                            }
 
                             // Try to read ProductUserVisibleVersion from mounted image (Tiger/Leopard)
                             var userVisibleVersionFromMounted: String? = nil
@@ -234,6 +250,14 @@ extension AnalysisLogic {
                             self.updateRequiredUSBCapacity(rawVersion: rawVer, name: name)
                             self.sourceAppURL = appURL
                             self.updateDetectedSystemIcon(from: appURL)
+
+                            guard self.applyMacOSArchitecturePreflight(
+                                inspection: inspection,
+                                name: name,
+                                rawVersion: rawVer
+                            ) else {
+                                return
+                            }
 
                             if !self.applyMacosCompatibilityForAppInstaller(name: name, rawVer: rawVer) {
                                 return

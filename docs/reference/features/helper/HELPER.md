@@ -98,6 +98,7 @@ Primary request types:
 - `WindowsAutounattendConfigurationPayload` as an optional Windows workflow sub-payload for Windows answer-file generation, including separate local-account `Name` and `DisplayName` values when automatic local-account creation is enabled.
 - `DownloaderAssemblyRequestPayload` for downloader `.pkg` to `.app` assembly.
 - `DownloaderCleanupRequestPayload` for downloader session-temp cleanup.
+- `installRosetta(_:)` accepts no executable path or arguments and returns an encoded `RosettaInstallationResultPayload`.
 
 Primary progress/result types:
 - `HelperProgressEventPayload`
@@ -105,6 +106,7 @@ Primary progress/result types:
 - `DownloaderAssemblyProgressPayload`
 - `DownloaderAssemblyResultPayload`
 - `DownloaderCleanupResultPayload`
+- `RosettaInstallationResultPayload` (`success`, termination status, and a bounded diagnostic tail).
 
 Serialization:
 - `HelperXPCCodec` (`JSONEncoder`/`JSONDecoder`, ISO-8601 dates).
@@ -121,7 +123,7 @@ Contract invariants:
 ## 6. Runtime Flows
 
 ### Single Active Task Invariant
-- Helper executes only one privileged task at a time across USB workflow, downloader assembly, and downloader cleanup requests.
+- Helper executes only one privileged task at a time across USB workflow, downloader assembly, downloader cleanup, and Rosetta installation requests.
 - If another task is already active, the new request is rejected with conflict semantics and must be retried by app-side flow when appropriate.
 
 ### Ensure-Ready Flow
@@ -174,6 +176,15 @@ Contract invariants:
 - App sends `DownloaderCleanupRequestPayload` in the final cleanup stage.
 - Daemon removes the session temp directory and returns `DownloaderCleanupResultPayload`.
 - Cleanup is executed as the last downloader stage before summary (not inside assembly stage).
+
+### Rosetta Installation Flow
+
+- App obtains explicit Apple software license acceptance before sending the request.
+- Daemon requires effective UID 0, verifies Apple Silicon independently, and rejects a concurrent privileged task.
+- Daemon runs only `/usr/sbin/softwareupdate --install-rosetta --agree-to-license`; the request cannot inject a path or arguments.
+- stdout and stderr are continuously drained through a merged pipe; only a bounded diagnostic tail and termination status return to the app.
+- Raw helper diagnostics are logged and never rendered directly in user-facing UI.
+- Rosetta installation is non-cancellable and does not alter USB workflow payloads, downloader behavior, or their cancellation semantics.
 
 ---
 

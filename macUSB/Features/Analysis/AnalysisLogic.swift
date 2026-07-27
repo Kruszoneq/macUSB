@@ -31,6 +31,9 @@ final class AnalysisLogic: ObservableObject {
     @Published var shouldShowAlreadyMountedSourceAlert: Bool = false
     @Published var isPPC: Bool = false
     @Published var legacyArchInfo: String? = nil
+    @Published var createInstallMediaInspection: MacOSCreateInstallMediaInspection = .notApplicable
+    @Published var macOSArchitectureBlockReason: MacOSArchitectureBlockReason? = nil
+    @Published var macOSRosettaRequirement: MacOSRosettaRequirement = .notRequired
     @Published var userSkippedAnalysis: Bool = false
     @Published var isLinuxDetected: Bool = false
     @Published var isLinuxDistributionRecognized: Bool = false
