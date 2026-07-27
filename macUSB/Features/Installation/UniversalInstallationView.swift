@@ -619,9 +619,6 @@ struct UniversalInstallationView: View {
         .onChange(of: selectedWindowsBootMode) { mode in
             logWindowsBootModeChangeIfNeeded(mode)
         }
-        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
-            refreshRequiredPermissionsState()
-        }
         .onDisappear {
             menuState.setDownloaderAccessBlocked(false, reason: downloaderBlockReason)
             stopUSBMonitoring()
@@ -632,7 +629,7 @@ struct UniversalInstallationView: View {
     }
 
     private func refreshRequiredPermissionsState() {
-        FullDiskAccessPermissionManager.shared.refreshState()
+        FullDiskAccessPermissionManager.shared.refreshState(trigger: .installationSummary)
         HelperServiceManager.shared.refreshBackgroundApprovalState()
     }
 }
