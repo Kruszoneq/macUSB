@@ -125,7 +125,7 @@ Discovery UX contract:
 - starts automatically on entering downloader window,
 - always discovers stable and Public Beta entries together,
 - starts with Public Beta visibility disabled whenever the downloader window is opened,
-- changes to the beta visibility option only refilter the retained discovery results and do not rerun Apple catalog or local-installer discovery,
+- changes to the beta visibility option immediately and smoothly refilter the retained discovery results while the options sheet remains open, without rerunning Apple catalog or local-installer discovery,
 - manual refresh checks all stable and Public Beta catalogs while reusing the retained local-installer snapshot,
 - inline progress panel is shown in list area,
 - cancel is available during scanning,
@@ -232,7 +232,7 @@ Window:
 List screen:
 - grouped families,
 - default mode hides Public Beta entries and shows the newest stable entry per family, plus every older stable entry detected in `/Applications`,
-- enabling Public Beta visibility adds the newest beta entry per family, or every beta entry when `Pokaż wszystkie wersje` is also enabled, without rerunning discovery,
+- enabling Public Beta visibility immediately adds the newest beta entry per family with an animated list transition, or every beta entry when `Pokaż wszystkie wersje` is also enabled, without rerunning discovery,
 - overlapping Public Beta catalogs are deduplicated by system identity, version, and build,
 - `Pokaż wszystkie wersje` shows every available stable version and, when beta visibility is enabled, every available Public Beta version,
 - locally detected entries use a localized, accent-colored `POBRANY` badge in the selection list only,
