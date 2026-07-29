@@ -111,8 +111,12 @@ Discovery pipeline (`MacOSCatalogService`, orchestrated by `MacOSDownloaderLogic
   - require a valid bundle plist and installer payload,
   - inspect each candidate sequentially outside the main thread,
   - mount only its own `SharedSupport.dmg` or `InstallESD.dmg` using read-only, no-browse, no-verify options,
-  - read version/build metadata from MobileAsset or `SystemVersion.plist`; for legacy images containing only packages, extract `Distribution` from `OSInstall.mpkg` and read `macOSProductVersion` plus `macOSProductBuildVersion`/`osBuildVersion`; if these sources do not identify the installer, include Finder-hidden files when locating the nested `BaseSystem.dmg`, mount it read-only, and read its `System/Library/CoreServices/SystemVersion.plist`,
-  - always detach the image and remove its unique temporary mount and metadata-extraction directories.
+  - read version/build metadata in order from MobileAsset, direct `SystemVersion.plist`, `OSInstall.mpkg/Distribution`, and a nested Finder-hidden `BaseSystem.dmg`,
+  - check canonical metadata paths first and enumerate each mounted image at most once when fallbacks are needed,
+  - treat failure of one metadata source as non-fatal and continue to the next independent source, while still propagating cancellation immediately,
+  - detach nested images before parent images using a standard retry followed by forced detach,
+  - report detach exhaustion as a discovery failure for that candidate and retain the temporary directory rather than removing an active mount point,
+  - remove unique temporary mount and metadata-extraction directories only after all owned images are confirmed detached.
 9. Match a local installer to a catalog entry by normalized exact version and build; when the catalog build is `N/A`, use exact version as the fallback.
 10. Remove prerelease suffixes from family names so beta entries share the stable family section and icon; canonicalize Golden Gate entries under the `macOS Golden Gate` family.
 11. Group by family and sort newest-first, with stable before Public Beta for equal builds.
@@ -317,7 +321,12 @@ Downloader module:
 - `macUSB/Features/Downloader/UI/MacOSDownloaderProcessView.swift`
 - `macUSB/Features/Downloader/UI/MacOSDownloaderSummaryView.swift`
 - `macUSB/Features/Downloader/Logic/Discovery/*`
-  - `MacOSDiscoveryLocalInstallers.swift` owns `/Applications` scanning, image mounting, metadata extraction, cleanup, and catalog matching.
+  - `MacOSDiscoveryLocalInstallers.swift` orchestrates `/Applications` scanning, candidate validation, sequential identity reads, and catalog matching.
+  - `MacOSLocalInstallerModels.swift` owns local identity normalization, exact version/build matching, and domain results/errors.
+  - `MacOSLocalInstallerMetadataReader.swift` owns ordered metadata fallbacks and the single-pass mounted-image inventory.
+  - `MacOSLocalInstallerLegacyParser.swift` extracts and parses legacy `OSInstall.mpkg/Distribution` metadata.
+  - `MacOSLocalInstallerDiskImageManager.swift` owns unique mount points, reverse-order detach retries, and cleanup safety.
+  - `MacOSLocalInstallerProcessRunner.swift` owns cancellable off-main process execution and concurrent diagnostic stream draining.
 - `macUSB/Features/Downloader/Logic/Download/*`
 - `macUSB/Features/Downloader/Logic/MacOSVerificationLogic.swift`
 - `macUSB/Features/Downloader/Logic/Assembly/*`
