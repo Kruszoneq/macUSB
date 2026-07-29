@@ -105,7 +105,8 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 
 - Source language is Polish (`pl`) in `Localizable.xcstrings`.
 - New UI copy is authored in Polish first.
-- Runtime non-`Text` user-facing strings use `String(localized:)`.
+- UI state, workflow payloads, and helper transport must carry localization keys instead of prelocalized strings.
+- Resolve a key with `String(localized:)` only at a presentation boundary where an API requires a `String`; APIs that accept localization keys should receive keys directly.
 - Helper localization keys and app-side rendering keys must remain synchronized.
 - For strings that mirror macOS system UI, notifications, or alerts, match Apple’s terminology in each language instead of inventing custom wording.
 
@@ -123,6 +124,26 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 - Helper registration/signing/environment drift may surface as late-stage failures.
 - Localization key drift between helper and app breaks runtime text quality.
 - Notification and permission UX can regress when startup/menu/finish logic diverges.
+
+## UI copy and translation rules
+
+- All user-facing UI text must use localization keys.
+- Polish is the source language for new UI copy.
+- When planning a change that introduces or modifies UI text, always include the proposed Polish and English wording.
+- During implementation, provide translations for every language supported by the application.
+- Review every new or modified text twice in each supported language. Both reviews must cover:
+  - grammar,
+  - style and natural phrasing,
+  - correct macOS and Apple terminology,
+  - consistency with the meaning and context of the UI element.
+- Before completing the task, perform a final verification of all localization keys and translations.
+- In the post-implementation report, list every localization key created or modified together with its translation in every supported language.
+- Do not place a period at the end of banner or alert titles.
+- Every `NSAlert` must include:
+  - the application logo,
+  - a title,
+  - a descriptive message.
+- `NSAlert` buttons must be selected and worded according to the specific action and context. Do not use generic button labels when a more precise label is appropriate.
 
 ## When to open runtime references
 
@@ -297,6 +318,7 @@ When branch creation is requested:
 - Do not use escaped newline sequences like `\n` in commit message text; use normal multi-line commit formatting only.
 - When creating commits from CLI, never pass `\n` inside a single `-m` value; use separate `-m` flags (title + body) or standard multi-line commit input.
 - If a commit includes updates to runtime reference docs under `docs/reference/`, `docs/CHANGELOG.md`, and/or `docs/AGENTS.md`, do not explicitly enumerate those documentation-file updates in the commit title or commit body.
+- Do not mention added or updated localization keys, translations, or language coverage in the commit title or body unless the commit contains only translation changes.
 - In commit title/body descriptions, omit explicit listing of debug-only functionality that is not present in Release builds.
 
 ### Commit scope rules

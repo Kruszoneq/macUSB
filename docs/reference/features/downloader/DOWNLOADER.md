@@ -237,6 +237,8 @@ List screen:
 - `Pokaż wszystkie wersje` shows every available stable version and, when beta visibility is enabled, every available Public Beta version,
 - locally detected entries use a localized, accent-colored `POBRANY` badge in the selection list only,
 - beta entries use a neutral `BETA` badge by default; the badge becomes accent-colored only in a selected list row and stays neutral in the active download view,
+- on a physical Intel Mac, starting a download for Golden Gate or any newer system (major version `>= 27`) requires confirmation in an app-icon alert explaining that the installer can be downloaded and built, but cannot be used on that Mac to create bootable USB media,
+- when the selected Golden Gate-or-newer entry is also marked as downloaded, the Intel compatibility warning is presented first; after confirmation, the existing redownload confirmation remains required,
 - starting a download for an entry marked as downloaded requires confirmation in an app-icon alert; cancelling keeps the selection unchanged, while `Pobierz ponownie` starts the unchanged download workflow,
 - options sheet includes:
   - show all versions,

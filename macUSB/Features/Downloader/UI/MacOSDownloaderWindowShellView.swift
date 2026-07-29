@@ -233,6 +233,42 @@ struct MacOSDownloaderWindowShellView: View {
         return alert.runModal() == .alertSecondButtonReturn
     }
 
+    func presentIntelBootableInstallerWarningAlert() -> Bool {
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .warning
+        alert.messageText = String(
+            localized: "downloader.intel_bootable_installer_warning.title"
+        )
+        alert.informativeText = String(
+            localized: "downloader.intel_bootable_installer_warning.message"
+        )
+        alert.addButton(
+            withTitle: String(
+                localized: "downloader.intel_bootable_installer_warning.confirm"
+            )
+        )
+        alert.addButton(
+            withTitle: String(
+                localized: "downloader.intel_bootable_installer_warning.cancel"
+            )
+        )
+        return alert.runModal() == .alertFirstButtonReturn
+    }
+
+    func requiresIntelBootableInstallerWarning(_ entry: MacOSInstallerEntry) -> Bool {
+        guard MacHardwareArchitecture.current == .intel else {
+            return false
+        }
+        guard
+            let majorVersionText = entry.version.split(separator: ".").first,
+            let majorVersion = Int(majorVersionText)
+        else {
+            return false
+        }
+        return majorVersion >= 27
+    }
+
     func ensureSelectedEntryIsVisible() {
         guard let selectedInstallerID else { return }
         let visibleIDs = Set(visibleFamilyGroups.flatMap { group in
@@ -255,6 +291,20 @@ struct MacOSDownloaderWindowShellView: View {
                 category: "Downloader"
             )
             return
+        }
+
+        if requiresIntelBootableInstallerWarning(entry) {
+            guard presentIntelBootableInstallerWarningAlert() else {
+                AppLogging.info(
+                    "Anulowano pobieranie instalatora \(entry.name) \(entry.version) (\(entry.build)) po ostrzezeniu o braku mozliwosci utworzenia nosnika USB na Macu z procesorem Intel.",
+                    category: "Downloader"
+                )
+                return
+            }
+            AppLogging.info(
+                "Potwierdzono pobieranie instalatora \(entry.name) \(entry.version) (\(entry.build)) mimo braku mozliwosci utworzenia nosnika USB na Macu z procesorem Intel.",
+                category: "Downloader"
+            )
         }
 
         if entry.isDownloaded {
