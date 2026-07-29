@@ -218,9 +218,15 @@
 				Features/Downloader/Logic/Discovery/MacOSDiscoveryFiltering.swift,
 				Features/Downloader/Logic/Discovery/MacOSDiscoveryGrouping.swift,
 				Features/Downloader/Logic/Discovery/MacOSDiscoveryLegacySupport.swift,
+				Features/Downloader/Logic/Discovery/MacOSDiscoveryLocalInstallers.swift,
 				Features/Downloader/Logic/Discovery/MacOSDiscoveryModels.swift,
 				Features/Downloader/Logic/Discovery/MacOSDiscoveryOrchestrator.swift,
 				Features/Downloader/Logic/Discovery/MacOSDiscoverySizeProbe.swift,
+				Features/Downloader/Logic/Discovery/MacOSLocalInstallerDiskImageManager.swift,
+				Features/Downloader/Logic/Discovery/MacOSLocalInstallerLegacyParser.swift,
+				Features/Downloader/Logic/Discovery/MacOSLocalInstallerMetadataReader.swift,
+				Features/Downloader/Logic/Discovery/MacOSLocalInstallerModels.swift,
+				Features/Downloader/Logic/Discovery/MacOSLocalInstallerProcessRunner.swift,
 				Features/Downloader/Logic/Download/MacOSDownloadFormatting.swift,
 				Features/Downloader/Logic/Download/MacOSDownloadNamingPolicy.swift,
 				Features/Downloader/Logic/Download/MacOSDownloadOrchestrator.swift,
@@ -984,7 +990,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 40;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -1040,7 +1046,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 40;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;

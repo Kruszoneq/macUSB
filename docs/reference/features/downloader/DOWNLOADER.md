@@ -38,7 +38,7 @@ Current production scope:
 - full download pipeline is enabled for selected Catalina, Big Sur, Monterey, Ventura, Sonoma, Sequoia, Tahoe, and Golden Gate entries,
 - full download pipeline is enabled for Sierra and older official Apple Support installers distributed as `.dmg`,
 - discovery includes broad Apple-official stable entries across families,
-- optional beta discovery uses Apple Public Beta catalogs for the current macOS families supported by discovery.
+- discovery always includes Apple Public Beta catalogs for the current macOS families supported by discovery, while beta entries remain hidden by default.
 
 ---
 
@@ -76,7 +76,7 @@ Runtime orchestration:
 
 Core models:
 - `MacOSInstallerEntry`
-  - identity, family, catalog name, version, build, source URL, optional product ID, release channel, and source catalog URL.
+  - identity, family, catalog name, version, build, source URL, optional product ID, release channel, source catalog URL, and the `isDownloaded` discovery snapshot.
 - `MacOSInstallerReleaseChannel`
   - `stable` or `publicBeta`.
 - `MacOSInstallerFamilyGroup`
@@ -99,25 +99,41 @@ Process runtime state:
 ## 5. Discovery Flow (Apple Catalog)
 
 Discovery pipeline (`MacOSCatalogService`, orchestrated by `MacOSDownloaderLogic`):
-1. Download the stable Apple catalog and, when enabled, Public Beta catalogs for macOS 27, 26, and 15 from `swscan.apple.com`.
-2. Parse InstallAssistant candidates from products metadata.
-3. Parse `.dist` metadata from Apple distribution hosts.
-4. Keep non-prerelease entries from stable and prerelease entries from beta catalogs.
-5. Deduplicate by normalized identity within each release channel and across overlapping Public Beta catalogs.
-6. Enrich legacy official entries from Apple Support list.
-7. Probe installer sizes (catalog-prefill + network probe fallback).
-8. Remove prerelease suffixes from family names so beta entries share the stable family section and icon; canonicalize Golden Gate entries under the `macOS Golden Gate` family.
-9. Group by family and sort newest-first, with stable before Public Beta for equal builds.
+1. On opening the downloader, inspect direct installer `.app` bundles in `/Applications` once and retain the resulting identities for the lifetime of that downloader window:
+  - accept names beginning with `Install macOS`, `Install OS X`, or `Install Mac OS X`,
+  - require a valid bundle plist and installer payload,
+  - inspect each candidate sequentially outside the main thread,
+  - mount only its own `SharedSupport.dmg` or `InstallESD.dmg` using read-only, no-browse, no-verify options,
+  - read version/build metadata in order from MobileAsset, direct `SystemVersion.plist`, `OSInstall.mpkg/Distribution`, and a nested Finder-hidden `BaseSystem.dmg`,
+  - check canonical metadata paths first and enumerate each mounted image at most once when fallbacks are needed,
+  - treat failure of one metadata source as non-fatal and continue to the next independent source, while still propagating cancellation immediately,
+  - detach nested images before parent images using a standard retry followed by forced detach,
+  - report detach exhaustion as a discovery failure for that candidate and retain the temporary directory rather than removing an active mount point,
+  - remove unique temporary mount and metadata-extraction directories only after all owned images are confirmed detached.
+2. Download the stable Apple catalog and Public Beta catalogs for macOS 27, 26, and 15 from `swscan.apple.com` on every discovery.
+3. Parse InstallAssistant candidates from products metadata.
+4. Parse `.dist` metadata from Apple distribution hosts.
+5. Keep non-prerelease entries from stable and prerelease entries from beta catalogs.
+6. Deduplicate by normalized identity within each release channel and across overlapping Public Beta catalogs.
+7. Enrich legacy official entries from Apple Support list.
+8. Probe installer sizes (catalog-prefill + network probe fallback).
+9. Match the retained local installer identities to catalog entries by normalized exact version and build; when the catalog build is `N/A`, use exact version as the fallback.
+10. Remove prerelease suffixes from family names so beta entries share the stable family section and icon; canonicalize Golden Gate entries under the `macOS Golden Gate` family.
+11. Group by family and sort newest-first, with stable before Public Beta for equal builds.
 
 Discovery UX contract:
 - starts automatically on entering downloader window,
-- starts with Public Beta discovery disabled whenever the downloader window is opened,
-- reruns after the beta option is changed and confirmed,
-- manual refresh uses the currently selected channel set,
+- always discovers stable and Public Beta entries together,
+- starts with Public Beta visibility disabled whenever the downloader window is opened,
+- changes to the beta visibility option immediately and smoothly refilter the retained discovery results while the options sheet remains open, without rerunning Apple catalog or local-installer discovery,
+- manual refresh checks all stable and Public Beta catalogs while reusing the retained local-installer snapshot,
 - inline progress panel is shown in list area,
 - cancel is available during scanning,
 - after completion panel transitions out and list appears,
 - failure of any requested catalog uses the standard discovery failure screen without silently falling back to fewer channels.
+- failure to enumerate `/Applications` is non-blocking and leaves the Apple list available without local badges,
+- valid local installers absent from the active catalog are logged but do not affect the list,
+- installer payloads whose version or build cannot be read are summarized in one app-icon alert, presented at most once per app runtime.
 
 ---
 
@@ -215,10 +231,15 @@ Window:
 
 List screen:
 - grouped families,
-- default mode shows the newest stable entry and the newest Public Beta entry per family,
+- default mode hides Public Beta entries and shows the newest stable entry per family, plus every older stable entry detected in `/Applications`,
+- enabling Public Beta visibility immediately adds the newest beta entry per family with an animated list transition, or every beta entry when `Pokaż wszystkie wersje` is also enabled, without rerunning discovery,
 - overlapping Public Beta catalogs are deduplicated by system identity, version, and build,
-- `Pokaż wszystkie wersje` shows every available version from each enabled channel,
-- beta entries use an accent-colored `BETA` badge in both the selection list and the active download view,
+- `Pokaż wszystkie wersje` shows every available stable version and, when beta visibility is enabled, every available Public Beta version,
+- locally detected entries use a localized, accent-colored `POBRANY` badge in the selection list only,
+- beta entries use a neutral `BETA` badge by default; the badge becomes accent-colored only in a selected list row and stays neutral in the active download view,
+- on a physical Intel Mac, starting a download for Golden Gate or any newer system (major version `>= 27`) requires confirmation in an app-icon alert explaining that the installer can be downloaded and built, but cannot be used on that Mac to create bootable USB media,
+- when the selected Golden Gate-or-newer entry is also marked as downloaded, the Intel compatibility warning is presented first; after confirmation, the existing redownload confirmation remains required,
+- starting a download for an entry marked as downloaded requires confirmation in an app-icon alert; cancelling keeps the selection unchanged, while `Pobierz ponownie` starts the unchanged download workflow,
 - options sheet includes:
   - show all versions,
   - show macOS Public Beta versions (session-only and off by default),
@@ -227,7 +248,7 @@ List screen:
 Process screen:
 - stage cards with three visual states:
   - pending,
-  - active (accent-highlighted),
+  - active (accent-highlighted through the shared Liquid Glass-compatible active surface),
   - completed (green check state).
 - active download stage shows:
   - percent above progress bar,
@@ -256,6 +277,8 @@ Rules:
 User-facing messaging:
 - permission/move failures are rewritten to clearer, action-oriented text,
 - insufficient disk space during preflight is shown as a system `NSAlert` with required minimum and available space values,
+- an unreadable local installer identity is reported in a non-blocking aggregate `NSAlert` after discovery,
+- all local-installer alerts include the macUSB icon, localized title, localized description, and task-specific buttons,
 - technical detail remains in logs.
 
 ---
@@ -280,6 +303,7 @@ Release:
 
 Downloader logs should include:
 - discovery phase transitions and counts,
+- local installer candidates, ignored name-only matches, identities, catalog matches, and cleanup failures,
 - active release channels and per-channel candidate/accepted counts,
 - source channel and catalog URL used for manifest lookup,
 - manifest contents summary per item,
@@ -301,6 +325,12 @@ Downloader module:
 - `macUSB/Features/Downloader/UI/MacOSDownloaderProcessView.swift`
 - `macUSB/Features/Downloader/UI/MacOSDownloaderSummaryView.swift`
 - `macUSB/Features/Downloader/Logic/Discovery/*`
+  - `MacOSDiscoveryLocalInstallers.swift` orchestrates `/Applications` scanning, candidate validation, sequential identity reads, and catalog matching.
+  - `MacOSLocalInstallerModels.swift` owns local identity normalization, exact version/build matching, and domain results/errors.
+  - `MacOSLocalInstallerMetadataReader.swift` owns ordered metadata fallbacks and the single-pass mounted-image inventory.
+  - `MacOSLocalInstallerLegacyParser.swift` extracts and parses legacy `OSInstall.mpkg/Distribution` metadata.
+  - `MacOSLocalInstallerDiskImageManager.swift` owns unique mount points, reverse-order detach retries, and cleanup safety.
+  - `MacOSLocalInstallerProcessRunner.swift` owns cancellable off-main process execution and concurrent diagnostic stream draining.
 - `macUSB/Features/Downloader/Logic/Download/*`
 - `macUSB/Features/Downloader/Logic/MacOSVerificationLogic.swift`
 - `macUSB/Features/Downloader/Logic/Assembly/*`

@@ -25,6 +25,33 @@ struct MacOSInstallerEntry: Identifiable, Hashable {
     let catalogProductID: String?
     let releaseChannel: MacOSInstallerReleaseChannel
     let catalogURL: URL?
+    let isDownloaded: Bool
+
+    init(
+        id: String,
+        family: String,
+        name: String,
+        version: String,
+        build: String,
+        installerSizeText: String?,
+        sourceURL: URL,
+        catalogProductID: String?,
+        releaseChannel: MacOSInstallerReleaseChannel,
+        catalogURL: URL?,
+        isDownloaded: Bool = false
+    ) {
+        self.id = id
+        self.family = family
+        self.name = name
+        self.version = version
+        self.build = build
+        self.installerSizeText = installerSizeText
+        self.sourceURL = sourceURL
+        self.catalogProductID = catalogProductID
+        self.releaseChannel = releaseChannel
+        self.catalogURL = catalogURL
+        self.isDownloaded = isDownloaded
+    }
 
     var isBeta: Bool {
         releaseChannel == .publicBeta
@@ -45,9 +72,36 @@ struct MacOSInstallerEntry: Identifiable, Hashable {
             sourceURL: sourceURL,
             catalogProductID: catalogProductID,
             releaseChannel: releaseChannel,
-            catalogURL: catalogURL
+            catalogURL: catalogURL,
+            isDownloaded: isDownloaded
         )
     }
+
+    func with(isDownloaded: Bool) -> MacOSInstallerEntry {
+        MacOSInstallerEntry(
+            id: id,
+            family: family,
+            name: name,
+            version: version,
+            build: build,
+            installerSizeText: installerSizeText,
+            sourceURL: sourceURL,
+            catalogProductID: catalogProductID,
+            releaseChannel: releaseChannel,
+            catalogURL: catalogURL,
+            isDownloaded: isDownloaded
+        )
+    }
+}
+
+struct MacOSInstallerDiscoveryResult {
+    let entries: [MacOSInstallerEntry]
+    let unrecognizedLocalInstallerCount: Int
+}
+
+struct MacOSLocalInstallerDiscoverySnapshot {
+    let identities: Set<MacOSLocalInstallerIdentity>
+    let unrecognizedInstallerCount: Int
 }
 
 struct MacOSInstallerFamilyGroup: Identifiable, Hashable {

@@ -7,8 +7,17 @@ final class MacOSDownloaderWindowManager {
     private let downloaderWindowHeight: CGFloat = 650
 
     private var sheetWindow: NSWindow?
+    private var hasPresentedUnrecognizedLocalInstallerAlert = false
 
     private init() {}
+
+    func claimUnrecognizedLocalInstallerAlertPresentation() -> Bool {
+        guard !hasPresentedUnrecognizedLocalInstallerAlert else {
+            return false
+        }
+        hasPresentedUnrecognizedLocalInstallerAlert = true
+        return true
+    }
 
     func present() {
         guard !MenuState.shared.isDownloaderAccessBlocked else {
