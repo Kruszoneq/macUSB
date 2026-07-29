@@ -71,6 +71,9 @@ struct MacOSDownloaderWindowShellView: View {
         .onChange(of: logic.familyGroups) {
             ensureSelectedEntryIsVisible()
         }
+        .onChange(of: logic.state) {
+            presentUnrecognizedLocalInstallersAlertIfNeeded()
+        }
         .onChange(of: showAllAvailableVersions) {
             ensureSelectedEntryIsVisible()
         }
@@ -170,6 +173,54 @@ struct MacOSDownloaderWindowShellView: View {
         handleCloseRequest()
     }
 
+    func presentUnrecognizedLocalInstallersAlertIfNeeded() {
+        guard
+            logic.state == .loaded,
+            logic.unrecognizedLocalInstallerCount > 0,
+            MacOSDownloaderWindowManager.shared.claimUnrecognizedLocalInstallerAlertPresentation()
+        else {
+            return
+        }
+
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .warning
+        alert.messageText = String(
+            localized: "downloader.local_installers.unrecognized_title"
+        )
+        alert.informativeText = String(
+            format: String(
+                localized: "downloader.local_installers.unrecognized_message"
+            ),
+            String(logic.unrecognizedLocalInstallerCount)
+        )
+        alert.addButton(withTitle: String(localized: "common.action.ok"))
+        alert.runModal()
+    }
+
+    func presentRedownloadConfirmationAlert() -> Bool {
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .warning
+        alert.messageText = String(
+            localized: "downloader.local_installers.redownload_title"
+        )
+        alert.informativeText = String(
+            localized: "downloader.local_installers.redownload_message"
+        )
+        alert.addButton(
+            withTitle: String(
+                localized: "downloader.local_installers.redownload_cancel"
+            )
+        )
+        alert.addButton(
+            withTitle: String(
+                localized: "downloader.local_installers.redownload_confirm"
+            )
+        )
+        return alert.runModal() == .alertSecondButtonReturn
+    }
+
     func ensureSelectedEntryIsVisible() {
         guard let selectedInstallerID else { return }
         let visibleIDs = Set(visibleFamilyGroups.flatMap { group in
@@ -204,6 +255,20 @@ struct MacOSDownloaderWindowShellView: View {
                 category: "Downloader"
             )
             return
+        }
+
+        if entry.isDownloaded {
+            guard presentRedownloadConfirmationAlert() else {
+                AppLogging.info(
+                    "Anulowano ponowne pobieranie lokalnie wykrytego instalatora \(entry.name) \(entry.version) (\(entry.build)).",
+                    category: "Downloader"
+                )
+                return
+            }
+            AppLogging.info(
+                "Potwierdzono ponowne pobieranie lokalnie wykrytego instalatora \(entry.name) \(entry.version) (\(entry.build)).",
+                category: "Downloader"
+            )
         }
 
         activeDownloadEntry = entry

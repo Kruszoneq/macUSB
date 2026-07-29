@@ -19,7 +19,7 @@ extension MacOSDownloaderWindowShellView {
                                         .font(.headline)
                                         .foregroundStyle(.primary)
 
-                                    betaBadge(for: entry)
+                                    betaBadge(for: entry, isSelected: false)
                                 }
 
                                 if shouldShowBuild(entry.build) {

@@ -7,6 +7,7 @@ final class MacOSDownloaderLogic: ObservableObject {
     @Published private(set) var familyGroups: [MacOSInstallerFamilyGroup] = []
     @Published private(set) var statusText: String = ""
     @Published private(set) var errorText: String?
+    @Published private(set) var unrecognizedLocalInstallerCount = 0
 
     var isLoading: Bool {
         state == .loading
@@ -23,6 +24,7 @@ final class MacOSDownloaderLogic: ObservableObject {
         cancelDiscovery(updateState: false)
         state = .loading
         errorText = nil
+        unrecognizedLocalInstallerCount = 0
         statusText = String(localized: "Łączenie z serwerami Apple...")
 
         AppLogging.stage("Downloader: Rozpoczecie sprawdzania dostepnych wersji")
@@ -67,7 +69,7 @@ final class MacOSDownloaderLogic: ObservableObject {
 
     private func runDiscovery(includePublicBetaVersions: Bool) async {
         do {
-            let entries = try await catalogService.fetchInstallers(
+            let result = try await catalogService.fetchInstallers(
                 includePublicBetaVersions: includePublicBetaVersions
             ) { [weak self] phase in
                 Task { @MainActor [weak self] in
@@ -77,13 +79,14 @@ final class MacOSDownloaderLogic: ObservableObject {
 
             try Task.checkCancellation()
 
-            familyGroups = Self.makeGroups(from: entries)
+            familyGroups = Self.makeGroups(from: result.entries)
+            unrecognizedLocalInstallerCount = result.unrecognizedLocalInstallerCount
             state = .loaded
             statusText = ""
             discoveryTask = nil
 
             AppLogging.info(
-                "Sprawdzanie zakonczone sukcesem. Znaleziono \(entries.count) pozycji.",
+                "Sprawdzanie zakonczone sukcesem. Znaleziono \(result.entries.count) pozycji, nierozpoznane lokalne instalatory: \(result.unrecognizedLocalInstallerCount).",
                 category: "Downloader"
             )
         } catch is CancellationError {

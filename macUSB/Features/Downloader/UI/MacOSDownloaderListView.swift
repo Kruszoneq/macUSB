@@ -230,7 +230,8 @@ extension MacOSDownloaderWindowShellView {
                             .font(.body.weight(.medium))
                             .foregroundStyle(.primary)
 
-                        betaBadge(for: entry)
+                        betaBadge(for: entry, isSelected: isSelected)
+                        downloadedBadge(for: entry)
                     }
 
                     if let secondaryText = entrySecondaryText(for: entry) {
@@ -299,11 +300,17 @@ extension MacOSDownloaderWindowShellView {
 
         return logic.familyGroups.compactMap { group in
             var seenChannels: Set<MacOSInstallerReleaseChannel> = []
-            let newestPerChannel = group.entries.filter { entry in
-                seenChannels.insert(entry.releaseChannel).inserted
+            var seenEntryIDs: Set<String> = []
+            let newestPerChannelAndDownloaded = group.entries.filter { entry in
+                let isNewestInChannel = seenChannels.insert(entry.releaseChannel).inserted
+                let shouldInclude = isNewestInChannel || entry.isDownloaded
+                return shouldInclude && seenEntryIDs.insert(entry.id).inserted
             }
-            guard !newestPerChannel.isEmpty else { return nil }
-            return MacOSInstallerFamilyGroup(family: group.family, entries: newestPerChannel)
+            guard !newestPerChannelAndDownloaded.isEmpty else { return nil }
+            return MacOSInstallerFamilyGroup(
+                family: group.family,
+                entries: newestPerChannelAndDownloaded
+            )
         }
     }
 
@@ -398,9 +405,37 @@ extension MacOSDownloaderWindowShellView {
     }
 
     @ViewBuilder
-    func betaBadge(for entry: MacOSInstallerEntry) -> some View {
+    func betaBadge(for entry: MacOSInstallerEntry, isSelected: Bool) -> some View {
         if entry.isBeta {
             Text(verbatim: "BETA")
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
+                .padding(.horizontal, 7)
+                .padding(.vertical, 2)
+                .background(
+                    Capsule(style: .continuous)
+                        .fill(
+                            isSelected
+                                ? Color.accentColor.opacity(0.14)
+                                : Color.secondary.opacity(0.08)
+                        )
+                )
+                .overlay(
+                    Capsule(style: .continuous)
+                        .stroke(
+                            isSelected
+                                ? Color.accentColor.opacity(0.46)
+                                : Color.secondary.opacity(0.36),
+                            lineWidth: 0.7
+                        )
+                )
+        }
+    }
+
+    @ViewBuilder
+    func downloadedBadge(for entry: MacOSInstallerEntry) -> some View {
+        if entry.isDownloaded {
+            Text(String(localized: "downloader.local_installers.downloaded_badge"))
                 .font(.caption2.weight(.bold))
                 .foregroundStyle(Color.accentColor)
                 .padding(.horizontal, 7)
