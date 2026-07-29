@@ -11,7 +11,7 @@ extension MacOSDownloaderWindowShellView {
                 Spacer()
 
                 Button {
-                    logic.startDiscovery(includePublicBetaVersions: showBetaVersions)
+                    logic.startDiscovery()
                 } label: {
                     Image(systemName: "arrow.clockwise")
                         .padding(.horizontal, 10)
@@ -294,11 +294,23 @@ extension MacOSDownloaderWindowShellView {
     }
 
     var visibleFamilyGroups: [MacOSInstallerFamilyGroup] {
+        let channelFilteredGroups: [MacOSInstallerFamilyGroup] =
+            logic.familyGroups.compactMap { group -> MacOSInstallerFamilyGroup? in
+                let entries = group.entries.filter { entry in
+                    showBetaVersions || entry.releaseChannel == .stable
+                }
+                guard !entries.isEmpty else { return nil }
+                return MacOSInstallerFamilyGroup(
+                    family: group.family,
+                    entries: entries
+                )
+            }
+
         guard !showAllAvailableVersions else {
-            return logic.familyGroups
+            return channelFilteredGroups
         }
 
-        return logic.familyGroups.compactMap { group in
+        return channelFilteredGroups.compactMap { group in
             var seenChannels: Set<MacOSInstallerReleaseChannel> = []
             var seenEntryIDs: Set<String> = []
             let newestPerChannelAndDownloaded = group.entries.filter { entry in

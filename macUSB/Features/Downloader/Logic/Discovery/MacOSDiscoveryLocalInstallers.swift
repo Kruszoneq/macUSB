@@ -2,9 +2,8 @@ import Foundation
 
 extension MacOSCatalogService {
     func discoverLocalInstallers(
-        matching entries: [MacOSInstallerEntry],
         applicationsURL: URL = URL(fileURLWithPath: "/Applications", isDirectory: true)
-    ) async throws -> MacOSInstallerDiscoveryResult {
+    ) async throws -> MacOSLocalInstallerDiscoverySnapshot {
         try Task.checkCancellation()
 
         let applicationURLs: [URL]
@@ -28,9 +27,9 @@ extension MacOSCatalogService {
                 "Nie udalo sie odczytac folderu /Applications podczas wykrywania lokalnych instalatorow: \(error.localizedDescription)",
                 category: "Downloader"
             )
-            return MacOSInstallerDiscoveryResult(
-                entries: entries,
-                unrecognizedLocalInstallerCount: 0
+            return MacOSLocalInstallerDiscoverySnapshot(
+                identities: [],
+                unrecognizedInstallerCount: 0
             )
         }
 
@@ -80,10 +79,26 @@ extension MacOSCatalogService {
             }
         }
 
+        AppLogging.info(
+            "Wykrywanie lokalnych instalatorow zakonczone: rozpoznane tozsamosci=\(identities.count), nierozpoznane=\(unrecognizedCount).",
+            category: "Downloader"
+        )
+        return MacOSLocalInstallerDiscoverySnapshot(
+            identities: identities,
+            unrecognizedInstallerCount: unrecognizedCount
+        )
+    }
+
+    func applyingLocalInstallerSnapshot(
+        _ snapshot: MacOSLocalInstallerDiscoverySnapshot,
+        to entries: [MacOSInstallerEntry]
+    ) -> MacOSInstallerDiscoveryResult {
         let enrichedEntries = entries.map { entry in
-            entry.with(isDownloaded: identities.contains { $0.matches(entry) })
+            entry.with(
+                isDownloaded: snapshot.identities.contains { $0.matches(entry) }
+            )
         }
-        for identity in identities where !entries.contains(where: identity.matches) {
+        for identity in snapshot.identities where !entries.contains(where: identity.matches) {
             AppLogging.info(
                 "Lokalny instalator version=\(identity.version), build=\(identity.build) nie wystepuje w aktywnym katalogu Apple; pozostaje bez oznaczenia.",
                 category: "Downloader"
@@ -91,12 +106,12 @@ extension MacOSCatalogService {
         }
 
         AppLogging.info(
-            "Wykrywanie lokalnych instalatorow zakonczone: rozpoznane tozsamosci=\(identities.count), nierozpoznane=\(unrecognizedCount), dopasowane wpisy katalogu=\(enrichedEntries.filter(\.isDownloaded).count).",
+            "Zastosowano wynik wykrywania lokalnych instalatorow: rozpoznane tozsamosci=\(snapshot.identities.count), nierozpoznane=\(snapshot.unrecognizedInstallerCount), dopasowane wpisy katalogu=\(enrichedEntries.filter(\.isDownloaded).count).",
             category: "Downloader"
         )
         return MacOSInstallerDiscoveryResult(
             entries: enrichedEntries,
-            unrecognizedLocalInstallerCount: unrecognizedCount
+            unrecognizedLocalInstallerCount: snapshot.unrecognizedInstallerCount
         )
     }
 

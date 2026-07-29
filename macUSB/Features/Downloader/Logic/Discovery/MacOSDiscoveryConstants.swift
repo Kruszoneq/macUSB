@@ -96,16 +96,12 @@ extension MacOSCatalogService {
             "InstallESDDmg.pkg"
         ]
 
-        static func catalogSources(includePublicBetaVersions: Bool) -> [CatalogSource] {
-            var sources = [
+        static var catalogSources: [CatalogSource] {
+            [
                 CatalogSource(channel: .stable, url: stableCatalogURL)
-            ]
-            if includePublicBetaVersions {
-                sources.append(contentsOf: publicBetaCatalogURLs.map {
-                    CatalogSource(channel: .publicBeta, url: $0)
-                })
+            ] + publicBetaCatalogURLs.map {
+                CatalogSource(channel: .publicBeta, url: $0)
             }
-            return sources
         }
     }
 

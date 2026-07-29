@@ -2,13 +2,12 @@ import Foundation
 
 extension MacOSCatalogService {
     func fetchInstallers(
-        includePublicBetaVersions: Bool,
         phase: @escaping PhaseSink
-    ) async throws -> MacOSInstallerDiscoveryResult {
+    ) async throws -> [MacOSInstallerEntry] {
         try Task.checkCancellation()
 
         phase(String(localized: "Pobieranie katalogu Apple..."))
-        let sources = Constants.catalogSources(includePublicBetaVersions: includePublicBetaVersions)
+        let sources = Constants.catalogSources
         AppLogging.info(
             "Pobieranie katalogow installerow z Apple: \(sources.map { "\($0.channel.rawValue)=\($0.url.lastPathComponent)" }.joined(separator: ", ")).",
             category: "Downloader"
@@ -78,9 +77,7 @@ extension MacOSCatalogService {
         AppLogging.info("Zakonczono sprawdzanie rozmiarow instalatorow.", category: "Downloader")
         logSizeProbeSummary(sizeProbeResult.summary)
 
-        phase(String(localized: "downloader.local_installers.discovery_status"))
-        AppLogging.info("Rozpoczecie wykrywania lokalnych instalatorow.", category: "Downloader")
-        return try await discoverLocalInstallers(matching: sizeProbeResult.entries)
+        return sizeProbeResult.entries
     }
 
     private func fetchCatalogCandidateBatch(from source: CatalogSource) async throws -> CatalogCandidateBatch {

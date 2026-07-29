@@ -15,16 +15,19 @@ final class MacOSDownloaderLogic: ObservableObject {
 
     private var discoveryTask: Task<Void, Never>?
     private let catalogService: MacOSCatalogService
+    private var localInstallerSnapshot: MacOSLocalInstallerDiscoverySnapshot?
 
     init(session: URLSession = .shared) {
         self.catalogService = MacOSCatalogService(session: session)
     }
 
-    func startDiscovery(includePublicBetaVersions: Bool = false) {
+    func startDiscovery() {
         cancelDiscovery(updateState: false)
         state = .loading
         errorText = nil
-        unrecognizedLocalInstallerCount = 0
+        if localInstallerSnapshot == nil {
+            unrecognizedLocalInstallerCount = 0
+        }
         statusText = String(localized: "Łączenie z serwerami Apple...")
 
         AppLogging.stage("Downloader: Rozpoczecie sprawdzania dostepnych wersji")
@@ -32,7 +35,7 @@ final class MacOSDownloaderLogic: ObservableObject {
 
         discoveryTask = Task { [weak self] in
             guard let self else { return }
-            await self.runDiscovery(includePublicBetaVersions: includePublicBetaVersions)
+            await self.runDiscovery()
         }
     }
 
@@ -67,11 +70,32 @@ final class MacOSDownloaderLogic: ObservableObject {
         catalogService.isSupportedDownloadTarget(entry)
     }
 
-    private func runDiscovery(includePublicBetaVersions: Bool) async {
+    private func runDiscovery() async {
         do {
-            let result = try await catalogService.fetchInstallers(
-                includePublicBetaVersions: includePublicBetaVersions
-            ) { [weak self] phase in
+            let localSnapshot: MacOSLocalInstallerDiscoverySnapshot
+            if let localInstallerSnapshot {
+                localSnapshot = localInstallerSnapshot
+                AppLogging.info(
+                    "Ponowne uzycie wyniku wykrywania lokalnych instalatorow z aktywnej sesji downloadera.",
+                    category: "Downloader"
+                )
+            } else {
+                statusText = String(
+                    localized: "downloader.local_installers.discovery_status"
+                )
+                AppLogging.info(
+                    "Rozpoczecie wykrywania lokalnych instalatorow przy otwarciu downloadera.",
+                    category: "Downloader"
+                )
+                let discoveredSnapshot = try await catalogService.discoverLocalInstallers()
+                try Task.checkCancellation()
+                localInstallerSnapshot = discoveredSnapshot
+                unrecognizedLocalInstallerCount =
+                    discoveredSnapshot.unrecognizedInstallerCount
+                localSnapshot = discoveredSnapshot
+            }
+
+            let entries = try await catalogService.fetchInstallers { [weak self] phase in
                 Task { @MainActor [weak self] in
                     self?.statusText = phase
                 }
@@ -79,6 +103,10 @@ final class MacOSDownloaderLogic: ObservableObject {
 
             try Task.checkCancellation()
 
+            let result = catalogService.applyingLocalInstallerSnapshot(
+                localSnapshot,
+                to: entries
+            )
             familyGroups = Self.makeGroups(from: result.entries)
             unrecognizedLocalInstallerCount = result.unrecognizedLocalInstallerCount
             state = .loaded

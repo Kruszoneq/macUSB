@@ -66,7 +66,7 @@ struct MacOSDownloaderWindowShellView: View {
             }
         }
         .task {
-            logic.startDiscovery(includePublicBetaVersions: showBetaVersions)
+            logic.startDiscovery()
         }
         .onChange(of: logic.familyGroups) {
             ensureSelectedEntryIsVisible()
@@ -75,6 +75,9 @@ struct MacOSDownloaderWindowShellView: View {
             presentUnrecognizedLocalInstallersAlertIfNeeded()
         }
         .onChange(of: showAllAvailableVersions) {
+            ensureSelectedEntryIsVisible()
+        }
+        .onChange(of: showBetaVersions) {
             ensureSelectedEntryIsVisible()
         }
         .onChange(of: downloadFlowModel.isFinished) {
@@ -241,9 +244,8 @@ struct MacOSDownloaderWindowShellView: View {
 
         showBetaVersions = newValue
         selectedInstallerID = nil
-        logic.startDiscovery(includePublicBetaVersions: newValue)
         AppLogging.info(
-            "Zmieniono widocznosc publicznych wersji beta na \(newValue). Ponowne sprawdzanie katalogow Apple.",
+            "Zmieniono widocznosc publicznych wersji beta na \(newValue). Zastosowano filtr do wynikow aktywnej sesji bez ponownego sprawdzania katalogow Apple.",
             category: "Downloader"
         )
     }

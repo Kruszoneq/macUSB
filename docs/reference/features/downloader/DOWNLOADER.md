@@ -38,7 +38,7 @@ Current production scope:
 - full download pipeline is enabled for selected Catalina, Big Sur, Monterey, Ventura, Sonoma, Sequoia, Tahoe, and Golden Gate entries,
 - full download pipeline is enabled for Sierra and older official Apple Support installers distributed as `.dmg`,
 - discovery includes broad Apple-official stable entries across families,
-- optional beta discovery uses Apple Public Beta catalogs for the current macOS families supported by discovery.
+- discovery always includes Apple Public Beta catalogs for the current macOS families supported by discovery, while beta entries remain hidden by default.
 
 ---
 
@@ -99,14 +99,7 @@ Process runtime state:
 ## 5. Discovery Flow (Apple Catalog)
 
 Discovery pipeline (`MacOSCatalogService`, orchestrated by `MacOSDownloaderLogic`):
-1. Download the stable Apple catalog and, when enabled, Public Beta catalogs for macOS 27, 26, and 15 from `swscan.apple.com`.
-2. Parse InstallAssistant candidates from products metadata.
-3. Parse `.dist` metadata from Apple distribution hosts.
-4. Keep non-prerelease entries from stable and prerelease entries from beta catalogs.
-5. Deduplicate by normalized identity within each release channel and across overlapping Public Beta catalogs.
-6. Enrich legacy official entries from Apple Support list.
-7. Probe installer sizes (catalog-prefill + network probe fallback).
-8. As the final discovery phase, inspect direct installer `.app` bundles in `/Applications`:
+1. On opening the downloader, inspect direct installer `.app` bundles in `/Applications` once and retain the resulting identities for the lifetime of that downloader window:
   - accept names beginning with `Install macOS`, `Install OS X`, or `Install Mac OS X`,
   - require a valid bundle plist and installer payload,
   - inspect each candidate sequentially outside the main thread,
@@ -117,15 +110,23 @@ Discovery pipeline (`MacOSCatalogService`, orchestrated by `MacOSDownloaderLogic
   - detach nested images before parent images using a standard retry followed by forced detach,
   - report detach exhaustion as a discovery failure for that candidate and retain the temporary directory rather than removing an active mount point,
   - remove unique temporary mount and metadata-extraction directories only after all owned images are confirmed detached.
-9. Match a local installer to a catalog entry by normalized exact version and build; when the catalog build is `N/A`, use exact version as the fallback.
+2. Download the stable Apple catalog and Public Beta catalogs for macOS 27, 26, and 15 from `swscan.apple.com` on every discovery.
+3. Parse InstallAssistant candidates from products metadata.
+4. Parse `.dist` metadata from Apple distribution hosts.
+5. Keep non-prerelease entries from stable and prerelease entries from beta catalogs.
+6. Deduplicate by normalized identity within each release channel and across overlapping Public Beta catalogs.
+7. Enrich legacy official entries from Apple Support list.
+8. Probe installer sizes (catalog-prefill + network probe fallback).
+9. Match the retained local installer identities to catalog entries by normalized exact version and build; when the catalog build is `N/A`, use exact version as the fallback.
 10. Remove prerelease suffixes from family names so beta entries share the stable family section and icon; canonicalize Golden Gate entries under the `macOS Golden Gate` family.
 11. Group by family and sort newest-first, with stable before Public Beta for equal builds.
 
 Discovery UX contract:
 - starts automatically on entering downloader window,
-- starts with Public Beta discovery disabled whenever the downloader window is opened,
-- reruns after the beta option is changed and confirmed,
-- manual refresh uses the currently selected channel set,
+- always discovers stable and Public Beta entries together,
+- starts with Public Beta visibility disabled whenever the downloader window is opened,
+- changes to the beta visibility option only refilter the retained discovery results and do not rerun Apple catalog or local-installer discovery,
+- manual refresh checks all stable and Public Beta catalogs while reusing the retained local-installer snapshot,
 - inline progress panel is shown in list area,
 - cancel is available during scanning,
 - after completion panel transitions out and list appears,
@@ -230,9 +231,10 @@ Window:
 
 List screen:
 - grouped families,
-- default mode shows the newest stable entry and the newest Public Beta entry per family, plus every older entry detected in `/Applications`,
+- default mode hides Public Beta entries and shows the newest stable entry per family, plus every older stable entry detected in `/Applications`,
+- enabling Public Beta visibility adds the newest beta entry per family, or every beta entry when `Pokaż wszystkie wersje` is also enabled, without rerunning discovery,
 - overlapping Public Beta catalogs are deduplicated by system identity, version, and build,
-- `Pokaż wszystkie wersje` shows every available version from each enabled channel,
+- `Pokaż wszystkie wersje` shows every available stable version and, when beta visibility is enabled, every available Public Beta version,
 - locally detected entries use a localized, accent-colored `POBRANY` badge in the selection list only,
 - beta entries use a neutral `BETA` badge by default; the badge becomes accent-colored only in a selected list row and stays neutral in the active download view,
 - starting a download for an entry marked as downloaded requires confirmation in an app-icon alert; cancelling keeps the selection unchanged, while `Pobierz ponownie` starts the unchanged download workflow,

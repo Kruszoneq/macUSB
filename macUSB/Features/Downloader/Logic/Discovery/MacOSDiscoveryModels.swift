@@ -99,6 +99,11 @@ struct MacOSInstallerDiscoveryResult {
     let unrecognizedLocalInstallerCount: Int
 }
 
+struct MacOSLocalInstallerDiscoverySnapshot {
+    let identities: Set<MacOSLocalInstallerIdentity>
+    let unrecognizedInstallerCount: Int
+}
+
 struct MacOSInstallerFamilyGroup: Identifiable, Hashable {
     let family: String
     let entries: [MacOSInstallerEntry]
