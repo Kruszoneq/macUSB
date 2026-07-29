@@ -246,7 +246,7 @@ List screen:
 Process screen:
 - stage cards with three visual states:
   - pending,
-  - active (accent-highlighted),
+  - active (accent-highlighted through the shared Liquid Glass-compatible active surface),
   - completed (green check state).
 - active download stage shows:
   - percent above progress bar,
