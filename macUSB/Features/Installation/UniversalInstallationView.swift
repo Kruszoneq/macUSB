@@ -260,7 +260,8 @@ struct UniversalInstallationView: View {
                         .transition(.opacity)
                     }
 
-                    if let windowsBootModeCardStyle {
+                    if !windowsPrerequisiteShouldBlockStart,
+                       let windowsBootModeCardStyle {
                         CreatorWindowsBootModeCardView(
                             style: windowsBootModeCardStyle,
                             eligibleModes: windowsBootCapabilities?.eligibleModes ?? [],
@@ -269,7 +270,8 @@ struct UniversalInstallationView: View {
                         .transition(.opacity)
                     }
 
-                    if let windowsAutounattendVersion {
+                    if !windowsPrerequisiteShouldBlockStart,
+                       let windowsAutounattendVersion {
                         CreatorWindowsAutounattendCardView(
                             windowsVersion: windowsAutounattendVersion,
                             configuration: $windowsAutounattendConfiguration,
