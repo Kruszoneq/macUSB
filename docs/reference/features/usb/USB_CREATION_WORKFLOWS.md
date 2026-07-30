@@ -90,7 +90,7 @@ Windows automatic configuration card:
 Windows summary pre-start prerequisites:
 - BIOS selection queries helper capability `windows.macusboot.v1` before destructive confirmation; the helper exposes it only when the bundled macUSBoot artifact resolves and validates successfully. App version/build fingerprint changes re-register updated helper builds. A missing artifact or stale/incompatible helper is reloaded once and queried again, then start remains blocked with the existing helper-repair guidance if capability validation still fails.
 - if Windows workflow requires `install.wim` split and `wimlib-imagex` is not detected, start action is blocked before workflow start.
-- in blocked state, summary keeps a divider with warning label and replaces process/time cards with an orange prerequisites card.
+- in blocked state, summary hides the BIOS/UEFI presentation and automatic-configuration card, keeps a divider with warning label, and replaces process/time cards with an orange prerequisites card.
 - prerequisites card includes:
   - required `wimlib` message,
   - split-specific context,
