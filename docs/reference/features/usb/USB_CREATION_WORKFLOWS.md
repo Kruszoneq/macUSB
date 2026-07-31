@@ -106,6 +106,8 @@ Windows summary pre-start prerequisites:
 - Every Windows helper request must contain `windowsBootMode`; a missing mode is rejected before stage execution.
 - Linux raw-copy must target whole-disk device, never a partition node.
 - Windows workflow must copy installer files 1:1 from ISO payload (no UEFI fallback file synthesis).
+- Windows ISO copy must use only the system-provided `/usr/bin/rsync`; the privileged helper must not execute user-managed Homebrew or MacPorts `rsync` binaries.
+- Windows ISO copy uses explicit recursive/link/time preservation (`-rlt`) instead of archive mode so POSIX ownership, group, permissions, device, and special-file metadata are not requested for the FAT32 target.
 - Windows BIOS source and target verification require case-insensitive `BOOTMGR`, `boot/BCD`, and `sources/boot.wim`. UEFI verification retains the EFI-directory plus accepted EFI-loader-marker contract and also requires `sources/boot.wim` on target media.
 - `windows_install_macusboot` is appended only for BIOS after `windows_verify_media` and before `windows_cleanup_temp`; the UEFI stage graph and media contents remain unchanged.
 - macUSBoot accepts only the pinned, exact three-file bundled resource set and the supported 512-byte logical-sector MBR layout. It writes StageTwo first, synchronizes and fully reads it back, then writes the MBR boot-code bytes while preserving the target partition table/signature bytes, synchronizes and reads back again, and finally verifies the protected range.
