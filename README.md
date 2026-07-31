@@ -202,6 +202,7 @@ macOS versions recognized and supported for USB creation:
 
 | System | Version | Supported |
 | :--- | :--- | :---: |
+| **macOS Golden Gate**[^2] | 27 | ✅ |
 | **macOS Tahoe** | 26 | ✅ |
 | **macOS Sequoia** | 15 | ✅ |
 | **macOS Sonoma** | 14 | ✅ |
@@ -211,44 +212,49 @@ macOS versions recognized and supported for USB creation:
 | **macOS Catalina** | 10.15 | ✅ |
 | **macOS Mojave** | 10.14 | ✅ |
 | **macOS High Sierra** | 10.13 | ✅ |
-| **macOS Sierra**[^2] | 10.12 | ✅ |
+| **macOS Sierra**[^3] | 10.12 | ✅ |
 | **OS X El Capitan** | 10.11 | ✅ |
 | **OS X Yosemite** | 10.10 | ✅ |
-| **OS X Mavericks**[^3] | 10.9 | ✅ |
+| **OS X Mavericks**[^4] | 10.9 | ✅ |
 | **OS X Mountain Lion** | 10.8 | ✅ |
 | **OS X Lion** | 10.7 | ✅ |
 | **Mac OS X Snow Leopard** | 10.6 | ✅ |
 | **Mac OS X Leopard** | 10.5 | ✅ |
-| **Mac OS X Tiger**[^4] | 10.4 | ✅ |
+| **Mac OS X Tiger**[^5] | 10.4 | ✅ |
 
-[^2]: Only **10.12.6** is supported.
-[^3]: Fully verified with the image from [Mavericks Forever](https://mavericksforever.com/). Other sources may fail.
-[^4]: **Single-DVD** images are auto-detected. For **Multi-DVD** images, only the first disc is recognized correctly. Other discs may appear as unrecognized or be identified incorrectly. To use them, force detection manually from **Options** → **Skip file analysis** → **Mac OS X Tiger 10.4 (Multi DVD)**.
+[^2]: USB creation is supported on **Apple Silicon only.**
+[^3]: Only **10.12.6** is supported.
+[^4]: Fully verified with the image from [Mavericks Forever](https://mavericksforever.com/). Other sources may fail.
+[^5]: **Single-DVD** images are auto-detected. For **Multi-DVD** images, only the first disc is recognized correctly. Other discs may appear as unrecognized or be identified incorrectly. To use them, force detection manually from **Options** → **Skip file analysis** → **Mac OS X Tiger 10.4 (Multi DVD)**.
 
 ---
 
 ## 🪟 Windows Support
 
-macUSB recognizes Windows `.iso` images starting from **Windows XP** and **Windows Server 2003**.
+macUSB recognizes Windows `.iso` images from **Windows XP** and **Windows Server 2003** onward and automatically detects their edition and architecture.
 
-Bootable Windows USB creation is currently supported for **Windows 8 and newer** and **Windows Server 2012 and newer**. Prepared media is **UEFI-only**.[^5]
+Bootable USB creation is supported from **Windows Vista** and **Windows Server 2008 R2** onward.
 
-When a Windows image is recognized, macUSB detects the edition automatically. 64-bit builds keep the standard detected name, while 32-bit and ARM builds are labeled directly, for example `Windows 10 (32-bit)` or `Windows 11 (ARM)`.
+Available boot modes depend on the Windows version:
 
-For Windows 10 and Windows 11 sources, macUSB can prepare optional setup automation with `autounattend.xml`, helping configure selected out-of-box experience (OOBE) choices, skip the Microsoft Account requirement, and bypass Windows 11 hardware requirement checks as Windows Setup starts.
+- **Legacy BIOS only:** Windows Vista, Windows 7, and Windows Server 2008 R2.
+- **Legacy BIOS or UEFI:** Windows 8, Windows 8.1, Windows 10, and Windows Server 2012 through 2022.
+- **UEFI only:** Windows 11 and Windows Server 2025.
 
-During Windows USB creation, macUSB formats the selected target as **MBR** with **FAT32**. Because FAT32 has a **4 GB per-file limit**, some modern Windows images may require extra preparation. If `install.wim` exceeds that limit, macUSB automatically splits it into smaller `.swm` parts using `wimlib`.
+For legacy BIOS support, macUSB installs the [`macUSBoot`](https://github.com/Kruszoneq/macUSBoot) bootloader on the prepared media.
+
+For Windows 10 and Windows 11, macUSB can optionally prepare an `autounattend.xml` file. It can configure selected OOBE options, skip the Microsoft account requirement, and bypass Windows 11 hardware checks during setup.
+
+Regardless of the selected boot mode, macUSB formats the target as **MBR** with **FAT32**. Because FAT32 has a **4 GB per-file limit**, some modern Windows images may require extra preparation. If `install.wim` exceeds that limit, macUSB automatically splits it into smaller `.swm` parts using `wimlib`.
 
 > [!IMPORTANT]
-> [`wimlib`](https://wimlib.net/) is required only when the selected Windows image needs `install.wim` splitting. It is not bundled with macUSB and must be installed separately by the user. The simplest install path is Homebrew:
+> [`wimlib`](https://wimlib.net/) is required only when the selected Windows image needs `install.wim` splitting. It is not bundled with macUSB and must be installed separately by the user. The simplest way to install it is with Homebrew:
 >
 > ```bash
 > brew install wimlib
 > ```
 >
-> macUSB checks automatically whether `wimlib-imagex` is available when this step is required.
-
-[^5]: Booting and installation were tested on a Dell OptiPlex 5040 with UEFI and Secure Boot enabled.
+> macUSB automatically checks whether `wimlib-imagex` is available when this step is required.
 
 ---
 
