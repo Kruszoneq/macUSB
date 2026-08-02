@@ -4,15 +4,21 @@
 
 Before installer recognition completes, required size in UI is unresolved (`-- GB`).
 
-Thresholds:
+macOS thresholds:
 - major version `<= 14`: UI `16 GB`, technical threshold `15_000_000_000` bytes
 - major version `>= 15`: UI `32 GB`, technical threshold `28_000_000_000` bytes
-- Linux source size `<= 6_000_000_000` bytes: UI `8 GB`, technical threshold `6_000_000_000` bytes
-- Linux source size `> 6_000_000_000` and `<= 14_000_000_000` bytes: UI `16 GB`, technical threshold `15_000_000_000` bytes
-- Linux source size `> 14_000_000_000` bytes: UI `32 GB`, technical threshold `28_000_000_000` bytes
-- Windows source size `<= 6_000_000_000` bytes: UI `8 GB`, technical threshold `6_000_000_000` bytes
-- Windows source size `> 6_000_000_000` and `<= 14_000_000_000` bytes: UI `16 GB`, technical threshold `15_000_000_000` bytes
-- Windows source size `> 14_000_000_000` bytes: UI `32 GB`, technical threshold `28_000_000_000` bytes
+
+Linux and Windows use the same source-image thresholds. Apply the first matching upper limit:
+
+- source size up to `900_000_000` bytes: UI `1 GB`, technical threshold `900_000_000` bytes
+- source size up to `1_800_000_000` bytes: UI `2 GB`, technical threshold `1_800_000_000` bytes
+- source size up to `3_600_000_000` bytes: UI `4 GB`, technical threshold `3_600_000_000` bytes
+- source size up to `7_300_000_000` bytes: UI `8 GB`, technical threshold `7_300_000_000` bytes
+- source size up to `14_700_000_000` bytes: UI `16 GB`, technical threshold `14_700_000_000` bytes
+- source size up to `29_400_000_000` bytes: UI `32 GB`, technical threshold `29_400_000_000` bytes
+- source size up to `58_800_000_000` bytes: UI `64 GB`, technical threshold `58_800_000_000` bytes
+
+Sources above `58_800_000_000` bytes currently remain in the top `64 GB` class.
 
 Fallback for Linux and Windows source-size resolution:
 - if source image size cannot be resolved, required capacity falls back to `16 GB` (instead of unresolved `-- GB`).
