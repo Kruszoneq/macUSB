@@ -1,10 +1,10 @@
 # <img src="docs/readme-assets/images/macUSBicon.png" alt="macUSB" width="64" height="64" style="vertical-align: middle;"> macUSB
 
-### Download. Flash. Boot. The all-in-one USB creator for Mac
+### The all-in-one bootable USB creator for Mac
 
-![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) ![Security](https://img.shields.io/badge/Security-Notarized-success) [![Website](https://img.shields.io/badge/Website-macUSB-blueviolet)](https://kruszoneq.github.io/macUSB/)
+![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) ![Security](https://img.shields.io/badge/Security-Notarized-success) [![Website](https://img.shields.io/badge/Website-macusb.app-blueviolet)](https://macusb.app/)
 
-**macUSB** is a guided macOS app for creating bootable USB media on Apple Silicon and Intel Macs from local `.dmg`, `.iso`, `.cdr`, and `.app` files, or with the built-in macOS downloader.
+**macUSB** is a guided macOS app for creating bootable USB media on Apple Silicon and Intel Macs using local files or the built-in macOS downloader.
 
 ---
 
@@ -34,8 +34,6 @@ Choose one installation method:
 brew install --cask macusb
 ```
 
-**Project website:** [macUSB](https://kruszoneq.github.io/macUSB/)
-
 ---
 
 ## 🔍 Why macUSB Exists
@@ -51,7 +49,6 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
 - **Built-in Downloader:** discover and download macOS installers, including available Public Beta releases, from Apple servers.
 - **Local source support:** create bootable USB media from local installers and disk images.
 - **Checksum insight:** calculate SHA-256 checksums for recognized `.iso`, `.cdr`, and `.dmg` source images.
-- **One guided flow:** from source selection or download to finished bootable media.
 - **Apple Silicon legacy support:** automatic compatibility handling for older macOS installers during USB creation.
 - **Automatic media prep:** partition and format checks with conversion when required.[^1]
 - **Linux and Windows support:** create bootable USB media from supported Linux and Windows `.iso` images, with optional Windows setup automation.
@@ -183,9 +180,7 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
 > External HDD/SSD support is disabled by default on every app launch to improve safety and reduce the risk of accidental target selection. You can enable it in **Options** → **Enable external drives support**.
 
 ### Source Inputs
-macUSB can work with either local source files or the built-in macOS Downloader.
-
-Accepted local source formats depend on the system recognized in the selected source:
+Accepted local source formats:
 - **For macOS:** `.dmg`, `.cdr`, `.iso`, and `.app`
 - **For Windows/Linux:** `.iso`
 
@@ -236,7 +231,7 @@ Available boot modes depend on the Windows version:
 - **Legacy BIOS or UEFI:** Windows 8, Windows 8.1, Windows 10, and Windows Server 2012 R2 through 2022.
 - **UEFI only:** Windows 11 and Windows Server 2025.
 
-For legacy BIOS support, macUSB installs the [`macUSBoot`](https://github.com/Kruszoneq/macUSBoot) bootloader on the prepared media.
+For legacy BIOS support, macUSB installs the [macUSBoot](https://github.com/Kruszoneq/macUSBoot) bootloader on the prepared media.
 
 For Windows 10 and Windows 11, macUSB can optionally prepare an `autounattend.xml` file. It can configure selected OOBE options, skip the Microsoft account requirement, and bypass Windows 11 hardware checks during setup.
 
