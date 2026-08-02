@@ -2,6 +2,41 @@
 
 ---
 
+## v2.4
+
+macUSB v2.4 introduces support for macOS 27 Golden Gate and adds the ability to create Windows installation media that can boot on computers using legacy BIOS.
+
+### ADDED: WINDOWS
+- Added support for creating USB installation media for Windows Vista, Windows 7, and Windows Server 2008 R2.
+- Added BIOS and UEFI boot mode selection for Windows 8 through Windows 10 and Windows Server 2012 R2 through Windows Server 2022.
+- Added validation to ensure that the selected Windows image supports the chosen boot mode.
+- Added the [macUSBoot](https://github.com/Kruszoneq/macUSBoot) bootloader to media prepared for BIOS mode, allowing the Windows installer to start on computers using legacy BIOS.
+
+### ADDED: DOWNLOADER
+- Added automatic detection of macOS installers in the Applications folder, with locally available versions marked as downloaded.
+- Added discovery and download support for Public Beta releases available from Apple, including macOS 27 Golden Gate.
+- Added a warning shown on Intel-based Macs before downloading macOS 27 Golden Gate, explaining that creating USB media with this installer requires a Mac with Apple silicon.
+
+### ADDED: macOS
+- Added beta-version recognition and labeling during installer analysis.
+- Added support for creating USB installation media for macOS 27 Golden Gate.
+- Added installer architecture validation against the Mac’s hardware architecture before USB creation begins.
+- Added a Rosetta 2 availability check on Apple silicon Macs running macOS 27 when using older Intel-only macOS installers.
+
+### CHANGES
+- Updated Full Disk Access detection for compatibility with macOS 27 Golden Gate.
+- Applied the Liquid Glass effect to the active download stage.
+
+### IMPROVEMENTS
+- Added an option to force-eject USB media from the summary screen when standard ejection fails, including when the drive is being indexed by Spotlight.
+- Improved the messages and screen layout shown when tools required for Windows media creation are unavailable.
+- Adjusted minimum USB capacity requirements to match Linux and Windows image sizes.
+
+### FIXED
+- Fixed a Windows media creation error that could occur while copying files from an ISO image when an external version of `rsync` was installed.
+
+---
+
 ## v2.3
 
 macUSB v2.3 expands the Windows 10 and Windows 11 installer creation process with new autounattend-based configuration options, allowing prepared USB media to automate selected setup steps and bypass specific installation requirements. This release also adds SHA-256 checksum calculation for recognized disk images.
