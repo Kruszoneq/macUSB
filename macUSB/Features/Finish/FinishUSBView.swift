@@ -307,7 +307,7 @@ struct FinishUSBView: View {
                                 HStack {
                                     Spacer()
                                     Button(action: {
-                                        if let url = URL(string: "https://kruszoneq.github.io/macUSB/pages/guides/ppc_boot_instructions.html") {
+                                        if let url = URL(string: "https://macusb.app/pages/guides/ppc_boot_instructions.html") {
                                             NSWorkspace.shared.open(url)
                                         }
                                     }) {

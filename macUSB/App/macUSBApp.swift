@@ -364,7 +364,7 @@ struct macUSBApp: App {
             CommandGroup(after: .help) {
                 Divider()
                 Button {
-                    if let url = URL(string: "https://kruszoneq.github.io/macUSB/") {
+                    if let url = URL(string: "https://macusb.app/") {
                         NSWorkspace.shared.open(url)
                     }
                 } label: {
