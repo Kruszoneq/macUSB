@@ -11,15 +11,33 @@ Destructive start requires explicit confirmation.
 
 - User selects source and runs analysis.
 - Analysis resolves compatibility flags and workflow branch.
+- For macOS installers, analysis also compares the physical Mac architecture with `createinstallmedia`; Intel hosts reject ARM-only tools and unreadable architectures fail closed.
 - User selects target USB and confirms destructive start.
 - Progress screen reflects helper-driven stages.
 - Finish screen reports success/failure/cancel plus cleanup status.
+
+Apple Silicon and Rosetta behavior:
+
+- Yosemite through Catalina installers with Intel-only `createinstallmedia` continue to the summary with a Rosetta requirement,
+- missing or indeterminate Rosetta availability blocks `Start`, while installer analysis itself remains successful,
+- the summary requires explicit acceptance of Apple software license terms before the privileged helper runs the fixed Rosetta installation command,
+- while installation or availability checking is active, both `Start` and `Back` are disabled,
+- successful installation is followed by at most five availability probes; unresolved and failed outcomes remain blocked and expose a localized retry action.
 
 Linux-specific runtime behavior:
 - recognized Linux image (`.iso`) unlocks the same shared install flow,
 - `Tools -> Write Raw Linux Image (.img)...` can force a selected `.img` file into Linux raw-copy flow from Welcome or an empty analysis screen after a warning and dedicated `.img` picker,
 - USB validation keeps capacity gating, while APFS blocking is macOS-only (Linux uses physical `diskX` targets),
 - creation branch uses Linux raw-copy helper stages.
+
+Windows-specific runtime behavior:
+
+- analysis recognizes supported Windows families from original `.iso` images and resolves eligible BIOS/UEFI modes from bounded boot-marker evidence,
+- the summary presents the family-appropriate boot-mode state; dual-mode images default to UEFI and retain the user's session-only selection,
+- the selected mode is sent to the helper as required `windowsBootMode`,
+- BIOS selection validates helper capability `windows.macusboot.v1` before destructive confirmation; persistent capability failure blocks start with helper-repair guidance,
+- BIOS execution appends the non-cancellable `windows_install_macusboot` transaction after media verification and before cleanup, while UEFI never loads or writes the macUSBoot artifact,
+- if a cancellation request races with entry into macUSBoot, helper rejection keeps the progress flow active and must not produce a cancelled finish result.
 
 ## Tools Flow: Downloader
 

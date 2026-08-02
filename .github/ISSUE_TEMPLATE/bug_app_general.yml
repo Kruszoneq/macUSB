@@ -7,7 +7,6 @@ body:
     attributes:
       value: |
         Please fill in all required fields.
-        Attach diagnostic logs exported from `Help -> Export diagnostic logs...` and screenshots.
 
   - type: input
     id: app_version
@@ -107,12 +106,25 @@ body:
     validations:
       required: true
 
-  - type: checkboxes
-    id: attachments_check
+  - type: upload
+    id: diagnostic_logs
     attributes:
-      label: "Required attachments"
-      options:
-        - label: "I attached diagnostic logs exported from `Help -> Export diagnostic logs...`"
-          required: true
-        - label: "I attached screenshots showing the issue"
-          required: true
+      label: "Diagnostic logs"
+      description: "If relevant to the issue, attach the exported .txt diagnostic log."
+    validations:
+      required: false
+      accept: ".txt"
+
+  - type: upload
+    id: problem_media
+    attributes:
+      label: "Screenshots or videos"
+      description: "Attach screenshots or a video if they help demonstrate the problem."
+    validations:
+      required: false
+      accept: ".png,.jpg,.jpeg,.gif,.webp,.mp4,.mov,.webm"
+
+  - type: markdown
+    attributes:
+      value: |
+        Diagnostic logs can be exported from `Help -> Export diagnostic logs...`.

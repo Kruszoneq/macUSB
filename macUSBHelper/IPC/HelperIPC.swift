@@ -9,6 +9,11 @@ enum HelperWorkflowKind: String, Codable {
     case windows
 }
 
+enum HelperWindowsBootMode: String, Codable {
+    case bios
+    case uefi
+}
+
 struct WindowsAutounattendConfigurationPayload: Codable {
     let skipHardwareRequirements: Bool
     let useMacLanguageAndRegion: Bool
@@ -97,6 +102,7 @@ struct HelperWorkflowRequestPayload: Codable {
     let windowsForceUnmount: Bool
     let windowsMountedSourcePath: String?
     let windowsAutounattendConfiguration: WindowsAutounattendConfigurationPayload?
+    let windowsBootMode: HelperWindowsBootMode?
 
     init(
         workflowKind: HelperWorkflowKind,
@@ -116,7 +122,8 @@ struct HelperWorkflowRequestPayload: Codable {
         linuxForceUnmount: Bool,
         windowsForceUnmount: Bool,
         windowsMountedSourcePath: String?,
-        windowsAutounattendConfiguration: WindowsAutounattendConfigurationPayload? = nil
+        windowsAutounattendConfiguration: WindowsAutounattendConfigurationPayload? = nil,
+        windowsBootMode: HelperWindowsBootMode? = nil
     ) {
         self.workflowKind = workflowKind
         self.systemName = systemName
@@ -136,6 +143,7 @@ struct HelperWorkflowRequestPayload: Codable {
         self.windowsForceUnmount = windowsForceUnmount
         self.windowsMountedSourcePath = windowsMountedSourcePath
         self.windowsAutounattendConfiguration = windowsAutounattendConfiguration
+        self.windowsBootMode = windowsBootMode
     }
 }
 
@@ -194,6 +202,16 @@ struct DownloaderCleanupResultPayload: Codable {
     let errorMessage: String?
 }
 
+struct HelperCapabilitiesPayload: Codable {
+    let capabilities: [String]
+}
+
+struct RosettaInstallationResultPayload: Codable {
+    let success: Bool
+    let terminationStatus: Int32
+    let diagnosticMessage: String?
+}
+
 @objc(MacUSBPrivilegedHelperToolXPCProtocol)
 protocol PrivilegedHelperToolXPCProtocol {
     func startWorkflow(_ requestData: NSData, reply: @escaping (NSString?, NSError?) -> Void)
@@ -201,6 +219,8 @@ protocol PrivilegedHelperToolXPCProtocol {
     func startDownloaderAssembly(_ requestData: NSData, reply: @escaping (NSString?, NSError?) -> Void)
     func cancelDownloaderAssembly(_ workflowID: String, reply: @escaping (Bool, NSError?) -> Void)
     func cleanupDownloaderSession(_ requestData: NSData, reply: @escaping (NSData?, NSError?) -> Void)
+    func installRosetta(_ reply: @escaping (NSData?, NSError?) -> Void)
+    func queryCapabilities(_ reply: @escaping (NSData?, NSError?) -> Void)
     func queryHealth(_ reply: @escaping (Bool, NSString) -> Void)
 }
 

@@ -1,14 +1,5 @@
 import Foundation
 
-struct WindowsUEFIStatus {
-    let hasEFIDirectory: Bool
-    let hasAcceptedBootMarker: Bool
-
-    var hasCompatibleEFI: Bool {
-        hasEFIDirectory && hasAcceptedBootMarker
-    }
-}
-
 extension HelperWorkflowExecutor {
     func runWindowsVerifyMediaStage(_ stage: WorkflowStage) throws {
         let targetPath = windowsPreparedTargetVolumePath ?? "/Volumes/\(request.targetLabel)"
@@ -22,24 +13,7 @@ extension HelperWorkflowExecutor {
             )
         }
 
-        let bootWimFound = fileManager.fileExists(atPath: targetURL.appendingPathComponent("sources/boot.wim").path)
-            || fileManager.fileExists(atPath: targetURL.appendingPathComponent("Sources/boot.wim").path)
-        guard bootWimFound else {
-            throw HelperExecutionError.failed(
-                stage: stage.key,
-                exitCode: -1,
-                description: "Na nośniku USB nie znaleziono pliku sources/boot.wim."
-            )
-        }
-
-        let uefiStatus = evaluateWindowsUEFIStatus(in: targetURL)
-        guard uefiStatus.hasCompatibleEFI else {
-            throw HelperExecutionError.failed(
-                stage: stage.key,
-                exitCode: -1,
-                description: "Na nośniku USB nie znaleziono wymaganych markerów UEFI (katalog EFI oraz co najmniej jeden plik: bootmgr.efi, EFI/Microsoft/Boot/cdboot.efi, EFI/BOOT/BOOTX64.EFI, EFI/BOOT/BOOTAA64.EFI)."
-            )
-        }
+        try validateWindowsBootRequirements(in: targetURL, stage: stage, isTarget: true)
 
         if windowsShouldSplitWim {
             let swmFound = fileManager.fileExists(atPath: targetURL.appendingPathComponent("sources/install.swm").path)
@@ -91,37 +65,6 @@ extension HelperWorkflowExecutor {
             statusKey: stage.statusKey,
             logLine: "Windows media validation completed successfully.",
             shouldAdvancePercent: false
-        )
-    }
-
-    func evaluateWindowsUEFIStatus(in rootURL: URL) -> WindowsUEFIStatus {
-        let hasEFIDirectory = fileManager.fileExists(atPath: rootURL.appendingPathComponent("EFI").path)
-            || fileManager.fileExists(atPath: rootURL.appendingPathComponent("efi").path)
-
-        let bootCandidates = [
-            "bootmgr.efi",
-            "BOOTMGR.EFI",
-            "EFI/Microsoft/Boot/cdboot.efi",
-            "efi/microsoft/boot/cdboot.efi",
-            "EFI/Microsoft/Boot/CDBOOT.EFI",
-            "efi/microsoft/boot/CDBOOT.EFI",
-            "EFI/BOOT/BOOTX64.EFI",
-            "EFI/BOOT/BOOTAA64.EFI",
-            "efi/boot/bootx64.efi",
-            "efi/boot/bootaa64.efi",
-            "efi/boot/BOOTX64.EFI",
-            "efi/boot/BOOTAA64.EFI",
-            "EFI/BOOT/bootx64.efi",
-            "EFI/BOOT/bootaa64.efi"
-        ]
-
-        let hasAcceptedBootMarker = bootCandidates.contains { candidate in
-            fileManager.fileExists(atPath: rootURL.appendingPathComponent(candidate).path)
-        }
-
-        return WindowsUEFIStatus(
-            hasEFIDirectory: hasEFIDirectory,
-            hasAcceptedBootMarker: hasAcceptedBootMarker
         )
     }
 

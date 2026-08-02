@@ -2,6 +2,9 @@ import Foundation
 
 extension HelperWorkflowExecutor {
     func buildWindowsWorkflowStages(using _: PreparedWorkflowContext) throws -> [WorkflowStage] {
+        guard let windowsBootMode = request.windowsBootMode else {
+            throw HelperExecutionError.invalidRequest("Brak wymaganego trybu rozruchu dla workflow Windows.")
+        }
         var stages: [WorkflowStage] = [
             WorkflowStage(
                 key: "windows_prepare_source",
@@ -77,6 +80,21 @@ extension HelperWorkflowExecutor {
             )
         }
 
+        if windowsBootMode == .bios {
+            stages.append(
+                WorkflowStage(
+                    key: "windows_install_macusboot",
+                    titleKey: HelperWorkflowLocalizationKeys.windowsInstallMacUSBootTitle,
+                    statusKey: HelperWorkflowLocalizationKeys.windowsInstallMacUSBootCheckingArtifact,
+                    startPercent: 98,
+                    endPercent: 99,
+                    executable: "/usr/bin/true",
+                    arguments: [],
+                    parseToolPercent: false
+                )
+            )
+        }
+
         return stages
     }
 
@@ -134,7 +152,7 @@ extension HelperWorkflowExecutor {
             )
         }
 
-        let rsyncPlan = resolveRsyncExecutionPlan()
+        let rsyncPlan = systemRsyncExecutionPlan()
         windowsRsyncProgressMode = rsyncPlan.mode
         windowsLegacyRsyncCurrentFilePath = nil
         windowsLegacyRsyncCurrentFileSizeBytes = 0
@@ -285,53 +303,8 @@ extension HelperWorkflowExecutor {
         return deviceIdentifier
     }
 
-    private func resolveRsyncExecutionPlan() -> (executable: String, arguments: [String], mode: String) {
-        let candidates = [
-            "/opt/homebrew/bin/rsync",
-            "/usr/local/bin/rsync",
-            "/opt/local/bin/rsync",
-            "/usr/bin/rsync"
-        ]
-
-        for candidate in candidates where fileManager.isExecutableFile(atPath: candidate) {
-            if supportsRsyncProgress2(executable: candidate) {
-                return (candidate, ["-a", "--info=progress2,name0"], "progress2")
-            }
-            return (candidate, ["-a", "-h", "--progress"], "legacy-progress")
-        }
-
-        return ("/usr/bin/rsync", ["-a", "-h", "--progress"], "legacy-progress-fallback")
-    }
-
-    private func supportsRsyncProgress2(executable: String) -> Bool {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: executable)
-        process.arguments = ["--version"]
-        process.standardOutput = Pipe()
-        process.standardError = Pipe()
-
-        do {
-            try process.run()
-        } catch {
-            return false
-        }
-
-        process.waitUntilExit()
-        guard process.terminationStatus == 0 else {
-            return false
-        }
-
-        let data = (process.standardOutput as? Pipe)?.fileHandleForReading.readDataToEndOfFile() ?? Data()
-        guard let output = String(data: data, encoding: .utf8)?.lowercased() else {
-            return false
-        }
-
-        // macOS ships ancient rsync 2.6.9 (openrsync-compatible usage) without --info=progress2.
-        if output.contains("version 2.6.9") || output.contains("protocol version 29") {
-            return false
-        }
-
-        return true
+    private func systemRsyncExecutionPlan() -> (executable: String, arguments: [String], mode: String) {
+        ("/usr/bin/rsync", ["-rlt", "-h", "--progress"], "legacy-progress")
     }
 
     private func runWindowsStreamingStageCommand(

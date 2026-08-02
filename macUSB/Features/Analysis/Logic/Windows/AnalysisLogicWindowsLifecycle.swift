@@ -41,6 +41,7 @@ extension AnalysisLogic {
         self.windowsArchitecture = nil
         self.isWindowsARM = false
         self.windowsHasEFI = false
+        self.windowsBootCapabilities = nil
         self.isWindowsWorkflowSupported = false
         self.windowsWillSplitWIM = false
         self.windowsAutounattendMacLocale = nil
@@ -59,7 +60,8 @@ extension AnalysisLogic {
         self.windowsServicePack = result.servicePack
         self.windowsArchitecture = result.arch
         self.isWindowsARM = result.isARM
-        self.windowsHasEFI = result.efiStatus.hasEFI
+        self.windowsHasEFI = result.bootCapabilities.hasUEFI
+        self.windowsBootCapabilities = result.bootCapabilities
         self.isWindowsWorkflowSupported = result.isSupported
         self.windowsWillSplitWIM = result.isSupported && detectWindowsWimSplitNeed(mountedImagePath: mountedImagePath)
         self.windowsAutounattendMacLocale = resolveWindowsAutounattendMacLocaleIfNeeded(
@@ -115,11 +117,28 @@ extension AnalysisLogic {
         }
 
         self.log("Rozpoznano obraz Windows: \(result.displayName)")
-        self.log("Windows support gate: supported=\(result.isSupported ? "TAK" : "NIE"), reason=\(result.supportReason.rawValue), hasEFI=\(result.efiStatus.hasEFI ? "TAK" : "NIE")")
+        self.log(
+            "Windows support gate: supported=\(result.isSupported ? "TAK" : "NIE"), reason=\(result.supportReason.rawValue), has_eligible_boot_mode=\(result.bootCapabilities.eligibleModes.isEmpty ? "NIE" : "TAK"), hasEFI=\(result.bootCapabilities.hasUEFI ? "TAK" : "NIE")"
+        )
         self.log("Windows workflow flag: isWindowsWorkflowSupported=\(self.isWindowsWorkflowSupported ? "TAK" : "NIE")")
         self.log("Windows workflow split-wim flag: \(self.windowsWillSplitWIM ? "TAK" : "NIE")")
         self.log("Windows source file: \(sourceURL.path)")
+        self.log(
+            "Windows boot capabilities: detected=\(windowsBootModesLogValue(result.bootCapabilities.detectedModes)), eligible=\(windowsBootModesLogValue(result.bootCapabilities.eligibleModes)), family=\(result.family.rawValue), arch=\(result.arch.rawValue), workflow_supported=\(result.isSupported ? "yes" : "no")"
+        )
+        self.log(
+            "Windows boot marker evidence: BIOS present=\(windowsBootMarkersLogValue(result.bootCapabilities.biosPresentMarkers)) missing=\(windowsBootMarkersLogValue(result.bootCapabilities.biosMissingRequiredMarkers)); UEFI present=\(windowsBootMarkersLogValue(result.bootCapabilities.uefiPresentMarkers)) missing=\(windowsBootMarkersLogValue(result.bootCapabilities.uefiMissingRequiredMarkers))"
+        )
         AppLogging.separator()
+    }
+
+    private func windowsBootModesLogValue(_ modes: Set<WindowsBootMode>) -> String {
+        let orderedModes = WindowsBootMode.allCases.filter(modes.contains).map(\.rawValue)
+        return orderedModes.isEmpty ? "none" : orderedModes.joined(separator: "+")
+    }
+
+    private func windowsBootMarkersLogValue(_ markers: [String]) -> String {
+        markers.isEmpty ? "none" : "[\(markers.joined(separator: ","))]"
     }
 
     private func resolveWindowsAutounattendMacLocaleIfNeeded(

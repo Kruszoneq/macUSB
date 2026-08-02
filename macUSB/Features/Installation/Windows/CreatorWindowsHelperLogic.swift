@@ -13,9 +13,17 @@ extension UniversalInstallationView {
         let helperTargetBSDName = resolveHelperTargetBSDName(for: drive)
         let requesterUID = Int(getuid())
         let targetLabel = windowsTargetVolumeLabel()
+        let helperBootMode = resolvedWindowsBootMode.map { mode in
+            switch mode {
+            case .bios:
+                return HelperWindowsBootMode.bios
+            case .uefi:
+                return HelperWindowsBootMode.uefi
+            }
+        }
 
         log(
-            "WindowsInstallFlow: przygotowano helper request (source=\(sourceAppURL.path), mounted=\(windowsMountedSourcePath ?? "brak"), targetBSD=\(helperTargetBSDName), label=\(targetLabel))",
+            "WindowsInstallFlow: przygotowano helper request (source=\(sourceAppURL.path), mounted=\(windowsMountedSourcePath ?? "brak"), targetBSD=\(helperTargetBSDName), label=\(targetLabel), bootMode=\(helperBootMode?.rawValue ?? "brak"))",
             category: "WindowsInstallFlow"
         )
 
@@ -44,7 +52,8 @@ extension UniversalInstallationView {
             linuxForceUnmount: false,
             windowsForceUnmount: false,
             windowsMountedSourcePath: windowsMountedSourcePath,
-            windowsAutounattendConfiguration: autounattendPayload
+            windowsAutounattendConfiguration: autounattendPayload,
+            windowsBootMode: helperBootMode
         )
     }
 

@@ -22,9 +22,19 @@ Unsupported detection outcomes must be clearly surfaced and must block unsupport
 For selected macOS `.app` sources and macOS `.app` bundles found inside mounted `.dmg`, `.iso`, and `.cdr` sources:
 
 - analysis must read installer metadata from `Contents/Info.plist`,
+- prerelease state is detected from prerelease markers in `CFBundleDisplayName` (`Beta`, `Seed`, `Preview`, `Release Candidate`, or `RC`) and from the Apple seed-bundle identifier marker in `CFBundleIdentifier`,
+- a detected prerelease installer keeps the normalized system name free of prerelease suffixes and exposes a separate `BETA` badge in the analysis result and every subsequent main-flow screen through finish,
+- Golden Gate metadata is normalized to the user-facing name `macOS 27 Golden Gate`, regardless of the internal installer-app version, and Golden Gate is routed as a modern installer,
 - analysis must inspect installer payload markers before accepting the app as a valid source:
   - `Contents/Resources/createinstallmedia` must exist as a file for standard app-installer workflows,
   - `Contents/SharedSupport/InstallESD.dmg` must exist as a file and is sufficient only for restore-legacy metadata (`Lion` / `Mountain Lion`, `10.7` / `10.8`),
+- standard app-installer workflows inspect `Contents/Resources/createinstallmedia` locally through the system `CFBundleCopyExecutableArchitecturesForURL` API, without launching external tools or requiring Xcode Command Line Tools,
+- CoreFoundation handles thin and Fat/Universal Mach-O formats; analysis normalizes the returned `x86_64` and ARM64 CPU types, treats `arm64e` as Apple Silicon, and fails closed for unreadable, unsupported, or non-Mach-O results,
+- the physical Mac architecture is detected through `hw.optional.arm64` with a controlled `uname` fallback; compile-time or current-process architecture must not drive compatibility,
+- Intel Mac plus ARM-only `createinstallmedia` is an unsupported result that blocks USB selection and cannot be bypassed through manual analysis skipping,
+- an unreadable/unknown `createinstallmedia` architecture, or unknown physical host architecture when a decision is required, fails closed,
+- Apple Silicon plus Intel-only `createinstallmedia` for Yosemite through Catalina creates a Rosetta summary requirement; universal and ARM-capable tools do not,
+- Rosetta availability is probed by executing `/usr/bin/arch -x86_64 /usr/bin/true`; `EBADARCH`/`Bad CPU type in executable` means missing, and any other nonzero outcome is indeterminate,
 - mounted images may accept legacy Mac OS X installer apps without these payload markers only when the mounted image exposes `System/Library/CoreServices/SystemVersion.plist` with `ProductUserVisibleVersion` from `10.3` through `10.6`; Panther remains an unsupported detection outcome,
 - bundle identifier is diagnostic metadata only and must not be treated as proof that the app contains installer payload,
 - invalid `.app` selections must keep the selected source visible but clear install-handoff state (`sourceAppURL`, detected icon, USB section, target selection, capacity result, and workflow flags),
@@ -36,10 +46,14 @@ For Windows fallback:
 - fallback entry is limited to `.iso` sources,
 - fallback runs only when macOS installer metadata is not detected from mounted image,
 - Windows detection uses mounted-image metadata only (no weak volume-label fallback),
+- Windows detection independently records case-insensitive BIOS and UEFI marker evidence,
+- detected boot modes are filtered by family/architecture policy and handed to the installation summary together with the detected family,
 - recognized Windows result may be marked unsupported by support gate,
-- support gate for current app workflow is:
-  - desktop: **Windows family >= 8 AND EFI markers present**,
-  - server: **Windows Server family >= 2012 AND EFI markers present**,
+- current summary-handoff support gate requires at least one eligible mode for a supported family:
+  - `Vista`, `7`, `Server 2008 R2`: BIOS,
+  - `8` through `10`, `Server 2012` through `Server 2022`: BIOS or UEFI,
+  - `11`, `Server 2025`: UEFI,
+  - `XP`, `Server 2003`: unsupported,
 
 For Linux fallback:
 
@@ -77,12 +91,23 @@ Windows fallback routing includes:
   - server: `Server 2003`, `Server 2008 R2`, `Server 2012`, `Server 2012 R2`, `Server 2016`, `Server 2019`, `Server 2022`, `Server 2025`,
 - optional Service Pack extraction when deterministically available (for legacy families),
 - architecture normalization to `32-bit` / `64-bit` / `ARM` / `unknown`,
-- unsupported result for `XP` / `Vista` / `7` regardless of EFI artifacts,
-- unsupported result for `Server 2003` / `Server 2008 R2` regardless of EFI artifacts,
-- unsupported result for any family missing required EFI markers.
-- unsupported requirement info message is family-aware:
-  - desktop variant: `Windows 8 + EFI`,
-  - server variant: `Windows Server 2012 + EFI`.
+- BIOS detection from `bootmgr` + `boot/BCD` + `sources/boot.wim`, with additional diagnostic BIOS markers,
+- UEFI detection from the existing EFI directory/boot-marker rule,
+- eligible boot-mode mapping:
+  - `Vista`, `7`, and `Server 2008 R2`: BIOS,
+  - `8` through `10` and `Server 2012` through `Server 2022`: every detected mode,
+  - `11` and `Server 2025`: UEFI only,
+  - `XP` and `Server 2003`: no eligible modes,
+  - ARM: UEFI only when otherwise eligible for its Windows family,
+- unsupported result for `XP` and `Server 2003`,
+- unsupported result for any otherwise supported family with no eligible boot mode,
+- summary boot-mode presentation and pre-start behavior:
+  - `Vista`, `7`, and `Server 2008 R2`: BIOS-only informational card,
+  - `8` through `10` and `Server 2012` through `Server 2022`: segmented BIOS/UEFI control driven by eligible modes; UEFI is the dual-mode default and a single eligible mode locks the control,
+  - `11` and `Server 2025`: existing UEFI-only informational card,
+  - selected mode is session-only, logged, and sent through helper/XPC as required `windowsBootMode`,
+  - BIOS selection runs the `windows.macusboot.v1` helper capability preflight before destructive confirmation; one controlled helper reload is attempted when needed, and start remains blocked with repair guidance only if the capability is still unavailable,
+  - UEFI selection uses the existing Windows media-creation path without loading or installing macUSBoot.
 
 ## Special Blocking Rule
 
@@ -146,6 +171,7 @@ Checksum calculation:
 Analysis should log:
 - selected source type,
 - detected compatibility family/flags,
+- macOS prerelease classification signals and decision,
 - explicit block reasons (for example mounted image conflict),
 - image-analysis timeout start/finish events for `.dmg`/`.iso`/`.cdr`,
 - timeout-triggered image detach result (success/failure + mount path),
@@ -176,6 +202,8 @@ Windows fallback should additionally log:
 - fallback transition from macOS detection to Windows detection,
 - parsed Windows details (`family`, `service_pack`, `arch`, `isARM`),
 - support gate decision (`is_supported`, `support_reason`, `has_efi`),
+- detected and eligible BIOS/UEFI modes after family/architecture qualification,
+- present and missing required marker evidence for both boot modes,
 - evidence summary used for recognition.
 
 ## Update Trigger

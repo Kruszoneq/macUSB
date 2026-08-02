@@ -62,22 +62,9 @@ extension AnalysisLogic {
             evidence.append("cversion-minserver:\(cversionMinServer)")
         }
 
-        let hasEFIDirectory = exists("efi")
-        let hasBootMgrEFI = exists("bootmgr.efi")
-        let hasCdBootEFI = exists("efi/microsoft/boot/cdboot.efi")
-        let hasBootx64EFI = exists("efi/boot/bootx64.efi")
-        let hasBootaa64EFI = exists("efi/boot/bootaa64.efi")
-
-        var efiEvidence: [String] = []
-        if hasEFIDirectory { efiEvidence.append("efi/") }
-        if hasBootMgrEFI { efiEvidence.append("bootmgr.efi") }
-        if hasCdBootEFI { efiEvidence.append("efi/microsoft/boot/cdboot.efi") }
-        if hasBootx64EFI { efiEvidence.append("efi/boot/bootx64.efi") }
-        if hasBootaa64EFI { efiEvidence.append("efi/boot/bootaa64.efi") }
-
-        let hasEFI = hasEFIDirectory && (hasBootMgrEFI || hasCdBootEFI || hasBootx64EFI || hasBootaa64EFI)
-        let efiStatus = WindowsEFIStatus(hasEFI: hasEFI, evidence: efiEvidence.sorted())
-        evidence.append("efi:\(hasEFI ? "yes" : "no")")
+        let bootCapabilities = detectWindowsBootCapabilities(in: mountURL)
+        evidence.append("bios:\(bootCapabilities.hasBIOS ? "yes" : "no")")
+        evidence.append("efi:\(bootCapabilities.hasUEFI ? "yes" : "no")")
 
         let hasWindowsSignals =
             hasInstallWIM ||
@@ -107,7 +94,7 @@ extension AnalysisLogic {
             cversionMinClient: cversionMinClient,
             cversionMinServer: cversionMinServer,
             sourceFileName: sourceURL.lastPathComponent,
-            efiStatus: efiStatus,
+            bootCapabilities: bootCapabilities,
             evidence: Array(Set(evidence)).sorted()
         )
     }

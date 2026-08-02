@@ -10,13 +10,17 @@ struct UniversalInstallationView: View {
     let targetDriveDisplayName: String?
     let systemName: String
     let detectedSystemIcon: NSImage?
+    let isBetaInstaller: Bool
     let originalImageURL: URL?
     let linuxFlowContext: LinuxInstallationFlowContext?
     let isWindowsWorkflow: Bool
     let windowsMountedSourcePath: String?
     let windowsAutounattendMacLocale: CreatorWindowsAutounattendMacLocale?
     let windowsArchitecture: WindowsArchitecture?
+    let windowsFamily: WindowsFamily?
+    let windowsBootCapabilities: WindowsBootCapabilities?
     let windowsWillSplitWim: Bool
+    let macOSRosettaRequirement: MacOSRosettaRequirement
     
     // Flagi
     let needsCodesign: Bool
@@ -75,12 +79,18 @@ struct UniversalInstallationView: View {
     @State var windowsPrerequisiteProbeInProgress: Bool = false
     @State var windowsAutounattendConfiguration: CreatorWindowsAutounattendConfiguration = CreatorWindowsAutounattendConfiguration()
     @State var windowsAutounattendOptionsPresented: Bool = false
+    @State var selectedWindowsBootMode: WindowsBootMode? = nil
+    @State var lastLoggedWindowsBootMode: WindowsBootMode? = nil
+    @State var windowsMacUSBootPreflightInProgress: Bool = false
+    @State var macOSRosettaState: CreatorMacOSRosettaState? = nil
+    @State var macOSRosettaRetryGeneration: UUID? = nil
     
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
     @State var usbProcessSleepBlockToken: UUID? = nil
     
     @State var windowHandler: UniversalWindowHandler?
+    @State var hostingWindow: NSWindow?
     
     var tempWorkURL: URL {
         return FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_temp")
@@ -129,8 +139,22 @@ struct UniversalInstallationView: View {
         guard isWindowsWorkflow, windowsAutounattendConfiguration.hasSelectedOption else { return false }
         return !windowsAutounattendConfiguration.canStartWorkflow
     }
+    private var shouldShowProcessDurationCard: Bool {
+        guard windowsAutounattendVersion != nil,
+              let windowsBootModeCardStyle else {
+            return true
+        }
+
+        if case .configurable = windowsBootModeCardStyle {
+            return false
+        }
+        return true
+    }
     private var shouldBlockStartAction: Bool {
-        windowsPrerequisiteShouldBlockStart || windowsAutounattendShouldBlockStart
+        windowsPrerequisiteShouldBlockStart
+            || windowsAutounattendShouldBlockStart
+            || windowsMacUSBootPreflightInProgress
+            || macOSRosettaShouldBlockStart
     }
     private var processSectionDivider: some View {
         HStack(spacing: 10) {
@@ -178,7 +202,12 @@ struct UniversalInstallationView: View {
                                 }
                                 VStack(alignment: .leading, spacing: 3) {
                                     Text("Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
-                                    Text(systemName).font(.headline).foregroundColor(.primary).bold()
+                                    HStack(spacing: 8) {
+                                        Text(systemName).font(.headline).foregroundColor(.primary).bold()
+                                        if isBetaInstaller {
+                                            MacOSBetaBadge(tint: .secondary)
+                                        }
+                                    }
                                 }
                                 Spacer()
                             }
@@ -202,6 +231,14 @@ struct UniversalInstallationView: View {
                         }
                     }
 
+                    if macOSRosettaShouldShowCard {
+                        CreatorMacOSRosettaCardView(
+                            state: effectiveMacOSRosettaState,
+                            action: performMacOSRosettaPrimaryAction
+                        )
+                        .transition(.opacity)
+                    }
+
                     if isLinuxWorkflow {
                         StatusCard(tone: .active, density: .compact) {
                             HStack(alignment: .center) {
@@ -223,28 +260,18 @@ struct UniversalInstallationView: View {
                         .transition(.opacity)
                     }
 
-                    if isWindowsWorkflow {
-                        StatusCard(tone: .active, density: .compact) {
-                            HStack(alignment: .center) {
-                                Image(systemName: "info.circle.fill")
-                                    .font(sectionIconFont)
-                                    .foregroundColor(.accentColor)
-                                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(String(localized: "installation.summary.windows.uefi_only.title"))
-                                        .font(.headline)
-                                        .foregroundColor(.accentColor)
-                                    Text(String(localized: "installation.summary.windows.uefi_only.body"))
-                                        .font(.subheadline)
-                                        .foregroundColor(.accentColor)
-                                }
-                                Spacer()
-                            }
-                        }
+                    if !windowsPrerequisiteShouldBlockStart,
+                       let windowsBootModeCardStyle {
+                        CreatorWindowsBootModeCardView(
+                            style: windowsBootModeCardStyle,
+                            eligibleModes: windowsBootCapabilities?.eligibleModes ?? [],
+                            selectedMode: $selectedWindowsBootMode
+                        )
                         .transition(.opacity)
                     }
 
-                    if let windowsAutounattendVersion {
+                    if !windowsPrerequisiteShouldBlockStart,
+                       let windowsAutounattendVersion {
                         CreatorWindowsAutounattendCardView(
                             windowsVersion: windowsAutounattendVersion,
                             configuration: $windowsAutounattendConfiguration,
@@ -321,6 +348,9 @@ struct UniversalInstallationView: View {
                                             Text("installation.summary.process.windows.prepare_source")
                                             Text("installation.summary.process.windows.prepare_target")
                                             Text("installation.summary.process.windows.create_and_verify")
+                                            if resolvedWindowsBootMode == .bios {
+                                                Text("installation.summary.windows.macusboot")
+                                            }
                                         } else if isRestoreLegacy {
                                             Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
                                             Text("• Nośnik USB zostanie sformatowany")
@@ -344,11 +374,13 @@ struct UniversalInstallationView: View {
                             }
                         }
 
-                        StatusCard(tone: .neutral, density: .compact) {
-                            HStack(alignment: .center, spacing: 15) {
-                                Image(systemName: "clock").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                                Text("Cały proces może potrwać kilka minut.").font(.subheadline).foregroundColor(.secondary)
-                                Spacer()
+                        if shouldShowProcessDurationCard {
+                            StatusCard(tone: .neutral, density: .compact) {
+                                HStack(alignment: .center, spacing: 15) {
+                                    Image(systemName: "clock").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                    Text("Cały proces może potrwać kilka minut.").font(.subheadline).foregroundColor(.secondary)
+                                    Spacer()
+                                }
                             }
                         }
                     }
@@ -402,6 +434,7 @@ struct UniversalInstallationView: View {
                             .padding(8)
                         }
                         .macUSBSecondaryButtonStyle()
+                        .disabled(macOSRosettaIsBusy)
                     }
                     .transition(.opacity)
                 }
@@ -504,6 +537,7 @@ struct UniversalInstallationView: View {
         .navigationBarBackButtonHidden(isTabLocked)
         .background(
             WindowAccessor_Universal { window in
+                self.hostingWindow = window
                 window.styleMask.remove(NSWindow.StyleMask.resizable)
                 
                 if self.windowHandler == nil {
@@ -526,6 +560,7 @@ struct UniversalInstallationView: View {
                     systemName: systemName,
                     mountPoint: effectiveMountPointForCreation,
                     detectedSystemIcon: detectedSystemIcon,
+                    isBetaInstaller: isBetaInstaller,
                     isCatalina: isCatalina,
                     isRestoreLegacy: isRestoreLegacy,
                     isMavericks: isMavericks,
@@ -534,6 +569,7 @@ struct UniversalInstallationView: View {
                     isWindowsWorkflow: isWindowsWorkflow,
                     windowsWillSplitWimExpected: windowsWillSplitWim,
                     windowsWillCreateAutounattendExpected: windowsAutounattendConfiguration.shouldGenerateMacUSBFile,
+                    windowsWillInstallMacUSBootExpected: resolvedWindowsBootMode == .bios,
                     shouldDetachMountPoint: shouldDetachMountPointAfterFinish,
                     targetWholeDiskBSDName: targetWholeDiskBSDNameForFinish,
                     needsPreformat: (targetDrive?.needsFormatting ?? false) && !isPPC,
@@ -543,7 +579,9 @@ struct UniversalInstallationView: View {
                         self.rootIsActive = false
                     },
                     onCancelRequested: showCreationProgressCancelAlert,
-                    canCancelWorkflow: !didCancelCreation && !navigateToFinish,
+                    canCancelWorkflow: !didCancelCreation
+                        && !navigateToFinish
+                        && !isWindowsMacUSBootCancellationBlocked,
                     helperStageTitleKey: $helperStageTitleKey,
                     helperStatusKey: $helperStatusKey,
                     helperCurrentStageKey: $helperCurrentStageKey,
@@ -563,7 +601,9 @@ struct UniversalInstallationView: View {
             .hidden()
         )
         .onAppear {
+            initializeMacOSRosettaStateIfNeeded()
             if isWindowsWorkflow {
+                initializeWindowsBootModeSelectionIfNeeded()
                 loadWindowsAutounattendConfiguration()
                 InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
                     path: sourceAppURL.path,
@@ -594,10 +634,11 @@ struct UniversalInstallationView: View {
                 startUSBMonitoring()
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
-            refreshRequiredPermissionsState()
+        .onChange(of: selectedWindowsBootMode) { mode in
+            logWindowsBootModeChangeIfNeeded(mode)
         }
         .onDisappear {
+            invalidateMacOSRosettaChecks()
             menuState.setDownloaderAccessBlocked(false, reason: downloaderBlockReason)
             stopUSBMonitoring()
             if !navigateToCreationProgress && !isHelperWorking {
@@ -607,7 +648,7 @@ struct UniversalInstallationView: View {
     }
 
     private func refreshRequiredPermissionsState() {
-        FullDiskAccessPermissionManager.shared.refreshState()
+        FullDiskAccessPermissionManager.shared.refreshState(trigger: .installationSummary)
         HelperServiceManager.shared.refreshBackgroundApprovalState()
     }
 }

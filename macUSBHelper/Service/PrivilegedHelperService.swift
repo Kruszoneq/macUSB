@@ -8,11 +8,14 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
     private var activeExecutor: HelperWorkflowExecutor?
     private var activeDownloaderAssemblyID: String?
     private var activeDownloaderAssemblyExecutor: DownloaderAssemblyExecutor?
+    private var isRosettaInstallationActive = false
     private let queue = DispatchQueue(label: "macUSB.helper.service")
 
     func startWorkflow(_ requestData: NSData, reply: @escaping (NSString?, NSError?) -> Void) {
         queue.async {
-            guard self.activeExecutor == nil, self.activeDownloaderAssemblyExecutor == nil else {
+            guard self.activeExecutor == nil,
+                  self.activeDownloaderAssemblyExecutor == nil,
+                  !self.isRosettaInstallationActive else {
                 let error = NSError(
                     domain: "macUSBHelper",
                     code: 409,
@@ -32,6 +35,16 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
                     userInfo: [NSLocalizedDescriptionKey: "Nieprawidłowe żądanie helpera: \(error.localizedDescription)"]
                 )
                 reply(nil, err)
+                return
+            }
+
+            guard request.workflowKind != .windows || request.windowsBootMode != nil else {
+                let error = NSError(
+                    domain: "macUSBHelper",
+                    code: 422,
+                    userInfo: [NSLocalizedDescriptionKey: "Żądanie workflow Windows nie zawiera wymaganego trybu rozruchu."]
+                )
+                reply(nil, error)
                 return
             }
 
@@ -65,14 +78,15 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
                 reply(false, nil)
                 return
             }
-            executor.cancel()
-            reply(true, nil)
+            reply(executor.cancel(), nil)
         }
     }
 
     func startDownloaderAssembly(_ requestData: NSData, reply: @escaping (NSString?, NSError?) -> Void) {
         queue.async {
-            guard self.activeExecutor == nil, self.activeDownloaderAssemblyExecutor == nil else {
+            guard self.activeExecutor == nil,
+                  self.activeDownloaderAssemblyExecutor == nil,
+                  !self.isRosettaInstallationActive else {
                 let error = NSError(
                     domain: "macUSBHelper",
                     code: 409,
@@ -135,7 +149,9 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
 
     func cleanupDownloaderSession(_ requestData: NSData, reply: @escaping (NSData?, NSError?) -> Void) {
         queue.async {
-            guard self.activeExecutor == nil, self.activeDownloaderAssemblyExecutor == nil else {
+            guard self.activeExecutor == nil,
+                  self.activeDownloaderAssemblyExecutor == nil,
+                  !self.isRosettaInstallationActive else {
                 let error = NSError(
                     domain: "macUSBHelper",
                     code: 409,
@@ -190,11 +206,81 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
         }
     }
 
+    func installRosetta(_ reply: @escaping (NSData?, NSError?) -> Void) {
+        queue.async {
+            guard self.activeExecutor == nil,
+                  self.activeDownloaderAssemblyExecutor == nil,
+                  !self.isRosettaInstallationActive else {
+                reply(
+                    nil,
+                    NSError(
+                        domain: "macUSBHelper",
+                        code: 409,
+                        userInfo: [NSLocalizedDescriptionKey: "Helper realizuje już inne zadanie."]
+                    )
+                )
+                return
+            }
+
+            do {
+                try HelperRosettaInstaller.validateEnvironment()
+            } catch {
+                reply(nil, error as NSError)
+                return
+            }
+
+            self.isRosettaInstallationActive = true
+            DispatchQueue.global(qos: .userInitiated).async {
+                let result = HelperRosettaInstaller.run()
+                self.queue.async {
+                    self.isRosettaInstallationActive = false
+                    do {
+                        reply(try HelperXPCCodec.encode(result) as NSData, nil)
+                    } catch {
+                        reply(
+                            nil,
+                            NSError(
+                                domain: "macUSBHelper",
+                                code: 500,
+                                userInfo: [NSLocalizedDescriptionKey: "Nie udało się zakodować wyniku instalacji Rosetty."]
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     func queryHealth(_ reply: @escaping (Bool, NSString) -> Void) {
         let uid = getuid()
         let euid = geteuid()
         let pid = getpid()
         reply(true, "Helper odpowiada poprawnie (uid=\(uid), euid=\(euid), pid=\(pid))" as NSString)
+    }
+
+    func queryCapabilities(_ reply: @escaping (NSData?, NSError?) -> Void) {
+        do {
+            let payload = HelperCapabilitiesPayload(
+                capabilities: try PrivilegedHelperServiceCapabilities.validatedCapabilities()
+            )
+            reply(try HelperXPCCodec.encode(payload) as NSData, nil)
+        } catch {
+            reply(
+                nil,
+                NSError(
+                    domain: "macUSBHelper",
+                    code: 503,
+                    userInfo: [NSLocalizedDescriptionKey: "Capability macUSBoot jest niedostępna: \(macUSBootCapabilityErrorDescription(error))"]
+                )
+            )
+        }
+    }
+
+    private func macUSBootCapabilityErrorDescription(_ error: Error) -> String {
+        if let failure = error as? HelperWorkflowWindowsMacUSBootFailure {
+            return failure.diagnosticDescription
+        }
+        return error.localizedDescription
     }
 
     private func sendProgress(_ event: HelperProgressEventPayload) {

@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         UserDefaults.standard.synchronize()
         // Update MenuState to reflect the default state in UI
         MenuState.shared.externalDrivesEnabled = false
-        refreshPermissionStates()
+        refreshPermissionStates(fullDiskAccessTrigger: nil)
     }
     
     func applicationWillTerminate(_ notification: Notification) {
@@ -43,12 +43,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
-        refreshPermissionStates()
+        refreshPermissionStates(fullDiskAccessTrigger: .activation)
     }
 
-    private func refreshPermissionStates() {
+    private func refreshPermissionStates(fullDiskAccessTrigger: FullDiskAccessCheckTrigger?) {
         NotificationPermissionManager.shared.refreshState()
-        FullDiskAccessPermissionManager.shared.refreshState()
+        if let fullDiskAccessTrigger {
+            FullDiskAccessPermissionManager.shared.refreshState(trigger: fullDiskAccessTrigger)
+        }
         HelperServiceManager.shared.refreshBackgroundApprovalState()
     }
 }
@@ -362,7 +364,7 @@ struct macUSBApp: App {
             CommandGroup(after: .help) {
                 Divider()
                 Button {
-                    if let url = URL(string: "https://kruszoneq.github.io/macUSB/") {
+                    if let url = URL(string: "https://macusb.app/") {
                         NSWorkspace.shared.open(url)
                     }
                 } label: {

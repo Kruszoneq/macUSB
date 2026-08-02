@@ -225,9 +225,14 @@ extension MacOSDownloaderWindowShellView {
                 installerIconView(for: entry)
 
                 VStack(alignment: .leading, spacing: 1) {
-                    Text("\(entry.name) \(entry.version)")
-                        .font(.body.weight(.medium))
-                        .foregroundStyle(.primary)
+                    HStack(spacing: 7) {
+                        Text("\(entry.family) \(entry.version)")
+                            .font(.body.weight(.medium))
+                            .foregroundStyle(.primary)
+
+                        betaBadge(for: entry, isSelected: isSelected)
+                        downloadedBadge(for: entry)
+                    }
 
                     if let secondaryText = entrySecondaryText(for: entry) {
                         Text(secondaryText)
@@ -289,15 +294,35 @@ extension MacOSDownloaderWindowShellView {
     }
 
     var visibleFamilyGroups: [MacOSInstallerFamilyGroup] {
+        let channelFilteredGroups: [MacOSInstallerFamilyGroup] =
+            logic.familyGroups.compactMap { group -> MacOSInstallerFamilyGroup? in
+                let entries = group.entries.filter { entry in
+                    showBetaVersions || entry.releaseChannel == .stable
+                }
+                guard !entries.isEmpty else { return nil }
+                return MacOSInstallerFamilyGroup(
+                    family: group.family,
+                    entries: entries
+                )
+            }
+
         guard !showAllAvailableVersions else {
-            return logic.familyGroups
+            return channelFilteredGroups
         }
 
-        return logic.familyGroups.compactMap { group in
-            guard let newest = group.entries.first else {
-                return nil
+        return channelFilteredGroups.compactMap { group in
+            var seenChannels: Set<MacOSInstallerReleaseChannel> = []
+            var seenEntryIDs: Set<String> = []
+            let newestPerChannelAndDownloaded = group.entries.filter { entry in
+                let isNewestInChannel = seenChannels.insert(entry.releaseChannel).inserted
+                let shouldInclude = isNewestInChannel || entry.isDownloaded
+                return shouldInclude && seenEntryIDs.insert(entry.id).inserted
             }
-            return MacOSInstallerFamilyGroup(family: group.family, entries: [newest])
+            guard !newestPerChannelAndDownloaded.isEmpty else { return nil }
+            return MacOSInstallerFamilyGroup(
+                family: group.family,
+                entries: newestPerChannelAndDownloaded
+            )
         }
     }
 
@@ -320,7 +345,7 @@ extension MacOSDownloaderWindowShellView {
     func resolveInstallerIcon(for entry: MacOSInstallerEntry) -> NSImage? {
         let versionKey = normalizedVersionKey(from: entry.version)
         let majorVersionKey = normalizedMajorVersionKey(from: entry.version)
-        let nameKey = normalizedSystemNameKey(from: entry.name)
+        let nameKey = normalizedSystemNameKey(from: entry.family)
         let nameAliases = iconNameAliases(for: nameKey)
 
         for alias in nameAliases {
@@ -389,6 +414,53 @@ extension MacOSDownloaderWindowShellView {
             return ["mavericks", "maverics"]
         }
         return [key]
+    }
+
+    @ViewBuilder
+    func betaBadge(for entry: MacOSInstallerEntry, isSelected: Bool) -> some View {
+        if entry.isBeta {
+            Text(verbatim: "BETA")
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
+                .padding(.horizontal, 7)
+                .padding(.vertical, 2)
+                .background(
+                    Capsule(style: .continuous)
+                        .fill(
+                            isSelected
+                                ? Color.accentColor.opacity(0.14)
+                                : Color.secondary.opacity(0.08)
+                        )
+                )
+                .overlay(
+                    Capsule(style: .continuous)
+                        .stroke(
+                            isSelected
+                                ? Color.accentColor.opacity(0.46)
+                                : Color.secondary.opacity(0.36),
+                            lineWidth: 0.7
+                        )
+                )
+        }
+    }
+
+    @ViewBuilder
+    func downloadedBadge(for entry: MacOSInstallerEntry) -> some View {
+        if entry.isDownloaded {
+            Text(String(localized: "downloader.local_installers.downloaded_badge"))
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(Color.accentColor)
+                .padding(.horizontal, 7)
+                .padding(.vertical, 2)
+                .background(
+                    Capsule(style: .continuous)
+                        .fill(Color.accentColor.opacity(0.14))
+                )
+                .overlay(
+                    Capsule(style: .continuous)
+                        .stroke(Color.accentColor.opacity(0.46), lineWidth: 0.7)
+                )
+        }
     }
 
     func shouldShowBuild(_ build: String) -> Bool {

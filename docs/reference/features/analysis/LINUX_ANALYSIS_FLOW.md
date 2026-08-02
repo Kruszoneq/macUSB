@@ -129,9 +129,13 @@ Raw `.img` Linux force sets Linux workflow state without distro recognition:
 
 Required USB capacity is computed from source file size:
 
-- source size `<= 6_000_000_000` bytes -> `8 GB`,
-- source size `> 6_000_000_000` and `<= 14_000_000_000` bytes -> `16 GB`,
-- source size `> 14_000_000_000` bytes -> `32 GB`.
+- source size `<= 900_000_000` bytes -> `1 GB`,
+- source size `> 900_000_000` and `<= 1_800_000_000` bytes -> `2 GB`,
+- source size `> 1_800_000_000` and `<= 3_600_000_000` bytes -> `4 GB`,
+- source size `> 3_600_000_000` and `<= 7_300_000_000` bytes -> `8 GB`,
+- source size `> 7_300_000_000` and `<= 14_700_000_000` bytes -> `16 GB`,
+- source size `> 14_700_000_000` and `<= 29_400_000_000` bytes -> `32 GB`,
+- source size `> 29_400_000_000` bytes -> `64 GB`.
 
 If source size cannot be resolved from file metadata, fallback capacity is `16 GB`.
 

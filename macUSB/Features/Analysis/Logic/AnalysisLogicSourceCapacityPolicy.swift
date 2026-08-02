@@ -11,13 +11,25 @@ extension AnalysisLogic {
     private static let sourceCapacityFallbackGB: Int = 16
 
     func requiredUSBCapacityGBForImageSourceSize(_ fileSizeBytes: Int64) -> Int {
-        if fileSizeBytes > 14_000_000_000 {
+        if fileSizeBytes > 29_400_000_000 {
+            return 64
+        }
+        if fileSizeBytes > 14_700_000_000 {
             return 32
         }
-        if fileSizeBytes > 6_000_000_000 {
+        if fileSizeBytes > 7_300_000_000 {
             return 16
         }
-        return 8
+        if fileSizeBytes > 3_600_000_000 {
+            return 8
+        }
+        if fileSizeBytes > 1_800_000_000 {
+            return 4
+        }
+        if fileSizeBytes > 900_000_000 {
+            return 2
+        }
+        return 1
     }
 
     func resolveImageSourceFileSizeBytes(for sourceURL: URL) -> (bytes: Int64, source: String)? {

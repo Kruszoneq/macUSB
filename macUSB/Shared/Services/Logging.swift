@@ -11,6 +11,7 @@ import Darwin
 ///   Wersja aplikacji: X (Y)
 ///   Wersja macOS: A.B(.C)
 ///   Model Maca: MacNN,N
+///   Architektura Maca: Apple Silicon (ARM64) / Intel (x86_64)
 ///   ------------
 /// - Etapy: `AppLogging.stage("NAZWA ETAPU")` loguje nagłówek z separatorem.
 /// - Kroki: `AppLogging.info("komunikat", category: "FileAnalysis")` lub `AppLogging.error(...)`.
@@ -48,12 +49,14 @@ public enum AppLogging {
         let appVer = appVersionString()
         let macVer = macOSVersionString()
         let model = hardwareModelString()
+        let architecture = MacHardwareArchitecture.current.diagnosticLabel
         let message = """
 [\(time)] Start aplikacji
 ------------
 Wersja aplikacji: \(appVer)
 Wersja macOS: \(macVer)
 Model Maca: \(model)
+Architektura Maca: \(architecture)
 ------------
 """
         appLogger.info("\(message, privacy: .public)")

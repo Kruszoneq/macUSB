@@ -24,14 +24,16 @@ extension MacOSCatalogService {
 
             entries.append(
                 MacOSInstallerEntry(
-                    id: "\(legacy.name)|\(legacy.version)|N/A",
+                    id: "\(MacOSInstallerReleaseChannel.stable.rawValue)|\(legacy.name)|\(legacy.version)|N/A",
                     family: legacy.name,
                     name: legacy.name,
                     version: legacy.version,
                     build: "N/A",
                     installerSizeText: nil,
                     sourceURL: sourceURL,
-                    catalogProductID: nil
+                    catalogProductID: nil,
+                    releaseChannel: .stable,
+                    catalogURL: nil
                 )
             )
         }

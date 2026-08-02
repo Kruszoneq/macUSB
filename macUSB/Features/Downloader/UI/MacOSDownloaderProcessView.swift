@@ -14,9 +14,13 @@ extension MacOSDownloaderWindowShellView {
                                 .frame(width: 36, height: 36)
 
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("\(entry.name) \(entry.version)")
-                                    .font(.headline)
-                                    .foregroundStyle(.primary)
+                                HStack(spacing: 7) {
+                                    Text("\(entry.family) \(entry.version)")
+                                        .font(.headline)
+                                        .foregroundStyle(.primary)
+
+                                    betaBadge(for: entry, isSelected: false)
+                                }
 
                                 if shouldShowBuild(entry.build) {
                                     Text(entry.build)
@@ -122,59 +126,54 @@ extension MacOSDownloaderWindowShellView {
             }
 
         case .active:
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(spacing: 12) {
-                    Image(systemName: activeIconForDownloadStage(stage))
-                        .font(.title3)
-                        .foregroundColor(.accentColor)
-                        .frame(width: 24)
-                    Text(downloadStageTitle(for: stage))
-                        .font(.headline)
-                    Spacer()
-                    if stage == .downloading {
-                        Text(downloadProgressText())
-                            .font(.title3.monospacedDigit())
-                            .fontWeight(.semibold)
+            StatusCard(
+                tone: .active,
+                cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode())
+            ) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack(spacing: 12) {
+                        Image(systemName: activeIconForDownloadStage(stage))
+                            .font(.title3)
                             .foregroundColor(.accentColor)
-                    }
-                }
-
-                if let description = downloadStageDescription(for: stage) {
-                    Text(description)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-
-                if let progress = downloadStageProgress(for: stage) {
-                    ProgressView(value: progress)
-                        .progressViewStyle(.linear)
-                } else {
-                    ProgressView()
-                        .progressViewStyle(.linear)
-                }
-
-                if stage == .downloading {
-                    HStack {
-                        Text(verbatim: downloadSpeedLabelText())
-                            .font(.subheadline.monospacedDigit())
-                            .foregroundStyle(.secondary)
+                            .frame(width: 24)
+                        Text(downloadStageTitle(for: stage))
+                            .font(.headline)
                         Spacer()
-                        Text(downloadFlowModel.downloadTransferredText)
-                            .font(.caption.monospacedDigit())
+                        if stage == .downloading {
+                            Text(downloadProgressText())
+                                .font(.title3.monospacedDigit())
+                                .fontWeight(.semibold)
+                                .foregroundColor(.accentColor)
+                        }
+                    }
+
+                    if let description = downloadStageDescription(for: stage) {
+                        Text(description)
+                            .font(.subheadline)
                             .foregroundStyle(.secondary)
+                    }
+
+                    if let progress = downloadStageProgress(for: stage) {
+                        ProgressView(value: progress)
+                            .progressViewStyle(.linear)
+                    } else {
+                        ProgressView()
+                            .progressViewStyle(.linear)
+                    }
+
+                    if stage == .downloading {
+                        HStack {
+                            Text(verbatim: downloadSpeedLabelText())
+                                .font(.subheadline.monospacedDigit())
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                            Text(downloadFlowModel.downloadTransferredText)
+                                .font(.caption.monospacedDigit())
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
             }
-            .padding(MacUSBDesignTokens.panelInnerPadding)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(activeStageBackgroundFill)
-            .overlay(activeStageBackgroundStroke)
-            .clipShape(
-                RoundedRectangle(
-                    cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode()),
-                    style: .continuous
-                )
-            )
 
         case .completed:
             StatusCard(tone: .neutral, density: .compact) {
@@ -313,19 +312,4 @@ extension MacOSDownloaderWindowShellView {
         )
     }
 
-    private var activeStageBackgroundFill: some View {
-        RoundedRectangle(
-            cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode()),
-            style: .continuous
-        )
-        .fill(Color.accentColor.opacity(0.14))
-    }
-
-    private var activeStageBackgroundStroke: some View {
-        RoundedRectangle(
-            cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode()),
-            style: .continuous
-        )
-        .stroke(Color.accentColor.opacity(0.30), lineWidth: 0.6)
-    }
 }

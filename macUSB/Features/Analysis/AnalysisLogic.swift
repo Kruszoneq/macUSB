@@ -10,6 +10,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var recognizedVersion: String = ""
     @Published var sourceAppURL: URL?
     @Published var detectedSystemIcon: NSImage?
+    @Published var isBetaInstaller: Bool = false
     @Published var mountedDMGPath: String? = nil
 
     @Published var isAnalyzing: Bool = false
@@ -30,6 +31,9 @@ final class AnalysisLogic: ObservableObject {
     @Published var shouldShowAlreadyMountedSourceAlert: Bool = false
     @Published var isPPC: Bool = false
     @Published var legacyArchInfo: String? = nil
+    @Published var createInstallMediaInspection: MacOSCreateInstallMediaInspection = .notApplicable
+    @Published var macOSArchitectureBlockReason: MacOSArchitectureBlockReason? = nil
+    @Published var macOSRosettaRequirement: MacOSRosettaRequirement = .notRequired
     @Published var userSkippedAnalysis: Bool = false
     @Published var isLinuxDetected: Bool = false
     @Published var isLinuxDistributionRecognized: Bool = false
@@ -46,6 +50,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var windowsArchitecture: WindowsArchitecture? = nil
     @Published var isWindowsARM: Bool = false
     @Published var windowsHasEFI: Bool = false
+    @Published var windowsBootCapabilities: WindowsBootCapabilities? = nil
     @Published var isWindowsWorkflowSupported: Bool = false
     @Published var windowsWillSplitWIM: Bool = false
     @Published var windowsAutounattendMacLocale: CreatorWindowsAutounattendMacLocale? = nil
@@ -249,6 +254,7 @@ extension AnalysisLogic {
         requiredUSBCapacityGB = nil
         sourceAppURL = nil
         detectedSystemIcon = nil
+        isBetaInstaller = false
         isSystemDetected = false
         showUSBSection = false
         showUnsupportedMessage = false

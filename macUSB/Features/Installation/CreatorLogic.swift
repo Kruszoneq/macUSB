@@ -4,6 +4,21 @@ import AppKit
 // Shared installation utilities used by the helper-only flow
 extension UniversalInstallationView {
     func showStartCreationAlert() {
+        guard windowsMacUSBootPreflightRequired else {
+            continueStartCreationAlert()
+            return
+        }
+
+        runWindowsMacUSBootPreflight { ready, message in
+            guard ready else {
+                errorMessage = message ?? String(localized: "Nie udało się automatycznie odświeżyć helpera. Otwórz Narzędzia → Napraw helpera i spróbuj ponownie.")
+                return
+            }
+            continueStartCreationAlert()
+        }
+    }
+
+    private func continueStartCreationAlert() {
         guard resolveWindowsAutounattendStartReadiness() else { return }
 
         resolveWindowsAutounattendExistingFileIfNeeded { shouldContinue in
@@ -77,6 +92,14 @@ extension UniversalInstallationView {
     }
 
     func showCreationProgressCancelAlert() {
+        guard !isWindowsMacUSBootCancellationBlocked else {
+            log(
+                "Pominięto otwarcie potwierdzenia anulowania: etap macUSBoot nie może zostać przerwany.",
+                category: "WindowsInstallFlow"
+            )
+            return
+        }
+
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
@@ -86,12 +109,19 @@ extension UniversalInstallationView {
         alert.addButton(withTitle: String(localized: "Przerwij"))
 
         let completionHandler = { (response: NSApplication.ModalResponse) in
-            if response == .alertSecondButtonReturn {
-                withAnimation(.easeInOut(duration: 0.35)) {
-                    self.isCancelling = true
-                }
-                self.performCancellationAndNavigateToFinish()
+            guard response == .alertSecondButtonReturn else { return }
+            guard !self.isWindowsMacUSBootCancellationBlocked else {
+                self.log(
+                    "Odrzucono potwierdzenie anulowania: helper przeszedł do nieprzerywalnego etapu macUSBoot.",
+                    category: "WindowsInstallFlow"
+                )
+                return
             }
+
+            withAnimation(.easeInOut(duration: 0.35)) {
+                self.isCancelling = true
+            }
+            self.performCancellationAndNavigateToFinish()
         }
 
         if let window = NSApp.windows.first {
@@ -103,6 +133,18 @@ extension UniversalInstallationView {
     }
 
     func performCancellationAndNavigateToFinish() {
+        guard !isWindowsMacUSBootCancellationBlocked else {
+            cancellationRequestedBeforeWorkflowStart = false
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isCancelling = false
+            }
+            log(
+                "Pominięto żądanie anulowania: etap macUSBoot nie może zostać przerwany.",
+                category: "WindowsInstallFlow"
+            )
+            return
+        }
+
         stopUSBMonitoring()
 
         if activeHelperWorkflowID == nil {
@@ -110,11 +152,27 @@ extension UniversalInstallationView {
             return
         }
 
-        cancelHelperWorkflowIfNeeded {
+        cancelHelperWorkflowIfNeeded { cancellationAccepted in
             DispatchQueue.main.async {
-                self.completeCancellationFlow()
+                if cancellationAccepted {
+                    self.completeCancellationFlow()
+                } else {
+                    self.cancellationRequestedBeforeWorkflowStart = false
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        self.isCancelling = false
+                    }
+                    self.log(
+                        "Helper odrzucił żądanie anulowania; aplikacja pozostaje w aktywnym workflow.",
+                        category: self.isWindowsWorkflow ? "WindowsInstallFlow" : "Installation"
+                    )
+                }
             }
         }
+    }
+
+    var isWindowsMacUSBootCancellationBlocked: Bool {
+        isWindowsWorkflow
+            && helperCurrentStageKey == CreationProgressWindowsMapping.installMacUSBootStageKey
     }
 
     func completeCancellationFlow() {

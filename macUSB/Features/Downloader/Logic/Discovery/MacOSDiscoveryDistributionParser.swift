@@ -15,18 +15,26 @@ extension MacOSCatalogService {
 
         if version.isEmpty { return nil }
         if build.isEmpty { build = "N/A" }
-        if isPrerelease(name: name, version: version, build: build) { return nil }
+        let prerelease = isPrerelease(name: name, version: version, build: build)
+        if candidate.releaseChannel == .stable, prerelease {
+            return nil
+        }
+        if candidate.releaseChannel != .stable, !prerelease {
+            return nil
+        }
 
         let family = normalizeFamilyName(from: name)
         return MacOSInstallerEntry(
-            id: "\(family)|\(name)|\(version)|\(build)",
+            id: "\(candidate.releaseChannel.rawValue)|\(family)|\(name)|\(version)|\(build)",
             family: family,
             name: name,
             version: version,
             build: build,
             installerSizeText: candidate.catalogSizeBytes.map(formatSizeInGigabytes),
             sourceURL: candidate.sourceURL,
-            catalogProductID: candidate.productID
+            catalogProductID: candidate.productID,
+            releaseChannel: candidate.releaseChannel,
+            catalogURL: candidate.catalogURL
         )
     }
 
@@ -45,10 +53,28 @@ extension MacOSCatalogService {
     }
 
     func normalizeFamilyName(from name: String) -> String {
-        if name.hasPrefix("Install ") {
-            return String(name.dropFirst("Install ".count))
+        var family = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        if family.hasPrefix("Install ") {
+            family = String(family.dropFirst("Install ".count))
         }
-        return name
+
+        let prereleaseSuffixPatterns = [
+            #"\s+(?:(?:Public|Developer)\s+)?(?:Beta|Seed|Preview)(?:\s+\d+)?$"#,
+            #"\s+(?:Release Candidate|RC)(?:\s+\d+)?$"#,
+        ]
+        for pattern in prereleaseSuffixPatterns {
+            family = family.replacingOccurrences(
+                of: pattern,
+                with: "",
+                options: [.regularExpression, .caseInsensitive]
+            )
+        }
+        family = family.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if family.localizedCaseInsensitiveContains("golden gate") {
+            return "macOS Golden Gate"
+        }
+        return family
     }
 
     func isPrerelease(name: String, version: String, build: String) -> Bool {

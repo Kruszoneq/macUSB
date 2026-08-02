@@ -22,12 +22,16 @@ struct SystemAnalysisView: View {
     
     @State private var selectedDriveDisplayNameSnapshot: String? = nil
     @State private var selectedDriveForInstallationSnapshot: USBDrive? = nil
+    @State private var isBetaInstallerSnapshot: Bool = false
     @State private var linuxFlowContextSnapshot: LinuxInstallationFlowContext? = nil
     @State private var windowsWorkflowSupportedSnapshot: Bool = false
     @State private var windowsMountedSourcePathSnapshot: String? = nil
     @State private var windowsAutounattendMacLocaleSnapshot: CreatorWindowsAutounattendMacLocale? = nil
     @State private var windowsArchitectureSnapshot: WindowsArchitecture? = nil
+    @State private var windowsFamilySnapshot: WindowsFamily? = nil
+    @State private var windowsBootCapabilitiesSnapshot: WindowsBootCapabilities? = nil
     @State private var windowsWillSplitWIMSnapshot: Bool = false
+    @State private var macOSRosettaRequirementSnapshot: MacOSRosettaRequirement = .notRequired
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
     @State private var checksumSheetPresentation: AnalysisChecksumSheetPresentation?
@@ -76,7 +80,11 @@ struct SystemAnalysisView: View {
                                      && !logic.recognizedVersion.isEmpty
                                      && logic.showUnsupportedMessage)
 
-        let skipAnalysisEnabled = analysisFinished && hasAnySelection && !isValidSelection && (unrecognizedBlocking || recognizedUnsupported)
+        let skipAnalysisEnabled = analysisFinished
+            && hasAnySelection
+            && !isValidSelection
+            && logic.macOSArchitectureBlockReason == nil
+            && (unrecognizedBlocking || recognizedUnsupported)
         MenuState.shared.skipAnalysisEnabled = skipAnalysisEnabled
 
         let sourceExtension: String
@@ -188,11 +196,16 @@ struct SystemAnalysisView: View {
         navigateToInstall = false
         selectedDriveDisplayNameSnapshot = nil
         selectedDriveForInstallationSnapshot = nil
+        isBetaInstallerSnapshot = false
         linuxFlowContextSnapshot = nil
         windowsWorkflowSupportedSnapshot = false
         windowsMountedSourcePathSnapshot = nil
         windowsAutounattendMacLocaleSnapshot = nil
+        windowsArchitectureSnapshot = nil
+        windowsFamilySnapshot = nil
+        windowsBootCapabilitiesSnapshot = nil
         windowsWillSplitWIMSnapshot = false
+        macOSRosettaRequirementSnapshot = .notRequired
         MenuState.shared.skipAnalysisEnabled = false
         MenuState.shared.skipLinuxManualSelectionEnabled = false
         updateMenuState()
@@ -408,9 +421,14 @@ struct SystemAnalysisView: View {
                         Text(isValid ? "Pomyślnie wykryto system" : "Błąd analizy")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Text(isValid ? (logic.recognizedVersion.isEmpty ? String(localized: "Wykryto kompatybilny instalator") : logic.recognizedVersion) : unsupportedText)
-                            .font(.headline)
-                            .foregroundColor(isValid ? .green : .red)
+                        HStack(spacing: 8) {
+                            Text(isValid ? (logic.recognizedVersion.isEmpty ? String(localized: "Wykryto kompatybilny instalator") : logic.recognizedVersion) : unsupportedText)
+                                .font(.headline)
+                                .foregroundColor(isValid ? .green : .red)
+                            if isValid, logic.isBetaInstaller {
+                                MacOSBetaBadge(tint: .green)
+                            }
+                        }
                     }
                     Spacer()
                 }
@@ -462,6 +480,28 @@ struct SystemAnalysisView: View {
                 }
                 .transition(.opacity)
             }
+
+            if let architectureBlockReason = logic.macOSArchitectureBlockReason {
+                StatusCard(tone: .warning, density: .compact) {
+                    HStack(alignment: .center, spacing: 10) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(sectionIconFont)
+                            .foregroundColor(.orange)
+                            .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text(String(localized: architectureBlockReason.titleLocalizationKey))
+                                .font(.headline)
+                                .foregroundColor(.orange)
+                            Text(String(localized: architectureBlockReason.descriptionLocalizationKey))
+                                .font(.subheadline)
+                                .foregroundColor(.orange.opacity(0.8))
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        Spacer()
+                    }
+                }
+                .transition(.opacity)
+            }
         }
         .transition(.opacity)
     }
@@ -477,13 +517,17 @@ struct SystemAnalysisView: View {
                         targetDriveDisplayName: selectedDriveDisplayNameSnapshot,
                         systemName: logic.recognizedVersion,
                         detectedSystemIcon: logic.detectedSystemIcon,
+                        isBetaInstaller: isBetaInstallerSnapshot,
                         originalImageURL: logic.selectedFileUrl,
                         linuxFlowContext: linuxFlowContextSnapshot,
                         isWindowsWorkflow: windowsWorkflowSupportedSnapshot,
                         windowsMountedSourcePath: windowsMountedSourcePathSnapshot,
                         windowsAutounattendMacLocale: windowsAutounattendMacLocaleSnapshot,
                         windowsArchitecture: windowsArchitectureSnapshot,
+                        windowsFamily: windowsFamilySnapshot,
+                        windowsBootCapabilities: windowsBootCapabilitiesSnapshot,
                         windowsWillSplitWim: windowsWillSplitWIMSnapshot,
+                        macOSRosettaRequirement: macOSRosettaRequirementSnapshot,
                         needsCodesign: logic.needsCodesign,
                         isLegacySystem: logic.isLegacyDetected,
                         isRestoreLegacy: logic.isRestoreLegacy,
@@ -541,12 +585,16 @@ struct SystemAnalysisView: View {
     private func handleProceedToInstall() {
         selectedDriveDisplayNameSnapshot = logic.selectedDrive?.displayName
         selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
+        isBetaInstallerSnapshot = logic.isBetaInstaller
         linuxFlowContextSnapshot = logic.linuxInstallationFlowContext
         windowsWorkflowSupportedSnapshot = logic.isWindowsWorkflowSupported
         windowsMountedSourcePathSnapshot = logic.mountedDMGPath
         windowsAutounattendMacLocaleSnapshot = logic.windowsAutounattendMacLocale
         windowsArchitectureSnapshot = logic.windowsArchitecture
+        windowsFamilySnapshot = logic.windowsFamily
+        windowsBootCapabilitiesSnapshot = logic.windowsBootCapabilities
         windowsWillSplitWIMSnapshot = logic.windowsWillSplitWIM
+        macOSRosettaRequirementSnapshot = logic.macOSRosettaRequirement
         isTabLocked = true
         if logic.isWindowsWorkflowSupported {
             DispatchQueue.main.async {

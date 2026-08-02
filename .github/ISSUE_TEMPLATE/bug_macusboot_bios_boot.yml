@@ -1,0 +1,132 @@
+name: "Bug Report - macUSBoot BIOS Boot"
+description: "Report issues related to macUSBoot and BIOS booting of Windows installation media."
+title: "[Windows] "
+labels: ["bug", "Windows"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill in all required fields.
+        Attach a photo or video if it helps show the boot problem.
+        If the problem occurred while creating the USB storage device, attach diagnostic logs exported from `Help -> Export diagnostic logs...`.
+
+  - type: input
+    id: app_version
+    attributes:
+      label: "macUSB version"
+      placeholder: "e.g., v2.4 build 37"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: bios_selected
+    attributes:
+      label: "Was BIOS selected in macUSB?"
+      options:
+        - "Yes"
+        - "No"
+        - "Not applicable"
+    validations:
+      required: true
+
+  - type: input
+    id: hardware_model
+    attributes:
+      label: "Computer or motherboard model"
+      description: "Enter the laptop, desktop computer, or motherboard model. Include the BIOS version if known."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: other_media
+    attributes:
+      label: "Have you tried another USB storage device?"
+      options:
+        - "Yes"
+        - "No"
+        - "Not applicable"
+    validations:
+      required: true
+
+  - type: input
+    id: target_windows_version
+    attributes:
+      label: "Which Windows system were you creating?"
+      placeholder: "e.g., Windows 10 22H2 x64"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: displayed_error
+    attributes:
+      label: "Error displayed on screen"
+      options:
+        - "Not applicable - no error message is displayed"
+        - "C01 - No disk access."
+        - "C02 - Bad layout."
+        - "C03 - Read failed."
+        - "C04 - Bad header."
+        - "C05 - Bad data."
+        - "C06 - The bootloader handoff is invalid."
+        - "F01 - The Windows volume could not be read."
+        - "F02 - The FAT32 volume layout is unsupported."
+        - "F03 - The Windows file system could not be read."
+        - "F04 - The root directory is invalid."
+        - "F05 - Windows Boot Manager was not found."
+        - "F06 - Windows Boot Manager data is invalid."
+        - "F07 - Windows Boot Manager is too large."
+        - "Other message not listed above"
+    validations:
+      required: true
+
+  - type: input
+    id: other_error_message
+    attributes:
+      label: "Other error message"
+      description: "If you selected \"Other message not listed above\", enter the complete message displayed on screen."
+      placeholder: "Enter the complete error message."
+    validations:
+      required: false
+
+  - type: textarea
+    id: problem_description
+    attributes:
+      label: "What happens?"
+      description: "Describe when the problem occurs, what is visible on the screen, and how the computer behaves."
+      placeholder: "Describe the issue in a few sentences."
+    validations:
+      required: true
+
+  - type: textarea
+    id: attempted_solutions
+    attributes:
+      label: "What have you tried?"
+      description: "List the troubleshooting steps already attempted and their results."
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_information
+    attributes:
+      label: "Additional information"
+      description: "Provide any other information that may help diagnose the problem, such as BIOS settings or the USB flash drive model."
+    validations:
+      required: false
+
+  - type: upload
+    id: diagnostic_logs
+    attributes:
+      label: "Diagnostic logs"
+      description: "If the problem occurred while creating the USB storage device, attach the .txt diagnostic log exported from `Help -> Export diagnostic logs...`."
+    validations:
+      required: false
+      accept: ".txt"
+
+  - type: upload
+    id: problem_media
+    attributes:
+      label: "Photo or video of the problem"
+      description: "Attach a photo or video showing the problem."
+    validations:
+      required: false
+      accept: ".png,.jpg,.jpeg,.gif,.webp,.mp4,.mov,.webm"

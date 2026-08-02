@@ -20,15 +20,7 @@ extension HelperWorkflowExecutor {
                 description: "Źródłowy obraz nie wygląda jak instalator Windows: brak katalogu sources/Sources."
             )
         }
-        let sourceUEFIStatus = evaluateWindowsUEFIStatus(in: sourceURL)
-
-        guard sourceUEFIStatus.hasCompatibleEFI else {
-            throw HelperExecutionError.failed(
-                stage: stage.key,
-                exitCode: -1,
-                description: "W obrazie źródłowym nie znaleziono wymaganych markerów UEFI (katalog EFI oraz co najmniej jeden plik: bootmgr.efi, EFI/Microsoft/Boot/cdboot.efi, EFI/BOOT/BOOTX64.EFI, EFI/BOOT/BOOTAA64.EFI)."
-            )
-        }
+        try validateWindowsBootRequirements(in: sourceURL, stage: stage, isTarget: false)
 
         let installWimInfo = resolveWindowsInstallWimInfo(in: sourcesDirectory)
         let installEsdInfo = resolveWindowsInstallEsdInfo(in: sourcesDirectory)

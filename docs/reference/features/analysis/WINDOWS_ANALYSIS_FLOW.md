@@ -11,6 +11,12 @@ Windows detection is a fallback path in analysis between macOS and Linux.
 - If Windows is not recognized, flow continues to Linux fallback.
 - Supported Windows detection unlocks dedicated Windows USB-creation workflow.
 
+## Source Image Trust Boundary
+
+The supported and tested input contract covers original Microsoft Windows ISO images. Modified, repacked, or otherwise customized images are not tested and are outside the compatibility guarantee.
+
+The app detects bounded metadata, required payload markers, and eligible boot modes; these checks do not certify image provenance or establish that an arbitrary ISO is trustworthy. Selecting the correct, independently verified source image remains the user's responsibility. The optional manual SHA-256 action reports the selected file's digest but does not compare it with an authoritative Microsoft checksum automatically.
+
 ## Trigger and Entry
 
 Windows fallback is entered when all conditions are met:
@@ -39,30 +45,63 @@ Detection uses bounded metadata reads from mounted image only.
 - XP markers:
   - top-level `WIN51*`,
   - top-level `I386`.
+- boot capability markers from a bounded, case-insensitive index of only the required mounted-image directories.
 
 No recursive unpacking and no weak volume-label-only recognition path.
 
-## EFI Support Gate
+## Boot Capability Detection
 
-For this app iteration, a detected Windows image is treated as workflow-supported only when both are true:
+Boot marker presence and product eligibility are separate results.
 
-- detected family is one of:
-  - desktop: `8`, `8.1`, `10`, `11`,
-  - server: `Server 2012`, `Server 2012 R2`, `Server 2016`, `Server 2019`, `Server 2022`, `Server 2025`,
-- required EFI markers are present:
-  - `efi` directory,
-  - and at least one EFI boot marker:
-    - `bootmgr.efi`, or
-    - `efi/microsoft/boot/cdboot.efi`, or
-    - `efi/boot/bootx64.efi`, or
-    - `efi/boot/bootaa64.efi`.
+BIOS is detected when all required markers are present:
+
+- `bootmgr`,
+- `boot/BCD`,
+- `sources/boot.wim`.
+
+Additional BIOS diagnostic evidence is recorded when present but is not required:
+
+- `boot/boot.sdi`,
+- `boot/bootfix.bin`,
+- `boot/etfsboot.com`.
+
+UEFI detection preserves the existing rule:
+
+- `efi` directory,
+- and at least one EFI boot marker:
+  - `bootmgr.efi`,
+  - `efi/microsoft/boot/cdboot.efi`,
+  - `efi/boot/bootx64.efi`,
+  - `efi/boot/bootaa64.efi`.
+
+Detected modes are filtered into eligible modes by family and architecture:
+
+- `XP` and `Server 2003`: no eligible modes,
+- `Vista`, `7`, and `Server 2008 R2`: BIOS when detected,
+- `8`, `8.1`, `10`, and `Server 2012` through `Server 2022`: every detected mode,
+- `11` and `Server 2025`: UEFI when detected, even when BIOS markers are present,
+- ARM images retain UEFI eligibility and never receive BIOS eligibility,
+- unknown architecture does not block BIOS eligibility.
+
+The resolved boot capabilities, including detected modes, eligible modes, and marker evidence, are retained in analysis state and handed to the installation summary together with the detected family. The summary uses this data to render the applicable BIOS/UEFI presentation and initialize the selected boot mode.
+
+## Current Workflow Support Gate
+
+For this app iteration, a detected Windows image can proceed to the installation summary when its family is supported and qualification produces at least one eligible boot mode.
+
+Supported summary families and requirements:
+
+- `Vista`, `7`, and `Server 2008 R2`: detected BIOS,
+- `8`, `8.1`, `10`, and `Server 2012` through `Server 2022`: detected BIOS or UEFI,
+- `11` and `Server 2025`: detected UEFI.
 
 Unsupported policy:
 
-- `XP`, `Vista`, `7` are always unsupported even if EFI artifacts exist.
-- `Server 2003` and `Server 2008 R2` are always unsupported even if EFI artifacts exist.
-- desktop `8+` without required EFI markers is unsupported.
-- server `2012+` without required EFI markers is unsupported.
+- `XP` and `Server 2003` are always unsupported.
+- a supported family with no eligible boot mode is unsupported,
+- `Vista`, `7`, and `Server 2008 R2` remain unsupported when BIOS is not detected,
+- `11` and `Server 2025` remain unsupported when UEFI is not detected,
+- ARM images follow the same family support gate and remain UEFI-only.
 
 ## Classification Rules
 
@@ -71,6 +110,7 @@ Detection result produces:
 - family (`XP`, `Vista`, `7`, `8`, `8.1`, `10`, `11`, `Server 2003`, `Server 2008 R2`, `Server 2012`, `Server 2012 R2`, `Server 2016`, `Server 2019`, `Server 2022`, `Server 2025`),
 - optional Service Pack string (`SP1`, `SP2`, `SP3`) when deterministic,
 - normalized architecture (`32-bit` / `64-bit` / `ARM` / `unknown`),
+- detected and eligible BIOS/UEFI modes with marker evidence,
 - support decision and reason.
 
 Family mapping (current implementation contract):
@@ -128,17 +168,26 @@ Current workflow gating:
 - supported Windows detection is shown as successful detection state in analysis card,
 - proceed to installation is enabled for supported Windows images,
 - unsupported Windows detection follows unsupported presentation path,
-- unsupported requirement info message is family-aware:
-  - desktop uses `Windows 8 + EFI` requirement wording,
-  - server uses `Windows Server 2012 + EFI` requirement wording.
+- supported ARM detection follows the existing UEFI workflow,
+- boot capabilities and detected family are passed to the summary as rendered handoff data,
+- `8` through `10` and `Server 2012` through `Server 2022` show a segmented BIOS/UEFI control; dual-mode defaults to UEFI and single-mode locks the control to its only eligible mode,
+- `Vista`, `7`, and `Server 2008 R2` show a BIOS-only informational card,
+- `11` and `Server 2025` retain the UEFI-only informational card,
+- the selected boot mode is session-only and logged in the installation summary,
+- the resolved boot mode is sent to the helper as required `windowsBootMode`; BIOS selection triggers a `windows.macusboot.v1` capability preflight before destructive confirmation, including at most one controlled helper reload, while UEFI keeps the existing media-creation path,
+- the helper advertises the BIOS capability only when its bundled macUSBoot resource set validates against artifact identity and SHA-256 pins compiled into the helper; persistent preflight failure blocks start with helper-repair guidance,
 - analysis also computes Windows toolchain probe (`brew`, `wimlib-imagex`) for installation-summary pre-start gating.
 - when Windows summary expects `install.wim` split and `wimlib-imagex` is missing, start is blocked in summary until probe refresh confirms `wimlib-imagex` presence.
 
 Required USB capacity is computed from selected Windows source file size:
 
-- source size `<= 6_000_000_000` bytes -> `8 GB`,
-- source size `> 6_000_000_000` and `<= 14_000_000_000` bytes -> `16 GB`,
-- source size `> 14_000_000_000` bytes -> `32 GB`.
+- source size `<= 900_000_000` bytes -> `1 GB`,
+- source size `> 900_000_000` and `<= 1_800_000_000` bytes -> `2 GB`,
+- source size `> 1_800_000_000` and `<= 3_600_000_000` bytes -> `4 GB`,
+- source size `> 3_600_000_000` and `<= 7_300_000_000` bytes -> `8 GB`,
+- source size `> 7_300_000_000` and `<= 14_700_000_000` bytes -> `16 GB`,
+- source size `> 14_700_000_000` and `<= 29_400_000_000` bytes -> `32 GB`,
+- source size `> 29_400_000_000` bytes -> `64 GB`.
 
 If source size cannot be resolved from file metadata, fallback capacity is `16 GB`.
 
@@ -148,7 +197,9 @@ When Windows fallback runs, logs include:
 
 - transition entry from macOS detection to Windows detection,
 - parsed details (`family`, `service_pack`, `arch`, `isARM`),
-- support gate summary (`is_supported`, `support_reason`, `has_efi`),
+- support gate summary (`is_supported`, `support_reason`, eligible-mode presence, `has_efi`),
+- final boot capability summary (`detected`, `eligible`, family, architecture, workflow support),
+- present and missing required BIOS/UEFI marker evidence,
 - evidence list used for classification.
 - source file size in bytes with resolution source when available,
 - selected USB threshold in GB,
@@ -165,4 +216,4 @@ When Windows fallback runs, logs include:
 
 ## Update Trigger
 
-Update this file when Windows detection heuristics, EFI support gate, display format, or handoff behavior changes.
+Update this file when Windows detection heuristics, boot capability policy, current workflow support gate, display format, or handoff behavior changes.

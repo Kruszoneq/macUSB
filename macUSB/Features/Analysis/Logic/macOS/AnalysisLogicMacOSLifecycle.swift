@@ -29,6 +29,7 @@ extension AnalysisLogic {
                     self.recognizedVersion = "Mac OS X Tiger 10.4"
                     self.sourceAppURL = effectiveSourceAppURL
                     self.updateDetectedSystemIcon(from: effectiveSourceAppURL)
+                    self.isBetaInstaller = false
                     self.mountedDMGPath = mountPoint
                     self.isSystemDetected = true
                     self.showUnsupportedMessage = false
@@ -41,6 +42,9 @@ extension AnalysisLogic {
                     self.isMavericks = false
                     self.isUnsupportedSierra = false
                     self.isPPC = true
+                    self.createInstallMediaInspection = .notApplicable
+                    self.macOSArchitectureBlockReason = nil
+                    self.macOSRosettaRequirement = .notRequired
                     self.legacyArchInfo = nil
                     self.selectedDrive = nil
                     self.capacityCheckFinished = false
@@ -71,6 +75,7 @@ extension AnalysisLogic {
                 self.recognizedVersion = ""
                 self.sourceAppURL = nil
                 self.detectedSystemIcon = nil
+                self.isBetaInstaller = false
                 self.mountedDMGPath = nil
 
                 self.isAnalyzing = false
@@ -86,6 +91,9 @@ extension AnalysisLogic {
                 self.isMavericks = false
                 self.isUnsupportedSierra = false
                 self.isPPC = false
+                self.createInstallMediaInspection = .notApplicable
+                self.macOSArchitectureBlockReason = nil
+                self.macOSRosettaRequirement = .notRequired
                 self.legacyArchInfo = nil
                 self.shouldShowAlreadyMountedSourceAlert = false
                 self.userSkippedAnalysis = false

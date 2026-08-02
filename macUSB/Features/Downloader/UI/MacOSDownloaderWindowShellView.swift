@@ -10,6 +10,7 @@ struct MacOSDownloaderWindowShellView: View {
     @StateObject var downloadFlowModel = MontereyDownloadFlowModel()
     @State var isOptionsPresented = false
     @State var showAllAvailableVersions = false
+    @State var showBetaVersions = false
     @State var selectedInstallerID: String?
     @State var activeDownloadEntry: MacOSInstallerEntry?
 
@@ -58,6 +59,14 @@ struct MacOSDownloaderWindowShellView: View {
         .sheet(isPresented: $isOptionsPresented) {
             MacOSDownloaderOptionsSheetView(
                 showAllAvailableVersions: $showAllAvailableVersions,
+                showBetaVersions: Binding(
+                    get: { showBetaVersions },
+                    set: { newValue in
+                        withAnimation(.easeInOut(duration: 0.24)) {
+                            showBetaVersions = newValue
+                        }
+                    }
+                ),
                 preserveDownloadedFilesInDebug: $downloadFlowModel.preserveDownloadedFilesInDebug
             )
         }
@@ -67,8 +76,18 @@ struct MacOSDownloaderWindowShellView: View {
         .onChange(of: logic.familyGroups) {
             ensureSelectedEntryIsVisible()
         }
+        .onChange(of: logic.state) {
+            presentUnrecognizedLocalInstallersAlertIfNeeded()
+        }
         .onChange(of: showAllAvailableVersions) {
             ensureSelectedEntryIsVisible()
+        }
+        .onChange(of: showBetaVersions) {
+            selectedInstallerID = nil
+            AppLogging.info(
+                "Zmieniono widocznosc publicznych wersji beta na \(showBetaVersions). Natychmiast zastosowano animowany filtr do wynikow aktywnej sesji bez ponownego sprawdzania katalogow Apple.",
+                category: "Downloader"
+            )
         }
         .onChange(of: downloadFlowModel.isFinished) {
             guard downloadFlowModel.isFinished,
@@ -166,6 +185,90 @@ struct MacOSDownloaderWindowShellView: View {
         handleCloseRequest()
     }
 
+    func presentUnrecognizedLocalInstallersAlertIfNeeded() {
+        guard
+            logic.state == .loaded,
+            logic.unrecognizedLocalInstallerCount > 0,
+            MacOSDownloaderWindowManager.shared.claimUnrecognizedLocalInstallerAlertPresentation()
+        else {
+            return
+        }
+
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .warning
+        alert.messageText = String(
+            localized: "downloader.local_installers.unrecognized_title"
+        )
+        alert.informativeText = String(
+            format: String(
+                localized: "downloader.local_installers.unrecognized_message"
+            ),
+            String(logic.unrecognizedLocalInstallerCount)
+        )
+        alert.addButton(withTitle: String(localized: "common.action.ok"))
+        alert.runModal()
+    }
+
+    func presentRedownloadConfirmationAlert() -> Bool {
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .warning
+        alert.messageText = String(
+            localized: "downloader.local_installers.redownload_title"
+        )
+        alert.informativeText = String(
+            localized: "downloader.local_installers.redownload_message"
+        )
+        alert.addButton(
+            withTitle: String(
+                localized: "downloader.local_installers.redownload_cancel"
+            )
+        )
+        alert.addButton(
+            withTitle: String(
+                localized: "downloader.local_installers.redownload_confirm"
+            )
+        )
+        return alert.runModal() == .alertSecondButtonReturn
+    }
+
+    func presentIntelBootableInstallerWarningAlert() -> Bool {
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .warning
+        alert.messageText = String(
+            localized: "downloader.intel_bootable_installer_warning.title"
+        )
+        alert.informativeText = String(
+            localized: "downloader.intel_bootable_installer_warning.message"
+        )
+        alert.addButton(
+            withTitle: String(
+                localized: "downloader.intel_bootable_installer_warning.confirm"
+            )
+        )
+        alert.addButton(
+            withTitle: String(
+                localized: "downloader.intel_bootable_installer_warning.cancel"
+            )
+        )
+        return alert.runModal() == .alertFirstButtonReturn
+    }
+
+    func requiresIntelBootableInstallerWarning(_ entry: MacOSInstallerEntry) -> Bool {
+        guard MacHardwareArchitecture.current == .intel else {
+            return false
+        }
+        guard
+            let majorVersionText = entry.version.split(separator: ".").first,
+            let majorVersion = Int(majorVersionText)
+        else {
+            return false
+        }
+        return majorVersion >= 27
+    }
+
     func ensureSelectedEntryIsVisible() {
         guard let selectedInstallerID else { return }
         let visibleIDs = Set(visibleFamilyGroups.flatMap { group in
@@ -178,43 +281,44 @@ struct MacOSDownloaderWindowShellView: View {
     }
 
     func supportsProductionDownload(_ entry: MacOSInstallerEntry) -> Bool {
-        if logic.isOldestDownloadTarget(entry) {
-            return true
-        }
-
-        let normalizedName = entry.name.lowercased()
-        let major = entry.version.split(separator: ".").first.map(String.init) ?? ""
-        let supportedMajors: Set<String> = ["11", "12", "13", "14", "15", "26"]
-        if supportedMajors.contains(major) {
-            return true
-        }
-        if normalizedName.contains("catalina") && entry.version.hasPrefix("10.15") {
-            return true
-        }
-        if normalizedName.contains("mojave") && entry.version.hasPrefix("10.14") {
-            return true
-        }
-        if normalizedName.contains("high sierra") && entry.version.hasPrefix("10.13") {
-            return true
-        }
-        return normalizedName.contains("big sur")
-            || normalizedName.contains("catalina")
-            || normalizedName.contains("mojave")
-            || normalizedName.contains("high sierra")
-            || normalizedName.contains("monterey")
-            || normalizedName.contains("ventura")
-            || normalizedName.contains("sonoma")
-            || normalizedName.contains("sequoia")
-            || normalizedName.contains("tahoe")
+        logic.supportsProductionDownload(entry)
     }
 
     func handleDownloadTap(for entry: MacOSInstallerEntry) {
         guard supportsProductionDownload(entry) else {
             AppLogging.info(
-                "Pobieranie jest obecnie dostepne tylko dla: macOS High Sierra, Mojave, Catalina, Big Sur, Monterey, Ventura, Sonoma, Sequoia i Tahoe.",
+                "Pobieranie jest obecnie dostepne tylko dla: macOS High Sierra, Mojave, Catalina, Big Sur, Monterey, Ventura, Sonoma, Sequoia, Tahoe i Golden Gate.",
                 category: "Downloader"
             )
             return
+        }
+
+        if requiresIntelBootableInstallerWarning(entry) {
+            guard presentIntelBootableInstallerWarningAlert() else {
+                AppLogging.info(
+                    "Anulowano pobieranie instalatora \(entry.name) \(entry.version) (\(entry.build)) po ostrzezeniu o braku mozliwosci utworzenia nosnika USB na Macu z procesorem Intel.",
+                    category: "Downloader"
+                )
+                return
+            }
+            AppLogging.info(
+                "Potwierdzono pobieranie instalatora \(entry.name) \(entry.version) (\(entry.build)) mimo braku mozliwosci utworzenia nosnika USB na Macu z procesorem Intel.",
+                category: "Downloader"
+            )
+        }
+
+        if entry.isDownloaded {
+            guard presentRedownloadConfirmationAlert() else {
+                AppLogging.info(
+                    "Anulowano ponowne pobieranie lokalnie wykrytego instalatora \(entry.name) \(entry.version) (\(entry.build)).",
+                    category: "Downloader"
+                )
+                return
+            }
+            AppLogging.info(
+                "Potwierdzono ponowne pobieranie lokalnie wykrytego instalatora \(entry.name) \(entry.version) (\(entry.build)).",
+                category: "Downloader"
+            )
         }
 
         activeDownloadEntry = entry
@@ -264,6 +368,7 @@ struct MacOSDownloaderWindowShellView: View {
 
 private struct MacOSDownloaderOptionsSheetView: View {
     @Binding var showAllAvailableVersions: Bool
+    @Binding var showBetaVersions: Bool
     @Binding var preserveDownloadedFilesInDebug: Bool
     @Environment(\.dismiss) private var dismiss
 
@@ -274,6 +379,12 @@ private struct MacOSDownloaderOptionsSheetView: View {
 
             Toggle(String(localized: "Pokaż wszystkie wersje"), isOn: $showAllAvailableVersions)
                 .toggleStyle(.checkbox)
+
+            Toggle(
+                String(localized: "downloader.options.showBetaVersions"),
+                isOn: $showBetaVersions
+            )
+            .toggleStyle(.checkbox)
 
             #if DEBUG
             HStack(spacing: 10) {
