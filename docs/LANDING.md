@@ -4,12 +4,19 @@
 
 This document describes the actual structure, content, and behavior of `index.html`.
 
+## Search and Social Preview Metadata
+
+- Browser title: `macUSB - The all-in-one bootable USB creator for Mac`
+- Preferred preview image: `assets/social/macusb-preview.png` (`1280 × 640` PNG)
+- `index.html` declares the absolute production image URL through `og:image`.
+- `index.html` identifies the same image as `WebPage.primaryImageOfPage` in JSON-LD structured data.
+
 ## Section Order and Content
 
 1. Hero
 - Product: `macUSB`
 - Primary line: `Download. Flash. Boot.`
-- Secondary line: `The all-in-one USB creator for Mac`
+- Secondary line: `The all-in-one bootable USB creator for Mac`
 - Actions:
   - `Download for macOS` (GitHub releases)
   - `Download via Homebrew` (reveals command panel)
