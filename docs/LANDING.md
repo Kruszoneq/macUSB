@@ -7,9 +7,12 @@ This document describes the actual structure, content, and behavior of `index.ht
 ## Search and Social Preview Metadata
 
 - Browser title: `macUSB - The all-in-one bootable USB creator for Mac`
+- Canonical URL: `https://www.macusb.app/`
 - Preferred preview image: `assets/social/macusb-preview.png` (`1280 × 640` PNG)
 - `index.html` declares the absolute production image URL through `og:image`.
-- `index.html` identifies the same image as `WebPage.primaryImageOfPage` in JSON-LD structured data.
+- JSON-LD uses an `@graph` containing a `WebPage` entity and its `SoftwareApplication` main entity.
+- The `WebPage` entity declares the canonical page identity, browser-title-aligned name, meta-description-aligned description, and the preview image as a `1280 × 640` `ImageObject`.
+- The `SoftwareApplication` entity identifies macUSB as a free macOS utility requiring macOS 14.6 or later, with GitHub Releases as the offer and download destination and the GitHub repository as its matching external identity.
 
 ## Section Order and Content
 

@@ -14,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>macUSB - The all-in-one bootable USB creator for Mac</title>
     <meta name="description" content="A clean, guided way to create bootable USB media on Mac. Built for simple workflows and recovery scenarios.">
+    <link rel="canonical" href="https://www.macusb.app/">
     <meta property="og:image" content="https://www.macusb.app/assets/social/macusb-preview.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1280">
@@ -21,9 +22,46 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebPage",
-        "url": "https://www.macusb.app/",
-        "primaryImageOfPage": "https://www.macusb.app/assets/social/macusb-preview.png"
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "https://www.macusb.app/#webpage",
+            "url": "https://www.macusb.app/",
+            "name": "macUSB - The all-in-one bootable USB creator for Mac",
+            "description": "A clean, guided way to create bootable USB media on Mac. Built for simple workflows and recovery scenarios.",
+            "primaryImageOfPage": {
+              "@type": "ImageObject",
+              "url": "https://www.macusb.app/assets/social/macusb-preview.png",
+              "width": 1280,
+              "height": 640
+            },
+            "mainEntity": {
+              "@id": "https://www.macusb.app/#software"
+            }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://www.macusb.app/#software",
+            "name": "macUSB",
+            "url": "https://www.macusb.app/",
+            "description": "The all-in-one bootable USB creator for Mac.",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "macOS 14.6 or later",
+            "softwareRequirements": "macOS 14.6 or later",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD",
+              "url": "https://github.com/Kruszoneq/macUSB/releases"
+            },
+            "downloadUrl": "https://github.com/Kruszoneq/macUSB/releases",
+            "image": "https://www.macusb.app/assets/social/macusb-preview.png",
+            "sameAs": [
+              "https://github.com/Kruszoneq/macUSB"
+            ]
+          }
+        ]
       }
     </script>
     <link rel="icon" type="image/png" href="assets/icon/macUSBicon-v2.png">
