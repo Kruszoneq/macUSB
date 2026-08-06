@@ -1,56 +1,21 @@
+# Contributing to macUSB
+
 Thank you for your interest in contributing to macUSB.
 
-macUSB is actively developed, but to keep the project consistent and maintainable, please use the contribution paths below.
-
-## Reporting Bugs
-
-If you found a bug, please open a GitHub Issue using the appropriate issue template.
-
-Before creating a new issue:
-- check whether the same problem has already been reported,
-- use the template that best matches the problem type,
-- include screenshots showing the issue,
-- attach diagnostic logs exported from `Help` → `Export diagnostic logs...`.
-
-Current issue templates include:
-- macOS USB Creation
-- Linux USB Creation
-- Downloader
-- General App Issues
-
-Please fill in all relevant fields as accurately as possible. The more precise the report is, the easier it is to investigate and fix.
+This document explains how to propose new features and improvements, and how to submit changes to the project.
 
 ## Feature Requests
 
-If you would like to suggest a new feature or improvement, please open a GitHub Issue using the `Feature Request` template.
-
-For feature work, issue-based proposals are strongly preferred over direct pull requests.
-
-Please describe:
-- what should be added or changed,
-- what result or behavior is expected,
-- optionally, any ideas, implementation notes, or technical suggestions you want to share.
-
-This helps keep discussion focused on the intended outcome before implementation begins.
+If you have an idea for a new feature or application module, please submit a [Feature Request](https://github.com/Kruszoneq/macUSB/issues/new?template=feature_request.yml) through GitHub Issues. This is the preferred and expected way to propose new functionality. Clearly describe the proposed feature, explain its motivation and use case, and identify the problem it would solve for macUSB users. You may also include optional implementation ideas or reference images.
 
 ## Pull Requests
 
-Pull requests are primarily welcome for translation fixes.
+Opening a GitHub issue is generally preferred over submitting a pull request. It allows a proposed change or reported problem to be discussed before implementation begins.
 
-For larger functional changes or new features, please open an issue first instead of submitting a pull request directly.
+For a new feature, application module, or functionality improvement, use the [Feature Request](https://github.com/Kruszoneq/macUSB/issues/new?template=feature_request.yml) template. For a bug fix, open the most appropriate issue and describe the current behavior and the expected behavior.
 
-Functional changes and new features may be declined, postponed, or implemented differently to match the long-term direction of the project. For that reason, opening an issue first is the preferred path.
+Do not report suspected security vulnerabilities through public GitHub issues. Follow the [Security Policy](../SECURITY.md) instead.
 
-## Translations
+Pull requests are still welcome, especially for translation improvements and new translations. Larger changes and new functionality submitted without prior discussion may be declined if they do not align with the project's vision and direction.
 
-Polish is my native language and it is the primary language used while building the app, writing logs, and maintaining core localization keys.
-
-Translations are currently created with AI assistance, so mistakes may exist.
-
-I can also review English text to the best of my ability, so pull requests with fixes for English and other translations are very welcome.
-
-## Notes
-
-Clear reports, focused proposals, and well-scoped fixes are the most helpful way to contribute to macUSB.
-
-Thank you for helping improve the project.
+Pull requests should target the `development` branch.

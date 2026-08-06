@@ -1,0 +1,41 @@
+name: "Bug Report - Other"
+description: "Report an issue not covered by the other bug report templates."
+title: "[Other] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for issues that do not fit any of the other bug report categories.
+
+  - type: textarea
+    id: problem_description
+    attributes:
+      label: "Issue description"
+      description: "Describe the bug or matter in detail."
+      placeholder: "Explain what happened and include any information that may help investigate the issue."
+    validations:
+      required: true
+
+  - type: upload
+    id: diagnostic_logs
+    attributes:
+      label: "Diagnostic logs"
+      description: "Optionally attach the exported .txt diagnostic log."
+    validations:
+      required: false
+      accept: ".txt"
+
+  - type: upload
+    id: problem_screenshot
+    attributes:
+      label: "Screenshot"
+      description: "Optionally attach a screenshot showing the issue."
+    validations:
+      required: false
+      accept: ".png,.jpg,.jpeg,.gif,.webp"
+
+  - type: markdown
+    attributes:
+      value: |
+        Diagnostic logs can be exported from `Help -> Export diagnostic logs...`.
