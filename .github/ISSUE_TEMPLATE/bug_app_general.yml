@@ -1,7 +1,7 @@
 name: "Bug Report - Other App Issues"
 description: "Report non-downloader and non-USB-creation issues in macUSB."
 title: "[App] "
-labels: ["bug", "triage", "app"]
+labels: ["bug", "app"]
 body:
   - type: markdown
     attributes:
@@ -89,20 +89,6 @@ body:
         2. Go to ...
         3. Click ...
         4. Observe issue
-    validations:
-      required: true
-
-  - type: textarea
-    id: expected_result
-    attributes:
-      label: "Expected result"
-    validations:
-      required: true
-
-  - type: textarea
-    id: actual_result
-    attributes:
-      label: "Actual result"
     validations:
       required: true
 

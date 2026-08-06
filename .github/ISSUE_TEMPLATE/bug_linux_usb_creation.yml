@@ -136,20 +136,6 @@ body:
     validations:
       required: true
 
-  - type: textarea
-    id: expected_result
-    attributes:
-      label: "Expected result"
-    validations:
-      required: true
-
-  - type: textarea
-    id: actual_result
-    attributes:
-      label: "Actual result"
-    validations:
-      required: true
-
   - type: upload
     id: diagnostic_logs
     attributes:
