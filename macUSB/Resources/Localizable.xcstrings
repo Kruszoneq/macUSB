@@ -37445,84 +37445,1970 @@
         }
       }
     },
-    "raw_linux_img.alert.continue_button" : {
+    "• Dozwolone formaty plików to .iso oraz .img" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fortfahren und .img-Datei auswählen…"
+            "value" : "• Unterstützte Dateiformate sind .iso und .img"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Continue and Choose .img File…"
+            "value" : "• Supported file formats are .iso and .img"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Continuar y seleccionar archivo .img…"
+            "value" : "• Los formatos de archivo compatibles son .iso y .img"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Continuer et choisir le fichier .img…"
+            "value" : "• Les formats de fichiers pris en charge sont .iso et .img"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Continua e scegli il file .img…"
+            "value" : "• I formati di file supportati sono .iso e .img"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "続けて.imgファイルを選択…"
+            "value" : "• 対応するファイル形式は.isoと.imgです"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kontynuuj i wybierz plik .img…"
+            "value" : "• Dozwolone formaty plików to .iso oraz .img"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Continuar e escolher arquivo .img…"
+            "value" : "• Os formatos de arquivo compatíveis são .iso e .img"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Продолжить и выбрать файл .img…"
+            "value" : "• Поддерживаются форматы файлов .iso и .img"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sürdür ve .img dosyası seç…"
+            "value" : "• Desteklenen dosya biçimleri .iso ve .img’dir"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Продовжити й вибрати файл .img…"
+            "value" : "• Підтримуються формати файлів .iso та .img"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tiếp tục và chọn tệp .img…"
+            "value" : "• Các định dạng tệp được hỗ trợ là .iso và .img"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "继续并选择 .img 文件…"
+            "value" : "• 支持的文件格式为 .iso 和 .img"
+          }
+        }
+      }
+    },
+    "• Zawartość obrazu nie będzie analizowana" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Der Inhalt des Images wird nicht analysiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The image contents will not be analyzed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• No se analizará el contenido de la imagen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Le contenu de l’image ne sera pas analysé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Il contenuto dell’immagine non verrà analizzato"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• イメージの内容は解析されません"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Zawartość obrazu nie będzie analizowana"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• O conteúdo da imagem não será analisado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Содержимое образа не будет анализироваться"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• İmajın içeriği analiz edilmeyecek"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Вміст образу не аналізуватиметься"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Nội dung ảnh đĩa sẽ không được phân tích"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 不会分析镜像内容"
+          }
+        }
+      }
+    },
+    "Wybrano surowy obraz" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rohes Image ausgewählt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raw Image Selected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imagen sin procesar seleccionada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image brute sélectionnée"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Immagine raw selezionata"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RAWイメージを選択済み"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybrano surowy obraz"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imagem bruta selecionada"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбран необработанный образ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ham imaj seçildi"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вибрано необроблений образ"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã chọn ảnh đĩa thô"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已选择原始镜像"
+          }
+        }
+      }
+    },
+    "Przebieg zapisu" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schreibvorgang"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write Process"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proceso de escritura"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Processus d’écriture"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Processo di scrittura"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "書き込み処理"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przebieg zapisu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Processo de gravação"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Процесс записи"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yazma işlemi"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Процес запису"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quá trình ghi"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "写入过程"
+          }
+        }
+      }
+    },
+    "Wybrany obraz" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgewähltes Image"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selected Image"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imagen seleccionada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image sélectionnée"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Immagine selezionata"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したイメージ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybrany obraz"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imagem selecionada"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбранный образ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilen imaj"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вибраний образ"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ảnh đĩa đã chọn"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所选镜像"
+          }
+        }
+      }
+    },
+    "Możliwy komunikat o nieczytelnym nośniku" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mögliche Meldung über ein nicht lesbares Laufwerk"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Possible Unreadable Disk Message"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Posible mensaje de disco ilegible"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Message possible de disque illisible"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Possibile messaggio di disco illeggibile"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ディスクを読み取れないというメッセージが表示される場合があります"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Możliwy komunikat o nieczytelnym nośniku"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Possível mensagem de disco ilegível"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Возможное сообщение о нечитаемом диске"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Olası okunamayan disk iletisi"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Можливе повідомлення про нечитабельний диск"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Có thể xuất hiện thông báo ổ đĩa không đọc được"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可能出现磁盘不可读信息"
+          }
+        }
+      }
+    },
+    "Podczas zapisu macOS może poinformować, że nośnik jest nieczytelny. Jest to oczekiwane zachowanie. Aby kontynuować, wybierz „Ignoruj”." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Während des Schreibvorgangs meldet macOS möglicherweise, dass das Laufwerk nicht lesbar ist. Dies ist zu erwarten. Wählen Sie „Ignorieren“, um fortzufahren."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "During the write, macOS may report that the drive is unreadable. This is expected. To continue, choose “Ignore”."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durante la escritura, macOS puede indicar que la unidad no se puede leer. Este comportamiento es normal. Para continuar, selecciona «Ignorar»."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pendant l’écriture, macOS peut signaler que le lecteur est illisible. Ce comportement est normal. Pour continuer, choisissez « Ignorer »."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durante la scrittura, macOS potrebbe segnalare che l’unità non è leggibile. È un comportamento previsto. Per continuare, scegli “Ignora”."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "書き込み中に、ドライブを読み取れないというメッセージがmacOSに表示される場合があります。これは想定される動作です。続けるには「無視」を選択してください。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podczas zapisu macOS może poinformować, że nośnik jest nieczytelny. Jest to oczekiwane zachowanie. Aby kontynuować, wybierz „Ignoruj”."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durante a gravação, o macOS pode informar que a unidade não pode ser lida. Esse comportamento é esperado. Para continuar, escolha “Ignorar”."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Во время записи macOS может сообщить, что накопитель не читается. Это ожидаемое поведение. Чтобы продолжить, выберите «Игнорировать»."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yazma sırasında macOS sürücünün okunamadığını bildirebilir. Bu beklenen bir durumdur. Sürdürmek için “Yoksay”ı seçin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Під час запису macOS може повідомити, що носій не читається. Це очікувана поведінка. Щоб продовжити, виберіть «Ігнорувати»."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trong khi ghi, macOS có thể báo rằng ổ đĩa không đọc được. Đây là hành vi dự kiến. Để tiếp tục, hãy chọn “Bỏ qua”."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "写入期间，macOS 可能会报告驱动器无法读取。这是预期行为。要继续，请选择“忽略”。"
+          }
+        }
+      }
+    },
+    "Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces zapisu może potrwać kilkanaście minut" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ausgewählte Laufwerk verwendet einen älteren Datenübertragungsstandard. Der Schreibvorgang kann mehrere Minuten dauern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The selected drive uses an older data transfer standard. The write may take several minutes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La unidad seleccionada utiliza un estándar de transferencia de datos antiguo. La escritura puede tardar varios minutos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le lecteur sélectionné utilise une ancienne norme de transfert de données. L’écriture peut prendre plusieurs minutes"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’unità selezionata usa uno standard di trasferimento dati meno recente. La scrittura può richiedere diversi minuti"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したドライブは古いデータ転送規格を使用しています。書き込みには数分以上かかる場合があります"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces zapisu może potrwać kilkanaście minut"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A unidade selecionada usa um padrão de transferência de dados mais antigo. A gravação pode levar vários minutos"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбранный накопитель использует устаревший стандарт передачи данных. Запись может занять несколько минут"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilen sürücü daha eski bir veri aktarım standardı kullanıyor. Yazma işlemi birkaç dakika sürebilir"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вибраний носій використовує старіший стандарт передавання даних. Запис може тривати кілька хвилин"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ổ đã chọn sử dụng chuẩn truyền dữ liệu cũ hơn. Quá trình ghi có thể mất vài phút"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所选驱动器使用较旧的数据传输标准。写入可能需要几分钟"
+          }
+        }
+      }
+    },
+    "• Plik obrazu zostanie przygotowany" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Die Imagedatei wird vorbereitet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The image file will be prepared"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Se preparará el archivo de imagen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Le fichier image sera préparé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Il file immagine verrà preparato"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• イメージファイルが準備されます"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Plik obrazu zostanie przygotowany"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• O arquivo de imagem será preparado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Файл образа будет подготовлен"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• İmaj dosyası hazırlanacak"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Файл образу буде підготовлено"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Tệp ảnh đĩa sẽ được chuẩn bị"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 将准备镜像文件"
+          }
+        }
+      }
+    },
+    "• Obraz zostanie zapisany na nośniku USB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Das Image wird auf das USB-Laufwerk geschrieben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The image will be written to the USB drive"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La imagen se escribirá en la unidad USB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• L’image sera écrite sur le lecteur USB"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• L’immagine verrà scritta sull’unità USB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• イメージがUSBドライブに書き込まれます"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Obraz zostanie zapisany na nośniku USB"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• A imagem será gravada na unidade USB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Образ будет записан на USB-накопитель"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• İmaj USB sürücüsüne yazılacak"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Образ буде записано на USB-носій"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Ảnh đĩa sẽ được ghi vào ổ USB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 镜像将写入 USB 驱动器"
+          }
+        }
+      }
+    },
+    "• Zapis zostanie zweryfikowany" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Der Schreibvorgang wird verifiziert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The write will be verified"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Se verificará la escritura"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• L’écriture sera vérifiée"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• La scrittura verrà verificata"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 書き込みが検証されます"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Zapis zostanie zweryfikowany"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• A gravação será verificada"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Запись будет проверена"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Yazma işlemi doğrulanacak"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Запис буде перевірено"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Quá trình ghi sẽ được xác minh"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 将验证写入结果"
+          }
+        }
+      }
+    },
+    "Etapy zapisu" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schreibschritte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write Stages"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etapas de escritura"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étapes d’écriture"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fasi di scrittura"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "書き込みステージ"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etapy zapisu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etapas da gravação"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Этапы записи"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yazma aşamaları"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Етапи запису"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Các giai đoạn ghi"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "写入阶段"
+          }
+        }
+      }
+    },
+    "Zapisywanie obrazu" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image schreiben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Writing the Image"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escribiendo la imagen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écriture de l’image"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scrittura dell’immagine"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "イメージを書き込み中"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapisywanie obrazu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gravando a imagem"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запись образа"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İmaj yazılıyor"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запис образу"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang ghi ảnh đĩa"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在写入镜像"
+          }
+        }
+      }
+    },
+    "Wybrany nośnik jest używany przez inną aplikację. Aby kontynuować zapis obrazu, macUSB może wymusić odmontowanie urządzenia. Niezapisane dane na tym nośniku mogą zostać utracone. Czy chcesz wymusić odmontowanie?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ausgewählte Laufwerk wird von einer anderen App verwendet. Um mit dem Schreiben des Images fortzufahren, kann macUSB das Gerät zwangsweise aushängen. Nicht gespeicherte Daten auf diesem Laufwerk können verloren gehen. Möchten Sie das Aushängen erzwingen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The selected drive is being used by another app. To continue writing the image, macUSB can forcibly unmount the device. Unsaved data on this drive may be lost. Do you want to forcibly unmount it?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otra app está usando la unidad seleccionada. Para continuar escribiendo la imagen, macUSB puede forzar el desmontaje del dispositivo. Los datos no guardados de esta unidad podrían perderse. ¿Quieres forzar el desmontaje?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le lecteur sélectionné est utilisé par une autre app. Pour poursuivre l’écriture de l’image, macUSB peut forcer le démontage de l’appareil. Les données non enregistrées sur ce lecteur peuvent être perdues. Voulez-vous forcer le démontage ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’unità selezionata è utilizzata da un’altra app. Per continuare a scrivere l’immagine, macUSB può forzare lo smontaggio del dispositivo. I dati non salvati su questa unità potrebbero andare persi. Vuoi forzare lo smontaggio?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したドライブは別のアプリで使用されています。イメージの書き込みを続けるため、macUSBはデバイスを強制的にアンマウントできます。このドライブ上の未保存データは失われる可能性があります。強制的にアンマウントしますか？"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybrany nośnik jest używany przez inną aplikację. Aby kontynuować zapis obrazu, macUSB może wymusić odmontowanie urządzenia. Niezapisane dane na tym nośniku mogą zostać utracone. Czy chcesz wymusić odmontowanie?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A unidade selecionada está sendo usada por outro app. Para continuar gravando a imagem, o macUSB pode forçar a desmontagem do dispositivo. Dados não salvos nessa unidade podem ser perdidos. Deseja forçar a desmontagem?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбранный накопитель используется другим приложением. Чтобы продолжить запись образа, macUSB может принудительно отключить устройство. Несохраненные данные на этом накопителе могут быть потеряны. Принудительно отключить его?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilen sürücü başka bir uygulama tarafından kullanılıyor. İmajı yazmayı sürdürmek için macUSB aygıtın bağlantısını zorla kesebilir. Bu sürücüdeki kaydedilmemiş veriler kaybolabilir. Bağlantı zorla kesilsin mi?"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вибраний носій використовується іншою програмою. Щоб продовжити запис образу, macUSB може примусово відмонтувати пристрій. Незбережені дані на цьому носії можуть бути втрачені. Примусово відмонтувати його?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ổ đã chọn đang được một ứng dụng khác sử dụng. Để tiếp tục ghi ảnh đĩa, macUSB có thể buộc tháo gắn kết thiết bị. Dữ liệu chưa lưu trên ổ này có thể bị mất. Bạn có muốn buộc tháo gắn kết không?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所选驱动器正被其他 App 使用。为了继续写入镜像，macUSB 可以强制卸载设备。此驱动器上未保存的数据可能会丢失。要强制卸载吗？"
+          }
+        }
+      }
+    },
+    "Nie udało się zapisać obrazu na nośniku USB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Image konnte nicht auf das USB-Laufwerk geschrieben werden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Image Couldn’t Be Written to the USB Drive"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo escribir la imagen en la unidad USB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’image n’a pas pu être écrite sur le lecteur USB"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile scrivere l’immagine sull’unità USB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "イメージをUSBドライブに書き込めませんでした"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się zapisać obrazu na nośniku USB"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível gravar a imagem na unidade USB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось записать образ на USB-накопитель"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İmaj USB sürücüsüne yazılamadı"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося записати образ на USB-носій"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể ghi ảnh đĩa vào ổ USB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法将镜像写入 USB 驱动器"
+          }
+        }
+      }
+    },
+    "Zapisano surowy obraz na nośniku USB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rohes Image auf das USB-Laufwerk geschrieben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raw Image Written to the USB Drive"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imagen sin procesar escrita en la unidad USB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image brute écrite sur le lecteur USB"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Immagine raw scritta sull’unità USB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RAWイメージをUSBドライブに書き込みました"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapisano surowy obraz na nośniku USB"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imagem bruta gravada na unidade USB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Необработанный образ записан на USB-накопитель"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ham imaj USB sürücüsüne yazıldı"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Необроблений образ записано на USB-носій"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã ghi ảnh đĩa thô vào ổ USB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已将原始镜像写入 USB 驱动器"
+          }
+        }
+      }
+    },
+    "Proces zapisu obrazu na wybranym nośniku zakończył się niepowodzeniem." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Schreiben des Images auf das ausgewählte Laufwerk ist fehlgeschlagen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Writing the image to the selected drive failed."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo escribir la imagen en la unidad seleccionada."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’écriture de l’image sur le lecteur sélectionné a échoué."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La scrittura dell’immagine sull’unità selezionata non è riuscita."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したドライブへのイメージの書き込みに失敗しました。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proces zapisu obrazu na wybranym nośniku zakończył się niepowodzeniem."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A gravação da imagem na unidade selecionada falhou."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось записать образ на выбранный накопитель."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İmaj seçilen sürücüye yazılamadı."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося записати образ на вибраний носій."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể ghi ảnh đĩa vào ổ đã chọn."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法将镜像写入所选驱动器。"
+          }
+        }
+      }
+    },
+    "Proces zapisu obrazu na nośniku zakończył się pomyślnie." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Image wurde erfolgreich auf das Laufwerk geschrieben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The image was written to the drive successfully."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La imagen se escribió correctamente en la unidad."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’image a été écrite sur le lecteur."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’immagine è stata scritta correttamente sull’unità."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "イメージがドライブに正常に書き込まれました。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proces zapisu obrazu na nośniku zakończył się pomyślnie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A imagem foi gravada na unidade com sucesso."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Образ успешно записан на накопитель."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İmaj sürücüye başarıyla yazıldı."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Образ успішно записано на носій."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ảnh đĩa đã được ghi thành công vào ổ."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "镜像已成功写入驱动器。"
+          }
+        }
+      }
+    },
+    "raw_image.workflow.copy.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image schreiben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Writing the Image"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escribiendo la imagen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écriture de l’image"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scrittura dell’immagine"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "イメージを書き込み中"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapisywanie obrazu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gravando a imagem"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запись образа"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İmaj yazılıyor"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запис образу"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang ghi ảnh đĩa"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在写入镜像"
+          }
+        }
+      }
+    },
+    "raw_image.workflow.copy.status" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rohes Image auf das USB-Laufwerk schreiben…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Writing the raw image to the USB drive…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escribiendo la imagen sin procesar en la unidad USB…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écriture de l’image brute sur le lecteur USB…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scrittura dell’immagine raw sull’unità USB…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RAWイメージをUSBドライブに書き込み中…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapisywanie surowego obrazu na nośniku USB…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gravando a imagem bruta na unidade USB…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запись необработанного образа на USB-накопитель…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ham imaj USB sürücüsüne yazılıyor…"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запис необробленого образу на USB-носій…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang ghi ảnh đĩa thô vào ổ USB…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在将原始镜像写入 USB 驱动器…"
+          }
+        }
+      }
+    },
+    "raw_image.workflow.verify.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schreibvorgang verifizieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifying the Write"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verificando la escritura"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérification de l’écriture"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifica della scrittura"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "書き込みを検証中"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weryfikacja zapisu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verificando a gravação"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверка записи"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yazma işlemi doğrulanıyor"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перевірка запису"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang xác minh quá trình ghi"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在验证写入结果"
+          }
+        }
+      }
+    },
+    "raw_image.workflow.verify.status" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imagedaten mit dem USB-Laufwerk vergleichen…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparing image data with the USB drive…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparando los datos de la imagen con la unidad USB…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparaison des données de l’image avec le lecteur USB…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confronto dei dati dell’immagine con l’unità USB…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "イメージデータとUSBドライブを比較中…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Porównywanie danych obrazu z nośnikiem USB…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparando os dados da imagem com a unidade USB…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сравнение данных образа с USB-накопителем…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İmaj verileri USB sürücüsüyle karşılaştırılıyor…"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Порівняння даних образу з USB-носієм…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang so sánh dữ liệu ảnh đĩa với ổ USB…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在将镜像数据与 USB 驱动器进行比较…"
+          }
+        }
+      }
+    },
+    "raw_image.error.verify.generic" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Verifizierung des Image-Schreibvorgangs ist fehlgeschlagen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image write verification failed."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La verificación de la escritura de la imagen falló."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La vérification de l’écriture de l’image a échoué."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La verifica della scrittura dell’immagine non è riuscita."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "イメージの書き込み検証に失敗しました。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weryfikacja zapisu obrazu zakończyła się błędem."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A verificação da gravação da imagem falhou."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверка записи образа завершилась ошибкой."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İmaj yazma doğrulaması başarısız oldu."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перевірка запису образу завершилася помилкою."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xác minh quá trình ghi ảnh đĩa đã thất bại."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "镜像写入验证失败。"
+          }
+        }
+      }
+    },
+    "raw_linux_img.alert.continue_button" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortfahren und Image auswählen…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue and Choose an Image…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar y elegir una imagen…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer et choisir une image…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continua e scegli un’immagine…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "続けてイメージを選択…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontynuuj i wybierz obraz…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar e escolher uma imagem…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продолжить и выбрать образ…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sürdür ve bir imaj seç…"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продовжити й вибрати образ…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiếp tục và chọn ảnh đĩa…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "继续并选择镜像…"
           }
         }
       }
@@ -37532,79 +39418,79 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diese Option zwingt macUSB, die ausgewählte .img-Datei als Linux-Image zu erkennen. Die Datei wird von macUSB nicht überprüft, und das erstellte USB-Medium startet möglicherweise nicht korrekt. Möchten Sie fortfahren?"
+            "value" : "Die ausgewählte .iso- oder .img-Datei wird direkt auf das USB-Laufwerk geschrieben, ohne ihren Inhalt zu analysieren. macUSB überprüft weder die Kompatibilität des Images noch, ob das erstellte Laufwerk startfähig sein wird. Möchten Sie fortfahren?"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This option forces macUSB to recognize the selected .img file as a Linux image. The file will not be checked by macUSB, and the USB media you create may not boot correctly. Do you want to continue?"
+            "value" : "The selected .iso or .img file will be written directly to the USB drive without analyzing its contents. macUSB will not verify image compatibility or whether the resulting drive will be bootable. Do you want to continue?"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esta opción obliga a macUSB a reconocer el archivo .img seleccionado como una imagen de Linux. macUSB no comprobará el archivo, y el medio USB que crees podría no arrancar correctamente. ¿Quieres continuar?"
+            "value" : "El archivo .iso o .img seleccionado se escribirá directamente en la unidad USB sin analizar su contenido. macUSB no comprobará la compatibilidad de la imagen ni si la unidad resultante podrá arrancar. ¿Quieres continuar?"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cette option force macUSB à reconnaître le fichier .img sélectionné comme une image Linux. Le fichier ne sera pas vérifié par macUSB, et le support USB créé pourrait ne pas démarrer correctement. Voulez-vous continuer ?"
+            "value" : "Le fichier .iso ou .img sélectionné sera écrit directement sur le lecteur USB sans analyser son contenu. macUSB ne vérifiera ni la compatibilité de l’image ni si le lecteur obtenu pourra démarrer. Voulez-vous continuer ?"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Questa opzione forza macUSB a riconoscere il file .img selezionato come immagine Linux. Il file non verrà controllato da macUSB e il supporto USB creato potrebbe non avviarsi correttamente. Vuoi continuare?"
+            "value" : "Il file .iso o .img selezionato verrà scritto direttamente sull’unità USB senza analizzarne il contenuto. macUSB non verificherà la compatibilità dell’immagine né se l’unità risultante sarà avviabile. Vuoi continuare?"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このオプションは、選択した.imgファイルをLinuxイメージとしてmacUSBに強制的に認識させます。ファイルはmacUSBで検証されず、作成したUSBメディアが正しく起動しない場合があります。続けますか？"
+            "value" : "選択した.isoまたは.imgファイルは、内容を解析せずにUSBドライブへ直接書き込まれます。macUSBはイメージの互換性や、作成されたドライブが起動可能かどうかを確認しません。続けますか？"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ta opcja wymusi rozpoznanie wybranego pliku .img jako obrazu Linux. Plik nie zostanie sprawdzony przez macUSB, a utworzony nośnik USB może nie uruchomić systemu poprawnie. Czy chcesz kontynuować?"
+            "value" : "Wybrany plik .iso lub .img zostanie zapisany bezpośrednio na nośniku USB bez analizowania jego zawartości. macUSB nie sprawdzi zgodności obrazu ani tego, czy utworzony nośnik będzie można uruchomić. Czy chcesz kontynuować?"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esta opção força o macUSB a reconhecer o arquivo .img selecionado como uma imagem Linux. O arquivo não será verificado pelo macUSB, e a mídia USB criada pode não inicializar corretamente. Deseja continuar?"
+            "value" : "O arquivo .iso ou .img selecionado será gravado diretamente na unidade USB sem analisar seu conteúdo. O macUSB não verificará a compatibilidade da imagem nem se a unidade resultante será inicializável. Deseja continuar?"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Этот параметр принудительно распознает выбранный файл .img в macUSB как образ Linux. Файл не будет проверен macUSB, а созданный USB-носитель может не загрузиться корректно. Продолжить?"
+            "value" : "Выбранный файл .iso или .img будет записан непосредственно на USB-накопитель без анализа его содержимого. macUSB не проверит совместимость образа и возможность загрузки с созданного накопителя. Продолжить?"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu seçenek, seçilen .img dosyasının macUSB tarafından Linux imajı olarak tanınmasını zorlar. Dosya macUSB tarafından denetlenmez ve oluşturulan USB ortamı doğru şekilde önyüklenmeyebilir. Sürdürmek istiyor musunuz?"
+            "value" : "Seçilen .iso veya .img dosyası, içeriği analiz edilmeden doğrudan USB sürücüsüne yazılacak. macUSB imaj uyumluluğunu veya oluşturulan sürücünün önyüklenebilir olup olmadığını doğrulamayacak. Sürdürmek istiyor musunuz?"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Цей параметр примусово розпізнає вибраний файл .img у macUSB як образ Linux. Файл не буде перевірено macUSB, а створений USB-носій може не завантажуватися належним чином. Продовжити?"
+            "value" : "Вибраний файл .iso або .img буде записано безпосередньо на USB-носій без аналізу його вмісту. macUSB не перевірятиме сумісність образу й можливість завантаження зі створеного носія. Продовжити?"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tùy chọn này buộc macUSB nhận dạng tệp .img đã chọn là ảnh đĩa Linux. Tệp sẽ không được macUSB kiểm tra, và phương tiện USB được tạo có thể không khởi động đúng cách. Bạn có muốn tiếp tục không?"
+            "value" : "Tệp .iso hoặc .img đã chọn sẽ được ghi trực tiếp vào ổ USB mà không phân tích nội dung. macUSB sẽ không xác minh tính tương thích của ảnh đĩa hoặc khả năng khởi động của ổ được tạo. Bạn có muốn tiếp tục không?"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此选项会强制 macUSB 将所选 .img 文件识别为 Linux 镜像。macUSB 不会检查该文件，创建的 USB 介质可能无法正确启动。要继续吗？"
+            "value" : "所选 .iso 或 .img 文件将直接写入 USB 驱动器，而不会分析其内容。macUSB 不会验证镜像兼容性，也不会检查生成的驱动器能否启动。要继续吗？"
           }
         }
       }
@@ -37614,79 +39500,79 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rohes Linux-Image schreiben"
+            "value" : "Rohes Image auf ein Laufwerk schreiben"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Write Raw Linux Image"
+            "value" : "Write a Raw Image to a Drive"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Escribir imagen Linux sin procesar"
+            "value" : "Escribir una imagen sin procesar en una unidad"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Écrire une image Linux brute"
+            "value" : "Écrire une image brute sur un lecteur"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scrivi immagine Linux raw"
+            "value" : "Scrivi un’immagine raw su un’unità"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "LinuxのRAWイメージを書き込む"
+            "value" : "RAWイメージをドライブに書き込む"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zapis surowego obrazu Linux"
+            "value" : "Zapis surowego obrazu na nośniku"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gravar imagem Linux bruta"
+            "value" : "Gravar uma imagem bruta em uma unidade"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Запись необработанного образа Linux"
+            "value" : "Запись необработанного образа на накопитель"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ham Linux imajını yaz"
+            "value" : "Ham imajı bir sürücüye yaz"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Запис необробленого образу Linux"
+            "value" : "Запис необробленого образу на носій"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ghi ảnh đĩa Linux thô"
+            "value" : "Ghi ảnh đĩa thô vào ổ đĩa"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "写入原始 Linux 镜像"
+            "value" : "将原始镜像写入驱动器"
           }
         }
       }
@@ -37696,79 +39582,79 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rohes Linux-Image (.img) schreiben..."
+            "value" : "Rohes Image auf ein Laufwerk schreiben…"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Write Raw Linux Image (.img)..."
+            "value" : "Write a Raw Image to a Drive…"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Escribir imagen Linux sin procesar (.img)..."
+            "value" : "Escribir una imagen sin procesar en una unidad…"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Écrire une image Linux brute (.img)..."
+            "value" : "Écrire une image brute sur un lecteur…"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scrivi immagine Linux raw (.img)..."
+            "value" : "Scrivi un’immagine raw su un’unità…"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "LinuxのRAWイメージ（.img）を書き込む..."
+            "value" : "RAWイメージをドライブに書き込む…"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zapisz surowy obraz Linux (.img)..."
+            "value" : "Zapisz surowy obraz na nośniku…"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gravar imagem Linux bruta (.img)..."
+            "value" : "Gravar uma imagem bruta em uma unidade…"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Записать необработанный образ Linux (.img)..."
+            "value" : "Записать необработанный образ на накопитель…"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ham Linux imajı (.img) yaz..."
+            "value" : "Ham imajı bir sürücüye yaz…"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Записати необроблений образ Linux (.img)..."
+            "value" : "Записати необроблений образ на носій…"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ghi ảnh đĩa Linux thô (.img)..."
+            "value" : "Ghi ảnh đĩa thô vào ổ đĩa…"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "写入原始 Linux 镜像 (.img)..."
+            "value" : "将原始镜像写入驱动器…"
           }
         }
       }
@@ -37778,79 +39664,79 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wählen Sie ein rohes Linux-Image im .img-Format aus."
+            "value" : "Wählen Sie eine Imagedatei im Format .iso oder .img aus."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choose a raw Linux image in .img format."
+            "value" : "Choose an image file in .iso or .img format."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Selecciona una imagen Linux sin procesar en formato .img."
+            "value" : "Elige un archivo de imagen en formato .iso o .img."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choisissez une image Linux brute au format .img."
+            "value" : "Choisissez un fichier image au format .iso ou .img."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scegli un'immagine Linux raw in formato .img."
+            "value" : "Scegli un file immagine in formato .iso o .img."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ".img形式のLinux RAWイメージを選択してください。"
+            "value" : ".isoまたは.img形式のイメージファイルを選択してください。"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wybierz surowy obraz Linux w formacie .img."
+            "value" : "Wybierz plik obrazu w formacie .iso lub .img."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Escolha uma imagem Linux bruta no formato .img."
+            "value" : "Escolha um arquivo de imagem no formato .iso ou .img."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Выберите необработанный образ Linux в формате .img."
+            "value" : "Выберите файл образа в формате .iso или .img."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ".img biçiminde bir ham Linux imajı seçin."
+            "value" : ".iso veya .img biçiminde bir imaj dosyası seçin."
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Виберіть необроблений образ Linux у форматі .img."
+            "value" : "Виберіть файл образу у форматі .iso або .img."
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chọn ảnh đĩa Linux thô ở định dạng .img."
+            "value" : "Chọn tệp ảnh đĩa ở định dạng .iso hoặc .img."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请选择 .img 格式的原始 Linux 镜像。"
+            "value" : "请选择 .iso 或 .img 格式的镜像文件。"
           }
         }
       }
@@ -37860,79 +39746,79 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ".img-Datei auswählen"
+            "value" : "Rohes Image auswählen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choose .img File"
+            "value" : "Choose a Raw Image"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seleccionar archivo .img"
+            "value" : "Elegir una imagen sin procesar"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choisir le fichier .img"
+            "value" : "Choisir une image brute"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scegli file .img"
+            "value" : "Scegli un’immagine raw"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ".imgファイルを選択"
+            "value" : "RAWイメージを選択"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wybierz plik .img"
+            "value" : "Wybierz surowy obraz"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Escolher arquivo .img"
+            "value" : "Escolher uma imagem bruta"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Выберите файл .img"
+            "value" : "Выберите необработанный образ"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ".img dosyası seç"
+            "value" : "Ham imaj seç"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Виберіть файл .img"
+            "value" : "Виберіть необроблений образ"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chọn tệp .img"
+            "value" : "Chọn ảnh đĩa thô"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "选择 .img 文件"
+            "value" : "选择原始镜像"
           }
         }
       }
