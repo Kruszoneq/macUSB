@@ -105,6 +105,7 @@ struct WelcomeView: View {
             navigateToAnalysis = true
         }
         .onAppear {
+            MenuState.shared.resetLanguageChangesForWelcome()
             MenuState.shared.rawLinuxImageSelectionEnabled = true
             guard !didRunStartupFlow else { return }
             didRunStartupFlow = true

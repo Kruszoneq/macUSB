@@ -165,6 +165,10 @@ struct ContentView: View {
     }
     
     private func presentRestartAlert() {
+        guard MenuState.shared.isLanguageChangeEnabled else {
+            languageManager.needsRestart = false
+            return
+        }
         let alert = NSAlert()
         alert.alertStyle = .informational
         alert.icon = NSApp.applicationIconImage

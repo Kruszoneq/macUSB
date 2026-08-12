@@ -113,7 +113,8 @@ final class AppActiveOperationRegistry: ObservableObject {
             activeOperationCount = count
         } else {
             DispatchQueue.main.async { [weak self] in
-                self?.activeOperationCount = count
+                guard let self else { return }
+                activeOperationCount = lock.withLock { self.operations.count }
             }
         }
     }

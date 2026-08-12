@@ -263,6 +263,7 @@ struct macUSBApp: App {
                 } label: {
                     Label(String(localized: "Język"), systemImage: "globe")
                 }
+                .disabled(!menuState.isLanguageChangeEnabled)
                 Divider()
                 Button {
                     NotificationPermissionManager.shared.handleMenuNotificationsTapped()

@@ -43,6 +43,7 @@ final class MacOSDownloaderWindowManager {
         }
 
         let sheetContentHeight = downloaderWindowHeight
+        MenuState.shared.lockLanguageChanges(reason: "downloader_opened")
 
         let contentView = MacOSDownloaderWindowShellView(contentHeight: sheetContentHeight) { [weak self] in
             self?.close()
