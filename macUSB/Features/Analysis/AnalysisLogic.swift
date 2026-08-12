@@ -13,7 +13,11 @@ final class AnalysisLogic: ObservableObject {
     @Published var isBetaInstaller: Bool = false
     @Published var mountedDMGPath: String? = nil
 
-    @Published var isAnalyzing: Bool = false
+    @Published var isAnalyzing: Bool = false {
+        didSet {
+            updateAnalysisOperationActivity(from: oldValue)
+        }
+    }
     @Published var isSystemDetected: Bool = false
     @Published var showUSBSection: Bool = false
     @Published var showUnsupportedMessage: Bool = false
@@ -154,6 +158,7 @@ final class AnalysisLogic: ObservableObject {
     var activeImageAnalysisRunID: UUID? = nil
     var imageAnalysisTimeoutWorkItem: DispatchWorkItem? = nil
     var linuxImageAttachSession: LinuxImageAttachSession? = nil
+    var analysisOperationToken: AppActiveOperationToken?
     private var isSynchronizingDriveSelection: Bool = false
 
     var requiredUSBCapacityDisplayValue: String {
