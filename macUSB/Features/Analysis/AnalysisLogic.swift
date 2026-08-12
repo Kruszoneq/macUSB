@@ -40,6 +40,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var macOSRosettaRequirement: MacOSRosettaRequirement = .notRequired
     @Published var userSkippedAnalysis: Bool = false
     @Published var isLinuxDetected: Bool = false
+    @Published var isRawImageSelection: Bool = false
     @Published var isLinuxDistributionRecognized: Bool = false
     @Published var linuxDistro: String? = nil
     @Published var linuxVersion: String? = nil

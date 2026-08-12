@@ -256,6 +256,7 @@ extension AnalysisLogic {
     func resetLinuxDetectionState() {
         cleanupLinuxAttachSession(reason: "reset_linux_detection_state")
         self.isLinuxDetected = false
+        self.isRawImageSelection = false
         self.isLinuxDistributionRecognized = false
         self.linuxDistro = nil
         self.linuxVersion = nil

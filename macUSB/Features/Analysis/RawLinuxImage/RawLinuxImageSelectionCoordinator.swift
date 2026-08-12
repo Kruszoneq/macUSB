@@ -43,7 +43,7 @@ final class RawLinuxImageSelectionCoordinator {
 
     private func presentImagePicker(attachedTo window: NSWindow?) {
         let panel = NSOpenPanel()
-        panel.allowedFileTypes = ["img"]
+        panel.allowedFileTypes = ["iso", "img"]
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
         panel.canChooseFiles = true
@@ -59,7 +59,7 @@ final class RawLinuxImageSelectionCoordinator {
             }
 
             let standardizedURL = url.standardizedFileURL
-            guard standardizedURL.pathExtension.lowercased() == "img" else {
+            guard ["iso", "img"].contains(standardizedURL.pathExtension.lowercased()) else {
                 AppLogging.error("Pominięto surowy obraz Linux: nieobsługiwane rozszerzenie .\(standardizedURL.pathExtension.lowercased()).", category: "FileAnalysis")
                 return
             }

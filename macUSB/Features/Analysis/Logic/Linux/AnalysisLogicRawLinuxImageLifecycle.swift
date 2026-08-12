@@ -3,11 +3,12 @@ import SwiftUI
 
 extension AnalysisLogic {
     func forceRawLinuxImageSelection(_ sourceURL: URL) {
-        cancelActiveImageAnalysisRun(reason: "Wybór surowego obrazu Linux .img")
+        cancelActiveImageAnalysisRun(reason: "Wybór surowego obrazu .iso/.img")
 
         let standardizedURL = sourceURL.standardizedFileURL
-        guard standardizedURL.pathExtension.lowercased() == "img" else {
-            logError("Nie można wymusić rozpoznania Linux (.img) dla .\(standardizedURL.pathExtension.lowercased()).")
+        let sourceExtension = standardizedURL.pathExtension.lowercased()
+        guard ["iso", "img"].contains(sourceExtension) else {
+            logError("Nie można wymusić surowego zapisu dla .\(sourceExtension).")
             return
         }
         MenuState.shared.lockLanguageChanges(reason: "raw_linux_selection")
@@ -30,6 +31,7 @@ extension AnalysisLogic {
             self.resetWindowsDetectionState()
 
             self.isLinuxDetected = true
+            self.isRawImageSelection = true
             self.isLinuxDistributionRecognized = false
             self.linuxDisplayName = "Linux (.img)"
             self.linuxSourceURL = standardizedURL
