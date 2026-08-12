@@ -105,6 +105,9 @@ struct UniversalInstallationView: View {
     private var showsIdleActions: Bool {
         !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !isCancelling
     }
+    private var isRawImageWorkflow: Bool {
+        linuxFlowContext?.isRawImageSelection == true
+    }
     private var selectedDriveSummaryName: String? {
         if (isLinuxWorkflow || isWindowsWorkflow), let drive = targetDrive {
             let speedText = drive.usbSpeed?.rawValue ?? "USB"
@@ -169,7 +172,7 @@ struct UniversalInstallationView: View {
                     .foregroundColor(.orange)
                     .fontWeight(.semibold)
             } else {
-                Text("Przebieg tworzenia")
+                Text(isRawImageWorkflow ? "Przebieg zapisu" : "Przebieg tworzenia")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -191,7 +194,12 @@ struct UniversalInstallationView: View {
                     ) {
                         VStack(alignment: .leading, spacing: 12) {
                             HStack {
-                                if let detectedSystemIcon {
+                                if isRawImageWorkflow {
+                                    Image(systemName: "opticaldisc.fill")
+                                        .font(sectionIconFont)
+                                        .foregroundColor(.secondary)
+                                        .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                } else if let detectedSystemIcon {
                                     Image(nsImage: detectedSystemIcon)
                                         .resizable()
                                         .scaledToFit()
@@ -203,10 +211,10 @@ struct UniversalInstallationView: View {
                                         .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 }
                                 VStack(alignment: .leading, spacing: 3) {
-                                    Text("Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
+                                    Text(isRawImageWorkflow ? "Wybrany obraz" : "Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
                                     HStack(spacing: 8) {
                                         Text(systemName).font(.headline).foregroundColor(.primary).bold()
-                                        if isBetaInstaller {
+                                        if isBetaInstaller && !isRawImageWorkflow {
                                             MacOSBetaBadge(tint: .secondary)
                                         }
                                     }
@@ -249,10 +257,12 @@ struct UniversalInstallationView: View {
                                     .foregroundColor(.accentColor)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Komunikat o nieczytelności nośnika w trakcie tworzenia.")
+                                    Text(isRawImageWorkflow ? "Możliwy komunikat o nieczytelnym nośniku" : "Komunikat o nieczytelności nośnika w trakcie tworzenia.")
                                         .font(.headline)
                                         .foregroundColor(.accentColor)
-                                    Text("Podczas tworzenia nośnika startowego Linux system macOS może wyświetlić komunikat: „Dołączony dysk nie jest czytelny dla tego komputera.” Jest to spodziewane zachowanie. Aby kontynuować, w tym oknie wybierz „Ignoruj”.")
+                                    Text(isRawImageWorkflow
+                                         ? "Podczas zapisu macOS może poinformować, że nośnik jest nieczytelny. Jest to oczekiwane zachowanie. Aby kontynuować, wybierz „Ignoruj”."
+                                         : "Podczas tworzenia nośnika startowego Linux system macOS może wyświetlić komunikat: „Dołączony dysk nie jest czytelny dla tego komputera.” Jest to spodziewane zachowanie. Aby kontynuować, w tym oknie wybierz „Ignoruj”.")
                                         .font(.subheadline)
                                         .foregroundColor(.accentColor)
                                 }
@@ -316,7 +326,9 @@ struct UniversalInstallationView: View {
                                     Text("Wybrano nośnik USB 2.0")
                                         .font(.headline)
                                         .foregroundColor(.orange)
-                                    Text("Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces tworzenia instalatora może potrwać kilkanaście minut")
+                                    Text(isRawImageWorkflow
+                                         ? "Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces zapisu może potrwać kilkanaście minut"
+                                         : "Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces tworzenia instalatora może potrwać kilkanaście minut")
                                         .font(.subheadline)
                                         .foregroundColor(.orange.opacity(0.8))
                                 }
@@ -342,7 +354,12 @@ struct UniversalInstallationView: View {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text("Przebieg procesu").font(.headline)
                                     VStack(alignment: .leading, spacing: 4) {
-                                        if isLinuxWorkflow {
+                                        if isRawImageWorkflow {
+                                            Text("• Plik obrazu zostanie przygotowany")
+                                            Text("• Wybrany nośnik USB zostanie odmontowany")
+                                            Text("• Obraz zostanie zapisany na nośniku USB")
+                                            Text("• Zapis zostanie zweryfikowany")
+                                        } else if isLinuxWorkflow {
                                             Text("• Pliki obrazu Linux zostaną przygotowane")
                                             Text("• Wybrany nośnik USB zostanie odmontowany")
                                             Text("• Obraz Linux zostanie zapisany na nośniku USB")
@@ -368,7 +385,9 @@ struct UniversalInstallationView: View {
                                                 Text("• Struktura instalatora zostanie sfinalizowana")
                                             }
                                         }
-                                        Text("installation.summary.process.cleanup_temp")
+                                        if !isRawImageWorkflow {
+                                            Text("installation.summary.process.cleanup_temp")
+                                        }
                                     }
                                     .font(.subheadline).foregroundColor(.secondary)
                                 }
@@ -558,6 +577,7 @@ struct UniversalInstallationView: View {
                     isMavericks: isMavericks,
                     isPPC: isPPC,
                     isLinuxWorkflow: isLinuxWorkflow,
+                    isRawImageSelection: isRawImageWorkflow,
                     isWindowsWorkflow: isWindowsWorkflow,
                     windowsWillSplitWimExpected: windowsWillSplitWim,
                     windowsWillCreateAutounattendExpected: windowsAutounattendConfiguration.shouldGenerateMacUSBFile,
