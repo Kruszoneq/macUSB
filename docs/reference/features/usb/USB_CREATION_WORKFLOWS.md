@@ -5,6 +5,8 @@
 Start path is destructive and must require explicit confirmation.
 Workflow selection must respect analyzed compatibility flags.
 
+Every confirmed creation attempt owns one USB-creation token across macOS, Linux, and Windows branches. The token begins before workflow preflight and ends only on start failure, terminal success/failure, or confirmed terminal cancellation. An accepted helper cancellation request keeps the token active until the final helper result. Helper cleanup stages add a nested cleanup token.
+
 ## Workflow Families
 
 - Standard `createinstallmedia` path
@@ -129,6 +131,7 @@ Windows summary pre-start prerequisites:
 - Idle sleep is blocked for the full USB creation runtime.
 - Sleep blocker is activated at creation process start.
 - Sleep blocker is released on every terminal path: success, failure, and cancellation.
+- The USB-creation token follows the same terminal coverage but is independent from the sleep blocker.
 
 ## Logging and Diagnostics
 

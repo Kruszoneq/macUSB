@@ -66,6 +66,10 @@
 
 ### Shared platform services
 
+- `macUSB/Shared/Services/AppActiveOperationRegistry.swift` — thread-safe token registry and diagnostic snapshots for protected runtime work.
+- `macUSB/Shared/Services/AppTerminationCoordinator.swift` — shared quit and main-window close decision, blocked-exit alert, and diagnostic reporting.
+- `macUSB/Shared/Services/AppTerminationCleanup.swift` — idempotent cleanup executed before allowed application exit.
+- `macUSB/Shared/Services/AppWindowCloseGuard.swift` — main-window delegate forwarding close requests to the termination coordinator.
 - `macUSB/Shared/Services/MacHardwareArchitecture.swift` — physical Mac architecture detection independent of the current process architecture.
 - `macUSB/Shared/Services/RosettaAvailabilityProbe.swift` — execution-based Rosetta availability probe.
 
@@ -96,6 +100,7 @@
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift`
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClientCapabilities.swift` — helper capability query used by BIOS preflight.
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClientRosetta.swift` — app-side Rosetta installation IPC wrapper.
+- `macUSB/Shared/Services/Helper/PrivilegedOperationClientActivity.swift` — lifecycle tokens for long USB and downloader helper tasks.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift`
 - `macUSB/Shared/Services/Helper/HelperService/*`
 - `macUSB/Shared/Services/InstallerSourceImageUnmountRegistry.swift` — centralny rejestr śledzenia źródeł ISO (Windows/Linux) i cleanup odmontowania przy zamknięciu aplikacji.

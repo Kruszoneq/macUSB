@@ -15,6 +15,9 @@ Destructive start requires explicit confirmation.
 - User selects target USB and confirms destructive start.
 - Progress screen reflects helper-driven stages.
 - Finish screen reports success/failure/cancel plus cleanup status.
+- Language changes are available on Welcome and on the analysis screen before analysis begins. Starting analysis, forcing an analysis result, or opening the downloader locks language changes until the flow returns to Welcome.
+- Any active protected operation also disables language changes, including startup helper repair, cleanup, and USB ejection.
+- `Command-Q` and main-window close use the same termination guard. Active work blocks exit with one warning; an idle app performs termination cleanup and exits.
 
 Apple Silicon and Rosetta behavior:
 
@@ -42,6 +45,7 @@ Windows-specific runtime behavior:
 ## Tools Flow: Downloader
 
 - `Tools -> Download macOS installer...` opens downloader window.
+- The downloader window owns an active-operation token from presentation until the window is fully closed, including discovery, list, process, and summary states.
 - `Tools -> Write Raw Linux Image (.img)...` is placed under the downloader action, separated by a divider, and is enabled only on Welcome or on `SystemAnalysisView` before any source file is selected.
 - `SystemAnalysisView` also exposes `Pobierz` between `Wybierz` and `Analizuj` for direct downloader access.
 - Downloader opening is blocked during USB creation operation stages (`UniversalInstallationView`, `CreationProgressView`, `FinishUSBView`), and `Tools -> Pobierz instalator macOS...` is disabled there.

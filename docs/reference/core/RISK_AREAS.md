@@ -15,6 +15,8 @@ Keep this file current with operational hotspots that can cause regressions.
 - Notification/permission UX divergence across startup/menu/finish paths.
 - Cross-feature leakage between downloader, analysis, and USB creation.
 - Old Yosemite–Catalina installers may still fail after Rosetta removes `EBADARCH`; Rosetta availability is a prerequisite, not a guarantee of complete legacy installer compatibility.
+- Termination during privileged or destructive work can leave media, mounts, or temporary data in an indeterminate state; every new long-running operation must acquire and release an active-operation token on all terminal paths.
+- A helper cancellation acknowledgement is not a terminal workflow result. App-side USB and helper tokens remain active until the helper sends the final result or the XPC connection is invalidated.
 
 ## Mitigation Pattern
 
@@ -23,3 +25,4 @@ For any change in a high-risk area:
 - run targeted smoke validation,
 - verify unrelated feature behavior was not touched,
 - update corresponding reference docs.
+- verify both `Command-Q` and main-window close during every newly protected operation.

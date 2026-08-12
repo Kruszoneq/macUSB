@@ -20,6 +20,7 @@ Finish screen must report:
   - on force-eject failure, show a localized error card and allow force-eject retry,
   - on any other eject failure, show the existing localized generic error card and allow standard retry,
   - keep raw `stderr` in installation logs only; never expose it in finish-screen UI.
+- Standard and forced eject attempts own a USB-eject token from `diskutil` launch through the final success, unavailable, Spotlight-blocked, or failure state.
 - debug finish routes keep the eject card visible with a disabled `DEBUG` action.
 
 ## Cleanup Determinism
@@ -30,6 +31,8 @@ For Windows BIOS creation, macUSBoot owns one final whole-disk mount attempt aft
 App-termination path must execute centralized source-image cleanup for Windows/Linux workflows:
 - tracked source ISO image entities are force-detached on app termination (final shutdown step),
 - this applies regardless of active screen (`analysis`, `summary`, `progress`, `finish`) to prevent stale mounted installer images after app exit.
+- An idle termination runs the centralized cleanup exactly once before exit. Failure to remove temporary files or detach an image is logged but does not cancel termination.
+- Finish-screen cleanup, emergency installation cleanup, downloader cleanup, tracked-image detach, and termination cleanup own cleanup-operation tokens for their full execution.
 
 Downloader-specific cleanup behavior is detailed in `docs/reference/features/downloader/DOWNLOADER.md`.
 
