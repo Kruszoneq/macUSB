@@ -8,7 +8,7 @@ macOS thresholds:
 - major version `<= 14`: UI `16 GB`, technical threshold `15_000_000_000` bytes
 - major version `>= 15`: UI `32 GB`, technical threshold `28_000_000_000` bytes
 
-Linux and Windows use the same source-image thresholds. Apply the first matching upper limit:
+Linux, Windows, and manual raw `.iso`/`.img` selection use the same source-image thresholds. Apply the first matching upper limit:
 
 - source size up to `900_000_000` bytes: UI `1 GB`, technical threshold `900_000_000` bytes
 - source size up to `1_800_000_000` bytes: UI `2 GB`, technical threshold `1_800_000_000` bytes
@@ -20,6 +20,8 @@ Linux and Windows use the same source-image thresholds. Apply the first matching
 
 Sources above `58_800_000_000` bytes currently remain in the top `64 GB` class.
 
+Manual raw-image selection intentionally keeps this existing class-based policy; it does not add exact byte-size capacity validation.
+
 Fallback for Linux and Windows source-size resolution:
 - if source image size cannot be resolved, required capacity falls back to `16 GB` (instead of unresolved `-- GB`).
 
@@ -30,7 +32,7 @@ Proceed must remain blocked until selected target passes validation.
 If selected target is APFS:
 - proceed remains blocked,
 - user is instructed to reformat manually in Disk Utility.
-- this APFS block applies to macOS-target flow only; Linux-target flow uses physical whole-disk (`diskX`) selection and does not apply APFS blocking.
+- this APFS block applies to macOS-target flow only; Linux-target and manual raw-image flows use physical whole-disk (`diskX`) selection and do not apply APFS blocking.
 
 ## Unreadable USB Guidance
 
@@ -53,9 +55,9 @@ Detection policy:
 
 UI suppression rule:
 - when unreadable USB warning is shown and there are no readable targets in picker, do not show the generic `Nie wykryto nośnika USB` error card.
-- unreadable USB warning applies to macOS-target flow only; Linux-target flow suppresses this warning and lists physical USB whole disks directly.
+- unreadable USB warning applies to macOS-target flow only; Linux-target and manual raw-image flows suppress this warning and list physical USB whole disks directly.
 - when any USB is physically connected but system recognition is still pending, analysis UI shows a neutral waiting card in USB section instead of target-selection messages.
-- for Linux flow, selectable target labels use concise physical-media format: `diskX - <size> - <USB standard>`.
+- for Linux and manual raw-image flows, selectable target labels use concise physical-media format: `diskX - <size> - <USB standard>`.
 
 In PPC flow, specialized target formatting behavior must not be forced through standard assumptions.
 

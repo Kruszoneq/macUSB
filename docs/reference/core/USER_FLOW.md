@@ -29,9 +29,10 @@ Apple Silicon and Rosetta behavior:
 
 Linux-specific runtime behavior:
 - recognized Linux image (`.iso`) unlocks the same shared install flow,
-- `Tools -> Write Raw Linux Image (.img)...` can force a selected `.img` file into Linux raw-copy flow from Welcome or an empty analysis screen after a warning and dedicated `.img` picker,
+- `Tools -> Write a Raw Image to a Drive...` accepts `.iso` and `.img` from Welcome or an empty analysis screen after a warning and dedicated picker,
+- manual raw-image selection skips content analysis and source mounting, displays the selected filename with neutral image wording, and enters the existing Linux raw-copy flow through app-only presentation state,
 - USB validation keeps capacity gating, while APFS blocking is macOS-only (Linux uses physical `diskX` targets),
-- creation branch uses Linux raw-copy helper stages.
+- creation branch uses unchanged Linux raw-copy helper stages and hides Linux-specific post-write guidance for manual raw images.
 
 Windows-specific runtime behavior:
 
@@ -46,7 +47,7 @@ Windows-specific runtime behavior:
 
 - `Tools -> Download macOS installer...` opens downloader window.
 - The downloader window owns an active-operation token from presentation until the window is fully closed, including discovery, list, process, and summary states.
-- `Tools -> Write Raw Linux Image (.img)...` is placed under the downloader action, separated by a divider, and is enabled only on Welcome or on `SystemAnalysisView` before any source file is selected.
+- `Tools -> Write a Raw Image to a Drive...` is placed under the downloader action, separated by a divider, and is enabled only on Welcome or on `SystemAnalysisView` before any source file is selected.
 - `SystemAnalysisView` also exposes `Pobierz` between `Wybierz` and `Analizuj` for direct downloader access.
 - Downloader opening is blocked during USB creation operation stages (`UniversalInstallationView`, `CreationProgressView`, `FinishUSBView`), and `Tools -> Pobierz instalator macOS...` is disabled there.
 - Discovery starts on entering downloader window (never on app startup).

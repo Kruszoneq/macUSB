@@ -14,7 +14,7 @@ Every confirmed creation attempt owns one USB-creation token across macOS, Linux
 - Mavericks restore path
 - PPC dedicated formatting/restore path
 - Catalina and Sierra dedicated handling where required
-- Linux raw-copy path (`dd`) for recognized `.iso` sources and exceptional forced raw `.img` sources
+- Linux raw-copy path (`dd`) for recognized Linux `.iso` sources and manually selected raw `.iso`/`.img` sources
 - Windows ISO copy path (FAT32/MBR + optional WIM split), with a conditional macUSBoot final write for BIOS media
 
 macOS architecture preflight:
@@ -32,6 +32,13 @@ Linux raw-copy stages:
 - `linux_verify_write` — post-write verification by comparing SHA-256 of source image with SHA-256 of first `N` bytes on target raw disk (`N = source image size`) (indeterminate stage),
 - `cleanup_temp` — deterministic temp cleanup,
 - `finalize` — terminal state transition.
+
+Manual raw-image workflow contract:
+- helper requests continue to use `workflowKind: .linux`; helper IPC, events, stage keys, mount guard, `dd`, cancellation, and SHA-256 verification remain unchanged,
+- `isRawImageSelection` exists only in app analysis/install context and selects neutral UI wording,
+- progress overrides presentation only for `linux_raw_copy` and `linux_verify_write`, without changing the emitted stage keys,
+- the finish screen uses neutral success/failure wording and omits Linux post-write guidance,
+- the source is never mounted by this path and is not registered in `InstallerSourceImageUnmountRegistry`; recognized Linux `.iso` analysis retains its existing source cleanup.
 
 Windows workflow stages:
 - `windows_prepare_source` — source ISO validation, hidden mount, FAT32-limit scan, WIM split decision (indeterminate stage),
@@ -52,7 +59,8 @@ Linux auto-mount guard invariant:
 Linux summary screen (`UniversalInstallationView`) should show an informational card before the process-stages section:
 - card is visible only for Linux workflow,
 - card uses accent tone (`.active`) with SF Symbol `info.circle.fill`,
-- copy explains that macOS may show an unreadable-disk dialog and user should choose `Ignore`.
+- copy explains that macOS may show an unreadable-disk dialog and user should choose `Ignore`,
+- manual raw images use neutral image wording, the selected filename, and `opticaldisc.fill`; automatically recognized Linux retains Linux presentation.
 
 For a macOS installer classified as prerelease during analysis:
 

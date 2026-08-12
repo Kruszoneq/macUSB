@@ -64,7 +64,8 @@ For Linux fallback:
 - recognized Linux result unlocks shared install flow (`UniversalInstallationView -> CreationProgressView -> FinishUSBView`),
 - detected Linux state may present dedicated Linux icon resource (`linux.icns`) in analysis UI.
 - manual Linux force from `Opcje -> Pomiń analizowanie pliku -> Linux` is treated as Linux-recognized state for install handoff only when selected source is `.iso`.
-- raw Linux `.img` force from `Narzędzia -> Zapisz surowy obraz Linux (.img)...` is a separate exceptional entry point; it is not part of standard source selection or fallback detection and treats the selected `.img` as Linux-recognized without content inspection.
+- manual raw-image selection from `Narzędzia -> Zapisz surowy obraz na nośniku...` is a separate exceptional entry point for `.iso` and `.img`; it is not part of standard source selection or fallback detection and enters the existing Linux workflow without content inspection or source mounting.
+- selecting `.iso` through the standard `Wybierz` action remains part of normal macOS/Windows/Linux analysis.
 
 ## Current Supported Routing Families
 
@@ -84,7 +85,7 @@ Linux fallback routing includes:
 - recognized Linux distro,
 - Linux with unknown distro (`Linux - nierozpoznana dystrybucja`).
 - manually forced Linux (`Linux`).
-- manually forced raw Linux image (`Linux (.img)`).
+- manually selected raw image (selected filename with neutral presentation).
 
 Windows fallback routing includes:
 
@@ -136,7 +137,7 @@ Global app-termination cleanup invariant for ISO analysis:
 - on app termination, centralized cleanup force-detaches tracked Linux/Windows source-image entities (by `image-path` match from `hdiutil info -plist`),
 - this termination cleanup runs even if user exits during analysis before workflow start.
 
-Raw Linux `.img` force path registers the selected source as a Linux image for centralized termination cleanup, but it does not mount or inspect the source image during analysis.
+Manual raw-image selection does not register the source in `InstallerSourceImageUnmountRegistry`, because this path neither mounts nor inspects the source. Automatically analyzed Linux `.iso` sources retain centralized termination cleanup.
 
 For Linux fallback on `.iso`:
 
@@ -161,7 +162,7 @@ This action is optional and user-triggered only; it must not run during automati
 
 Checksum calculation:
 
-- is available for successful `.dmg`, `.iso`, `.cdr`, and raw Linux `.img` recognition, including manually forced Linux `.iso` selection and raw Linux `.img` selection,
+- is available for successful `.dmg`, `.iso`, `.cdr`, and manual raw-image selection, including manually forced Linux `.iso` and raw `.iso`/`.img` selection,
 - stays hidden for `.app` sources, unsupported results, unrecognized results, and active analysis,
 - presents the checksum sheet only when the selected source URL is already bound, so the 420 px-wide sheet opens and starts calculation immediately while keeping a 240 px minimum height and allowing taller content,
 - reads the source file in one pass with POSIX file I/O and a fixed 4 MiB buffer,
@@ -197,7 +198,7 @@ Linux fallback should additionally log:
 - archive-reader diagnostics relevant to bounded execution (`bsdtar` timeout/errors),
 - install handoff readiness (`linuxSourceURL` present, capacity computed).
 - manual-force diagnostics when Linux is forced from menu.
-- raw `.img` force diagnostics when Linux is forced from the Tools menu.
+- manual raw `.iso`/`.img` selection diagnostics when the Tools-menu path is used.
 
 Windows fallback should additionally log:
 
