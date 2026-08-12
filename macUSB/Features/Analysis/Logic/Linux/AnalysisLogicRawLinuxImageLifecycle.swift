@@ -3,23 +3,17 @@ import SwiftUI
 
 extension AnalysisLogic {
     func forceRawLinuxImageSelection(_ sourceURL: URL) {
-        cancelActiveImageAnalysisRun(reason: "Wybór surowego obrazu Linux .img")
+        cancelActiveImageAnalysisRun(reason: "Wybór surowego obrazu .iso/.img")
 
         let standardizedURL = sourceURL.standardizedFileURL
-        guard standardizedURL.pathExtension.lowercased() == "img" else {
-            logError("Nie można wymusić rozpoznania Linux (.img) dla .\(standardizedURL.pathExtension.lowercased()).")
+        let sourceExtension = standardizedURL.pathExtension.lowercased()
+        guard ["iso", "img"].contains(sourceExtension) else {
+            logError("Nie można wymusić surowego zapisu dla .\(sourceExtension).")
             return
         }
         MenuState.shared.lockLanguageChanges(reason: "raw_linux_selection")
 
-        InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
-            path: standardizedURL.path,
-            family: .linux,
-            mountHint: nil,
-            reason: "linux_raw_img"
-        )
-
-        log("Ręcznie wybrano surowy obraz Linux .img (bez analizy pliku).")
+        log("Ręcznie wybrano surowy obraz .iso/.img (bez analizy pliku).")
 
         withAnimation {
             self.selectedFilePath = standardizedURL.path
@@ -30,13 +24,14 @@ extension AnalysisLogic {
             self.resetWindowsDetectionState()
 
             self.isLinuxDetected = true
+            self.isRawImageSelection = true
             self.isLinuxDistributionRecognized = false
-            self.linuxDisplayName = "Linux (.img)"
+            self.linuxDisplayName = standardizedURL.lastPathComponent
             self.linuxSourceURL = standardizedURL
 
-            self.recognizedVersion = "Linux (.img)"
+            self.recognizedVersion = standardizedURL.lastPathComponent
             self.sourceAppURL = nil
-            self.detectedSystemIcon = loadLinuxDetectedSystemIcon(for: nil)
+            self.detectedSystemIcon = nil
             self.mountedDMGPath = nil
 
             self.isSystemDetected = true
@@ -62,11 +57,11 @@ extension AnalysisLogic {
         requiredUSBCapacityGB = capacityResolution.requiredCapacityGB
         if let fileSizeBytes = capacityResolution.sourceFileSizeBytes,
            let fileSizeSource = capacityResolution.sourceFileSizeSource {
-            log("Linux raw .img source size: \(fileSizeBytes) bytes (source=\(fileSizeSource))")
+            log("Raw image source size: \(fileSizeBytes) bytes (source=\(fileSizeSource))")
         } else if capacityResolution.usedFallback {
-            log("Linux raw .img source size unavailable. Applying fallback USB threshold: \(capacityResolution.requiredCapacityGB) GB")
+            log("Raw image source size unavailable. Applying fallback USB threshold: \(capacityResolution.requiredCapacityGB) GB")
         }
-        log("Linux raw .img required USB threshold: \(capacityResolution.requiredCapacityGB) GB")
-        log("Ustawiono ręczne rozpoznanie Linux (.img): recognizedVersion=\(recognizedVersion), source=\(standardizedURL.path)")
+        log("Raw image required USB threshold: \(capacityResolution.requiredCapacityGB) GB")
+        log("Ustawiono ręczny zapis surowego obrazu: recognizedVersion=\(recognizedVersion), source=\(standardizedURL.path)")
     }
 }

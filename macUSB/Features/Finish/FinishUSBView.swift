@@ -12,6 +12,7 @@ struct FinishUSBView: View {
     let isPPC: Bool
     let isBetaInstaller: Bool
     let isLinuxWorkflow: Bool
+    let isRawImageSelection: Bool
     let isWindowsWorkflow: Bool
     let didFail: Bool
     let didCancel: Bool
@@ -39,6 +40,7 @@ struct FinishUSBView: View {
         isPPC: Bool,
         isBetaInstaller: Bool = false,
         isLinuxWorkflow: Bool = false,
+        isRawImageSelection: Bool = false,
         isWindowsWorkflow: Bool = false,
         didFail: Bool,
         didCancel: Bool = false,
@@ -57,6 +59,7 @@ struct FinishUSBView: View {
         self.isPPC = isPPC
         self.isBetaInstaller = isBetaInstaller
         self.isLinuxWorkflow = isLinuxWorkflow
+        self.isRawImageSelection = isRawImageSelection
         self.isWindowsWorkflow = isWindowsWorkflow
         self.didFail = didFail
         self.didCancel = didCancel
@@ -159,6 +162,8 @@ struct FinishUSBView: View {
     }
     private var summaryTitleText: String {
         if isCancelledResult { return String(localized: "Tworzenie nośnika zostało przerwane") }
+        if isRawImageSelection, isFailedResult { return String(localized: "Nie udało się zapisać obrazu na nośniku USB") }
+        if isRawImageSelection { return String(localized: "Zapisano surowy obraz na nośniku USB") }
         if isFailedResult { return String(localized: "Tworzenie instalatora nie powiodło się") }
         if isLinuxWorkflow { return String(localized: "Utworzono nośnik startowy Linux") }
         return String(localized: "Utworzono instalator systemu")
@@ -186,7 +191,12 @@ struct FinishUSBView: View {
                                 .overlay(Color.secondary.opacity(0.18))
 
                             HStack(alignment: .center) {
-                                if isSuccessResult, let detectedSystemIcon {
+                                if isRawImageSelection {
+                                    Image(systemName: "opticaldisc.fill")
+                                        .font(sectionIconFont)
+                                        .foregroundColor(primaryResultColor)
+                                        .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                } else if isSuccessResult, let detectedSystemIcon {
                                     if detectedSystemIcon.isTemplate {
                                         Image(nsImage: detectedSystemIcon)
                                             .renderingMode(.template)
@@ -212,7 +222,7 @@ struct FinishUSBView: View {
                                         Text(verbatim: systemName)
                                             .font(.headline)
                                             .foregroundColor(primaryResultColor)
-                                        if isBetaInstaller {
+                                        if isBetaInstaller && !isRawImageSelection {
                                             MacOSBetaBadge(tint: primaryResultColor)
                                         }
                                     }
@@ -233,7 +243,7 @@ struct FinishUSBView: View {
                                     Text(LocalizedStringKey(linuxErrorPresentation.titleKey))
                                         .font(.headline)
                                         .foregroundColor(.orange)
-                                    Text(LocalizedStringKey(linuxErrorPresentation.descriptionKey))
+                                    Text(LocalizedStringKey(effectiveLinuxErrorDescriptionKey(linuxErrorPresentation)))
                                         .font(.subheadline)
                                         .foregroundColor(.orange.opacity(0.9))
                                 }
@@ -260,7 +270,7 @@ struct FinishUSBView: View {
                         }
                     }
 
-                    if isSuccessResult {
+                    if isSuccessResult && !isRawImageSelection {
                         StatusCard(tone: .neutral, density: .compact) {
                             HStack(alignment: .top) {
                                 Image(systemName: "info.circle.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
@@ -423,6 +433,14 @@ struct FinishUSBView: View {
             menuState.setDownloaderAccessBlocked(false, reason: downloaderBlockReason)
             ejectLogic.stopAvailabilityMonitoring()
         }
+    }
+
+    private func effectiveLinuxErrorDescriptionKey(_ presentation: LinuxWorkflowErrorPresentation) -> String {
+        if isRawImageSelection,
+           presentation.descriptionKey == "installation.error.linux.verify_write.generic" {
+            return "raw_image.error.verify.generic"
+        }
+        return presentation.descriptionKey
     }
 
     @ViewBuilder
@@ -685,10 +703,21 @@ struct FinishUSBView: View {
         guard !didCancel else { return }
         didSendBackgroundNotification = true
 
-        let title = isFailedResult ? String(localized: "Wystąpił błąd") : String(localized: "Instalator gotowy")
-        let body = isFailedResult
-            ? String(localized: "Proces tworzenia instalatora na wybranym nośniku zakończył się niepowodzeniem.")
-            : String(localized: "Proces zapisu na nośniku zakończył się pomyślnie.")
+        let title: String
+        let body: String
+        if isRawImageSelection {
+            title = isFailedResult
+                ? String(localized: "Nie udało się zapisać obrazu na nośniku USB")
+                : String(localized: "Zapisano surowy obraz na nośniku USB")
+            body = isFailedResult
+                ? String(localized: "Proces zapisu obrazu na wybranym nośniku zakończył się niepowodzeniem.")
+                : String(localized: "Proces zapisu obrazu na nośniku zakończył się pomyślnie.")
+        } else {
+            title = isFailedResult ? String(localized: "Wystąpił błąd") : String(localized: "Instalator gotowy")
+            body = isFailedResult
+                ? String(localized: "Proces tworzenia instalatora na wybranym nośniku zakończył się niepowodzeniem.")
+                : String(localized: "Proces zapisu na nośniku zakończył się pomyślnie.")
+        }
 
         NotificationPermissionManager.shared.shouldDeliverInAppNotification { shouldDeliver in
             guard shouldDeliver else { return }

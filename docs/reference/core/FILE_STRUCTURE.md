@@ -39,6 +39,8 @@
 - `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicLinuxDisplayName.swift` — final Linux display-name formatting policy.
 - `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicLinuxLifecycle.swift` — Linux state reset/apply helpers.
 - `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicLinuxInstallationHandoff.swift` — Linux install context handoff for USB creation flow.
+- `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicRawLinuxImageLifecycle.swift` — manual `.iso`/`.img` raw-image state handoff without analysis or source mounting.
+- `macUSB/Features/Analysis/RawLinuxImage/RawLinuxImageSelectionCoordinator.swift` — Tools-menu warning and dedicated raw-image picker.
 
 ### Installation layout
 
@@ -48,10 +50,10 @@
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` — shared helper workflow orchestration, authoritative cancellation-response handling, and transfer metrics.
 - `macUSB/Features/Installation/macOS/CreatorMacOSRosettaLogic.swift` — summary-side Rosetta check, license confirmation, installation, and bounded post-install verification.
 - `macUSB/Features/Installation/macOS/CreatorMacOSRosettaCardView.swift` — localized Rosetta status card and retry actions.
-- `macUSB/Features/Installation/Linux/LinuxInstallationFlowContext.swift` — Linux flow context payload.
+- `macUSB/Features/Installation/Linux/LinuxInstallationFlowContext.swift` — Linux flow context payload with app-only manual raw-image presentation state.
 - `macUSB/Features/Installation/Linux/CreatorLinuxLogic.swift` — Linux-specific summary/cleanup helpers.
 - `macUSB/Features/Installation/Linux/CreatorLinuxHelperLogic.swift` — Linux helper request construction and start routing.
-- `macUSB/Features/Installation/Linux/CreationProgressLinuxMapping.swift` — Linux stage mapping for shared progress UI.
+- `macUSB/Features/Installation/Linux/CreationProgressLinuxMapping.swift` — Linux stage mapping and neutral manual raw-image title/status overrides for shared progress UI.
 - `macUSB/Features/Installation/Windows/CreatorWindowsLabelLogic.swift` — Windows target volume-label mapping policy.
 - `macUSB/Features/Installation/Windows/CreatorWindowsBootModeCardView.swift` — Windows summary BIOS/UEFI presentation, session selection, and logging.
 - `macUSB/Features/Installation/Windows/CreatorWindowsHelperLogic.swift` — Windows helper request construction and workflow start routing.
@@ -103,7 +105,7 @@
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClientActivity.swift` — lifecycle tokens for long USB and downloader helper tasks.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift`
 - `macUSB/Shared/Services/Helper/HelperService/*`
-- `macUSB/Shared/Services/InstallerSourceImageUnmountRegistry.swift` — centralny rejestr śledzenia źródeł ISO (Windows/Linux) i cleanup odmontowania przy zamknięciu aplikacji.
+- `macUSB/Shared/Services/InstallerSourceImageUnmountRegistry.swift` — centralny rejestr śledzenia zamontowanych źródeł ISO (Windows/Linux) i cleanup odmontowania przy zamknięciu aplikacji; ręczne źródła raw nie są rejestrowane.
 
 ### Helper (daemon)
 

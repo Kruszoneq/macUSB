@@ -8,7 +8,8 @@ extension AnalysisLogic {
 
         return LinuxInstallationFlowContext(
             sourceImageURL: linuxSourceURL,
-            mountedImagePath: mountedDMGPath
+            mountedImagePath: mountedDMGPath,
+            isRawImageSelection: isRawImageSelection
         )
     }
 }

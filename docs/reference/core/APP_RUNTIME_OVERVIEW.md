@@ -8,9 +8,10 @@ This file defines high-level runtime scope and global contracts.
 
 - macOS/OS X/Mac OS X installers from `.dmg`, `.iso`, `.cdr`, and `.app` sources,
 - supported Windows families from original `.iso` images using a boot-mode-aware BIOS or UEFI workflow,
-- recognized Linux `.iso` images using the shared analysis and installation flow.
+- recognized Linux `.iso` images using the shared analysis and installation flow,
+- manually selected raw `.iso` and `.img` images written directly to USB without content analysis.
 
-Linux `.img` support is an exceptional Tools-menu raw-write path only; it is not part of standard source selection or analysis fallback. Modified Windows images are outside the tested workflow contract; source-image selection and provenance remain the user's responsibility.
+Manual raw-image writing is an exceptional Tools-menu path. It reuses the existing Linux `dd` workflow and SHA-256 write verification, but carries app-only presentation state so the UI does not describe the source as Linux. It is not part of standard source selection or analysis fallback: selecting `.iso` through the standard `Choose` action still runs normal macOS/Windows/Linux analysis. Modified Windows images are outside the tested workflow contract; source-image selection and provenance remain the user's responsibility.
 
 Primary runtime goals:
 

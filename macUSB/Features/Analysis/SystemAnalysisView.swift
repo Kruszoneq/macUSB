@@ -303,7 +303,7 @@ struct SystemAnalysisView: View {
             Button(String(localized: "Analizuj")) { logic.startAnalysis() }
                 .buttonStyle(.borderedProminent)
                 .tint(.accentColor)
-                .disabled(logic.selectedFilePath.isEmpty || logic.isAnalyzing)
+                .disabled(logic.selectedFilePath.isEmpty || logic.isAnalyzing || logic.isRawImageSelection)
         }
     }
 
@@ -375,9 +375,14 @@ struct SystemAnalysisView: View {
             : String(localized: "Wybrany system nie jest wspierany przez aplikację", comment: "Generic unsupported system message"))
 
         return VStack(alignment: .leading, spacing: MacUSBDesignTokens.bottomBarContentSpacing) {
-            StatusCard(tone: isValid ? .success : .error) {
+            StatusCard(tone: logic.isRawImageSelection ? .neutral : (isValid ? .success : .error)) {
                 HStack(alignment: .center) {
-                    if isValid, logic.isWindowsDetected, let detectedIcon = logic.detectedSystemIcon {
+                    if logic.isRawImageSelection {
+                        Image(systemName: "opticaldisc.fill")
+                            .font(sectionIconFont)
+                            .foregroundColor(.secondary)
+                            .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                    } else if isValid, logic.isWindowsDetected, let detectedIcon = logic.detectedSystemIcon {
                         Image(nsImage: detectedIcon)
                             .renderingMode(.template)
                             .resizable()
@@ -417,14 +422,14 @@ struct SystemAnalysisView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(isValid ? "Pomyślnie wykryto system" : "Błąd analizy")
+                        Text(logic.isRawImageSelection ? "Wybrano surowy obraz" : (isValid ? "Pomyślnie wykryto system" : "Błąd analizy"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                         HStack(spacing: 8) {
                             Text(isValid ? (logic.recognizedVersion.isEmpty ? String(localized: "Wykryto kompatybilny instalator") : logic.recognizedVersion) : unsupportedText)
                                 .font(.headline)
-                                .foregroundColor(isValid ? .green : .red)
-                            if isValid, logic.isBetaInstaller {
+                                .foregroundColor(logic.isRawImageSelection ? .primary : (isValid ? .green : .red))
+                            if isValid, !logic.isRawImageSelection, logic.isBetaInstaller {
                                 MacOSBetaBadge(tint: .green)
                             }
                         }
