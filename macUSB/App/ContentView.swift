@@ -224,6 +224,7 @@ struct WindowConfigurator: NSViewRepresentable {
 
                 // Staly Touch Bar dla calej aplikacji niezaleznie od widoku.
                 TouchbarSupport.shared.install(on: window)
+                AppWindowCloseGuard.shared.install(on: window)
             }
         }
         return view
