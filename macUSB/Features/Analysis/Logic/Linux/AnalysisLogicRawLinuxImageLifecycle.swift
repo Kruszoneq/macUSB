@@ -13,13 +13,6 @@ extension AnalysisLogic {
         }
         MenuState.shared.lockLanguageChanges(reason: "raw_linux_selection")
 
-        InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
-            path: standardizedURL.path,
-            family: .linux,
-            mountHint: nil,
-            reason: "linux_raw_img"
-        )
-
         log("Ręcznie wybrano surowy obraz .iso/.img (bez analizy pliku).")
 
         withAnimation {

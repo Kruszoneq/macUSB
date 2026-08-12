@@ -624,7 +624,7 @@ struct UniversalInstallationView: View {
                     reason: "installation_summary_on_appear"
                 )
             }
-            if isLinuxWorkflow {
+            if isLinuxWorkflow && !isRawImageWorkflow {
                 InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
                     path: sourceAppURL.path,
                     family: .linux,
