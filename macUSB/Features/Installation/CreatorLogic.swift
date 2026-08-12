@@ -76,6 +76,11 @@ extension UniversalInstallationView {
     }
 
     func performEmergencyCleanup(mountPoint: URL, tempURL: URL) {
+        let cleanupToken = AppActiveOperationRegistry.shared.begin(
+            kind: .cleanup,
+            context: "installation_emergency_cleanup"
+        )
+        defer { cleanupToken.finish() }
         log("Cleanup: odmontowuję \(mountPoint.path)")
         log("Cleanup: usuwam katalog TEMP \(tempURL.path)")
 

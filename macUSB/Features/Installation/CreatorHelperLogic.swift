@@ -172,6 +172,7 @@ extension UniversalInstallationView {
                                     let normalizedStageKey = canonicalStageKeyForPresentation(event.stageKey)
                                     let previousStageKey = helperCurrentStageKey
                                     helperCurrentStageKey = normalizedStageKey
+                                    updateWorkflowCleanupOperation(for: normalizedStageKey)
                                     if isLinuxWorkflow, previousStageKey != normalizedStageKey {
                                         log(
                                             "LinuxInstallFlow: stage transition \(previousStageKey.isEmpty ? "<start>" : previousStageKey) -> \(normalizedStageKey)",
@@ -218,6 +219,7 @@ extension UniversalInstallationView {
                                     activeHelperWorkflowID = nil
                                     isHelperWorking = false
                                     stopHelperWriteSpeedMonitoring()
+                                    finishWorkflowCleanupOperationIfNeeded()
 
                                     if result.isUserCancelled || isCancelled {
                                         completeCancellationFlow()

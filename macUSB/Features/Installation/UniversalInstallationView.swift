@@ -89,6 +89,7 @@ struct UniversalInstallationView: View {
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
     @State var usbCreationOperationToken: AppActiveOperationToken?
+    @State var workflowCleanupOperationToken: AppActiveOperationToken?
     @State var usbProcessSleepBlockToken: UUID? = nil
     
     @State var hostingWindow: NSWindow?

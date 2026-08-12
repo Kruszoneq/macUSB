@@ -28,7 +28,27 @@ extension UniversalInstallationView {
     }
 
     func finishUSBCreationOperationIfNeeded() {
+        finishWorkflowCleanupOperationIfNeeded()
         usbCreationOperationToken?.finish()
         usbCreationOperationToken = nil
+    }
+
+    func updateWorkflowCleanupOperation(for stageKey: String) {
+        let normalizedStageKey = stageKey.lowercased()
+        let isCleanupStage = normalizedStageKey.contains("cleanup")
+        if isCleanupStage {
+            guard workflowCleanupOperationToken == nil else { return }
+            workflowCleanupOperationToken = AppActiveOperationRegistry.shared.begin(
+                kind: .cleanup,
+                context: "helper_workflow_stage:\(normalizedStageKey)"
+            )
+        } else {
+            finishWorkflowCleanupOperationIfNeeded()
+        }
+    }
+
+    func finishWorkflowCleanupOperationIfNeeded() {
+        workflowCleanupOperationToken?.finish()
+        workflowCleanupOperationToken = nil
     }
 }

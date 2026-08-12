@@ -20,6 +20,7 @@ final class FinishUSBEjectLogic: ObservableObject {
     private let targetWholeDiskBSDName: String?
     private let isDebugMode: Bool
     private var availabilityTimer: Timer?
+    private var operationToken: AppActiveOperationToken?
 
     init(targetWholeDiskBSDName: String?, isDebugMode: Bool) {
         if let targetWholeDiskBSDName, !targetWholeDiskBSDName.isEmpty {
@@ -32,6 +33,7 @@ final class FinishUSBEjectLogic: ObservableObject {
 
     deinit {
         availabilityTimer?.invalidate()
+        operationToken?.finish()
     }
 
     func prepareForPresentation() {
@@ -79,12 +81,21 @@ final class FinishUSBEjectLogic: ObservableObject {
         }
 
         let shouldForceEject = state == .spotlightBlocked || state == .forceFailed
+        operationToken?.finish()
+        operationToken = AppActiveOperationRegistry.shared.begin(
+            kind: .usbEject,
+            context: shouldForceEject ? "usb_eject_force:\(disk)" : "usb_eject_standard:\(disk)"
+        )
         state = shouldForceEject ? .forceInProgress : .inProgress
 
         DispatchQueue.global(qos: .userInitiated).async {
             let result = Self.executeDiskutilEject(for: disk, force: shouldForceEject)
 
             DispatchQueue.main.async {
+                defer {
+                    self.operationToken?.finish()
+                    self.operationToken = nil
+                }
                 if result.exitCode == 0 {
                     let mode = shouldForceEject ? "force" : "standard"
                     AppLogging.info("FinishEject: pomyślnie wysunięto /dev/\(disk), tryb=\(mode).", category: "Installation")

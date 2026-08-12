@@ -64,6 +64,11 @@ final class InstallerSourceImageUnmountRegistry {
         families: Set<InstallerSourceImageFamily>,
         clearAfter: Bool
     ) {
+        let cleanupToken = AppActiveOperationRegistry.shared.begin(
+            kind: .cleanup,
+            context: "source_image_detach:\(reason)"
+        )
+        defer { cleanupToken.finish() }
         let snapshot = queue.sync { () -> (paths: [InstallerSourceImageFamily: Set<String>], hints: [InstallerSourceImageFamily: Set<String>]) in
             let paths = trackedSourcePaths.filter { families.contains($0.key) }
             let hints = trackedMountHints.filter { families.contains($0.key) }
