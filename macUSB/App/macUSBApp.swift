@@ -6,6 +6,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
+
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        AppTerminationCoordinator.shared.applicationShouldTerminate()
+    }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSWindow.allowsAutomaticWindowTabbing = false
@@ -19,27 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationWillTerminate(_ notification: Notification) {
-        // Reset external drives support on app termination
-        UserDefaults.standard.set(false, forKey: "AllowExternalDrives")
-        UserDefaults.standard.synchronize()
-        // Reflect the state in MenuState for consistency
-        MenuState.shared.externalDrivesEnabled = false
-
-        let tempRootURL = FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_temp", isDirectory: true)
-        if FileManager.default.fileExists(atPath: tempRootURL.path) {
-            do {
-                try FileManager.default.removeItem(at: tempRootURL)
-                AppLogging.info("Zamkniecie aplikacji: usunieto katalog macUSB_temp.", category: "Downloader")
-            } catch {
-                AppLogging.error(
-                    "Zamkniecie aplikacji: nie udalo sie usunac macUSB_temp: \(error.localizedDescription)",
-                    category: "Downloader"
-                )
-            }
-        }
-
-        // Last-step cleanup for tracked Windows/Linux source images.
-        InstallerSourceImageUnmountRegistry.shared.detachAllTrackedImagesOnAppTermination()
+        AppTerminationCleanup.shared.performIfNeeded()
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
@@ -279,6 +263,7 @@ struct macUSBApp: App {
                 } label: {
                     Label(String(localized: "Język"), systemImage: "globe")
                 }
+                .disabled(!menuState.isLanguageChangeEnabled)
                 Divider()
                 Button {
                     NotificationPermissionManager.shared.handleMenuNotificationsTapped()

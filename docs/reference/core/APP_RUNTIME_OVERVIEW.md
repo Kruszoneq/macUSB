@@ -32,6 +32,17 @@ Primary runtime goals:
 - USB creation changes must not modify downloader logic.
 - Analysis routing remains the source of truth for workflow branch selection.
 - Destructive operations must remain explicitly confirmed by user.
+- App termination is coordinated through a process-wide active-operation registry.
+- Quit requests and main-window close requests are rejected while analysis, USB creation, the downloader window, Rosetta installation, helper repair, long helper work, cleanup, or USB ejection is active.
+- An allowed termination runs the idempotent application cleanup before exit; cleanup errors are logged and do not keep the app running.
+
+## Active Operation and Termination Model
+
+- Every protected operation owns an idempotent token from its actual start to its terminal result.
+- Multiple and nested tokens are valid, including USB creation plus helper work plus helper cleanup.
+- A blocked quit shows one generic localized warning and records the active operation kinds, contexts, identifiers, and durations in diagnostics.
+- Repeated quit requests activate the existing warning instead of creating additional alerts.
+- The warning does not expose a cancellation action or redirect the user to workflow cancellation.
 
 ## Update Trigger
 

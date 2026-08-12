@@ -11,12 +11,14 @@ final class PrivilegedOperationClient: NSObject {
     typealias DownloaderAssemblyEventHandler = (DownloaderAssemblyProgressPayload) -> Void
     typealias DownloaderAssemblyCompletionHandler = (DownloaderAssemblyResultPayload) -> Void
 
-    private let lock = NSLock()
+    let lock = NSLock()
     private var connection: NSXPCConnection?
     private var eventHandlers: [String: EventHandler] = [:]
     private var completionHandlers: [String: CompletionHandler] = [:]
     private var downloaderAssemblyEventHandlers: [String: DownloaderAssemblyEventHandler] = [:]
     private var downloaderAssemblyCompletionHandlers: [String: DownloaderAssemblyCompletionHandler] = [:]
+    var workflowActivityTokens: [String: AppActiveOperationToken] = [:]
+    var downloaderAssemblyActivityTokens: [String: AppActiveOperationToken] = [:]
     private let startReplyTimeout: TimeInterval = 10
     private let healthReplyTimeout: TimeInterval = 5
 
@@ -106,6 +108,7 @@ final class PrivilegedOperationClient: NSObject {
                     self?.lock.lock()
                     self?.eventHandlers[workflowID] = onEvent
                     self?.completionHandlers[workflowID] = onCompletion
+                    self?.registerWorkflowActivityLocked(workflowID: workflowID)
                     self?.lock.unlock()
 
                     onStarted(workflowID)
@@ -213,6 +216,7 @@ final class PrivilegedOperationClient: NSObject {
                     self?.lock.lock()
                     self?.downloaderAssemblyEventHandlers[workflowID] = onEvent
                     self?.downloaderAssemblyCompletionHandlers[workflowID] = onCompletion
+                    self?.registerDownloaderAssemblyActivityLocked(workflowID: workflowID)
                     self?.lock.unlock()
 
                     onStarted(workflowID)
@@ -245,8 +249,13 @@ final class PrivilegedOperationClient: NSObject {
         request: DownloaderCleanupRequestPayload,
         completion: @escaping (DownloaderCleanupResultPayload) -> Void
     ) {
+        let activityToken = AppActiveOperationRegistry.shared.begin(
+            kind: .helperActivity,
+            context: "helper_downloader_cleanup"
+        )
         let fail: (String) -> Void = { message in
             DispatchQueue.main.async {
+                activityToken.finish()
                 completion(DownloaderCleanupResultPayload(success: false, errorMessage: message))
             }
         }
@@ -268,6 +277,7 @@ final class PrivilegedOperationClient: NSObject {
 
         proxy.cleanupDownloaderSession(requestData as NSData) { data, error in
             DispatchQueue.main.async {
+                defer { activityToken.finish() }
                 if let error {
                     completion(DownloaderCleanupResultPayload(success: false, errorMessage: error.localizedDescription))
                     return
@@ -374,7 +384,9 @@ final class PrivilegedOperationClient: NSObject {
         completionHandlers.removeAll()
         downloaderAssemblyEventHandlers.removeAll()
         downloaderAssemblyCompletionHandlers.removeAll()
+        let activityTokens = removeAllActivityTokensLocked()
         lock.unlock()
+        activityTokens.forEach { $0.finish() }
         existingConnection?.invalidate()
     }
 
@@ -457,8 +469,10 @@ final class PrivilegedOperationClient: NSObject {
         completionHandlers.removeAll()
         downloaderAssemblyEventHandlers.removeAll()
         downloaderAssemblyCompletionHandlers.removeAll()
+        let activityTokens = removeAllActivityTokensLocked()
         connection = nil
         lock.unlock()
+        activityTokens.forEach { $0.finish() }
 
         DispatchQueue.main.async {
             for (workflowID, handler) in completionSnapshot {
@@ -574,6 +588,7 @@ extension PrivilegedOperationClient: PrivilegedHelperClientXPCProtocol {
                 error.localizedDescription
             )
             AppLogging.error(message, category: "HelperLiveLog")
+            finishAllWorkflowActivityAfterDecodeFailure()
             return
         }
 
@@ -581,7 +596,9 @@ extension PrivilegedOperationClient: PrivilegedHelperClientXPCProtocol {
         let completion = completionHandlers[result.workflowID]
         eventHandlers.removeValue(forKey: result.workflowID)
         completionHandlers.removeValue(forKey: result.workflowID)
+        let activityToken = workflowActivityTokens.removeValue(forKey: result.workflowID)
         lock.unlock()
+        activityToken?.finish()
 
         if let completion {
             DispatchQueue.main.async {
@@ -622,6 +639,7 @@ extension PrivilegedOperationClient: PrivilegedHelperClientXPCProtocol {
                 "Nie udalo sie zdekodowac wyniku assembly downloadera: \(error.localizedDescription)",
                 category: "HelperLiveLog"
             )
+            finishAllDownloaderAssemblyActivityAfterDecodeFailure()
             return
         }
 
@@ -629,7 +647,9 @@ extension PrivilegedOperationClient: PrivilegedHelperClientXPCProtocol {
         let completion = downloaderAssemblyCompletionHandlers[result.workflowID]
         downloaderAssemblyEventHandlers.removeValue(forKey: result.workflowID)
         downloaderAssemblyCompletionHandlers.removeValue(forKey: result.workflowID)
+        let activityToken = downloaderAssemblyActivityTokens.removeValue(forKey: result.workflowID)
         lock.unlock()
+        activityToken?.finish()
 
         if let completion {
             DispatchQueue.main.async {

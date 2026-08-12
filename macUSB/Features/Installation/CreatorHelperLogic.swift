@@ -29,6 +29,7 @@ extension UniversalInstallationView {
         guard let drive = targetDrive else {
             navigateToCreationProgress = false
             errorMessage = String(localized: "Błąd: Nie wybrano dysku.")
+            finishUSBCreationOperationIfNeeded()
             return
         }
 
@@ -93,6 +94,7 @@ extension UniversalInstallationView {
                 usbProcessStartedAt = nil
                 errorMessage = error.localizedDescription
             }
+            finishUSBCreationOperationIfNeeded()
             return
         }
 
@@ -113,6 +115,7 @@ extension UniversalInstallationView {
                     usbProcessStartedAt = nil
                     errorMessage = failureReason ?? String(localized: "Helper nie jest gotowy do pracy.")
                 }
+                finishUSBCreationOperationIfNeeded()
                 return
             }
 
@@ -153,6 +156,7 @@ extension UniversalInstallationView {
                                 usbProcessStartedAt = nil
                                 errorMessage = message
                             }
+                            finishUSBCreationOperationIfNeeded()
                         }
 
                         var startHelperWorkflow: ((Bool) -> Void)!
@@ -168,6 +172,7 @@ extension UniversalInstallationView {
                                     let normalizedStageKey = canonicalStageKeyForPresentation(event.stageKey)
                                     let previousStageKey = helperCurrentStageKey
                                     helperCurrentStageKey = normalizedStageKey
+                                    updateWorkflowCleanupOperation(for: normalizedStageKey)
                                     if isLinuxWorkflow, previousStageKey != normalizedStageKey {
                                         log(
                                             "LinuxInstallFlow: stage transition \(previousStageKey.isEmpty ? "<start>" : previousStageKey) -> \(normalizedStageKey)",
@@ -214,9 +219,10 @@ extension UniversalInstallationView {
                                     activeHelperWorkflowID = nil
                                     isHelperWorking = false
                                     stopHelperWriteSpeedMonitoring()
+                                    finishWorkflowCleanupOperationIfNeeded()
 
                                     if result.isUserCancelled || isCancelled {
-                                        usbProcessStartedAt = nil
+                                        completeCancellationFlow()
                                         return
                                     }
 
@@ -310,6 +316,7 @@ extension UniversalInstallationView {
                                     withAnimation {
                                         navigateToFinish = true
                                     }
+                                    finishUSBCreationOperationIfNeeded()
                                 },
                                 onStartError: { message in
                                     guard allowCompatibilityRecovery, isLikelyHelperIPCContractMismatch(message) else {
@@ -337,7 +344,10 @@ extension UniversalInstallationView {
                                     if cancellationRequestedBeforeWorkflowStart {
                                         cancelHelperWorkflowIfNeeded { cancellationAccepted in
                                             if cancellationAccepted {
-                                                completeCancellationFlow()
+                                                log(
+                                                    "Helper przyjął oczekujące żądanie anulowania; oczekuję na wynik końcowy workflow.",
+                                                    category: isWindowsWorkflow ? "WindowsInstallFlow" : "Installation"
+                                                )
                                             } else {
                                                 cancellationRequestedBeforeWorkflowStart = false
                                                 withAnimation(.easeInOut(duration: 0.2)) {
@@ -393,6 +403,7 @@ extension UniversalInstallationView {
                             usbProcessStartedAt = nil
                             errorMessage = error.localizedDescription
                         }
+                        finishUSBCreationOperationIfNeeded()
                     }
                 }
             }
@@ -584,12 +595,7 @@ extension UniversalInstallationView {
                 return
             }
 
-            PrivilegedOperationClient.shared.clearHandlers(for: workflowID)
-            activeHelperWorkflowID = nil
-            isHelperWorking = false
-            stopHelperWriteSpeedMonitoring()
-            usbProcessStartedAt = nil
-            releaseUSBProcessSleepBlockIfNeeded()
+            log("Helper przyjął żądanie anulowania; oczekuję na wynik końcowy workflow.")
             completion(true)
         }
     }

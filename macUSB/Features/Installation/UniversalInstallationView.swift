@@ -84,12 +84,14 @@ struct UniversalInstallationView: View {
     @State var windowsMacUSBootPreflightInProgress: Bool = false
     @State var macOSRosettaState: CreatorMacOSRosettaState? = nil
     @State var macOSRosettaRetryGeneration: UUID? = nil
+    @State var macOSRosettaOperationToken: AppActiveOperationToken?
     
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
+    @State var usbCreationOperationToken: AppActiveOperationToken?
+    @State var workflowCleanupOperationToken: AppActiveOperationToken?
     @State var usbProcessSleepBlockToken: UUID? = nil
     
-    @State var windowHandler: UniversalWindowHandler?
     @State var hostingWindow: NSWindow?
     
     var tempWorkURL: URL {
@@ -540,18 +542,8 @@ struct UniversalInstallationView: View {
                 self.hostingWindow = window
                 window.styleMask.remove(NSWindow.StyleMask.resizable)
                 
-                if self.windowHandler == nil {
-                    let handler = UniversalWindowHandler(
-                        shouldClose: {
-                            return self.isCancelled
-                        },
-                        onCleanup: {
-                            self.performEmergencyCleanupIfNeeded(tempURL: tempWorkURL)
-                        }
-                    )
-                    window.delegate = handler
-                    self.windowHandler = handler
-                }
+                AppWindowCloseGuard.shared.install(on: window)
+                AppWindowCloseGuard.shared.setBeforeAllowedClose(nil)
             }
         )
         .background(
@@ -667,33 +659,5 @@ struct WindowAccessor_Universal: NSViewRepresentable {
     class Coordinator {
         let callback: (NSWindow) -> Void
         init(callback: @escaping (NSWindow) -> Void) { self.callback = callback }
-    }
-}
-
-class UniversalWindowHandler: NSObject, NSWindowDelegate {
-    let shouldClose: () -> Bool
-    let onCleanup: () -> Void
-    init(shouldClose: @escaping () -> Bool, onCleanup: @escaping () -> Void) {
-        self.shouldClose = shouldClose
-        self.onCleanup = onCleanup
-    }
-    func windowShouldClose(_ sender: NSWindow) -> Bool {
-        if shouldClose() {
-            onCleanup()
-            return true
-        }
-        let alert = NSAlert()
-        alert.icon = NSApp.applicationIconImage
-        alert.alertStyle = .warning
-        alert.messageText = String(localized: "UWAGA!")
-        alert.informativeText = String(localized: "Czy na pewno chcesz przerwać pracę?")
-        alert.addButton(withTitle: String(localized: "Nie"))
-        alert.addButton(withTitle: String(localized: "Tak"))
-        let response = alert.runModal()
-        if response == .alertSecondButtonReturn {
-            onCleanup()
-            NSApplication.shared.terminate(nil)
-            return true
-        } else { return false }
     }
 }

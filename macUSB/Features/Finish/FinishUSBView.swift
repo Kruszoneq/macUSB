@@ -552,6 +552,10 @@ struct FinishUSBView: View {
     // --- LOGIKA ---
     func performCleanupWithDelay() {
         isCleaning = true
+        let cleanupToken = AppActiveOperationRegistry.shared.begin(
+            kind: .cleanup,
+            context: "finish_screen_cleanup"
+        )
         DispatchQueue.global(qos: .userInitiated).async {
             var success = true
             var errorMsg: String? = nil
@@ -611,6 +615,7 @@ struct FinishUSBView: View {
                     self.completionDurationText = durationText
                     self.isCleaning = false
                 }
+                cleanupToken.finish()
             }
         }
     }

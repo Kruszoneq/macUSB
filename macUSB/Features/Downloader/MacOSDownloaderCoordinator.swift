@@ -7,6 +7,7 @@ final class MacOSDownloaderWindowManager {
     private let downloaderWindowHeight: CGFloat = 650
 
     private var sheetWindow: NSWindow?
+    private var operationToken: AppActiveOperationToken?
     private var hasPresentedUnrecognizedLocalInstallerAlert = false
 
     private init() {}
@@ -42,6 +43,7 @@ final class MacOSDownloaderWindowManager {
         }
 
         let sheetContentHeight = downloaderWindowHeight
+        MenuState.shared.lockLanguageChanges(reason: "downloader_opened")
 
         let contentView = MacOSDownloaderWindowShellView(contentHeight: sheetContentHeight) { [weak self] in
             self?.close()
@@ -62,6 +64,10 @@ final class MacOSDownloaderWindowManager {
         window.center()
 
         sheetWindow = window
+        operationToken = AppActiveOperationRegistry.shared.begin(
+            kind: .downloader,
+            context: "macos_downloader_window"
+        )
         parentWindow.beginSheet(window)
 
         AppLogging.info(
@@ -81,6 +87,8 @@ final class MacOSDownloaderWindowManager {
         }
 
         sheetWindow = nil
+        operationToken?.finish()
+        operationToken = nil
         NSApp.activate(ignoringOtherApps: true)
 
         AppLogging.info(

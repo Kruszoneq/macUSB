@@ -125,6 +125,9 @@ Contract invariants:
 ### Single Active Task Invariant
 - Helper executes only one privileged task at a time across USB workflow, downloader assembly, downloader cleanup, and Rosetta installation requests.
 - If another task is already active, the new request is rejected with conflict semantics and must be retried by app-side flow when appropriate.
+- App-side active-operation tracking covers accepted USB workflow IDs, accepted downloader assembly IDs, downloader cleanup requests, and Rosetta installation requests.
+- Health checks, capability queries, normal ensure-ready checks, and status reads do not create standalone helper-activity tokens.
+- Helper activity ends on the final result, a terminal request error, result decode failure, or XPC invalidation; cancellation acknowledgement alone does not end USB helper activity.
 
 ### Ensure-Ready Flow
 - Entry point: `HelperServiceManager` ensure-ready path.
@@ -139,6 +142,7 @@ Contract invariants:
 - If fingerprint changed, or no previous fingerprint exists (upgrade from older app versions), app runs automatic full helper repair in background.
 - Successful automatic repair updates stored fingerprint, remains visible in logs, and shows a short in-app toast at the bottom of the main window.
 - Failed automatic repair presents one warning `NSAlert` with guidance to run `Tools → Repair helper` manually.
+- Automatic and manual full repair own a repair token from the start of unregister through the final registration health check.
 
 ### Hard-Repair Flow
 - Triggered from Tools menu repair action.
@@ -199,6 +203,8 @@ App-side helper integration:
   - app-side helper code-signing requirement, trust-failure diagnostics, and user-facing trust-failure text.
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift`
   - XPC connection handling, app-side helper trust requirement setup, and app-facing helper calls.
+- `macUSB/Shared/Services/Helper/PrivilegedOperationClientActivity.swift`
+  - app-side lifecycle tokens for accepted long-running USB and downloader helper tasks.
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClientCapabilities.swift`
   - bounded helper capability query for the Windows BIOS preflight.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift`

@@ -50,6 +50,8 @@ Current production scope:
 - Discovery runs on entering downloader window, not at app startup.
 - Downloader UI must remain stylistically aligned with app design system.
 - Final cleanup stage must be explicit and ordered as the last stage before summary.
+- The downloader window is a protected operation from presentation until full close, regardless of discovery, download, failure, cancellation, or summary state.
+- Opening the downloader locks language changes for the current main flow.
 
 ---
 
@@ -219,6 +221,11 @@ Helper responsibilities in downloader flow:
 - build installer `.app` from Yosemite/El Capitan/Sierra `.dmg` by running Apple `installer` with `CM_BUILD=CM_BUILD` on helper-owned staging volume,
 - perform final privileged cleanup of session temp directory.
 
+App-side operation tracking:
+- accepted assembly workflow IDs own a long-helper token through final result or XPC invalidation,
+- final and fallback cleanup own cleanup tokens,
+- privileged final cleanup also owns a nested long-helper token.
+
 ---
 
 ## 9. UI Contract
@@ -228,6 +235,7 @@ Window:
 - app-like liquid/glass-compatible surfaces and tokens.
 - can be opened from `Tools -> Pobierz instalator macOS...` and from the analysis screen button `Pobierz`.
 - opening is blocked while USB creation flow is in operation screens (`UniversalInstallationView`, `CreationProgressView`, `FinishUSBView`), and the Tools menu item is disabled in those stages.
+- the window-level active-operation token remains held across list, process, failure, cancellation, and summary UI until the window is fully closed.
 
 List screen:
 - grouped families,

@@ -35,7 +35,6 @@ struct SystemAnalysisView: View {
     @State private var navigateToInstall: Bool = false
     @State private var isDragTargeted: Bool = false
     @State private var checksumSheetPresentation: AnalysisChecksumSheetPresentation?
-    @State private var analysisWindowHandler: AnalysisWindowHandler?
     @State private var hostingWindow: NSWindow? = nil
     @State private var lastAPFSAlertedDriveURL: URL? = nil
     
@@ -547,18 +546,11 @@ struct SystemAnalysisView: View {
 
     private var windowAccessorBackground: some View {
         WindowAccessor_System { window in
-            if let existingHandler = window.delegate as? AnalysisWindowHandler {
-                self.analysisWindowHandler = existingHandler
-            } else {
-                let handler = AnalysisWindowHandler(
-                    onCleanup: {
-                        if let path = self.logic.mountedDMGPath {
-                            let task = Process(); task.launchPath = "/usr/bin/hdiutil"; task.arguments = ["detach", path, "-force"]; try? task.run(); task.waitUntilExit()
-                        }
-                    }
-                )
-                window.delegate = handler
-                self.analysisWindowHandler = handler
+            AppWindowCloseGuard.shared.install(on: window)
+            AppWindowCloseGuard.shared.setBeforeAllowedClose {
+                if let path = self.logic.mountedDMGPath {
+                    let task = Process(); task.launchPath = "/usr/bin/hdiutil"; task.arguments = ["detach", path, "-force"]; try? task.run(); task.waitUntilExit()
+                }
             }
             self.hostingWindow = window
         }
@@ -728,6 +720,7 @@ struct SystemAnalysisView: View {
                 }
                 .onDisappear {
                     MenuState.shared.rawLinuxImageSelectionEnabled = false
+                    AppWindowCloseGuard.shared.setBeforeAllowedClose(nil)
                 }
         )
     }
@@ -985,8 +978,4 @@ struct WindowAccessor_System: NSViewRepresentable {
     func updateNSView(_ nsView: NSView, context: Context) {}
     func makeCoordinator() -> Coordinator { Coordinator(callback: callback) }
     class Coordinator { let callback: (NSWindow) -> Void; init(callback: @escaping (NSWindow) -> Void) { self.callback = callback } }
-}
-class AnalysisWindowHandler: NSObject, NSWindowDelegate {
-    let onCleanup: () -> Void; init(onCleanup: @escaping () -> Void) { self.onCleanup = onCleanup }
-    func windowShouldClose(_ sender: NSWindow) -> Bool { onCleanup(); return true }
 }

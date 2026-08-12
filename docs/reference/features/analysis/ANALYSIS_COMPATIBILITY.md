@@ -19,6 +19,8 @@ Windows-specific behavior details are documented in:
 Analysis flags are the source of truth for workflow branch selection.
 Unsupported detection outcomes must be clearly surfaced and must block unsupported paths.
 
+Analysis owns a protected-operation token whenever `isAnalyzing` is active. The token covers supported, unsupported, failure, already-mounted-source, and global-timeout outcomes. Manual SHA-256 calculation uses a separate analysis token until completion, cancellation, failure, or sheet teardown. Starting analysis or applying a manual analysis override locks language changes for the current flow.
+
 For selected macOS `.app` sources and macOS `.app` bundles found inside mounted `.dmg`, `.iso`, and `.cdr` sources:
 
 - analysis must read installer metadata from `Contents/Info.plist`,

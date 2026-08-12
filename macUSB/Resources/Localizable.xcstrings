@@ -4125,6 +4125,252 @@
         }
       }
     },
+    "app.termination.active.confirm" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In macUSB bleiben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stay in macUSB"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permanecer en macUSB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rester dans macUSB"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rimani in macUSB"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSBを使い続ける"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pozostań w aplikacji"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permanecer no macUSB"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Остаться в macUSB"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB’de kal"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Залишитися в macUSB"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiếp tục dùng macUSB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "留在 macUSB"
+          }
+        }
+      }
+    },
+    "app.termination.active.message" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB führt gerade einen Vorgang aus, der nicht sicher unterbrochen werden kann. Warten Sie, bis der aktuelle Vorgang abgeschlossen ist, und versuchen Sie dann erneut, die App zu beenden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB is performing an operation that can’t be safely interrupted. Wait for the current work to finish, then try quitting the app again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB está realizando una operación que no se puede interrumpir de forma segura. Espera a que termine la tarea actual e intenta cerrar la app de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB effectue actuellement une opération qui ne peut pas être interrompue en toute sécurité. Attendez la fin de l’opération en cours, puis essayez à nouveau de quitter l’app."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB sta eseguendo un’operazione che non può essere interrotta in sicurezza. Attendi il completamento dell’operazione in corso, quindi prova di nuovo a chiudere l’app."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSBは現在、安全に中断できない操作を実行しています。処理が完了してから、もう一度アプリを終了してください。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB wykonuje operację, której nie można bezpiecznie przerwać. Poczekaj na zakończenie bieżącej pracy, a następnie spróbuj ponownie zamknąć aplikację."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O macUSB está executando uma operação que não pode ser interrompida com segurança. Aguarde a conclusão do trabalho atual e tente encerrar o app novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB выполняет операцию, которую нельзя безопасно прервать. Дождитесь завершения текущей работы, затем снова попробуйте завершить работу приложения."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB şu anda güvenli bir şekilde kesintiye uğratılamayacak bir işlem yürütüyor. Mevcut işin tamamlanmasını bekleyin, ardından uygulamadan çıkmayı yeniden deneyin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB виконує операцію, яку не можна безпечно перервати. Дочекайтеся завершення поточної роботи, а потім знову спробуйте завершити роботу програми."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB đang thực hiện một tác vụ không thể dừng một cách an toàn. Hãy chờ tác vụ hiện tại hoàn tất, sau đó thử thoát ứng dụng lần nữa."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB 正在执行一项无法安全中断的操作。请等待当前工作完成，然后再次尝试退出 App。"
+          }
+        }
+      }
+    },
+    "app.termination.active.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB kann derzeit nicht beendet werden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB can’t quit right now"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede cerrar macUSB ahora"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de quitter macUSB pour le moment"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile chiudere macUSB adesso"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在macUSBを終了できません"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie można teraz zamknąć macUSB"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não é possível encerrar o macUSB agora"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сейчас невозможно завершить работу macUSB"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB şu anda kapatılamıyor"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зараз неможливо завершити роботу macUSB"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hiện không thể thoát macUSB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "现在无法退出 macUSB"
+          }
+        }
+      }
+    },
     "app.toast.helper_auto_update.completed.message" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -7302,6 +7548,7 @@
       }
     },
     "Czy na pewno chcesz przerwać pracę?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -24874,6 +25121,7 @@
       }
     },
     "Lokalizacja aplikacji: poza /Applications" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

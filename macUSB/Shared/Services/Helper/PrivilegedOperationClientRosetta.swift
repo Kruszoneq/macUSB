@@ -4,6 +4,10 @@ extension PrivilegedOperationClient {
     func installRosetta(
         completion: @escaping (Result<RosettaInstallationResultPayload, Error>) -> Void
     ) {
+        let activityToken = AppActiveOperationRegistry.shared.begin(
+            kind: .helperActivity,
+            context: "helper_rosetta_installation"
+        )
         let stateLock = NSLock()
         var didFinish = false
         let finishOnce: (Result<RosettaInstallationResultPayload, Error>) -> Void = { result in
@@ -12,6 +16,7 @@ extension PrivilegedOperationClient {
             didFinish = true
             stateLock.unlock()
             guard shouldFinish else { return }
+            activityToken.finish()
             DispatchQueue.main.async {
                 completion(result)
             }

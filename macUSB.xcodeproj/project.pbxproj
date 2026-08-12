@@ -178,6 +178,7 @@
 				Features/Analysis/Logic/AnalysisLogicFileSelection.swift,
 				Features/Analysis/Logic/AnalysisLogicSourceCapacityPolicy.swift,
 				Features/Analysis/Logic/AnalysisLogicUsbDrives.swift,
+				Features/Analysis/Logic/AnalysisOperationActivity.swift,
 				Features/Analysis/Logic/Linux/AnalysisLogicLinuxArchitecture.swift,
 				Features/Analysis/Logic/Linux/AnalysisLogicLinuxArchiveReader.swift,
 				Features/Analysis/Logic/Linux/AnalysisLogicLinuxClassification.swift,
@@ -247,6 +248,7 @@
 				Features/Installation/CreationProgressView.swift,
 				Features/Installation/CreatorHelperLogic.swift,
 				Features/Installation/CreatorLogic.swift,
+				Features/Installation/CreatorOperationActivity.swift,
 				Features/Installation/Linux/CreationProgressLinuxMapping.swift,
 				Features/Installation/Linux/CreatorLinuxHelperLogic.swift,
 				Features/Installation/Linux/CreatorLinuxLogic.swift,
@@ -296,6 +298,10 @@
 				Resources/Localizable.xcstrings,
 				Shared/Localization/HelperWorkflowLocalizationKeys.swift,
 				Shared/Models/Models.swift,
+				Shared/Services/AppActiveOperationRegistry.swift,
+				Shared/Services/AppTerminationCleanup.swift,
+				Shared/Services/AppTerminationCoordinator.swift,
+				Shared/Services/AppWindowCloseGuard.swift,
 				Shared/Services/FullDiskAccessPermissionManager.swift,
 				Shared/Services/FullDiskAccessProbe.swift,
 				Shared/Services/FullDiskAccessTypes.swift,
@@ -310,6 +316,7 @@
 				Shared/Services/Helper/HelperService/HelperServiceStatusUI.swift,
 				Shared/Services/Helper/HelperServiceManager.swift,
 				Shared/Services/Helper/PrivilegedOperationClient.swift,
+				Shared/Services/Helper/PrivilegedOperationClientActivity.swift,
 				Shared/Services/Helper/PrivilegedOperationClientCapabilities.swift,
 				Shared/Services/Helper/PrivilegedOperationClientRosetta.swift,
 				Shared/Services/InstallerSourceImageUnmountRegistry.swift,
@@ -990,7 +997,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 42;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -1013,7 +1020,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.4;
+				MARKETING_VERSION = 2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1046,7 +1053,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 42;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -1069,7 +1076,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.4;
+				MARKETING_VERSION = 2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kruszoneq.macUSB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -10,6 +10,7 @@ extension AnalysisLogic {
             logError("Nie można wymusić rozpoznania Linux (.img) dla .\(standardizedURL.pathExtension.lowercased()).")
             return
         }
+        MenuState.shared.lockLanguageChanges(reason: "raw_linux_selection")
 
         InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
             path: standardizedURL.path,
