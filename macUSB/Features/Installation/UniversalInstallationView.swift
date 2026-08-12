@@ -84,6 +84,7 @@ struct UniversalInstallationView: View {
     @State var windowsMacUSBootPreflightInProgress: Bool = false
     @State var macOSRosettaState: CreatorMacOSRosettaState? = nil
     @State var macOSRosettaRetryGeneration: UUID? = nil
+    @State var macOSRosettaOperationToken: AppActiveOperationToken?
     
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
