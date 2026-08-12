@@ -51,6 +51,9 @@ The script injects:
 - Support link:
   - label `Support macUSB`
   - target `https://www.buymeacoffee.com/kruszoneq`
+  - matches the hero action dimensions, centered icon-label layout, and `10px` icon gap
+  - transitions to Buy Me a Coffee yellow (`#FFDD00`) on hover and runs the two-second coffee-to-smile-to-coffee icon cycle
+  - expands to full width on mobile and keeps the coffee icon static when reduced motion is requested
 - Latest release placeholder element:
   - `data-latest-version`
   - default text `Latest release`

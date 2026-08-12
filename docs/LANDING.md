@@ -18,12 +18,13 @@ This document describes the actual structure, content, and behavior of `index.ht
 
 1. Hero
 - Product: `macUSB`
-- Primary line: `Download. Flash. Boot.`
-- Secondary line: `The all-in-one bootable USB creator for Mac`
+- Subtitle: `The all-in-one bootable USB creator for Mac`
 - Actions:
   - `Download for macOS` (GitHub releases)
   - `Download via Homebrew` (reveals command panel)
   - `Support macUSB`
+- Action layout: all three buttons use equal dimensions based on the primary download CTA, with each icon-label group centered and consistently spaced; on mobile, they expand to the full action-row width.
+- Support hover: hero and footer buttons transition smoothly to and from Buy Me a Coffee yellow (`#FFDD00`) while their coffee icons transition to a smile and back over two seconds; reduced-motion mode suppresses the icon animation.
 - Utility text:
   - latest release label (`data-latest-version`)
   - requirement: `Requires macOS 14.6 or newer`

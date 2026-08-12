@@ -46,6 +46,8 @@ It describes how interfaces should look and behave, not what exact marketing cop
 - `card-button` is secondary action style.
 - `support-button` is tertiary/support action and must remain visually lower priority than primary CTA.
 - Action groups should be visually ordered by priority.
+- Hero action buttons use equal dimensions based on the primary download CTA, center each icon-label group with consistent spacing, and expand to the available width on mobile.
+- Hero and footer support actions transition smoothly to and from Buy Me a Coffee yellow (`#FFDD00`) on hover and run a single two-second coffee-to-smile-to-coffee icon cycle; reduced-motion mode keeps the coffee icon static.
 
 ## Section Presentation Rules
 
@@ -77,6 +79,7 @@ It describes how interfaces should look and behave, not what exact marketing cop
 
 - Navbar and footer are shared partials and must not be duplicated per page.
 - Shared chrome should remain visually consistent across pages.
+- Footer action buttons match the hero action dimensions, content centering, icon spacing, and responsive full-width behavior.
 - Any visual changes to shared chrome must be reflected in `docs/PARTIALS.md` and this file.
 
 Note: This document was originally derived from the previous Cal-based DESIGN.md and then adapted to the current macUSB website.

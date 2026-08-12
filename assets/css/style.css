@@ -21,6 +21,7 @@
   --color-on-dark-soft: #a1a1aa;
   --color-focus: rgba(59, 130, 246, 0.35);
   --color-surface-strong-hover: #d1d5db;
+  --color-buy-me-a-coffee: #ffdd00;
 
   --space-xxs: 4px;
   --space-xs: 8px;
@@ -684,6 +685,16 @@ body.scrolled .logo {
   justify-content: center;
 }
 
+.hero-intro .cta-row > .cta-button,
+.hero-intro .cta-row > .card-button,
+.hero-intro .cta-row > .support-button {
+  box-sizing: border-box;
+  width: 210px;
+  min-height: 46px;
+  justify-content: center;
+  gap: 10px;
+}
+
 body.intro-loading .hero-intro .hero-icon,
 body.intro-loading .hero-intro h1,
 body.intro-loading .hero-intro .subtitle,
@@ -760,15 +771,6 @@ h1 {
   max-width: 54ch;
 }
 
-.intro-line-primary,
-.intro-line-secondary {
-  display: block;
-}
-
-.intro-line-primary {
-  white-space: nowrap;
-}
-
 .cta-container {
   margin-top: 28px;
   display: flex;
@@ -835,6 +837,65 @@ h1 {
   width: 16px;
   height: 16px;
   flex: 0 0 auto;
+}
+
+.hero-intro .support-button:hover {
+  border-color: var(--color-buy-me-a-coffee);
+  background: var(--color-buy-me-a-coffee);
+  color: #111111;
+}
+
+.hero-intro .support-button,
+footer .support-button {
+  transition:
+    transform 0.2s ease,
+    background-color 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.4s ease;
+}
+
+.support-icon-coffee,
+.support-icon-smile {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.support-icon-smile {
+  opacity: 0;
+}
+
+.support-button:hover .support-icon-coffee {
+  animation: support-coffee-cycle 2s ease-in-out;
+}
+
+.support-button:hover .support-icon-smile {
+  animation: support-smile-cycle 2s ease-in-out;
+}
+
+@keyframes support-coffee-cycle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  35%,
+  65% {
+    opacity: 0;
+    transform: scale(0.72) rotate(-8deg);
+  }
+}
+
+@keyframes support-smile-cycle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.72) rotate(8deg);
+  }
+  35%,
+  65% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
 }
 
 .version-info {
@@ -1211,6 +1272,15 @@ footer a {
   margin-bottom: 16px;
 }
 
+.footer-actions > .cta-button,
+.footer-actions > .support-button {
+  box-sizing: border-box;
+  width: 210px;
+  min-height: 46px;
+  justify-content: center;
+  gap: 10px;
+}
+
 .footer-version-info {
   display: block;
   margin-bottom: 12px;
@@ -1230,7 +1300,9 @@ footer .support-button {
 }
 
 footer .support-button:hover {
-  background: #222222;
+  border-color: var(--color-buy-me-a-coffee);
+  background: var(--color-buy-me-a-coffee);
+  color: #111111;
 }
 
 footer .cta-button {
@@ -1364,6 +1436,17 @@ footer .cta-button:hover {
   .support-button {
     width: 100%;
     justify-content: center;
+  }
+
+  .hero-intro .cta-row > .cta-button,
+  .hero-intro .cta-row > .card-button,
+  .hero-intro .cta-row > .support-button {
+    width: 100%;
+  }
+
+  .footer-actions > .cta-button,
+  .footer-actions > .support-button {
+    width: 100%;
   }
 
   .brew-command-panel {
