@@ -265,17 +265,12 @@ struct SystemAnalysisView: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Wymagania").font(.headline).foregroundColor(.primary)
                     VStack(alignment: .leading, spacing: 3) {
-                        if logic.isRawImageSelection {
-                            Text("• Dozwolone formaty plików to .iso oraz .img")
-                            Text("• Zawartość obrazu nie będzie analizowana")
-                        } else {
-                            Text("• Wybrany plik musi zawierać instalator macOS, Windows lub Linux")
-                            Text("• Dozwolone formaty plików to .dmg, .iso, .cdr oraz .app")
-                            if isMacOSFlowDetected {
-                                Text("• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym")
-                            }
-                            Text("• Brak instalatora? Użyj przycisku „Pobierz”")
+                        Text("• Wybrany plik musi zawierać instalator macOS, Windows lub Linux")
+                        Text("• Dozwolone formaty plików to .dmg, .iso, .cdr oraz .app")
+                        if isMacOSFlowDetected {
+                            Text("• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym")
                         }
+                        Text("• Brak instalatora? Użyj przycisku „Pobierz”")
                     }
                     .font(.subheadline).foregroundColor(.secondary)
                 }
