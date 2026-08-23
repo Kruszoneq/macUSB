@@ -87,7 +87,7 @@ extension HelperWorkflowExecutor {
             titleKey: stage.titleKey,
             percent: latestPercent,
             statusKey: stage.statusKey,
-            logLine: "Windows target prepared: disk=\(wholeDisk), partition=\(target.partitionBSDName), label=\(request.targetLabel), mountPath=\(target.mountPath), volumeUUID=\(target.volumeUUID ?? "none")",
+            logLine: "Windows target prepared: disk=\(wholeDisk), partition=\(target.partitionBSDName), label=\(request.targetLabel), mountPath=\(target.mountPath), volumeUUID=\(target.volumeUUID)",
             shouldAdvancePercent: false
         )
     }

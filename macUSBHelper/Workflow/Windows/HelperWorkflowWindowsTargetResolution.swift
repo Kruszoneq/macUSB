@@ -4,14 +4,14 @@ struct WindowsTargetVolumeResolution {
     let wholeDiskBSDName: String
     let partitionBSDName: String
     let mountPath: String
-    let volumeUUID: String?
+    let volumeUUID: String
 }
 
 private struct WindowsTargetPartitionState {
     let wholeDiskBSDName: String
     let partitionBSDName: String
     let mountPath: String?
-    let volumeUUID: String?
+    let volumeUUID: String
 }
 
 extension HelperWorkflowExecutor {
@@ -117,7 +117,7 @@ extension HelperWorkflowExecutor {
             titleKey: stage.titleKey,
             percent: latestPercent,
             statusKey: stage.statusKey,
-            logLine: "Windows target path refreshed: disk=\(wholeDisk), partition=\(target.partitionBSDName), mountPath=\(target.mountPath), volumeUUID=\(target.volumeUUID ?? "none")",
+            logLine: "Windows target path refreshed: disk=\(wholeDisk), partition=\(target.partitionBSDName), mountPath=\(target.mountPath), volumeUUID=\(target.volumeUUID)",
             shouldAdvancePercent: false
         )
         return target.mountPath
@@ -144,12 +144,15 @@ extension HelperWorkflowExecutor {
             }
 
             let mountPath = (info["MountPoint"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
-            let volumeUUID = (info["VolumeUUID"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard let volumeUUID = (info["VolumeUUID"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !volumeUUID.isEmpty else {
+                return nil
+            }
             return WindowsTargetPartitionState(
                 wholeDiskBSDName: parentWholeDisk,
                 partitionBSDName: resolvedPartition,
                 mountPath: mountPath?.isEmpty == false ? mountPath : nil,
-                volumeUUID: volumeUUID?.isEmpty == false ? volumeUUID : nil
+                volumeUUID: volumeUUID
             )
         }
     }
@@ -178,7 +181,10 @@ extension HelperWorkflowExecutor {
             return nil
         }
 
-        let volumeUUID = (info["VolumeUUID"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let volumeUUID = (info["VolumeUUID"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !volumeUUID.isEmpty else {
+            return nil
+        }
         if let expectedVolumeUUID,
            volumeUUID != expectedVolumeUUID {
             return nil
@@ -188,7 +194,7 @@ extension HelperWorkflowExecutor {
             wholeDiskBSDName: parentWholeDisk,
             partitionBSDName: partitionBSDName,
             mountPath: resolvedMountPath,
-            volumeUUID: volumeUUID?.isEmpty == false ? volumeUUID : nil
+            volumeUUID: volumeUUID
         )
     }
 
