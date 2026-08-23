@@ -33,7 +33,7 @@ Before implementation, recommendations, or review:
 - Runtime reference index: `docs/reference/README.md`
 - Downloader runtime reference: `docs/reference/features/downloader/DOWNLOADER.md`
 - Helper runtime reference: `docs/reference/features/helper/HELPER.md`
-- Release notes: `docs/CHANGELOG.md`
+- Existing release history (read-only for agents): `docs/CHANGELOG.md`
 - Agent process rules: `docs/AGENTS.md`
 
 ## Critical runtime invariants (must preserve)
@@ -164,8 +164,8 @@ Use this sequence unless the user explicitly requests a narrower scope that does
 3. Implement the required change.
 4. Validate behavior (project policy in this file applies).
 5. Update documentation in `docs/reference/` when behavior, contracts, or workflows changed.
-6. Update release notes in `docs/CHANGELOG.md` only when the user explicitly asks for changelog edits.
-7. Prepare commit message and commit scope according to commit rules in this file.
+6. When the user explicitly requests a changelog, prepare Polish and English versions and provide them in the response without editing `docs/CHANGELOG.md`.
+7. Follow the commit cadence defined in the implementation plan. For unplanned but genuinely staged work, announce each stage-ending commit before creating it. For ordinary small changes, do not create commits automatically; suggest one after implementation instead.
 
 ## Definition of done
 
@@ -175,9 +175,9 @@ A change is done when all applicable conditions are met:
 - Requested behavior is implemented.
 - Validation was run (or explicitly reported if not possible).
 - relevant file(s) in `docs/reference/` reflect current behavior when relevant.
-- `docs/CHANGELOG.md` is updated only when the user explicitly asks for changelog edits.
+- Requested changelog text is delivered in Polish and English in the response, without editing `docs/CHANGELOG.md`.
 - No stale documentation links remain.
-- Commit content and message follow this file.
+- Commits listed in an implementation plan and announced commits for genuinely staged work are created at the applicable stages. Ordinary small changes receive a commit suggestion instead, and all commits actually created are included in the post-implementation report.
 
 ## Validation policy (project-specific)
 
@@ -203,9 +203,9 @@ Use these rules to decide required documentation updates:
 - Code or runtime behavior changed:
   - update relevant file(s) from `docs/reference/README.md`.
 - User-facing behavior changed and should appear in release notes:
-  - update `docs/CHANGELOG.md` only when the user explicitly asks for changelog edits.
+  - prepare a bilingual Polish and English changelog entry only when the user explicitly requests it, and provide it in the response without editing `docs/CHANGELOG.md`.
 - Internal-only refactor with no user-facing impact:
-  - changelog update is optional.
+  - no changelog entry is needed unless the user explicitly requests one.
 - Documentation-only change:
   - update only affected docs and keep cross-references consistent.
 
@@ -234,7 +234,7 @@ Minor helper changes that do not alter behavior may proceed, but must still be r
 
 - The root `README.md` is protected documentation and must never be edited automatically, including as part of a general documentation update. Any README change requires a separate explicit user request that names `README.md` as in scope.
 - If runtime behavior changed, update relevant file(s) from `docs/reference/README.md`.
-- If release-relevant user-facing behavior changed, update `docs/CHANGELOG.md` only when the user explicitly asks for changelog edits.
+- Do not edit `docs/CHANGELOG.md`. When the user explicitly requests a changelog, provide its Polish and English versions in the response only.
 - Keep process rules only in `docs/AGENTS.md`.
 - Keep app behavior and technical reference only in `docs/reference/`.
 - Avoid duplicating the same rule in multiple files.
@@ -323,31 +323,31 @@ When branch creation is requested:
 
 ### Commit scope rules
 
-- Commit changes comprehensively (include all modified project files) by default.
-- Exceptions to comprehensive commits:
-  - user explicitly requests a narrower commit scope, or
-  - modified files appear to be build artifacts/temporary/unnecessary outputs (for example Xcode build products).
+- Create commits automatically only when they are included in an implementation plan or when the implementation is genuinely divided into distinct stages.
+- When preparing an implementation plan, include the expected commits, their thematic scopes, and the stages after which they will be created.
+- For genuinely staged work without a planned commit, inform the user before creating each stage-ending commit.
+- For ordinary small changes, do not create a commit automatically; suggest an appropriate thematic commit after implementation.
+- An explicit user request may authorize a commit regardless of the automatic commit conditions above.
+- Each commit must comprehensively include the project files belonging to its completed stage without mixing unrelated stages or unrelated user changes.
+- A user may explicitly request a different commit scope or cadence.
 - In artifact/temporary-output cases, explicitly report those files before committing and ask the user what to do.
 
-### Commit approval gate (mandatory)
+### Commit and push approval rules
 
-- Before creating a commit, present the proposed commit title and commit body to the user for approval.
-- Do not run `git commit` until explicit user approval is given.
-- If the user requests wording changes, update the proposal and request approval again.
+- Local commits that remain unpushed do not require user approval before creation.
+- Do not push commits automatically after implementation.
+- Push commits only when the user explicitly requests it.
+- Before pushing, present all commits to be pushed, including their titles and bodies, for user approval. If the user requests wording changes, amend the proposal and request approval again.
 
-### Post-commit push rule (mandatory)
+### Post-implementation commit reporting rules
 
-- After a commit is created, push it immediately to the corresponding remote branch.
-- If no upstream is configured, set upstream while pushing (for example `git push -u origin <branch>`).
-- If push fails, report the blocker and stop follow-up remote operations until user direction is provided.
-
-### Post-commit reporting rules
-
-- After creating a commit, the agent must report:
+- After implementation, report every commit created during the work, including:
   - commit hash,
   - scope of committed files,
   - commit title and commit body/description,
+  - whether the commit was pushed,
   - whether the working tree is clean (`git status --short` has no output).
+- If an ordinary small change was not committed, suggest a commit title and body in the post-implementation report.
 
 ## PR rules
 
@@ -360,9 +360,12 @@ When branch creation is requested:
 ### PR description rules
 
 - Write PR descriptions in English.
-- Start with one clear, expanded paragraph explaining what changed and why.
-- If useful, add a short flat list of new features and/or fixes.
+- Keep the description short and concise.
+- Include only changes and additions that are actually present in the PR.
+- Write the description as sentences, without feature or fix lists.
+- Do not pad the description with unchanged-behavior clauses using wording such as `preserving` or `while`.
 - Do not include testing information in the PR description.
+- Do not mention documentation or translation changes unless the PR contains only documentation or translation changes.
 - In PR title/description, omit explicit listing of debug-only functionality that is not present in Release builds.
 
 ### PR approval gate (mandatory)
@@ -393,15 +396,14 @@ When branch creation is requested:
 
 ### General rules
 
-- `CHANGELOG.md` should contain release entries only (no writing instructions).
-- Write changelogs in English.
-- `CHANGELOG.md` must never be edited automatically.
-- Changelog edits are allowed only on explicit user request.
-- Before applying changelog edits, present the proposed changelog text to the user for approval.
+- Do not prepare a changelog automatically after completing work; prepare it only when the user explicitly requests one.
+- Write every requested changelog in both Polish and English.
+- Provide both language versions directly in the response.
+- Never save agent-prepared changelog text to `docs/CHANGELOG.md`; the file remains read-only for agents.
 - Verify each entry against shipped behavior and relevant runtime reference files from `docs/reference/README.md`.
 - Keep wording concise and suitable for GitHub Releases.
 - Changes with only marginal product impact do not have to be listed in a release entry.
-- Small copy-only edits can be grouped under generic labels such as `Translation fixes` or general text fixes.
+- Small copy-only edits can be grouped under generic labels such as `Poprawki tłumaczeń` in Polish and `Translation fixes` in English, or equivalent general text-fix labels.
 - Changelog bullets must stay user-friendly and readable; avoid low-level technical jargon when the change was not significant.
 
 ### Release entry format
@@ -409,10 +411,10 @@ When branch creation is requested:
 - Release title must contain only the app version, for example:
   - `## v2.0`
   - `## v2.0.1`
-- Start each release with one short summary paragraph describing what the release focuses on.
+- In both language versions, start each release with one short summary paragraph describing what the release focuses on.
 - Keep the summary as one coherent paragraph.
 - After adding a new bullet for the currently developed version, update that version summary paragraph so it reflects the full accumulated update scope, with emphasis on newly introduced features and/or key improvements.
-- For major releases, the preferred section order is: `ADDED`, `CHANGES`, `IMPROVEMENTS`.
+- For major releases, the preferred section order is: `DODANO`, `ZMIANY`, `ULEPSZENIA` in Polish and `ADDED`, `CHANGES`, `IMPROVEMENTS` in English.
 - For hotfix/patch releases (for example `x.x.1`), sections are optional when change scope is small.
 - Section names are suggestions, not strict requirements; skip unnecessary sections and use better-fitting custom sections when needed.
 
@@ -422,7 +424,7 @@ When branch creation is requested:
 - Do not overdescribe implementation internals unless needed for release clarity.
 - Do not use file-based screen names (for example class/file names); describe screens functionally (for example selection screen, analysis screen, summary screen).
 - When behavior is conditional, state the condition clearly (for example permissions, toggles, runtime state).
-- Use consistent menu path formatting: `Options → ...`, `Help → ...`, `Tools → ...`.
+- Use consistent English menu path formatting in both Polish and English changelog entries: `Options → ...`, `Help → ...`, `Tools → ...`.
 - If a release change is one coherent topic, document it as one bullet; split into multiple bullets only when the release contains clearly separate user-facing topics.
 - Write every bullet as a simple, user-friendly summary suitable for GitHub Releases; avoid implementation details and deep technical breakdowns.
 
