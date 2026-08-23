@@ -32,6 +32,7 @@
 		A10000012F00000100000049 /* Workflow/Windows/HelperWorkflowWindowsStages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000004A /* Workflow/Windows/HelperWorkflowWindowsStages.swift */; };
 		A10000012F0000010000004B /* Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000004C /* Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift */; };
 		A10000012F0000010000004D /* Workflow/Windows/HelperWorkflowWindowsUnmountLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000004E /* Workflow/Windows/HelperWorkflowWindowsUnmountLogic.swift */; };
+		A10000012F0000010000005D /* Workflow/Windows/HelperWorkflowWindowsTargetResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F0000010000005E /* Workflow/Windows/HelperWorkflowWindowsTargetResolution.swift */; };
 		A10000012F0000010000004F /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000050 /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift */; };
 		A10000012F00000100000051 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000052 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift */; };
 		A10000012F00000100000053 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000054 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift */; };
@@ -137,6 +138,7 @@
 		A10000012F0000010000004A /* Workflow/Windows/HelperWorkflowWindowsStages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsStages.swift; sourceTree = "<group>"; };
 		A10000012F0000010000004C /* Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift; sourceTree = "<group>"; };
 		A10000012F0000010000004E /* Workflow/Windows/HelperWorkflowWindowsUnmountLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsUnmountLogic.swift; sourceTree = "<group>"; };
+		A10000012F0000010000005E /* Workflow/Windows/HelperWorkflowWindowsTargetResolution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsTargetResolution.swift; sourceTree = "<group>"; };
 		A10000012F00000100000050 /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift; sourceTree = "<group>"; };
 		A10000012F00000100000052 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift; sourceTree = "<group>"; };
 		A10000012F00000100000054 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift; sourceTree = "<group>"; };
@@ -555,6 +557,7 @@
 				A10000012F0000010000004A /* Workflow/Windows/HelperWorkflowWindowsStages.swift */,
 				A10000012F0000010000004C /* Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift */,
 				A10000012F0000010000004E /* Workflow/Windows/HelperWorkflowWindowsUnmountLogic.swift */,
+				A10000012F0000010000005E /* Workflow/Windows/HelperWorkflowWindowsTargetResolution.swift */,
 				A10000012F00000100000050 /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift */,
 				A10000012F00000100000052 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift */,
 				A10000012F00000100000054 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift */,
@@ -811,6 +814,7 @@
 				A10000012F00000100000049 /* Workflow/Windows/HelperWorkflowWindowsStages.swift in Sources */,
 				A10000012F0000010000004B /* Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift in Sources */,
 				A10000012F0000010000004D /* Workflow/Windows/HelperWorkflowWindowsUnmountLogic.swift in Sources */,
+				A10000012F0000010000005D /* Workflow/Windows/HelperWorkflowWindowsTargetResolution.swift in Sources */,
 				A10000012F0000010000004F /* Workflow/Windows/HelperWorkflowWindowsCopyProgressParsing.swift in Sources */,
 				A10000012F00000100000051 /* Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift in Sources */,
 				A10000012F00000100000053 /* Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift in Sources */,

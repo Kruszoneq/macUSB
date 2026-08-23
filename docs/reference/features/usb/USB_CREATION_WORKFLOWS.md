@@ -128,6 +128,7 @@ Windows summary pre-start prerequisites:
 - Windows automatic configuration may set `OOBE/HideWirelessSetupInOOBE` to `true` when Wi-Fi/network setup skip is enabled.
 - Windows automatic local-account creation writes both `Name` and `DisplayName` for `Microsoft-Windows-Shell-Setup/UserAccounts/LocalAccounts/LocalAccount`; `DisplayName` preserves the user-entered display name, while `Name` is generated without spaces or special characters and limited to 20 ASCII letters/digits.
 - Windows target format must be `MS-DOS (FAT32)` + `MBR`.
+- After formatting, the helper resolves the Windows target from the exact selected whole-disk identifier through `AllDisksAndPartitions`, validates the FAT32 child partition, its exact `ParentWholeDisk`, mount point, and volume UUID, and uses that verified mount point for copy, WIM split, answer-file generation, and media verification. The user-facing volume label must never be used to address the target path.
 - Windows target volume labels are selected from the detected family:
   - desktop: `WINXP-MU`, `WINVS-MU`, `WIN7-MU`, `WIN8-MU`, `WIN81-MU`, `WIN10-MU`, or `WIN11-MU`,
   - server: `SRV03-MU`, `SRV08-MU`, `SRV12-MU`, `SRV16-MU`, `SRV19-MU`, `SRV22-MU`, or `SRV25-MU`,
