@@ -114,7 +114,7 @@
 - `macUSBHelper/Service/*`
 - `macUSBHelper/Workflow/*`
 - `macUSBHelper/Workflow/Linux/*` — Linux raw-copy stage builder, parser, and disk ops.
-- `macUSBHelper/Workflow/Windows/*` — Windows ISO-copy stage builder, boot-mode-aware source/target validation, progress parsing, and verification.
+- `macUSBHelper/Workflow/Windows/*` — Windows ISO-copy stage builder, exact formatted-target partition and mount-point resolution, boot-mode-aware source/target validation, progress parsing, and verification.
 - `macUSBHelper/Workflow/Windows/MacUSBoot/*` — BIOS-only macUSBoot artifact validation, Disk Arbitration guard, raw-disk layout validation, transaction, disk operations, and orchestration.
 - `macUSBHelper/DownloaderAssembly/*`
 - `macUSBHelper/Rosetta/HelperRosettaInstaller.swift` — fixed-command, root-only Rosetta installer with bounded diagnostics.

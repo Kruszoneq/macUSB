@@ -168,6 +168,7 @@ Contract invariants:
 - Automatic local-account creation writes the generated local account `Name` separately from the user-facing `DisplayName`. The helper validates `Name` as non-empty ASCII letters/digits, max 20 characters, and not `NONE`; `DisplayName` is non-empty, max 256 characters, not `NONE`, and contains only letters, digits, and spaces.
 - Mac language/region transfer receives app-side validated Windows locale tags, writes `Microsoft-Windows-International-Core` in `oobeSystem`, and uses the language tag as `InputLocale` so Windows selects its default keyboard for that language.
 - Every Windows request must include `windowsBootMode`; the service rejects requests without it before creating an executor.
+- After Windows target formatting, helper resolves the FAT32 partition from the exact requested whole disk, mounts that partition by device identifier when needed, and validates its partition identifier, exact parent whole disk, mount point, and volume UUID before every target-writing or target-verification stage. Volume labels remain presentation metadata and are not target paths.
 - Windows media copy runs only the system-provided `/usr/bin/rsync` with explicit recursive/link/time preservation. The privileged helper does not execute user-managed Homebrew or MacPorts `rsync` binaries and does not request POSIX ownership metadata for the FAT32 target.
 - BIOS mode appends `windows_install_macusboot` after `windows_verify_media` and before cleanup. UEFI retains the existing stage graph.
 - The BIOS stage validates the pinned bundled artifact and the target MBR gap, installs StageTwo at LBA 1...5 before MBR boot code, synchronizes and reads back each write, then verifies the full protected range. It blocks Disk Arbitration auto-mounts, ignores cancellation while active, and performs exactly one final `mountDisk` attempt after releasing raw-device ownership.
@@ -262,6 +263,8 @@ Daemon helper runtime:
   - Windows `Autounattend.xml` configuration helpers, XML generation, and XML validation.
 - `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsBootValidation.swift`
   - boot-mode-aware, case-insensitive BIOS/UEFI source and target marker validation.
+- `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsTargetResolution.swift`
+  - exact whole-disk, FAT32 partition, mount-point, and volume-UUID resolution for the formatted Windows target.
 - `macUSBHelper/Workflow/Windows/MacUSBoot/*`
   - macUSBoot artifact/parser, MBR-gap validation, exclusive raw-device I/O, Disk Arbitration guard, diskutil operations, write transaction, and stage orchestration.
 - `macUSBHelper/DownloaderAssembly/DownloaderAssemblyExecutor.swift`
