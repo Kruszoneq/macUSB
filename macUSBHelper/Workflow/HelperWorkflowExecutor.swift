@@ -24,7 +24,9 @@ final class HelperWorkflowExecutor {
     var windowsShouldSplitWim = false
     var windowsHasInstallESD = false
     var windowsWimlibExecutablePath: String?
+    var windowsPreparedTargetPartitionBSDName: String?
     var windowsPreparedTargetVolumePath: String?
+    var windowsPreparedTargetVolumeUUID: String?
     var windowsCopyStageTotalBytes: Int64?
     var windowsRsyncProgressMode: String?
     var windowsLegacyRsyncCurrentFilePath: String?

@@ -194,7 +194,7 @@ extension HelperWorkflowExecutor {
             )
         }
 
-        let targetVolumePath = windowsPreparedTargetVolumePath ?? "/Volumes/\(request.targetLabel)"
+        let targetVolumePath = try requireWindowsPreparedTargetVolumePath(stage: stage)
         let relativeWimPath = windowsInstallWimRelativePath ?? "sources/install.wim"
         let sourcesSubdirectory = (relativeWimPath as NSString).deletingLastPathComponent
         let targetSplitPath = URL(fileURLWithPath: targetVolumePath)
@@ -233,31 +233,7 @@ extension HelperWorkflowExecutor {
     }
 
     private func ensureWindowsTargetMountPathForCopy(stage: WorkflowStage) throws -> String {
-        if let currentPath = windowsPreparedTargetVolumePath,
-           isWindowsMountedDirectoryUsable(currentPath) {
-            return currentPath
-        }
-
-        let wholeDisk = try extractWholeDiskName(from: request.targetBSDName)
-        guard let remountedPath = resolveMountedVolumePathForWholeDisk(wholeDisk),
-              isWindowsMountedDirectoryUsable(remountedPath) else {
-            throw HelperExecutionError.failed(
-                stage: stage.key,
-                exitCode: -1,
-                description: "Nie znaleziono zamontowanego woluminu docelowego USB przed kopiowaniem."
-            )
-        }
-
-        windowsPreparedTargetVolumePath = remountedPath
-        emitProgress(
-            stageKey: stage.key,
-            titleKey: stage.titleKey,
-            percent: latestPercent,
-            statusKey: stage.statusKey,
-            logLine: "Windows target path refreshed before copy: \(remountedPath)",
-            shouldAdvancePercent: false
-        )
-        return remountedPath
+        try requireWindowsPreparedTargetVolumePath(stage: stage)
     }
 
     private func isWindowsMountedDirectoryUsable(_ path: String) -> Bool {

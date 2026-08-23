@@ -77,19 +77,17 @@ extension HelperWorkflowExecutor {
         }
 
         try runWindowsFormatCommand(stage: stage, wholeDisk: wholeDisk)
-        let mountPath = try waitForWindowsTargetVolumeMountPath(
-            stage: stage,
-            wholeDisk: wholeDisk,
-            preferredVolumeName: request.targetLabel
-        )
-        windowsPreparedTargetVolumePath = mountPath
+        let target = try waitForWindowsTargetVolume(stage: stage, wholeDisk: wholeDisk)
+        windowsPreparedTargetPartitionBSDName = target.partitionBSDName
+        windowsPreparedTargetVolumePath = target.mountPath
+        windowsPreparedTargetVolumeUUID = target.volumeUUID
 
         emitProgress(
             stageKey: stage.key,
             titleKey: stage.titleKey,
             percent: latestPercent,
             statusKey: stage.statusKey,
-            logLine: "Windows target prepared: disk=\(wholeDisk), label=\(request.targetLabel), mountPath=\(mountPath)",
+            logLine: "Windows target prepared: disk=\(wholeDisk), partition=\(target.partitionBSDName), label=\(request.targetLabel), mountPath=\(target.mountPath), volumeUUID=\(target.volumeUUID ?? "none")",
             shouldAdvancePercent: false
         )
     }
@@ -205,90 +203,6 @@ extension HelperWorkflowExecutor {
             try throwIfCancelled()
             Thread.sleep(forTimeInterval: 0.1)
         }
-    }
-
-    private func waitForWindowsTargetVolumeMountPath(
-        stage: WorkflowStage,
-        wholeDisk: String,
-        preferredVolumeName: String
-    ) throws -> String {
-        let preferredMountPath = "/Volumes/\(preferredVolumeName)"
-
-        for _ in 0..<70 {
-            if let resolvedMountPath = resolveMountedVolumePathForWholeDisk(wholeDisk),
-               isExistingDirectory(atPath: resolvedMountPath) {
-                return resolvedMountPath
-            }
-
-            if isExistingDirectory(atPath: preferredMountPath),
-               isMountPathBackedByWholeDisk(preferredMountPath, wholeDisk: wholeDisk) {
-                return preferredMountPath
-            }
-            try throwIfCancelled()
-            Thread.sleep(forTimeInterval: 0.1)
-        }
-
-        throw HelperExecutionError.failed(
-            stage: stage.key,
-            exitCode: -1,
-            description: "Nie znaleziono zamontowanego woluminu USB po formatowaniu dla urządzenia \(wholeDisk)."
-        )
-    }
-
-    func resolveMountedVolumePathForWholeDisk(_ wholeDisk: String) -> String? {
-        guard let info = diskutilPlist(arguments: ["list", "-plist", "/dev/\(wholeDisk)"]),
-              let partitions = info["Partitions"] as? [[String: Any]] else {
-            return nil
-        }
-
-        for partition in partitions {
-            if let mountPoint = partition["MountPoint"] as? String,
-               !mountPoint.isEmpty {
-                return mountPoint
-            }
-        }
-        return nil
-    }
-
-    private func isMountPathBackedByWholeDisk(_ mountPath: String, wholeDisk: String) -> Bool {
-        guard let info = diskutilPlist(arguments: ["info", "-plist", mountPath]),
-              let deviceIdentifier = info["DeviceIdentifier"] as? String else {
-            return false
-        }
-        return deviceIdentifier.hasPrefix(wholeDisk)
-    }
-
-    private func diskutilPlist(arguments: [String]) -> [String: Any]? {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/sbin/diskutil")
-        process.arguments = arguments
-        process.standardOutput = Pipe()
-        process.standardError = Pipe()
-
-        do {
-            try process.run()
-        } catch {
-            return nil
-        }
-
-        process.waitUntilExit()
-        guard process.terminationStatus == 0 else {
-            return nil
-        }
-
-        let data = (process.standardOutput as? Pipe)?.fileHandleForReading.readDataToEndOfFile() ?? Data()
-        guard !data.isEmpty,
-              let plist = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil),
-              let dictionary = plist as? [String: Any] else {
-            return nil
-        }
-
-        return dictionary
-    }
-
-    private func isExistingDirectory(atPath path: String) -> Bool {
-        var isDirectory = ObjCBool(false)
-        return fileManager.fileExists(atPath: path, isDirectory: &isDirectory) && isDirectory.boolValue
     }
 
     private func isWindowsUnmountBusyLine(_ line: String) -> Bool {
