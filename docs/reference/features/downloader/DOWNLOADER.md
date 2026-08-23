@@ -115,7 +115,7 @@ Discovery pipeline (`MacOSCatalogService`, orchestrated by `MacOSDownloaderLogic
 2. Download the stable Apple catalog and Public Beta catalogs for macOS 27, 26, and 15 from `swscan.apple.com` on every discovery.
 3. Parse InstallAssistant candidates from products metadata.
 4. Parse `.dist` metadata from Apple distribution hosts.
-5. Keep non-prerelease entries from stable and prerelease entries from beta catalogs.
+5. Treat the source catalog as the release-channel authority: entries from the stable catalog are stable, while entries unique to Public Beta catalogs are Public Beta regardless of prerelease wording in distribution metadata; when the same product ID is present in both channels, the stable catalog takes precedence.
 6. Deduplicate by normalized identity within each release channel and across overlapping Public Beta catalogs.
 7. Enrich legacy official entries from Apple Support list.
 8. Probe installer sizes (catalog-prefill + network probe fallback).
