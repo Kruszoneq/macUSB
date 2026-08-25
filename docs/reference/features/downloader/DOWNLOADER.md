@@ -238,6 +238,11 @@ Window:
 - the window-level active-operation token remains held across list, process, failure, cancellation, and summary UI until the window is fully closed.
 
 List screen:
+- on presentation, app activation, warning selection, and every download attempt, downloader passively refreshes Full Disk Access and helper readiness without registering, repairing, or reloading the helper,
+- discovery remains available when prerequisites are missing, while starting a download requires confirmed Full Disk Access, an enabled helper service, and a successful XPC health check,
+- a missing prerequisite shows an orange warning action immediately to the left of refresh; it remains disabled during discovery or a prerequisite check and opens an app-icon alert after discovery completes,
+- prerequisite alerts provide direct System Settings actions for Full Disk Access and App Background Activity; an unavailable helper without an approval requirement instead directs the user to `Tools -> Repair Helper`,
+- returning from System Settings refreshes prerequisite state without rerunning discovery or clearing the selected installer,
 - grouped families,
 - default mode hides Public Beta entries and shows the newest stable entry per family, plus every older stable entry detected in `/Applications`,
 - enabling Public Beta visibility immediately adds the newest beta entry per family with an animated list transition, or every beta entry when `Pokaż wszystkie wersje` is also enabled, without rerunning discovery,
@@ -283,6 +288,7 @@ Rules:
   - warning summary is shown instead of full hard-failure semantics.
 
 User-facing messaging:
+- missing Full Disk Access, App Background Activity approval, or helper XPC readiness blocks the download before compatibility/redownload confirmations and before any session or temporary directory is created,
 - permission/move failures are rewritten to clearer, action-oriented text,
 - insufficient disk space during preflight is shown as a system `NSAlert` with required minimum and available space values,
 - an unreadable local installer identity is reported in a non-blocking aggregate `NSAlert` after discovery,

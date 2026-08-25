@@ -42,6 +42,15 @@ final class MacOSDownloaderPrerequisiteController: ObservableObject {
         trigger: MacOSDownloaderPrerequisiteCheckTrigger,
         completion: ((MacOSDownloaderPrerequisiteSnapshot) -> Void)? = nil
     ) {
+        guard !isChecking else {
+            AppLogging.info(
+                "Pominieto rownolegle sprawdzenie wymagan downloadera " +
+                "[trigger=\(trigger.rawValue)].",
+                category: "Downloader"
+            )
+            return
+        }
+
         let checkID = UUID()
         activeCheckID = checkID
         isChecking = true

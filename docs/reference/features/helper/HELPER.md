@@ -136,6 +136,11 @@ Contract invariants:
 - Performs health validation via XPC after configuring app-side helper code-signing requirements.
 - Uses controlled recovery when enabled service is unhealthy.
 
+### Passive Readiness Probe
+- Downloader uses an app-side passive readiness probe that reads `SMAppService` status and performs a bounded XPC health check only when the service is enabled.
+- The probe distinguishes user approval required from other helper unavailability.
+- It never registers, repairs, reloads, or otherwise recovers the helper; normal ensure-ready and repair flows remain unchanged.
+
 ### Startup Auto-Repair Flow (version/build change)
 - Entry point: `bootstrapIfNeededAtStartup`.
 - After successful non-interactive ensure-ready, app compares current app fingerprint (`CFBundleShortVersionString` + `CFBundleVersion`) with last successful helper-repair fingerprint stored in `UserDefaults`.
@@ -216,6 +221,8 @@ App-side helper integration:
   - startup bootstrap and approval-related helper lifecycle hooks.
 - `macUSB/Shared/Services/Helper/HelperService/HelperServiceEnsureReadyFlow.swift`
   - readiness and registration flow.
+- `macUSB/Shared/Services/Helper/HelperService/HelperServicePassiveReadiness.swift`
+  - side-effect-free service-status and XPC-health snapshot used by downloader gating.
 - `macUSB/Shared/Services/Helper/HelperService/HelperServiceRepairFlow.swift`
   - hard repair flow and retry/stabilization logic.
 - `macUSB/Shared/Services/Helper/HelperService/HelperServiceStatusUI.swift`

@@ -4,6 +4,230 @@
     "" : {
 
     },
+    "downloader.prerequisites.background_activity.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To download and prepare a macOS installer, turn on App Background Activity for macUSB in System Settings."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aby pobrać i przygotować instalator macOS, włącz aktywność aplikacji macUSB w tle w Ustawieniach systemowych."
+          }
+        }
+      }
+    },
+    "downloader.prerequisites.background_activity.open" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Background Activity Settings"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz ustawienia aktywności w tle"
+          }
+        }
+      }
+    },
+    "downloader.prerequisites.background_activity.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Background Activity Required"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wymagana aktywność aplikacji w tle"
+          }
+        }
+      }
+    },
+    "downloader.prerequisites.combined.background_activity_action" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Background Activity"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktywność w tle"
+          }
+        }
+      }
+    },
+    "downloader.prerequisites.combined.full_disk_access_action" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full Disk Access"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pełny dostęp do dysku"
+          }
+        }
+      }
+    },
+    "downloader.prerequisites.combined.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To download and prepare a macOS installer, grant macUSB Full Disk Access and turn on App Background Activity for macUSB in System Settings."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aby pobrać i przygotować instalator macOS, przyznaj aplikacji macUSB „Pełny dostęp do dysku” oraz włącz aktywność aplikacji macUSB w tle w Ustawieniach systemowych."
+          }
+        }
+      }
+    },
+    "downloader.prerequisites.combined.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permissions Required"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wymagane uprawnienia"
+          }
+        }
+      }
+    },
+    "downloader.prerequisites.full_disk_access.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To download and prepare a macOS installer, grant macUSB Full Disk Access in System Settings."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aby pobrać i przygotować instalator macOS, przyznaj aplikacji macUSB uprawnienie „Pełny dostęp do dysku” w Ustawieniach systemowych."
+          }
+        }
+      }
+    },
+    "downloader.prerequisites.full_disk_access.open" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Full Disk Access"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz pełny dostęp do dysku"
+          }
+        }
+      }
+    },
+    "downloader.prerequisites.full_disk_access.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full Disk Access Required"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wymagany pełny dostęp do dysku"
+          }
+        }
+      }
+    },
+    "downloader.prerequisites.full_disk_and_helper_unavailable.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To download and prepare a macOS installer, grant macUSB Full Disk Access in System Settings. The macUSB helper tool is also unavailable. Choose Tools → Repair Helper, then try again."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aby pobrać i przygotować instalator macOS, przyznaj aplikacji macUSB uprawnienie „Pełny dostęp do dysku” w Ustawieniach systemowych. Narzędzie pomocnicze macUSB również nie jest dostępne. Wybierz Narzędzia → Napraw helpera, a następnie spróbuj ponownie."
+          }
+        }
+      }
+    },
+    "downloader.prerequisites.helper_unavailable.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The macUSB helper tool is unavailable. Choose Tools → Repair Helper, then try again."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie można połączyć się z narzędziem pomocniczym macUSB. Wybierz Narzędzia → Napraw helpera, a następnie spróbuj ponownie."
+          }
+        }
+      }
+    },
+    "downloader.prerequisites.helper_unavailable.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper Unavailable"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper nie jest dostępny"
+          }
+        }
+      }
+    },
+    "downloader.prerequisites.warning_help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Required permissions or helper connection unavailable"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak wymaganych uprawnień lub połączenia z helperem"
+          }
+        }
+      }
+    },
     "%@ %@" : {
       "localizations" : {
         "de" : {

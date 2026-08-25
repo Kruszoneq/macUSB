@@ -51,6 +51,8 @@ Windows-specific runtime behavior:
 - `SystemAnalysisView` also exposes `Pobierz` between `Wybierz` and `Analizuj` for direct downloader access.
 - Downloader opening is blocked during USB creation operation stages (`UniversalInstallationView`, `CreationProgressView`, `FinishUSBView`), and `Tools -> Pobierz instalator macOS...` is disabled there.
 - Discovery starts on entering downloader window (never on app startup).
+- Downloader also passively checks Full Disk Access and helper XPC readiness on entry and app activation. Missing prerequisites do not block discovery or selection, but they surface an orange warning action and block `Download` before any session begins.
+- Selecting the prerequisite warning or attempting a blocked download presents an actionable app-icon alert. Returning from System Settings refreshes the state without rerunning discovery or clearing selection.
 - While discovery runs, header/options remain visible; list area shows scanning panel.
 - After discovery completes, grouped systems list is shown.
 - On downloader summary, when final `.app` exists, icon action can pass installer path to analysis and trigger automatic analysis; from Welcome, app navigates to analysis first.
