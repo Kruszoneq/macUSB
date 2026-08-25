@@ -17,7 +17,18 @@
             "state" : "translated",
             "value" : "Aby pobrać i przygotować instalator macOS, włącz aktywność aplikacji macUSB w tle w Ustawieniach systemowych."
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"Um ein macOS-Installationsprogramm zu laden und vorzubereiten, aktiviere in den Systemeinstellungen die App-Hintergrundaktivitäten für macUSB."}},
+        "es":{"stringUnit":{"state":"translated","value":"Para descargar y preparar un instalador de macOS, activa la actividad en segundo plano de las apps para macUSB en Ajustes del Sistema."}},
+        "fr":{"stringUnit":{"state":"translated","value":"Pour télécharger et préparer un programme d’installation de macOS, activez l’activité des apps en arrière-plan pour macUSB dans Réglages Système."}},
+        "it":{"stringUnit":{"state":"translated","value":"Per scaricare e preparare un programma di installazione di macOS, attiva l’attività delle app in background per macUSB in Impostazioni di Sistema."}},
+        "ja":{"stringUnit":{"state":"translated","value":"macOSインストーラをダウンロードして準備するには、「システム設定」でmacUSBの「アプリのバックグラウンドでのアクティビティ」をオンにしてください。"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"Para baixar e preparar um instalador do macOS, ative a Atividade de apps em segundo plano para o macUSB nos Ajustes do Sistema."}},
+        "ru":{"stringUnit":{"state":"translated","value":"Чтобы загрузить и подготовить установщик macOS, включите фоновую активность для macUSB в Системных настройках."}},
+        "tr":{"stringUnit":{"state":"translated","value":"Bir macOS yükleyicisini indirmek ve hazırlamak için Sistem Ayarları’nda macUSB için Uygulamanın Arka Plan Aktivitesi’ni açın."}},
+        "uk":{"stringUnit":{"state":"translated","value":"Щоб завантажити й підготувати інсталятор macOS, увімкніть фонову активність для macUSB у Системних параметрах."}},
+        "vi":{"stringUnit":{"state":"translated","value":"Để tải về và chuẩn bị trình cài đặt macOS, hãy bật Hoạt động trong nền của ứng dụng cho macUSB trong Cài đặt hệ thống."}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"若要下载并准备 macOS 安装器，请在“系统设置”中为 macUSB 打开“App 后台活动”。"}}
       }
     },
     "downloader.prerequisites.background_activity.open" : {
@@ -33,7 +44,18 @@
             "state" : "translated",
             "value" : "Otwórz ustawienia aktywności w tle"
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"Einstellungen für App-Hintergrundaktivitäten öffnen"}},
+        "es":{"stringUnit":{"state":"translated","value":"Abrir los ajustes de actividad en segundo plano"}},
+        "fr":{"stringUnit":{"state":"translated","value":"Ouvrir les réglages d’activité en arrière-plan"}},
+        "it":{"stringUnit":{"state":"translated","value":"Apri le impostazioni per l’attività in background"}},
+        "ja":{"stringUnit":{"state":"translated","value":"バックグラウンドアクティビティ設定を開く"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"Abrir Ajustes de Atividade em Segundo Plano"}},
+        "ru":{"stringUnit":{"state":"translated","value":"Открыть настройки фоновой активности"}},
+        "tr":{"stringUnit":{"state":"translated","value":"Arka Plan Aktivitesi Ayarlarını Aç"}},
+        "uk":{"stringUnit":{"state":"translated","value":"Відкрити параметри фонової активності"}},
+        "vi":{"stringUnit":{"state":"translated","value":"Mở cài đặt Hoạt động trong nền"}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"打开后台活动设置"}}
       }
     },
     "downloader.prerequisites.background_activity.title" : {
@@ -49,7 +71,18 @@
             "state" : "translated",
             "value" : "Wymagana aktywność aplikacji w tle"
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"App-Hintergrundaktivitäten erforderlich"}},
+        "es":{"stringUnit":{"state":"translated","value":"Se requiere actividad en segundo plano de las apps"}},
+        "fr":{"stringUnit":{"state":"translated","value":"Activité des apps en arrière-plan requise"}},
+        "it":{"stringUnit":{"state":"translated","value":"Attività delle app in background richiesta"}},
+        "ja":{"stringUnit":{"state":"translated","value":"アプリのバックグラウンドでのアクティビティが必要です"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"Atividade de apps em segundo plano obrigatória"}},
+        "ru":{"stringUnit":{"state":"translated","value":"Требуется фоновая активность приложений"}},
+        "tr":{"stringUnit":{"state":"translated","value":"Uygulamanın Arka Plan Aktivitesi Gerekli"}},
+        "uk":{"stringUnit":{"state":"translated","value":"Потрібна фонова активність програм"}},
+        "vi":{"stringUnit":{"state":"translated","value":"Yêu cầu Hoạt động trong nền của ứng dụng"}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"需要 App 后台活动"}}
       }
     },
     "downloader.prerequisites.combined.background_activity_action" : {
@@ -65,7 +98,18 @@
             "state" : "translated",
             "value" : "Aktywność w tle"
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"App-Hintergrundaktivitäten"}},
+        "es":{"stringUnit":{"state":"translated","value":"Actividad en segundo plano"}},
+        "fr":{"stringUnit":{"state":"translated","value":"Activité en arrière-plan"}},
+        "it":{"stringUnit":{"state":"translated","value":"Attività in background"}},
+        "ja":{"stringUnit":{"state":"translated","value":"バックグラウンドアクティビティ"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"Atividade em Segundo Plano"}},
+        "ru":{"stringUnit":{"state":"translated","value":"Фоновая активность"}},
+        "tr":{"stringUnit":{"state":"translated","value":"Arka Plan Aktivitesi"}},
+        "uk":{"stringUnit":{"state":"translated","value":"Фонова активність"}},
+        "vi":{"stringUnit":{"state":"translated","value":"Hoạt động trong nền"}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"后台活动"}}
       }
     },
     "downloader.prerequisites.combined.full_disk_access_action" : {
@@ -81,7 +125,18 @@
             "state" : "translated",
             "value" : "Pełny dostęp do dysku"
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"Festplattenvollzugriff"}},
+        "es":{"stringUnit":{"state":"translated","value":"Acceso total al disco"}},
+        "fr":{"stringUnit":{"state":"translated","value":"Accès complet au disque"}},
+        "it":{"stringUnit":{"state":"translated","value":"Accesso completo al disco"}},
+        "ja":{"stringUnit":{"state":"translated","value":"フルディスクアクセス"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"Acesso Total ao Disco"}},
+        "ru":{"stringUnit":{"state":"translated","value":"Полный доступ к диску"}},
+        "tr":{"stringUnit":{"state":"translated","value":"Tam Disk Erişimi"}},
+        "uk":{"stringUnit":{"state":"translated","value":"Повний доступ до диска"}},
+        "vi":{"stringUnit":{"state":"translated","value":"Quyền truy cập toàn bộ ổ đĩa"}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"完全磁盘访问权限"}}
       }
     },
     "downloader.prerequisites.combined.message" : {
@@ -97,7 +152,18 @@
             "state" : "translated",
             "value" : "Aby pobrać i przygotować instalator macOS, przyznaj aplikacji macUSB „Pełny dostęp do dysku” oraz włącz aktywność aplikacji macUSB w tle w Ustawieniach systemowych."
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"Um ein macOS-Installationsprogramm zu laden und vorzubereiten, erteile macUSB in den Systemeinstellungen Festplattenvollzugriff und aktiviere die App-Hintergrundaktivitäten für macUSB."}},
+        "es":{"stringUnit":{"state":"translated","value":"Para descargar y preparar un instalador de macOS, concede a macUSB acceso total al disco y activa la actividad en segundo plano para macUSB en Ajustes del Sistema."}},
+        "fr":{"stringUnit":{"state":"translated","value":"Pour télécharger et préparer un programme d’installation de macOS, accordez à macUSB l’accès complet au disque et activez son activité en arrière-plan dans Réglages Système."}},
+        "it":{"stringUnit":{"state":"translated","value":"Per scaricare e preparare un programma di installazione di macOS, concedi a macUSB l’accesso completo al disco e attiva la sua attività in background in Impostazioni di Sistema."}},
+        "ja":{"stringUnit":{"state":"translated","value":"macOSインストーラをダウンロードして準備するには、「システム設定」でmacUSBにフルディスクアクセスを許可し、macUSBの「アプリのバックグラウンドでのアクティビティ」をオンにしてください。"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"Para baixar e preparar um instalador do macOS, conceda ao macUSB Acesso Total ao Disco e ative a Atividade de apps em segundo plano para o macUSB nos Ajustes do Sistema."}},
+        "ru":{"stringUnit":{"state":"translated","value":"Чтобы загрузить и подготовить установщик macOS, предоставьте macUSB полный доступ к диску и включите фоновую активность для macUSB в Системных настройках."}},
+        "tr":{"stringUnit":{"state":"translated","value":"Bir macOS yükleyicisini indirmek ve hazırlamak için Sistem Ayarları’nda macUSB’ye Tam Disk Erişimi verin ve macUSB için Uygulamanın Arka Plan Aktivitesi’ni açın."}},
+        "uk":{"stringUnit":{"state":"translated","value":"Щоб завантажити й підготувати інсталятор macOS, надайте macUSB повний доступ до диска та увімкніть фонову активність для macUSB у Системних параметрах."}},
+        "vi":{"stringUnit":{"state":"translated","value":"Để tải về và chuẩn bị trình cài đặt macOS, hãy cấp Quyền truy cập toàn bộ ổ đĩa cho macUSB và bật Hoạt động trong nền của ứng dụng cho macUSB trong Cài đặt hệ thống."}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"若要下载并准备 macOS 安装器，请在“系统设置”中授予 macUSB“完全磁盘访问权限”，并为 macUSB 打开“App 后台活动”。"}}
       }
     },
     "downloader.prerequisites.combined.title" : {
@@ -113,7 +179,18 @@
             "state" : "translated",
             "value" : "Wymagane uprawnienia"
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"Berechtigungen erforderlich"}},
+        "es":{"stringUnit":{"state":"translated","value":"Se requieren permisos"}},
+        "fr":{"stringUnit":{"state":"translated","value":"Autorisations requises"}},
+        "it":{"stringUnit":{"state":"translated","value":"Autorizzazioni richieste"}},
+        "ja":{"stringUnit":{"state":"translated","value":"アクセス権が必要です"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"Permissões obrigatórias"}},
+        "ru":{"stringUnit":{"state":"translated","value":"Требуются разрешения"}},
+        "tr":{"stringUnit":{"state":"translated","value":"İzinler Gerekli"}},
+        "uk":{"stringUnit":{"state":"translated","value":"Потрібні дозволи"}},
+        "vi":{"stringUnit":{"state":"translated","value":"Yêu cầu quyền"}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"需要权限"}}
       }
     },
     "downloader.prerequisites.full_disk_access.message" : {
@@ -129,7 +206,18 @@
             "state" : "translated",
             "value" : "Aby pobrać i przygotować instalator macOS, przyznaj aplikacji macUSB uprawnienie „Pełny dostęp do dysku” w Ustawieniach systemowych."
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"Um ein macOS-Installationsprogramm zu laden und vorzubereiten, erteile macUSB in den Systemeinstellungen Festplattenvollzugriff."}},
+        "es":{"stringUnit":{"state":"translated","value":"Para descargar y preparar un instalador de macOS, concede a macUSB acceso total al disco en Ajustes del Sistema."}},
+        "fr":{"stringUnit":{"state":"translated","value":"Pour télécharger et préparer un programme d’installation de macOS, accordez à macUSB l’accès complet au disque dans Réglages Système."}},
+        "it":{"stringUnit":{"state":"translated","value":"Per scaricare e preparare un programma di installazione di macOS, concedi a macUSB l’accesso completo al disco in Impostazioni di Sistema."}},
+        "ja":{"stringUnit":{"state":"translated","value":"macOSインストーラをダウンロードして準備するには、「システム設定」でmacUSBにフルディスクアクセスを許可してください。"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"Para baixar e preparar um instalador do macOS, conceda ao macUSB Acesso Total ao Disco nos Ajustes do Sistema."}},
+        "ru":{"stringUnit":{"state":"translated","value":"Чтобы загрузить и подготовить установщик macOS, предоставьте macUSB полный доступ к диску в Системных настройках."}},
+        "tr":{"stringUnit":{"state":"translated","value":"Bir macOS yükleyicisini indirmek ve hazırlamak için Sistem Ayarları’nda macUSB’ye Tam Disk Erişimi verin."}},
+        "uk":{"stringUnit":{"state":"translated","value":"Щоб завантажити й підготувати інсталятор macOS, надайте macUSB повний доступ до диска в Системних параметрах."}},
+        "vi":{"stringUnit":{"state":"translated","value":"Để tải về và chuẩn bị trình cài đặt macOS, hãy cấp Quyền truy cập toàn bộ ổ đĩa cho macUSB trong Cài đặt hệ thống."}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"若要下载并准备 macOS 安装器，请在“系统设置”中授予 macUSB“完全磁盘访问权限”。"}}
       }
     },
     "downloader.prerequisites.full_disk_access.open" : {
@@ -145,7 +233,18 @@
             "state" : "translated",
             "value" : "Otwórz pełny dostęp do dysku"
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"Festplattenvollzugriff öffnen"}},
+        "es":{"stringUnit":{"state":"translated","value":"Abrir Acceso total al disco"}},
+        "fr":{"stringUnit":{"state":"translated","value":"Ouvrir Accès complet au disque"}},
+        "it":{"stringUnit":{"state":"translated","value":"Apri Accesso completo al disco"}},
+        "ja":{"stringUnit":{"state":"translated","value":"フルディスクアクセスを開く"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"Abrir Acesso Total ao Disco"}},
+        "ru":{"stringUnit":{"state":"translated","value":"Открыть полный доступ к диску"}},
+        "tr":{"stringUnit":{"state":"translated","value":"Tam Disk Erişimi’ni Aç"}},
+        "uk":{"stringUnit":{"state":"translated","value":"Відкрити повний доступ до диска"}},
+        "vi":{"stringUnit":{"state":"translated","value":"Mở Quyền truy cập toàn bộ ổ đĩa"}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"打开“完全磁盘访问权限”"}}
       }
     },
     "downloader.prerequisites.full_disk_access.title" : {
@@ -161,7 +260,18 @@
             "state" : "translated",
             "value" : "Wymagany pełny dostęp do dysku"
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"Erforderlicher vollständiger Festplattenzugriff"}},
+        "es":{"stringUnit":{"state":"translated","value":"Se requiere acceso total al disco"}},
+        "fr":{"stringUnit":{"state":"translated","value":"Accès complet au disque requis"}},
+        "it":{"stringUnit":{"state":"translated","value":"Accesso completo al disco richiesto"}},
+        "ja":{"stringUnit":{"state":"translated","value":"フルディスクアクセスが必要です"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"Acesso total ao disco obrigatório"}},
+        "ru":{"stringUnit":{"state":"translated","value":"Требуется полный доступ к диску"}},
+        "tr":{"stringUnit":{"state":"translated","value":"Tam Disk Erişimi Gerekli"}},
+        "uk":{"stringUnit":{"state":"translated","value":"Потрібен повний доступ до диска"}},
+        "vi":{"stringUnit":{"state":"translated","value":"Yêu cầu Quyền truy cập toàn bộ ổ đĩa"}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"需要“完全磁盘访问权限”"}}
       }
     },
     "downloader.prerequisites.full_disk_and_helper_unavailable.message" : {
@@ -177,7 +287,18 @@
             "state" : "translated",
             "value" : "Aby pobrać i przygotować instalator macOS, przyznaj aplikacji macUSB uprawnienie „Pełny dostęp do dysku” w Ustawieniach systemowych. Narzędzie pomocnicze macUSB również nie jest dostępne. Wybierz Narzędzia → Napraw helpera, a następnie spróbuj ponownie."
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"Um ein macOS-Installationsprogramm zu laden und vorzubereiten, erteile macUSB in den Systemeinstellungen Festplattenvollzugriff. Das macUSB-Hilfsprogramm ist ebenfalls nicht verfügbar. Wähle „Werkzeuge“ → „Helper reparieren“ und versuche es erneut."}},
+        "es":{"stringUnit":{"state":"translated","value":"Para descargar y preparar un instalador de macOS, concede a macUSB acceso total al disco en Ajustes del Sistema. La herramienta auxiliar de macUSB tampoco está disponible. Selecciona Herramientas → Reparar helper e inténtalo de nuevo."}},
+        "fr":{"stringUnit":{"state":"translated","value":"Pour télécharger et préparer un programme d’installation de macOS, accordez à macUSB l’accès complet au disque dans Réglages Système. L’outil auxiliaire de macUSB est également indisponible. Choisissez Outils → Réparer l’outil auxiliaire, puis réessayez."}},
+        "it":{"stringUnit":{"state":"translated","value":"Per scaricare e preparare un programma di installazione di macOS, concedi a macUSB l’accesso completo al disco in Impostazioni di Sistema. Anche l’helper di macUSB non è disponibile. Scegli Strumenti → Ripara helper, quindi riprova."}},
+        "ja":{"stringUnit":{"state":"translated","value":"macOSインストーラをダウンロードして準備するには、「システム設定」でmacUSBにフルディスクアクセスを許可してください。macUSBのヘルパーも利用できません。「ツール」＞「ヘルパーを修復」と選択してから、もう一度お試しください。"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"Para baixar e preparar um instalador do macOS, conceda ao macUSB Acesso Total ao Disco nos Ajustes do Sistema. A ferramenta auxiliar do macUSB também não está disponível. Selecione Ferramentas → Reparar helper e tente novamente."}},
+        "ru":{"stringUnit":{"state":"translated","value":"Чтобы загрузить и подготовить установщик macOS, предоставьте macUSB полный доступ к диску в Системных настройках. Вспомогательный инструмент macUSB также недоступен. Выберите «Инструменты» → «Восстановить helper» и повторите попытку."}},
+        "tr":{"stringUnit":{"state":"translated","value":"Bir macOS yükleyicisini indirmek ve hazırlamak için Sistem Ayarları’nda macUSB’ye Tam Disk Erişimi verin. macUSB yardımcı aracı da kullanılamıyor. Araçlar → Yardımcıyı düzelt’i seçip yeniden deneyin."}},
+        "uk":{"stringUnit":{"state":"translated","value":"Щоб завантажити й підготувати інсталятор macOS, надайте macUSB повний доступ до диска в Системних параметрах. Допоміжний інструмент macUSB також недоступний. Виберіть Інструменти → Виправити помічника, а потім повторіть спробу."}},
+        "vi":{"stringUnit":{"state":"translated","value":"Để tải về và chuẩn bị trình cài đặt macOS, hãy cấp Quyền truy cập toàn bộ ổ đĩa cho macUSB trong Cài đặt hệ thống. Công cụ trợ giúp macUSB cũng không khả dụng. Chọn Công cụ → Sửa chữa trình trợ giúp, sau đó thử lại."}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"若要下载并准备 macOS 安装器，请在“系统设置”中授予 macUSB“完全磁盘访问权限”。macUSB 辅助工具也不可用。请选择“工具”→“修复辅助工具”，然后再试一次。"}}
       }
     },
     "downloader.prerequisites.helper_unavailable.message" : {
@@ -193,7 +314,18 @@
             "state" : "translated",
             "value" : "Nie można połączyć się z narzędziem pomocniczym macUSB. Wybierz Narzędzia → Napraw helpera, a następnie spróbuj ponownie."
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"Das macUSB-Hilfsprogramm ist nicht verfügbar. Wähle „Werkzeuge“ → „Helper reparieren“ und versuche es erneut."}},
+        "es":{"stringUnit":{"state":"translated","value":"La herramienta auxiliar de macUSB no está disponible. Selecciona Herramientas → Reparar helper e inténtalo de nuevo."}},
+        "fr":{"stringUnit":{"state":"translated","value":"L’outil auxiliaire de macUSB est indisponible. Choisissez Outils → Réparer l’outil auxiliaire, puis réessayez."}},
+        "it":{"stringUnit":{"state":"translated","value":"L’helper di macUSB non è disponibile. Scegli Strumenti → Ripara helper, quindi riprova."}},
+        "ja":{"stringUnit":{"state":"translated","value":"macUSBのヘルパーを利用できません。「ツール」＞「ヘルパーを修復」と選択してから、もう一度お試しください。"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"A ferramenta auxiliar do macUSB não está disponível. Selecione Ferramentas → Reparar helper e tente novamente."}},
+        "ru":{"stringUnit":{"state":"translated","value":"Вспомогательный инструмент macUSB недоступен. Выберите «Инструменты» → «Восстановить helper» и повторите попытку."}},
+        "tr":{"stringUnit":{"state":"translated","value":"macUSB yardımcı aracı kullanılamıyor. Araçlar → Yardımcıyı düzelt’i seçip yeniden deneyin."}},
+        "uk":{"stringUnit":{"state":"translated","value":"Допоміжний інструмент macUSB недоступний. Виберіть Інструменти → Виправити помічника, а потім повторіть спробу."}},
+        "vi":{"stringUnit":{"state":"translated","value":"Công cụ trợ giúp macUSB không khả dụng. Chọn Công cụ → Sửa chữa trình trợ giúp, sau đó thử lại."}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"macUSB 辅助工具不可用。请选择“工具”→“修复辅助工具”，然后再试一次。"}}
       }
     },
     "downloader.prerequisites.helper_unavailable.title" : {
@@ -209,7 +341,18 @@
             "state" : "translated",
             "value" : "Helper nie jest dostępny"
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"Hilfsprogramm nicht verfügbar"}},
+        "es":{"stringUnit":{"state":"translated","value":"Herramienta auxiliar no disponible"}},
+        "fr":{"stringUnit":{"state":"translated","value":"Outil auxiliaire indisponible"}},
+        "it":{"stringUnit":{"state":"translated","value":"Helper non disponibile"}},
+        "ja":{"stringUnit":{"state":"translated","value":"ヘルパーを利用できません"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"Ferramenta auxiliar indisponível"}},
+        "ru":{"stringUnit":{"state":"translated","value":"Вспомогательный инструмент недоступен"}},
+        "tr":{"stringUnit":{"state":"translated","value":"Yardımcı Kullanılamıyor"}},
+        "uk":{"stringUnit":{"state":"translated","value":"Помічник недоступний"}},
+        "vi":{"stringUnit":{"state":"translated","value":"Trình trợ giúp không khả dụng"}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"辅助工具不可用"}}
       }
     },
     "downloader.prerequisites.warning_help" : {
@@ -225,7 +368,18 @@
             "state" : "translated",
             "value" : "Brak wymaganych uprawnień lub połączenia z helperem"
           }
-        }
+        },
+        "de":{"stringUnit":{"state":"translated","value":"Erforderliche Berechtigungen fehlen oder die Helper-Verbindung ist nicht verfügbar"}},
+        "es":{"stringUnit":{"state":"translated","value":"Faltan permisos necesarios o no hay conexión con la herramienta auxiliar"}},
+        "fr":{"stringUnit":{"state":"translated","value":"Autorisations requises manquantes ou connexion à l’outil auxiliaire indisponible"}},
+        "it":{"stringUnit":{"state":"translated","value":"Autorizzazioni richieste o connessione all’helper non disponibile"}},
+        "ja":{"stringUnit":{"state":"translated","value":"必要なアクセス権またはヘルパー接続を利用できません"}},
+        "pt-BR":{"stringUnit":{"state":"translated","value":"Permissões necessárias ou conexão com a ferramenta auxiliar indisponível"}},
+        "ru":{"stringUnit":{"state":"translated","value":"Нет необходимых разрешений или подключения к вспомогательному инструменту"}},
+        "tr":{"stringUnit":{"state":"translated","value":"Gerekli izinler veya yardımcı bağlantısı kullanılamıyor"}},
+        "uk":{"stringUnit":{"state":"translated","value":"Немає потрібних дозволів або з’єднання з помічником"}},
+        "vi":{"stringUnit":{"state":"translated","value":"Thiếu quyền bắt buộc hoặc không có kết nối với trình trợ giúp"}},
+        "zh-Hans":{"stringUnit":{"state":"translated","value":"所需权限缺失或辅助工具连接不可用"}}
       }
     },
     "%@ %@" : {
