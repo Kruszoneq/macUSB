@@ -34,6 +34,16 @@ body:
     validations:
       required: true
 
+  - type: checkboxes
+    id: required_permissions
+    attributes:
+      label: "Required permissions"
+      options:
+        - label: "I enabled Full Disk Access for macUSB in System Settings"
+          required: true
+        - label: "I enabled Allow in the Background for macUSB in System Settings"
+          required: true
+
   - type: dropdown
     id: helper_repair
     attributes:
