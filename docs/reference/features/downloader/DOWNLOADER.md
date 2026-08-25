@@ -238,11 +238,16 @@ Window:
 - the window-level active-operation token remains held across list, process, failure, cancellation, and summary UI until the window is fully closed.
 
 List screen:
+- on presentation, app activation, warning selection, and every download attempt, downloader passively refreshes Full Disk Access and helper readiness without registering, repairing, or reloading the helper,
+- discovery remains available when prerequisites are missing, while starting a download requires confirmed Full Disk Access, an enabled helper service, and a successful XPC health check,
+- a missing prerequisite shows an orange warning action immediately to the left of refresh; it remains disabled during discovery or a prerequisite check and opens an app-icon alert after discovery completes,
+- prerequisite alerts provide direct System Settings actions for Full Disk Access and App Background Activity; an unavailable helper without an approval requirement instead directs the user to `Tools -> Repair Helper`,
+- returning from System Settings refreshes prerequisite state without rerunning discovery or clearing the selected installer,
 - grouped families,
 - default mode hides Public Beta entries and shows the newest stable entry per family, plus every older stable entry detected in `/Applications`,
 - enabling Public Beta visibility immediately adds the newest beta entry per family with an animated list transition, or every beta entry when `Pokaż wszystkie wersje` is also enabled, without rerunning discovery,
 - overlapping Public Beta catalogs are deduplicated by system identity, version, and build,
-- `Pokaż wszystkie wersje` shows every available stable version and, when beta visibility is enabled, every available Public Beta version,
+- `Pokaż wszystkie wersje` shows every available stable version and, when beta visibility is enabled, every available Public Beta version; enabling or disabling it uses the same animated list transition as Public Beta visibility without rerunning discovery,
 - locally detected entries use a localized, accent-colored `POBRANY` badge in the selection list only,
 - beta entries use a neutral `BETA` badge by default; the badge becomes accent-colored only in a selected list row and stays neutral in the active download view,
 - on a physical Intel Mac, starting a download for Golden Gate or any newer system (major version `>= 27`) requires confirmation in an app-icon alert explaining that the installer can be downloaded and built, but cannot be used on that Mac to create bootable USB media,
@@ -283,6 +288,7 @@ Rules:
   - warning summary is shown instead of full hard-failure semantics.
 
 User-facing messaging:
+- missing Full Disk Access, App Background Activity approval, or helper XPC readiness blocks the download before compatibility/redownload confirmations and before any session or temporary directory is created,
 - permission/move failures are rewritten to clearer, action-oriented text,
 - insufficient disk space during preflight is shown as a system `NSAlert` with required minimum and available space values,
 - an unreadable local installer identity is reported in a non-blocking aggregate `NSAlert` after discovery,

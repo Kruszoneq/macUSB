@@ -89,7 +89,9 @@
 ### Downloader layout
 
 - `macUSB/Features/Downloader/MacOSDownloaderCoordinator.swift`
+- `macUSB/Features/Downloader/Logic/MacOSDownloaderPrerequisites.swift` — combines Full Disk Access and passive helper readiness into the downloader gate while rejecting stale checks.
 - `macUSB/Features/Downloader/UI/*`
+- `macUSB/Features/Downloader/UI/MacOSDownloaderPrerequisiteAlerts.swift` — prerequisite alert variants and direct System Settings actions.
 - `macUSB/Features/Downloader/Logic/Discovery/*`
 - `macUSB/Features/Downloader/Logic/Download/*`
 - `macUSB/Features/Downloader/Logic/Assembly/*`
@@ -105,6 +107,7 @@
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClientActivity.swift` — lifecycle tokens for long USB and downloader helper tasks.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift`
 - `macUSB/Shared/Services/Helper/HelperService/*`
+- `macUSB/Shared/Services/Helper/HelperService/HelperServicePassiveReadiness.swift` — passive `SMAppService` status and XPC health snapshot without recovery side effects.
 - `macUSB/Shared/Services/InstallerSourceImageUnmountRegistry.swift` — centralny rejestr śledzenia zamontowanych źródeł ISO (Windows/Linux) i cleanup odmontowania przy zamknięciu aplikacji; ręczne źródła raw nie są rejestrowane.
 
 ### Helper (daemon)

@@ -8,6 +8,7 @@ struct MacOSDownloaderWindowShellView: View {
 
     @StateObject var logic = MacOSDownloaderLogic()
     @StateObject var downloadFlowModel = MontereyDownloadFlowModel()
+    @StateObject var prerequisiteController = MacOSDownloaderPrerequisiteController()
     @State var isOptionsPresented = false
     @State var showAllAvailableVersions = false
     @State var showBetaVersions = false
@@ -58,7 +59,14 @@ struct MacOSDownloaderWindowShellView: View {
         }
         .sheet(isPresented: $isOptionsPresented) {
             MacOSDownloaderOptionsSheetView(
-                showAllAvailableVersions: $showAllAvailableVersions,
+                showAllAvailableVersions: Binding(
+                    get: { showAllAvailableVersions },
+                    set: { newValue in
+                        withAnimation(.easeInOut(duration: 0.24)) {
+                            showAllAvailableVersions = newValue
+                        }
+                    }
+                ),
                 showBetaVersions: Binding(
                     get: { showBetaVersions },
                     set: { newValue in
@@ -72,6 +80,10 @@ struct MacOSDownloaderWindowShellView: View {
         }
         .task {
             logic.startDiscovery()
+            prerequisiteController.refresh(trigger: .initialPresentation)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            prerequisiteController.refresh(trigger: .appActivation)
         }
         .onChange(of: logic.familyGroups) {
             ensureSelectedEntryIsVisible()
@@ -102,6 +114,7 @@ struct MacOSDownloaderWindowShellView: View {
             downloadFlowModel.pendingDiskSpaceAlert = nil
         }
         .onDisappear {
+            prerequisiteController.invalidate()
             logic.cancelDiscovery(updateState: false)
             downloadFlowModel.stop()
         }
@@ -292,6 +305,30 @@ struct MacOSDownloaderWindowShellView: View {
             )
             return
         }
+
+        guard !prerequisiteController.isChecking else {
+            AppLogging.info(
+                "Pominieto ponowne sprawdzenie wymagan downloadera, poniewaz poprzednie nadal trwa.",
+                category: "Downloader"
+            )
+            return
+        }
+
+        prerequisiteController.refresh(trigger: .downloadAction) { snapshot in
+            guard snapshot.allowsDownload else {
+                AppLogging.info(
+                    "Zablokowano rozpoczecie pobierania z powodu niespelnionych wymagan downloadera.",
+                    category: "Downloader"
+                )
+                presentDownloaderPrerequisiteAlert(for: snapshot)
+                return
+            }
+
+            continueDownloadTap(for: entry)
+        }
+    }
+
+    private func continueDownloadTap(for entry: MacOSInstallerEntry) {
 
         if requiresIntelBootableInstallerWarning(entry) {
             guard presentIntelBootableInstallerWarningAlert() else {

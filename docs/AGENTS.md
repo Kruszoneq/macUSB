@@ -99,6 +99,7 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
   - `macUSBPrimaryButtonStyle`
   - `macUSBSecondaryButtonStyle`
 - Spacing/radii use `MacUSBDesignTokens`.
+- Dynamic lists, their contextual banners/status cards, and conditional header actions must follow the global motion rules in `docs/reference/design/DESIGN_SYSTEM.md`, including symmetric appearance and disappearance.
 - `DEBUG` UI must not appear in Release builds.
 
 ### Localization invariants
@@ -137,6 +138,8 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
   - correct macOS and Apple terminology,
   - consistency with the meaning and context of the UI element.
 - Before completing the task, perform a final verification of all localization keys and translations.
+- Edit `Localizable.xcstrings` in the exact target serialization format produced by Xcode: two-space indentation, spaced `"key" : value` separators, expanded multiline objects, Xcode's case-insensitive natural catalog order for string keys, lexicographically ordered locale identifiers, and no compact inline localization entries. Opening or saving the catalog in Xcode must not produce a formatting-only diff.
+- Mark an actively used localization key as `"extractionState" : "manual"` when it is intentionally resolved through dynamic indirection that Xcode string extraction cannot discover; do not accept `stale` for such a key.
 - In the post-implementation report, list every localization key created or modified together with its translation in every supported language.
 - Do not place a period at the end of banner or alert titles.
 - Every `NSAlert` must include:
