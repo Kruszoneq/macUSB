@@ -28,6 +28,7 @@ extension MacOSDownloaderWindowShellView {
                             : 1.0
                     )
                     .help(String(localized: "downloader.prerequisites.warning_help"))
+                    .transition(.scale(scale: 0.85).combined(with: .opacity))
                 }
 
                 Button {
@@ -56,6 +57,10 @@ extension MacOSDownloaderWindowShellView {
                 .disabled(isDiscoveryInProgress)
                 .opacity(isDiscoveryInProgress ? 0.65 : 1.0)
             }
+            .animation(
+                .easeInOut(duration: 0.22),
+                value: prerequisiteController.snapshot?.requiresWarning == true
+            )
 
             installerListArea
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

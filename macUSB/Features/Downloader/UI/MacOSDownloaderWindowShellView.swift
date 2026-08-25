@@ -59,7 +59,14 @@ struct MacOSDownloaderWindowShellView: View {
         }
         .sheet(isPresented: $isOptionsPresented) {
             MacOSDownloaderOptionsSheetView(
-                showAllAvailableVersions: $showAllAvailableVersions,
+                showAllAvailableVersions: Binding(
+                    get: { showAllAvailableVersions },
+                    set: { newValue in
+                        withAnimation(.easeInOut(duration: 0.24)) {
+                            showAllAvailableVersions = newValue
+                        }
+                    }
+                ),
                 showBetaVersions: Binding(
                     get: { showBetaVersions },
                     set: { newValue in
