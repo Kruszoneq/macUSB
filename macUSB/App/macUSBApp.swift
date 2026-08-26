@@ -418,6 +418,7 @@ struct macUSBApp: App {
                 } label: {
                     Label(String(localized: "Eksportuj logi diagnostyczne..."), systemImage: "square.and.arrow.down")
                 }
+                .keyboardShortcut("l", modifiers: [.option])
             }
             #if DEBUG
             CommandMenu("DEBUG") {

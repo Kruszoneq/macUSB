@@ -21,6 +21,8 @@ Primary runtime goals:
 - execute privileged operations through helper architecture,
 - keep the user flow guided and non-technical.
 
+The Help menu provides diagnostic-log export through its menu item and the `Option-L` keyboard shortcut.
+
 ## Runtime Boundaries
 
 - Process/workflow rules for agents are in `docs/AGENTS.md`.
