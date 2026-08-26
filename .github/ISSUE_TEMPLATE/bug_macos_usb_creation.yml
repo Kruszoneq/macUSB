@@ -145,7 +145,7 @@ body:
     id: diagnostic_logs
     attributes:
       label: "Diagnostic logs"
-      description: "Attach the exported .txt diagnostic log."
+      description: "Export diagnostic logs using Option (⌥) + L, then attach the exported .txt file."
     validations:
       required: true
       accept: ".txt"
@@ -158,8 +158,3 @@ body:
     validations:
       required: false
       accept: ".png,.jpg,.jpeg,.gif,.webp,.mp4,.mov,.webm"
-
-  - type: markdown
-    attributes:
-      value: |
-        Diagnostic logs can be exported from `Help -> Export diagnostic logs...`.
