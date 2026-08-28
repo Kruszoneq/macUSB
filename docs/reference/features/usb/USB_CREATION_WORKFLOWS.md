@@ -113,7 +113,7 @@ Windows summary pre-start prerequisites:
 - Privileged operations must run through helper (`SMAppService + XPC`).
 - No terminal fallback privileged execution path.
 - Stage progression shown in UI must remain deterministic.
-- Each helper-reported stage change animates the completed and newly active progress cards together with the shared stage-transition motion. The animation is presentation-only and does not delay or reorder helper events.
+- Pending and completed progress cards remain at `0.98` scale, while the active card uses `1.0`. Each helper-reported stage change animates the completed and newly active cards together with the shared stage-transition motion. The animation is presentation-only and does not delay or reorder helper events.
 - Every Windows helper request must contain `windowsBootMode`; a missing mode is rejected before stage execution.
 - Linux raw-copy must target whole-disk device, never a partition node.
 - Windows workflow must copy installer files 1:1 from ISO payload (no UEFI fallback file synthesis).

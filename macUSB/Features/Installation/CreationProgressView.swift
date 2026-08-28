@@ -293,7 +293,8 @@ struct CreationProgressView: View {
             }
         }
         .id(stageState)
-        .transition(MacUSBDesignTokens.stageCardTransition)
+        .scaleEffect(MacUSBDesignTokens.stageScale(isActive: stageState == .active))
+        .transition(MacUSBDesignTokens.stageCardTransition(isActive: stageState == .active))
     }
 
     private var creationStageMotionStates: [CreationStageVisualState] {

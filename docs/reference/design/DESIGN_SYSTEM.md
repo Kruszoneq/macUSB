@@ -59,7 +59,8 @@ The downloader prerequisite warning action is the reference implementation for c
 
 - When a running process advances, the completed stage and the newly active stage must update in one shared `easeInOut` animation lasting `0.24` seconds.
 - Keep stage-row identity stable and key the animation to the complete set of visual stage states, so progress and speed updates do not retrigger the list transition.
-- Replace the visual contents of a stage card with a symmetric opacity plus subtle `0.98` scale transition. The containing stage list must animate the corresponding height changes so the active card collapses as the next card expands.
+- Pending and completed stage cards remain at `0.98` scale, while the active stage uses `1.0` scale.
+- Replace the visual contents of a stage card with a symmetric opacity transition. The active card additionally scales between `0.98` and `1.0` during entry and exit, and the containing stage list animates the corresponding height changes so the active card collapses as the next card expands.
 - Animation remains presentation-only. Do not delay, reorder, or merge workflow events to accommodate it.
 
 The downloader and USB creation process screens share this stage-transition behavior.

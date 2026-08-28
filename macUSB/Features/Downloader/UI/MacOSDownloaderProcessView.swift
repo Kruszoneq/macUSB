@@ -195,7 +195,8 @@ extension MacOSDownloaderWindowShellView {
             }
         }
         .id(stageState)
-        .transition(MacUSBDesignTokens.stageCardTransition)
+        .scaleEffect(MacUSBDesignTokens.stageScale(isActive: stageState == .active))
+        .transition(MacUSBDesignTokens.stageCardTransition(isActive: stageState == .active))
     }
 
     private var downloadStageMotionStates: [DownloadStageVisualState] {

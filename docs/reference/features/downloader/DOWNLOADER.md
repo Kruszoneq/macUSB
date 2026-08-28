@@ -263,7 +263,7 @@ Process screen:
   - pending,
   - active (accent-highlighted through the shared Liquid Glass-compatible active surface),
   - completed (green check state).
-- advancing to the next stage animates the completed and newly active cards together with the shared stage-transition motion; frequent progress and speed updates do not retrigger this transition.
+- pending and completed cards remain at `0.98` scale, while the active card uses `1.0`; advancing to the next stage animates the completed and newly active cards together with the shared stage-transition motion, and frequent progress and speed updates do not retrigger this transition.
 - active download stage shows:
   - percent above progress bar,
   - speed label and transfer,

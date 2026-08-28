@@ -26,8 +26,13 @@ enum MacUSBDesignTokens {
         .easeInOut(duration: stageTransitionDuration)
     }
 
-    static var stageCardTransition: AnyTransition {
-        .opacity.combined(with: .scale(scale: stageTransitionScale))
+    static func stageScale(isActive: Bool) -> CGFloat {
+        isActive ? 1 : stageTransitionScale
+    }
+
+    static func stageCardTransition(isActive: Bool) -> AnyTransition {
+        guard isActive else { return .opacity }
+        return .opacity.combined(with: .scale(scale: stageTransitionScale))
     }
 
     static func panelCornerRadius(for mode: VisualSystemMode) -> CGFloat {
