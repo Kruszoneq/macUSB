@@ -56,10 +56,18 @@ extension MontereyDownloadFlowModel {
                 playCompletionSound(success: true)
             }
         } catch is MacOSDiskImagePreflightCancelled {
+            AppLogging.info(
+                "Preflight miejsca przed pobieraniem z obrazem DMG: anulowano po wykryciu kolizji nazwy pliku.",
+                category: "Downloader"
+            )
             workflowState = .idle
             didCancelDiskImagePreflight = true
             activeDiskImagePreflightPlan = nil
         } catch let error as MacOSDiskImagePreflightError {
+            AppLogging.error(
+                "Preflight miejsca przed pobieraniem z obrazem DMG zakończony niepowodzeniem: \(diskImagePreflightTechnicalDescription(for: error)).",
+                category: "Downloader"
+            )
             workflowState = .idle
             suppressInlineFailureMessage = true
             activeDiskImagePreflightPlan = nil
@@ -219,6 +227,12 @@ extension MontereyDownloadFlowModel {
                !collisionDecision(collisionContext) {
                 throw MacOSDiskImagePreflightCancelled()
             }
+            if let collisionContext = plan.collisionContext {
+                AppLogging.info(
+                    "Preflight obrazu DMG: zaakceptowano zmianę nazwy z \(collisionContext.existingFileName) na \(collisionContext.proposedFileName).",
+                    category: "Downloader"
+                )
+            }
             activeDiskImagePreflightPlan = plan
         } else {
             try verifyTemporaryDiskCapacity(requiredBytes: manifest.totalExpectedBytes)
@@ -270,6 +284,22 @@ extension MontereyDownloadFlowModel {
             return "Source installer restoration failed: \(details)"
         default:
             return error.localizedDescription
+        }
+    }
+
+    func diskImagePreflightTechnicalDescription(
+        for error: MacOSDiskImagePreflightError
+    ) -> String {
+        switch error {
+        case .destinationUnavailable:
+            return "katalog docelowy jest niedostępny"
+        case .capacityUnavailable:
+            return "nie udało się odczytać dostępnego miejsca"
+        case let .insufficientSpace(location, requiredBytes, availableBytes):
+            let locationDescription = location == .systemVolume
+                ? "wolumin systemowy/katalogu tymczasowego"
+                : "wolumin docelowy obrazu DMG"
+            return "brak miejsca na \(locationDescription); wymagane=\(MacOSDownloadDiskSpaceDiagnostics.describe(requiredBytes)), dostępne=\(MacOSDownloadDiskSpaceDiagnostics.describe(availableBytes))"
         }
     }
 }

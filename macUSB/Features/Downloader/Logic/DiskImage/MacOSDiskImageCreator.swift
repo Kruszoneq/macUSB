@@ -28,6 +28,11 @@ extension MontereyDownloadFlowModel {
             .appendingPathComponent(".macusb-dmg-\(UUID().uuidString.lowercased()).dmg")
         var installerWasStaged = false
 
+        AppLogging.info(
+            "Tworzenie obrazu DMG: rozpoczęto; instalator=\(installerURL.path), plik docelowy=\(preflightPlan.destinationURL.path).",
+            category: "Downloader"
+        )
+
         do {
             guard fileManager.fileExists(atPath: preflightPlan.destinationDirectoryURL.path),
                   fileManager.isWritableFile(atPath: preflightPlan.destinationDirectoryURL.path)
@@ -60,12 +65,6 @@ extension MontereyDownloadFlowModel {
                 .filter { !$0.isEmpty }
                 .joined(separator: "\n")
                 .trimmingCharacters(in: .whitespacesAndNewlines)
-            if !diagnostic.isEmpty {
-                AppLogging.info(
-                    "hdiutil disk image output: \(diagnostic)",
-                    category: "Downloader"
-                )
-            }
             guard processResult.terminationStatus == 0 else {
                 throw MacOSDiskImageCreationError.processFailed(
                     diagnostic.isEmpty
@@ -88,10 +87,6 @@ extension MontereyDownloadFlowModel {
                     preferredFileName: preflightPlan.preferredFileName,
                     fileManager: fileManager
                 )
-                AppLogging.info(
-                    "Disk image destination changed during finalization because of a new collision: \(destinationURL.lastPathComponent)",
-                    category: "Downloader"
-                )
             } else {
                 destinationURL = preflightPlan.destinationURL
             }
@@ -110,7 +105,7 @@ extension MontereyDownloadFlowModel {
                 diskImageStageStatus = .completed
                 completedStages.insert(.creatingDiskImage)
                 AppLogging.info(
-                    "Disk image created at \(destinationURL.path); source installer removed.",
+                    "Tworzenie obrazu DMG: zakończono pomyślnie; obraz=\(destinationURL.path).",
                     category: "Downloader"
                 )
                 return .success(diskImageURL: destinationURL)
@@ -125,7 +120,7 @@ extension MontereyDownloadFlowModel {
                 diskImageStageStatus = .completed
                 completedStages.insert(.creatingDiskImage)
                 AppLogging.error(
-                    "Disk image created, but source installer removal failed: \(error.localizedDescription)",
+                    "Tworzenie obrazu DMG: zakończono z błędem usuwania instalatora źródłowego; obraz=\(destinationURL.path), zachowany instalator=\(retainedURL.path), szczegóły=\(error.localizedDescription)",
                     category: "Downloader"
                 )
                 return .partialSuccess(
@@ -134,6 +129,7 @@ extension MontereyDownloadFlowModel {
                 )
             }
         } catch {
+            let creationError = error
             if fileManager.fileExists(atPath: temporaryImageURL.path) {
                 try? fileManager.removeItem(at: temporaryImageURL)
             }
@@ -146,15 +142,27 @@ extension MontereyDownloadFlowModel {
                     )
                     finalInstallerAppURL = restoredURL
                 } catch {
+                    AppLogging.error(
+                        "Tworzenie obrazu DMG: zakończono błędem; nie udało się przywrócić instalatora źródłowego: \(error.localizedDescription)",
+                        category: "Downloader"
+                    )
                     throw MacOSDiskImageCreationError.sourceRestoreFailed(
                         error.localizedDescription
                     )
                 }
             }
-            if error is CancellationError || Task.isCancelled {
+            if creationError is CancellationError || Task.isCancelled {
+                AppLogging.info(
+                    "Tworzenie obrazu DMG: anulowano.",
+                    category: "Downloader"
+                )
                 throw CancellationError()
             }
-            throw error
+            AppLogging.error(
+                "Tworzenie obrazu DMG: zakończono błędem: \(diskImageTechnicalDescription(for: creationError))",
+                category: "Downloader"
+            )
+            throw creationError
         }
     }
 

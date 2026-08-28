@@ -4,7 +4,7 @@ struct MacOSDiskImageConfiguration: Equatable {
     let isEnabled: Bool
     let destinationDirectoryURL: URL?
 
-    nonisolated static let disabled = MacOSDiskImageConfiguration(
+    static let disabled = MacOSDiskImageConfiguration(
         isEnabled: false,
         destinationDirectoryURL: nil
     )

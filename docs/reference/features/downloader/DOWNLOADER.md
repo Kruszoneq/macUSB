@@ -344,6 +344,8 @@ Downloader logs should include:
 - manifest contents summary per item,
 - verification step outputs (expected vs actual),
 - helper assembly progress and movement logs,
+- disk-space preflight results for every checked volume, including required and available capacity as exact bytes and decimal GB,
+- disk-image creation start and terminal result, including technical error details when creation fails,
 - cleanup result and final destination status.
 
 Logging category:
