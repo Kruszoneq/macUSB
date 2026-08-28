@@ -78,7 +78,7 @@ extension MacOSDownloaderWindowShellView {
                                 downloadStageSectionDivider
 
                                 VStack(spacing: 10) {
-                                    ForEach(MontereyDownloadFlowStage.allCases, id: \.self) { stage in
+                                    ForEach(visibleDownloadStages, id: \.self) { stage in
                                         downloadStageRow(for: stage)
                                     }
                                 }
@@ -215,7 +215,13 @@ extension MacOSDownloaderWindowShellView {
     }
 
     private var downloadStageMotionStates: [DownloadStageVisualState] {
-        MontereyDownloadFlowStage.allCases.map(downloadFlowModel.visualState(for:))
+        visibleDownloadStages.map(downloadFlowModel.visualState(for:))
+    }
+
+    private var visibleDownloadStages: [MontereyDownloadFlowStage] {
+        MontereyDownloadFlowStage.allCases.filter { stage in
+            stage != .creatingDiskImage || downloadFlowModel.activeDiskImageConfiguration.isEnabled
+        }
     }
 
     func pendingIconForDownloadStage(_ stage: MontereyDownloadFlowStage) -> String {
@@ -228,6 +234,8 @@ extension MacOSDownloaderWindowShellView {
             return "checkmark.shield"
         case .buildingInstaller:
             return "shippingbox"
+        case .creatingDiskImage:
+            return "externaldrive.badge.plus"
         case .cleanup:
             return "checkmark.circle"
         }
@@ -243,6 +251,8 @@ extension MacOSDownloaderWindowShellView {
             return "checkmark.shield.fill"
         case .buildingInstaller:
             return "shippingbox.fill"
+        case .creatingDiskImage:
+            return "externaldrive.fill.badge.plus"
         case .cleanup:
             return "checkmark.circle.fill"
         }
@@ -261,6 +271,8 @@ extension MacOSDownloaderWindowShellView {
                 format: String(localized: "Przygotowywanie instalatora %@"),
                 installerFamilyLabelForBuildStage()
             )
+        case .creatingDiskImage:
+            return String(localized: "downloader.disk_image.stage.title")
         case .cleanup:
             return String(localized: "Kończenie pracy")
         }
@@ -303,6 +315,17 @@ extension MacOSDownloaderWindowShellView {
             )
         case .buildingInstaller:
             return downloadFlowModel.buildStatusText
+        case .creatingDiskImage:
+            switch downloadFlowModel.diskImageStageStatus {
+            case .preparing:
+                return String(localized: "downloader.disk_image.stage.preparing")
+            case .creating:
+                return String(localized: "downloader.disk_image.stage.creating")
+            case .removingSource:
+                return String(localized: "downloader.disk_image.stage.removing_source")
+            case .completed:
+                return String(localized: "downloader.disk_image.stage.completed")
+            }
         case .cleanup:
             return downloadFlowModel.cleanupStatusText
         }
@@ -317,6 +340,8 @@ extension MacOSDownloaderWindowShellView {
         case .verifying:
             return nil
         case .buildingInstaller:
+            return nil
+        case .creatingDiskImage:
             return nil
         case .cleanup:
             return nil

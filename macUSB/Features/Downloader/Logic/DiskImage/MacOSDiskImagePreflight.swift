@@ -78,6 +78,7 @@ struct MacOSDiskImagePreflight {
 
         return MacOSDiskImagePreflightPlan(
             destinationDirectoryURL: destinationURL,
+            preferredFileName: preferredFileName,
             destinationURL: resolvedURL,
             volumeName: MacOSDiskImageNamingPolicy.baseName(for: entry),
             collisionContext: collisionContext

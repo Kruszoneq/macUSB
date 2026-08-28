@@ -1,14 +1,25 @@
 import Foundation
 
 extension MontereyDownloadFlowModel {
-    func runWorkflow(for entry: MacOSInstallerEntry, using logic: MacOSDownloaderLogic) async {
+    func runWorkflow(
+        for entry: MacOSInstallerEntry,
+        using logic: MacOSDownloaderLogic,
+        diskImageConfiguration: MacOSDiskImageConfiguration,
+        collisionDecision: @escaping @MainActor (MacOSDiskImageCollisionContext) -> Bool
+    ) async {
         let sleepBlockToken = SystemSleepBlocker.shared.begin(reason: "Pobieranie systemu macOS")
         defer { SystemSleepBlocker.shared.end(sleepBlockToken) }
 
         workflowState = .running
+        activeDiskImageConfiguration = diskImageConfiguration
 
         do {
-            let manifest = try await runConnectionCheck(for: entry, using: logic)
+            let manifest = try await runConnectionCheck(
+                for: entry,
+                using: logic,
+                diskImageConfiguration: diskImageConfiguration,
+                collisionDecision: collisionDecision
+            )
             activeManifest = manifest
             discoveredDownloadItems = manifest.items
 
@@ -16,11 +27,26 @@ extension MontereyDownloadFlowModel {
             try await runFileDownloads(manifest: manifest)
             try await runFileVerification(manifest: manifest, entry: entry)
             try await runInstallerBuild(manifest: manifest, entry: entry)
+            if diskImageConfiguration.isEnabled {
+                do {
+                    _ = try await runDiskImageCreation()
+                } catch is CancellationError {
+                    throw CancellationError()
+                } catch {
+                    throw DownloadFailureReason.diskImageCreationFailed(
+                        diskImageTechnicalDescription(for: error)
+                    )
+                }
+            }
             try await runCleanup(completionReason: .success)
 
             updateSummaryMetrics()
             isFinished = true
-            if let cleanupWarningMessage, !cleanupWarningMessage.isEmpty {
+            if diskImageSourceRemovalWarning {
+                isPartialSuccess = true
+                workflowState = .failed
+                playCompletionSound(success: true)
+            } else if let cleanupWarningMessage, !cleanupWarningMessage.isEmpty {
                 failureMessage = cleanupWarningMessage
                 isPartialSuccess = finalInstallerAppURL != nil
                 workflowState = .failed
@@ -28,6 +54,24 @@ extension MontereyDownloadFlowModel {
             } else {
                 workflowState = .completed
                 playCompletionSound(success: true)
+            }
+        } catch is MacOSDiskImagePreflightCancelled {
+            workflowState = .idle
+            didCancelDiskImagePreflight = true
+            activeDiskImagePreflightPlan = nil
+        } catch let error as MacOSDiskImagePreflightError {
+            workflowState = .idle
+            suppressInlineFailureMessage = true
+            activeDiskImagePreflightPlan = nil
+            switch error {
+            case let .insufficientSpace(location, requiredBytes, availableBytes):
+                pendingDiskSpaceAlert = DiskSpaceAlertContext(
+                    requiredMinimumText: formatDiskImageGigabytes(requiredBytes),
+                    availableText: formatDiskImageGigabytes(availableBytes),
+                    diskImageLocation: location
+                )
+            case .destinationUnavailable, .capacityUnavailable:
+                pendingDiskImageFolderUnavailableAlert = true
             }
         } catch is CancellationError {
             workflowState = .cancelled
@@ -84,7 +128,8 @@ extension MontereyDownloadFlowModel {
                 isPartialSuccess = true
                 failureMessage = String(localized: "Instalator został przygotowany, ale usuwanie plików tymczasowych nie zostało ukończone automatycznie.")
             } else {
-                isPartialSuccess = (finalInstallerAppURL != nil) && completedStages.contains(.cleanup)
+                isPartialSuccess = (finalInstallerAppURL != nil || finalDiskImageURL != nil)
+                    && completedStages.contains(.cleanup)
             }
             updateSummaryMetrics()
             playCompletionSound(success: false)
@@ -132,7 +177,9 @@ extension MontereyDownloadFlowModel {
 
     func runConnectionCheck(
         for entry: MacOSInstallerEntry,
-        using logic: MacOSDownloaderLogic
+        using logic: MacOSDownloaderLogic,
+        diskImageConfiguration: MacOSDiskImageConfiguration,
+        collisionDecision: @escaping @MainActor (MacOSDiskImageCollisionContext) -> Bool
     ) async throws -> DownloadManifest {
         currentStage = .connection
         connectionStatusText = String(localized: "Łączenie z serwerami Apple i pobieranie manifestu wybranego systemu...")
@@ -162,7 +209,20 @@ extension MontereyDownloadFlowModel {
         }
 
         connectionStatusText = String(localized: "Sprawdzanie dostępnego miejsca w katalogu tymczasowym...")
-        try verifyTemporaryDiskCapacity(requiredBytes: manifest.totalExpectedBytes)
+        if diskImageConfiguration.isEnabled {
+            let plan = try MacOSDiskImagePreflight().prepare(
+                configuration: diskImageConfiguration,
+                entry: entry,
+                installerBytes: manifest.totalExpectedBytes
+            )
+            if let collisionContext = plan.collisionContext,
+               !collisionDecision(collisionContext) {
+                throw MacOSDiskImagePreflightCancelled()
+            }
+            activeDiskImagePreflightPlan = plan
+        } else {
+            try verifyTemporaryDiskCapacity(requiredBytes: manifest.totalExpectedBytes)
+        }
 
         downloadTotal = manifest.items.count
         verifyTotal = manifest.items.count
@@ -173,5 +233,41 @@ extension MontereyDownloadFlowModel {
         )
         completedStages.insert(.connection)
         return manifest
+    }
+
+    func formatDiskImageGigabytes(_ bytes: Int64) -> String {
+        let formatter = NumberFormatter()
+        formatter.locale = .current
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        let gigabytes = Double(bytes) / 1_000_000_000
+        return formatter.string(from: NSNumber(value: gigabytes))
+            ?? String(format: "%.2f", gigabytes)
+    }
+
+    func diskImageTechnicalDescription(for error: Error) -> String {
+        switch error {
+        case MacOSDiskImageCreationError.missingConfiguration:
+            return "Missing disk image configuration"
+        case MacOSDiskImageCreationError.missingInstaller:
+            return "Missing source installer"
+        case MacOSDiskImageCreationError.missingSessionOutput:
+            return "Missing session output directory"
+        case MacOSDiskImageCreationError.destinationUnavailable:
+            return "Disk image destination is unavailable"
+        case MacOSDiskImageCreationError.destinationCollision:
+            return "Disk image destination collision occurred during finalization"
+        case let MacOSDiskImageCreationError.stagingFailed(details):
+            return details
+        case let MacOSDiskImageCreationError.processFailed(details):
+            return details
+        case MacOSDiskImageCreationError.invalidOutput:
+            return "hdiutil did not create a valid disk image"
+        case let MacOSDiskImageCreationError.sourceRestoreFailed(details):
+            return "Source installer restoration failed: \(details)"
+        default:
+            return error.localizedDescription
+        }
     }
 }

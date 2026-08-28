@@ -23,9 +23,17 @@ struct MacOSDiskImageCollisionContext: Equatable {
 
 struct MacOSDiskImagePreflightPlan: Equatable {
     let destinationDirectoryURL: URL
+    let preferredFileName: String
     let destinationURL: URL
     let volumeName: String
     let collisionContext: MacOSDiskImageCollisionContext?
+}
+
+enum MacOSDiskImageStageStatus: Equatable {
+    case preparing
+    case creating
+    case removingSource
+    case completed
 }
 
 enum MacOSDiskImagePreflightError: Error, Equatable {
@@ -54,3 +62,11 @@ enum MacOSDiskImageCreationError: Error {
     case invalidOutput
     case sourceRestoreFailed(String)
 }
+
+struct MacOSDiskImageProcessResult {
+    let terminationStatus: Int32
+    let standardOutput: String
+    let standardError: String
+}
+
+struct MacOSDiskImagePreflightCancelled: Error {}
