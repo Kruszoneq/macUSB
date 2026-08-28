@@ -22,6 +22,20 @@ enum MacOSDiskImageNamingPolicy {
             return preferredURL
         }
 
+        return firstAvailableSuffixedURL(
+            in: directoryURL,
+            preferredFileName: preferredFileName,
+            fileManager: fileManager
+        )
+    }
+
+    static func firstAvailableSuffixedURL(
+        in directoryURL: URL,
+        preferredFileName: String,
+        fileManager: FileManager = .default
+    ) -> URL {
+        let preferredURL = directoryURL.appendingPathComponent(preferredFileName)
+
         let fileExtension = preferredURL.pathExtension
         let stem = preferredURL.deletingPathExtension().lastPathComponent
         var suffix = 2

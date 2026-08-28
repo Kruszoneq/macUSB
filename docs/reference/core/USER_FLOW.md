@@ -55,7 +55,9 @@ Windows-specific runtime behavior:
 - Selecting the prerequisite warning or attempting a blocked download presents an actionable app-icon alert. Returning from System Settings refreshes the state without rerunning discovery or clearing selection.
 - While discovery runs, header/options remain visible; list area shows scanning panel.
 - After discovery completes, grouped systems list is shown.
-- On downloader summary, when final `.app` exists, icon action can pass installer path to analysis and trigger automatic analysis; from Welcome, app navigates to analysis first.
+- On downloader summary, when final `.app` or `.dmg` exists, the icon action can pass its path to analysis and trigger automatic analysis; from Welcome, app navigates to analysis first.
+- Downloader options can enable session-only DMG output and select its destination directory. Preflight resolves output-name collisions and checks the system and destination volumes before any session directory or payload download is started.
+- A DMG-enabled workflow adds an indeterminate disk-image stage after `.app` assembly. Success removes the source `.app`; cancellation or image-creation failure restores it.
 
 ## Update Trigger
 

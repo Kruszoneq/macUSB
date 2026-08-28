@@ -12,6 +12,8 @@ struct MacOSDownloaderWindowShellView: View {
     @State var isOptionsPresented = false
     @State var showAllAvailableVersions = false
     @State var showBetaVersions = false
+    @State var createDiskImage = false
+    @State var diskImageDestinationDirectoryURL: URL?
     @State var selectedInstallerID: String?
     @State var activeDownloadEntry: MacOSInstallerEntry?
 
@@ -63,7 +65,7 @@ struct MacOSDownloaderWindowShellView: View {
             }
         }
         .sheet(isPresented: $isOptionsPresented) {
-            MacOSDownloaderOptionsSheetView(
+            MacOSDownloaderDiskImageOptionsView(
                 showAllAvailableVersions: Binding(
                     get: { showAllAvailableVersions },
                     set: { newValue in
@@ -80,6 +82,8 @@ struct MacOSDownloaderWindowShellView: View {
                         }
                     }
                 ),
+                createDiskImage: $createDiskImage,
+                diskImageDestinationDirectoryURL: $diskImageDestinationDirectoryURL,
                 preserveDownloadedFilesInDebug: $downloadFlowModel.preserveDownloadedFilesInDebug
             )
         }
@@ -117,6 +121,18 @@ struct MacOSDownloaderWindowShellView: View {
             guard let context = downloadFlowModel.pendingDiskSpaceAlert else { return }
             presentInsufficientDiskSpaceAlert(context: context)
             downloadFlowModel.pendingDiskSpaceAlert = nil
+            if context.diskImageLocation != nil {
+                returnToInstallerListAfterDiskImagePreflight()
+            }
+        }
+        .onChange(of: downloadFlowModel.pendingDiskImageFolderUnavailableAlert) {
+            guard downloadFlowModel.pendingDiskImageFolderUnavailableAlert else { return }
+            presentDiskImageFolderUnavailableAlert()
+            returnToInstallerListAfterDiskImagePreflight()
+        }
+        .onChange(of: downloadFlowModel.didCancelDiskImagePreflight) {
+            guard downloadFlowModel.didCancelDiskImagePreflight else { return }
+            returnToInstallerListAfterDiskImagePreflight()
         }
         .onDisappear {
             prerequisiteController.invalidate()
@@ -192,21 +208,6 @@ struct MacOSDownloaderWindowShellView: View {
         alert.addButton(withTitle: String(localized: "Kontynuuj pobieranie"))
         alert.addButton(withTitle: String(localized: "Anuluj pobieranie i zamknij"))
         return alert.runModal() == .alertSecondButtonReturn
-    }
-
-    func presentInsufficientDiskSpaceAlert(context: DiskSpaceAlertContext) {
-        let alert = NSAlert()
-        alert.icon = NSApp.applicationIconImage
-        alert.alertStyle = .warning
-        alert.messageText = String(localized: "Za mało miejsca na dysku")
-        alert.informativeText = String(
-            format: String(localized: "Aby rozpocząć pobieranie, potrzebujesz więcej wolnego miejsca na dysku.\n\nWymagane minimum: %@. Dostępne: %@.\n\nZwolnij miejsce i spróbuj ponownie."),
-            context.requiredMinimumText,
-            context.availableText
-        )
-        alert.addButton(withTitle: String(localized: "OK"))
-        alert.runModal()
-        handleCloseRequest()
     }
 
     func presentUnrecognizedLocalInstallersAlertIfNeeded() {
@@ -372,7 +373,20 @@ struct MacOSDownloaderWindowShellView: View {
         withAnimation(MacUSBDesignTokens.stageTransitionAnimation) {
             activeDownloadEntry = entry
         }
-        downloadFlowModel.start(for: entry, using: logic)
+        let diskImageConfiguration = MacOSDiskImageConfiguration(
+            isEnabled: createDiskImage,
+            destinationDirectoryURL: createDiskImage
+                ? diskImageDestinationDirectoryURL
+                : nil
+        )
+        downloadFlowModel.start(
+            for: entry,
+            using: logic,
+            diskImageConfiguration: diskImageConfiguration,
+            collisionDecision: { context in
+                presentDiskImageCollisionAlert(context: context)
+            }
+        )
 
         AppLogging.info(
             "Uruchomiono pobieranie systemu dla \(entry.name) \(entry.version).",
@@ -414,61 +428,4 @@ struct MacOSDownloaderWindowShellView: View {
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
 
-}
-
-private struct MacOSDownloaderOptionsSheetView: View {
-    @Binding var showAllAvailableVersions: Bool
-    @Binding var showBetaVersions: Bool
-    @Binding var preserveDownloadedFilesInDebug: Bool
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Text(String(localized: "Opcje pobierania"))
-                .font(.headline)
-
-            Toggle(String(localized: "Pokaż wszystkie wersje"), isOn: $showAllAvailableVersions)
-                .toggleStyle(.checkbox)
-
-            Toggle(
-                String(localized: "downloader.options.showBetaVersions"),
-                isOn: $showBetaVersions
-            )
-            .toggleStyle(.checkbox)
-
-            #if DEBUG
-            HStack(spacing: 10) {
-                Capsule()
-                    .fill(Color.secondary.opacity(0.20))
-                    .frame(height: 1)
-                Text(String(localized: "Deweloperskie"))
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                Capsule()
-                    .fill(Color.secondary.opacity(0.20))
-                    .frame(height: 1)
-            }
-            .padding(.vertical, 2)
-
-            Toggle(String(localized: "Zachowaj pobrane pliki (Debug)"), isOn: $preserveDownloadedFilesInDebug)
-                .toggleStyle(.checkbox)
-            #endif
-
-            Spacer(minLength: 0)
-
-            HStack {
-                Spacer()
-                Button {
-                    dismiss()
-                } label: {
-                    Text(String(localized: "OK"))
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 6)
-                }
-                .macUSBPrimaryButtonStyle()
-            }
-        }
-        .padding(18)
-        .frame(width: 420, height: 240)
-    }
 }

@@ -237,7 +237,9 @@ extension MontereyDownloadFlowModel {
 
     func formatDiskImageGigabytes(_ bytes: Int64) -> String {
         let formatter = NumberFormatter()
-        formatter.locale = .current
+        let activeLanguageIdentifier = Bundle.main.preferredLocalizations.first
+            ?? Locale.current.identifier
+        formatter.locale = Locale(identifier: activeLanguageIdentifier)
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 2
         formatter.maximumFractionDigits = 2

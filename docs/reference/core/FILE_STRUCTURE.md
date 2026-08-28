@@ -92,8 +92,11 @@
 - `macUSB/Features/Downloader/Logic/MacOSDownloaderPrerequisites.swift` — combines Full Disk Access and passive helper readiness into the downloader gate while rejecting stale checks.
 - `macUSB/Features/Downloader/UI/*`
 - `macUSB/Features/Downloader/UI/MacOSDownloaderPrerequisiteAlerts.swift` — prerequisite alert variants and direct System Settings actions.
+- `macUSB/Features/Downloader/UI/MacOSDownloaderDiskImageOptionsView.swift` — session-only DMG toggle, destination picker, abbreviated path, and change action.
+- `macUSB/Features/Downloader/UI/MacOSDownloaderDiskImageAlerts.swift` — collision, destination-access, and volume-specific capacity alerts for DMG preflight.
 - `macUSB/Features/Downloader/Logic/Discovery/*`
 - `macUSB/Features/Downloader/Logic/Download/*`
+- `macUSB/Features/Downloader/Logic/DiskImage/*` — session-only DMG output models, naming, volume-aware preflight, cancellable `hdiutil` execution, staging, rollback, and source-app removal.
 - `macUSB/Features/Downloader/Logic/Assembly/*`
 - `macUSB/Features/Downloader/Logic/MacOSVerificationLogic.swift`
 - `macUSB/Features/Downloader/Logic/MacOSCleanupLogic.swift`

@@ -206,6 +206,7 @@ final class MontereyDownloadFlowModel: ObservableObject {
     ) {
         stop()
         resetState()
+        activeDiskImageConfiguration = diskImageConfiguration
 
         workflowTask = Task { [weak self] in
             guard let self else { return }

@@ -9277,6 +9277,256 @@
         }
       }
     },
+    "downloader.disk_image.collision.cancel" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anuluj pobieranie"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.collision.continue" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontynuuj z nową nazwą"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.collision.message" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Katalog „%@” zawiera już plik „%@”. Jeśli będziesz kontynuować, nowy obraz zostanie zapisany jako „%@”."
+          }
+        }
+      }
+    },
+    "downloader.disk_image.collision.title" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plik obrazu dysku już istnieje"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.error.creation" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się utworzyć obrazu dysku: %@"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.folder.change" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zmień"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.folder.change_help" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zmień katalog docelowy obrazu dysku"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.folder_unavailable.message" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprawdź, czy katalog nadal istnieje i czy masz uprawnienia do zapisywania w nim plików, a następnie spróbuj ponownie."
+          }
+        }
+      }
+    },
+    "downloader.disk_image.folder_unavailable.title" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie można użyć wybranego katalogu"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.option.title" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapisz instalator jako obraz dysku (.dmg)"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.partial.source_removal" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obraz dysku został utworzony, ale nie udało się usunąć źródłowego instalatora „%@”. Oba pliki pozostały na dysku."
+          }
+        }
+      }
+    },
+    "downloader.disk_image.picker.message" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gotowy plik .dmg zostanie zapisany w wybranym katalogu."
+          }
+        }
+      }
+    },
+    "downloader.disk_image.picker.prompt" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz katalog"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.picker.title" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz katalog dla obrazu dysku"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.space.destination.message" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wolumin zawierający wybrany katalog nie ma wystarczającej ilości wolnego miejsca, aby utworzyć obraz dysku.\n\nWymagane miejsce: %@ GB\nDostępne miejsce: %@ GB"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.space.destination.title" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Za mało miejsca w katalogu docelowym"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.space.return" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wróć do downloadera"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.space.system.message" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na woluminie systemowym nie ma wystarczającej ilości wolnego miejsca, aby pobrać i przygotować instalator oraz utworzyć obraz dysku.\n\nWymagane miejsce: %@ GB\nDostępne miejsce: %@ GB"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.space.system.title" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Za mało miejsca na woluminie systemowym"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.stage.completed" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obraz dysku został utworzony"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.stage.creating" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tworzenie obrazu dysku..."
+          }
+        }
+      }
+    },
+    "downloader.disk_image.stage.preparing" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przygotowywanie obrazu dysku..."
+          }
+        }
+      }
+    },
+    "downloader.disk_image.stage.removing_source" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuwanie źródłowego instalatora..."
+          }
+        }
+      }
+    },
+    "downloader.disk_image.stage.title" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tworzenie obrazu dysku"
+          }
+        }
+      }
+    },
+    "downloader.disk_image.summary.label" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obraz dysku"
+          }
+        }
+      }
+    },
     "downloader.intel_bootable_installer_warning.cancel" : {
       "localizations" : {
         "de" : {

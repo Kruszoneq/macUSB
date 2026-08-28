@@ -46,18 +46,6 @@ extension MontereyDownloadFlowModel {
             installerWasStaged = true
             finalInstallerAppURL = stagedInstallerURL
 
-            let destinationURL = MacOSDiskImageNamingPolicy.firstAvailableURL(
-                in: preflightPlan.destinationDirectoryURL,
-                preferredFileName: preflightPlan.preferredFileName,
-                fileManager: fileManager
-            )
-            if destinationURL != preflightPlan.destinationURL {
-                AppLogging.info(
-                    "Disk image destination changed after preflight because of a new collision: \(destinationURL.lastPathComponent)",
-                    category: "Downloader"
-                )
-            }
-
             diskImageStageStatus = .creating
             let processResult = try await diskImageProcessRunner.run(arguments: [
                 "create",
@@ -91,6 +79,21 @@ extension MontereyDownloadFlowModel {
                   fileSize.int64Value > 0
             else {
                 throw MacOSDiskImageCreationError.invalidOutput
+            }
+
+            let destinationURL: URL
+            if fileManager.fileExists(atPath: preflightPlan.destinationURL.path) {
+                destinationURL = MacOSDiskImageNamingPolicy.firstAvailableSuffixedURL(
+                    in: preflightPlan.destinationDirectoryURL,
+                    preferredFileName: preflightPlan.preferredFileName,
+                    fileManager: fileManager
+                )
+                AppLogging.info(
+                    "Disk image destination changed during finalization because of a new collision: \(destinationURL.lastPathComponent)",
+                    category: "Downloader"
+                )
+            } else {
+                destinationURL = preflightPlan.destinationURL
             }
             guard !fileManager.fileExists(atPath: destinationURL.path) else {
                 throw MacOSDiskImageCreationError.destinationCollision
