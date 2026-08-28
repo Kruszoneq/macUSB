@@ -12,6 +12,7 @@ enum MontereyDownloadFlowStage: Int, CaseIterable {
     case downloading
     case verifying
     case buildingInstaller
+    case creatingDiskImage
     case cleanup
 }
 
@@ -30,6 +31,7 @@ enum DownloadFailureReason: LocalizedError {
     case downloadFailed(String)
     case verificationFailed(String)
     case assemblyFailed(String)
+    case diskImageCreationFailed(String)
     case cleanupFailed(String)
 
     var errorDescription: String? {
@@ -61,6 +63,11 @@ enum DownloadFailureReason: LocalizedError {
         case let .assemblyFailed(details):
             return String(
                 format: String(localized: "Nie udało się przygotować instalatora: %@"),
+                details
+            )
+        case let .diskImageCreationFailed(details):
+            return String(
+                format: String(localized: "downloader.disk_image.error.creation"),
                 details
             )
         case let .cleanupFailed(details):
@@ -113,6 +120,7 @@ struct DownloadManifest: Hashable {
 struct DiskSpaceAlertContext: Equatable {
     let requiredMinimumText: String
     let availableText: String
+    var diskImageLocation: MacOSDiskImageSpaceLocation? = nil
 }
 
 @MainActor
@@ -140,6 +148,7 @@ final class MontereyDownloadFlowModel: ObservableObject {
     @Published var verifyProgress: Double = 0
     @Published var buildStatusText: String = String(localized: "Przygotowywanie instalatora...")
     @Published var buildProgress: Double? = nil
+    @Published var diskImageStageStatus: MacOSDiskImageStageStatus = .preparing
     @Published var cleanupStatusText: String = String(localized: "Przygotowanie czyszczenia...")
     @Published var cleanupProgress: Double = 0
     @Published var summaryTotalDownloadedText: String = "0.0 GB"
@@ -155,6 +164,8 @@ final class MontereyDownloadFlowModel: ObservableObject {
     @Published var discoveredDownloadItems: [DownloadManifestItem] = []
     @Published var pendingDiskSpaceAlert: DiskSpaceAlertContext?
     @Published var suppressInlineFailureMessage: Bool = false
+    @Published var didCancelDiskImagePreflight: Bool = false
+    @Published var pendingDiskImageFolderUnavailableAlert: Bool = false
 
     @Published var preserveDownloadedFilesInDebug: Bool = false
 
@@ -174,6 +185,12 @@ final class MontereyDownloadFlowModel: ObservableObject {
     var helperCleanupFailureMessage: String?
     var downloadedFileURLsByItemID: [String: URL] = [:]
     var finalInstallerAppURL: URL?
+    var finalDiskImageURL: URL?
+    var retainedSourceInstallerURL: URL?
+    var activeDiskImageConfiguration: MacOSDiskImageConfiguration = .disabled
+    var activeDiskImagePreflightPlan: MacOSDiskImagePreflightPlan?
+    var diskImageSourceRemovalWarning: Bool = false
+    let diskImageProcessRunner = MacOSDiskImageProcessRunner()
 
     var activeDownloadTask: URLSessionDownloadTask?
     var activeDownloadSession: URLSession?
@@ -181,13 +198,24 @@ final class MontereyDownloadFlowModel: ObservableObject {
 
     var activeAssemblyWorkflowID: String?
 
-    func start(for entry: MacOSInstallerEntry, using logic: MacOSDownloaderLogic) {
+    func start(
+        for entry: MacOSInstallerEntry,
+        using logic: MacOSDownloaderLogic,
+        diskImageConfiguration: MacOSDiskImageConfiguration = .disabled,
+        collisionDecision: @escaping @MainActor (MacOSDiskImageCollisionContext) -> Bool = { _ in false }
+    ) {
         stop()
         resetState()
+        activeDiskImageConfiguration = diskImageConfiguration
 
         workflowTask = Task { [weak self] in
             guard let self else { return }
-            await runWorkflow(for: entry, using: logic)
+            await runWorkflow(
+                for: entry,
+                using: logic,
+                diskImageConfiguration: diskImageConfiguration,
+                collisionDecision: collisionDecision
+            )
         }
     }
 
@@ -205,6 +233,7 @@ final class MontereyDownloadFlowModel: ObservableObject {
             PrivilegedOperationClient.shared.cancelDownloaderAssembly(activeAssemblyWorkflowID) { _, _ in }
             self.activeAssemblyWorkflowID = nil
         }
+        diskImageProcessRunner.cancel()
     }
 
     func visualState(for stage: MontereyDownloadFlowStage) -> DownloadStageVisualState {
@@ -241,6 +270,7 @@ final class MontereyDownloadFlowModel: ObservableObject {
         verifyProgress = 0
         buildStatusText = String(localized: "Przygotowywanie instalatora...")
         buildProgress = nil
+        diskImageStageStatus = .preparing
         cleanupStatusText = String(localized: "Przygotowanie czyszczenia...")
         cleanupProgress = 0
         summaryTotalDownloadedText = "0.0 GB"
@@ -256,6 +286,8 @@ final class MontereyDownloadFlowModel: ObservableObject {
         discoveredDownloadItems = []
         pendingDiskSpaceAlert = nil
         suppressInlineFailureMessage = false
+        didCancelDiskImagePreflight = false
+        pendingDiskImageFolderUnavailableAlert = false
 
         processStartedAt = Date()
         totalDownloadedBytes = 0
@@ -271,5 +303,10 @@ final class MontereyDownloadFlowModel: ObservableObject {
         helperCleanupFailureMessage = nil
         downloadedFileURLsByItemID = [:]
         finalInstallerAppURL = nil
+        finalDiskImageURL = nil
+        retainedSourceInstallerURL = nil
+        activeDiskImageConfiguration = .disabled
+        activeDiskImagePreflightPlan = nil
+        diskImageSourceRemovalWarning = false
     }
 }

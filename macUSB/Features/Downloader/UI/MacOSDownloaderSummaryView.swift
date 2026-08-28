@@ -5,8 +5,10 @@ extension MacOSDownloaderWindowShellView {
     var downloadSummaryView: some View {
         let isFailure = downloadFlowModel.workflowState == .failed
         let isPartial = isFailure && downloadFlowModel.isPartialSuccess
-        let hasFinalInstallerApp = downloadFlowModel.finalInstallerAppURL != nil
-        let shouldShowInstallerOutputSection = !isFailure || hasFinalInstallerApp
+        let finalOutputURL = downloadFlowModel.finalDiskImageURL
+            ?? downloadFlowModel.finalInstallerAppURL
+        let hasFinalOutput = finalOutputURL != nil
+        let shouldShowInstallerOutputSection = !isFailure || hasFinalOutput
         return VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 10) {
                 Image(systemName: isPartial ? "exclamationmark.triangle.fill" : (isFailure ? "xmark.circle.fill" : "checkmark.circle.fill"))
@@ -41,7 +43,9 @@ extension MacOSDownloaderWindowShellView {
 
             if shouldShowInstallerOutputSection {
                 downloadSummaryMetricRow(
-                    title: String(localized: "Instalator"),
+                    title: downloadFlowModel.finalDiskImageURL == nil
+                        ? String(localized: "Instalator")
+                        : String(localized: "downloader.disk_image.summary.label"),
                     value: downloadFlowModel.summaryCreatedFileText
                 )
                 downloadSummaryMetricRow(
@@ -69,9 +73,29 @@ extension MacOSDownloaderWindowShellView {
                 }
             }
 
+            if downloadFlowModel.diskImageSourceRemovalWarning,
+               let retainedInstallerURL = downloadFlowModel.retainedSourceInstallerURL {
+                Divider()
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(String(localized: "Status"))
+                        .font(.subheadline.weight(.semibold))
+                    Text(
+                        String(
+                            format: String(
+                                localized: "downloader.disk_image.partial.source_removal"
+                            ),
+                            retainedInstallerURL.path
+                        )
+                    )
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+
             if shouldShowInstallerOutputSection {
                 VStack(spacing: 8) {
-                    if hasFinalInstallerApp {
+                    if hasFinalOutput {
                         Button {
                             useDownloadedInstallerInAnalysis()
                         } label: {
@@ -205,9 +229,11 @@ extension MacOSDownloaderWindowShellView {
     }
 
     func openPlannedInstallerFolder() {
-        if let finalInstallerAppURL = downloadFlowModel.finalInstallerAppURL,
-           FileManager.default.fileExists(atPath: finalInstallerAppURL.path) {
-            NSWorkspace.shared.activateFileViewerSelecting([finalInstallerAppURL])
+        let finalOutputURL = downloadFlowModel.finalDiskImageURL
+            ?? downloadFlowModel.finalInstallerAppURL
+        if let finalOutputURL,
+           FileManager.default.fileExists(atPath: finalOutputURL.path) {
+            NSWorkspace.shared.activateFileViewerSelecting([finalOutputURL])
             return
         }
 
@@ -216,13 +242,14 @@ extension MacOSDownloaderWindowShellView {
     }
 
     func useDownloadedInstallerInAnalysis() {
-        guard let finalInstallerAppURL = downloadFlowModel.finalInstallerAppURL,
-              FileManager.default.fileExists(atPath: finalInstallerAppURL.path)
+        guard let finalOutputURL = downloadFlowModel.finalDiskImageURL
+                ?? downloadFlowModel.finalInstallerAppURL,
+              FileManager.default.fileExists(atPath: finalOutputURL.path)
         else {
             return
         }
 
-        AnalysisSelectionHandoff.shared.setPendingInstallerURL(finalInstallerAppURL)
+        AnalysisSelectionHandoff.shared.setPendingInstallerURL(finalOutputURL)
         NotificationCenter.default.post(name: .macUSBNavigateToAnalysis, object: nil)
         NotificationCenter.default.post(name: .macUSBApplyPendingDownloaderInstaller, object: nil)
         handleCloseRequest()

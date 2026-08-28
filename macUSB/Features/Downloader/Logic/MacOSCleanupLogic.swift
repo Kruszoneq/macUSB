@@ -111,8 +111,9 @@ extension MontereyDownloadFlowModel {
             durationSeconds = 0
         }
         summaryDurationText = formatDuration(durationSeconds)
-        summaryCreatedFileText = finalInstallerAppURL?.lastPathComponent ?? String(localized: "Nie utworzono instalatora")
-        summaryLocationText = finalInstallerAppURL?.deletingLastPathComponent().path ?? String(localized: "Brak danych")
+        let finalOutputURL = finalDiskImageURL ?? finalInstallerAppURL
+        summaryCreatedFileText = finalOutputURL?.lastPathComponent ?? String(localized: "Nie utworzono instalatora")
+        summaryLocationText = finalOutputURL?.deletingLastPathComponent().path ?? String(localized: "Brak danych")
     }
 
     func formatDuration(_ seconds: TimeInterval) -> String {

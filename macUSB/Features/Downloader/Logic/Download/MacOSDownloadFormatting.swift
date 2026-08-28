@@ -1,5 +1,21 @@
 import Foundation
 
+enum MacOSDownloadDiskSpaceDiagnostics {
+    static func describe(_ bytes: Int64) -> String {
+        let gigabytes = Double(bytes) / 1_000_000_000
+        let abbreviated = String(
+            format: "%.2f GB",
+            locale: Locale(identifier: "en_US_POSIX"),
+            gigabytes
+        )
+        return "\(bytes) B (\(abbreviated))"
+    }
+
+    static func status(requiredBytes: Int64, availableBytes: Int64) -> String {
+        availableBytes >= requiredBytes ? "OK" : "BRAK MIEJSCA"
+    }
+}
+
 extension MontereyDownloadFlowModel {
     func formatTransferStatus(downloadedBytes: Int64, totalBytes: Int64) -> String {
         if totalBytes < 1_000_000_000 {
