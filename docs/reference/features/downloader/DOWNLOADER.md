@@ -257,6 +257,7 @@ List screen:
   - show all versions,
   - show macOS Public Beta versions (session-only and off by default),
   - DEBUG retain-files toggle (Debug only).
+- after a confirmed download action, the list screen and process screen transition in one shared `easeInOut` animation lasting `0.24` seconds, using symmetric opacity and subtle `0.98` scale transitions consistent with process-stage motion; the animation is presentation-only and does not delay workflow startup.
 
 Process screen:
 - stage cards with three visual states:
@@ -264,6 +265,7 @@ Process screen:
   - active (accent-highlighted through the shared Liquid Glass-compatible active surface),
   - completed (green check state).
 - pending and completed cards remain at `0.98` scale, while the active card uses `1.0`; advancing to the next stage animates the completed and newly active cards together with the shared stage-transition motion, and frequent progress and speed updates do not retrigger this transition.
+- when the workflow reaches a terminal state, the stage list and download summary transition in one shared `easeInOut` animation lasting `0.24` seconds, using the same symmetric opacity and subtle `0.98` scale motion as the list-to-process transition.
 - active download stage shows:
   - percent above progress bar,
   - speed label and transfer,

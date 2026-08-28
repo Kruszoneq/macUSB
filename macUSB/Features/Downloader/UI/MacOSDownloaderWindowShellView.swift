@@ -29,11 +29,16 @@ struct MacOSDownloaderWindowShellView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .macUSBPanelSurface(.subtle)
 
-            if let activeDownloadEntry {
-                downloaderProgressSection(for: activeDownloadEntry)
-            } else {
-                installerSelectionSection
+            ZStack(alignment: .topLeading) {
+                if let activeDownloadEntry {
+                    downloaderProgressSection(for: activeDownloadEntry)
+                        .transition(downloaderScreenTransition)
+                } else {
+                    installerSelectionSection
+                        .transition(downloaderScreenTransition)
+                }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
         .padding(.horizontal, MacUSBDesignTokens.contentHorizontalPadding)
         .padding(.top, MacUSBDesignTokens.contentVerticalPadding)
@@ -124,6 +129,12 @@ struct MacOSDownloaderWindowShellView: View {
         shouldConfirmCloseDuringDownload
             ? String(localized: "Anuluj")
             : String(localized: "Zamknij")
+    }
+
+    var downloaderScreenTransition: AnyTransition {
+        .opacity.combined(
+            with: .scale(scale: MacUSBDesignTokens.stageTransitionScale)
+        )
     }
 
     var managerDescriptionText: String {
@@ -358,7 +369,9 @@ struct MacOSDownloaderWindowShellView: View {
             )
         }
 
-        activeDownloadEntry = entry
+        withAnimation(MacUSBDesignTokens.stageTransitionAnimation) {
+            activeDownloadEntry = entry
+        }
         downloadFlowModel.start(for: entry, using: logic)
 
         AppLogging.info(

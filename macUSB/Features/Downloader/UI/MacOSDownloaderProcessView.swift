@@ -32,55 +32,70 @@ extension MacOSDownloaderWindowShellView {
                         }
                     }
 
-                    if downloadFlowModel.isFinished {
-                        downloadSummaryView
-                    } else {
-                        if let networkWarningMessage = downloadFlowModel.networkWarningMessage,
-                           !networkWarningMessage.isEmpty {
-                            StatusCard(tone: .warning, density: .compact) {
-                                HStack(alignment: .top, spacing: 10) {
-                                    Image(systemName: "exclamationmark.triangle.fill")
-                                        .font(.title3)
-                                        .foregroundStyle(.orange)
+                    ZStack(alignment: .topLeading) {
+                        if downloadFlowModel.isFinished {
+                            downloadSummaryView
+                                .transition(downloaderScreenTransition)
+                        } else {
+                            VStack(
+                                alignment: .leading,
+                                spacing: MacUSBDesignTokens.sectionGroupSpacing
+                            ) {
+                                if let networkWarningMessage = downloadFlowModel.networkWarningMessage,
+                                   !networkWarningMessage.isEmpty {
+                                    StatusCard(tone: .warning, density: .compact) {
+                                        HStack(alignment: .top, spacing: 10) {
+                                            Image(systemName: "exclamationmark.triangle.fill")
+                                                .font(.title3)
+                                                .foregroundStyle(.orange)
 
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(String(localized: "Połączenie internetowe zostało utracone"))
-                                            .font(.subheadline.weight(.semibold))
-                                        Text(networkWarningMessage)
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
+                                            VStack(alignment: .leading, spacing: 4) {
+                                                Text(String(localized: "Połączenie internetowe zostało utracone"))
+                                                    .font(.subheadline.weight(.semibold))
+                                                Text(networkWarningMessage)
+                                                    .font(.caption)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            Spacer(minLength: 0)
+                                        }
                                     }
-                                    Spacer(minLength: 0)
                                 }
-                            }
-                        }
 
-                        if !downloadFlowModel.suppressInlineFailureMessage,
-                           let failureMessage = downloadFlowModel.failureMessage,
-                           !failureMessage.isEmpty {
-                            StatusCard(tone: .warning, density: .compact) {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(String(localized: "Nie udało się dokończyć pobierania"))
-                                        .font(.subheadline.weight(.semibold))
-                                    Text(failureMessage)
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
+                                if !downloadFlowModel.suppressInlineFailureMessage,
+                                   let failureMessage = downloadFlowModel.failureMessage,
+                                   !failureMessage.isEmpty {
+                                    StatusCard(tone: .warning, density: .compact) {
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text(String(localized: "Nie udało się dokończyć pobierania"))
+                                                .font(.subheadline.weight(.semibold))
+                                            Text(failureMessage)
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                    }
                                 }
-                            }
-                        }
 
-                        downloadStageSectionDivider
+                                downloadStageSectionDivider
 
-                        VStack(spacing: 10) {
-                            ForEach(MontereyDownloadFlowStage.allCases, id: \.self) { stage in
-                                downloadStageRow(for: stage)
+                                VStack(spacing: 10) {
+                                    ForEach(MontereyDownloadFlowStage.allCases, id: \.self) { stage in
+                                        downloadStageRow(for: stage)
+                                    }
+                                }
+                                .animation(
+                                    MacUSBDesignTokens.stageTransitionAnimation,
+                                    value: downloadStageMotionStates
+                                )
                             }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .transition(downloaderScreenTransition)
                         }
-                        .animation(
-                            MacUSBDesignTokens.stageTransitionAnimation,
-                            value: downloadStageMotionStates
-                        )
                     }
+                    .frame(maxWidth: .infinity, alignment: .topLeading)
+                    .animation(
+                        MacUSBDesignTokens.stageTransitionAnimation,
+                        value: downloadFlowModel.isFinished
+                    )
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
