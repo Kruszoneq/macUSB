@@ -76,6 +76,10 @@ extension MacOSDownloaderWindowShellView {
                                 downloadStageRow(for: stage)
                             }
                         }
+                        .animation(
+                            MacUSBDesignTokens.stageTransitionAnimation,
+                            value: downloadStageMotionStates
+                        )
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -110,84 +114,92 @@ extension MacOSDownloaderWindowShellView {
     func downloadStageRow(for stage: MontereyDownloadFlowStage) -> some View {
         let stageState = downloadFlowModel.visualState(for: stage)
 
-        switch stageState {
-        case .pending:
-            StatusCard(tone: .subtle, density: .compact) {
-                HStack(spacing: 12) {
-                    Image(systemName: pendingIconForDownloadStage(stage))
-                        .font(.title3)
-                        .foregroundStyle(.secondary)
-                        .frame(width: 24)
-                    Text(downloadStageTitle(for: stage))
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                }
-            }
-
-        case .active:
-            StatusCard(
-                tone: .active,
-                cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode())
-            ) {
-                VStack(alignment: .leading, spacing: 10) {
+        Group {
+            switch stageState {
+            case .pending:
+                StatusCard(tone: .subtle, density: .compact) {
                     HStack(spacing: 12) {
-                        Image(systemName: activeIconForDownloadStage(stage))
+                        Image(systemName: pendingIconForDownloadStage(stage))
                             .font(.title3)
-                            .foregroundColor(.accentColor)
+                            .foregroundStyle(.secondary)
                             .frame(width: 24)
                         Text(downloadStageTitle(for: stage))
-                            .font(.headline)
-                        Spacer()
-                        if stage == .downloading {
-                            Text(downloadProgressText())
-                                .font(.title3.monospacedDigit())
-                                .fontWeight(.semibold)
-                                .foregroundColor(.accentColor)
-                        }
-                    }
-
-                    if let description = downloadStageDescription(for: stage) {
-                        Text(description)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
+                        Spacer()
                     }
+                }
 
-                    if let progress = downloadStageProgress(for: stage) {
-                        ProgressView(value: progress)
-                            .progressViewStyle(.linear)
-                    } else {
-                        ProgressView()
-                            .progressViewStyle(.linear)
-                    }
-
-                    if stage == .downloading {
-                        HStack {
-                            Text(verbatim: downloadSpeedLabelText())
-                                .font(.subheadline.monospacedDigit())
-                                .foregroundStyle(.secondary)
+            case .active:
+                StatusCard(
+                    tone: .active,
+                    cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode())
+                ) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack(spacing: 12) {
+                            Image(systemName: activeIconForDownloadStage(stage))
+                                .font(.title3)
+                                .foregroundColor(.accentColor)
+                                .frame(width: 24)
+                            Text(downloadStageTitle(for: stage))
+                                .font(.headline)
                             Spacer()
-                            Text(downloadFlowModel.downloadTransferredText)
-                                .font(.caption.monospacedDigit())
+                            if stage == .downloading {
+                                Text(downloadProgressText())
+                                    .font(.title3.monospacedDigit())
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.accentColor)
+                            }
+                        }
+
+                        if let description = downloadStageDescription(for: stage) {
+                            Text(description)
+                                .font(.subheadline)
                                 .foregroundStyle(.secondary)
+                        }
+
+                        if let progress = downloadStageProgress(for: stage) {
+                            ProgressView(value: progress)
+                                .progressViewStyle(.linear)
+                        } else {
+                            ProgressView()
+                                .progressViewStyle(.linear)
+                        }
+
+                        if stage == .downloading {
+                            HStack {
+                                Text(verbatim: downloadSpeedLabelText())
+                                    .font(.subheadline.monospacedDigit())
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                Text(downloadFlowModel.downloadTransferredText)
+                                    .font(.caption.monospacedDigit())
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                     }
                 }
-            }
 
-        case .completed:
-            StatusCard(tone: .neutral, density: .compact) {
-                HStack(spacing: 12) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.title3)
-                        .foregroundColor(.green)
-                        .frame(width: 24)
-                    Text(downloadStageTitle(for: stage))
-                        .font(.subheadline)
-                    Spacer()
+            case .completed:
+                StatusCard(tone: .neutral, density: .compact) {
+                    HStack(spacing: 12) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.title3)
+                            .foregroundColor(.green)
+                            .frame(width: 24)
+                        Text(downloadStageTitle(for: stage))
+                            .font(.subheadline)
+                        Spacer()
+                    }
                 }
             }
         }
+        .id(stageState)
+        .transition(MacUSBDesignTokens.stageCardTransition)
+    }
+
+    private var downloadStageMotionStates: [DownloadStageVisualState] {
+        MontereyDownloadFlowStage.allCases.map(downloadFlowModel.visualState(for:))
     }
 
     func pendingIconForDownloadStage(_ stage: MontereyDownloadFlowStage) -> String {

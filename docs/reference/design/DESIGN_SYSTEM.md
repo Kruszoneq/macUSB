@@ -55,6 +55,15 @@ The downloader options for Public Beta visibility and showing all available vers
 
 The downloader prerequisite warning action is the reference implementation for conditional button visibility.
 
+### Sequential process stages
+
+- When a running process advances, the completed stage and the newly active stage must update in one shared `easeInOut` animation lasting `0.24` seconds.
+- Keep stage-row identity stable and key the animation to the complete set of visual stage states, so progress and speed updates do not retrigger the list transition.
+- Replace the visual contents of a stage card with a symmetric opacity plus subtle `0.98` scale transition. The containing stage list must animate the corresponding height changes so the active card collapses as the next card expands.
+- Animation remains presentation-only. Do not delay, reorder, or merge workflow events to accommodate it.
+
+The downloader and USB creation process screens share this stage-transition behavior.
+
 ## Copy and Tone
 
 - User-facing copy should remain concise, calm, and Apple-like.

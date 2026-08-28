@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-private enum CreationStageVisualState {
+private enum CreationStageVisualState: Hashable {
     case pending
     case active
     case completed
@@ -161,6 +161,10 @@ struct CreationProgressView: View {
                             stageRow(for: stage, at: index)
                         }
                     }
+                    .animation(
+                        MacUSBDesignTokens.stageTransitionAnimation,
+                        value: creationStageMotionStates
+                    )
                 }
                 .padding(.horizontal, MacUSBDesignTokens.contentHorizontalPadding)
                 .padding(.vertical, MacUSBDesignTokens.contentVerticalPadding)
@@ -219,73 +223,81 @@ struct CreationProgressView: View {
     private func stageRow(for stage: CreationStageDescriptor, at index: Int) -> some View {
         let stageState = stateForStage(at: index)
 
-        switch stageState {
-        case .pending:
-            StatusCard(tone: .subtle, density: .compact) {
-                HStack(spacing: 12) {
-                    Image(systemName: pendingIconForStage(stage.key))
-                        .font(sectionIconFont)
-                        .foregroundColor(.secondary)
-                        .frame(width: 24)
-                    Text(LocalizedStringKey(stage.titleKey))
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    Spacer()
-                }
-            }
-
-        case .active:
-            StatusCard(
-                tone: .active,
-                cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode())
-            ) {
-                VStack(alignment: .leading, spacing: 10) {
+        Group {
+            switch stageState {
+            case .pending:
+                StatusCard(tone: .subtle, density: .compact) {
                     HStack(spacing: 12) {
-                        Image(systemName: activeIconForStage(stage.key))
+                        Image(systemName: pendingIconForStage(stage.key))
                             .font(sectionIconFont)
-                            .foregroundColor(.accentColor)
+                            .foregroundColor(.secondary)
                             .frame(width: 24)
                         Text(LocalizedStringKey(stage.titleKey))
-                            .font(.headline)
-                        Spacer()
-                        if shouldShowCopyProgress(for: stage.key) {
-                            Text(copyProgressText())
-                                .font(.title3.monospacedDigit())
-                                .fontWeight(.semibold)
-                                .foregroundColor(.accentColor)
-                        }
-                    }
-                    Text(LocalizedStringKey(effectiveStatusKey(for: stage.key)))
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    if shouldShowCopyProgress(for: stage.key) {
-                        ProgressView(value: boundedCopyProgressPercent() / 100.0)
-                            .progressViewStyle(.linear)
-                    } else {
-                        ProgressView()
-                            .progressViewStyle(.linear)
-                    }
-                    if shouldShowWriteSpeed(for: stage.key) {
-                        Text(verbatim: writeSpeedLabelText())
-                            .font(.subheadline.monospacedDigit())
+                            .font(.subheadline)
                             .foregroundColor(.secondary)
+                        Spacer()
                     }
                 }
-            }
 
-        case .completed:
-            StatusCard(tone: .neutral, density: .compact) {
-                HStack(spacing: 12) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(sectionIconFont)
-                        .foregroundColor(.green)
-                        .frame(width: 24)
-                    Text(LocalizedStringKey(stage.titleKey))
-                        .font(.subheadline)
-                    Spacer()
+            case .active:
+                StatusCard(
+                    tone: .active,
+                    cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode())
+                ) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack(spacing: 12) {
+                            Image(systemName: activeIconForStage(stage.key))
+                                .font(sectionIconFont)
+                                .foregroundColor(.accentColor)
+                                .frame(width: 24)
+                            Text(LocalizedStringKey(stage.titleKey))
+                                .font(.headline)
+                            Spacer()
+                            if shouldShowCopyProgress(for: stage.key) {
+                                Text(copyProgressText())
+                                    .font(.title3.monospacedDigit())
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.accentColor)
+                            }
+                        }
+                        Text(LocalizedStringKey(effectiveStatusKey(for: stage.key)))
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        if shouldShowCopyProgress(for: stage.key) {
+                            ProgressView(value: boundedCopyProgressPercent() / 100.0)
+                                .progressViewStyle(.linear)
+                        } else {
+                            ProgressView()
+                                .progressViewStyle(.linear)
+                        }
+                        if shouldShowWriteSpeed(for: stage.key) {
+                            Text(verbatim: writeSpeedLabelText())
+                                .font(.subheadline.monospacedDigit())
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+
+            case .completed:
+                StatusCard(tone: .neutral, density: .compact) {
+                    HStack(spacing: 12) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(sectionIconFont)
+                            .foregroundColor(.green)
+                            .frame(width: 24)
+                        Text(LocalizedStringKey(stage.titleKey))
+                            .font(.subheadline)
+                        Spacer()
+                    }
                 }
             }
         }
+        .id(stageState)
+        .transition(MacUSBDesignTokens.stageCardTransition)
+    }
+
+    private var creationStageMotionStates: [CreationStageVisualState] {
+        stageDescriptors.indices.map(stateForStage(at:))
     }
 
     private func stageDescriptor(for stageKey: String) -> CreationStageDescriptor {

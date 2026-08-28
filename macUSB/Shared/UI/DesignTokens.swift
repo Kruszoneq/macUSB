@@ -19,6 +19,17 @@ enum MacUSBDesignTokens {
 
     static let iconColumnWidth: CGFloat = 32
 
+    static let stageTransitionDuration: Double = 0.24
+    static let stageTransitionScale: CGFloat = 0.98
+
+    static var stageTransitionAnimation: Animation {
+        .easeInOut(duration: stageTransitionDuration)
+    }
+
+    static var stageCardTransition: AnyTransition {
+        .opacity.combined(with: .scale(scale: stageTransitionScale))
+    }
+
     static func panelCornerRadius(for mode: VisualSystemMode) -> CGFloat {
         switch mode {
         case .liquidGlass:

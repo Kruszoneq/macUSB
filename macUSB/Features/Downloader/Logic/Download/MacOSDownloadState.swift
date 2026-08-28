@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-enum DownloadStageVisualState {
+enum DownloadStageVisualState: Hashable {
     case pending
     case active
     case completed
