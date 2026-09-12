@@ -8,7 +8,6 @@ Linux detection is a fallback path in analysis, with install handoff enabled.
 
 - Primary path remains macOS installer detection.
 - Linux path runs when macOS installer metadata is not detected from `.iso` source.
-- Linux path can also be forced manually from `Opcje -> Pomiń analizowanie pliku -> Linux` after unsupported/unrecognized analysis, but only when selected source is `.iso`.
 - Manual raw-image path is available only from `Narzędzia -> Zapisz surowy obraz na nośniku...` and accepts `.iso` or `.img`; standard file selection, drag-and-drop, and Linux fallback detection retain their existing behavior.
 - Positive Linux detection unlocks USB selection and installer creation flow.
 
@@ -111,14 +110,6 @@ Linux recognition is shown as successful detection in analysis UI and enables in
 - installation workflow starts from shared summary/progress/finish UI,
 - Linux helper branch uses raw copy (`dd`) stages.
 
-Manual Linux force from menu sets Linux workflow state without distro recognition:
-
-- display name: `Linux`,
-- distro metadata: unresolved (no distro/version/edition),
-- icon: generic Linux fallback (`linux.icns`),
-- source handoff: selected file path is used as `linuxSourceURL`.
-- manual force is available only when selected source extension is `.iso`; for other extensions request is ignored and Linux state is not applied.
-
 Manual raw-image selection sets Linux workflow state without distro recognition:
 
 - display name: selected source filename,
@@ -167,14 +158,6 @@ When Linux fallback runs, logs must include:
 - cleanup summary (`all_detached`, `residual_entities_count`),
 - archive-reader diagnostics for timeout/error cases,
 - ignored stale callback entry when an expired session returns after timeout.
-
-When manual Linux force runs, logs must include:
-
-- manual-force transition entry,
-- selected source path,
-- resolved source file size in bytes (when available),
-- selected USB threshold in GB only.
-- explicit fallback log when source size is unavailable.
 
 When manual raw-image selection runs, logs must include:
 

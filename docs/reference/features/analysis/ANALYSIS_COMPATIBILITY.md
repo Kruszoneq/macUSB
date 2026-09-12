@@ -63,7 +63,6 @@ For Linux fallback:
 - detection is considered successful when Linux is recognized, including unknown distro case,
 - recognized Linux result unlocks shared install flow (`UniversalInstallationView -> CreationProgressView -> FinishUSBView`),
 - detected Linux state may present dedicated Linux icon resource (`linux.icns`) in analysis UI.
-- manual Linux force from `Opcje -> Pomiń analizowanie pliku -> Linux` is treated as Linux-recognized state for install handoff only when selected source is `.iso`.
 - manual raw-image selection from `Narzędzia -> Zapisz surowy obraz na nośniku...` is a separate exceptional entry point for `.iso` and `.img`; it is not part of standard source selection or fallback detection and enters the existing Linux workflow without content inspection or source mounting.
 - selecting `.iso` through the standard `Wybierz` action remains part of normal macOS/Windows/Linux analysis.
 
@@ -84,7 +83,6 @@ Linux fallback routing includes:
 
 - recognized Linux distro,
 - Linux with unknown distro (`Linux - nierozpoznana dystrybucja`).
-- manually forced Linux (`Linux`).
 - manually selected raw image (selected filename with neutral presentation).
 
 Windows fallback routing includes:
@@ -162,7 +160,7 @@ This action is optional and user-triggered only; it must not run during automati
 
 Checksum calculation:
 
-- is available for successful `.dmg`, `.iso`, `.cdr`, and manual raw-image selection, including manually forced Linux `.iso` and raw `.iso`/`.img` selection,
+- is available for successful `.dmg`, `.iso`, `.cdr`, and manual raw-image selection, including raw `.iso`/`.img` selection,
 - stays hidden for `.app` sources, unsupported results, unrecognized results, and active analysis,
 - presents the checksum sheet only when the selected source URL is already bound, so the 420 px-wide sheet opens and starts calculation immediately while keeping a 240 px minimum height and allowing taller content,
 - reads the source file in one pass with POSIX file I/O and a fixed 4 MiB buffer,
@@ -197,7 +195,6 @@ Linux fallback should additionally log:
 - Linux attach-session snapshot plus per-entity cleanup result and residual summary,
 - archive-reader diagnostics relevant to bounded execution (`bsdtar` timeout/errors),
 - install handoff readiness (`linuxSourceURL` present, capacity computed).
-- manual-force diagnostics when Linux is forced from menu.
 - manual raw `.iso`/`.img` selection diagnostics when the Tools-menu path is used.
 
 Windows fallback should additionally log:

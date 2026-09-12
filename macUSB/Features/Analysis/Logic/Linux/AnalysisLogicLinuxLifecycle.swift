@@ -1,6 +1,5 @@
 import Foundation
 import AppKit
-import SwiftUI
 
 private enum LinuxDistroIconCatalog {
     static let names: [String] = [
@@ -87,73 +86,6 @@ private enum LinuxDistroIconCatalog {
 }
 
 extension AnalysisLogic {
-    func forceLinuxManualSelection() {
-        cancelActiveImageAnalysisRun(reason: "Ręczne wymuszenie trybu Linux")
-        guard let sourceURL = self.selectedFileUrl else {
-            self.logError("Nie można wymusić rozpoznania Linux: brak wybranego pliku.")
-            return
-        }
-        let sourceExtension = sourceURL.pathExtension.lowercased()
-        guard sourceExtension == "iso" else {
-            self.logError("Nie można wymusić rozpoznania Linux dla .\(sourceExtension). Opcja „Pomiń analizowanie pliku -> Linux” jest dostępna tylko dla plików .iso.")
-            return
-        }
-        MenuState.shared.lockLanguageChanges(reason: "manual_linux_selection")
-
-        InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
-            path: sourceURL.path,
-            family: .linux,
-            mountHint: mountedDMGPath,
-            reason: "linux_manual_selection"
-        )
-
-        self.log("Ręcznie wybrano tryb Linux (pominięcie analizy pliku).")
-
-        withAnimation {
-            self.isAnalyzing = false
-            self.userSkippedAnalysis = true
-            self.resetLinuxDetectionState()
-            self.resetWindowsDetectionState()
-
-            self.isLinuxDetected = true
-            self.isLinuxDistributionRecognized = false
-            self.linuxDisplayName = "Linux"
-            self.linuxSourceURL = sourceURL
-
-            self.recognizedVersion = "Linux"
-            self.sourceAppURL = nil
-            self.detectedSystemIcon = loadLinuxDetectedSystemIcon(for: nil)
-
-            self.isSystemDetected = true
-            self.showUnsupportedMessage = false
-            self.showUSBSection = false
-
-            self.needsCodesign = true
-            self.isLegacyDetected = false
-            self.isRestoreLegacy = false
-            self.isCatalina = false
-            self.isSierra = false
-            self.isMavericks = false
-            self.isUnsupportedSierra = false
-            self.isPPC = false
-            self.legacyArchInfo = nil
-            self.selectedDrive = nil
-            self.capacityCheckFinished = false
-        }
-
-        let capacityResolution = resolveRequiredUSBCapacityForImageSource(sourceURL)
-        self.requiredUSBCapacityGB = capacityResolution.requiredCapacityGB
-        if let fileSizeBytes = capacityResolution.sourceFileSizeBytes,
-           let fileSizeSource = capacityResolution.sourceFileSizeSource {
-            self.log("Linux manual source size: \(fileSizeBytes) bytes (source=\(fileSizeSource))")
-        } else if capacityResolution.usedFallback {
-            self.log("Linux manual source size unavailable. Applying fallback USB threshold: \(capacityResolution.requiredCapacityGB) GB")
-        }
-        self.log("Linux manual required USB threshold: \(capacityResolution.requiredCapacityGB) GB")
-
-        self.log("Ustawiono ręczne rozpoznanie Linux: recognizedVersion=\(self.recognizedVersion), source=\(sourceURL.path)")
-    }
-
     func loadLinuxDetectedSystemIcon(for distro: String?) -> NSImage? {
         if let distro, let distroIcon = loadLinuxDistroIcon(for: distro) {
             self.log("Załadowano ikonę Linux distro: \(distro)")

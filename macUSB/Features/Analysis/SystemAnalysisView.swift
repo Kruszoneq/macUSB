@@ -85,14 +85,6 @@ struct SystemAnalysisView: View {
             && logic.macOSArchitectureBlockReason == nil
             && (unrecognizedBlocking || recognizedUnsupported)
         MenuState.shared.skipAnalysisEnabled = skipAnalysisEnabled
-
-        let sourceExtension: String
-        if let selectedFileUrl = logic.selectedFileUrl {
-            sourceExtension = selectedFileUrl.pathExtension.lowercased()
-        } else {
-            sourceExtension = URL(fileURLWithPath: logic.selectedFilePath).pathExtension.lowercased()
-        }
-        MenuState.shared.skipLinuxManualSelectionEnabled = skipAnalysisEnabled && sourceExtension == "iso"
         MenuState.shared.rawLinuxImageSelectionEnabled = analysisFinished && !hasAnySelection
     }
     
@@ -206,7 +198,6 @@ struct SystemAnalysisView: View {
         windowsWillSplitWIMSnapshot = false
         macOSRosettaRequirementSnapshot = .notRequired
         MenuState.shared.skipAnalysisEnabled = false
-        MenuState.shared.skipLinuxManualSelectionEnabled = false
         updateMenuState()
     }
 
@@ -710,9 +701,6 @@ struct SystemAnalysisView: View {
             analysisContentWithDialogHandlers
                 .onReceive(NotificationCenter.default.publisher(for: .macUSBStartTigerMultiDVD)) { _ in
                     logic.forceTigerMultiDVDSelection()
-                }
-                .onReceive(NotificationCenter.default.publisher(for: .macUSBStartLinuxManualSelection)) { _ in
-                    logic.forceLinuxManualSelection()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: .macUSBApplyPendingDownloaderInstaller)) { _ in
                     consumePendingDownloaderInstallerAndAnalyze()
