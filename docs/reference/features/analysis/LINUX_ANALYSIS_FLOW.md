@@ -134,8 +134,8 @@ If source size cannot be resolved from file metadata, fallback capacity is `16 G
 Linux detected state uses icon fallback chain:
 
 - first: distro-specific icon from `macUSB/Resources/Icons/Linux/Distros/*.png` when distro is recognized and mapped,
-  runtime lookup supports both `Icons/Linux/Distros` and bundled `Distros` subdirectory variants,
-- second: generic Linux icon `macUSB/Resources/Icons/Linux/linux.icns` (lookup: `Icons/Linux` subdirectory, then bundle root),
+  runtime lookup supports `Icons/Linux/Distros`, bundled `Distros`, and bundle-root variants,
+- second: generic Linux icon `macUSB/Resources/Icons/Linux/Distros/linux.png`, resolved through the same lookup variants,
 - third: SF Symbol fallback in UI when no file icon could be loaded.
 
 ## Logging Contract

@@ -286,7 +286,6 @@
 				Features/Welcome/AppBranding.swift,
 				Features/Welcome/WelcomeView.swift,
 				macUSBIcon.icon,
-				Resources/Icons/Linux/linux.icns,
 				Resources/Icons/OS/os_10_7_lion.icns,
 				Resources/Icons/OS/os_10_8_mountain_lion.icns,
 				Resources/Icons/OS/os_10_9_maverics.icns,

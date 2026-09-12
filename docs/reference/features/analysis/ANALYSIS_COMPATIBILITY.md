@@ -62,7 +62,7 @@ For Linux fallback:
 - fallback entry is limited to `.iso` sources,
 - detection is considered successful when Linux is recognized, including unknown distro case,
 - recognized Linux result unlocks shared install flow (`UniversalInstallationView -> CreationProgressView -> FinishUSBView`),
-- detected Linux state may present dedicated Linux icon resource (`linux.icns`) in analysis UI.
+- detected Linux state presents the generic `Distros/linux.png` resource when a distro-specific icon is unavailable, with an SF Symbol as the final UI fallback.
 - manual raw-image selection from `Narzędzia -> Zapisz surowy obraz na nośniku...` is a separate exceptional entry point for `.iso` and `.img`; it is not part of standard source selection or fallback detection and enters the existing Linux workflow without content inspection or source mounting.
 - selecting `.iso` through the standard `Wybierz` action remains part of normal macOS/Windows/Linux analysis.
 

@@ -92,14 +92,12 @@ extension AnalysisLogic {
             return distroIcon
         }
 
-        let nestedURL = Bundle.main.url(forResource: "linux", withExtension: "icns", subdirectory: "Icons/Linux")
-        let rootURL = Bundle.main.url(forResource: "linux", withExtension: "icns")
-        guard let url = nestedURL ?? rootURL, let icon = NSImage(contentsOf: url) else {
-            self.log("Nie znaleziono fallback ikony linux.icns - zostanie użyty SF Symbol.", category: "FileAnalysis")
+        guard let icon = loadLinuxDistroIcon(for: "linux") else {
+            self.log("Nie znaleziono fallback ikony linux.png - zostanie użyty SF Symbol.", category: "FileAnalysis")
             return nil
         }
         icon.isTemplate = false
-        self.log("Załadowano fallback ikonę linux.icns.", category: "FileAnalysis")
+        self.log("Załadowano fallback ikonę linux.png.", category: "FileAnalysis")
         return icon
     }
 
