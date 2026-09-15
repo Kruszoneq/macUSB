@@ -37,6 +37,7 @@ For selected macOS `.app` sources and macOS `.app` bundles found inside mounted 
 - an unreadable/unknown `createinstallmedia` architecture, or unknown physical host architecture when a decision is required, fails closed,
 - Apple Silicon plus Intel-only `createinstallmedia` for Yosemite through Catalina creates a Rosetta summary requirement; universal and ARM-capable tools do not,
 - Rosetta availability is probed by executing `/usr/bin/arch -x86_64 /usr/bin/true`; `EBADARCH`/`Bad CPU type in executable` means missing, and any other nonzero outcome is indeterminate,
+- after a successful in-app Rosetta installation and availability probe, the summary warning card keeps its title and description, transitions to a green success state, replaces the warning symbol with a success checkmark, shows a disabled localized confirmation action, remains visible for 3 seconds, and then dismisses with the global contextual-card animation,
 - mounted images may accept legacy Mac OS X installer apps without these payload markers only when the mounted image exposes `System/Library/CoreServices/SystemVersion.plist` with `ProductUserVisibleVersion` from `10.3` through `10.6`; Panther remains an unsupported detection outcome,
 - bundle identifier is diagnostic metadata only and must not be treated as proof that the app contains installer payload,
 - invalid `.app` selections must keep the selected source visible but clear install-handoff state (`sourceAppURL`, detected icon, USB section, target selection, capacity result, and workflow flags),

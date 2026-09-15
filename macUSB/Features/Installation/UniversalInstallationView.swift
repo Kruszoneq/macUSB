@@ -84,6 +84,8 @@ struct UniversalInstallationView: View {
     @State var windowsMacUSBootPreflightInProgress: Bool = false
     @State var macOSRosettaState: CreatorMacOSRosettaState? = nil
     @State var macOSRosettaRetryGeneration: UUID? = nil
+    @State var macOSRosettaSuccessVisible: Bool = false
+    @State var macOSRosettaSuccessDismissalGeneration: UUID? = nil
     @State var macOSRosettaOperationToken: AppActiveOperationToken?
     
     @State var isCancelling: Bool = false
@@ -246,7 +248,7 @@ struct UniversalInstallationView: View {
                             state: effectiveMacOSRosettaState,
                             action: performMacOSRosettaPrimaryAction
                         )
-                        .transition(.opacity)
+                        .transition(.move(edge: .top).combined(with: .opacity))
                     }
 
                     if isLinuxWorkflow {
