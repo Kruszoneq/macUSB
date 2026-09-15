@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import SwiftUI
 
 enum CreatorMacOSRosettaState: Equatable {
     case available
@@ -31,7 +32,7 @@ extension UniversalInstallationView {
 
     var macOSRosettaShouldShowCard: Bool {
         macOSRosettaRequirement.initialAvailability != nil
-            && effectiveMacOSRosettaState != .available
+            && (effectiveMacOSRosettaState != .available || macOSRosettaSuccessVisible)
     }
 
     var macOSRosettaShouldBlockStart: Bool {
@@ -139,8 +140,8 @@ extension UniversalInstallationView {
                 )
 
                 if availability == .available {
-                    macOSRosettaState = .available
                     macOSRosettaRetryGeneration = nil
+                    showMacOSRosettaInstallationSuccess()
                     finishMacOSRosettaOperation()
                     return
                 }
@@ -190,8 +191,28 @@ extension UniversalInstallationView {
 
     func invalidateMacOSRosettaChecks() {
         macOSRosettaRetryGeneration = nil
+        macOSRosettaSuccessDismissalGeneration = nil
         if effectiveMacOSRosettaState == .checking {
             finishMacOSRosettaOperation()
+        }
+    }
+
+    private func showMacOSRosettaInstallationSuccess() {
+        let generation = UUID()
+        macOSRosettaSuccessDismissalGeneration = generation
+
+        withAnimation(.easeInOut(duration: 0.24)) {
+            macOSRosettaState = .available
+            macOSRosettaSuccessVisible = true
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            guard generation == macOSRosettaSuccessDismissalGeneration else { return }
+            macOSRosettaSuccessDismissalGeneration = nil
+
+            withAnimation(.easeInOut(duration: 0.24)) {
+                macOSRosettaSuccessVisible = false
+            }
         }
     }
 
