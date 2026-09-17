@@ -41,7 +41,7 @@ For standard `createinstallmedia` workflows, holding Option on the analysis scre
 - disks without an eligible GPT/HFS+ volume remain selectable as physical `diskX` targets,
 - the physical-disk and mixed lists are prepared together, so pressing or releasing Option switches the presented list immediately without another disk enumeration,
 - releasing Option always restores the physical-disk list; the mixed list is never latched,
-- changing the presented list does not clear or replace an already selected disk or volume,
+- changing the presented list does not clear, replace, or hide the name of an already selected disk or volume,
 - a selected eligible volume still skips automatic preformat when the user proceeds, even after Option is released.
 
 Linux, Windows, and manual raw-image workflows keep their existing physical whole-disk selection behavior.

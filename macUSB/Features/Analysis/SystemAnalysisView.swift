@@ -730,6 +730,13 @@ struct SystemAnalysisUSBSectionView: View {
         return "\(drive.device) - \(drive.size) - \(speedText)"
     }
 
+    private var selectedDriveDisplayName: String {
+        guard let selectedDrive = logic.selectedDrive else {
+            return String(localized: "Wybierz...")
+        }
+        return pickerDisplayName(for: selectedDrive)
+    }
+
     private func sectionDivider(_ title: LocalizedStringKey) -> some View {
         HStack(spacing: 10) {
             Capsule()
@@ -803,13 +810,28 @@ struct SystemAnalysisUSBSectionView: View {
                         }
                     } else if !logic.availableDrives.isEmpty {
                         HStack {
-                            Picker("", selection: $logic.selectedDriveSelectionID) {
-                                Text("Wybierz...").tag(nil as String?)
-                                ForEach(logic.availableDrives) { drive in
-                                    Text(pickerDisplayName(for: drive)).tag(Optional(drive.selectionID))
+                            Menu {
+                                Button("Wybierz...") {
+                                    logic.selectedDriveSelectionID = nil
                                 }
+                                ForEach(logic.availableDrives) { drive in
+                                    Button {
+                                        logic.selectedDriveSelectionID = drive.selectionID
+                                    } label: {
+                                        if logic.selectedDriveSelectionID == drive.selectionID {
+                                            Label(pickerDisplayName(for: drive), systemImage: "checkmark")
+                                        } else {
+                                            Text(pickerDisplayName(for: drive))
+                                        }
+                                    }
+                                }
+                            } label: {
+                                Text(selectedDriveDisplayName)
+                                    .lineLimit(1)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
-                            .labelsHidden()
+                            .menuStyle(.borderlessButton)
+                            .menuIndicator(.visible)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
