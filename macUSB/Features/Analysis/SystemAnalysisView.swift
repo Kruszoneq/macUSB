@@ -730,11 +730,12 @@ struct SystemAnalysisUSBSectionView: View {
         return "\(drive.device) - \(drive.size) - \(speedText)"
     }
 
-    private var selectedDriveDisplayName: String {
-        guard let selectedDrive = logic.selectedDrive else {
-            return String(localized: "Wybierz...")
+    private var preservedPickerSelection: USBDrive? {
+        guard let selectedDrive = logic.selectedDrive,
+              !logic.availableDrives.contains(where: { $0.selectionID == selectedDrive.selectionID }) else {
+            return nil
         }
-        return pickerDisplayName(for: selectedDrive)
+        return selectedDrive
     }
 
     private func sectionDivider(_ title: LocalizedStringKey) -> some View {
@@ -810,28 +811,17 @@ struct SystemAnalysisUSBSectionView: View {
                         }
                     } else if !logic.availableDrives.isEmpty {
                         HStack {
-                            Menu {
-                                Button("Wybierz...") {
-                                    logic.selectedDriveSelectionID = nil
+                            Picker("", selection: $logic.selectedDriveSelectionID) {
+                                Text("Wybierz...").tag(nil as String?)
+                                if let preservedPickerSelection {
+                                    Text(pickerDisplayName(for: preservedPickerSelection))
+                                        .tag(Optional(preservedPickerSelection.selectionID))
                                 }
                                 ForEach(logic.availableDrives) { drive in
-                                    Button {
-                                        logic.selectedDriveSelectionID = drive.selectionID
-                                    } label: {
-                                        if logic.selectedDriveSelectionID == drive.selectionID {
-                                            Label(pickerDisplayName(for: drive), systemImage: "checkmark")
-                                        } else {
-                                            Text(pickerDisplayName(for: drive))
-                                        }
-                                    }
+                                    Text(pickerDisplayName(for: drive)).tag(Optional(drive.selectionID))
                                 }
-                            } label: {
-                                Text(selectedDriveDisplayName)
-                                    .lineLimit(1)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
-                            .menuStyle(.borderlessButton)
-                            .menuIndicator(.visible)
+                            .labelsHidden()
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
