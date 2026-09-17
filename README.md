@@ -50,10 +50,8 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
 - **Local source support:** create bootable USB media from local installers and disk images.
 - **Checksum insight:** calculate SHA-256 checksums for recognized `.iso`, `.cdr`, and `.dmg` source images.
 - **Apple Silicon legacy support:** automatic compatibility handling for older macOS installers during USB creation.
-- **Automatic media prep:** partition and format checks with conversion when required.[^1]
+- **Automatic media prep:** partition and format checks with conversion when required.
 - **Linux and Windows support:** create bootable USB media from supported Linux and Windows `.iso` images, with optional Windows setup automation.
-
-[^1]: When creating macOS bootable media, APFS-formatted targets are not converted automatically. If the selected drive uses APFS, macUSB requires manual reformatting in Disk Utility before continuing.
 
 ---
 
@@ -192,7 +190,7 @@ macOS versions recognized and supported for USB creation:
 
 | System | Version | Supported |
 | :--- | :--- | :---: |
-| **macOS Golden Gate**[^2] | 27 | ✅ |
+| **macOS Golden Gate**[^1] | 27 | ✅ |
 | **macOS Tahoe** | 26 | ✅ |
 | **macOS Sequoia** | 15 | ✅ |
 | **macOS Sonoma** | 14 | ✅ |
@@ -202,20 +200,20 @@ macOS versions recognized and supported for USB creation:
 | **macOS Catalina** | 10.15 | ✅ |
 | **macOS Mojave** | 10.14 | ✅ |
 | **macOS High Sierra** | 10.13 | ✅ |
-| **macOS Sierra**[^3] | 10.12 | ✅ |
+| **macOS Sierra**[^2] | 10.12 | ✅ |
 | **OS X El Capitan** | 10.11 | ✅ |
 | **OS X Yosemite** | 10.10 | ✅ |
-| **OS X Mavericks**[^4] | 10.9 | ✅ |
+| **OS X Mavericks**[^3] | 10.9 | ✅ |
 | **OS X Mountain Lion** | 10.8 | ✅ |
 | **OS X Lion** | 10.7 | ✅ |
 | **Mac OS X Snow Leopard** | 10.6 | ✅ |
 | **Mac OS X Leopard** | 10.5 | ✅ |
-| **Mac OS X Tiger**[^5] | 10.4 | ✅ |
+| **Mac OS X Tiger**[^4] | 10.4 | ✅ |
 
-[^2]: USB creation is supported on **Apple Silicon only.**
-[^3]: Only **10.12.6** is supported.
-[^4]: Fully verified with the image from [Mavericks Forever](https://mavericksforever.com/). Other sources may fail.
-[^5]: **Single-DVD** images are auto-detected. For **Multi-DVD** images, only the first disc is recognized correctly. Other discs may appear as unrecognized or be identified incorrectly. To use them, force detection manually from **Options** → **Skip file analysis** → **Mac OS X Tiger 10.4 (Multi DVD)**.
+[^1]: USB creation is supported on **Apple Silicon only.**
+[^2]: Only **10.12.6** is supported.
+[^3]: Fully verified with the image from [Mavericks Forever](https://mavericksforever.com/). Other sources may fail.
+[^4]: **Single-DVD** images are auto-detected. For **Multi-DVD** images, only the first disc is recognized correctly. Other discs may appear as unrecognized or be identified incorrectly. To use them, force detection manually from **Options** → **Skip file analysis** → **Mac OS X Tiger 10.4 (Multi DVD)**.
 
 ---
 
@@ -258,9 +256,9 @@ If a selected file is a valid Linux image but is not recognized automatically, y
 
 Linux-based `.img` images can also be written from **Tools** → **Write Raw Linux Image (.img)…**. This raw-image path is separate from the officially boot-tested Linux `.iso` support matrix.
 
-> Linux support has been tested with 19 distributions using the latest available releases as of April 30, 2026, with boot behavior verified on real hardware.[^6]
+> Linux support has been tested with 19 distributions using the latest available releases as of April 30, 2026, with boot behavior verified on real hardware.[^5]
 
-[^6]: Validated distributions: *Ubuntu*, *Kali Linux*, *NixOS*, *Garuda Linux*, *openSUSE Leap*, *Gentoo*, *Rocky Linux*, *Linux Mint*, *Fedora Workstation*, *Manjaro*, *Zorin OS*, *CachyOS*, *AlmaLinux*, *Debian*, *Arch Linux*, *MX Linux*, *Pop!_OS*, *EndeavourOS*, and *elementary OS*. Boot behavior was verified on a MacBook Air 2017, a Dell OptiPlex 5040 with UEFI, and an Asus F52Q with Legacy BIOS.
+[^5]: Validated distributions: *Ubuntu*, *Kali Linux*, *NixOS*, *Garuda Linux*, *openSUSE Leap*, *Gentoo*, *Rocky Linux*, *Linux Mint*, *Fedora Workstation*, *Manjaro*, *Zorin OS*, *CachyOS*, *AlmaLinux*, *Debian*, *Arch Linux*, *MX Linux*, *Pop!_OS*, *EndeavourOS*, and *elementary OS*. Boot behavior was verified on a MacBook Air 2017, a Dell OptiPlex 5040 with UEFI, and an Asus F52Q with Legacy BIOS.
 
 ---
 
