@@ -2,6 +2,25 @@ import SwiftUI
 import Foundation
 
 extension AnalysisLogic {
+    var isMacOSUSBTargetWorkflow: Bool {
+        let hasMacOSSource = sourceAppURL != nil || isPPC || isMavericks
+        let isDetected = isSystemDetected || isPPC || isMavericks
+        return hasMacOSSource && isDetected && !showUnsupportedMessage && !isUnsupportedSierra
+    }
+
+    var supportsMacOSCreateInstallMediaVolumeOverride: Bool {
+        isMacOSUSBTargetWorkflow
+            && !isPPC
+            && !isMavericks
+            && !isRestoreLegacy
+            && macOSArchitectureBlockReason == nil
+            && createInstallMediaInspection.architecture != .notApplicable
+    }
+
+    var usesPhysicalUSBTargetSelection: Bool {
+        isLinuxDetected || isWindowsWorkflowSupported || isMacOSUSBTargetWorkflow
+    }
+
     private var requiredUSBCapacityBytes: Int? {
         guard let requiredGB = requiredUSBCapacityGB else { return nil }
         switch requiredGB {
@@ -24,75 +43,66 @@ extension AnalysisLogic {
         }
     }
 
-    // MARK: - Helper to enumerate external hard drives (non-removable)
-    private func enumerateExternalUSBHardDrives() -> [USBDrive] {
-        let keys: [URLResourceKey] = [
-            .volumeNameKey,
-            .volumeIsRemovableKey,
-            .volumeIsInternalKey,
-            .volumeTotalCapacityKey
-        ]
-        guard let urls = FileManager.default.mountedVolumeURLs(includingResourceValuesForKeys: keys, options: .skipHiddenVolumes) else { return [] }
-
-        let candidates: [USBDrive] = urls.compactMap { url -> USBDrive? in
-            guard let v = try? url.resourceValues(forKeys: Set(keys)) else { return nil }
-            // Only external (non-internal), non-network, non-removable volumes (HDD/SSD)
-            if (v.volumeIsInternal ?? true) { return nil }
-            // Filter out obvious network-mounted volumes by scheme (e.g., afp, smb, nfs)
-            let scheme = url.scheme?.lowercased()
-            if let scheme = scheme, ["afp", "smb", "nfs", "ftp", "webdav"].contains(scheme) { return nil }
-            if (v.volumeIsRemovable ?? false) { return nil }
-            guard let name = v.volumeName else { return nil }
-            let bsd = USBDriveLogic.getBSDName(from: url)
-            guard !bsd.isEmpty && bsd != "unknown" else { return nil }
-            let totalCapacity = Int64(v.volumeTotalCapacity ?? 0)
-            let size = ByteCountFormatter.string(fromByteCount: totalCapacity, countStyle: .file)
-            let whole = USBDriveLogic.wholeDiskName(from: bsd)
-            let speed = USBDriveLogic.detectUSBSpeed(forBSDName: whole)
-            let partitionScheme = USBDriveLogic.detectPartitionScheme(forBSDName: whole)
-            let fileSystemFormat = USBDriveLogic.detectFileSystemFormat(forVolumeURL: url)
-            return USBDrive(
-                name: name,
-                device: bsd,
-                size: size,
-                url: url,
-                usbSpeed: speed,
-                partitionScheme: partitionScheme,
-                fileSystemFormat: fileSystemFormat
-            )
-        }
-        return candidates
-    }
-
-    func refreshDrives() {
+    func refreshDrives(useMacOSCreateInstallMediaVolumeOverride: Bool = false) {
         let allowExternal = UserDefaults.standard.bool(forKey: "AllowExternalDrives")
 
-        if isLinuxDetected || isWindowsWorkflowSupported {
-            guard !isLinuxPhysicalDriveRefreshRunning else { return }
-            isLinuxPhysicalDriveRefreshRunning = true
+        if usesPhysicalUSBTargetSelection {
+            let effectiveVolumeOverride = useMacOSCreateInstallMediaVolumeOverride
+                && supportsMacOSCreateInstallMediaVolumeOverride
+
+            if isPhysicalDriveRefreshRunning,
+               activePhysicalDriveRefreshUsesVolumeOverride == effectiveVolumeOverride {
+                return
+            }
+
+            physicalDriveRefreshGeneration &+= 1
+            let refreshGeneration = physicalDriveRefreshGeneration
+            let isMacOSPhysicalTargetWorkflow = isMacOSUSBTargetWorkflow
+            isPhysicalDriveRefreshRunning = true
+            activePhysicalDriveRefreshUsesVolumeOverride = effectiveVolumeOverride
 
             DispatchQueue.global(qos: .utility).async { [weak self] in
-                let enumerated = USBDriveLogic.enumerateAvailablePhysicalUSBDrivesWithCapacities(
-                    allowExternalHardDrives: allowExternal
-                )
+                let enumerated: (drives: [USBDrive], capacityByWholeDisk: [String: Int64])
+                if isMacOSPhysicalTargetWorkflow {
+                    enumerated = USBDriveLogic.enumerateAvailableMacOSTargetsWithCapacities(
+                        allowExternalHardDrives: allowExternal,
+                        useCreateInstallMediaVolumeOverride: effectiveVolumeOverride
+                    )
+                } else {
+                    enumerated = USBDriveLogic.enumerateAvailablePhysicalUSBDrivesWithCapacities(
+                        allowExternalHardDrives: allowExternal
+                    )
+                }
 
                 DispatchQueue.main.async {
                     guard let self else { return }
-                    self.isLinuxPhysicalDriveRefreshRunning = false
+                    guard self.physicalDriveRefreshGeneration == refreshGeneration,
+                          self.activePhysicalDriveRefreshUsesVolumeOverride == effectiveVolumeOverride else {
+                        return
+                    }
 
-                    guard self.isLinuxDetected || self.isWindowsWorkflowSupported else { return }
+                    self.isPhysicalDriveRefreshRunning = false
+                    self.activePhysicalDriveRefreshUsesVolumeOverride = nil
 
-                    self.linuxWholeDiskCapacityCache = enumerated.capacityByWholeDisk
+                    guard self.usesPhysicalUSBTargetSelection else { return }
+                    if effectiveVolumeOverride {
+                        guard self.supportsMacOSCreateInstallMediaVolumeOverride else { return }
+                    }
+
+                    self.wholeDiskCapacityCache = enumerated.capacityByWholeDisk
                     let activeSelectionID = self.selectedDriveSelectionID ?? self.selectedDrive?.selectionID
                     let resolvedSelection = activeSelectionID.flatMap { selectionID in
                         enumerated.drives.first(where: { $0.selectionID == selectionID })
                     }
+                    let preservedSelectionID = effectiveVolumeOverride && resolvedSelection == nil
+                        ? activeSelectionID
+                        : resolvedSelection?.selectionID
 
                     withAnimation(.easeInOut(duration: 0.18)) {
                         self.synchronizeDriveSelection {
                             self.availableDrives = enumerated.drives
                             self.selectedDrive = resolvedSelection
-                            self.selectedDriveSelectionID = resolvedSelection?.selectionID
+                            self.selectedDriveSelectionID = preservedSelectionID
                         }
                     }
 
@@ -111,21 +121,16 @@ extension AnalysisLogic {
             }
             return
         } else {
-            linuxWholeDiskCapacityCache = [:]
+            physicalDriveRefreshGeneration &+= 1
+            isPhysicalDriveRefreshRunning = false
+            activePhysicalDriveRefreshUsesVolumeOverride = nil
+            wholeDiskCapacityCache = [:]
         }
 
         let currentSelectedSelectionID = selectedDriveSelectionID ?? selectedDrive?.selectionID
-        var volumeDrives = USBDriveLogic.enumerateAvailableDrives()
-        if allowExternal {
-            let extra = enumerateExternalUSBHardDrives()
-            // Merge unique by URL
-            for d in extra {
-                if !volumeDrives.contains(where: { $0.url == d.url }) {
-                    volumeDrives.append(d)
-                }
-            }
-        }
-        let foundDrives = volumeDrives
+        let foundDrives = USBDriveLogic.enumerateAvailableVolumeDrives(
+            allowExternalHardDrives: allowExternal
+        )
 
         let resolvedSelection = currentSelectedSelectionID.flatMap { selectionID in
             foundDrives.first(where: { $0.selectionID == selectionID })
@@ -181,9 +186,9 @@ extension AnalysisLogic {
             return
         }
 
-        if isLinuxDetected || isWindowsWorkflowSupported {
+        if drive.isWholeDiskTarget {
             let wholeDisk = USBDriveLogic.wholeDiskName(from: drive.device)
-            if let capacity = linuxWholeDiskCapacityCache[wholeDisk] {
+            if let capacity = wholeDiskCapacityCache[wholeDisk] {
                 withAnimation {
                     isCapacitySufficient = capacity >= Int64(minCapacity)
                     capacityCheckFinished = true

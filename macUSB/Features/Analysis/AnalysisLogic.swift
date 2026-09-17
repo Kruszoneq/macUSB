@@ -153,8 +153,10 @@ final class AnalysisLogic: ObservableObject {
     var lastUnreadableUSBDetectionDate: Date = .distantPast
     let unreadableUSBDetectionInterval: TimeInterval = 2.5
     var isUnreadableUSBDetectionRunning: Bool = false
-    var isLinuxPhysicalDriveRefreshRunning: Bool = false
-    var linuxWholeDiskCapacityCache: [String: Int64] = [:]
+    var isPhysicalDriveRefreshRunning: Bool = false
+    var activePhysicalDriveRefreshUsesVolumeOverride: Bool? = nil
+    var physicalDriveRefreshGeneration: UInt = 0
+    var wholeDiskCapacityCache: [String: Int64] = [:]
     let imageAnalysisTimeoutSeconds: TimeInterval = 20
     var activeImageAnalysisRunID: UUID? = nil
     var imageAnalysisTimeoutWorkItem: DispatchWorkItem? = nil

@@ -111,7 +111,7 @@ struct UniversalInstallationView: View {
         linuxFlowContext?.isRawImageSelection == true
     }
     private var selectedDriveSummaryName: String? {
-        if (isLinuxWorkflow || isWindowsWorkflow), let drive = targetDrive {
+        if let drive = targetDrive, drive.isWholeDiskTarget {
             let speedText = drive.usbSpeed?.rawValue ?? "USB"
             return "\(drive.device) - \(drive.size) - \(speedText)"
         }
