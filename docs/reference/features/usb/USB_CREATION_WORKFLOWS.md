@@ -17,6 +17,14 @@ Every confirmed creation attempt owns one USB-creation token across macOS, Linux
 - Linux raw-copy path (`dd`) for recognized Linux `.iso` sources and manually selected raw `.iso`/`.img` sources
 - Windows ISO copy path (FAT32/MBR + optional WIM split), with a conditional macUSBoot final write for BIOS media
 
+macOS target preparation:
+
+- standard `createinstallmedia`, legacy restore, and Mavericks workflows receive a physical whole-disk target by default and always run the existing `preformat` stage as GPT/HFS+ with the `mac_USB` label,
+- existing APFS, HFS+, FAT, NTFS, and other target formats do not bypass default whole-disk preparation,
+- standard `createinstallmedia` may skip `preformat` only for a mounted GPT/HFS+ volume selected through the analysis-screen Option override; the existing volume path is then passed directly to `createinstallmedia`,
+- PPC receives a physical whole-disk target but remains exempt from standard `preformat`; its existing `ppc_format` stage continues to create APM/HFS+ media labeled `PPC`,
+- helper request fields, workflow kinds, and stage identifiers remain unchanged.
+
 macOS architecture preflight:
 
 - standard `createinstallmedia` workflows require a readable Mach-O architecture classification before USB selection,

@@ -63,7 +63,8 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
   - major version `<= 14`: `16 GB` UI target and `15_000_000_000` bytes threshold
   - major version `>= 15`: `32 GB` UI target and `28_000_000_000` bytes threshold
 - Proceed action stays blocked until selected target passes validation.
-- APFS-selected target must block proceed and require manual reformat in Disk Utility.
+- macOS target selection defaults to physical whole disks and automatically preformats non-PPC targets as GPT/HFS+ with the `mac_USB` label; APFS does not block this path.
+- Standard `createinstallmedia` workflows may reuse an existing GPT/HFS+ volume without preformat only through the analysis-screen Option override.
 - In PPC flow, target formatting behavior is specialized and must not be forced through standard preformat assumptions.
 
 ### Detection and compatibility routing
