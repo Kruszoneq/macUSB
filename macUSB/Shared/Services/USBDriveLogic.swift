@@ -440,17 +440,19 @@ struct USBDriveLogic {
         return (sorted, capacityByWholeDisk)
     }
 
-    /// Enumerates macOS targets. The default mode returns physical whole disks.
-    /// The createinstallmedia Option override replaces a GPT whole disk with its
+    /// Enumerates both macOS target presentations from one physical-disk snapshot.
+    /// The createinstallmedia Option list replaces a GPT whole disk with its
     /// mounted HFS+ volumes when at least one eligible volume is available.
-    static func enumerateAvailableMacOSTargetsWithCapacities(
-        allowExternalHardDrives: Bool,
-        useCreateInstallMediaVolumeOverride: Bool
-    ) -> (drives: [USBDrive], capacityByWholeDisk: [String: Int64]) {
+    static func enumerateAvailableMacOSTargetSetsWithCapacities(
+        allowExternalHardDrives: Bool
+    ) -> (
+        physicalDrives: [USBDrive],
+        optionDrives: [USBDrive],
+        capacityByWholeDisk: [String: Int64]
+    ) {
         let physical = enumerateAvailablePhysicalUSBDrivesWithCapacities(
             allowExternalHardDrives: allowExternalHardDrives
         )
-        guard useCreateInstallMediaVolumeOverride else { return physical }
 
         let physicalWholeDisks = Set(physical.drives.map(\.device))
         let eligibleVolumes = enumerateAvailableVolumeDrives(
@@ -474,7 +476,7 @@ struct USBDriveLogic {
             }
         }
 
-        return (mixedTargets, physical.capacityByWholeDisk)
+        return (physical.drives, mixedTargets, physical.capacityByWholeDisk)
     }
 
     static func totalSizeBytesForWholeDiskBSDName(_ wholeDiskBSDName: String) -> Int64? {

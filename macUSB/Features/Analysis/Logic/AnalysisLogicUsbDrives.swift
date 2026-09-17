@@ -43,66 +43,77 @@ extension AnalysisLogic {
         }
     }
 
-    func refreshDrives(useMacOSCreateInstallMediaVolumeOverride: Bool = false) {
+    func setMacOSCreateInstallMediaVolumeOverrideActive(_ isActive: Bool) {
+        let effectiveOverride = isActive && supportsMacOSCreateInstallMediaVolumeOverride
+        isMacOSCreateInstallMediaVolumeOverrideActive = effectiveOverride
+
+        guard isMacOSUSBTargetWorkflow else { return }
+        availableDrives = effectiveOverride
+            ? macOSOptionUSBTargetsCache
+            : physicalUSBTargetsCache
+    }
+
+    func refreshDrives() {
         let allowExternal = UserDefaults.standard.bool(forKey: "AllowExternalDrives")
 
         if usesPhysicalUSBTargetSelection {
-            let effectiveVolumeOverride = useMacOSCreateInstallMediaVolumeOverride
-                && supportsMacOSCreateInstallMediaVolumeOverride
-
-            if isPhysicalDriveRefreshRunning,
-               activePhysicalDriveRefreshUsesVolumeOverride == effectiveVolumeOverride {
-                return
-            }
+            guard !isPhysicalDriveRefreshRunning else { return }
 
             physicalDriveRefreshGeneration &+= 1
             let refreshGeneration = physicalDriveRefreshGeneration
             let isMacOSPhysicalTargetWorkflow = isMacOSUSBTargetWorkflow
             isPhysicalDriveRefreshRunning = true
-            activePhysicalDriveRefreshUsesVolumeOverride = effectiveVolumeOverride
 
             DispatchQueue.global(qos: .utility).async { [weak self] in
-                let enumerated: (drives: [USBDrive], capacityByWholeDisk: [String: Int64])
+                let physicalDrives: [USBDrive]
+                let optionDrives: [USBDrive]
+                let capacityByWholeDisk: [String: Int64]
                 if isMacOSPhysicalTargetWorkflow {
-                    enumerated = USBDriveLogic.enumerateAvailableMacOSTargetsWithCapacities(
-                        allowExternalHardDrives: allowExternal,
-                        useCreateInstallMediaVolumeOverride: effectiveVolumeOverride
-                    )
-                } else {
-                    enumerated = USBDriveLogic.enumerateAvailablePhysicalUSBDrivesWithCapacities(
+                    let enumerated = USBDriveLogic.enumerateAvailableMacOSTargetSetsWithCapacities(
                         allowExternalHardDrives: allowExternal
                     )
+                    physicalDrives = enumerated.physicalDrives
+                    optionDrives = enumerated.optionDrives
+                    capacityByWholeDisk = enumerated.capacityByWholeDisk
+                } else {
+                    let enumerated = USBDriveLogic.enumerateAvailablePhysicalUSBDrivesWithCapacities(
+                        allowExternalHardDrives: allowExternal
+                    )
+                    physicalDrives = enumerated.drives
+                    optionDrives = enumerated.drives
+                    capacityByWholeDisk = enumerated.capacityByWholeDisk
                 }
 
                 DispatchQueue.main.async {
                     guard let self else { return }
-                    guard self.physicalDriveRefreshGeneration == refreshGeneration,
-                          self.activePhysicalDriveRefreshUsesVolumeOverride == effectiveVolumeOverride else {
-                        return
-                    }
+                    guard self.physicalDriveRefreshGeneration == refreshGeneration else { return }
 
                     self.isPhysicalDriveRefreshRunning = false
-                    self.activePhysicalDriveRefreshUsesVolumeOverride = nil
+                    guard self.usesPhysicalUSBTargetSelection,
+                          self.isMacOSUSBTargetWorkflow == isMacOSPhysicalTargetWorkflow else { return }
 
-                    guard self.usesPhysicalUSBTargetSelection else { return }
-                    if effectiveVolumeOverride {
-                        guard self.supportsMacOSCreateInstallMediaVolumeOverride else { return }
-                    }
+                    self.physicalUSBTargetsCache = physicalDrives
+                    self.macOSOptionUSBTargetsCache = optionDrives
+                    self.wholeDiskCapacityCache = capacityByWholeDisk
 
-                    self.wholeDiskCapacityCache = enumerated.capacityByWholeDisk
+                    let effectiveVolumeOverride = isMacOSPhysicalTargetWorkflow
+                        && self.isMacOSCreateInstallMediaVolumeOverrideActive
+                        && self.supportsMacOSCreateInstallMediaVolumeOverride
+                    self.isMacOSCreateInstallMediaVolumeOverrideActive = effectiveVolumeOverride
+                    let displayedDrives = effectiveVolumeOverride ? optionDrives : physicalDrives
+                    let selectableDrives = isMacOSPhysicalTargetWorkflow
+                        ? (physicalDrives + optionDrives)
+                        : physicalDrives
                     let activeSelectionID = self.selectedDriveSelectionID ?? self.selectedDrive?.selectionID
                     let resolvedSelection = activeSelectionID.flatMap { selectionID in
-                        enumerated.drives.first(where: { $0.selectionID == selectionID })
+                        selectableDrives.first(where: { $0.selectionID == selectionID })
                     }
-                    let preservedSelectionID = effectiveVolumeOverride && resolvedSelection == nil
-                        ? activeSelectionID
-                        : resolvedSelection?.selectionID
 
                     withAnimation(.easeInOut(duration: 0.18)) {
                         self.synchronizeDriveSelection {
-                            self.availableDrives = enumerated.drives
+                            self.availableDrives = displayedDrives
                             self.selectedDrive = resolvedSelection
-                            self.selectedDriveSelectionID = preservedSelectionID
+                            self.selectedDriveSelectionID = resolvedSelection?.selectionID
                         }
                     }
 
@@ -123,8 +134,10 @@ extension AnalysisLogic {
         } else {
             physicalDriveRefreshGeneration &+= 1
             isPhysicalDriveRefreshRunning = false
-            activePhysicalDriveRefreshUsesVolumeOverride = nil
             wholeDiskCapacityCache = [:]
+            physicalUSBTargetsCache = []
+            macOSOptionUSBTargetsCache = []
+            isMacOSCreateInstallMediaVolumeOverrideActive = false
         }
 
         let currentSelectedSelectionID = selectedDriveSelectionID ?? selectedDrive?.selectionID

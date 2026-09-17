@@ -37,8 +37,6 @@ struct SystemAnalysisView: View {
     @State private var checksumSheetPresentation: AnalysisChecksumSheetPresentation?
     @State private var hostingWindow: NSWindow? = nil
     @State private var isOptionModifierPressed: Bool = false
-    @State private var macOSVolumeSelectionOverrideLatched: Bool = false
-    @State private var optionWholeDiskSelectionID: String? = nil
     @State private var optionModifierMonitor: Any? = nil
     
     let driveRefreshTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
@@ -123,62 +121,28 @@ struct SystemAnalysisView: View {
         }
     }
 
-    private var usesMacOSCreateInstallMediaVolumeOverride: Bool {
-        logic.supportsMacOSCreateInstallMediaVolumeOverride
-            && (isOptionModifierPressed || macOSVolumeSelectionOverrideLatched)
-    }
-
     private func updateOptionModifierState(_ isPressed: Bool) {
         guard isOptionModifierPressed != isPressed else { return }
-        if isPressed,
-           !macOSVolumeSelectionOverrideLatched,
-           logic.selectedDrive?.isWholeDiskTarget == true {
-            optionWholeDiskSelectionID = logic.selectedDrive?.selectionID
-        } else if !isPressed,
-                  !macOSVolumeSelectionOverrideLatched,
-                  let optionWholeDiskSelectionID {
-            logic.selectedDriveSelectionID = optionWholeDiskSelectionID
-        }
         isOptionModifierPressed = isPressed
-        logic.refreshDrives(
-            useMacOSCreateInstallMediaVolumeOverride: usesMacOSCreateInstallMediaVolumeOverride
-        )
+        logic.setMacOSCreateInstallMediaVolumeOverrideActive(isPressed)
     }
 
     private func installOptionModifierMonitorIfNeeded() {
         guard optionModifierMonitor == nil else { return }
         isOptionModifierPressed = NSEvent.modifierFlags.contains(.option)
         optionModifierMonitor = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { event in
-            DispatchQueue.main.async {
-                updateOptionModifierState(event.modifierFlags.contains(.option))
-            }
+            updateOptionModifierState(event.modifierFlags.contains(.option))
             return event
         }
     }
 
     private func removeOptionModifierMonitor() {
-        guard let optionModifierMonitor else { return }
-        NSEvent.removeMonitor(optionModifierMonitor)
-        self.optionModifierMonitor = nil
+        if let optionModifierMonitor {
+            NSEvent.removeMonitor(optionModifierMonitor)
+            self.optionModifierMonitor = nil
+        }
         isOptionModifierPressed = false
-    }
-
-    private func handleTargetSelectionChange(_ drive: USBDrive?) {
-        guard isOptionModifierPressed,
-              logic.supportsMacOSCreateInstallMediaVolumeOverride,
-              let drive else {
-            return
-        }
-
-        if drive.isWholeDiskTarget {
-            optionWholeDiskSelectionID = drive.selectionID
-            return
-        }
-
-        guard drive.partitionScheme == .gpt,
-              drive.fileSystemFormat == .hfsPlus else { return }
-        macOSVolumeSelectionOverrideLatched = true
-        optionWholeDiskSelectionID = nil
+        logic.setMacOSCreateInstallMediaVolumeOverrideActive(false)
     }
 
     private func consumePendingDownloaderInstallerAndAnalyze() {
@@ -194,8 +158,7 @@ struct SystemAnalysisView: View {
 
     private func handleResetToStartNotification() {
         checksumSheetPresentation = nil
-        macOSVolumeSelectionOverrideLatched = false
-        optionWholeDiskSelectionID = nil
+        logic.setMacOSCreateInstallMediaVolumeOverrideActive(false)
         logic.resetAll()
         isTabLocked = false
         navigateToInstall = false
@@ -217,9 +180,8 @@ struct SystemAnalysisView: View {
 
     private func handleViewAppear() {
         installOptionModifierMonitorIfNeeded()
-        logic.refreshDrives(
-            useMacOSCreateInstallMediaVolumeOverride: usesMacOSCreateInstallMediaVolumeOverride
-        )
+        logic.setMacOSCreateInstallMediaVolumeOverrideActive(isOptionModifierPressed)
+        logic.refreshDrives()
         updateMenuState()
         consumePendingDownloaderInstallerAndAnalyze()
         consumePendingRawLinuxImageAndApply()
@@ -668,9 +630,8 @@ struct SystemAnalysisView: View {
         AnyView(
             analysisContentWithBackgrounds
                 .onReceive(driveRefreshTimer) { _ in
-                    logic.refreshDrives(
-                        useMacOSCreateInstallMediaVolumeOverride: usesMacOSCreateInstallMediaVolumeOverride
-                    )
+                    updateOptionModifierState(NSEvent.modifierFlags.contains(.option))
+                    logic.refreshDrives()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: .macUSBResetToStart)) { _ in
                     handleResetToStartNotification()
@@ -688,16 +649,13 @@ struct SystemAnalysisView: View {
                 .onChange(of: logic.selectedFilePath) { _ in updateMenuState() }
                 .onChange(of: logic.selectedFilePath) { _ in
                     checksumSheetPresentation = nil
-                    macOSVolumeSelectionOverrideLatched = false
-                    optionWholeDiskSelectionID = nil
                 }
                 .onChange(of: logic.isPPC) { _ in updateMenuState() }
                 .onChange(of: logic.isLinuxDetected) { _ in updateMenuState() }
                 .onChange(of: logic.sourceAppURL) { _ in updateMenuState() }
-                .onChange(of: logic.supportsMacOSCreateInstallMediaVolumeOverride) { isSupported in
-                    guard !isSupported else { return }
-                    macOSVolumeSelectionOverrideLatched = false
-                    optionWholeDiskSelectionID = nil
+                .onChange(of: logic.supportsMacOSCreateInstallMediaVolumeOverride) { _ in
+                    logic.setMacOSCreateInstallMediaVolumeOverrideActive(isOptionModifierPressed)
+                    logic.refreshDrives()
                 }
         )
     }
@@ -710,9 +668,6 @@ struct SystemAnalysisView: View {
                 }
                 .onChange(of: logic.shouldShowAlreadyMountedSourceAlert) { show in
                     if show { presentAlreadyMountedSourceDialog() }
-                }
-                .onChange(of: logic.selectedDrive) { drive in
-                    handleTargetSelectionChange(drive)
                 }
         )
     }
