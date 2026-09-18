@@ -440,6 +440,43 @@ struct USBDriveLogic {
         return (sorted, capacityByWholeDisk)
     }
 
+    /// Enumerates both macOS target presentations from one physical-disk snapshot.
+    /// The createinstallmedia Option list keeps every whole disk and inserts its
+    /// mounted HFS+ volumes directly after the matching physical target.
+    static func enumerateAvailableMacOSTargetSetsWithCapacities(
+        allowExternalHardDrives: Bool
+    ) -> (
+        physicalDrives: [USBDrive],
+        optionDrives: [USBDrive],
+        capacityByWholeDisk: [String: Int64]
+    ) {
+        let physical = enumerateAvailablePhysicalUSBDrivesWithCapacities(
+            allowExternalHardDrives: allowExternalHardDrives
+        )
+
+        let physicalWholeDisks = Set(physical.drives.map(\.device))
+        let eligibleVolumes = enumerateAvailableVolumeDrives(
+            allowExternalHardDrives: allowExternalHardDrives
+        ).filter { drive in
+            drive.partitionScheme == .gpt
+                && drive.fileSystemFormat == .hfsPlus
+                && physicalWholeDisks.contains(wholeDiskName(from: drive.device))
+        }
+
+        let volumesByWholeDisk = Dictionary(grouping: eligibleVolumes) { drive in
+            wholeDiskName(from: drive.device)
+        }
+
+        let expandedTargets = physical.drives.flatMap { drive -> [USBDrive] in
+            let volumes = (volumesByWholeDisk[drive.device] ?? []).sorted {
+                $0.device.localizedStandardCompare($1.device) == .orderedAscending
+            }
+            return [drive] + volumes
+        }
+
+        return (physical.drives, expandedTargets, physical.capacityByWholeDisk)
+    }
+
     static func totalSizeBytesForWholeDiskBSDName(_ wholeDiskBSDName: String) -> Int64? {
         guard let info = runDiskutilPlistCommand(arguments: ["info", "-plist", "/dev/\(wholeDiskBSDName)"]) else {
             return nil
@@ -499,8 +536,9 @@ struct USBDriveLogic {
         return nil
     }
 
-    /// Enumerates external, non-internal, non-network removable mounted volumes and returns them as USBDrive models.
-    static func enumerateAvailableDrives() -> [USBDrive] {
+    /// Enumerates external, non-internal, non-network mounted volumes and returns them as USBDrive models.
+    /// Non-removable external volumes are included only when external-drive support is enabled.
+    static func enumerateAvailableVolumeDrives(allowExternalHardDrives: Bool) -> [USBDrive] {
         let keys: [URLResourceKey] = [
             .volumeNameKey,
             .volumeIsRemovableKey,
@@ -514,11 +552,12 @@ struct USBDriveLogic {
 
         let drives: [USBDrive] = urls.compactMap { url -> USBDrive? in
             guard let v = try? url.resourceValues(forKeys: Set(keys)),
-                  let isRemovable = v.volumeIsRemovable, isRemovable,
                   let isInternal = v.volumeIsInternal, !isInternal,
                   let name = v.volumeName else {
                 return nil
             }
+            let isRemovable = v.volumeIsRemovable ?? false
+            guard isRemovable || allowExternalHardDrives else { return nil }
             if isNetworkVolume(url: url) {
                 return nil
             }
@@ -539,6 +578,12 @@ struct USBDriveLogic {
                 fileSystemFormat: fileSystemFormat
             )
         }
-        return drives
+        return drives.sorted {
+            $0.device.localizedStandardCompare($1.device) == .orderedAscending
+        }
+    }
+
+    static func enumerateAvailableDrives() -> [USBDrive] {
+        enumerateAvailableVolumeDrives(allowExternalHardDrives: false)
     }
 }

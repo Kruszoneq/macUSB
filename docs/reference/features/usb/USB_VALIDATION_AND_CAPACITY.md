@@ -27,37 +27,60 @@ Fallback for Linux and Windows source-size resolution:
 
 Proceed must remain blocked until selected target passes validation.
 
-## APFS Safety Rule
+## macOS Target Selection and Formatting
 
-If selected target is APFS:
-- proceed remains blocked,
-- user is instructed to reformat manually in Disk Utility.
-- this APFS block applies to macOS-target flow only; Linux-target and manual raw-image flows use physical whole-disk (`diskX`) selection and do not apply APFS blocking.
+Recognized macOS workflows use physical whole-disk (`diskX`) targets by default:
+- target labels use `diskX - <size> - <USB standard>`,
+- APFS and other existing formats remain selectable,
+- every non-PPC whole-disk target is passed to automatic GPT/HFS+ preparation with the `mac_USB` label,
+- PPC remains a specialized whole-disk path and keeps its existing APM/HFS+ formatting.
 
-## Unreadable USB Guidance
+Physical whole-disk targets are the shared base snapshot for every supported workflow, and their preparation starts independently when the analysis screen appears. The picker never uses mounted volumes as its default target source or exposes a target list before the initial snapshot is ready. A second macOS Option snapshot is prepared from the same physical-disk enumeration and adds only eligible mounted GPT/HFS+ volumes. Pressing or releasing Option switches between these prepared in-memory presentations immediately. Workflow eligibility changes and the periodic analysis-screen refresh may still trigger a new enumeration.
 
-If at least one external USB medium is physically connected but has no readable/mountable macOS volume:
-- analysis screen keeps the standard USB picker behavior for readable targets,
-- an additional warning card is shown in USB section,
-- warning copy instructs user to erase medium in Disk Utility,
-- warning card exposes a direct action to open Disk Utility.
-- warning card action must remain clickable even when USB selection UI is disabled by analysis state.
-- warning card appears only after macOS routing is detected; before system recognition it stays hidden.
+For standard `createinstallmedia` workflows, holding Option on the analysis screen enables a mixed target list:
+- every physical `diskX` target remains in the list,
+- eligible mounted HFS+ volumes from a GPT disk are inserted directly after their matching physical `diskX` target,
+- APFS and other volumes from that disk are omitted,
+- disks without an eligible GPT/HFS+ volume remain unchanged in the list,
+- the physical-disk and mixed lists are prepared together, so pressing or releasing Option switches the presented list immediately without another disk enumeration,
+- releasing Option always restores the physical-disk list; the mixed list is never latched,
+- changing the presented list does not clear, replace, or hide the name of an already selected disk or volume,
+- a selected eligible volume still skips automatic preformat when the user proceeds, even after Option is released.
 
-Detection policy:
-- use `diskutil list -plist external` to enumerate connected external whole disks,
-- use mounted volume enumeration to map currently mountable/readable disks,
-- classify as unreadable USB only when all of the following are true:
-  - disk is external (`Internal`/`OSInternalMedia` is false),
-  - disk bus is `USB` (`BusProtocol == USB`),
-  - disk is physical (`VirtualOrPhysical == Physical`),
-  - no mounted volume maps to that whole disk.
+The Option volume override applies only to standard `createinstallmedia` workflows. PPC, restore-legacy, and Mavericks restore workflows expose and pass only physical `diskX` targets. If analysis changes into one of these workflows while a volume from that disk was selected earlier, selection is normalized to its parent physical disk. PPC then uses its dedicated APM/HFS+ formatting, while restore workflows use GPT/HFS+ preparation.
 
-UI suppression rule:
-- when unreadable USB warning is shown and there are no readable targets in picker, do not show the generic `Nie wykryto nośnika USB` error card.
-- unreadable USB warning applies to macOS-target flow only; Linux-target and manual raw-image flows suppress this warning and list physical USB whole disks directly.
-- when any USB is physically connected but system recognition is still pending, analysis UI shows a neutral waiting card in USB section instead of target-selection messages.
-- for Linux and manual raw-image flows, selectable target labels use concise physical-media format: `diskX - <size> - <USB standard>`.
+Linux, Windows, and manual raw-image workflows keep their existing physical whole-disk selection behavior.
+
+## Physical Target Discovery and Refresh
+
+The shared physical target snapshot is built as follows:
+
+- use `diskutil list -plist external` to obtain external whole-disk identifiers,
+- read `diskutil info -plist /dev/diskX` for each candidate,
+- include only external, physical USB devices,
+- when `AllowExternalDrives` is disabled, exclude non-removable external USB disks,
+- cache whole-disk capacity from the same enumeration for target-capacity validation,
+- sort targets by their `diskX` identifier.
+
+This physical enumeration does not depend on a readable or mounted macOS volume. A connected USB medium that macOS cannot mount can therefore still appear directly as a selectable whole-disk target.
+
+The analysis screen starts discovery when it appears and requests refresh every `0.5 s`. Refreshes are serialized so a new enumeration does not start while the previous one is running. Workflow-state changes may request an additional refresh; the current snapshot remains authoritative until a completed refresh replaces it.
+
+The Option presentation additionally reads mounted external, non-network volumes and keeps only volumes that:
+
+- belong to a physical USB whole disk from the shared snapshot,
+- use a GPT partition scheme,
+- use HFS+,
+- satisfy the same removable/external-drive preference policy.
+
+UI rules:
+- while the initial target snapshot is being prepared, analysis UI shows the neutral waiting state,
+- when at least one physical USB target is present but source recognition is still pending, the neutral waiting card remains visible instead of target-selection controls,
+- after the initial snapshot finishes with no eligible physical targets, the UI shows `Nie wykryto nośnika USB`,
+- physical targets use the concise label `diskX - <size> - <USB standard>`,
+- Option-selected HFS+ volumes use the mounted-volume label `diskXsY - <size> - <USB standard> - <volume name>`,
+- releasing Option restores the physical presentation; if an eligible volume remains selected, the picker keeps that one selected-volume entry visible until the selection changes,
+- when workflow routing changes to PPC, restore-legacy, or Mavericks, any selected volume is normalized to its parent physical `diskX` target.
 
 In PPC flow, specialized target formatting behavior must not be forced through standard assumptions.
 
@@ -70,4 +93,4 @@ Validation logs should include:
 
 ## Update Trigger
 
-Update when thresholds, generation split, or APFS blocking behavior changes.
+Update when thresholds, generation split, target-selection policy, or preformat eligibility changes.

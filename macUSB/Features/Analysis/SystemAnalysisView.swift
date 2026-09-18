@@ -36,7 +36,8 @@ struct SystemAnalysisView: View {
     @State private var isDragTargeted: Bool = false
     @State private var checksumSheetPresentation: AnalysisChecksumSheetPresentation?
     @State private var hostingWindow: NSWindow? = nil
-    @State private var lastAPFSAlertedDriveURL: URL? = nil
+    @State private var isOptionModifierPressed: Bool = false
+    @State private var optionModifierMonitor: Any? = nil
     
     let driveRefreshTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     private var visualMode: VisualSystemMode { currentVisualMode() }
@@ -120,53 +121,28 @@ struct SystemAnalysisView: View {
         }
     }
 
-    private func presentAPFSDriveDialog() {
-        let alert = NSAlert()
-        alert.icon = NSApp.applicationIconImage
-        alert.alertStyle = .warning
-        alert.messageText = String(localized: "Wybrano nośnik APFS")
-        alert.informativeText = String(localized: "Nośniki APFS nie mogą zostać automatycznie przeformatowane przez macUSB. Otwórz Narzędzie dyskowe i sformatuj wybrany nośnik ręcznie do dowolnego formatu innego niż APFS, a następnie wybierz go ponownie.")
-        alert.addButton(withTitle: String(localized: "Otwórz Narzędzie dyskowe"))
-        alert.addButton(withTitle: String(localized: "Zamknij"))
+    private func updateOptionModifierState(_ isPressed: Bool) {
+        guard isOptionModifierPressed != isPressed else { return }
+        isOptionModifierPressed = isPressed
+        logic.setMacOSCreateInstallMediaVolumeOverrideActive(isPressed)
+    }
 
-        let handleResponse: (NSApplication.ModalResponse) -> Void = { response in
-            guard response == .alertFirstButtonReturn else { return }
-            self.openDiskUtility()
-        }
-
-        if let window = hostingWindow {
-            alert.beginSheetModal(for: window, completionHandler: handleResponse)
-        } else {
-            handleResponse(alert.runModal())
+    private func installOptionModifierMonitorIfNeeded() {
+        guard optionModifierMonitor == nil else { return }
+        isOptionModifierPressed = NSEvent.modifierFlags.contains(.option)
+        optionModifierMonitor = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { event in
+            updateOptionModifierState(event.modifierFlags.contains(.option))
+            return event
         }
     }
 
-    private func openDiskUtility() {
-        let candidates = [
-            "/System/Applications/Utilities/Disk Utility.app",
-            "/Applications/Utilities/Disk Utility.app"
-        ].map { URL(fileURLWithPath: $0) }
-
-        for appURL in candidates where NSWorkspace.shared.open(appURL) {
-            return
+    private func removeOptionModifierMonitor() {
+        if let optionModifierMonitor {
+            NSEvent.removeMonitor(optionModifierMonitor)
+            self.optionModifierMonitor = nil
         }
-    }
-
-    private func handleAPFSSelectionChange() {
-        guard !logic.isLinuxDetected else {
-            lastAPFSAlertedDriveURL = nil
-            return
-        }
-
-        guard isAPFSSelected else {
-            lastAPFSAlertedDriveURL = nil
-            return
-        }
-
-        guard let selectedURL = logic.selectedDrive?.url else { return }
-        guard lastAPFSAlertedDriveURL != selectedURL else { return }
-        lastAPFSAlertedDriveURL = selectedURL
-        presentAPFSDriveDialog()
+        isOptionModifierPressed = false
+        logic.setMacOSCreateInstallMediaVolumeOverrideActive(false)
     }
 
     private func consumePendingDownloaderInstallerAndAnalyze() {
@@ -182,6 +158,7 @@ struct SystemAnalysisView: View {
 
     private func handleResetToStartNotification() {
         checksumSheetPresentation = nil
+        logic.setMacOSCreateInstallMediaVolumeOverrideActive(false)
         logic.resetAll()
         isTabLocked = false
         navigateToInstall = false
@@ -202,6 +179,8 @@ struct SystemAnalysisView: View {
     }
 
     private func handleViewAppear() {
+        installOptionModifierMonitorIfNeeded()
+        logic.setMacOSCreateInstallMediaVolumeOverrideActive(isOptionModifierPressed)
         logic.refreshDrives()
         updateMenuState()
         consumePendingDownloaderInstallerAndAnalyze()
@@ -557,17 +536,12 @@ struct SystemAnalysisView: View {
             && (logic.isSystemDetected || logic.isPPC || logic.isMavericks || logic.isLinuxDetected || logic.isWindowsWorkflowSupported)
     }
 
-    private var isAPFSSelected: Bool {
-        logic.selectedDrive?.fileSystemFormat == .apfs
-    }
-
     private var canProceedToInstall: Bool {
         canUseUSBSelection
-            && logic.selectedDrive != nil
+            && logic.selectedDriveForInstallation != nil
             && logic.capacityCheckFinished
             && logic.isCapacitySufficient
             && (!logic.isWindowsWorkflowSupported || logic.selectedFileUrl != nil)
-            && ((logic.isLinuxDetected || logic.isWindowsWorkflowSupported) || !isAPFSSelected)
     }
 
     private func handleProceedToInstall() {
@@ -656,6 +630,7 @@ struct SystemAnalysisView: View {
         AnyView(
             analysisContentWithBackgrounds
                 .onReceive(driveRefreshTimer) { _ in
+                    updateOptionModifierState(NSEvent.modifierFlags.contains(.option))
                     logic.refreshDrives()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: .macUSBResetToStart)) { _ in
@@ -670,14 +645,24 @@ struct SystemAnalysisView: View {
                 .onChange(of: logic.showUnsupportedMessage) { _ in updateMenuState() }
                 .onChange(of: logic.recognizedVersion) { _ in updateMenuState() }
                 .onChange(of: logic.isAnalyzing) { _ in updateMenuState() }
-                .onChange(of: logic.isSystemDetected) { _ in updateMenuState() }
+                .onChange(of: logic.isSystemDetected) { _ in
+                    updateMenuState()
+                    logic.refreshDrives()
+                }
                 .onChange(of: logic.selectedFilePath) { _ in updateMenuState() }
                 .onChange(of: logic.selectedFilePath) { _ in
                     checksumSheetPresentation = nil
                 }
-                .onChange(of: logic.isPPC) { _ in updateMenuState() }
+                .onChange(of: logic.isPPC) { _ in
+                    updateMenuState()
+                    logic.refreshDrives()
+                }
                 .onChange(of: logic.isLinuxDetected) { _ in updateMenuState() }
                 .onChange(of: logic.sourceAppURL) { _ in updateMenuState() }
+                .onChange(of: logic.supportsMacOSCreateInstallMediaVolumeOverride) { _ in
+                    logic.setMacOSCreateInstallMediaVolumeOverrideActive(isOptionModifierPressed)
+                    logic.refreshDrives()
+                }
         )
     }
 
@@ -689,9 +674,6 @@ struct SystemAnalysisView: View {
                 }
                 .onChange(of: logic.shouldShowAlreadyMountedSourceAlert) { show in
                     if show { presentAlreadyMountedSourceDialog() }
-                }
-                .onChange(of: logic.selectedDrive?.url) { _ in
-                    handleAPFSSelectionChange()
                 }
         )
     }
@@ -712,6 +694,7 @@ struct SystemAnalysisView: View {
                     handleViewAppear()
                 }
                 .onDisappear {
+                    removeOptionModifierMonitor()
                     MenuState.shared.rawLinuxImageSelectionEnabled = false
                     AppWindowCloseGuard.shared.setBeforeAllowedClose(nil)
                 }
@@ -731,9 +714,7 @@ struct SystemAnalysisView: View {
         SystemAnalysisUSBSectionView(
             logic: logic,
             sectionIconFont: sectionIconFont,
-            onOpenDiskUtility: openDiskUtility,
-            isSelectionEnabled: canUseUSBSelection,
-            isLinuxWorkflow: logic.isLinuxDetected || logic.isWindowsWorkflowSupported
+            isSelectionEnabled: canUseUSBSelection
         )
     }
 }
@@ -741,38 +722,29 @@ struct SystemAnalysisView: View {
 struct SystemAnalysisUSBSectionView: View {
     @ObservedObject var logic: AnalysisLogic
     let sectionIconFont: Font
-    let onOpenDiskUtility: () -> Void
     let isSelectionEnabled: Bool
-    let isLinuxWorkflow: Bool
-
-    private var isAPFSSelected: Bool {
-        !isLinuxWorkflow && logic.selectedDrive?.fileSystemFormat == .apfs
-    }
-
-    private var unreadableUSBDescription: String {
-        if logic.unreadableExternalUSBMediaCount > 1 {
-            return String(localized: "Do Maca są podłączone zewnętrzne nośniki USB, których macOS nie może odczytać. Otwórz Narzędzie dyskowe i wymaż je do formatu obsługiwanego przez macOS, a następnie wybierz nośnik ponownie.")
-        }
-
-        return String(localized: "Do Maca jest podłączony zewnętrzny nośnik USB, którego macOS nie może odczytać. Otwórz Narzędzie dyskowe i wymaż nośnik do formatu obsługiwanego przez macOS, a następnie wybierz go ponownie.")
-    }
-
-    private var shouldShowUnreadableUSBHint: Bool {
-        guard !isLinuxWorkflow else { return false }
-        let isMacOSFlowDetected = (logic.sourceAppURL != nil) || logic.isPPC || logic.isMavericks
-        return isMacOSFlowDetected && logic.hasUnreadableExternalUSBMedia
-    }
 
     private var shouldShowWaitingForSystemDetectionCard: Bool {
-        let isUSBConnected = !logic.availableDrives.isEmpty || logic.hasUnreadableExternalUSBMedia
+        let isUSBConnected = !logic.presentedUSBTargets.isEmpty || logic.hasUnreadableExternalUSBMedia
         let isAwaitingSystemRecognition = logic.recognizedVersion.isEmpty || logic.isAnalyzing
-        return isUSBConnected && isAwaitingSystemRecognition && !isSelectionEnabled
+        let isPreparingInitialTargetSnapshot = !logic.hasPreparedUSBTargetSnapshot
+        return (isUSBConnected || isPreparingInitialTargetSnapshot)
+            && isAwaitingSystemRecognition
+            && !isSelectionEnabled
     }
 
     private func pickerDisplayName(for drive: USBDrive) -> String {
-        guard isLinuxWorkflow else { return drive.displayName }
+        guard drive.isWholeDiskTarget else { return drive.displayName }
         let speedText = drive.usbSpeed?.rawValue ?? "USB"
         return "\(drive.device) - \(drive.size) - \(speedText)"
+    }
+
+    private var preservedPickerSelection: USBDrive? {
+        guard let selectedDrive = logic.selectedDrive,
+              !logic.presentedUSBTargets.contains(where: { $0.selectionID == selectedDrive.selectionID }) else {
+            return nil
+        }
+        return selectedDrive
     }
 
     private func sectionDivider(_ title: LocalizedStringKey) -> some View {
@@ -836,7 +808,11 @@ struct SystemAnalysisUSBSectionView: View {
                     }
                 } else {
                     Text("Wybierz docelowy nośnik USB:").font(.subheadline)
-                    if logic.availableDrives.isEmpty && !logic.hasUnreadableExternalUSBMedia {
+                    if !logic.hasPreparedUSBTargetSnapshot {
+                        ProgressView()
+                            .controlSize(.small)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    } else if logic.presentedUSBTargets.isEmpty && !logic.hasUnreadableExternalUSBMedia {
                         StatusCard(tone: .error, density: .compact) {
                             HStack {
                                 Image(systemName: "externaldrive.badge.xmark").font(sectionIconFont).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
@@ -846,11 +822,15 @@ struct SystemAnalysisUSBSectionView: View {
                                 }
                             }
                         }
-                    } else if !logic.availableDrives.isEmpty {
+                    } else if !logic.presentedUSBTargets.isEmpty {
                         HStack {
                             Picker("", selection: $logic.selectedDriveSelectionID) {
                                 Text("Wybierz...").tag(nil as String?)
-                                ForEach(logic.availableDrives) { drive in
+                                if let preservedPickerSelection {
+                                    Text(pickerDisplayName(for: preservedPickerSelection))
+                                        .tag(Optional(preservedPickerSelection.selectionID))
+                                }
+                                ForEach(logic.presentedUSBTargets) { drive in
                                     Text(pickerDisplayName(for: drive)).tag(Optional(drive.selectionID))
                                 }
                             }
@@ -864,68 +844,7 @@ struct SystemAnalysisUSBSectionView: View {
             .opacity(isSelectionEnabled ? 1.0 : 0.5)
             .onChange(of: logic.selectedDrive) { _ in logic.checkCapacity() }
 
-            if shouldShowUnreadableUSBHint {
-                StatusCard(tone: .warning, density: .compact) {
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack(alignment: .top, spacing: 10) {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .font(sectionIconFont)
-                                .foregroundColor(.orange)
-                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
-
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("Wykryto nieczytelny nośnik USB")
-                                    .font(.headline)
-                                    .foregroundColor(.orange)
-
-                                Text(unreadableUSBDescription)
-                                    .font(.subheadline)
-                                    .foregroundColor(.orange.opacity(0.85))
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
-
-                            Spacer(minLength: 0)
-                        }
-
-                        Button(action: onOpenDiskUtility) {
-                            HStack(spacing: 8) {
-                                Image(systemName: "externaldrive")
-                                Text("Otwórz Narzędzie dyskowe")
-                            }
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .foregroundColor(.orange)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .macUSBSecondaryButtonStyle()
-                        .tint(.orange)
-                    }
-                }
-                .transition(.opacity)
-            }
-
             if logic.selectedDrive != nil {
-                if isAPFSSelected {
-                    StatusCard(tone: .error, density: .compact) {
-                        HStack(alignment: .center) {
-                            Image(systemName: "xmark.octagon.fill")
-                                .font(sectionIconFont)
-                                .foregroundColor(.red)
-                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
-                            VStack(alignment: .leading) {
-                                Text("Wybrano nośnik APFS")
-                                    .font(.headline)
-                                    .foregroundColor(.red)
-                                Text("Wybrany nośnik korzysta z formatu APFS. Aby kontynuować, sformatuj go ręcznie w Narzędziu dyskowym do dowolnego formatu innego niż APFS.")
-                                    .font(.caption)
-                                    .foregroundColor(.red.opacity(0.8))
-                            }
-                            Spacer()
-                        }
-                    }
-                    .transition(.opacity)
-                }
                 if logic.capacityCheckFinished && !logic.isCapacitySufficient {
                     StatusCard(tone: .error, density: .compact) {
                         HStack {
@@ -945,7 +864,7 @@ struct SystemAnalysisUSBSectionView: View {
                     }
                     .transition(.opacity)
                 }
-                if logic.capacityCheckFinished && logic.isCapacitySufficient && !isAPFSSelected {
+                if logic.capacityCheckFinished && logic.isCapacitySufficient {
                     VStack(alignment: .leading, spacing: 15) {
                         StatusCard(tone: .warning, density: .compact) {
                             HStack(alignment: .center) {

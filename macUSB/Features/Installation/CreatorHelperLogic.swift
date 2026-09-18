@@ -421,7 +421,14 @@ extension UniversalInstallationView {
         let fileManager = FileManager.default
         let requesterUID = Int(getuid())
 
-        let shouldPreformat = drive.needsFormatting && !isPPC
+        let canReuseCreateInstallMediaVolume = !isRestoreLegacy
+            && !isMavericks
+            && !isPPC
+            && !drive.isWholeDiskTarget
+            && drive.partitionScheme == .gpt
+            && drive.fileSystemFormat == .hfsPlus
+        let shouldPreformat = !isPPC && !canReuseCreateInstallMediaVolume
+        let preparedTargetLabel = shouldPreformat ? "mac_USB" : drive.url.lastPathComponent
         let helperTargetBSDName = resolveHelperTargetBSDName(for: drive)
 
         if isRestoreLegacy {
@@ -442,7 +449,7 @@ extension UniversalInstallationView {
                 tempWorkPath: tempWorkURL.path,
                 targetVolumePath: drive.url.path,
                 targetBSDName: helperTargetBSDName,
-                targetLabel: drive.url.lastPathComponent,
+                targetLabel: preparedTargetLabel,
                 needsPreformat: shouldPreformat,
                 isCatalina: false,
                 isSierra: false,
@@ -473,7 +480,7 @@ extension UniversalInstallationView {
                 tempWorkPath: tempWorkURL.path,
                 targetVolumePath: drive.url.path,
                 targetBSDName: helperTargetBSDName,
-                targetLabel: drive.url.lastPathComponent,
+                targetLabel: preparedTargetLabel,
                 needsPreformat: shouldPreformat,
                 isCatalina: false,
                 isSierra: false,
@@ -516,7 +523,7 @@ extension UniversalInstallationView {
             tempWorkPath: tempWorkURL.path,
             targetVolumePath: drive.url.path,
             targetBSDName: helperTargetBSDName,
-            targetLabel: drive.url.lastPathComponent,
+            targetLabel: preparedTargetLabel,
             needsPreformat: shouldPreformat,
             isCatalina: isCatalina,
             isSierra: isSierra,

@@ -103,7 +103,8 @@ extension AnalysisLogic {
                 self.resetLinuxDetectionState()
                 self.resetWindowsDetectionState()
 
-                self.availableDrives = []
+                self.isMacOSCreateInstallMediaVolumeOverrideActive = false
+                self.presentedUSBTargets = self.physicalUSBTargetsCache
                 self.selectedDrive = nil
                 self.hasUnreadableExternalUSBMedia = false
                 self.unreadableExternalUSBMediaCount = 0

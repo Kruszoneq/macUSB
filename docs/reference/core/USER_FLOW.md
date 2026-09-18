@@ -12,6 +12,7 @@ Destructive start requires explicit confirmation.
 - User selects source and runs analysis.
 - Analysis resolves compatibility flags and workflow branch.
 - For macOS installers, analysis also compares the physical Mac architecture with `createinstallmedia`; Intel hosts reject ARM-only tools and unreadable architectures fail closed.
+- Recognized macOS workflows select physical USB whole disks by default. Non-PPC targets are prepared as GPT/HFS+ with the `mac_USB` label; a standard `createinstallmedia` workflow can instead reuse a GPT/HFS+ volume selected through the Option override.
 - User selects target USB and confirms destructive start.
 - Progress screen reflects helper-driven stages.
 - Finish screen reports success/failure/cancel plus cleanup status.
@@ -31,7 +32,7 @@ Linux-specific runtime behavior:
 - recognized Linux image (`.iso`) unlocks the same shared install flow,
 - `Tools -> Write a Raw Image to a Drive...` accepts `.iso` and `.img` from Welcome or an empty analysis screen after a warning and dedicated picker,
 - manual raw-image selection skips content analysis and source mounting, displays the selected filename with neutral image wording, and enters the existing Linux raw-copy flow through app-only presentation state,
-- USB validation keeps capacity gating, while APFS blocking is macOS-only (Linux uses physical `diskX` targets),
+- USB validation keeps capacity gating and Linux continues to use physical `diskX` targets independently of the macOS preformat and Option-override policy,
 - creation branch uses unchanged Linux raw-copy helper stages and hides Linux-specific post-write guidance for manual raw images.
 
 Windows-specific runtime behavior:

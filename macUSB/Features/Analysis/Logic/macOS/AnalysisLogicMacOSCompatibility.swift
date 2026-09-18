@@ -132,8 +132,14 @@ extension AnalysisLogic {
             rawVer.starts(with: "10.8") ||
             rawVer.starts(with: "10.7")
 
-        // ZMIANA: Dodanie isCatalina do isSystemDetected
-        self.isSystemDetected = isModern || isOldSupported || isLegacyDetected || isRestoreLegacy || isCatalina || isSierra || isMavericks
+        self.isSystemDetected = self.isPPC
+            || isModern
+            || isOldSupported
+            || isLegacyDetected
+            || isRestoreLegacy
+            || isCatalina
+            || isSierra
+            || isMavericks
 
         // Catalina ma swój własny codesign, więc tu wyłączamy standardowy 'needsCodesign'
         self.needsCodesign = isOldSupported && !isModern && !isLegacyDetected
@@ -281,7 +287,13 @@ extension AnalysisLogic {
             rawVer.starts(with: "10.8") ||
             rawVer.starts(with: "10.7")
 
-        self.isSystemDetected = isModern || isOldSupported || isLegacyDetected || isRestoreLegacy || isCatalina || isSierra
+        self.isSystemDetected = self.isPPC
+            || isModern
+            || isOldSupported
+            || isLegacyDetected
+            || isRestoreLegacy
+            || isCatalina
+            || isSierra
 
         self.needsCodesign = isOldSupported && !isModern && !isLegacyDetected
         self.isLegacyDetected = isLegacyDetected

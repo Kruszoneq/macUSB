@@ -80,6 +80,8 @@ For Linux fallback:
 
 Panther remains explicitly unsupported.
 
+Tiger, Leopard, and Snow Leopard are classified as supported PPC results. Their detection sets the general supported-system state together with the PPC workflow flag, so USB target enumeration stays on the physical whole-disk path instead of falling back to mounted-volume discovery. Panther remains excluded from this classification.
+
 Linux fallback routing includes:
 
 - recognized Linux distro,
@@ -143,16 +145,6 @@ For Linux fallback on `.iso`:
 - cleanup scope includes all image entities captured from `hdiutil info -plist` for the selected `image-path`,
 - cleanup is not limited to one mount-point; it must include all captured `dev-entry` and fallback `mount-point` detach attempts,
 - Linux entity cleanup must run on Linux success, Linux failure, timeout, cancel, and reset paths.
-
-## USB Unreadable Target Hint (Non-blocking)
-
-During analysis screen USB target area:
-- if a physical external USB disk is connected but unreadable for macOS mount stack, show a warning hint with Disk Utility guidance,
-- this hint does not replace supported-target validation (capacity/APFS) for readable drives,
-- generic `Nie wykryto nośnika USB` message is suppressed when unreadable USB hint is active and picker has no readable targets,
-- Disk Utility action inside this hint remains interactive regardless of analysis-state gating for USB selection controls.
-- this hint is shown only for macOS-target flow; Linux-target flow suppresses this hint and uses physical `diskX` selection.
-- in macOS flow, this hint is shown only after macOS routing is detected (it stays hidden before system detection).
 
 ## Manual Source Checksum Action
 

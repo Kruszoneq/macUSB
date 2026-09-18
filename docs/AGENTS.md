@@ -63,7 +63,8 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
   - major version `<= 14`: `16 GB` UI target and `15_000_000_000` bytes threshold
   - major version `>= 15`: `32 GB` UI target and `28_000_000_000` bytes threshold
 - Proceed action stays blocked until selected target passes validation.
-- APFS-selected target must block proceed and require manual reformat in Disk Utility.
+- macOS target selection defaults to physical whole disks and automatically preformats non-PPC targets as GPT/HFS+ with the `mac_USB` label; APFS does not block this path.
+- Standard `createinstallmedia` workflows may reuse an existing GPT/HFS+ volume without preformat only through the analysis-screen Option override.
 - In PPC flow, target formatting behavior is specialized and must not be forced through standard preformat assumptions.
 
 ### Detection and compatibility routing
@@ -121,7 +122,7 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 ### Delicate risk hotspots
 
 - Version/compatibility heuristics can affect multiple workflows at once.
-- USB formatting and APFS-to-physical mapping are high-risk destructive paths.
+- USB whole-disk enumeration, Option-volume parent matching, workflow-driven selection normalization, and destructive target formatting are high-risk paths.
 - Helper registration/signing/environment drift may surface as late-stage failures.
 - Localization key drift between helper and app breaks runtime text quality.
 - Notification and permission UX can regress when startup/menu/finish logic diverges.
