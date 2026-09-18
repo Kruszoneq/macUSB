@@ -35,6 +35,8 @@ Recognized macOS workflows use physical whole-disk (`diskX`) targets by default:
 - every non-PPC whole-disk target is passed to automatic GPT/HFS+ preparation with the `mac_USB` label,
 - PPC remains a specialized whole-disk path and keeps its existing APM/HFS+ formatting.
 
+Physical whole-disk targets are the shared base snapshot for every supported workflow, and their preparation starts independently when the analysis screen appears. The picker never uses mounted volumes as its default target source or exposes a target list before the initial snapshot is ready. A second macOS Option snapshot is prepared from the same physical-disk enumeration and adds only eligible mounted GPT/HFS+ volumes, so changing workflow or modifier state only changes the presented in-memory list.
+
 For standard `createinstallmedia` workflows, holding Option on the analysis screen enables a mixed target list:
 - every physical `diskX` target remains in the list,
 - eligible mounted HFS+ volumes from a GPT disk are inserted directly after their matching physical `diskX` target,

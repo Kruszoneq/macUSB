@@ -60,7 +60,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var windowsWillSplitWIM: Bool = false
     @Published var windowsAutounattendMacLocale: CreatorWindowsAutounattendMacLocale? = nil
 
-    @Published var availableDrives: [USBDrive] = []
+    @Published var presentedUSBTargets: [USBDrive] = []
     @Published var hasUnreadableExternalUSBMedia: Bool = false
     @Published var unreadableExternalUSBMediaCount: Int = 0
     @Published var selectedDriveSelectionID: String? {
@@ -88,7 +88,7 @@ final class AnalysisLogic: ObservableObject {
                 return
             }
 
-            if let matchingDrive = availableDrives.first(where: { $0.selectionID == selectionID }) {
+            if let matchingDrive = selectableUSBTargets.first(where: { $0.selectionID == selectionID }) {
                 if selectedDrive?.selectionID != matchingDrive.selectionID {
                     selectedDrive = matchingDrive
                 }
@@ -175,6 +175,7 @@ final class AnalysisLogic: ObservableObject {
     var physicalUSBTargetsCache: [USBDrive] = []
     var macOSOptionUSBTargetsCache: [USBDrive] = []
     var isMacOSCreateInstallMediaVolumeOverrideActive: Bool = false
+    @Published var hasPreparedUSBTargetSnapshot: Bool = false
     let imageAnalysisTimeoutSeconds: TimeInterval = 20
     var activeImageAnalysisRunID: UUID? = nil
     var imageAnalysisTimeoutWorkItem: DispatchWorkItem? = nil

@@ -725,9 +725,12 @@ struct SystemAnalysisUSBSectionView: View {
     let isSelectionEnabled: Bool
 
     private var shouldShowWaitingForSystemDetectionCard: Bool {
-        let isUSBConnected = !logic.availableDrives.isEmpty || logic.hasUnreadableExternalUSBMedia
+        let isUSBConnected = !logic.presentedUSBTargets.isEmpty || logic.hasUnreadableExternalUSBMedia
         let isAwaitingSystemRecognition = logic.recognizedVersion.isEmpty || logic.isAnalyzing
-        return isUSBConnected && isAwaitingSystemRecognition && !isSelectionEnabled
+        let isPreparingInitialTargetSnapshot = !logic.hasPreparedUSBTargetSnapshot
+        return (isUSBConnected || isPreparingInitialTargetSnapshot)
+            && isAwaitingSystemRecognition
+            && !isSelectionEnabled
     }
 
     private func pickerDisplayName(for drive: USBDrive) -> String {
@@ -738,7 +741,7 @@ struct SystemAnalysisUSBSectionView: View {
 
     private var preservedPickerSelection: USBDrive? {
         guard let selectedDrive = logic.selectedDrive,
-              !logic.availableDrives.contains(where: { $0.selectionID == selectedDrive.selectionID }) else {
+              !logic.presentedUSBTargets.contains(where: { $0.selectionID == selectedDrive.selectionID }) else {
             return nil
         }
         return selectedDrive
@@ -805,7 +808,11 @@ struct SystemAnalysisUSBSectionView: View {
                     }
                 } else {
                     Text("Wybierz docelowy nośnik USB:").font(.subheadline)
-                    if logic.availableDrives.isEmpty && !logic.hasUnreadableExternalUSBMedia {
+                    if !logic.hasPreparedUSBTargetSnapshot {
+                        ProgressView()
+                            .controlSize(.small)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    } else if logic.presentedUSBTargets.isEmpty && !logic.hasUnreadableExternalUSBMedia {
                         StatusCard(tone: .error, density: .compact) {
                             HStack {
                                 Image(systemName: "externaldrive.badge.xmark").font(sectionIconFont).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
@@ -815,7 +822,7 @@ struct SystemAnalysisUSBSectionView: View {
                                 }
                             }
                         }
-                    } else if !logic.availableDrives.isEmpty {
+                    } else if !logic.presentedUSBTargets.isEmpty {
                         HStack {
                             Picker("", selection: $logic.selectedDriveSelectionID) {
                                 Text("Wybierz...").tag(nil as String?)
@@ -823,7 +830,7 @@ struct SystemAnalysisUSBSectionView: View {
                                     Text(pickerDisplayName(for: preservedPickerSelection))
                                         .tag(Optional(preservedPickerSelection.selectionID))
                                 }
-                                ForEach(logic.availableDrives) { drive in
+                                ForEach(logic.presentedUSBTargets) { drive in
                                     Text(pickerDisplayName(for: drive)).tag(Optional(drive.selectionID))
                                 }
                             }
