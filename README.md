@@ -102,22 +102,22 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
   <tr>
     <td align="center" valign="top">
       <strong>macOS Installer</strong><br>
-      <a href="docs/readme-assets/app-screens/workflow-macos-details.png">
-        <img src="docs/readme-assets/app-screens/workflow-macos-details.png" alt="macOS installer workflow details" width="190">
+      <a href="docs/readme-assets/app-screens/ConfirmationMacOSBigSur.png">
+        <img src="docs/readme-assets/app-screens/ConfirmationMacOSBigSur.png" alt="macOS installer workflow details" width="190">
       </a><br>
       <sub>Review the selected macOS version, target USB drive, and creation steps before starting.</sub>
     </td>
     <td align="center" valign="top">
       <strong>Linux Image</strong><br>
-      <a href="docs/readme-assets/app-screens/workflow-linux-details.png">
-        <img src="docs/readme-assets/app-screens/workflow-linux-details.png" alt="Linux workflow details" width="190">
+      <a href="docs/readme-assets/app-screens/ConfirmationUbuntu.png">
+        <img src="docs/readme-assets/app-screens/ConfirmationUbuntu.png" alt="Linux workflow details" width="190">
       </a><br>
       <sub>Linux workflow includes guidance for the expected unreadable-disk prompt shown by macOS during creation.</sub>
     </td>
     <td align="center" valign="top">
       <strong>Windows Installer</strong><br>
-      <a href="docs/readme-assets/app-screens/workflow-windows-details.png">
-        <img src="docs/readme-assets/app-screens/workflow-windows-details.png" alt="Windows setup configuration options" width="190">
+      <a href="docs/readme-assets/app-screens/ConfigurationWindowsEleven.png">
+        <img src="docs/readme-assets/app-screens/ConfigurationWindowsEleven.png" alt="Windows setup configuration options" width="190">
       </a><br>
       <sub>Windows workflow includes optional setup configuration for selected Windows restrictions and first-run setup choices.</sub>
     </td>
@@ -136,22 +136,22 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
   <tr>
     <td align="center" valign="top">
       <strong>1. Installer List</strong><br>
-      <a href="docs/readme-assets/app-screens/downloader-list.png">
-        <img src="docs/readme-assets/app-screens/downloader-list.png" alt="Downloader installer list" width="190">
+      <a href="docs/readme-assets/app-screens/DownloaderCatalogOverview.png">
+        <img src="docs/readme-assets/app-screens/DownloaderCatalogOverview.png" alt="Downloader installer list" width="190">
       </a><br>
       <sub>Browse macOS installers available from Apple servers.</sub>
     </td>
     <td align="center" valign="top">
       <strong>2. Download Progress</strong><br>
-      <a href="docs/readme-assets/app-screens/downloader-process.png">
-        <img src="docs/readme-assets/app-screens/downloader-process.png" alt="Downloader progress view" width="190">
+      <a href="docs/readme-assets/app-screens/DownloaderProgress.png">
+        <img src="docs/readme-assets/app-screens/DownloaderProgress.png" alt="Downloader progress view" width="190">
       </a><br>
       <sub>Track download and preparation progress in real time.</sub>
     </td>
     <td align="center" valign="top">
       <strong>3. Download Summary</strong><br>
-      <a href="docs/readme-assets/app-screens/downloader-summary.png">
-        <img src="docs/readme-assets/app-screens/downloader-summary.png" alt="Downloader summary view" width="190">
+      <a href="docs/readme-assets/app-screens/DownloaderCompleted.png">
+        <img src="docs/readme-assets/app-screens/DownloaderCompleted.png" alt="Downloader summary view" width="190">
       </a><br>
       <sub>Review the final status and use the installer in the creation flow.</sub>
     </td>
