@@ -653,7 +653,10 @@ struct SystemAnalysisView: View {
                 .onChange(of: logic.selectedFilePath) { _ in
                     checksumSheetPresentation = nil
                 }
-                .onChange(of: logic.isPPC) { _ in updateMenuState() }
+                .onChange(of: logic.isPPC) { _ in
+                    updateMenuState()
+                    logic.refreshDrives()
+                }
                 .onChange(of: logic.isLinuxDetected) { _ in updateMenuState() }
                 .onChange(of: logic.sourceAppURL) { _ in updateMenuState() }
                 .onChange(of: logic.supportsMacOSCreateInstallMediaVolumeOverride) { _ in

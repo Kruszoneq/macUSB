@@ -80,6 +80,8 @@ For Linux fallback:
 
 Panther remains explicitly unsupported.
 
+Tiger, Leopard, and Snow Leopard are classified as supported PPC results. Their detection sets the general supported-system state together with the PPC workflow flag, so USB target enumeration stays on the physical whole-disk path instead of falling back to mounted-volume discovery. Panther remains excluded from this classification.
+
 Linux fallback routing includes:
 
 - recognized Linux distro,
