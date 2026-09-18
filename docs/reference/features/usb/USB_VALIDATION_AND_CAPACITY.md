@@ -36,9 +36,10 @@ Recognized macOS workflows use physical whole-disk (`diskX`) targets by default:
 - PPC remains a specialized whole-disk path and keeps its existing APM/HFS+ formatting.
 
 For standard `createinstallmedia` workflows, holding Option on the analysis screen enables a mixed target list:
-- a GPT disk with mounted HFS+ volumes is replaced by those HFS+ volumes,
+- every physical `diskX` target remains in the list,
+- eligible mounted HFS+ volumes from a GPT disk are inserted directly after their matching physical `diskX` target,
 - APFS and other volumes from that disk are omitted,
-- disks without an eligible GPT/HFS+ volume remain selectable as physical `diskX` targets,
+- disks without an eligible GPT/HFS+ volume remain unchanged in the list,
 - the physical-disk and mixed lists are prepared together, so pressing or releasing Option switches the presented list immediately without another disk enumeration,
 - releasing Option always restores the physical-disk list; the mixed list is never latched,
 - changing the presented list does not clear, replace, or hide the name of an already selected disk or volume,
