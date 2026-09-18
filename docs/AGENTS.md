@@ -122,7 +122,7 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 ### Delicate risk hotspots
 
 - Version/compatibility heuristics can affect multiple workflows at once.
-- USB formatting and APFS-to-physical mapping are high-risk destructive paths.
+- USB whole-disk enumeration, Option-volume parent matching, workflow-driven selection normalization, and destructive target formatting are high-risk paths.
 - Helper registration/signing/environment drift may surface as late-stage failures.
 - Localization key drift between helper and app breaks runtime text quality.
 - Notification and permission UX can regress when startup/menu/finish logic diverges.

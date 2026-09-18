@@ -106,7 +106,7 @@ Linux recognition is shown as successful detection in analysis UI and enables in
 - Linux picker labels use `diskX - <size> - <USB standard>` (no extra suffixes),
 - non-removable external USB disks stay gated by existing `AllowExternalDrives` preference,
 - proceed is available after Linux capacity validation (APFS does not block Linux flow),
-- unreadable-USB warning card from macOS flow is hidden in Linux flow,
+- target discovery does not require a readable or mounted macOS volume, so otherwise unmountable USB media can still appear as physical `diskX` targets,
 - installation workflow starts from shared summary/progress/finish UI,
 - Linux helper branch uses raw copy (`dd`) stages.
 
