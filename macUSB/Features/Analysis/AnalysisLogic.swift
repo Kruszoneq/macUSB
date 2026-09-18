@@ -129,20 +129,36 @@ final class AnalysisLogic: ObservableObject {
         }
     }
 
-    /// Nośnik przekazywany do etapu instalacji. W trybie PPC flaga
-    /// needsFormatting jest wymuszana na false, ponieważ
-    /// formatowanie (APM + HFS+) jest już wbudowane w dalszy proces.
+    /// Nośnik przekazywany do etapu instalacji. PPC i procesy restore
+    /// zawsze otrzymują fizyczny whole disk. W trybie PPC flaga
+    /// needsFormatting jest wymuszana na false, ponieważ formatowanie
+    /// (APM + HFS+) jest już wbudowane w dalszy proces.
     var selectedDriveForInstallation: USBDrive? {
         guard let drive = selectedDrive else { return nil }
-        guard isPPC else { return drive }
+        let installationDrive: USBDrive
+        if requiresWholeDiskMacOSTarget {
+            if drive.isWholeDiskTarget {
+                installationDrive = drive
+            } else {
+                let wholeDisk = USBDriveLogic.wholeDiskName(from: drive.device)
+                guard let physicalDrive = physicalUSBTargetsCache.first(where: { $0.device == wholeDisk }) else {
+                    return nil
+                }
+                installationDrive = physicalDrive
+            }
+        } else {
+            installationDrive = drive
+        }
+
+        guard isPPC else { return installationDrive }
         return USBDrive(
-            name: drive.name,
-            device: drive.device,
-            size: drive.size,
-            url: drive.url,
-            usbSpeed: drive.usbSpeed,
-            partitionScheme: drive.partitionScheme,
-            fileSystemFormat: drive.fileSystemFormat,
+            name: installationDrive.name,
+            device: installationDrive.device,
+            size: installationDrive.size,
+            url: installationDrive.url,
+            usbSpeed: installationDrive.usbSpeed,
+            partitionScheme: installationDrive.partitionScheme,
+            fileSystemFormat: installationDrive.fileSystemFormat,
             needsFormatting: false
         )
     }

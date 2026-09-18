@@ -45,6 +45,8 @@ For standard `createinstallmedia` workflows, holding Option on the analysis scre
 - changing the presented list does not clear, replace, or hide the name of an already selected disk or volume,
 - a selected eligible volume still skips automatic preformat when the user proceeds, even after Option is released.
 
+The Option volume override applies only to standard `createinstallmedia` workflows. PPC, restore-legacy, and Mavericks restore workflows expose and pass only physical `diskX` targets. If analysis changes into one of these workflows while a volume from that disk was selected earlier, selection is normalized to its parent physical disk. PPC then uses its dedicated APM/HFS+ formatting, while restore workflows use GPT/HFS+ preparation.
+
 Linux, Windows, and manual raw-image workflows keep their existing physical whole-disk selection behavior.
 
 ## Unreadable USB Guidance

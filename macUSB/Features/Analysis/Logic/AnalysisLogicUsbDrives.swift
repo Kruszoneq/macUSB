@@ -17,6 +17,10 @@ extension AnalysisLogic {
             && createInstallMediaInspection.architecture != .notApplicable
     }
 
+    var requiresWholeDiskMacOSTarget: Bool {
+        isPPC || isRestoreLegacy || isMavericks
+    }
+
     var usesPhysicalUSBTargetSelection: Bool {
         isLinuxDetected || isWindowsWorkflowSupported || isMacOSUSBTargetWorkflow
     }
@@ -101,12 +105,19 @@ extension AnalysisLogic {
                         && self.supportsMacOSCreateInstallMediaVolumeOverride
                     self.isMacOSCreateInstallMediaVolumeOverrideActive = effectiveVolumeOverride
                     let displayedDrives = effectiveVolumeOverride ? optionDrives : physicalDrives
-                    let selectableDrives = isMacOSPhysicalTargetWorkflow
-                        ? (physicalDrives + optionDrives)
-                        : physicalDrives
+                    let allowsVolumeSelection = isMacOSPhysicalTargetWorkflow
+                        && self.supportsMacOSCreateInstallMediaVolumeOverride
+                    let selectableDrives = allowsVolumeSelection ? optionDrives : physicalDrives
                     let activeSelectionID = self.selectedDriveSelectionID ?? self.selectedDrive?.selectionID
-                    let resolvedSelection = activeSelectionID.flatMap { selectionID in
+                    var resolvedSelection = activeSelectionID.flatMap { selectionID in
                         selectableDrives.first(where: { $0.selectionID == selectionID })
+                    }
+                    if resolvedSelection == nil,
+                       isMacOSPhysicalTargetWorkflow,
+                       !allowsVolumeSelection,
+                       let previousSelection = self.selectedDrive {
+                        let selectedWholeDisk = USBDriveLogic.wholeDiskName(from: previousSelection.device)
+                        resolvedSelection = physicalDrives.first(where: { $0.device == selectedWholeDisk })
                     }
 
                     withAnimation(.easeInOut(duration: 0.18)) {

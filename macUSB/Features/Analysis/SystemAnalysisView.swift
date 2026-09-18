@@ -538,7 +538,7 @@ struct SystemAnalysisView: View {
 
     private var canProceedToInstall: Bool {
         canUseUSBSelection
-            && logic.selectedDrive != nil
+            && logic.selectedDriveForInstallation != nil
             && logic.capacityCheckFinished
             && logic.isCapacitySufficient
             && (!logic.isWindowsWorkflowSupported || logic.selectedFileUrl != nil)
@@ -645,7 +645,10 @@ struct SystemAnalysisView: View {
                 .onChange(of: logic.showUnsupportedMessage) { _ in updateMenuState() }
                 .onChange(of: logic.recognizedVersion) { _ in updateMenuState() }
                 .onChange(of: logic.isAnalyzing) { _ in updateMenuState() }
-                .onChange(of: logic.isSystemDetected) { _ in updateMenuState() }
+                .onChange(of: logic.isSystemDetected) { _ in
+                    updateMenuState()
+                    logic.refreshDrives()
+                }
                 .onChange(of: logic.selectedFilePath) { _ in updateMenuState() }
                 .onChange(of: logic.selectedFilePath) { _ in
                     checksumSheetPresentation = nil
