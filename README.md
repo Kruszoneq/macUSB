@@ -210,7 +210,7 @@ macOS versions recognized and supported for USB creation:
 | **Mac OS X Leopard** | 10.5 | ✅ |
 | **Mac OS X Tiger**[^4] | 10.4 | ✅ |
 
-[^1]: USB creation is supported on **Apple Silicon only.**
+[^1]: Creating a bootable USB installer for **macOS Golden Gate** is supported only on Macs with **Apple Silicon**. The Mac used to create the installer does not need to be running macOS Golden Gate.
 [^2]: Only **10.12.6** is supported.
 [^3]: Fully verified with the image from [Mavericks Forever](https://mavericksforever.com/). Other sources may fail.
 [^4]: **Single-DVD** images are auto-detected. For **Multi-DVD** images, only the first disc is recognized correctly. Other discs may appear as unrecognized or be identified incorrectly. To use them, force detection manually from **Options** → **Skip file analysis** → **Mac OS X Tiger 10.4 (Multi DVD)**.
@@ -252,28 +252,28 @@ macUSB also supports creating bootable USB media from Linux `.iso` images.
 
 When a Linux image is recognized, macUSB detects the distribution, version, and architecture automatically. ARM builds are labeled directly in the detected name, for example `Linux - Ubuntu 26.04 (ARM)`.
 
-If a selected file is a valid Linux image but is not recognized automatically, you can force Linux mode manually from **Options** → **Skip file analysis** → **Linux**.
+> Linux support has been tested with 19 distributions.[^5]
 
-Linux-based `.img` images can also be written from **Tools** → **Write Raw Linux Image (.img)…**. This raw-image path is separate from the officially boot-tested Linux `.iso` support matrix.
+[^5]: Validated distributions: *Ubuntu*, *Kali Linux*, *NixOS*, *Garuda Linux*, *openSUSE Leap*, *Gentoo*, *Rocky Linux*, *Linux Mint*, *Fedora Workstation*, *Manjaro*, *Zorin OS*, *CachyOS*, *AlmaLinux*, *Debian*, *Arch Linux*, *MX Linux*, *Pop!_OS*, *EndeavourOS*, and *elementary OS*. Testing used the latest versions available as of April 30, 2026. Boot behavior was verified on a MacBook Air 2017, a Dell OptiPlex 5040 with UEFI, and an Asus F52Q with Legacy BIOS.
 
-> Linux support has been tested with 19 distributions using the latest available releases as of April 30, 2026, with boot behavior verified on real hardware.[^5]
+---
 
-[^5]: Validated distributions: *Ubuntu*, *Kali Linux*, *NixOS*, *Garuda Linux*, *openSUSE Leap*, *Gentoo*, *Rocky Linux*, *Linux Mint*, *Fedora Workstation*, *Manjaro*, *Zorin OS*, *CachyOS*, *AlmaLinux*, *Debian*, *Arch Linux*, *MX Linux*, *Pop!_OS*, *EndeavourOS*, and *elementary OS*. Boot behavior was verified on a MacBook Air 2017, a Dell OptiPlex 5040 with UEFI, and an Asus F52Q with Legacy BIOS.
+## 💾 Raw Image Writing
+
+macUSB can write `.iso` and `.img` image files directly to external drives using **Tools → Write a Raw Image to a Drive…**.
+
+This method can also be used when a Linux image is not recognized during analysis.
+
+> [!NOTE]
+> The resulting media is not guaranteed to be bootable. Bootability depends on the structure and compatibility of the source image.
 
 ---
 
 ## 🧩 PowerPC Notes
 
-If you are reviving a PowerPC Mac, the project website includes a dedicated Open Firmware guide based on real boot testing of PowerPC USB workflows created with macUSB.
+For instructions on booting a USB installer created with macUSB on a PowerPC Mac, see the [Open Firmware USB boot guide](https://macusb.app/pages/guides/ppc_boot_instructions.html).
 
-Validated scenarios include:
-- **Mac OS X Tiger** and **Mac OS X Leopard** boot scenarios,
-- **Single DVD** editions, and for Tiger also the **Multi-DVD** path,
-- Open Firmware boot commands verified in real hardware tests, including an **iMac G5**.
-
-Use the [step-by-step guide](https://kruszoneq.github.io/macUSB/pages/guides/ppc_boot_instructions.html) for setup and boot instructions.
-
-> PowerPC USB boot behavior can vary by model. During validation testing, USB boot was confirmed on an **iMac G5**, while an **iBook G4 (2003)** detected the USB device but did not boot from it successfully.
+> USB boot compatibility depends on the Mac model and its Open Firmware version. Not every PowerPC Mac can boot from USB.
 
 ---
 
