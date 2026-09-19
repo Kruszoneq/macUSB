@@ -46,6 +46,7 @@ final class AppTerminationCleanup {
         }
 
         InstallerSourceImageUnmountRegistry.shared.detachAllTrackedImagesOnAppTermination()
+        PrivilegedOperationClient.shared.disconnectForAppTermination()
         AppLogging.info("Zakończono cleanup przed zamknięciem aplikacji.", category: "AppLifecycle")
     }
 }

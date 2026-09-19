@@ -17,6 +17,7 @@ Keep this file current with operational hotspots that can cause regressions.
 - Old Yosemite–Catalina installers may still fail after Rosetta removes `EBADARCH`; Rosetta availability is a prerequisite, not a guarantee of complete legacy installer compatibility.
 - Termination during privileged or destructive work can leave media, mounts, or temporary data in an indeterminate state; every new long-running operation must acquire and release an active-operation token on all terminal paths.
 - A helper cancellation acknowledgement is not a terminal workflow result. App-side USB and helper tokens remain active until the helper sends the final result or the XPC connection is invalidated.
+- Helper process exit is gated by both client-connection and privileged-operation leases. App crash or Force Quit may request cancellation, but the daemon must not exit during a non-cancellable safety-critical stage.
 
 ## Mitigation Pattern
 

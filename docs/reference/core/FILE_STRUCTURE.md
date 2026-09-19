@@ -118,6 +118,7 @@
 - `macUSBHelper/main.swift`
 - `macUSBHelper/IPC/*`
 - `macUSBHelper/Service/*`
+- `macUSBHelper/Service/HelperProcessLifecycle.swift` — tracks XPC connections and privileged operations so the launch-on-demand helper exits safely after normal app termination, crash, or Force Quit.
 - `macUSBHelper/Workflow/*`
 - `macUSBHelper/Workflow/Linux/*` — Linux raw-copy stage builder, parser, and disk ops.
 - `macUSBHelper/Workflow/Windows/*` — Windows ISO-copy stage builder, exact formatted-target partition and mount-point resolution, boot-mode-aware source/target validation, progress parsing, and verification.

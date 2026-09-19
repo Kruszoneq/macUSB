@@ -15,6 +15,7 @@
 		A10000012F00000100000031 /* IPC/HelperIPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000021 /* IPC/HelperIPC.swift */; };
 		A10000012F00000100000032 /* Service/PrivilegedHelperService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000022 /* Service/PrivilegedHelperService.swift */; };
 		A10000012F00000100000033 /* Service/HelperListenerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000023 /* Service/HelperListenerDelegate.swift */; };
+		H10000012F00000100000001 /* Service/HelperProcessLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = H10000012F00000100000002 /* Service/HelperProcessLifecycle.swift */; };
 		A10000012F00000100000034 /* Workflow/HelperWorkflowExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000024 /* Workflow/HelperWorkflowExecutor.swift */; };
 		A10000012F00000100000035 /* Workflow/HelperWorkflowStages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000025 /* Workflow/HelperWorkflowStages.swift */; };
 		A10000012F00000100000036 /* Workflow/HelperWorkflowProgressParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000012F00000100000026 /* Workflow/HelperWorkflowProgressParsing.swift */; };
@@ -135,6 +136,7 @@
 		A10000012F00000100000021 /* IPC/HelperIPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPC/HelperIPC.swift; sourceTree = "<group>"; };
 		A10000012F00000100000022 /* Service/PrivilegedHelperService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service/PrivilegedHelperService.swift; sourceTree = "<group>"; };
 		A10000012F00000100000023 /* Service/HelperListenerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service/HelperListenerDelegate.swift; sourceTree = "<group>"; };
+		H10000012F00000100000002 /* Service/HelperProcessLifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service/HelperProcessLifecycle.swift; sourceTree = "<group>"; };
 		A10000012F00000100000024 /* Workflow/HelperWorkflowExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/HelperWorkflowExecutor.swift; sourceTree = "<group>"; };
 		A10000012F00000100000025 /* Workflow/HelperWorkflowStages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/HelperWorkflowStages.swift; sourceTree = "<group>"; };
 		A10000012F00000100000026 /* Workflow/HelperWorkflowProgressParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/HelperWorkflowProgressParsing.swift; sourceTree = "<group>"; };
@@ -589,6 +591,7 @@
 				A10000012F00000100000022 /* Service/PrivilegedHelperService.swift */,
 				F10000012F00000100000011 /* Service/PrivilegedHelperServiceCapabilities.swift */,
 				A10000012F00000100000023 /* Service/HelperListenerDelegate.swift */,
+				H10000012F00000100000002 /* Service/HelperProcessLifecycle.swift */,
 				G10000012F00000100000002 /* Rosetta/HelperRosettaInstaller.swift */,
 				A10000012F00000100000024 /* Workflow/HelperWorkflowExecutor.swift */,
 				A10000012F00000100000025 /* Workflow/HelperWorkflowStages.swift */,
@@ -846,6 +849,7 @@
 				A10000012F00000100000032 /* Service/PrivilegedHelperService.swift in Sources */,
 				F10000012F00000100000001 /* Service/PrivilegedHelperServiceCapabilities.swift in Sources */,
 				A10000012F00000100000033 /* Service/HelperListenerDelegate.swift in Sources */,
+				H10000012F00000100000001 /* Service/HelperProcessLifecycle.swift in Sources */,
 				G10000012F00000100000001 /* Rosetta/HelperRosettaInstaller.swift in Sources */,
 				A10000012F00000100000034 /* Workflow/HelperWorkflowExecutor.swift in Sources */,
 				A10000012F00000100000035 /* Workflow/HelperWorkflowStages.swift in Sources */,
@@ -1048,7 +1052,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 43;
+				CURRENT_PROJECT_VERSION = 44;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;
@@ -1105,7 +1109,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 43;
+				CURRENT_PROJECT_VERSION = 44;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 27NC66L8P2;
 				ENABLE_APP_SANDBOX = NO;

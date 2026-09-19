@@ -15,8 +15,6 @@
 		<key>com.kruszoneq.macusb.helper.debug</key>
 		<true/>
 	</dict>
-	<key>RunAtLoad</key>
-	<true/>
 	<key>KeepAlive</key>
 	<false/>
 </dict>

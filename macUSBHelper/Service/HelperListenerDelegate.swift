@@ -6,10 +6,18 @@ final class HelperListenerDelegate: NSObject, NSXPCListenerDelegate {
 
         let service = PrivilegedHelperService()
         service.connection = newConnection
+        let connectionLease = HelperProcessLifecycle.shared.beginConnection()
+
+        let disconnect: () -> Void = {
+            service.handleClientDisconnection()
+            connectionLease.finish()
+        }
 
         newConnection.exportedInterface = NSXPCInterface(with: PrivilegedHelperToolXPCProtocol.self)
         newConnection.exportedObject = service
         newConnection.remoteObjectInterface = NSXPCInterface(with: PrivilegedHelperClientXPCProtocol.self)
+        newConnection.interruptionHandler = disconnect
+        newConnection.invalidationHandler = disconnect
         newConnection.resume()
 
         return true
