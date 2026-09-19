@@ -15,14 +15,38 @@ extension HelperServiceManager {
         #if DEBUG
         if Self.isRunningFromXcodeDevelopmentBuild() {
             let service = SMAppService.daemon(plistName: Self.daemonPlistName)
-            if service.status == .requiresApproval {
+            switch service.status {
+            case .enabled:
+                validateEnabledServiceHealth(interactive: false, allowRecovery: false) { ready, _ in
+                    guard ready else {
+                        completion(false)
+                        return
+                    }
+
+                    self.runStartupAutoRepairIfNeeded(decision: startupDecision) { autoRepairOK in
+                        completion(autoRepairOK)
+                    }
+                }
+
+            case .requiresApproval:
                 presentStartupApprovalAlertIfNeeded {
                     completion(false)
                 }
-            } else {
-                runStartupAutoRepairIfNeeded(decision: startupDecision) { autoRepairOK in
-                    completion(autoRepairOK)
+
+            case .notRegistered, .notFound:
+                ensureReadyForPrivilegedWork(interactive: false) { ready, _ in
+                    guard ready else {
+                        completion(false)
+                        return
+                    }
+
+                    self.runStartupAutoRepairIfNeeded(decision: startupDecision) { autoRepairOK in
+                        completion(autoRepairOK)
+                    }
                 }
+
+            @unknown default:
+                completion(false)
             }
             return
         }

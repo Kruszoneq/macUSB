@@ -38,6 +38,8 @@ The Help menu provides diagnostic-log export through its menu item and the `Opti
 - App termination is coordinated through a process-wide active-operation registry.
 - Quit requests and main-window close requests are rejected while analysis, USB creation, the downloader window, Rosetta installation, helper repair, long helper work, cleanup, or USB ejection is active.
 - An allowed termination runs the idempotent application cleanup before exit; cleanup errors are logged and do not keep the app running.
+- The privileged helper is launch-on-demand, remains connected and ready while the app runs, and exits after the app disconnects and all privileged work reaches a terminal state.
+- Normal termination closes helper XPC explicitly; app crash and Force Quit are handled by helper-side XPC connection-loss detection.
 
 ## Active Operation and Termination Model
 

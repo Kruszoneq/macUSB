@@ -390,6 +390,24 @@ final class PrivilegedOperationClient: NSObject {
         existingConnection?.invalidate()
     }
 
+    func disconnectForAppTermination() {
+        lock.lock()
+        let existingConnection = connection
+        connection = nil
+        eventHandlers.removeAll()
+        completionHandlers.removeAll()
+        downloaderAssemblyEventHandlers.removeAll()
+        downloaderAssemblyCompletionHandlers.removeAll()
+        let activityTokens = removeAllActivityTokensLocked()
+        lock.unlock()
+
+        activityTokens.forEach { $0.finish() }
+        existingConnection?.invalidationHandler = nil
+        existingConnection?.interruptionHandler = nil
+        existingConnection?.invalidate()
+        AppLogging.info("Rozłączono XPC helpera przed zamknięciem aplikacji.", category: "AppLifecycle")
+    }
+
     func helperProxy(
         presentsTrustFailureAlert: Bool = false,
         onError: @escaping (String) -> Void

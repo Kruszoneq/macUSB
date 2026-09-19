@@ -10,4 +10,5 @@ private let listener = NSXPCListener(machServiceName: machServiceName)
 HelperConnectionSecurityPolicy.configure(listener, machServiceName: machServiceName)
 listener.delegate = delegate
 listener.resume()
+HelperProcessLifecycle.shared.start()
 dispatchMain()

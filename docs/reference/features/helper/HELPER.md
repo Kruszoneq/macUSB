@@ -75,6 +75,9 @@ The helper system has two runtime layers:
 High-level model:
 - App-side validates readiness, manages registration/repair, and communicates via XPC.
 - Daemon executes privileged workflows and sends progress/result events back to app-side.
+- The daemon is launch-on-demand and stays alive while the app holds its XPC connection.
+- Normal termination explicitly closes that connection; crash and Force Quit are observed as connection loss by the daemon.
+- With no client connection, cancellable work is cancelled and the daemon exits after all active privileged operations reach a terminal state.
 
 Core invariant:
 - No terminal fallback privileged path.
@@ -134,7 +137,16 @@ Contract invariants:
 - Checks app location and helper service status.
 - Handles status states (`enabled`, `requiresApproval`, `notRegistered`, `notFound`).
 - Performs health validation via XPC after configuring app-side helper code-signing requirements.
+- The successful startup health validation creates the persistent app-lifetime XPC connection and starts the on-demand helper.
 - Uses controlled recovery when enabled service is unhealthy.
+
+### Process Lifecycle Flow
+- LaunchDaemon plists advertise the XPC Mach service without `RunAtLoad`; registration and user approval persist independently of the helper process.
+- `HelperProcessLifecycle` tracks accepted XPC connections and active privileged operations.
+- The helper schedules a short idle exit when both counts reach zero. A new connection or operation cancels the pending exit.
+- App termination explicitly invalidates its XPC connection after termination cleanup.
+- XPC invalidation or interruption also covers app crash and Force Quit. It requests cancellation for active USB and downloader work; non-cancellable stages and Rosetta installation finish before the process exits.
+- The helper process exiting does not unregister the service. A later Mach-service connection launches it again on demand.
 
 ### Passive Readiness Probe
 - Downloader uses an app-side passive readiness probe that reads `SMAppService` status and performs a bounded XPC health check only when the service is enabled.
@@ -247,7 +259,9 @@ Daemon helper runtime:
 - `macUSBHelper/Service/PrivilegedHelperServiceCapabilities.swift`
   - helper capability identifiers and advertised capability payload.
 - `macUSBHelper/Service/HelperListenerDelegate.swift`
-  - listener delegate and connection wiring.
+  - listener delegate, connection wiring, and client-disconnection handling.
+- `macUSBHelper/Service/HelperProcessLifecycle.swift`
+  - process-lifetime leases for XPC connections and privileged operations, including guarded idle exit.
 - `macUSBHelper/Workflow/HelperWorkflowExecutor.swift`
   - USB workflow execution orchestration and cancellation.
 - `macUSBHelper/Workflow/HelperWorkflowStages.swift`

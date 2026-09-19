@@ -9,10 +9,13 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
     private var activeDownloaderAssemblyID: String?
     private var activeDownloaderAssemblyExecutor: DownloaderAssemblyExecutor?
     private var isRosettaInstallationActive = false
+    private var workflowLifecycleLease: HelperProcessLifecycle.Lease?
+    private var downloaderAssemblyLifecycleLease: HelperProcessLifecycle.Lease?
+    private var rosettaLifecycleLease: HelperProcessLifecycle.Lease?
     private let queue = DispatchQueue(label: "macUSB.helper.service")
 
     func startWorkflow(_ requestData: NSData, reply: @escaping (NSString?, NSError?) -> Void) {
-        queue.async {
+        queue.async { [self] in
             guard self.activeExecutor == nil,
                   self.activeDownloaderAssemblyExecutor == nil,
                   !self.isRosettaInstallationActive else {
@@ -59,6 +62,7 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
 
             self.activeWorkflowID = workflowID
             self.activeExecutor = executor
+            self.workflowLifecycleLease = HelperProcessLifecycle.shared.beginOperation()
             reply(workflowID as NSString, nil)
 
             DispatchQueue.global(qos: .userInitiated).async {
@@ -67,6 +71,8 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
                     self.sendResult(result)
                     self.activeWorkflowID = nil
                     self.activeExecutor = nil
+                    self.workflowLifecycleLease?.finish()
+                    self.workflowLifecycleLease = nil
                 }
             }
         }
@@ -83,7 +89,7 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
     }
 
     func startDownloaderAssembly(_ requestData: NSData, reply: @escaping (NSString?, NSError?) -> Void) {
-        queue.async {
+        queue.async { [self] in
             guard self.activeExecutor == nil,
                   self.activeDownloaderAssemblyExecutor == nil,
                   !self.isRosettaInstallationActive else {
@@ -120,6 +126,7 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
 
             self.activeDownloaderAssemblyID = workflowID
             self.activeDownloaderAssemblyExecutor = executor
+            self.downloaderAssemblyLifecycleLease = HelperProcessLifecycle.shared.beginOperation()
             reply(workflowID as NSString, nil)
 
             DispatchQueue.global(qos: .userInitiated).async {
@@ -128,6 +135,8 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
                     self.sendDownloaderAssemblyResult(result)
                     self.activeDownloaderAssemblyID = nil
                     self.activeDownloaderAssemblyExecutor = nil
+                    self.downloaderAssemblyLifecycleLease?.finish()
+                    self.downloaderAssemblyLifecycleLease = nil
                 }
             }
         }
@@ -148,7 +157,9 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
     }
 
     func cleanupDownloaderSession(_ requestData: NSData, reply: @escaping (NSData?, NSError?) -> Void) {
+        let lifecycleLease = HelperProcessLifecycle.shared.beginOperation()
         queue.async {
+            defer { lifecycleLease.finish() }
             guard self.activeExecutor == nil,
                   self.activeDownloaderAssemblyExecutor == nil,
                   !self.isRosettaInstallationActive else {
@@ -230,10 +241,13 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
             }
 
             self.isRosettaInstallationActive = true
+            self.rosettaLifecycleLease = HelperProcessLifecycle.shared.beginOperation()
             DispatchQueue.global(qos: .userInitiated).async {
                 let result = HelperRosettaInstaller.run()
                 self.queue.async {
                     self.isRosettaInstallationActive = false
+                    self.rosettaLifecycleLease?.finish()
+                    self.rosettaLifecycleLease = nil
                     do {
                         reply(try HelperXPCCodec.encode(result) as NSData, nil)
                     } catch {
@@ -273,6 +287,14 @@ final class PrivilegedHelperService: NSObject, PrivilegedHelperToolXPCProtocol {
                     userInfo: [NSLocalizedDescriptionKey: "Capability macUSBoot jest niedostępna: \(macUSBootCapabilityErrorDescription(error))"]
                 )
             )
+        }
+    }
+
+    func handleClientDisconnection() {
+        queue.async {
+            self.connection = nil
+            _ = self.activeExecutor?.cancel()
+            self.activeDownloaderAssemblyExecutor?.cancel()
         }
     }
 
