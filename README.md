@@ -184,36 +184,21 @@ Accepted local source formats:
 
 ---
 
-## 💿 Supported macOS Installers
+## 💿 macOS Support
 
-macOS versions recognized and supported for USB creation:
+macUSB supports creating bootable USB installers across the **macOS**, **OS X**, and **Mac OS X** system families, from **macOS Golden Gate 27** through **Mac OS X Tiger 10.4**. Some systems have additional requirements or limitations.[^1]
 
-| System | Version | Supported |
-| :--- | :--- | :---: |
-| **macOS Golden Gate**[^1] | 27 | ✅ |
-| **macOS Tahoe** | 26 | ✅ |
-| **macOS Sequoia** | 15 | ✅ |
-| **macOS Sonoma** | 14 | ✅ |
-| **macOS Ventura** | 13 | ✅ |
-| **macOS Monterey** | 12 | ✅ |
-| **macOS Big Sur** | 11 | ✅ |
-| **macOS Catalina** | 10.15 | ✅ |
-| **macOS Mojave** | 10.14 | ✅ |
-| **macOS High Sierra** | 10.13 | ✅ |
-| **macOS Sierra**[^2] | 10.12 | ✅ |
-| **OS X El Capitan** | 10.11 | ✅ |
-| **OS X Yosemite** | 10.10 | ✅ |
-| **OS X Mavericks**[^3] | 10.9 | ✅ |
-| **OS X Mountain Lion** | 10.8 | ✅ |
-| **OS X Lion** | 10.7 | ✅ |
-| **Mac OS X Snow Leopard** | 10.6 | ✅ |
-| **Mac OS X Leopard** | 10.5 | ✅ |
-| **Mac OS X Tiger**[^4] | 10.4 | ✅ |
+When macUSB is running on **macOS Golden Gate**, **Rosetta** is required to create installers for **macOS Catalina and earlier, down to OS X Yosemite**. macUSB checks for Rosetta automatically and, when needed, offers to install it with one click.
 
-[^1]: Creating a bootable USB installer for **macOS Golden Gate** is supported only on Macs with **Apple Silicon**. The Mac used to create the installer does not need to be running macOS Golden Gate.
-[^2]: Only **10.12.6** is supported.
-[^3]: Fully verified with the image from [Mavericks Forever](https://mavericksforever.com/). Other sources may fail.
-[^4]: **Single-DVD** images are auto-detected. For **Multi-DVD** images, only the first disc is recognized correctly. Other discs may appear as unrecognized or be identified incorrectly. To use them, force detection manually from **Options** → **Skip file analysis** → **Mac OS X Tiger 10.4 (Multi DVD)**.
+> [!NOTE]
+> For **OS X Yosemite and newer**, if the target USB drive is already partitioned as **GPT** and contains an **HFS+** volume, hold **Option (⌥)** while selecting the target to choose an individual volume without reformatting the entire drive. The selected volume itself will still be erased during installer creation.
+
+[^1]: **System-specific requirements and limitations:**
+
+    - **macOS Golden Gate 27:** Creating its bootable USB installer is supported only on Macs with **Apple Silicon**. The Mac used to create the installer does not need to be running macOS Golden Gate.
+    - **macOS Sierra 10.12:** Only **10.12.6** is supported.
+    - **OS X Mavericks 10.9:** Fully verified with the image from [Mavericks Forever](https://mavericksforever.com/). Other sources may fail.
+    - **Mac OS X Tiger 10.4:** **Single-DVD** images are auto-detected. For **Multi-DVD** images, only the first disc is recognized correctly. Other discs may appear as unrecognized or be identified incorrectly. To use them, force detection manually from **Options** → **Skip file analysis** → **Mac OS X Tiger 10.4 (Multi DVD)**.
 
 ---
 
@@ -252,9 +237,9 @@ macUSB also supports creating bootable USB media from Linux `.iso` images.
 
 When a Linux image is recognized, macUSB detects the distribution, version, and architecture automatically. ARM builds are labeled directly in the detected name, for example `Linux - Ubuntu 26.04 (ARM)`.
 
-> Linux support has been tested with 19 distributions.[^5]
+> Linux support has been tested with 19 distributions.[^2]
 
-[^5]: Validated distributions: *Ubuntu*, *Kali Linux*, *NixOS*, *Garuda Linux*, *openSUSE Leap*, *Gentoo*, *Rocky Linux*, *Linux Mint*, *Fedora Workstation*, *Manjaro*, *Zorin OS*, *CachyOS*, *AlmaLinux*, *Debian*, *Arch Linux*, *MX Linux*, *Pop!_OS*, *EndeavourOS*, and *elementary OS*. Testing used the latest versions available as of April 30, 2026. Boot behavior was verified on a MacBook Air 2017, a Dell OptiPlex 5040 with UEFI, and an Asus F52Q with Legacy BIOS.
+[^2]: Validated distributions: *Ubuntu*, *Kali Linux*, *NixOS*, *Garuda Linux*, *openSUSE Leap*, *Gentoo*, *Rocky Linux*, *Linux Mint*, *Fedora Workstation*, *Manjaro*, *Zorin OS*, *CachyOS*, *AlmaLinux*, *Debian*, *Arch Linux*, *MX Linux*, *Pop!_OS*, *EndeavourOS*, and *elementary OS*. Testing used the latest versions available as of April 30, 2026. Boot behavior was verified on a MacBook Air 2017, a Dell OptiPlex 5040 with UEFI, and an Asus F52Q with Legacy BIOS.
 
 ---
 
