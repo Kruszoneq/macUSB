@@ -1,6 +1,6 @@
 # <img src="docs/readme-assets/images/macUSBicon.png" alt="macUSB" width="64" height="64" style="vertical-align: middle;">&nbsp;&nbsp;macUSB
 
-### The all-in-one bootable USB creator for Mac
+*The all-in-one bootable USB creator for Mac*
 
 ![Platform](https://img.shields.io/badge/Platform-macOS-black) ![Architecture](https://img.shields.io/badge/Architecture-Apple_Silicon/Intel-black) ![License](https://img.shields.io/badge/License-MIT-blue) ![Security](https://img.shields.io/badge/Security-Notarized-success) [![Website](https://img.shields.io/badge/Website-macusb.app-blueviolet)](https://macusb.app/)
 
@@ -27,12 +27,12 @@ If the project helps you, you can support ongoing development:
 
 Choose one installation method:
 
-1. **GitHub Releases:** [Download latest release](https://github.com/Kruszoneq/macUSB/releases/latest)
+1. **GitHub Releases:** [Download the latest release](https://github.com/Kruszoneq/macUSB/releases/latest)
 2. **Homebrew:**
 
-```bash
-brew install --cask macusb
-```
+   ```bash
+   brew install --cask macusb
+   ```
 
 ---
 
@@ -46,11 +46,11 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
 
 ## ✅ Key Features
 
-- **Built-in Downloader:** discover and download macOS installers, including available Public Beta releases, from Apple servers.
+- **Built-in downloader:** discover and download macOS installers, including available Public Beta releases, from Apple servers.
 - **Local source support:** create bootable USB media from local installers and disk images.
-- **Checksum insight:** calculate SHA-256 checksums for recognized `.iso`, `.cdr`, and `.dmg` source images.
-- **Apple Silicon legacy support:** automatic compatibility handling for older macOS installers during USB creation.
-- **Automatic media prep:** partition and format checks with conversion when required.
+- **Checksum calculation:** calculate SHA-256 checksums for supported `.dmg`, `.cdr`, and `.iso` sources, as well as manually selected raw `.img` images.
+- **Apple silicon legacy support:** automatic compatibility handling for older macOS installers during USB creation.
+- **Automatic media preparation:** validate target capacity and prepare the selected drive for the chosen workflow.
 - **Linux and Windows support:** create bootable USB media from supported Linux and Windows `.iso` images, with optional Windows setup automation.
 
 ---
@@ -66,7 +66,7 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
    - use the built-in Downloader to fetch a macOS installer from Apple.
 3. Select the target USB drive and review the operation details.
 4. Start the process and monitor bootable media creation stage by stage.
-5. Use the final result screen for next steps.
+5. Review the final result and safely eject the USB drive directly from the final screen.
 
 > [!IMPORTANT]
 > For reliable media creation, enable **Allow in the Background** and **Full Disk Access** for macUSB in System Settings. Without them, creation workflows may fail.
@@ -95,7 +95,7 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
 ## 🧭 Workflow Details
 
 <p align="center">
-  Click any screenshot to open full size.
+  Click a screenshot to view it at full size.
 </p>
 
 <table align="center">
@@ -112,14 +112,14 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
       <a href="docs/readme-assets/app-screens/ConfirmationUbuntu.png">
         <img src="docs/readme-assets/app-screens/ConfirmationUbuntu.png" alt="Linux workflow details" width="190">
       </a><br>
-      <sub>Linux workflow includes guidance for the expected unreadable-disk prompt shown by macOS during creation.</sub>
+      <sub>The Linux workflow includes guidance for handling the expected unreadable-disk prompt shown by macOS during creation.</sub>
     </td>
     <td align="center" valign="top">
       <strong>Windows Installer</strong><br>
       <a href="docs/readme-assets/app-screens/ConfigurationWindowsEleven.png">
         <img src="docs/readme-assets/app-screens/ConfigurationWindowsEleven.png" alt="Windows setup configuration options" width="190">
       </a><br>
-      <sub>Windows workflow includes optional setup configuration for selected Windows restrictions and first-run setup choices.</sub>
+      <sub>The Windows workflow offers optional configuration for selected Windows restrictions and first-run setup choices.</sub>
     </td>
   </tr>
 </table>
@@ -129,7 +129,7 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
 ## 🌐 Downloader Workflow
 
 <p align="center">
-  Click any screenshot to open full size.
+  Click a screenshot to view it at full size.
 </p>
 
 <table align="center">
@@ -153,32 +153,38 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
       <a href="docs/readme-assets/app-screens/DownloaderCompleted.png">
         <img src="docs/readme-assets/app-screens/DownloaderCompleted.png" alt="Downloader summary view" width="190">
       </a><br>
-      <sub>Review the final status and use the installer in the creation flow.</sub>
+      <sub>Review the final status, then continue to USB creation with the downloaded installer.</sub>
     </td>
   </tr>
 </table>
+
+Downloader options can save the completed installer as a read-only DMG in a selected destination folder.
 
 ---
 
 ## ⚙️ Requirements
 
 ### Host Computer
-- **Architecture:** Apple Silicon or Intel.
-- **System:** **macOS 14.6 Sonoma** or newer.
+
+- **Architecture:** Apple silicon or Intel.
+- **System:** **macOS Sonoma 14.6** or later.
 - **Free disk space:**
-  - **Downloader stage:** up to **45 GB**, depending on the selected macOS version.
-  - **macOS USB creation stage:** up to **20 GB**, depending on the selected source and system version.
+  - **Downloader stage:** required free space depends on the selected installer and optional DMG output; macUSB checks the exact requirement before downloading.
+  - **USB creation stage:** additional temporary disk space may be required depending on the selected source and workflow.
 
 ### USB Media
-- **For macOS installers:** at least **16 GB**; **32 GB minimum** for **Sequoia and newer**.
+
+- **For macOS installers:** at least **16 GB**, or at least **32 GB** for **macOS Sequoia 15 and later**.
 - **For Windows/Linux images:** **1 GB** or more, depending on the size of the selected `.iso` image.
 - **Performance:** USB 3.0+ is recommended.
 
 > [!NOTE]
-> External HDD/SSD support is disabled by default on every app launch to improve safety and reduce the risk of accidental target selection. You can enable it in **Options** → **Enable external drives support**.
+> External HDD/SSD support is disabled by default each time the app launches to improve safety and reduce the risk of accidental target selection. It can be enabled from **Options → Enable external hard drive support**.
 
 ### Source Inputs
+
 Accepted local source formats:
+
 - **For macOS:** `.dmg`, `.cdr`, `.iso`, and `.app`
 - **For Windows/Linux:** `.iso`
 
@@ -188,14 +194,14 @@ Accepted local source formats:
 
 macUSB supports creating bootable USB installers across the **macOS**, **OS X**, and **Mac OS X** system families, from **macOS Golden Gate 27** through **Mac OS X Tiger 10.4**. Some systems have additional requirements or limitations.[^1]
 
-When macUSB is running on **macOS Golden Gate**, **Rosetta** is required to create installers for **macOS Catalina and earlier, down to OS X Yosemite**. macUSB checks for Rosetta automatically and, when needed, offers to install it with one click.
+On Macs running **macOS Golden Gate**, **Rosetta** is not installed by default. It is required for installers from **OS X Yosemite through macOS Catalina** that include an Intel-only `createinstallmedia` tool. macUSB checks for Rosetta automatically and, when needed, offers to install it with one click.
 
 > [!NOTE]
-> For **OS X Yosemite and newer**, if the target USB drive is already partitioned as **GPT** and contains an **HFS+** volume, hold **Option (⌥)** while selecting the target to choose an individual volume without reformatting the entire drive. The selected volume itself will still be erased during installer creation.
+> For **OS X Yosemite and later**, if the target USB drive is already partitioned as **GPT** and contains an **HFS+** volume, hold **Option (⌥)** while selecting the target to choose an individual volume without reformatting the entire drive. The selected volume itself will still be erased during installer creation.
 
 [^1]: **System-specific requirements and limitations:**
 
-    - **macOS Golden Gate 27:** Creating its bootable USB installer is supported only on Macs with **Apple Silicon**. The Mac used to create the installer does not need to be running macOS Golden Gate.
+    - **macOS Golden Gate 27:** Creating its bootable USB installer is supported only on Macs with **Apple silicon**. The Mac used to create the installer does not need to be running macOS Golden Gate.
     - **macOS Sierra 10.12:** Only **10.12.6** is supported.
     - **OS X Mavericks 10.9:** Fully verified with the image from [Mavericks Forever](https://mavericksforever.com/). Other sources may fail.
     - **Mac OS X Tiger 10.4:** **Single-DVD** images are auto-detected. For **Multi-DVD** images, only the first disc is recognized correctly. Other discs may appear as unrecognized or be identified incorrectly. To use them, force detection manually from **Options** → **Skip file analysis** → **Mac OS X Tiger 10.4 (Multi DVD)**.
@@ -204,24 +210,24 @@ When macUSB is running on **macOS Golden Gate**, **Rosetta** is required to crea
 
 ## 🪟 Windows Support
 
-macUSB recognizes Windows `.iso` images from **Windows XP** and **Windows Server 2003** onward and automatically detects their edition and architecture.
+macUSB recognizes original Microsoft Windows `.iso` images from **Windows XP through Windows 11** and **Windows Server 2003 through Windows Server 2025**, and automatically detects their Windows family, optional Service Pack, and architecture.
 
-Bootable USB creation is supported from **Windows Vista** and **Windows Server 2008 R2** onward.
+Bootable USB creation is supported for **Windows Vista through Windows 11** and **Windows Server 2008 R2 through Windows Server 2025**. Windows XP and Windows Server 2003 are recognized but are not supported for media creation.
 
 Available boot modes depend on the Windows version:
 
 - **Legacy BIOS only:** Windows Vista, Windows 7, and Windows Server 2008 R2.
-- **Legacy BIOS or UEFI:** Windows 8, Windows 8.1, Windows 10, and Windows Server 2012 R2 through 2022.
+- **Legacy BIOS or UEFI:** Windows 8, Windows 8.1, Windows 10, and Windows Server 2012 through 2022.
 - **UEFI only:** Windows 11 and Windows Server 2025.
 
 For legacy BIOS support, macUSB installs the [macUSBoot](https://github.com/Kruszoneq/macUSBoot) bootloader on the prepared media.
 
-For Windows 10 and Windows 11, macUSB can optionally prepare an `autounattend.xml` file. It can configure selected OOBE options, skip the Microsoft account requirement, and bypass Windows 11 hardware checks during setup.
+For 64-bit Windows 10 and Windows 11 images, macUSB can optionally prepare an `Autounattend.xml` file. It can automate selected first-run options, including local-account creation, language and region transfer, skipping selected network and privacy steps, bypassing the Microsoft account requirement, and preventing automatic BitLocker device encryption. For Windows 11, it can also bypass supported hardware checks.
 
-Regardless of the selected boot mode, macUSB formats the target as **MBR** with **FAT32**. Because FAT32 has a **4 GB per-file limit**, some modern Windows images may require extra preparation. If `install.wim` exceeds that limit, macUSB automatically splits it into smaller `.swm` parts using `wimlib`.
+Regardless of the selected boot mode, macUSB formats the target as **MBR** with **FAT32**. Because FAT32 has a **4 GB limit per file**, some modern Windows images may require extra preparation. If `install.wim` exceeds that limit, macUSB automatically splits it into smaller `.swm` parts using `wimlib`.
 
 > [!IMPORTANT]
-> [`wimlib`](https://wimlib.net/) is required only when the selected Windows image needs `install.wim` splitting. It is not bundled with macUSB and must be installed separately by the user. The simplest way to install it is with Homebrew:
+> [`wimlib`](https://wimlib.net/) is required only when the selected Windows image contains an `install.wim` file that must be split. It is not bundled with macUSB and must be installed separately by the user. The simplest way to install it is with Homebrew:
 >
 > ```bash
 > brew install wimlib
@@ -235,19 +241,22 @@ Regardless of the selected boot mode, macUSB formats the target as **MBR** with 
 
 macUSB also supports creating bootable USB media from Linux `.iso` images.
 
-When a Linux image is recognized, macUSB detects the distribution, version, and architecture automatically. ARM builds are labeled directly in the detected name, for example `Linux - Ubuntu 26.04 (ARM)`.
+When a Linux image is recognized, macUSB attempts to detect its distribution, version, and architecture automatically. Images with Linux signals but without a recognized distribution can still use the Linux creation workflow. The detected name explicitly identifies ARM builds, for example `Linux - Ubuntu 26.04 (ARM)`.
 
+> [!NOTE]
 > Linux support has been tested with 19 distributions.[^2]
 
-[^2]: Validated distributions: *Ubuntu*, *Kali Linux*, *NixOS*, *Garuda Linux*, *openSUSE Leap*, *Gentoo*, *Rocky Linux*, *Linux Mint*, *Fedora Workstation*, *Manjaro*, *Zorin OS*, *CachyOS*, *AlmaLinux*, *Debian*, *Arch Linux*, *MX Linux*, *Pop!_OS*, *EndeavourOS*, and *elementary OS*. Testing used the latest versions available as of April 30, 2026. Boot behavior was verified on a MacBook Air 2017, a Dell OptiPlex 5040 with UEFI, and an Asus F52Q with Legacy BIOS.
+[^2]: **Validated distributions:** *Ubuntu*, *Kali Linux*, *NixOS*, *Garuda Linux*, *openSUSE Leap*, *Gentoo*, *Rocky Linux*, *Linux Mint*, *Fedora Workstation*, *Manjaro*, *Zorin OS*, *CachyOS*, *AlmaLinux*, *Debian*, *Arch Linux*, *MX Linux*, *Pop!_OS*, *EndeavourOS*, and *elementary OS*. Testing covered the latest versions available as of April 30, 2026. Boot behavior was verified on a 2017 MacBook Air, a Dell OptiPlex 5040 with UEFI, and an ASUS F52Q with legacy BIOS.
 
 ---
 
 ## 💾 Raw Image Writing
 
-macUSB can write `.iso` and `.img` image files directly to external drives using **Tools → Write a Raw Image to a Drive…**.
+macUSB can write `.iso` and `.img` files directly to external USB drives using **Tools → Write a Raw Image to a Drive…**.
 
 This method can also be used when a Linux image is not recognized during analysis.
+
+After writing a Linux or raw image, macUSB verifies the written data against the source using SHA-256.
 
 > [!NOTE]
 > The resulting media is not guaranteed to be bootable. Bootability depends on the structure and compatibility of the source image.
@@ -258,27 +267,28 @@ This method can also be used when a Linux image is not recognized during analysi
 
 For instructions on booting a USB installer created with macUSB on a PowerPC Mac, see the [Open Firmware USB boot guide](https://macusb.app/pages/guides/ppc_boot_instructions.html).
 
+> [!NOTE]
 > USB boot compatibility depends on the Mac model and its Open Firmware version. Not every PowerPC Mac can boot from USB.
 
 ---
 
 ## 🌍 Available Languages
 
-The interface follows system language automatically:
+By default, the interface follows the system language automatically. A supported language can also be selected manually from **Options → Language**:
 
-- 🇵🇱 Polish (PL)
-- 🇺🇸 English (EN)
-- 🇩🇪 German (DE)
-- 🇯🇵 Japanese (JA)
-- 🇫🇷 French (FR)
-- 🇪🇸 Spanish (ES)
-- 🇧🇷 Portuguese (PT-BR)
-- 🇨🇳 Simplified Chinese (ZH-Hans)
-- 🇷🇺 Russian (RU)
-- 🇮🇹 Italian (IT)
-- 🇺🇦 Ukrainian (UK)
-- 🇻🇳 Vietnamese (VI)
-- 🇹🇷 Turkish (TR)
+- 🇵🇱 Polish (pl)
+- 🇺🇸 English (en)
+- 🇩🇪 German (de)
+- 🇯🇵 Japanese (ja)
+- 🇫🇷 French (fr)
+- 🇪🇸 Spanish (es)
+- 🇧🇷 Portuguese (pt-BR)
+- 🇨🇳 Simplified Chinese (zh-Hans)
+- 🇷🇺 Russian (ru)
+- 🇮🇹 Italian (it)
+- 🇺🇦 Ukrainian (uk)
+- 🇻🇳 Vietnamese (vi)
+- 🇹🇷 Turkish (tr)
 
 ---
 
