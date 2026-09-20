@@ -39,6 +39,8 @@
 - `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicLinuxDisplayName.swift` — final Linux display-name formatting policy.
 - `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicLinuxLifecycle.swift` — Linux state reset/apply helpers.
 - `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicLinuxInstallationHandoff.swift` — Linux install context handoff for USB creation flow.
+- `macUSB/Features/Analysis/Logic/Linux/AnalysisLogicRawLinuxImageLifecycle.swift` — manual `.iso`/`.img` raw-image state handoff without analysis or source mounting.
+- `macUSB/Features/Analysis/RawLinuxImage/RawLinuxImageSelectionCoordinator.swift` — Tools-menu warning and dedicated raw-image picker.
 
 ### Installation layout
 
@@ -48,10 +50,10 @@
 - `macUSB/Features/Installation/CreatorHelperLogic.swift` — shared helper workflow orchestration, authoritative cancellation-response handling, and transfer metrics.
 - `macUSB/Features/Installation/macOS/CreatorMacOSRosettaLogic.swift` — summary-side Rosetta check, license confirmation, installation, and bounded post-install verification.
 - `macUSB/Features/Installation/macOS/CreatorMacOSRosettaCardView.swift` — localized Rosetta status card and retry actions.
-- `macUSB/Features/Installation/Linux/LinuxInstallationFlowContext.swift` — Linux flow context payload.
+- `macUSB/Features/Installation/Linux/LinuxInstallationFlowContext.swift` — Linux flow context payload with app-only manual raw-image presentation state.
 - `macUSB/Features/Installation/Linux/CreatorLinuxLogic.swift` — Linux-specific summary/cleanup helpers.
 - `macUSB/Features/Installation/Linux/CreatorLinuxHelperLogic.swift` — Linux helper request construction and start routing.
-- `macUSB/Features/Installation/Linux/CreationProgressLinuxMapping.swift` — Linux stage mapping for shared progress UI.
+- `macUSB/Features/Installation/Linux/CreationProgressLinuxMapping.swift` — Linux stage mapping and neutral manual raw-image title/status overrides for shared progress UI.
 - `macUSB/Features/Installation/Windows/CreatorWindowsLabelLogic.swift` — Windows target volume-label mapping policy.
 - `macUSB/Features/Installation/Windows/CreatorWindowsBootModeCardView.swift` — Windows summary BIOS/UEFI presentation, session selection, and logging.
 - `macUSB/Features/Installation/Windows/CreatorWindowsHelperLogic.swift` — Windows helper request construction and workflow start routing.
@@ -66,6 +68,10 @@
 
 ### Shared platform services
 
+- `macUSB/Shared/Services/AppActiveOperationRegistry.swift` — thread-safe token registry and diagnostic snapshots for protected runtime work.
+- `macUSB/Shared/Services/AppTerminationCoordinator.swift` — shared quit and main-window close decision, blocked-exit alert, and diagnostic reporting.
+- `macUSB/Shared/Services/AppTerminationCleanup.swift` — idempotent cleanup executed before allowed application exit.
+- `macUSB/Shared/Services/AppWindowCloseGuard.swift` — main-window delegate forwarding close requests to the termination coordinator.
 - `macUSB/Shared/Services/MacHardwareArchitecture.swift` — physical Mac architecture detection independent of the current process architecture.
 - `macUSB/Shared/Services/RosettaAvailabilityProbe.swift` — execution-based Rosetta availability probe.
 
@@ -83,9 +89,14 @@
 ### Downloader layout
 
 - `macUSB/Features/Downloader/MacOSDownloaderCoordinator.swift`
+- `macUSB/Features/Downloader/Logic/MacOSDownloaderPrerequisites.swift` — combines Full Disk Access and passive helper readiness into the downloader gate while rejecting stale checks.
 - `macUSB/Features/Downloader/UI/*`
+- `macUSB/Features/Downloader/UI/MacOSDownloaderPrerequisiteAlerts.swift` — prerequisite alert variants and direct System Settings actions.
+- `macUSB/Features/Downloader/UI/MacOSDownloaderDiskImageOptionsView.swift` — session-only DMG toggle, destination picker, abbreviated path, and change action.
+- `macUSB/Features/Downloader/UI/MacOSDownloaderDiskImageAlerts.swift` — collision, destination-access, and volume-specific capacity alerts for DMG preflight.
 - `macUSB/Features/Downloader/Logic/Discovery/*`
 - `macUSB/Features/Downloader/Logic/Download/*`
+- `macUSB/Features/Downloader/Logic/DiskImage/*` — session-only DMG output models, naming, volume-aware preflight, cancellable `hdiutil` execution, staging, rollback, and source-app removal.
 - `macUSB/Features/Downloader/Logic/Assembly/*`
 - `macUSB/Features/Downloader/Logic/MacOSVerificationLogic.swift`
 - `macUSB/Features/Downloader/Logic/MacOSCleanupLogic.swift`
@@ -96,18 +107,21 @@
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift`
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClientCapabilities.swift` — helper capability query used by BIOS preflight.
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClientRosetta.swift` — app-side Rosetta installation IPC wrapper.
+- `macUSB/Shared/Services/Helper/PrivilegedOperationClientActivity.swift` — lifecycle tokens for long USB and downloader helper tasks.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift`
 - `macUSB/Shared/Services/Helper/HelperService/*`
-- `macUSB/Shared/Services/InstallerSourceImageUnmountRegistry.swift` — centralny rejestr śledzenia źródeł ISO (Windows/Linux) i cleanup odmontowania przy zamknięciu aplikacji.
+- `macUSB/Shared/Services/Helper/HelperService/HelperServicePassiveReadiness.swift` — passive `SMAppService` status and XPC health snapshot without recovery side effects.
+- `macUSB/Shared/Services/InstallerSourceImageUnmountRegistry.swift` — centralny rejestr śledzenia zamontowanych źródeł ISO (Windows/Linux) i cleanup odmontowania przy zamknięciu aplikacji; ręczne źródła raw nie są rejestrowane.
 
 ### Helper (daemon)
 
 - `macUSBHelper/main.swift`
 - `macUSBHelper/IPC/*`
 - `macUSBHelper/Service/*`
+- `macUSBHelper/Service/HelperProcessLifecycle.swift` — tracks XPC connections and privileged operations so the launch-on-demand helper exits safely after normal app termination, crash, or Force Quit.
 - `macUSBHelper/Workflow/*`
 - `macUSBHelper/Workflow/Linux/*` — Linux raw-copy stage builder, parser, and disk ops.
-- `macUSBHelper/Workflow/Windows/*` — Windows ISO-copy stage builder, boot-mode-aware source/target validation, progress parsing, and verification.
+- `macUSBHelper/Workflow/Windows/*` — Windows ISO-copy stage builder, exact formatted-target partition and mount-point resolution, boot-mode-aware source/target validation, progress parsing, and verification.
 - `macUSBHelper/Workflow/Windows/MacUSBoot/*` — BIOS-only macUSBoot artifact validation, Disk Arbitration guard, raw-disk layout validation, transaction, disk operations, and orchestration.
 - `macUSBHelper/DownloaderAssembly/*`
 - `macUSBHelper/Rosetta/HelperRosettaInstaller.swift` — fixed-command, root-only Rosetta installer with bounded diagnostics.

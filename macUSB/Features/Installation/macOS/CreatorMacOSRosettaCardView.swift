@@ -4,9 +4,30 @@ struct CreatorMacOSRosettaCardView: View {
     let state: CreatorMacOSRosettaState
     let action: () -> Void
 
+    private var isActionEnabled: Bool {
+        switch state {
+        case .missing, .checkFailed, .installFailed, .notAvailable:
+            return true
+        case .available, .installing, .checking:
+            return false
+        }
+    }
+
+    private var tone: MacUSBSurfaceTone {
+        state == .available ? .success : .warning
+    }
+
+    private var tint: Color {
+        state == .available ? .green : .orange
+    }
+
+    private var iconName: String {
+        state == .available ? "checkmark.circle.fill" : "exclamationmark.triangle.fill"
+    }
+
     private var titleKey: String {
         switch state {
-        case .missing, .installing:
+        case .available, .missing, .installing:
             return "installation.summary.rosetta.missing.title"
         case .checking, .checkFailed:
             return "installation.summary.rosetta.check_failed.title"
@@ -14,14 +35,12 @@ struct CreatorMacOSRosettaCardView: View {
             return "installation.summary.rosetta.install_failed.title"
         case .notAvailable:
             return "installation.summary.rosetta.not_available.title"
-        case .available:
-            return ""
         }
     }
 
     private var descriptionKey: String {
         switch state {
-        case .missing, .installing:
+        case .available, .missing, .installing:
             return "installation.summary.rosetta.missing.description"
         case .checking, .checkFailed:
             return "installation.summary.rosetta.check_failed.description"
@@ -29,8 +48,6 @@ struct CreatorMacOSRosettaCardView: View {
             return "installation.summary.rosetta.install_failed.description"
         case .notAvailable:
             return "installation.summary.rosetta.not_available.description"
-        case .available:
-            return ""
         }
     }
 
@@ -45,35 +62,46 @@ struct CreatorMacOSRosettaCardView: View {
         case .installFailed:
             return "installation.summary.rosetta.retry.action"
         case .available:
-            return ""
+            return "installation.summary.rosetta.installed.action"
         }
     }
 
     var body: some View {
-        StatusCard(tone: .warning, density: .compact) {
-            HStack(alignment: .top, spacing: 10) {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .font(.title3)
-                    .foregroundColor(.orange)
-                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
+        StatusCard(tone: tone, density: .compact) {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(alignment: .top, spacing: 10) {
+                    Image(systemName: iconName)
+                        .font(.title3)
+                        .foregroundColor(tint)
+                        .contentTransition(.symbolEffect(.replace))
+                        .frame(width: MacUSBDesignTokens.iconColumnWidth)
 
-                VStack(alignment: .leading, spacing: 8) {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(String(localized: String.LocalizationValue(titleKey)))
                             .font(.headline)
-                            .foregroundColor(.orange)
+                            .foregroundColor(tint)
                         Text(String(localized: String.LocalizationValue(descriptionKey)))
                             .font(.subheadline)
-                            .foregroundColor(.orange.opacity(0.8))
+                            .foregroundColor(tint.opacity(0.8))
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
-                    Button(String(localized: String.LocalizationValue(actionKey)), action: action)
-                        .buttonStyle(.bordered)
-                        .disabled(state == .installing || state == .checking)
+                    Spacer()
                 }
-                Spacer()
+
+                Button(action: action) {
+                    HStack {
+                        Text(String(localized: String.LocalizationValue(actionKey)))
+                            .contentTransition(.opacity)
+                    }
+                        .frame(maxWidth: .infinity)
+                        .padding(8)
+                }
+                .tint(tint)
+                .macUSBSecondaryButtonStyle(isEnabled: isActionEnabled)
+                .disabled(!isActionEnabled)
             }
         }
+        .animation(.easeInOut(duration: 0.24), value: state)
     }
 }

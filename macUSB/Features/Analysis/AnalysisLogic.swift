@@ -13,7 +13,11 @@ final class AnalysisLogic: ObservableObject {
     @Published var isBetaInstaller: Bool = false
     @Published var mountedDMGPath: String? = nil
 
-    @Published var isAnalyzing: Bool = false
+    @Published var isAnalyzing: Bool = false {
+        didSet {
+            updateAnalysisOperationActivity(from: oldValue)
+        }
+    }
     @Published var isSystemDetected: Bool = false
     @Published var showUSBSection: Bool = false
     @Published var showUnsupportedMessage: Bool = false
@@ -36,6 +40,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var macOSRosettaRequirement: MacOSRosettaRequirement = .notRequired
     @Published var userSkippedAnalysis: Bool = false
     @Published var isLinuxDetected: Bool = false
+    @Published var isRawImageSelection: Bool = false
     @Published var isLinuxDistributionRecognized: Bool = false
     @Published var linuxDistro: String? = nil
     @Published var linuxVersion: String? = nil
@@ -55,7 +60,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var windowsWillSplitWIM: Bool = false
     @Published var windowsAutounattendMacLocale: CreatorWindowsAutounattendMacLocale? = nil
 
-    @Published var availableDrives: [USBDrive] = []
+    @Published var presentedUSBTargets: [USBDrive] = []
     @Published var hasUnreadableExternalUSBMedia: Bool = false
     @Published var unreadableExternalUSBMediaCount: Int = 0
     @Published var selectedDriveSelectionID: String? {
@@ -83,7 +88,7 @@ final class AnalysisLogic: ObservableObject {
                 return
             }
 
-            if let matchingDrive = availableDrives.first(where: { $0.selectionID == selectionID }) {
+            if let matchingDrive = selectableUSBTargets.first(where: { $0.selectionID == selectionID }) {
                 if selectedDrive?.selectionID != matchingDrive.selectionID {
                     selectedDrive = matchingDrive
                 }
@@ -124,20 +129,36 @@ final class AnalysisLogic: ObservableObject {
         }
     }
 
-    /// Nośnik przekazywany do etapu instalacji. W trybie PPC flaga
-    /// needsFormatting jest wymuszana na false, ponieważ
-    /// formatowanie (APM + HFS+) jest już wbudowane w dalszy proces.
+    /// Nośnik przekazywany do etapu instalacji. PPC i procesy restore
+    /// zawsze otrzymują fizyczny whole disk. W trybie PPC flaga
+    /// needsFormatting jest wymuszana na false, ponieważ formatowanie
+    /// (APM + HFS+) jest już wbudowane w dalszy proces.
     var selectedDriveForInstallation: USBDrive? {
         guard let drive = selectedDrive else { return nil }
-        guard isPPC else { return drive }
+        let installationDrive: USBDrive
+        if requiresWholeDiskMacOSTarget {
+            if drive.isWholeDiskTarget {
+                installationDrive = drive
+            } else {
+                let wholeDisk = USBDriveLogic.wholeDiskName(from: drive.device)
+                guard let physicalDrive = physicalUSBTargetsCache.first(where: { $0.device == wholeDisk }) else {
+                    return nil
+                }
+                installationDrive = physicalDrive
+            }
+        } else {
+            installationDrive = drive
+        }
+
+        guard isPPC else { return installationDrive }
         return USBDrive(
-            name: drive.name,
-            device: drive.device,
-            size: drive.size,
-            url: drive.url,
-            usbSpeed: drive.usbSpeed,
-            partitionScheme: drive.partitionScheme,
-            fileSystemFormat: drive.fileSystemFormat,
+            name: installationDrive.name,
+            device: installationDrive.device,
+            size: installationDrive.size,
+            url: installationDrive.url,
+            usbSpeed: installationDrive.usbSpeed,
+            partitionScheme: installationDrive.partitionScheme,
+            fileSystemFormat: installationDrive.fileSystemFormat,
             needsFormatting: false
         )
     }
@@ -148,12 +169,18 @@ final class AnalysisLogic: ObservableObject {
     var lastUnreadableUSBDetectionDate: Date = .distantPast
     let unreadableUSBDetectionInterval: TimeInterval = 2.5
     var isUnreadableUSBDetectionRunning: Bool = false
-    var isLinuxPhysicalDriveRefreshRunning: Bool = false
-    var linuxWholeDiskCapacityCache: [String: Int64] = [:]
+    var isPhysicalDriveRefreshRunning: Bool = false
+    var physicalDriveRefreshGeneration: UInt = 0
+    var wholeDiskCapacityCache: [String: Int64] = [:]
+    var physicalUSBTargetsCache: [USBDrive] = []
+    var macOSOptionUSBTargetsCache: [USBDrive] = []
+    var isMacOSCreateInstallMediaVolumeOverrideActive: Bool = false
+    @Published var hasPreparedUSBTargetSnapshot: Bool = false
     let imageAnalysisTimeoutSeconds: TimeInterval = 20
     var activeImageAnalysisRunID: UUID? = nil
     var imageAnalysisTimeoutWorkItem: DispatchWorkItem? = nil
     var linuxImageAttachSession: LinuxImageAttachSession? = nil
+    var analysisOperationToken: AppActiveOperationToken?
     private var isSynchronizingDriveSelection: Bool = false
 
     var requiredUSBCapacityDisplayValue: String {

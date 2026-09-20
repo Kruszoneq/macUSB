@@ -8,8 +8,7 @@ Linux detection is a fallback path in analysis, with install handoff enabled.
 
 - Primary path remains macOS installer detection.
 - Linux path runs when macOS installer metadata is not detected from `.iso` source.
-- Linux path can also be forced manually from `Opcje -> Pomiń analizowanie pliku -> Linux` after unsupported/unrecognized analysis, but only when selected source is `.iso`.
-- Raw `.img` Linux path is available only from `Narzędzia -> Zapisz surowy obraz Linux (.img)...`; standard file selection, drag-and-drop, and Linux fallback detection remain limited to the existing supported formats.
+- Manual raw-image path is available only from `Narzędzia -> Zapisz surowy obraz na nośniku...` and accepts `.iso` or `.img`; standard file selection, drag-and-drop, and Linux fallback detection retain their existing behavior.
 - Positive Linux detection unlocks USB selection and installer creation flow.
 
 ## Trigger and Entry
@@ -31,11 +30,11 @@ Runtime sequence:
 
 If `.iso` is already mounted manually in macOS, Linux fallback entry is blocked and user must unmount first (guard shared with macOS image-analysis path).
 
-Raw `.img` force entry:
+Manual raw-image entry:
 - is enabled only from Welcome or from `SystemAnalysisView` when no source file is selected and no analysis is running,
-- shows a warning that macUSB will force Linux recognition, will not check the selected `.img`, and the created USB media may not boot correctly,
-- uses a dedicated `.img` open panel,
-- navigates to analysis when needed and immediately sets Linux state without requiring `Analizuj`,
+- warns that the selected `.iso` or `.img` will be written directly without content analysis, compatibility checking, or a bootability guarantee,
+- uses a dedicated `.iso`/`.img` open panel with case-insensitive extension validation,
+- navigates to analysis when needed, immediately sets the existing Linux workflow state with `isRawImageSelection`, and disables `Analizuj`,
 - does not run image attach, archive reading, distro classification, Windows fallback, or macOS fallback.
 
 ## Detection Inputs (Performance Policy)
@@ -107,25 +106,18 @@ Linux recognition is shown as successful detection in analysis UI and enables in
 - Linux picker labels use `diskX - <size> - <USB standard>` (no extra suffixes),
 - non-removable external USB disks stay gated by existing `AllowExternalDrives` preference,
 - proceed is available after Linux capacity validation (APFS does not block Linux flow),
-- unreadable-USB warning card from macOS flow is hidden in Linux flow,
+- target discovery does not require a readable or mounted macOS volume, so otherwise unmountable USB media can still appear as physical `diskX` targets,
 - installation workflow starts from shared summary/progress/finish UI,
 - Linux helper branch uses raw copy (`dd`) stages.
 
-Manual Linux force from menu sets Linux workflow state without distro recognition:
+Manual raw-image selection sets Linux workflow state without distro recognition:
 
-- display name: `Linux`,
+- display name: selected source filename,
 - distro metadata: unresolved (no distro/version/edition),
-- icon: generic Linux fallback (`linux.icns`),
-- source handoff: selected file path is used as `linuxSourceURL`.
-- manual force is available only when selected source extension is `.iso`; for other extensions request is ignored and Linux state is not applied.
-
-Raw `.img` Linux force sets Linux workflow state without distro recognition:
-
-- display name: `Linux (.img)`,
-- distro metadata: unresolved (no distro/version/edition),
-- icon: generic Linux fallback (`linux.icns`),
-- source handoff: selected `.img` path is used as `linuxSourceURL`,
-- source file contents are not inspected before install handoff.
+- icon: neutral SF Symbol `opticaldisc.fill`,
+- source handoff: selected `.iso` or `.img` path is used as `linuxSourceURL`,
+- `LinuxInstallationFlowContext.isRawImageSelection` controls app presentation and is not sent to the helper,
+- source file contents are not inspected before install handoff, and the source is not registered for unmount cleanup.
 
 Required USB capacity is computed from source file size:
 
@@ -142,8 +134,8 @@ If source size cannot be resolved from file metadata, fallback capacity is `16 G
 Linux detected state uses icon fallback chain:
 
 - first: distro-specific icon from `macUSB/Resources/Icons/Linux/Distros/*.png` when distro is recognized and mapped,
-  runtime lookup supports both `Icons/Linux/Distros` and bundled `Distros` subdirectory variants,
-- second: generic Linux icon `macUSB/Resources/Icons/Linux/linux.icns` (lookup: `Icons/Linux` subdirectory, then bundle root),
+  runtime lookup supports `Icons/Linux/Distros`, bundled `Distros`, and bundle-root variants,
+- second: generic Linux icon `macUSB/Resources/Icons/Linux/Distros/linux.png`, resolved through the same lookup variants,
 - third: SF Symbol fallback in UI when no file icon could be loaded.
 
 ## Logging Contract
@@ -167,17 +159,9 @@ When Linux fallback runs, logs must include:
 - archive-reader diagnostics for timeout/error cases,
 - ignored stale callback entry when an expired session returns after timeout.
 
-When manual Linux force runs, logs must include:
+When manual raw-image selection runs, logs must include:
 
-- manual-force transition entry,
-- selected source path,
-- resolved source file size in bytes (when available),
-- selected USB threshold in GB only.
-- explicit fallback log when source size is unavailable.
-
-When raw `.img` Linux force runs, logs must include:
-
-- raw `.img` force transition entry,
+- raw `.iso`/`.img` selection transition entry,
 - selected source path,
 - resolved source file size in bytes (when available),
 - selected USB threshold in GB only,
@@ -201,6 +185,7 @@ Mount lifecycle behavior remains aligned with existing analysis behavior:
   - first: `hdiutil detach -force` for all captured `dev-entry`,
   - second: fallback `hdiutil detach -force` for all captured `mount-point`,
   - then residual check for the same `image-path`.
+- Manual raw-image selection is excluded from this source lifecycle because it does not attach the source and does not register it in `InstallerSourceImageUnmountRegistry`.
 
 ## Non-goals
 

@@ -165,6 +165,10 @@ struct ContentView: View {
     }
     
     private func presentRestartAlert() {
+        guard MenuState.shared.isLanguageChangeEnabled else {
+            languageManager.needsRestart = false
+            return
+        }
         let alert = NSAlert()
         alert.alertStyle = .informational
         alert.icon = NSApp.applicationIconImage
@@ -224,6 +228,7 @@ struct WindowConfigurator: NSViewRepresentable {
 
                 // Staly Touch Bar dla calej aplikacji niezaleznie od widoku.
                 TouchbarSupport.shared.install(on: window)
+                AppWindowCloseGuard.shared.install(on: window)
             }
         }
         return view

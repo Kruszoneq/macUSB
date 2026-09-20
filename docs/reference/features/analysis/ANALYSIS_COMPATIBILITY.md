@@ -19,6 +19,8 @@ Windows-specific behavior details are documented in:
 Analysis flags are the source of truth for workflow branch selection.
 Unsupported detection outcomes must be clearly surfaced and must block unsupported paths.
 
+Analysis owns a protected-operation token whenever `isAnalyzing` is active. The token covers supported, unsupported, failure, already-mounted-source, and global-timeout outcomes. Manual SHA-256 calculation uses a separate analysis token until completion, cancellation, failure, or sheet teardown. Starting analysis or applying a manual analysis override locks language changes for the current flow.
+
 For selected macOS `.app` sources and macOS `.app` bundles found inside mounted `.dmg`, `.iso`, and `.cdr` sources:
 
 - analysis must read installer metadata from `Contents/Info.plist`,
@@ -35,6 +37,7 @@ For selected macOS `.app` sources and macOS `.app` bundles found inside mounted 
 - an unreadable/unknown `createinstallmedia` architecture, or unknown physical host architecture when a decision is required, fails closed,
 - Apple Silicon plus Intel-only `createinstallmedia` for Yosemite through Catalina creates a Rosetta summary requirement; universal and ARM-capable tools do not,
 - Rosetta availability is probed by executing `/usr/bin/arch -x86_64 /usr/bin/true`; `EBADARCH`/`Bad CPU type in executable` means missing, and any other nonzero outcome is indeterminate,
+- after a successful in-app Rosetta installation and availability probe, the summary warning card keeps its title and description, transitions to a green success state, replaces the warning symbol with a success checkmark, shows a disabled localized confirmation action, remains visible for 3 seconds, and then dismisses with the global contextual-card animation,
 - mounted images may accept legacy Mac OS X installer apps without these payload markers only when the mounted image exposes `System/Library/CoreServices/SystemVersion.plist` with `ProductUserVisibleVersion` from `10.3` through `10.6`; Panther remains an unsupported detection outcome,
 - bundle identifier is diagnostic metadata only and must not be treated as proof that the app contains installer payload,
 - invalid `.app` selections must keep the selected source visible but clear install-handoff state (`sourceAppURL`, detected icon, USB section, target selection, capacity result, and workflow flags),
@@ -60,9 +63,9 @@ For Linux fallback:
 - fallback entry is limited to `.iso` sources,
 - detection is considered successful when Linux is recognized, including unknown distro case,
 - recognized Linux result unlocks shared install flow (`UniversalInstallationView -> CreationProgressView -> FinishUSBView`),
-- detected Linux state may present dedicated Linux icon resource (`linux.icns`) in analysis UI.
-- manual Linux force from `Opcje -> Pomiń analizowanie pliku -> Linux` is treated as Linux-recognized state for install handoff only when selected source is `.iso`.
-- raw Linux `.img` force from `Narzędzia -> Zapisz surowy obraz Linux (.img)...` is a separate exceptional entry point; it is not part of standard source selection or fallback detection and treats the selected `.img` as Linux-recognized without content inspection.
+- detected Linux state presents the generic `Distros/linux.png` resource when a distro-specific icon is unavailable, with an SF Symbol as the final UI fallback.
+- manual raw-image selection from `Narzędzia -> Zapisz surowy obraz na nośniku...` is a separate exceptional entry point for `.iso` and `.img`; it is not part of standard source selection or fallback detection and enters the existing Linux workflow without content inspection or source mounting.
+- selecting `.iso` through the standard `Wybierz` action remains part of normal macOS/Windows/Linux analysis.
 
 ## Current Supported Routing Families
 
@@ -77,12 +80,13 @@ For Linux fallback:
 
 Panther remains explicitly unsupported.
 
+Tiger, Leopard, and Snow Leopard are classified as supported PPC results. Their detection sets the general supported-system state together with the PPC workflow flag, so USB target enumeration stays on the physical whole-disk path instead of falling back to mounted-volume discovery. Panther remains excluded from this classification.
+
 Linux fallback routing includes:
 
 - recognized Linux distro,
 - Linux with unknown distro (`Linux - nierozpoznana dystrybucja`).
-- manually forced Linux (`Linux`).
-- manually forced raw Linux image (`Linux (.img)`).
+- manually selected raw image (selected filename with neutral presentation).
 
 Windows fallback routing includes:
 
@@ -134,23 +138,13 @@ Global app-termination cleanup invariant for ISO analysis:
 - on app termination, centralized cleanup force-detaches tracked Linux/Windows source-image entities (by `image-path` match from `hdiutil info -plist`),
 - this termination cleanup runs even if user exits during analysis before workflow start.
 
-Raw Linux `.img` force path registers the selected source as a Linux image for centralized termination cleanup, but it does not mount or inspect the source image during analysis.
+Manual raw-image selection does not register the source in `InstallerSourceImageUnmountRegistry`, because this path neither mounts nor inspects the source. Automatically analyzed Linux `.iso` sources retain centralized termination cleanup.
 
 For Linux fallback on `.iso`:
 
 - cleanup scope includes all image entities captured from `hdiutil info -plist` for the selected `image-path`,
 - cleanup is not limited to one mount-point; it must include all captured `dev-entry` and fallback `mount-point` detach attempts,
 - Linux entity cleanup must run on Linux success, Linux failure, timeout, cancel, and reset paths.
-
-## USB Unreadable Target Hint (Non-blocking)
-
-During analysis screen USB target area:
-- if a physical external USB disk is connected but unreadable for macOS mount stack, show a warning hint with Disk Utility guidance,
-- this hint does not replace supported-target validation (capacity/APFS) for readable drives,
-- generic `Nie wykryto nośnika USB` message is suppressed when unreadable USB hint is active and picker has no readable targets,
-- Disk Utility action inside this hint remains interactive regardless of analysis-state gating for USB selection controls.
-- this hint is shown only for macOS-target flow; Linux-target flow suppresses this hint and uses physical `diskX` selection.
-- in macOS flow, this hint is shown only after macOS routing is detected (it stays hidden before system detection).
 
 ## Manual Source Checksum Action
 
@@ -159,7 +153,7 @@ This action is optional and user-triggered only; it must not run during automati
 
 Checksum calculation:
 
-- is available for successful `.dmg`, `.iso`, `.cdr`, and raw Linux `.img` recognition, including manually forced Linux `.iso` selection and raw Linux `.img` selection,
+- is available for successful `.dmg`, `.iso`, `.cdr`, and manual raw-image selection, including raw `.iso`/`.img` selection,
 - stays hidden for `.app` sources, unsupported results, unrecognized results, and active analysis,
 - presents the checksum sheet only when the selected source URL is already bound, so the 420 px-wide sheet opens and starts calculation immediately while keeping a 240 px minimum height and allowing taller content,
 - reads the source file in one pass with POSIX file I/O and a fixed 4 MiB buffer,
@@ -194,8 +188,7 @@ Linux fallback should additionally log:
 - Linux attach-session snapshot plus per-entity cleanup result and residual summary,
 - archive-reader diagnostics relevant to bounded execution (`bsdtar` timeout/errors),
 - install handoff readiness (`linuxSourceURL` present, capacity computed).
-- manual-force diagnostics when Linux is forced from menu.
-- raw `.img` force diagnostics when Linux is forced from the Tools menu.
+- manual raw `.iso`/`.img` selection diagnostics when the Tools-menu path is used.
 
 Windows fallback should additionally log:
 

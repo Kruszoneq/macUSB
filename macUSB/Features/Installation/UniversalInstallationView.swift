@@ -84,12 +84,16 @@ struct UniversalInstallationView: View {
     @State var windowsMacUSBootPreflightInProgress: Bool = false
     @State var macOSRosettaState: CreatorMacOSRosettaState? = nil
     @State var macOSRosettaRetryGeneration: UUID? = nil
+    @State var macOSRosettaSuccessVisible: Bool = false
+    @State var macOSRosettaSuccessDismissalGeneration: UUID? = nil
+    @State var macOSRosettaOperationToken: AppActiveOperationToken?
     
     @State var isCancelling: Bool = false
     @State var usbProcessStartedAt: Date?
+    @State var usbCreationOperationToken: AppActiveOperationToken?
+    @State var workflowCleanupOperationToken: AppActiveOperationToken?
     @State var usbProcessSleepBlockToken: UUID? = nil
     
-    @State var windowHandler: UniversalWindowHandler?
     @State var hostingWindow: NSWindow?
     
     var tempWorkURL: URL {
@@ -103,8 +107,11 @@ struct UniversalInstallationView: View {
     private var showsIdleActions: Bool {
         !isProcessing && !isHelperWorking && !isCancelled && !isUSBDisconnectedLock && !isCancelling
     }
+    private var isRawImageWorkflow: Bool {
+        linuxFlowContext?.isRawImageSelection == true
+    }
     private var selectedDriveSummaryName: String? {
-        if (isLinuxWorkflow || isWindowsWorkflow), let drive = targetDrive {
+        if let drive = targetDrive, drive.isWholeDiskTarget {
             let speedText = drive.usbSpeed?.rawValue ?? "USB"
             return "\(drive.device) - \(drive.size) - \(speedText)"
         }
@@ -167,7 +174,7 @@ struct UniversalInstallationView: View {
                     .foregroundColor(.orange)
                     .fontWeight(.semibold)
             } else {
-                Text("Przebieg tworzenia")
+                Text(isRawImageWorkflow ? "Przebieg zapisu" : "Przebieg tworzenia")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -189,7 +196,12 @@ struct UniversalInstallationView: View {
                     ) {
                         VStack(alignment: .leading, spacing: 12) {
                             HStack {
-                                if let detectedSystemIcon {
+                                if isRawImageWorkflow {
+                                    Image(systemName: "opticaldisc.fill")
+                                        .font(sectionIconFont)
+                                        .foregroundColor(.secondary)
+                                        .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                } else if let detectedSystemIcon {
                                     Image(nsImage: detectedSystemIcon)
                                         .resizable()
                                         .scaledToFit()
@@ -201,10 +213,10 @@ struct UniversalInstallationView: View {
                                         .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 }
                                 VStack(alignment: .leading, spacing: 3) {
-                                    Text("Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
+                                    Text(isRawImageWorkflow ? "Wybrany obraz" : "Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
                                     HStack(spacing: 8) {
                                         Text(systemName).font(.headline).foregroundColor(.primary).bold()
-                                        if isBetaInstaller {
+                                        if isBetaInstaller && !isRawImageWorkflow {
                                             MacOSBetaBadge(tint: .secondary)
                                         }
                                     }
@@ -236,7 +248,7 @@ struct UniversalInstallationView: View {
                             state: effectiveMacOSRosettaState,
                             action: performMacOSRosettaPrimaryAction
                         )
-                        .transition(.opacity)
+                        .transition(.move(edge: .top).combined(with: .opacity))
                     }
 
                     if isLinuxWorkflow {
@@ -247,10 +259,12 @@ struct UniversalInstallationView: View {
                                     .foregroundColor(.accentColor)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Komunikat o nieczytelności nośnika w trakcie tworzenia.")
+                                    Text(isRawImageWorkflow ? "Możliwy komunikat o nieczytelnym nośniku" : "Komunikat o nieczytelności nośnika w trakcie tworzenia.")
                                         .font(.headline)
                                         .foregroundColor(.accentColor)
-                                    Text("Podczas tworzenia nośnika startowego Linux system macOS może wyświetlić komunikat: „Dołączony dysk nie jest czytelny dla tego komputera.” Jest to spodziewane zachowanie. Aby kontynuować, w tym oknie wybierz „Ignoruj”.")
+                                    Text(isRawImageWorkflow
+                                         ? "Podczas zapisu macOS może poinformować, że nośnik jest nieczytelny. Jest to oczekiwane zachowanie. Aby kontynuować, wybierz „Ignoruj”."
+                                         : "Podczas tworzenia nośnika startowego Linux system macOS może wyświetlić komunikat: „Dołączony dysk nie jest czytelny dla tego komputera.” Jest to spodziewane zachowanie. Aby kontynuować, w tym oknie wybierz „Ignoruj”.")
                                         .font(.subheadline)
                                         .foregroundColor(.accentColor)
                                 }
@@ -314,7 +328,9 @@ struct UniversalInstallationView: View {
                                     Text("Wybrano nośnik USB 2.0")
                                         .font(.headline)
                                         .foregroundColor(.orange)
-                                    Text("Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces tworzenia instalatora może potrwać kilkanaście minut")
+                                    Text(isRawImageWorkflow
+                                         ? "Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces zapisu może potrwać kilkanaście minut"
+                                         : "Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces tworzenia instalatora może potrwać kilkanaście minut")
                                         .font(.subheadline)
                                         .foregroundColor(.orange.opacity(0.8))
                                 }
@@ -340,7 +356,12 @@ struct UniversalInstallationView: View {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text("Przebieg procesu").font(.headline)
                                     VStack(alignment: .leading, spacing: 4) {
-                                        if isLinuxWorkflow {
+                                        if isRawImageWorkflow {
+                                            Text("• Plik obrazu zostanie przygotowany")
+                                            Text("• Wybrany nośnik USB zostanie odmontowany")
+                                            Text("• Obraz zostanie zapisany na nośniku USB")
+                                            Text("• Zapis zostanie zweryfikowany")
+                                        } else if isLinuxWorkflow {
                                             Text("• Pliki obrazu Linux zostaną przygotowane")
                                             Text("• Wybrany nośnik USB zostanie odmontowany")
                                             Text("• Obraz Linux zostanie zapisany na nośniku USB")
@@ -366,7 +387,9 @@ struct UniversalInstallationView: View {
                                                 Text("• Struktura instalatora zostanie sfinalizowana")
                                             }
                                         }
-                                        Text("installation.summary.process.cleanup_temp")
+                                        if !isRawImageWorkflow {
+                                            Text("installation.summary.process.cleanup_temp")
+                                        }
                                     }
                                     .font(.subheadline).foregroundColor(.secondary)
                                 }
@@ -540,18 +563,8 @@ struct UniversalInstallationView: View {
                 self.hostingWindow = window
                 window.styleMask.remove(NSWindow.StyleMask.resizable)
                 
-                if self.windowHandler == nil {
-                    let handler = UniversalWindowHandler(
-                        shouldClose: {
-                            return self.isCancelled
-                        },
-                        onCleanup: {
-                            self.performEmergencyCleanupIfNeeded(tempURL: tempWorkURL)
-                        }
-                    )
-                    window.delegate = handler
-                    self.windowHandler = handler
-                }
+                AppWindowCloseGuard.shared.install(on: window)
+                AppWindowCloseGuard.shared.setBeforeAllowedClose(nil)
             }
         )
         .background(
@@ -566,6 +579,7 @@ struct UniversalInstallationView: View {
                     isMavericks: isMavericks,
                     isPPC: isPPC,
                     isLinuxWorkflow: isLinuxWorkflow,
+                    isRawImageSelection: isRawImageWorkflow,
                     isWindowsWorkflow: isWindowsWorkflow,
                     windowsWillSplitWimExpected: windowsWillSplitWim,
                     windowsWillCreateAutounattendExpected: windowsAutounattendConfiguration.shouldGenerateMacUSBFile,
@@ -612,7 +626,7 @@ struct UniversalInstallationView: View {
                     reason: "installation_summary_on_appear"
                 )
             }
-            if isLinuxWorkflow {
+            if isLinuxWorkflow && !isRawImageWorkflow {
                 InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
                     path: sourceAppURL.path,
                     family: .linux,
@@ -667,33 +681,5 @@ struct WindowAccessor_Universal: NSViewRepresentable {
     class Coordinator {
         let callback: (NSWindow) -> Void
         init(callback: @escaping (NSWindow) -> Void) { self.callback = callback }
-    }
-}
-
-class UniversalWindowHandler: NSObject, NSWindowDelegate {
-    let shouldClose: () -> Bool
-    let onCleanup: () -> Void
-    init(shouldClose: @escaping () -> Bool, onCleanup: @escaping () -> Void) {
-        self.shouldClose = shouldClose
-        self.onCleanup = onCleanup
-    }
-    func windowShouldClose(_ sender: NSWindow) -> Bool {
-        if shouldClose() {
-            onCleanup()
-            return true
-        }
-        let alert = NSAlert()
-        alert.icon = NSApp.applicationIconImage
-        alert.alertStyle = .warning
-        alert.messageText = String(localized: "UWAGA!")
-        alert.informativeText = String(localized: "Czy na pewno chcesz przerwać pracę?")
-        alert.addButton(withTitle: String(localized: "Nie"))
-        alert.addButton(withTitle: String(localized: "Tak"))
-        let response = alert.runModal()
-        if response == .alertSecondButtonReturn {
-            onCleanup()
-            NSApplication.shared.terminate(nil)
-            return true
-        } else { return false }
     }
 }

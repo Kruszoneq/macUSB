@@ -5,6 +5,8 @@
 Start path is destructive and must require explicit confirmation.
 Workflow selection must respect analyzed compatibility flags.
 
+Every confirmed creation attempt owns one USB-creation token across macOS, Linux, and Windows branches. The token begins before workflow preflight and ends only on start failure, terminal success/failure, or confirmed terminal cancellation. An accepted helper cancellation request keeps the token active until the final helper result. Helper cleanup stages add a nested cleanup token.
+
 ## Workflow Families
 
 - Standard `createinstallmedia` path
@@ -12,8 +14,16 @@ Workflow selection must respect analyzed compatibility flags.
 - Mavericks restore path
 - PPC dedicated formatting/restore path
 - Catalina and Sierra dedicated handling where required
-- Linux raw-copy path (`dd`) for recognized `.iso` sources and exceptional forced raw `.img` sources
+- Linux raw-copy path (`dd`) for recognized Linux `.iso` sources and manually selected raw `.iso`/`.img` sources
 - Windows ISO copy path (FAT32/MBR + optional WIM split), with a conditional macUSBoot final write for BIOS media
+
+macOS target preparation:
+
+- standard `createinstallmedia`, legacy restore, and Mavericks workflows receive a physical whole-disk target by default and always run the existing `preformat` stage as GPT/HFS+ with the `mac_USB` label,
+- existing APFS, HFS+, FAT, NTFS, and other target formats do not bypass default whole-disk preparation,
+- standard `createinstallmedia` may skip `preformat` only for a mounted GPT/HFS+ volume selected through the analysis-screen Option override; the existing volume path is then passed directly to `createinstallmedia`,
+- PPC receives a physical whole-disk target but remains exempt from standard `preformat`; its existing `ppc_format` stage continues to create APM/HFS+ media labeled `PPC`,
+- helper request fields, workflow kinds, and stage identifiers remain unchanged.
 
 macOS architecture preflight:
 
@@ -30,6 +40,13 @@ Linux raw-copy stages:
 - `linux_verify_write` — post-write verification by comparing SHA-256 of source image with SHA-256 of first `N` bytes on target raw disk (`N = source image size`) (indeterminate stage),
 - `cleanup_temp` — deterministic temp cleanup,
 - `finalize` — terminal state transition.
+
+Manual raw-image workflow contract:
+- helper requests continue to use `workflowKind: .linux`; helper IPC, events, stage keys, mount guard, `dd`, cancellation, and SHA-256 verification remain unchanged,
+- `isRawImageSelection` exists only in app analysis/install context and selects neutral UI wording,
+- progress overrides presentation only for `linux_raw_copy` and `linux_verify_write`, without changing the emitted stage keys,
+- the finish screen uses neutral success/failure wording and omits Linux post-write guidance,
+- the source is never mounted by this path and is not registered in `InstallerSourceImageUnmountRegistry`; recognized Linux `.iso` analysis retains its existing source cleanup.
 
 Windows workflow stages:
 - `windows_prepare_source` — source ISO validation, hidden mount, FAT32-limit scan, WIM split decision (indeterminate stage),
@@ -50,7 +67,8 @@ Linux auto-mount guard invariant:
 Linux summary screen (`UniversalInstallationView`) should show an informational card before the process-stages section:
 - card is visible only for Linux workflow,
 - card uses accent tone (`.active`) with SF Symbol `info.circle.fill`,
-- copy explains that macOS may show an unreadable-disk dialog and user should choose `Ignore`.
+- copy explains that macOS may show an unreadable-disk dialog and user should choose `Ignore`,
+- manual raw images use neutral image wording, the selected filename, and `opticaldisc.fill`; automatically recognized Linux retains Linux presentation.
 
 For a macOS installer classified as prerelease during analysis:
 
@@ -103,6 +121,7 @@ Windows summary pre-start prerequisites:
 - Privileged operations must run through helper (`SMAppService + XPC`).
 - No terminal fallback privileged execution path.
 - Stage progression shown in UI must remain deterministic.
+- Pending and completed progress cards remain at `0.98` scale, while the active card uses `1.0`. Each helper-reported stage change animates the completed and newly active cards together with the shared stage-transition motion. The animation is presentation-only and does not delay or reorder helper events.
 - Every Windows helper request must contain `windowsBootMode`; a missing mode is rejected before stage execution.
 - Linux raw-copy must target whole-disk device, never a partition node.
 - Windows workflow must copy installer files 1:1 from ISO payload (no UEFI fallback file synthesis).
@@ -118,6 +137,7 @@ Windows summary pre-start prerequisites:
 - Windows automatic configuration may set `OOBE/HideWirelessSetupInOOBE` to `true` when Wi-Fi/network setup skip is enabled.
 - Windows automatic local-account creation writes both `Name` and `DisplayName` for `Microsoft-Windows-Shell-Setup/UserAccounts/LocalAccounts/LocalAccount`; `DisplayName` preserves the user-entered display name, while `Name` is generated without spaces or special characters and limited to 20 ASCII letters/digits.
 - Windows target format must be `MS-DOS (FAT32)` + `MBR`.
+- After formatting, the helper resolves the Windows target from the exact selected whole-disk identifier through `AllDisksAndPartitions`, validates the FAT32 child partition, its exact `ParentWholeDisk`, mount point, and volume UUID, and uses that verified mount point for copy, WIM split, answer-file generation, and media verification. The user-facing volume label must never be used to address the target path.
 - Windows target volume labels are selected from the detected family:
   - desktop: `WINXP-MU`, `WINVS-MU`, `WIN7-MU`, `WIN8-MU`, `WIN81-MU`, `WIN10-MU`, or `WIN11-MU`,
   - server: `SRV03-MU`, `SRV08-MU`, `SRV12-MU`, `SRV16-MU`, `SRV19-MU`, `SRV22-MU`, or `SRV25-MU`,
@@ -129,6 +149,7 @@ Windows summary pre-start prerequisites:
 - Idle sleep is blocked for the full USB creation runtime.
 - Sleep blocker is activated at creation process start.
 - Sleep blocker is released on every terminal path: success, failure, and cancellation.
+- The USB-creation token follows the same terminal coverage but is independent from the sleep blocker.
 
 ## Logging and Diagnostics
 

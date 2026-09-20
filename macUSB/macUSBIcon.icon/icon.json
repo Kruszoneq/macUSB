@@ -1,20 +1,13 @@
 {
-  "fill" : {
-    "linear-gradient" : [
-      "display-p3:0.98226,1.00000,0.99672,1.00000",
-      "display-p3:0.73145,0.75668,0.74293,1.00000"
-    ],
-    "orientation" : {
-      "start" : {
-        "x" : 0.5,
-        "y" : 0
-      },
-      "stop" : {
-        "x" : 0.5,
-        "y" : 0.7
-      }
+  "fill-specializations" : [
+    {
+      "value" : "automatic"
+    },
+    {
+      "appearance" : "dark",
+      "value" : "automatic"
     }
-  },
+  ],
   "groups" : [
     {
       "layers" : [
@@ -31,7 +24,7 @@
           "fill-specializations" : [
             {
               "value" : {
-                "automatic-gradient" : "extended-gray:0.00000,1.00000"
+                "automatic-gradient" : "gray:0.00000,1.00000"
               }
             },
             {
@@ -43,7 +36,7 @@
             {
               "appearance" : "tinted",
               "value" : {
-                "automatic-gradient" : "display-p3:0.54422,0.54422,0.54422,1.00000",
+                "automatic-gradient" : "extended-gray:1.00000,1.00000",
                 "orientation" : {
                   "start" : {
                     "x" : 0.5,
@@ -57,8 +50,16 @@
               }
             }
           ],
+          "glass" : true,
           "image-name" : "usb-drive-svgrepo-com-2.svg",
-          "name" : "usb-drive-svgrepo-com-2"
+          "name" : "usb-drive-svgrepo-com-2",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              0.004802588342386116
+            ]
+          }
         }
       ],
       "shadow" : {

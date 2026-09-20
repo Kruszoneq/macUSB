@@ -7,7 +7,7 @@ extension HelperWorkflowExecutor {
             return
         }
 
-        let targetVolumePath = windowsPreparedTargetVolumePath ?? "/Volumes/\(request.targetLabel)"
+        let targetVolumePath = try requireWindowsPreparedTargetVolumePath(stage: stage)
         let targetURL = URL(fileURLWithPath: targetVolumePath)
         guard fileManager.fileExists(atPath: targetURL.path) else {
             throw HelperExecutionError.failed(

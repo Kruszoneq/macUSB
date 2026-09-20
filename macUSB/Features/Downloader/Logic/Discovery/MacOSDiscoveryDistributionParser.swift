@@ -15,14 +15,6 @@ extension MacOSCatalogService {
 
         if version.isEmpty { return nil }
         if build.isEmpty { build = "N/A" }
-        let prerelease = isPrerelease(name: name, version: version, build: build)
-        if candidate.releaseChannel == .stable, prerelease {
-            return nil
-        }
-        if candidate.releaseChannel != .stable, !prerelease {
-            return nil
-        }
-
         let family = normalizeFamilyName(from: name)
         return MacOSInstallerEntry(
             id: "\(candidate.releaseChannel.rawValue)|\(family)|\(name)|\(version)|\(build)",
@@ -75,14 +67,5 @@ extension MacOSCatalogService {
             return "macOS Golden Gate"
         }
         return family
-    }
-
-    func isPrerelease(name: String, version: String, build: String) -> Bool {
-        let text = "\(name) \(version) \(build)".lowercased()
-        return text.contains("beta")
-            || text.contains("seed")
-            || text.contains("release candidate")
-            || text.contains(" rc")
-            || text.contains("preview")
     }
 }

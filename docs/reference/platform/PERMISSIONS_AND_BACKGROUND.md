@@ -23,6 +23,13 @@ Startup and helper readiness flows must surface missing prerequisites.
 - The pre-settings check acts as a best-effort registration probe so macOS can add macUSB to the Full Disk Access list before the user enables it.
 - The Full Disk Access panel uses the current System Settings deep link for supported macOS versions, with the existing general System Settings fallback if the deep link cannot be opened.
 - Helper background approval is checked at startup and in ensure-ready/repair flows.
+- The registered LaunchDaemon runs on demand: startup readiness opens and retains an XPC connection for the lifetime of the app instead of relying on `RunAtLoad`.
+- Normal app termination explicitly invalidates the XPC connection. A crash or Force Quit is detected by the helper through XPC connection loss.
+- After the final client disconnects, the helper cancels cancellable work and exits once no privileged operation remains. Non-cancellable safety-critical work reaches its terminal state before exit.
+- The helper remains registered and approved while its process is stopped, so the next app launch can start it through the Mach service without repeating approval.
+- Downloader presentation and app reactivation passively refresh Full Disk Access, helper service approval, and XPC health without registering or repairing the helper.
+- Downloader discovery remains available with missing prerequisites, but a download session cannot start until Full Disk Access and helper readiness are confirmed.
+- Downloader prerequisite alerts use the current System Settings terminology `Aktywność aplikacji w tle` / `App Background Activity` and open the corresponding settings panel directly.
 - Missing prerequisites are visible and can block reliable helper operations.
 - External drive support defaults to disabled on launch/termination unless explicitly enabled.
 

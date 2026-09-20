@@ -4,6 +4,7 @@ import AppKit
 // Shared installation utilities used by the helper-only flow
 extension UniversalInstallationView {
     func showStartCreationAlert() {
+        beginUSBCreationOperationIfNeeded()
         guard windowsMacUSBootPreflightRequired else {
             continueStartCreationAlert()
             return
@@ -12,6 +13,7 @@ extension UniversalInstallationView {
         runWindowsMacUSBootPreflight { ready, message in
             guard ready else {
                 errorMessage = message ?? String(localized: "Nie udało się automatycznie odświeżyć helpera. Otwórz Narzędzia → Napraw helpera i spróbuj ponownie.")
+                finishUSBCreationOperationIfNeeded()
                 return
             }
             continueStartCreationAlert()
@@ -19,10 +21,16 @@ extension UniversalInstallationView {
     }
 
     private func continueStartCreationAlert() {
-        guard resolveWindowsAutounattendStartReadiness() else { return }
+        guard resolveWindowsAutounattendStartReadiness() else {
+            finishUSBCreationOperationIfNeeded()
+            return
+        }
 
         resolveWindowsAutounattendExistingFileIfNeeded { shouldContinue in
-            guard shouldContinue else { return }
+            guard shouldContinue else {
+                self.finishUSBCreationOperationIfNeeded()
+                return
+            }
             self.showConfirmedStartCreationAlert()
         }
     }
@@ -45,6 +53,9 @@ extension UniversalInstallationView {
             } else if self.isWindowsWorkflow {
                 self.windowsAutounattendConfiguration.existingFileDecision = nil
                 self.persistWindowsAutounattendConfiguration()
+                self.finishUSBCreationOperationIfNeeded()
+            } else {
+                self.finishUSBCreationOperationIfNeeded()
             }
         }
 
@@ -65,6 +76,11 @@ extension UniversalInstallationView {
     }
 
     func performEmergencyCleanup(mountPoint: URL, tempURL: URL) {
+        let cleanupToken = AppActiveOperationRegistry.shared.begin(
+            kind: .cleanup,
+            context: "installation_emergency_cleanup"
+        )
+        defer { cleanupToken.finish() }
         log("Cleanup: odmontowuję \(mountPoint.path)")
         log("Cleanup: usuwam katalog TEMP \(tempURL.path)")
 
@@ -155,7 +171,10 @@ extension UniversalInstallationView {
         cancelHelperWorkflowIfNeeded { cancellationAccepted in
             DispatchQueue.main.async {
                 if cancellationAccepted {
-                    self.completeCancellationFlow()
+                    self.log(
+                        "Helper przyjął żądanie anulowania; oczekuję na wynik końcowy workflow.",
+                        category: self.isWindowsWorkflow ? "WindowsInstallFlow" : "Installation"
+                    )
                 } else {
                     self.cancellationRequestedBeforeWorkflowStart = false
                     withAnimation(.easeInOut(duration: 0.2)) {
@@ -189,6 +208,7 @@ extension UniversalInstallationView {
             isCancelling = false
             navigateToFinish = true
         }
+        finishUSBCreationOperationIfNeeded()
     }
 
     func unmountDMG() {

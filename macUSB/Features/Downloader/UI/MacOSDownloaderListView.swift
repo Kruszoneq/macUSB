@@ -10,6 +10,27 @@ extension MacOSDownloaderWindowShellView {
 
                 Spacer()
 
+                if prerequisiteController.snapshot?.requiresWarning == true {
+                    Button {
+                        handlePrerequisiteWarningTap()
+                    } label: {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.orange)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                    }
+                    .macUSBSecondaryButtonStyle()
+                    .tint(.orange)
+                    .disabled(isDiscoveryInProgress || prerequisiteController.isChecking)
+                    .opacity(
+                        isDiscoveryInProgress || prerequisiteController.isChecking
+                            ? 0.65
+                            : 1.0
+                    )
+                    .help(String(localized: "downloader.prerequisites.warning_help"))
+                    .transition(.scale(scale: 0.85).combined(with: .opacity))
+                }
+
                 Button {
                     logic.startDiscovery()
                 } label: {
@@ -36,6 +57,10 @@ extension MacOSDownloaderWindowShellView {
                 .disabled(isDiscoveryInProgress)
                 .opacity(isDiscoveryInProgress ? 0.65 : 1.0)
             }
+            .animation(
+                .easeInOut(duration: 0.22),
+                value: prerequisiteController.snapshot?.requiresWarning == true
+            )
 
             installerListArea
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -260,8 +285,14 @@ extension MacOSDownloaderWindowShellView {
                         .padding(.vertical, 7)
                     }
                     .macUSBPrimaryButtonStyle()
-                    .disabled(!supportsProductionDownload)
-                    .opacity(supportsProductionDownload ? 1 : 0.6)
+                    .disabled(
+                        !supportsProductionDownload || prerequisiteController.isChecking
+                    )
+                    .opacity(
+                        supportsProductionDownload && !prerequisiteController.isChecking
+                            ? 1
+                            : 0.6
+                    )
                 }
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }

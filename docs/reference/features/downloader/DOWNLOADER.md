@@ -31,7 +31,7 @@ Scope note:
 Downloader provides:
 - official macOS/OS X installer discovery from Apple sources,
 - staged download/verify/build flow,
-- final installer `.app` creation and target placement,
+- final installer `.app` creation and target placement, with optional conversion to a user-selected `.dmg` destination,
 - deterministic temp cleanup and end-state summary.
 
 Current production scope:
@@ -50,6 +50,8 @@ Current production scope:
 - Discovery runs on entering downloader window, not at app startup.
 - Downloader UI must remain stylistically aligned with app design system.
 - Final cleanup stage must be explicit and ordered as the last stage before summary.
+- The downloader window is a protected operation from presentation until full close, regardless of discovery, download, failure, cancellation, or summary state.
+- Opening the downloader locks language changes for the current main flow.
 
 ---
 
@@ -92,7 +94,11 @@ Process runtime state:
 - `DownloadSessionState`
   - `idle`, `running`, `completed`, `failed`, `cancelled`.
 - Stages:
-  - `connection`, `downloading`, `verifying`, `buildingInstaller`, `cleanup`.
+  - `connection`, `downloading`, `verifying`, `buildingInstaller`, optional `creatingDiskImage`, `cleanup`.
+- Disk image output configuration:
+  - session-only enablement and destination-directory URL,
+  - a preflight plan containing the collision-safe output URL and volume name,
+  - final DMG and retained-source URLs for success and partial-success summaries.
 
 ---
 
@@ -110,10 +116,10 @@ Discovery pipeline (`MacOSCatalogService`, orchestrated by `MacOSDownloaderLogic
   - detach nested images before parent images using a standard retry followed by forced detach,
   - report detach exhaustion as a discovery failure for that candidate and retain the temporary directory rather than removing an active mount point,
   - remove unique temporary mount and metadata-extraction directories only after all owned images are confirmed detached.
-2. Download the stable Apple catalog and Public Beta catalogs for macOS 27, 26, and 15 from `swscan.apple.com` on every discovery.
+2. Download the merged stable Apple catalog for macOS 27, 26, and 15 and the corresponding Public Beta catalogs from `swscan.apple.com` on every discovery.
 3. Parse InstallAssistant candidates from products metadata.
 4. Parse `.dist` metadata from Apple distribution hosts.
-5. Keep non-prerelease entries from stable and prerelease entries from beta catalogs.
+5. Treat the source catalog as the release-channel authority: entries from the stable catalog are stable, while entries unique to Public Beta catalogs are Public Beta regardless of prerelease wording in distribution metadata; when the same product ID is present in both channels, the stable catalog takes precedence.
 6. Deduplicate by normalized identity within each release channel and across overlapping Public Beta catalogs.
 7. Enrich legacy official entries from Apple Support list.
 8. Probe installer sizes (catalog-prefill + network probe fallback).
@@ -147,7 +153,9 @@ Production pipeline (`MontereyDownloadFlowModel`) uses three compatible distribu
 Both modes share the same staged UI and runtime skeleton:
 1. Connection / preflight
   - fetch the real manifest for the selected supported entry from the catalog URL retained during discovery,
-  - validate temporary disk capacity against 250% of total expected installer bytes.
+  - without disk image output, validate temporary disk capacity against 250% of total expected installer bytes,
+  - with disk image output, additionally require 105% on the selected destination volume; combine both requirements when the destination and temporary directory share a volume,
+  - validate the selected destination directory and resolve existing-name collisions before creating session directories or downloading payloads.
 2. Sequential file download
   - one file at a time,
   - progress %, speed sampling, transferred bytes text,
@@ -162,7 +170,14 @@ Both modes share the same staged UI and runtime skeleton:
   - `Oldest` (`10.10 Yosemite`, `10.11 El Capitan`, `10.12 Sierra`): helper mounts source `.dmg`, resolves embedded installer `.pkg`, installs with Apple `installer` on temporary writable HFS+ target using `CM_BUILD=CM_BUILD`, and copies final `.app` to `/Applications`,
   - `Oldest` (`10.7` to `10.9`): in-app path mounts `.dmg`, extracts installer `.pkg`, expands package (`pkgutil --expand`), extracts `Payload` (`cpio` with compression fallback), and moves final `.app` to `/Applications`,
   - final installer is placed in `/Applications`.
-5. Final cleanup
+5. Optional disk image creation
+  - move the completed `.app` into a session staging directory without copying it,
+  - create an uncompressed read-only `UDRO` image through app-side `/usr/bin/hdiutil`,
+  - never overwrite an existing image; stable names use `<family> <version>.dmg`, Public Beta names append ` Beta`, and collisions append ` (2)`, ` (3)`, and so on,
+  - remove the source `.app` only after a valid DMG is finalized,
+  - restore the `.app` and remove partial image output after cancellation or image-creation failure,
+  - report partial success when the DMG is ready but source-app removal cannot be completed.
+6. Final cleanup
   - dedicated helper-side cleanup of session temp directory,
   - executed as last stage before summary.
 
@@ -173,8 +188,8 @@ Power management contract during production download flow:
 
 Summary:
 - shows transfer, average speed, duration, and output file name,
-- exposes Finder shortcut that reveals and selects the created installer `.app` when available (fallback: open destination folder),
-- when final installer `.app` exists, exposes adjacent icon action that hands this `.app` path into analysis flow, triggers analysis automatically, and closes downloader window,
+- exposes Finder shortcut that reveals and selects the created `.app` or `.dmg` output when available (fallback: open destination folder),
+- exposes an adjacent icon action that hands the final `.app` or `.dmg` path into analysis flow, triggers analysis automatically, and closes downloader window,
 - includes destination path and temporary-files cleanup status in dedicated summary rows.
 
 ---
@@ -219,6 +234,11 @@ Helper responsibilities in downloader flow:
 - build installer `.app` from Yosemite/El Capitan/Sierra `.dmg` by running Apple `installer` with `CM_BUILD=CM_BUILD` on helper-owned staging volume,
 - perform final privileged cleanup of session temp directory.
 
+App-side operation tracking:
+- accepted assembly workflow IDs own a long-helper token through final result or XPC invalidation,
+- final and fallback cleanup own cleanup tokens,
+- privileged final cleanup also owns a nested long-helper token.
+
 ---
 
 ## 9. UI Contract
@@ -228,13 +248,19 @@ Window:
 - app-like liquid/glass-compatible surfaces and tokens.
 - can be opened from `Tools -> Pobierz instalator macOS...` and from the analysis screen button `Pobierz`.
 - opening is blocked while USB creation flow is in operation screens (`UniversalInstallationView`, `CreationProgressView`, `FinishUSBView`), and the Tools menu item is disabled in those stages.
+- the window-level active-operation token remains held across list, process, failure, cancellation, and summary UI until the window is fully closed.
 
 List screen:
+- on presentation, app activation, warning selection, and every download attempt, downloader passively refreshes Full Disk Access and helper readiness without registering, repairing, or reloading the helper,
+- discovery remains available when prerequisites are missing, while starting a download requires confirmed Full Disk Access, an enabled helper service, and a successful XPC health check,
+- a missing prerequisite shows an orange warning action immediately to the left of refresh; it remains disabled during discovery or a prerequisite check and opens an app-icon alert after discovery completes,
+- prerequisite alerts provide direct System Settings actions for Full Disk Access and App Background Activity; an unavailable helper without an approval requirement instead directs the user to `Tools -> Repair Helper`,
+- returning from System Settings refreshes prerequisite state without rerunning discovery or clearing the selected installer,
 - grouped families,
 - default mode hides Public Beta entries and shows the newest stable entry per family, plus every older stable entry detected in `/Applications`,
 - enabling Public Beta visibility immediately adds the newest beta entry per family with an animated list transition, or every beta entry when `Pokaż wszystkie wersje` is also enabled, without rerunning discovery,
 - overlapping Public Beta catalogs are deduplicated by system identity, version, and build,
-- `Pokaż wszystkie wersje` shows every available stable version and, when beta visibility is enabled, every available Public Beta version,
+- `Pokaż wszystkie wersje` shows every available stable version and, when beta visibility is enabled, every available Public Beta version; enabling or disabling it uses the same animated list transition as Public Beta visibility without rerunning discovery,
 - locally detected entries use a localized, accent-colored `POBRANY` badge in the selection list only,
 - beta entries use a neutral `BETA` badge by default; the badge becomes accent-colored only in a selected list row and stays neutral in the active download view,
 - on a physical Intel Mac, starting a download for Golden Gate or any newer system (major version `>= 27`) requires confirmation in an app-icon alert explaining that the installer can be downloaded and built, but cannot be used on that Mac to create bootable USB media,
@@ -243,25 +269,31 @@ List screen:
 - options sheet includes:
   - show all versions,
   - show macOS Public Beta versions (session-only and off by default),
+  - save as disk image (session-only and off by default); enabling it opens a directory picker and then shows the abbreviated destination with a change action,
   - DEBUG retain-files toggle (Debug only).
+- after a confirmed download action, the list screen and process screen transition in one shared `easeInOut` animation lasting `0.24` seconds, using symmetric opacity and subtle `0.98` scale transitions consistent with process-stage motion; the animation is presentation-only and does not delay workflow startup.
 
 Process screen:
 - stage cards with three visual states:
   - pending,
   - active (accent-highlighted through the shared Liquid Glass-compatible active surface),
   - completed (green check state).
+- pending and completed cards remain at `0.98` scale, while the active card uses `1.0`; advancing to the next stage animates the completed and newly active cards together with the shared stage-transition motion, and frequent progress and speed updates do not retrigger this transition.
+- when the workflow reaches a terminal state, the stage list and download summary transition in one shared `easeInOut` animation lasting `0.24` seconds, using the same symmetric opacity and subtle `0.98` scale motion as the list-to-process transition.
 - active download stage shows:
   - percent above progress bar,
   - speed label and transfer,
   - inline manifest file list with status icons,
   - verification stage text in state form (`Weryfikowanie pliku …`).
+- the optional disk-image stage uses an outlined pending and filled active external-drive symbol, a generic status without the output file name, and an indeterminate progress bar.
 - close confirmation alert is shown only during active running download; summary close action is immediate.
 
 Summary screen:
 - success / partial / failure card tones,
 - metrics rows and detailed status section for failures or partial outcomes,
-- `Pokaż w Finderze` reveals and selects the created installer `.app` when available; otherwise opens `/Applications`.
-- when summary has a ready final `.app`, icon action next to Finder shortcut sends it to analysis and auto-runs analysis; if app is on Welcome screen, flow auto-navigates to analysis first.
+- `Pokaż w Finderze` reveals and selects the final `.app` or `.dmg` when available; otherwise opens `/Applications`.
+- when summary has a ready final output, the icon action next to Finder sends it to analysis and auto-runs analysis; if app is on Welcome screen, flow auto-navigates to analysis first.
+- a DMG/source-removal partial success identifies the DMG as the primary output and reports the retained `.app` path.
 - when an expired-but-trusted Apple package signature is accepted (currently Lion/Mountain Lion path), summary shows an additional neutral informational card with `info` icon explaining that signature trust is valid for this legacy case.
 
 ---
@@ -275,8 +307,11 @@ Rules:
   - warning summary is shown instead of full hard-failure semantics.
 
 User-facing messaging:
+- missing Full Disk Access, App Background Activity approval, or helper XPC readiness blocks the download before compatibility/redownload confirmations and before any session or temporary directory is created,
 - permission/move failures are rewritten to clearer, action-oriented text,
 - insufficient disk space during preflight is shown as a system `NSAlert` with required minimum and available space values,
+- DMG preflight alerts show required and available values in decimal GB without exposing internal percentage multipliers,
+- declining an existing-name collision or dismissing a DMG preflight failure returns to the installer list without creating a download session,
 - an unreadable local installer identity is reported in a non-blocking aggregate `NSAlert` after discovery,
 - all local-installer alerts include the macUSB icon, localized title, localized description, and task-specific buttons,
 - technical detail remains in logs.
@@ -309,6 +344,8 @@ Downloader logs should include:
 - manifest contents summary per item,
 - verification step outputs (expected vs actual),
 - helper assembly progress and movement logs,
+- disk-space preflight results for every checked volume, including required and available capacity as exact bytes and decimal GB,
+- disk-image creation start and terminal result, including technical error details when creation fails,
 - cleanup result and final destination status.
 
 Logging category:
@@ -332,9 +369,16 @@ Downloader module:
   - `MacOSLocalInstallerDiskImageManager.swift` owns unique mount points, reverse-order detach retries, and cleanup safety.
   - `MacOSLocalInstallerProcessRunner.swift` owns cancellable off-main process execution and concurrent diagnostic stream draining.
 - `macUSB/Features/Downloader/Logic/Download/*`
+- `macUSB/Features/Downloader/Logic/DiskImage/*`
+  - `MacOSDiskImageNamingPolicy.swift` owns stable/Beta output names and numeric collision suffixes.
+  - `MacOSDiskImagePreflight.swift` validates destination access, volume identity, free space, and the initial collision-safe path.
+  - `MacOSDiskImageProcessRunner.swift` runs cancellable `hdiutil` work while continuously draining diagnostics.
+  - `MacOSDiskImageCreator.swift` owns staging, UDRO creation, finalization, source removal, and rollback.
 - `macUSB/Features/Downloader/Logic/MacOSVerificationLogic.swift`
 - `macUSB/Features/Downloader/Logic/Assembly/*`
 - `macUSB/Features/Downloader/Logic/MacOSCleanupLogic.swift`
+- `macUSB/Features/Downloader/UI/MacOSDownloaderDiskImageOptionsView.swift`
+- `macUSB/Features/Downloader/UI/MacOSDownloaderDiskImageAlerts.swift`
 
 Helper touchpoints:
 - `macUSB/Shared/Services/Helper/HelperIPC.swift`

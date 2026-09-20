@@ -9,6 +9,11 @@ extension MontereyDownloadFlowModel {
     }
 
     func runCleanup(completionReason: CleanupCompletionReason) async throws {
+        let cleanupToken = AppActiveOperationRegistry.shared.begin(
+            kind: .cleanup,
+            context: "downloader_final_cleanup"
+        )
+        defer { cleanupToken.finish() }
         currentStage = .cleanup
         cleanupProgress = 0
 
@@ -106,8 +111,9 @@ extension MontereyDownloadFlowModel {
             durationSeconds = 0
         }
         summaryDurationText = formatDuration(durationSeconds)
-        summaryCreatedFileText = finalInstallerAppURL?.lastPathComponent ?? String(localized: "Nie utworzono instalatora")
-        summaryLocationText = finalInstallerAppURL?.deletingLastPathComponent().path ?? String(localized: "Brak danych")
+        let finalOutputURL = finalDiskImageURL ?? finalInstallerAppURL
+        summaryCreatedFileText = finalOutputURL?.lastPathComponent ?? String(localized: "Nie utworzono instalatora")
+        summaryLocationText = finalOutputURL?.deletingLastPathComponent().path ?? String(localized: "Brak danych")
     }
 
     func formatDuration(_ seconds: TimeInterval) -> String {
@@ -149,6 +155,11 @@ extension MontereyDownloadFlowModel {
     }
 
     func cleanupTemporaryDownloadsFolder() {
+        let cleanupToken = AppActiveOperationRegistry.shared.begin(
+            kind: .cleanup,
+            context: "downloader_temporary_folder_cleanup"
+        )
+        defer { cleanupToken.finish() }
         let temporaryDownloadsURL = downloaderSessionsRootURL()
 
         guard FileManager.default.fileExists(atPath: temporaryDownloadsURL.path) else {

@@ -6,6 +6,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
+
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        AppTerminationCoordinator.shared.applicationShouldTerminate()
+    }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSWindow.allowsAutomaticWindowTabbing = false
@@ -19,27 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationWillTerminate(_ notification: Notification) {
-        // Reset external drives support on app termination
-        UserDefaults.standard.set(false, forKey: "AllowExternalDrives")
-        UserDefaults.standard.synchronize()
-        // Reflect the state in MenuState for consistency
-        MenuState.shared.externalDrivesEnabled = false
-
-        let tempRootURL = FileManager.default.temporaryDirectory.appendingPathComponent("macUSB_temp", isDirectory: true)
-        if FileManager.default.fileExists(atPath: tempRootURL.path) {
-            do {
-                try FileManager.default.removeItem(at: tempRootURL)
-                AppLogging.info("Zamkniecie aplikacji: usunieto katalog macUSB_temp.", category: "Downloader")
-            } catch {
-                AppLogging.error(
-                    "Zamkniecie aplikacji: nie udalo sie usunac macUSB_temp: \(error.localizedDescription)",
-                    category: "Downloader"
-                )
-            }
-        }
-
-        // Last-step cleanup for tracked Windows/Linux source images.
-        InstallerSourceImageUnmountRegistry.shared.detachAllTrackedImagesOnAppTermination()
+        AppTerminationCleanup.shared.performIfNeeded()
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
@@ -123,29 +107,6 @@ struct macUSBApp: App {
                     }
                     .keyboardShortcut("t", modifiers: [.option, .command])
                     .disabled(!menuState.skipAnalysisEnabled)
-                    Divider()
-                    Button(String(localized: "Linux")) {
-                        let alert = NSAlert()
-                        alert.alertStyle = .informational
-                        alert.icon = NSApp.applicationIconImage
-                        alert.messageText = String(localized: "Tworzenie USB z Linux")
-                        alert.informativeText = String(localized: "Dla wybranego pliku zostanie pominięta analiza i rozpoznanie dystrybucji. Aplikacja wymusi rozpoznanie pliku jako „Linux”, aby umożliwić zapis USB w trybie Linux. Czy chcesz kontynuować?")
-                        alert.addButton(withTitle: String(localized: "Nie"))
-                        alert.addButton(withTitle: String(localized: "Tak"))
-                        if let window = NSApp.keyWindow ?? NSApp.mainWindow {
-                            alert.beginSheetModal(for: window) { response in
-                                if response == .alertSecondButtonReturn {
-                                    NotificationCenter.default.post(name: .macUSBStartLinuxManualSelection, object: nil)
-                                }
-                            }
-                        } else {
-                            let response = alert.runModal()
-                            if response == .alertSecondButtonReturn {
-                                NotificationCenter.default.post(name: .macUSBStartLinuxManualSelection, object: nil)
-                            }
-                        }
-                    }
-                    .disabled(!menuState.skipLinuxManualSelectionEnabled)
                 } label: {
                     Label(String(localized: "Pomiń analizowanie pliku"), systemImage: "doc.text.magnifyingglass")
                 }
@@ -279,6 +240,7 @@ struct macUSBApp: App {
                 } label: {
                     Label(String(localized: "Język"), systemImage: "globe")
                 }
+                .disabled(!menuState.isLanguageChangeEnabled)
                 Divider()
                 Button {
                     NotificationPermissionManager.shared.handleMenuNotificationsTapped()
@@ -433,6 +395,7 @@ struct macUSBApp: App {
                 } label: {
                     Label(String(localized: "Eksportuj logi diagnostyczne..."), systemImage: "square.and.arrow.down")
                 }
+                .keyboardShortcut("l", modifiers: [.option])
             }
             #if DEBUG
             CommandMenu("DEBUG") {

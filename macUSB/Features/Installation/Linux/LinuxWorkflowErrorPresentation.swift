@@ -50,6 +50,7 @@ enum LinuxWorkflowErrorLocalizationExtractionAnchors {
         String(localized: "installation.error.linux.verify_write.mismatch"),
         String(localized: "installation.error.linux.verify_write.short_read"),
         String(localized: "installation.error.linux.verify_write.generic"),
-        String(localized: "installation.error.workflow.generic")
+        String(localized: "installation.error.workflow.generic"),
+        String(localized: "raw_image.error.verify.generic")
     ]
 }

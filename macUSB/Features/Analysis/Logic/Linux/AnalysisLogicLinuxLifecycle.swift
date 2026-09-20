@@ -1,6 +1,5 @@
 import Foundation
 import AppKit
-import SwiftUI
 
 private enum LinuxDistroIconCatalog {
     static let names: [String] = [
@@ -87,86 +86,18 @@ private enum LinuxDistroIconCatalog {
 }
 
 extension AnalysisLogic {
-    func forceLinuxManualSelection() {
-        cancelActiveImageAnalysisRun(reason: "Ręczne wymuszenie trybu Linux")
-        guard let sourceURL = self.selectedFileUrl else {
-            self.logError("Nie można wymusić rozpoznania Linux: brak wybranego pliku.")
-            return
-        }
-        let sourceExtension = sourceURL.pathExtension.lowercased()
-        guard sourceExtension == "iso" else {
-            self.logError("Nie można wymusić rozpoznania Linux dla .\(sourceExtension). Opcja „Pomiń analizowanie pliku -> Linux” jest dostępna tylko dla plików .iso.")
-            return
-        }
-
-        InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
-            path: sourceURL.path,
-            family: .linux,
-            mountHint: mountedDMGPath,
-            reason: "linux_manual_selection"
-        )
-
-        self.log("Ręcznie wybrano tryb Linux (pominięcie analizy pliku).")
-
-        withAnimation {
-            self.isAnalyzing = false
-            self.userSkippedAnalysis = true
-            self.resetLinuxDetectionState()
-            self.resetWindowsDetectionState()
-
-            self.isLinuxDetected = true
-            self.isLinuxDistributionRecognized = false
-            self.linuxDisplayName = "Linux"
-            self.linuxSourceURL = sourceURL
-
-            self.recognizedVersion = "Linux"
-            self.sourceAppURL = nil
-            self.detectedSystemIcon = loadLinuxDetectedSystemIcon(for: nil)
-
-            self.isSystemDetected = true
-            self.showUnsupportedMessage = false
-            self.showUSBSection = false
-
-            self.needsCodesign = true
-            self.isLegacyDetected = false
-            self.isRestoreLegacy = false
-            self.isCatalina = false
-            self.isSierra = false
-            self.isMavericks = false
-            self.isUnsupportedSierra = false
-            self.isPPC = false
-            self.legacyArchInfo = nil
-            self.selectedDrive = nil
-            self.capacityCheckFinished = false
-        }
-
-        let capacityResolution = resolveRequiredUSBCapacityForImageSource(sourceURL)
-        self.requiredUSBCapacityGB = capacityResolution.requiredCapacityGB
-        if let fileSizeBytes = capacityResolution.sourceFileSizeBytes,
-           let fileSizeSource = capacityResolution.sourceFileSizeSource {
-            self.log("Linux manual source size: \(fileSizeBytes) bytes (source=\(fileSizeSource))")
-        } else if capacityResolution.usedFallback {
-            self.log("Linux manual source size unavailable. Applying fallback USB threshold: \(capacityResolution.requiredCapacityGB) GB")
-        }
-        self.log("Linux manual required USB threshold: \(capacityResolution.requiredCapacityGB) GB")
-
-        self.log("Ustawiono ręczne rozpoznanie Linux: recognizedVersion=\(self.recognizedVersion), source=\(sourceURL.path)")
-    }
-
     func loadLinuxDetectedSystemIcon(for distro: String?) -> NSImage? {
         if let distro, let distroIcon = loadLinuxDistroIcon(for: distro) {
             self.log("Załadowano ikonę Linux distro: \(distro)")
             return distroIcon
         }
 
-        let nestedURL = Bundle.main.url(forResource: "linux", withExtension: "icns", subdirectory: "Icons/Linux")
-        let rootURL = Bundle.main.url(forResource: "linux", withExtension: "icns")
-        guard let url = nestedURL ?? rootURL, let icon = NSImage(contentsOf: url) else {
-            self.log("Nie znaleziono fallback ikony linux.icns - zostanie użyty SF Symbol.", category: "FileAnalysis")
+        guard let icon = loadLinuxDistroIcon(for: "linux") else {
+            self.log("Nie znaleziono fallback ikony linux.png - zostanie użyty SF Symbol.", category: "FileAnalysis")
             return nil
         }
         icon.isTemplate = false
-        self.log("Załadowano fallback ikonę linux.icns.", category: "FileAnalysis")
+        self.log("Załadowano fallback ikonę linux.png.", category: "FileAnalysis")
         return icon
     }
 
@@ -255,6 +186,7 @@ extension AnalysisLogic {
     func resetLinuxDetectionState() {
         cleanupLinuxAttachSession(reason: "reset_linux_detection_state")
         self.isLinuxDetected = false
+        self.isRawImageSelection = false
         self.isLinuxDistributionRecognized = false
         self.linuxDistro = nil
         self.linuxVersion = nil

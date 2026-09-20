@@ -79,6 +79,12 @@ struct USBDrive: Hashable, Identifiable {
     /// Czy nośnik pracuje w standardzie USB 2.0
     var isUSB2: Bool { usbSpeed?.isUSB2 == true }
 
+    /// Czy wybór reprezentuje fizyczny whole-disk (`diskX`), a nie zamontowany wolumin.
+    var isWholeDiskTarget: Bool {
+        device == USBDriveLogic.wholeDiskName(from: device)
+            && url.path == "/dev/\(device)"
+    }
+
     /// Stabilny identyfikator nośnika używany przez Picker i synchronizację wyboru.
     var selectionID: String { url.absoluteString }
 

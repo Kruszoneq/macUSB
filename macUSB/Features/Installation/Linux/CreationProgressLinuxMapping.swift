@@ -47,6 +47,28 @@ enum CreationProgressLinuxMapping {
         stageKey == "linux_raw_copy"
     }
 
+    static func rawImageTitleKey(for stageKey: String) -> String? {
+        switch stageKey {
+        case "linux_raw_copy":
+            return "raw_image.workflow.copy.title"
+        case "linux_verify_write":
+            return "raw_image.workflow.verify.title"
+        default:
+            return nil
+        }
+    }
+
+    static func rawImageStatusKey(for stageKey: String) -> String? {
+        switch stageKey {
+        case "linux_raw_copy":
+            return "raw_image.workflow.copy.status"
+        case "linux_verify_write":
+            return "raw_image.workflow.verify.status"
+        default:
+            return nil
+        }
+    }
+
     static func canonicalStageKey(_ stageKey: String) -> String {
         switch stageKey {
         case "linux_dd_raw_copy":
@@ -55,4 +77,14 @@ enum CreationProgressLinuxMapping {
             return stageKey
         }
     }
+}
+
+enum RawImageWorkflowLocalizationExtractionAnchors {
+    // Keep literal keys here so String Catalog extraction can detect dynamic keys used at runtime.
+    static let anchoredValues: [String] = [
+        String(localized: "raw_image.workflow.copy.title"),
+        String(localized: "raw_image.workflow.copy.status"),
+        String(localized: "raw_image.workflow.verify.title"),
+        String(localized: "raw_image.workflow.verify.status")
+    ]
 }

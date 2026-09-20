@@ -2,7 +2,7 @@ import Foundation
 
 extension HelperWorkflowExecutor {
     func runWindowsVerifyMediaStage(_ stage: WorkflowStage) throws {
-        let targetPath = windowsPreparedTargetVolumePath ?? "/Volumes/\(request.targetLabel)"
+        let targetPath = try requireWindowsPreparedTargetVolumePath(stage: stage)
         let targetURL = URL(fileURLWithPath: targetPath)
 
         guard fileManager.fileExists(atPath: targetPath) else {

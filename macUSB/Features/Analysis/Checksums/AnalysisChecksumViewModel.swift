@@ -18,6 +18,7 @@ final class AnalysisChecksumViewModel: ObservableObject {
 
     let fileURL: URL
     private var checksumTask: Task<Void, Never>?
+    private var operationToken: AppActiveOperationToken?
     private let service = AnalysisChecksumService()
 
     var isRunning: Bool {
@@ -30,6 +31,7 @@ final class AnalysisChecksumViewModel: ObservableObject {
 
     deinit {
         checksumTask?.cancel()
+        operationToken?.finish()
     }
 
     func start() {
@@ -40,6 +42,10 @@ final class AnalysisChecksumViewModel: ObservableObject {
         failureMessage = nil
         progress = 0
         phase = .running
+        operationToken = AppActiveOperationRegistry.shared.begin(
+            kind: .analysis,
+            context: "manual_sha256:\(fileURL.lastPathComponent)"
+        )
 
         let sourceURL = fileURL
         let service = service
@@ -60,6 +66,7 @@ final class AnalysisChecksumViewModel: ObservableObject {
                     self?.checksum = digest
                     self?.phase = .completed
                     self?.checksumTask = nil
+                    self?.finishOperationActivity()
                 }
             } catch is CancellationError {
                 await MainActor.run {
@@ -82,6 +89,7 @@ final class AnalysisChecksumViewModel: ObservableObject {
                     self?.failureMessage = String(localized: "checksum.sheet.failed.description")
                     self?.phase = .failed
                     self?.checksumTask = nil
+                    self?.finishOperationActivity()
                 }
             }
         }
@@ -111,5 +119,11 @@ final class AnalysisChecksumViewModel: ObservableObject {
         failureMessage = nil
         progress = 0
         phase = .cancelled
+        finishOperationActivity()
+    }
+
+    private func finishOperationActivity() {
+        operationToken?.finish()
+        operationToken = nil
     }
 }

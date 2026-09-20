@@ -28,6 +28,14 @@ extension HelperServiceManager {
         }
     }
     func performFullRepairFromMenu(completion: @escaping EnsureCompletion) {
+        let operationToken = AppActiveOperationRegistry.shared.begin(
+            kind: .helperRepair,
+            context: "helper_full_repair"
+        )
+        let trackedCompletion: EnsureCompletion = { ready, message in
+            operationToken.finish()
+            completion(ready, message)
+        }
         reportHelperServiceEvent("Uruchamiam pełny reset helpera: unregister -> brak odpowiedzi starego -> register -> health-check.")
 
         guard isLocationRequirementSatisfied() else {
@@ -35,7 +43,7 @@ extension HelperServiceManager {
             reportHelperServiceEvent("Naprawa przerwana: warunek lokalizacji aplikacji niespełniony.")
             DispatchQueue.main.async {
                 self.presentMoveToApplicationsAlert()
-                completion(false, message)
+                trackedCompletion(false, message)
             }
             return
         }
@@ -45,7 +53,7 @@ extension HelperServiceManager {
                 let message = String(localized: "Trwa inna operacja helpera. Poczekaj chwilę i spróbuj ponownie.")
                 self.reportHelperServiceEvent("Naprawa przerwana: trwa równoległa operacja helpera.")
                 DispatchQueue.main.async {
-                    completion(false, message)
+                    trackedCompletion(false, message)
                 }
                 return
             }
@@ -56,11 +64,11 @@ extension HelperServiceManager {
             self.performHardUnregisterPhase(service: service) { teardownOK, teardownMessage in
                 guard teardownOK else {
                     DispatchQueue.main.async {
-                        completion(false, teardownMessage ?? String(localized: "Nie udało się usunąć starej rejestracji helpera."))
+                        trackedCompletion(false, teardownMessage ?? String(localized: "Nie udało się usunąć starej rejestracji helpera."))
                     }
                     return
                 }
-                self.performHardRegisterPhase(service: service, completion: completion)
+                self.performHardRegisterPhase(service: service, completion: trackedCompletion)
             }
         }
     }

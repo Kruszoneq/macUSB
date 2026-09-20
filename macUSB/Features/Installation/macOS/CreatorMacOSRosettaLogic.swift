@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import SwiftUI
 
 enum CreatorMacOSRosettaState: Equatable {
     case available
@@ -31,7 +32,7 @@ extension UniversalInstallationView {
 
     var macOSRosettaShouldShowCard: Bool {
         macOSRosettaRequirement.initialAvailability != nil
-            && effectiveMacOSRosettaState != .available
+            && (effectiveMacOSRosettaState != .available || macOSRosettaSuccessVisible)
     }
 
     var macOSRosettaShouldBlockStart: Bool {
@@ -84,6 +85,7 @@ extension UniversalInstallationView {
     }
 
     func startMacOSRosettaInstallation() {
+        beginMacOSRosettaOperation(context: "installation")
         macOSRosettaState = .installing
         macOSRosettaRetryGeneration = UUID()
         AppLogging.info("Rozpoczynam przygotowanie helpera do instalacji Rosetty.", category: "Rosetta")
@@ -91,6 +93,7 @@ extension UniversalInstallationView {
         HelperServiceManager.shared.ensureReadyForPrivilegedWork { ready, failureReason in
             guard ready else {
                 macOSRosettaState = .installFailed
+                finishMacOSRosettaOperation()
                 AppLogging.error(
                     "Helper nie jest gotowy do instalacji Rosetty: \(failureReason ?? "brak szczegółów")",
                     category: "Rosetta"
@@ -107,12 +110,14 @@ extension UniversalInstallationView {
                     )
                     guard payload.success else {
                         macOSRosettaState = .installFailed
+                        finishMacOSRosettaOperation()
                         return
                     }
                     runMacOSRosettaPostInstallChecks(attempt: 1)
 
                 case .failure(let error):
                     macOSRosettaState = .installFailed
+                    finishMacOSRosettaOperation()
                     AppLogging.error(
                         "Instalacja Rosetty przez helper nie powiodła się: \(error.localizedDescription)",
                         category: "Rosetta"
@@ -135,14 +140,16 @@ extension UniversalInstallationView {
                 )
 
                 if availability == .available {
-                    macOSRosettaState = .available
                     macOSRosettaRetryGeneration = nil
+                    showMacOSRosettaInstallationSuccess()
+                    finishMacOSRosettaOperation()
                     return
                 }
 
                 guard attempt < 5 else {
                     macOSRosettaState = .notAvailable
                     macOSRosettaRetryGeneration = nil
+                    finishMacOSRosettaOperation()
                     return
                 }
 
@@ -154,6 +161,7 @@ extension UniversalInstallationView {
     }
 
     func checkMacOSRosettaAvailabilityManually() {
+        beginMacOSRosettaOperation(context: "manual_check")
         macOSRosettaState = .checking
         let generation = UUID()
         macOSRosettaRetryGeneration = generation
@@ -176,12 +184,49 @@ extension UniversalInstallationView {
                     "Ręczne sprawdzenie Rosetty: \(availability.diagnosticLabel)",
                     category: "Rosetta"
                 )
+                finishMacOSRosettaOperation()
             }
         }
     }
 
     func invalidateMacOSRosettaChecks() {
         macOSRosettaRetryGeneration = nil
+        macOSRosettaSuccessDismissalGeneration = nil
+        if effectiveMacOSRosettaState == .checking {
+            finishMacOSRosettaOperation()
+        }
+    }
+
+    private func showMacOSRosettaInstallationSuccess() {
+        let generation = UUID()
+        macOSRosettaSuccessDismissalGeneration = generation
+
+        withAnimation(.easeInOut(duration: 0.24)) {
+            macOSRosettaState = .available
+            macOSRosettaSuccessVisible = true
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            guard generation == macOSRosettaSuccessDismissalGeneration else { return }
+            macOSRosettaSuccessDismissalGeneration = nil
+
+            withAnimation(.easeInOut(duration: 0.24)) {
+                macOSRosettaSuccessVisible = false
+            }
+        }
+    }
+
+    private func beginMacOSRosettaOperation(context: String) {
+        macOSRosettaOperationToken?.finish()
+        macOSRosettaOperationToken = AppActiveOperationRegistry.shared.begin(
+            kind: .rosettaInstallation,
+            context: "rosetta:\(context)"
+        )
+    }
+
+    private func finishMacOSRosettaOperation() {
+        macOSRosettaOperationToken?.finish()
+        macOSRosettaOperationToken = nil
     }
 }
 

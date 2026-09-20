@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-private enum CreationStageVisualState {
+private enum CreationStageVisualState: Hashable {
     case pending
     case active
     case completed
@@ -27,6 +27,7 @@ struct CreationProgressView: View {
     let isMavericks: Bool
     let isPPC: Bool
     let isLinuxWorkflow: Bool
+    let isRawImageSelection: Bool
     let isWindowsWorkflow: Bool
     let windowsWillSplitWimExpected: Bool
     let windowsWillCreateAutounattendExpected: Bool
@@ -57,7 +58,7 @@ struct CreationProgressView: View {
             Capsule()
                 .fill(Color.secondary.opacity(0.20))
                 .frame(height: 1)
-            Text("Etapy tworzenia")
+            Text(isRawImageSelection ? "Etapy zapisu" : "Etapy tworzenia")
                 .font(.caption)
                 .foregroundColor(.secondary)
             Capsule()
@@ -119,7 +120,12 @@ struct CreationProgressView: View {
                 VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
                     StatusCard(tone: .subtle, density: .compact) {
                         HStack {
-                            if let detectedSystemIcon {
+                            if isRawImageSelection {
+                                Image(systemName: "opticaldisc.fill")
+                                    .font(sectionIconFont)
+                                    .foregroundColor(.secondary)
+                                    .frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            } else if let detectedSystemIcon {
                                 Image(nsImage: detectedSystemIcon)
                                     .resizable()
                                     .scaledToFit()
@@ -131,7 +137,7 @@ struct CreationProgressView: View {
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             }
                             VStack(alignment: .leading) {
-                                Text("Wybrany system")
+                                Text(isRawImageSelection ? "Wybrany obraz" : "Wybrany system")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 HStack(spacing: 8) {
@@ -139,7 +145,7 @@ struct CreationProgressView: View {
                                         .font(.headline)
                                         .foregroundColor(.primary)
                                         .bold()
-                                    if isBetaInstaller {
+                                    if isBetaInstaller && !isRawImageSelection {
                                         MacOSBetaBadge(tint: .secondary)
                                     }
                                 }
@@ -155,6 +161,10 @@ struct CreationProgressView: View {
                             stageRow(for: stage, at: index)
                         }
                     }
+                    .animation(
+                        MacUSBDesignTokens.stageTransitionAnimation,
+                        value: creationStageMotionStates
+                    )
                 }
                 .padding(.horizontal, MacUSBDesignTokens.contentHorizontalPadding)
                 .padding(.vertical, MacUSBDesignTokens.contentVerticalPadding)
@@ -175,7 +185,7 @@ struct CreationProgressView: View {
             }
         }
         .frame(width: MacUSBDesignTokens.windowWidth, height: MacUSBDesignTokens.windowHeight)
-        .navigationTitle("Tworzenie nośnika")
+        .navigationTitle(isRawImageSelection ? "Zapisywanie obrazu" : "Tworzenie nośnika")
         .navigationBarBackButtonHidden(true)
         .onAppear {
             menuState.setDownloaderAccessBlocked(true, reason: downloaderBlockReason)
@@ -192,6 +202,7 @@ struct CreationProgressView: View {
                     isPPC: isPPC,
                     isBetaInstaller: isBetaInstaller,
                     isLinuxWorkflow: isLinuxWorkflow,
+                    isRawImageSelection: isRawImageSelection,
                     isWindowsWorkflow: isWindowsWorkflow,
                     didFail: helperOperationFailed,
                     didCancel: didCancelCreation,
@@ -212,80 +223,101 @@ struct CreationProgressView: View {
     private func stageRow(for stage: CreationStageDescriptor, at index: Int) -> some View {
         let stageState = stateForStage(at: index)
 
-        switch stageState {
-        case .pending:
-            StatusCard(tone: .subtle, density: .compact) {
-                HStack(spacing: 12) {
-                    Image(systemName: pendingIconForStage(stage.key))
-                        .font(sectionIconFont)
-                        .foregroundColor(.secondary)
-                        .frame(width: 24)
-                    Text(LocalizedStringKey(stage.titleKey))
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    Spacer()
-                }
-            }
-
-        case .active:
-            StatusCard(
-                tone: .active,
-                cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode())
-            ) {
-                VStack(alignment: .leading, spacing: 10) {
+        Group {
+            switch stageState {
+            case .pending:
+                StatusCard(tone: .subtle, density: .compact) {
                     HStack(spacing: 12) {
-                        Image(systemName: activeIconForStage(stage.key))
+                        Image(systemName: pendingIconForStage(stage.key))
                             .font(sectionIconFont)
-                            .foregroundColor(.accentColor)
+                            .foregroundColor(.secondary)
                             .frame(width: 24)
                         Text(LocalizedStringKey(stage.titleKey))
-                            .font(.headline)
-                        Spacer()
-                        if shouldShowCopyProgress(for: stage.key) {
-                            Text(copyProgressText())
-                                .font(.title3.monospacedDigit())
-                                .fontWeight(.semibold)
-                                .foregroundColor(.accentColor)
-                        }
-                    }
-                    Text(LocalizedStringKey(helperStatusKey.isEmpty ? HelperWorkflowLocalizationKeys.initializingStatus : helperStatusKey))
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    if shouldShowCopyProgress(for: stage.key) {
-                        ProgressView(value: boundedCopyProgressPercent() / 100.0)
-                            .progressViewStyle(.linear)
-                    } else {
-                        ProgressView()
-                            .progressViewStyle(.linear)
-                    }
-                    if shouldShowWriteSpeed(for: stage.key) {
-                        Text(verbatim: writeSpeedLabelText())
-                            .font(.subheadline.monospacedDigit())
+                            .font(.subheadline)
                             .foregroundColor(.secondary)
+                        Spacer()
                     }
                 }
-            }
 
-        case .completed:
-            StatusCard(tone: .neutral, density: .compact) {
-                HStack(spacing: 12) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(sectionIconFont)
-                        .foregroundColor(.green)
-                        .frame(width: 24)
-                    Text(LocalizedStringKey(stage.titleKey))
-                        .font(.subheadline)
-                    Spacer()
+            case .active:
+                StatusCard(
+                    tone: .active,
+                    cornerRadius: MacUSBDesignTokens.prominentPanelCornerRadius(for: currentVisualMode())
+                ) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack(spacing: 12) {
+                            Image(systemName: activeIconForStage(stage.key))
+                                .font(sectionIconFont)
+                                .foregroundColor(.accentColor)
+                                .frame(width: 24)
+                            Text(LocalizedStringKey(stage.titleKey))
+                                .font(.headline)
+                            Spacer()
+                            if shouldShowCopyProgress(for: stage.key) {
+                                Text(copyProgressText())
+                                    .font(.title3.monospacedDigit())
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.accentColor)
+                            }
+                        }
+                        Text(LocalizedStringKey(effectiveStatusKey(for: stage.key)))
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        if shouldShowCopyProgress(for: stage.key) {
+                            ProgressView(value: boundedCopyProgressPercent() / 100.0)
+                                .progressViewStyle(.linear)
+                        } else {
+                            ProgressView()
+                                .progressViewStyle(.linear)
+                        }
+                        if shouldShowWriteSpeed(for: stage.key) {
+                            Text(verbatim: writeSpeedLabelText())
+                                .font(.subheadline.monospacedDigit())
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+
+            case .completed:
+                StatusCard(tone: .neutral, density: .compact) {
+                    HStack(spacing: 12) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(sectionIconFont)
+                            .foregroundColor(.green)
+                            .frame(width: 24)
+                        Text(LocalizedStringKey(stage.titleKey))
+                            .font(.subheadline)
+                        Spacer()
+                    }
                 }
             }
         }
+        .id(stageState)
+        .scaleEffect(MacUSBDesignTokens.stageScale(isActive: stageState == .active))
+        .transition(MacUSBDesignTokens.stageCardTransition(isActive: stageState == .active))
+    }
+
+    private var creationStageMotionStates: [CreationStageVisualState] {
+        stageDescriptors.indices.map(stateForStage(at:))
     }
 
     private func stageDescriptor(for stageKey: String) -> CreationStageDescriptor {
+        if isRawImageSelection,
+           let titleKey = CreationProgressLinuxMapping.rawImageTitleKey(for: stageKey) {
+            return CreationStageDescriptor(key: stageKey, titleKey: titleKey)
+        }
         if let presentation = HelperWorkflowLocalizationKeys.presentation(for: stageKey) {
             return CreationStageDescriptor(key: stageKey, titleKey: presentation.titleKey)
         }
         return CreationStageDescriptor(key: stageKey, titleKey: stageKey)
+    }
+
+    private func effectiveStatusKey(for stageKey: String) -> String {
+        if isRawImageSelection,
+           let statusKey = CreationProgressLinuxMapping.rawImageStatusKey(for: stageKey) {
+            return statusKey
+        }
+        return helperStatusKey.isEmpty ? HelperWorkflowLocalizationKeys.initializingStatus : helperStatusKey
     }
 
     private func stateForStage(at index: Int) -> CreationStageVisualState {

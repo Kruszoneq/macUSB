@@ -3,6 +3,7 @@ import Foundation
 struct LinuxInstallationFlowContext {
     let sourceImageURL: URL
     let mountedImagePath: String?
+    let isRawImageSelection: Bool
 
     var sourcePath: String {
         sourceImageURL.path

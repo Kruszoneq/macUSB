@@ -14,6 +14,7 @@ enum FullDiskAccessCheckTrigger: String {
     case startup
     case activation
     case installationSummary
+    case downloader
     case settingsPanel
 }
 

@@ -75,6 +75,9 @@ The helper system has two runtime layers:
 High-level model:
 - App-side validates readiness, manages registration/repair, and communicates via XPC.
 - Daemon executes privileged workflows and sends progress/result events back to app-side.
+- The daemon is launch-on-demand and stays alive while the app holds its XPC connection.
+- Normal termination explicitly closes that connection; crash and Force Quit are observed as connection loss by the daemon.
+- With no client connection, cancellable work is cancelled and the daemon exits after all active privileged operations reach a terminal state.
 
 Core invariant:
 - No terminal fallback privileged path.
@@ -125,13 +128,30 @@ Contract invariants:
 ### Single Active Task Invariant
 - Helper executes only one privileged task at a time across USB workflow, downloader assembly, downloader cleanup, and Rosetta installation requests.
 - If another task is already active, the new request is rejected with conflict semantics and must be retried by app-side flow when appropriate.
+- App-side active-operation tracking covers accepted USB workflow IDs, accepted downloader assembly IDs, downloader cleanup requests, and Rosetta installation requests.
+- Health checks, capability queries, normal ensure-ready checks, and status reads do not create standalone helper-activity tokens.
+- Helper activity ends on the final result, a terminal request error, result decode failure, or XPC invalidation; cancellation acknowledgement alone does not end USB helper activity.
 
 ### Ensure-Ready Flow
 - Entry point: `HelperServiceManager` ensure-ready path.
 - Checks app location and helper service status.
 - Handles status states (`enabled`, `requiresApproval`, `notRegistered`, `notFound`).
 - Performs health validation via XPC after configuring app-side helper code-signing requirements.
+- The successful startup health validation creates the persistent app-lifetime XPC connection and starts the on-demand helper.
 - Uses controlled recovery when enabled service is unhealthy.
+
+### Process Lifecycle Flow
+- LaunchDaemon plists advertise the XPC Mach service without `RunAtLoad`; registration and user approval persist independently of the helper process.
+- `HelperProcessLifecycle` tracks accepted XPC connections and active privileged operations.
+- The helper schedules a short idle exit when both counts reach zero. A new connection or operation cancels the pending exit.
+- App termination explicitly invalidates its XPC connection after termination cleanup.
+- XPC invalidation or interruption also covers app crash and Force Quit. It requests cancellation for active USB and downloader work; non-cancellable stages and Rosetta installation finish before the process exits.
+- The helper process exiting does not unregister the service. A later Mach-service connection launches it again on demand.
+
+### Passive Readiness Probe
+- Downloader uses an app-side passive readiness probe that reads `SMAppService` status and performs a bounded XPC health check only when the service is enabled.
+- The probe distinguishes user approval required from other helper unavailability.
+- It never registers, repairs, reloads, or otherwise recovers the helper; normal ensure-ready and repair flows remain unchanged.
 
 ### Startup Auto-Repair Flow (version/build change)
 - Entry point: `bootstrapIfNeededAtStartup`.
@@ -139,6 +159,7 @@ Contract invariants:
 - If fingerprint changed, or no previous fingerprint exists (upgrade from older app versions), app runs automatic full helper repair in background.
 - Successful automatic repair updates stored fingerprint, remains visible in logs, and shows a short in-app toast at the bottom of the main window.
 - Failed automatic repair presents one warning `NSAlert` with guidance to run `Tools → Repair helper` manually.
+- Automatic and manual full repair own a repair token from the start of unregister through the final registration health check.
 
 ### Hard-Repair Flow
 - Triggered from Tools menu repair action.
@@ -157,11 +178,14 @@ Contract invariants:
 - Progress events are emitted with stage/status keys and percent updates.
 - Cancellation and failure return deterministic result payloads.
 - Linux raw-copy branch uses helper-side Disk Arbitration mount guard for target USB (`diskX` and `diskXsY`) from `linux_unmount_target` start until `linux_verify_write` terminal outcome, then always releases guard immediately after verify.
+- Manual `.iso`/`.img` raw-image writing reuses `workflowKind: .linux`, the same stage graph, `dd`, mount guard, and SHA-256 verification. The app-only presentation flag is not part of IPC, and no helper contract or stage key changes for this entry path.
+- The manual raw-image source is a regular input file and is not mounted or registered for app-side source-unmount cleanup.
 - Windows 10 64-bit and Windows 11 workflows may include optional `windowsAutounattendConfiguration`; when present, daemon inserts `windows_create_autounattend` after `windows_split_wim` if the split stage exists, otherwise after `windows_create_media`, and always before `windows_verify_media`.
 - `windows_create_autounattend` writes the answer file through Foundation XML APIs, validates XML before and after writing, and media verification validates the saved file again. If the generated XML contains `windowsPE`, helper writes root-level `Autounattend.xml`; otherwise it writes `sources/$OEM$/$$/Panther/unattend.xml` for later setup passes. The `windowsPE` pass is generated for options that require Windows PE setup data, such as the Windows 11 hardware-requirements bypass; Windows 10 64-bit automatic configuration does not generate that bypass.
 - Automatic local-account creation writes the generated local account `Name` separately from the user-facing `DisplayName`. The helper validates `Name` as non-empty ASCII letters/digits, max 20 characters, and not `NONE`; `DisplayName` is non-empty, max 256 characters, not `NONE`, and contains only letters, digits, and spaces.
 - Mac language/region transfer receives app-side validated Windows locale tags, writes `Microsoft-Windows-International-Core` in `oobeSystem`, and uses the language tag as `InputLocale` so Windows selects its default keyboard for that language.
 - Every Windows request must include `windowsBootMode`; the service rejects requests without it before creating an executor.
+- After Windows target formatting, helper resolves the FAT32 partition from the exact requested whole disk, mounts that partition by device identifier when needed, and validates its partition identifier, exact parent whole disk, mount point, and volume UUID before every target-writing or target-verification stage. Volume labels remain presentation metadata and are not target paths.
 - Windows media copy runs only the system-provided `/usr/bin/rsync` with explicit recursive/link/time preservation. The privileged helper does not execute user-managed Homebrew or MacPorts `rsync` binaries and does not request POSIX ownership metadata for the FAT32 target.
 - BIOS mode appends `windows_install_macusboot` after `windows_verify_media` and before cleanup. UEFI retains the existing stage graph.
 - The BIOS stage validates the pinned bundled artifact and the target MBR gap, installs StageTwo at LBA 1...5 before MBR boot code, synchronizes and reads back each write, then verifies the full protected range. It blocks Disk Arbitration auto-mounts, ignores cancellation while active, and performs exactly one final `mountDisk` attempt after releasing raw-device ownership.
@@ -199,6 +223,8 @@ App-side helper integration:
   - app-side helper code-signing requirement, trust-failure diagnostics, and user-facing trust-failure text.
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClient.swift`
   - XPC connection handling, app-side helper trust requirement setup, and app-facing helper calls.
+- `macUSB/Shared/Services/Helper/PrivilegedOperationClientActivity.swift`
+  - app-side lifecycle tokens for accepted long-running USB and downloader helper tasks.
 - `macUSB/Shared/Services/Helper/PrivilegedOperationClientCapabilities.swift`
   - bounded helper capability query for the Windows BIOS preflight.
 - `macUSB/Shared/Services/Helper/HelperServiceManager.swift`
@@ -207,6 +233,8 @@ App-side helper integration:
   - startup bootstrap and approval-related helper lifecycle hooks.
 - `macUSB/Shared/Services/Helper/HelperService/HelperServiceEnsureReadyFlow.swift`
   - readiness and registration flow.
+- `macUSB/Shared/Services/Helper/HelperService/HelperServicePassiveReadiness.swift`
+  - side-effect-free service-status and XPC-health snapshot used by downloader gating.
 - `macUSB/Shared/Services/Helper/HelperService/HelperServiceRepairFlow.swift`
   - hard repair flow and retry/stabilization logic.
 - `macUSB/Shared/Services/Helper/HelperService/HelperServiceStatusUI.swift`
@@ -231,7 +259,9 @@ Daemon helper runtime:
 - `macUSBHelper/Service/PrivilegedHelperServiceCapabilities.swift`
   - helper capability identifiers and advertised capability payload.
 - `macUSBHelper/Service/HelperListenerDelegate.swift`
-  - listener delegate and connection wiring.
+  - listener delegate, connection wiring, and client-disconnection handling.
+- `macUSBHelper/Service/HelperProcessLifecycle.swift`
+  - process-lifetime leases for XPC connections and privileged operations, including guarded idle exit.
 - `macUSBHelper/Workflow/HelperWorkflowExecutor.swift`
   - USB workflow execution orchestration and cancellation.
 - `macUSBHelper/Workflow/HelperWorkflowStages.swift`
@@ -254,6 +284,8 @@ Daemon helper runtime:
   - Windows `Autounattend.xml` configuration helpers, XML generation, and XML validation.
 - `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsBootValidation.swift`
   - boot-mode-aware, case-insensitive BIOS/UEFI source and target marker validation.
+- `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsTargetResolution.swift`
+  - exact whole-disk, FAT32 partition, mount-point, and volume-UUID resolution for the formatted Windows target.
 - `macUSBHelper/Workflow/Windows/MacUSBoot/*`
   - macUSBoot artifact/parser, MBR-gap validation, exclusive raw-device I/O, Disk Arbitration guard, diskutil operations, write transaction, and stage orchestration.
 - `macUSBHelper/DownloaderAssembly/DownloaderAssemblyExecutor.swift`

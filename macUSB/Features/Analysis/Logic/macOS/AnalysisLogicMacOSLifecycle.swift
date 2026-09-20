@@ -3,6 +3,7 @@ import Foundation
 
 extension AnalysisLogic {
     func forceTigerMultiDVDSelection() {
+        MenuState.shared.lockLanguageChanges(reason: "manual_tiger_selection")
         cancelActiveImageAnalysisRun(reason: "Ręczne przełączenie na Tiger Multi DVD")
         self.log("Ręcznie wybrano tryb Tiger Multi DVD")
         let fileURL = self.selectedFileUrl
@@ -102,7 +103,8 @@ extension AnalysisLogic {
                 self.resetLinuxDetectionState()
                 self.resetWindowsDetectionState()
 
-                self.availableDrives = []
+                self.isMacOSCreateInstallMediaVolumeOverrideActive = false
+                self.presentedUSBTargets = self.physicalUSBTargetsCache
                 self.selectedDrive = nil
                 self.hasUnreadableExternalUSBMedia = false
                 self.unreadableExternalUSBMediaCount = 0
