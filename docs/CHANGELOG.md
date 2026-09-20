@@ -1,4 +1,37 @@
 # macUSB Release Changelog
+---
+
+## v2.5
+
+macUSB v2.5 expands installer media creation with support for writing raw disk images and exporting downloaded macOS installers as DMG files. This update also improves USB target selection, downloader behavior, protection of active operations, the background helper lifecycle, and the app’s overall visual consistency.
+
+### ADDED
+
+- Added the ability to write raw `.iso` and `.img` images to external drives using **Tools → Write a Raw Image to a Drive…**.
+- Added the ability to save downloaded macOS installers as `.dmg` disk images.
+- Added the **Option (⌥) + L** keyboard shortcut for exporting diagnostic logs.
+
+### CHANGES
+
+- Replaced manual recognition of unrecognized `.iso` files as Linux images with the raw image writing feature.
+- The app language can now be changed only before file analysis begins or before the downloader is opened.
+- Updated the generic Linux icon to make it visually consistent with the individual distribution icons.
+- After recognizing a macOS or Mac OS X installer, the target list now displays entire physical USB drives.
+- For OS X Yosemite and newer installers, holding **Option (⌥)** while selecting a target reveals compatible GPT/HFS+ volumes that can be used without reformatting the entire drive.
+
+### FIXED
+
+- Fixed Windows installer media creation when another connected volume had the same name as the selected target.
+- Fixed the detection of available macOS public beta releases in the downloader.
+- Fixed the background helper remaining active after macUSB was closed.
+
+### IMPROVEMENTS
+
+- Prevented the app from being closed accidentally while an operation is in progress. The operation must finish or be cancelled manually before the app can be closed.
+- Improved animations throughout the downloader and USB creation process, including version list presentation and transitions between installer selection, downloading, and the summary.
+- Improved validation of required permissions and helper availability before a macOS installer download begins.
+- The Rosetta installation button now uses the Liquid Glass style and displays a confirmation after a successful installation.
+- Refreshed the app icon.
 
 ---
 
