@@ -8,10 +8,10 @@ This document describes the actual structure, content, and behavior of `index.ht
 
 - Browser title: `macUSB - The all-in-one bootable USB creator for Mac`
 - Canonical URL: `https://www.macusb.app/`
-- Preferred preview image: `assets/social/macusb-preview.png` (`1280 × 640` PNG)
+- Preferred preview image: `assets/social/macusb-search-preview.png` (`1280 × 1280` PNG)
 - `index.html` declares the absolute production image URL through `og:image`.
 - JSON-LD uses an `@graph` containing a `WebPage` entity and its `SoftwareApplication` main entity.
-- The `WebPage` entity declares the canonical page identity, browser-title-aligned name, meta-description-aligned description, and the preview image as a `1280 × 640` `ImageObject`.
+- The `WebPage` entity declares the canonical page identity, browser-title-aligned name, meta-description-aligned description, and the preview image as a `1280 × 1280` `ImageObject`.
 - The `SoftwareApplication` entity identifies macUSB as a free macOS utility requiring macOS 14.6 or later, with GitHub Releases as the offer and download destination and the GitHub repository as its matching external identity.
 
 ## Section Order and Content
@@ -59,9 +59,9 @@ This document describes the actual structure, content, and behavior of `index.ht
 - Note: `Oversized Windows .wim files are split automatically to fit within FAT32 limitations.¹`
 - Carousel screenshots:
   - `assets/screenshots/windows-linux/01-windows-11.png`
-  - `assets/screenshots/windows-linux/02-windows-10.png`
+  - `assets/screenshots/windows-linux/02-windows-7.png`
   - `assets/screenshots/windows-linux/03-windows-server-2025.png`
-  - `assets/screenshots/windows-linux/04-windows-server-2022.png`
+  - `assets/screenshots/windows-linux/04-windows-server-2008-r2.png`
   - `assets/screenshots/windows-linux/05-debian.png`
   - `assets/screenshots/windows-linux/06-ubuntu.png`
   - `assets/screenshots/windows-linux/07-opensuse.png`
