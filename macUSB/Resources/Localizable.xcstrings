@@ -3894,84 +3894,84 @@
     },
     "analysis.windows.server.unsupported_edition.description" : {
       "comment" : "Unsupported Windows Server edition message",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die erkannte Windows-Server-Edition wird nicht unterstützt. Unterstützt werden nur Windows-Server-2012- oder neuere Installationsmedien mit EFI-Dateien."
+            "value" : "Die erkannte Windows-Server-Version wird nicht unterstützt. Installationsmedien für Windows Server 2008 R2 oder neuer werden unterstützt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The detected Windows Server edition is not supported. Only Windows Server 2012 or later installers that include EFI files are supported."
+            "value" : "The detected Windows Server version is not supported. Windows Server 2008 R2 or later installers are supported."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La edición de Windows Server detectada no es compatible. Solo se admiten instaladores de Windows Server 2012 o posterior que incluyan archivos EFI."
+            "value" : "La versión de Windows Server detectada no es compatible. Se admiten instaladores de Windows Server 2008 R2 o posterior."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L’édition de Windows Server détectée n’est pas prise en charge. Seuls les programmes d’installation de Windows Server 2012 ou version ultérieure contenant des fichiers EFI sont pris en charge."
+            "value" : "La version de Windows Server détectée n’est pas prise en charge. Les programmes d’installation de Windows Server 2008 R2 ou version ultérieure sont pris en charge."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L’edizione di Windows Server rilevata non è supportata. Sono supportati solo i programmi di installazione di Windows Server 2012 o versioni successive che includono file EFI."
+            "value" : "La versione di Windows Server rilevata non è supportata. Sono supportati i programmi di installazione di Windows Server 2008 R2 o versioni successive."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "検出された Windows Server エディションはサポートされていません。EFI ファイルを含む Windows Server 2012 以降のインストーラのみサポートされています。"
+            "value" : "検出された Windows Server のバージョンはサポートされていません。Windows Server 2008 R2 以降のインストーラがサポートされています。"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wykryta edycja systemu Windows Server nie jest wspierana. Wspierane są tylko instalatory Windows Server 2012 lub nowsze, zawierające pliki EFI."
+            "value" : "Wykryta wersja systemu Windows Server nie jest wspierana. Obsługiwane są instalatory Windows Server 2008 R2 lub nowszych wersji."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A edição do Windows Server detectada não é compatível. Somente instaladores do Windows Server 2012 ou posterior que incluam arquivos EFI são compatíveis."
+            "value" : "A versão detectada do Windows Server não é compatível. Instaladores do Windows Server 2008 R2 ou posterior são compatíveis."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Обнаруженная редакция Windows Server не поддерживается. Поддерживаются только установщики Windows Server 2012 и новее, содержащие файлы EFI."
+            "value" : "Обнаруженная версия Windows Server не поддерживается. Поддерживаются установщики Windows Server 2008 R2 и более новых версий."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Algılanan Windows Server sürümü desteklenmiyor. Yalnızca EFI dosyalarını içeren Windows Server 2012 veya üzeri yükleyiciler desteklenir."
+            "value" : "Algılanan Windows Server sürümü desteklenmiyor. Windows Server 2008 R2 veya üzeri yükleyiciler desteklenir."
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Виявлена редакція Windows Server не підтримується. Підтримуються лише інсталятори Windows Server 2012 або новіших версій, що містять файли EFI."
+            "value" : "Виявлена версія Windows Server не підтримується. Підтримуються інсталятори Windows Server 2008 R2 або новіших версій."
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Phiên bản Windows Server được phát hiện không được hỗ trợ. Chỉ hỗ trợ bộ cài Windows Server 2012 trở lên có chứa tệp EFI."
+            "value" : "Phiên bản Windows Server được phát hiện không được hỗ trợ. Bộ cài Windows Server 2008 R2 trở lên được hỗ trợ."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "检测到的 Windows Server 版本不受支持。仅支持包含 EFI 文件的 Windows Server 2012 及更高版本安装程序。"
+            "value" : "检测到的 Windows Server 版本不受支持。支持 Windows Server 2008 R2 或更高版本的安装程序。"
           }
         }
       }
@@ -4061,84 +4061,84 @@
     },
     "analysis.windows.unsupported_edition.description" : {
       "comment" : "Unsupported Windows edition message",
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die erkannte Windows-Edition wird nicht unterstützt. Unterstützt werden nur Windows-8- oder neuere Installationsmedien mit EFI-Dateien."
+            "value" : "Die erkannte Windows-Version wird nicht unterstützt. Installationsmedien für Windows Vista oder neuer werden unterstützt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The detected Windows edition is not supported. Only Windows 8 or later installers that include EFI files are supported."
+            "value" : "The detected Windows version is not supported. Windows Vista or later installers are supported."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La edición de Windows detectada no es compatible. Solo se admiten instaladores de Windows 8 o posterior que incluyan archivos EFI."
+            "value" : "La versión de Windows detectada no es compatible. Se admiten instaladores de Windows Vista o posterior."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L’édition de Windows détectée n’est pas prise en charge. Seuls les programmes d’installation de Windows 8 ou version ultérieure contenant des fichiers EFI sont pris en charge."
+            "value" : "La version de Windows détectée n’est pas prise en charge. Les programmes d’installation de Windows Vista ou version ultérieure sont pris en charge."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L’edizione di Windows rilevata non è supportata. Sono supportati solo i programmi di installazione di Windows 8 o versioni successive che includono file EFI."
+            "value" : "La versione di Windows rilevata non è supportata. Sono supportati i programmi di installazione di Windows Vista o versioni successive."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "検出された Windows エディションはサポートされていません。EFI ファイルを含む Windows 8 以降のインストーラのみサポートされています。"
+            "value" : "検出された Windows のバージョンはサポートされていません。Windows Vista 以降のインストーラがサポートされています。"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wykryta edycja systemu Windows nie jest wspierana. Wspierane są tylko instalatory Windows 8 lub nowsze, zawierające pliki EFI."
+            "value" : "Wykryta wersja systemu Windows nie jest wspierana. Obsługiwane są instalatory Windows Vista lub nowszych wersji."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A edição do Windows detectada não é compatível. Somente instaladores do Windows 8 ou posterior que incluam arquivos EFI são compatíveis."
+            "value" : "A versão detectada do Windows não é compatível. Instaladores do Windows Vista ou posterior são compatíveis."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Обнаруженная редакция Windows не поддерживается. Поддерживаются только установщики Windows 8 и новее, содержащие файлы EFI."
+            "value" : "Обнаруженная версия Windows не поддерживается. Поддерживаются установщики Windows Vista и более новых версий."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Algılanan Windows sürümü desteklenmiyor. Yalnızca EFI dosyalarını içeren Windows 8 veya üzeri yükleyiciler desteklenir."
+            "value" : "Algılanan Windows sürümü desteklenmiyor. Windows Vista veya üzeri yükleyiciler desteklenir."
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Виявлена редакція Windows не підтримується. Підтримуються лише інсталятори Windows 8 або новіших версій, що містять файли EFI."
+            "value" : "Виявлена версія Windows не підтримується. Підтримуються інсталятори Windows Vista або новіших версій."
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Phiên bản Windows được phát hiện không được hỗ trợ. Chỉ hỗ trợ bộ cài Windows 8 trở lên có chứa tệp EFI."
+            "value" : "Phiên bản Windows được phát hiện không được hỗ trợ. Bộ cài Windows Vista trở lên được hỗ trợ."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "检测到的 Windows 版本不受支持。仅支持包含 EFI 文件的 Windows 8 及更高版本安装程序。"
+            "value" : "检测到的 Windows 版本不受支持。支持 Windows Vista 或更高版本的安装程序。"
           }
         }
       }

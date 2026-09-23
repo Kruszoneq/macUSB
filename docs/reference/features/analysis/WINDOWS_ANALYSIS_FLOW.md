@@ -168,6 +168,7 @@ Current workflow gating:
 - supported Windows detection is shown as successful detection state in analysis card,
 - proceed to installation is enabled for supported Windows images,
 - unsupported Windows detection follows unsupported presentation path,
+- the unsupported warning names Windows Vista or later, or Windows Server 2008 R2 or later,
 - supported ARM detection follows the existing UEFI workflow,
 - boot capabilities and detected family are passed to the summary as rendered handoff data,
 - `8` through `10` and `Server 2012` through `Server 2022` show a segmented BIOS/UEFI control; dual-mode defaults to UEFI and single-mode locks the control to its only eligible mode,
