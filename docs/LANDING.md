@@ -59,9 +59,9 @@ This document describes the actual structure, content, and behavior of `index.ht
 - Note: `Oversized Windows .wim files are split automatically to fit within FAT32 limitations.¹`
 - Carousel screenshots:
   - `assets/screenshots/windows-linux/01-windows-11.png`
-  - `assets/screenshots/windows-linux/02-windows-10.png`
+  - `assets/screenshots/windows-linux/02-windows-7.png`
   - `assets/screenshots/windows-linux/03-windows-server-2025.png`
-  - `assets/screenshots/windows-linux/04-windows-server-2022.png`
+  - `assets/screenshots/windows-linux/04-windows-server-2008-r2.png`
   - `assets/screenshots/windows-linux/05-debian.png`
   - `assets/screenshots/windows-linux/06-ubuntu.png`
   - `assets/screenshots/windows-linux/07-opensuse.png`
