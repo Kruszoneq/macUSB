@@ -180,17 +180,7 @@ Current workflow gating:
 - analysis also computes Windows toolchain probe (`brew`, `wimlib-imagex`) for installation-summary pre-start gating.
 - when Windows summary expects `install.wim` split and `wimlib-imagex` is missing, start is blocked in summary until probe refresh confirms `wimlib-imagex` presence.
 
-Required USB capacity is computed from selected Windows source file size:
-
-- source size `<= 900_000_000` bytes -> `1 GB`,
-- source size `> 900_000_000` and `<= 1_800_000_000` bytes -> `2 GB`,
-- source size `> 1_800_000_000` and `<= 3_600_000_000` bytes -> `4 GB`,
-- source size `> 3_600_000_000` and `<= 7_300_000_000` bytes -> `8 GB`,
-- source size `> 7_300_000_000` and `<= 14_700_000_000` bytes -> `16 GB`,
-- source size `> 14_700_000_000` and `<= 29_400_000_000` bytes -> `32 GB`,
-- source size `> 29_400_000_000` bytes -> `64 GB`.
-
-If source size cannot be resolved from file metadata, fallback capacity is `16 GB`.
+Required USB capacity is the selected source ISO's logical size plus 5%, rounded up to a byte. The UI presents the smallest fitting 2/4/8/16/32/64 GB (or larger doubling) class, while physical USB validation uses the exact byte requirement. If the source size cannot be resolved, analysis alerts the user and applies the `16 GB` class with a `15_000_000_000`-byte threshold.
 
 ## Logging Contract
 

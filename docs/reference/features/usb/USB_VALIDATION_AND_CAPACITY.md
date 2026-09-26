@@ -4,26 +4,16 @@
 
 Before installer recognition completes, required size in UI is unresolved (`-- GB`).
 
-macOS thresholds:
-- major version `<= 14`: UI `16 GB`, technical threshold `15_000_000_000` bytes
-- major version `>= 15`: UI `32 GB`, technical threshold `28_000_000_000` bytes
+For every supported macOS, Linux, Windows, and manually selected raw-image workflow:
 
-Linux, Windows, and manual raw `.iso`/`.img` selection use the same source-image thresholds. Apply the first matching upper limit:
+- the selected `.dmg`, `.iso`, `.cdr`, or `.img` file contributes its logical file size; a selected `.app` contributes the sum of regular-file sizes inside the bundle, without following symbolic links,
+- the exact minimum is `ceil(source bytes × 105 / 100)`, using checked integer arithmetic,
+- the UI shows the smallest decimal-GB class from `2`, `4`, `8`, `16`, `32`, `64`, and further doublings that is at least the exact minimum,
+- target admission compares actual target bytes with the exact minimum, not the displayed class; an unreadable target capacity fails validation.
 
-- source size up to `900_000_000` bytes: UI `1 GB`, technical threshold `900_000_000` bytes
-- source size up to `1_800_000_000` bytes: UI `2 GB`, technical threshold `1_800_000_000` bytes
-- source size up to `3_600_000_000` bytes: UI `4 GB`, technical threshold `3_600_000_000` bytes
-- source size up to `7_300_000_000` bytes: UI `8 GB`, technical threshold `7_300_000_000` bytes
-- source size up to `14_700_000_000` bytes: UI `16 GB`, technical threshold `14_700_000_000` bytes
-- source size up to `29_400_000_000` bytes: UI `32 GB`, technical threshold `29_400_000_000` bytes
-- source size up to `58_800_000_000` bytes: UI `64 GB`, technical threshold `58_800_000_000` bytes
+Source-size resolution runs off the main thread for `.app` bundles. Zero, unreadable, or unrepresentable source sizes use a documented fallback and trigger a user-facing alert. For macOS major version `>= 15`, the fallback is the `32 GB` class with a `28_000_000_000`-byte validation threshold. Older macOS, Linux, Windows, and manual raw-image workflows use the `16 GB` class with a `15_000_000_000`-byte threshold.
 
-Sources above `58_800_000_000` bytes currently remain in the top `64 GB` class.
-
-Manual raw-image selection intentionally keeps this existing class-based policy; it does not add exact byte-size capacity validation.
-
-Fallback for Linux and Windows source-size resolution:
-- if source image size cannot be resolved, required capacity falls back to `16 GB` (instead of unresolved `-- GB`).
+The hardware-requirement card continues to show the drive class. If an Option-selected volume is too small, its error card instead shows the exact required capacity in decimal GB rounded upward to one fractional digit; the byte threshold remains authoritative.
 
 Proceed must remain blocked until selected target passes validation.
 
