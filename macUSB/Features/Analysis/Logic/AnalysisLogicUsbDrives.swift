@@ -156,32 +156,48 @@ extension AnalysisLogic {
         }
     }
 
-    func checkCapacity() {
-        guard let drive = selectedDrive, let minCapacity = usbTargetCapacityRequirement?.minimumBytes else {
+    func checkCapacity(logResult: Bool = false) {
+        guard let drive = selectedDrive else {
             isCapacitySufficient = false
             capacityCheckFinished = false
             return
         }
 
-        if drive.isWholeDiskTarget {
-            let wholeDisk = USBDriveLogic.wholeDiskName(from: drive.device)
-            if let capacity = wholeDiskCapacityCache[wholeDisk] {
-                withAnimation {
-                    isCapacitySufficient = capacity >= minCapacity
-                    capacityCheckFinished = true
-                }
-            } else {
-                isCapacitySufficient = false
-                capacityCheckFinished = true
+        guard let minCapacity = usbTargetCapacityRequirement?.minimumBytes else {
+            isCapacitySufficient = false
+            capacityCheckFinished = false
+            if logResult {
+                log("Walidacja pojemności celu \(drive.device): brak ustalonego wymogu pojemności; wynik=nierozstrzygnięty.", category: "USBSelection")
             }
             return
         }
 
-        if let values = try? drive.url.resourceValues(forKeys: [.volumeTotalCapacityKey]), let capacity = values.volumeTotalCapacity {
-            withAnimation { isCapacitySufficient = Int64(capacity) >= minCapacity; capacityCheckFinished = true }
+        let capacityBytes: Int64?
+        if drive.isWholeDiskTarget {
+            let wholeDisk = USBDriveLogic.wholeDiskName(from: drive.device)
+            capacityBytes = wholeDiskCapacityCache[wholeDisk]
+        } else if let values = try? drive.url.resourceValues(forKeys: [.volumeTotalCapacityKey]),
+                  let capacity = values.volumeTotalCapacity {
+            capacityBytes = Int64(capacity)
         } else {
-            isCapacitySufficient = false
+            capacityBytes = nil
+        }
+
+        let sufficient = capacityBytes.map { $0 >= minCapacity } ?? false
+        withAnimation {
+            isCapacitySufficient = sufficient
             capacityCheckFinished = true
+        }
+
+        if logResult {
+            let kind = drive.isWholeDiskTarget ? "nośnik" : "wolumin"
+            let actualCapacity = capacityBytes.map { "\($0) B" } ?? "nieznana"
+            let result = sufficient ? "spełnia" : "nie spełnia"
+            let reason = capacityBytes == nil ? ", powód=brak odczytu pojemności" : ""
+            log(
+                "Walidacja pojemności wybranego celu [\(kind) \(drive.device)]: wymagane=\(minCapacity) B, pojemność=\(actualCapacity), wynik=\(result)\(reason).",
+                category: "USBSelection"
+            )
         }
     }
 }

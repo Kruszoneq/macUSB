@@ -120,6 +120,10 @@ final class AnalysisLogic: ObservableObject {
                 }
             }
 
+            if oldValue?.selectionID != selectedDrive?.selectionID, selectedDrive != nil {
+                checkCapacity(logResult: true)
+            }
+
             let newSelectionID = selectedDrive?.selectionID
             if selectedDriveSelectionID != newSelectionID {
                 synchronizeDriveSelection {

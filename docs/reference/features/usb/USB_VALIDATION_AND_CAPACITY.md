@@ -81,6 +81,8 @@ Validation logs should include:
 - selected target capacity,
 - final validation decision and block reason.
 
+Selecting a different whole disk or volume logs one capacity-validation result with target kind and identifier, required and actual bytes, and whether the target meets the requirement. An unreadable capacity is logged as insufficient with the read failure as the reason. Periodic target-list refreshes revalidate without repeating this selection log.
+
 ## Update Trigger
 
 Update when thresholds, generation split, target-selection policy, or preformat eligibility changes.
