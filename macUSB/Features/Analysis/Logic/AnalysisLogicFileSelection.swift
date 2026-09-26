@@ -85,7 +85,8 @@ extension AnalysisLogic {
                     self.legacyArchInfo = nil
                     self.userSkippedAnalysis = false
                     self.shouldShowMavericksDialog = false
-                    self.requiredUSBCapacityGB = nil
+                    self.usbTargetCapacityRequirement = nil
+                    self.shouldShowSourceSizeUnavailableAlert = false
                     self.mountedDMGPath = nil
                     self.resetLinuxDetectionState()
                     self.resetWindowsDetectionState()
@@ -142,7 +143,8 @@ extension AnalysisLogic {
                     self.legacyArchInfo = nil
                     self.userSkippedAnalysis = false
                     self.shouldShowMavericksDialog = false
-                    self.requiredUSBCapacityGB = nil
+                    self.usbTargetCapacityRequirement = nil
+                    self.shouldShowSourceSizeUnavailableAlert = false
                     self.mountedDMGPath = nil
                     self.resetLinuxDetectionState()
                     self.resetWindowsDetectionState()

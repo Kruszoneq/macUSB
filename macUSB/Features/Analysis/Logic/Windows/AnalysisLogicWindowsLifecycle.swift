@@ -93,17 +93,13 @@ extension AnalysisLogic {
         )
 
         if result.isSupported {
-            let capacityResolution = resolveRequiredUSBCapacityForImageSource(sourceURL)
-            self.requiredUSBCapacityGB = capacityResolution.requiredCapacityGB
-            if let fileSizeBytes = capacityResolution.sourceFileSizeBytes,
-               let fileSizeSource = capacityResolution.sourceFileSizeSource {
-                self.log("Windows source size: \(fileSizeBytes) bytes (source=\(fileSizeSource))")
-            } else if capacityResolution.usedFallback {
-                self.log("Windows source size unavailable. Applying fallback USB threshold: \(capacityResolution.requiredCapacityGB) GB")
-            }
-            self.log("Windows required USB threshold: \(capacityResolution.requiredCapacityGB) GB")
+            applySourceCapacityRequirement(
+                try? USBTargetCapacityRequirement.forSource(at: sourceURL),
+                sourceURL: sourceURL
+            )
         } else {
-            self.requiredUSBCapacityGB = nil
+            self.usbTargetCapacityRequirement = nil
+            self.shouldShowSourceSizeUnavailableAlert = false
         }
 
         if result.isSupported {

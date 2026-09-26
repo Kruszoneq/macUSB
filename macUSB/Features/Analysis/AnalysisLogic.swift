@@ -165,8 +165,8 @@ final class AnalysisLogic: ObservableObject {
 
     @Published var isCapacitySufficient: Bool = false
     @Published var capacityCheckFinished: Bool = false
-    @Published var requiredUSBCapacityGB: Int? = nil
     @Published var usbTargetCapacityRequirement: USBTargetCapacityRequirement? = nil
+    @Published var shouldShowSourceSizeUnavailableAlert: Bool = false
     var lastUnreadableUSBDetectionDate: Date = .distantPast
     let unreadableUSBDetectionInterval: TimeInterval = 2.5
     var isUnreadableUSBDetectionRunning: Bool = false
@@ -185,7 +185,17 @@ final class AnalysisLogic: ObservableObject {
     private var isSynchronizingDriveSelection: Bool = false
 
     var requiredUSBCapacityDisplayValue: String {
-        requiredUSBCapacityGB.map(String.init) ?? "--"
+        usbTargetCapacityRequirement.map { String($0.displayCapacityGB) } ?? "--"
+    }
+
+    var requiredVolumeCapacityDisplayValue: String {
+        guard let minimumBytes = usbTargetCapacityRequirement?.minimumBytes else { return "--" }
+        let tenths = minimumBytes / 100_000_000 + (minimumBytes % 100_000_000 == 0 ? 0 : 1)
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 1
+        formatter.maximumFractionDigits = 1
+        return formatter.string(from: NSNumber(value: Double(tenths) / 10)) ?? "--"
     }
 
     // Computed: true only when app has recognized a supported system and can proceed normally
@@ -279,7 +289,8 @@ extension AnalysisLogic {
             logError(timeoutReason)
         }
         recognizedVersion = String(localized: "Nie rozpoznano instalatora")
-        requiredUSBCapacityGB = nil
+        usbTargetCapacityRequirement = nil
+        shouldShowSourceSizeUnavailableAlert = false
         sourceAppURL = nil
         detectedSystemIcon = nil
         isBetaInstaller = false

@@ -131,7 +131,8 @@ extension AnalysisLogic {
         selectedDriveSelectionID = nil
         isCapacitySufficient = false
         capacityCheckFinished = false
-        requiredUSBCapacityGB = nil
+        usbTargetCapacityRequirement = nil
+        shouldShowSourceSizeUnavailableAlert = false
         resetLinuxDetectionState()
         resetWindowsDetectionState()
         AppLogging.separator()
