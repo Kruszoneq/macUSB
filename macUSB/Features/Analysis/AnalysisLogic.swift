@@ -166,6 +166,7 @@ final class AnalysisLogic: ObservableObject {
     @Published var isCapacitySufficient: Bool = false
     @Published var capacityCheckFinished: Bool = false
     @Published var requiredUSBCapacityGB: Int? = nil
+    @Published var usbTargetCapacityRequirement: USBTargetCapacityRequirement? = nil
     var lastUnreadableUSBDetectionDate: Date = .distantPast
     let unreadableUSBDetectionInterval: TimeInterval = 2.5
     var isUnreadableUSBDetectionRunning: Bool = false
