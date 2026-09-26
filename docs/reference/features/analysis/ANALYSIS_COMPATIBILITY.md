@@ -44,6 +44,8 @@ For selected macOS `.app` sources and macOS `.app` bundles found inside mounted 
 - invalid `.app` bundles found inside mounted images must not set macOS install-handoff state; `.iso` sources may still continue into Windows/Linux fallback when no valid macOS app is accepted,
 - explicitly recognized unsupported macOS outcomes, including Panther, remain unsupported detection results rather than generic invalid-app results.
 
+For a supported macOS result, USB capacity is derived from the originally selected source: the image file size for `.dmg`, `.iso`, and `.cdr`, or the total logical regular-file size inside a directly selected `.app`. The target threshold is that size plus 5%, rounded up to a byte. A source-size failure uses a visible fallback alert; macOS major version 15 or later uses the `32 GB` class and a `28_000_000_000`-byte threshold, and older versions use the `16 GB` class and a `15_000_000_000`-byte threshold. Unsupported or invalid installer outcomes do not present a source-size fallback alert.
+
 For Windows fallback:
 
 - fallback entry is limited to `.iso` sources,

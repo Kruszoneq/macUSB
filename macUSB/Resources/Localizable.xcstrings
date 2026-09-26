@@ -3728,6 +3728,334 @@
         }
       }
     },
+    "analysis.usb.source_size_unavailable.message" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Größe des ausgewählten Installationsprogramms konnte nicht ermittelt werden. Für das USB-Laufwerk wurde ersatzweise die Größenklasse %@ GB verwendet. Prüfen Sie die Quelle, bevor Sie das Installationsmedium erstellen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The selected installer’s size could not be determined. A fallback drive size class of %@ GB was applied. Check the source before creating the installer."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo determinar el tamaño del instalador seleccionado. Se aplicó la clase de capacidad alternativa de %@ GB para la unidad USB. Comprueba el origen antes de crear el instalador."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de déterminer la taille du programme d’installation sélectionné. Une classe de capacité de secours de %@ Go a été appliquée au support USB. Vérifiez la source avant de créer le programme d’installation."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile determinare le dimensioni del programma di installazione selezionato. È stata applicata la classe di capacità alternativa di %@ GB per l'unità USB. Controlla la sorgente prima di creare il programma di installazione."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したインストーラのサイズを確認できませんでした。USBドライブには代替の容量区分として %@ GB を適用しました。インストーラを作成する前にソースを確認してください。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie można ustalić wielkości wybranego instalatora. Przyjęto zastępczą klasę nośnika %@ GB. Sprawdź źródło przed utworzeniem instalatora."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível determinar o tamanho do instalador selecionado. Foi aplicada a classe alternativa de %@ GB para a unidade USB. Verifique a origem antes de criar o instalador."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось определить размер выбранного установщика. Для USB-накопителя применён резервный класс ёмкости %@ ГБ. Проверьте источник перед созданием установочного носителя."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilen yükleyicinin boyutu belirlenemedi. USB sürücüsü için %@ GB'lık yedek kapasite sınıfı uygulandı. Yükleyiciyi oluşturmadan önce kaynağı kontrol edin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося визначити розмір вибраного інсталятора. Для USB-носія застосовано резервний клас місткості %@ ГБ. Перевірте джерело перед створенням інсталятора."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể xác định kích thước bộ cài đặt đã chọn. Đã áp dụng mức dung lượng dự phòng %@ GB cho thiết bị USB. Hãy kiểm tra nguồn trước khi tạo bộ cài đặt."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法确定所选安装器的大小。已对 USB 驱动器采用 %@ GB 的备用容量档位。创建安装介质前请检查来源。"
+          }
+        }
+      }
+    },
+    "analysis.usb.source_size_unavailable.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Größe der Quelle konnte nicht ermittelt werden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t read the source size"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo determinar el tamaño del origen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de déterminer la taille de la source"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile leggere le dimensioni dell'origine"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ソースのサイズを読み取れませんでした"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się odczytać wielkości źródła"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível ler o tamanho da origem"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось определить размер источника"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaynağın boyutu okunamadı"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося визначити розмір джерела"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể đọc kích thước nguồn"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法读取来源大小"
+          }
+        }
+      }
+    },
+    "analysis.usb.source_size_unavailable.use_fallback" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ersatzgrenze verwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use fallback threshold"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar el límite alternativo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser le seuil de secours"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa la soglia alternativa"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "代替の容量しきい値を使用"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użyj progu zastępczego"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar limite alternativo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать резервный порог"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yedek eşiği kullan"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Використати резервний поріг"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dùng ngưỡng dự phòng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用备用容量阈值"
+          }
+        }
+      }
+    },
+    "analysis.usb.volume_capacity_too_small.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ausgewählte Volume ist zu klein"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The selected volume is too small"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El volumen seleccionado es demasiado pequeño"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le volume sélectionné est trop petit"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il volume selezionato è troppo piccolo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したボリュームの容量が不足しています"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybrany wolumin ma za małą pojemność"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O volume selecionado é pequeno demais"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ёмкость выбранного тома недостаточна"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilen birimin kapasitesi yetersiz"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обсяг вибраного тому замалий"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ổ đĩa được chọn không đủ dung lượng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所选宗卷的容量不足"
+          }
+        }
+      }
+    },
     "analysis.usb.waiting_for_system_detection.description" : {
       "localizations" : {
         "de" : {

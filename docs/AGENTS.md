@@ -59,9 +59,9 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 ### USB target safety and capacity
 
 - Before installer recognition, required capacity in UI is unresolved (`-- GB`).
-- Capacity rules:
-  - major version `<= 14`: `16 GB` UI target and `15_000_000_000` bytes threshold
-  - major version `>= 15`: `32 GB` UI target and `28_000_000_000` bytes threshold
+- For recognized macOS, Linux, Windows, and manual raw-image sources, capacity validation uses the source size plus 5%, rounded up to a whole byte. The UI displays the smallest fitting 2/4/8/16/32/64 GB (and larger doubling) drive class.
+- Image sources use the selected image file size; `.app` sources use the total logical size of regular files in the bundle without following symbolic links.
+- If source size is unavailable, an alert explains the fallback: macOS major version `>= 15` uses the `32 GB` class and `28_000_000_000` bytes; all other flows use the `16 GB` class and `15_000_000_000` bytes.
 - Proceed action stays blocked until selected target passes validation.
 - macOS target selection defaults to physical whole disks and automatically preformats non-PPC targets as GPT/HFS+ with the `mac_USB` label; APFS does not block this path.
 - Standard `createinstallmedia` workflows may reuse an existing GPT/HFS+ volume without preformat only through the analysis-screen Option override.

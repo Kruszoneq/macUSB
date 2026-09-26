@@ -8,6 +8,7 @@ extension AnalysisLogic {
         self.log("Ręcznie wybrano tryb Tiger Multi DVD")
         let fileURL = self.selectedFileUrl
         DispatchQueue.global(qos: .userInitiated).async {
+            let resolvedRequirement = fileURL.flatMap { try? USBTargetCapacityRequirement.forSource(at: $0) }
             var mountPoint: String? = self.mountedDMGPath
             var effectiveSourceAppURL: URL? = nil
             if let url = fileURL {
@@ -24,6 +25,7 @@ extension AnalysisLogic {
                 }
             }
             DispatchQueue.main.async {
+                guard self.selectedFileUrl == fileURL else { return }
                 withAnimation {
                     self.isAnalyzing = false
                     self.userSkippedAnalysis = true
@@ -49,7 +51,12 @@ extension AnalysisLogic {
                     self.legacyArchInfo = nil
                     self.selectedDrive = nil
                     self.capacityCheckFinished = false
-                    self.requiredUSBCapacityGB = 16
+                    if let fileURL {
+                        self.applySourceCapacityRequirement(resolvedRequirement, sourceURL: fileURL)
+                    } else {
+                        self.usbTargetCapacityRequirement = USBTargetCapacityRequirement.fallback()
+                        self.shouldShowSourceSizeUnavailableAlert = true
+                    }
                     self.resetLinuxDetectionState()
                     self.resetWindowsDetectionState()
                 }
@@ -99,7 +106,8 @@ extension AnalysisLogic {
                 self.shouldShowAlreadyMountedSourceAlert = false
                 self.userSkippedAnalysis = false
                 self.shouldShowMavericksDialog = false
-                self.requiredUSBCapacityGB = nil
+                self.usbTargetCapacityRequirement = nil
+                self.shouldShowSourceSizeUnavailableAlert = false
                 self.resetLinuxDetectionState()
                 self.resetWindowsDetectionState()
 

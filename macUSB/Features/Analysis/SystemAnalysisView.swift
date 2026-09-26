@@ -36,6 +36,7 @@ struct SystemAnalysisView: View {
     @State private var isDragTargeted: Bool = false
     @State private var checksumSheetPresentation: AnalysisChecksumSheetPresentation?
     @State private var hostingWindow: NSWindow? = nil
+    @State private var isSourceSizeAlertPresented: Bool = false
     @State private var isOptionModifierPressed: Bool = false
     @State private var optionModifierMonitor: Any? = nil
     
@@ -121,6 +122,32 @@ struct SystemAnalysisView: View {
         }
     }
 
+    private func presentSourceSizeUnavailableDialog() {
+        guard !isSourceSizeAlertPresented,
+              let requirement = logic.usbTargetCapacityRequirement,
+              requirement.usedFallback else { return }
+        isSourceSizeAlertPresented = true
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .warning
+        alert.messageText = String(localized: "analysis.usb.source_size_unavailable.title")
+        alert.informativeText = String(
+            format: String(localized: "analysis.usb.source_size_unavailable.message"),
+            String(requirement.displayCapacityGB)
+        )
+        alert.addButton(withTitle: String(localized: "analysis.usb.source_size_unavailable.use_fallback"))
+
+        let handleClose: (NSApplication.ModalResponse) -> Void = { _ in
+            isSourceSizeAlertPresented = false
+            logic.shouldShowSourceSizeUnavailableAlert = false
+        }
+        if let window = hostingWindow {
+            alert.beginSheetModal(for: window, completionHandler: handleClose)
+        } else {
+            handleClose(alert.runModal())
+        }
+    }
+
     private func updateOptionModifierState(_ isPressed: Bool) {
         guard isOptionModifierPressed != isPressed else { return }
         isOptionModifierPressed = isPressed
@@ -187,6 +214,9 @@ struct SystemAnalysisView: View {
         consumePendingRawLinuxImageAndApply()
         if logic.shouldShowMavericksDialog {
             presentMavericksDialog()
+        }
+        if logic.shouldShowSourceSizeUnavailableAlert {
+            presentSourceSizeUnavailableDialog()
         }
     }
 
@@ -675,6 +705,9 @@ struct SystemAnalysisView: View {
                 .onChange(of: logic.shouldShowAlreadyMountedSourceAlert) { show in
                     if show { presentAlreadyMountedSourceDialog() }
                 }
+                .onChange(of: logic.shouldShowSourceSizeUnavailableAlert) { show in
+                    if show { presentSourceSizeUnavailableDialog() }
+                }
         )
     }
 
@@ -850,11 +883,19 @@ struct SystemAnalysisUSBSectionView: View {
                         HStack {
                             Image(systemName: "xmark.circle.fill").font(sectionIconFont).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading) {
-                                Text("Wybrany nośnik USB ma za małą pojemność").font(.headline).foregroundColor(.red)
+                                if logic.selectedDrive?.isWholeDiskTarget == false {
+                                    Text("analysis.usb.volume_capacity_too_small.title")
+                                        .font(.headline).foregroundColor(.red)
+                                } else {
+                                    Text("Wybrany nośnik USB ma za małą pojemność")
+                                        .font(.headline).foregroundColor(.red)
+                                }
                                 Text(
                                     String(
                                         format: String(localized: "Wymagane jest minimum %@ GB."),
-                                        logic.requiredUSBCapacityDisplayValue
+                                        logic.selectedDrive?.isWholeDiskTarget == false
+                                            ? logic.requiredVolumeCapacityDisplayValue
+                                            : logic.requiredUSBCapacityDisplayValue
                                     )
                                 )
                                 .font(.caption)

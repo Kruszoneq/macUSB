@@ -235,15 +235,10 @@ extension AnalysisLogic {
         self.isPPC = false
         self.legacyArchInfo = nil
         self.userSkippedAnalysis = false
-        let capacityResolution = resolveRequiredUSBCapacityForImageSource(sourceURL)
-        self.requiredUSBCapacityGB = capacityResolution.requiredCapacityGB
-        if let fileSizeBytes = capacityResolution.sourceFileSizeBytes,
-           let fileSizeSource = capacityResolution.sourceFileSizeSource {
-            self.log("Linux source size: \(fileSizeBytes) bytes (source=\(fileSizeSource))")
-        } else if capacityResolution.usedFallback {
-            self.log("Linux source size unavailable. Applying fallback USB threshold: \(capacityResolution.requiredCapacityGB) GB")
-        }
-        self.log("Linux required USB threshold: \(capacityResolution.requiredCapacityGB) GB")
+        applySourceCapacityRequirement(
+            try? USBTargetCapacityRequirement.forSource(at: sourceURL),
+            sourceURL: sourceURL
+        )
 
         self.log("Rozpoznano obraz Linux: \(result.displayName)")
         self.log("Linux source file: \(sourceURL.path)")

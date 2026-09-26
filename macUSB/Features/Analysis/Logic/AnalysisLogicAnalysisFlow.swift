@@ -52,7 +52,8 @@ extension AnalysisLogic {
         macOSArchitectureBlockReason = nil
         macOSRosettaRequirement = .notRequired
         shouldShowAlreadyMountedSourceAlert = false
-        requiredUSBCapacityGB = nil
+        usbTargetCapacityRequirement = nil
+        shouldShowSourceSizeUnavailableAlert = false
         resetLinuxDetectionState()
         resetWindowsDetectionState()
 
@@ -76,6 +77,7 @@ extension AnalysisLogic {
             let analysisRunID = self.beginImageAnalysisRun(sourceURL: url)
             let oldMountPath = self.mountedDMGPath
             DispatchQueue.global(qos: .userInitiated).async {
+                let resolvedRequirement = try? USBTargetCapacityRequirement.forSource(at: url)
                 if let path = oldMountPath {
                     let task = Process(); task.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil"); task.arguments = ["detach", path, "-force"]; try? task.run(); task.waitUntilExit()
                 }
@@ -110,7 +112,6 @@ extension AnalysisLogic {
                         if let (name, rawVer, appURL, _) = mountedReadInfo {
                             self.recognizedVersion = self.formatDetectedMacOSName(rawVersion: rawVer, name: name)
                             self.isBetaInstaller = self.detectBetaInstaller(name: name, appURL: appURL)
-                            self.updateRequiredUSBCapacity(rawVersion: rawVer, name: name)
                             self.sourceAppURL = appURL
                             self.updateDetectedSystemIcon(from: appURL)
 
@@ -147,6 +148,11 @@ extension AnalysisLogic {
                             if !compatibilityApplied {
                                 return
                             }
+                            self.applySourceCapacityRequirement(
+                                resolvedRequirement,
+                                sourceURL: url,
+                                macOSMajorVersion: self.marketingMajorVersion(raw: rawVer, name: name)
+                            )
                         } else if sourceAlreadyMounted {
                             self.recognizedVersion = ""
                             self.sourceAppURL = nil
@@ -165,7 +171,7 @@ extension AnalysisLogic {
                             self.isPPC = false
                             self.legacyArchInfo = nil
                             self.userSkippedAnalysis = false
-                            self.requiredUSBCapacityGB = nil
+                            self.usbTargetCapacityRequirement = nil
                             self.shouldShowAlreadyMountedSourceAlert = true
                             self.resetLinuxDetectionState()
                             self.resetWindowsDetectionState()
@@ -240,7 +246,9 @@ extension AnalysisLogic {
             self.log("Źródło pliku do odczytu wersji: \(url.path)")
             DispatchQueue.global(qos: .userInitiated).async {
                 let inspection = self.inspectMacOSInstallerApp(at: url)
+                let resolvedRequirement = try? USBTargetCapacityRequirement.forSource(at: url)
                 DispatchQueue.main.async {
+                    guard self.selectedFileUrl == url else { return }
                     withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
                         self.isAnalyzing = false
                         self.mountedDMGPath = nil
@@ -248,7 +256,6 @@ extension AnalysisLogic {
                         if let (name, rawVer, appURL) = inspection.appInfo {
                             self.recognizedVersion = self.formatDetectedMacOSName(rawVersion: rawVer, name: name)
                             self.isBetaInstaller = self.detectBetaInstaller(name: name, appURL: appURL)
-                            self.updateRequiredUSBCapacity(rawVersion: rawVer, name: name)
                             self.sourceAppURL = appURL
                             self.updateDetectedSystemIcon(from: appURL)
 
@@ -263,6 +270,11 @@ extension AnalysisLogic {
                             if !self.applyMacosCompatibilityForAppInstaller(name: name, rawVer: rawVer) {
                                 return
                             }
+                            self.applySourceCapacityRequirement(
+                                resolvedRequirement,
+                                sourceURL: url,
+                                macOSMajorVersion: self.marketingMajorVersion(raw: rawVer, name: name)
+                            )
                         } else {
                             self.applyInvalidMacOSInstallerAppState(reason: inspection.decisionReason)
                         }

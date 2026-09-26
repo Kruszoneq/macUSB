@@ -22,11 +22,12 @@
 - `macUSB/Features/Analysis/Checksums/*` — manual post-analysis SHA-256 checksum action for successful non-`.app` source-file flows, including POSIX streaming service, sheet state model, and SwiftUI views.
 - `macUSB/Features/Analysis/Logic/AnalysisLogicFileSelection.swift` — file selection/drop/open-panel logic.
 - `macUSB/Features/Analysis/Logic/AnalysisLogicAnalysisFlow.swift` — orchestration of analysis execution for `.app` and image sources.
+- `macUSB/Features/Analysis/Logic/AnalysisLogicSourceCapacityPolicy.swift` — image and `.app` source-size resolution, exact USB capacity requirement, display class, and fallback policy.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSCompatibility.swift` — macOS-only compatibility/version-family detection rules and flag mapping.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSArchitectureCompatibility.swift` — host/`createinstallmedia` architecture policy and Rosetta requirement handoff.
 - `macUSB/Features/Analysis/Logic/macOS/MacOSCreateInstallMediaArchitecture.swift` — CoreFoundation-backed local executable architecture inspection and normalized Apple Silicon/Intel/universal classification.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSImageMounting.swift` — image mounting + mounted-source guard + legacy image read logic.
-- `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerMetadata.swift` — installer metadata/version parsing and USB capacity mapping helpers.
+- `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerMetadata.swift` — installer metadata and marketing-version parsing.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerIcon.swift` — installer icon discovery.
 - `macUSB/Features/Analysis/Logic/AnalysisLogicUsbDrives.swift` — USB drive enumeration/refresh/capacity checks.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSLifecycle.swift` — reset/cleanup/manual Tiger flow helpers.

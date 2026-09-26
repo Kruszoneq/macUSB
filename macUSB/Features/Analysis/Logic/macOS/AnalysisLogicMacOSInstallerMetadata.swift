@@ -1,14 +1,6 @@
 import Foundation
 
 extension AnalysisLogic {
-    func updateRequiredUSBCapacity(rawVersion: String, name: String) {
-        guard let majorVersion = marketingMajorVersion(raw: rawVersion, name: name) else {
-            requiredUSBCapacityGB = nil
-            return
-        }
-        requiredUSBCapacityGB = (majorVersion >= 15) ? 32 : 16
-    }
-
     func marketingMajorVersion(raw: String, name: String) -> Int? {
         let marketingVersion = formatMarketingVersion(raw: raw, name: name)
         guard let majorToken = marketingVersion.split(separator: ".").first else { return nil }

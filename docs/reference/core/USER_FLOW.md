@@ -11,8 +11,10 @@ Destructive start requires explicit confirmation.
 
 - User selects source and runs analysis.
 - Analysis resolves compatibility flags and workflow branch.
+- Supported-source analysis computes an exact USB capacity requirement from source size plus 5% and presents the smallest fitting drive class; unreadable source size triggers a fallback alert.
 - For macOS installers, analysis also compares the physical Mac architecture with `createinstallmedia`; Intel hosts reject ARM-only tools and unreadable architectures fail closed.
 - Recognized macOS workflows select physical USB whole disks by default. Non-PPC targets are prepared as GPT/HFS+ with the `mac_USB` label; a standard `createinstallmedia` workflow can instead reuse a GPT/HFS+ volume selected through the Option override.
+- Whole-disk capacity is checked against the exact byte requirement. An Option-selected volume is checked against its own total capacity, and its insufficient-capacity card displays the required decimal GB rounded up to one digit.
 - User selects target USB and confirms destructive start.
 - Progress screen reflects helper-driven stages.
 - Finish screen reports success/failure/cancel plus cleanup status.

@@ -51,17 +51,13 @@ extension AnalysisLogic {
             self.capacityCheckFinished = false
             self.shouldShowMavericksDialog = false
             self.shouldShowAlreadyMountedSourceAlert = false
+            self.shouldShowSourceSizeUnavailableAlert = false
         }
 
-        let capacityResolution = resolveRequiredUSBCapacityForImageSource(standardizedURL)
-        requiredUSBCapacityGB = capacityResolution.requiredCapacityGB
-        if let fileSizeBytes = capacityResolution.sourceFileSizeBytes,
-           let fileSizeSource = capacityResolution.sourceFileSizeSource {
-            log("Raw image source size: \(fileSizeBytes) bytes (source=\(fileSizeSource))")
-        } else if capacityResolution.usedFallback {
-            log("Raw image source size unavailable. Applying fallback USB threshold: \(capacityResolution.requiredCapacityGB) GB")
-        }
-        log("Raw image required USB threshold: \(capacityResolution.requiredCapacityGB) GB")
+        applySourceCapacityRequirement(
+            try? USBTargetCapacityRequirement.forSource(at: standardizedURL),
+            sourceURL: standardizedURL
+        )
         log("Ustawiono ręczny zapis surowego obrazu: recognizedVersion=\(recognizedVersion), source=\(standardizedURL.path)")
     }
 }
