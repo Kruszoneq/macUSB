@@ -44,7 +44,7 @@ Cleanup logs should include:
 - result and error details when cleanup fails,
 - finish-eject mode (`standard` or `force`) and Spotlight classification when applicable.
 
-Finish cleanup, duration/result, and eject diagnostics retain the workflow's `USB` label and use English `AppLogging` messages. Raw `stderr` and system error descriptions remain attached to the labeled diagnostic line. The result and error cards continue to use localized UI text.
+Finish cleanup, duration/result, and eject diagnostics retain the selected `[USB_WORKFLOW]` label and use English `AppLogging` messages. Finish cleanup records its app executor, requested mount-point detach and temporary path, detach exit status, temporary-file removal or skip/failure, and final duration/result/cleanup status. Forwarded helper diagnostics retain the same workflow label followed by `[HELPER]`; app-run `hdiutil` and `diskutil` diagnostics have no helper source tag. Raw `stderr` and system error descriptions remain attached to the labeled diagnostic line. The result and error cards continue to use localized UI text.
 
 Allowed application termination records cleanup, temporary-directory removal, helper XPC disconnection, and termination-operation start/finish with English `[APP]` lines. Protected-operation details remain available in blocked-termination diagnostics.
 

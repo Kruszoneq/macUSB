@@ -574,6 +574,11 @@ struct FinishUSBView: View {
     // --- LOGIKA ---
     func performCleanupWithDelay() {
         isCleaning = true
+        AppLogging.info(
+            "Finish cleanup requested: executor=app, detachMountPoint=\(shouldDetachMountPoint), mountPoint=\(mountPoint.path), temporaryPath=\(tempWorkURL.path).",
+            stage: .usb,
+            workflow: loggingWorkflow
+        )
         let cleanupToken = AppActiveOperationRegistry.shared.begin(
             kind: .cleanup,
             context: "finish_screen_cleanup",
@@ -589,11 +594,22 @@ struct FinishUSBView: View {
                 unmountTask.arguments = ["detach", self.mountPoint.path, "-force"]
                 try? unmountTask.run()
                 unmountTask.waitUntilExit()
+                let detachMessage = "Finish cleanup image detach completed: path=\(self.mountPoint.path), exitCode=\(unmountTask.terminationStatus)."
+                if unmountTask.terminationStatus == 0 {
+                    AppLogging.info(detachMessage, stage: .usb, workflow: self.loggingWorkflow)
+                } else {
+                    AppLogging.error(detachMessage, stage: .usb, workflow: self.loggingWorkflow)
+                }
             }
             let tempCleanupNeeded = FileManager.default.fileExists(atPath: self.tempWorkURL.path)
             if tempCleanupNeeded {
                 do {
                     try FileManager.default.removeItem(at: self.tempWorkURL)
+                    AppLogging.info(
+                        "Fallback cleanup removed temporary files: path=\(self.tempWorkURL.path).",
+                        stage: .usb,
+                        workflow: self.loggingWorkflow
+                    )
                 } catch {
                     let stillExists = FileManager.default.fileExists(atPath: self.tempWorkURL.path)
                     let nsError = error as NSError
@@ -618,7 +634,7 @@ struct FinishUSBView: View {
                 }
             } else {
                 AppLogging.info(
-                    "Fallback cleanup skipped: helper already removed temporary files.",
+                    "Fallback cleanup skipped: temporary files were already absent at path=\(self.tempWorkURL.path).",
                     stage: .usb,
                     workflow: self.loggingWorkflow
                 )
