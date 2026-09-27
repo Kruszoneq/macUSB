@@ -43,12 +43,15 @@ Use this map before reading feature-specific references:
 ### Notifications
 - `docs/reference/platform/NOTIFICATIONS_CONTRACT.md`
 
+### Logging
+- `docs/reference/platform/LOGGING_CONTRACT.md`
+
 ### Debug behavior
 - `docs/reference/platform/DEBUG_CONTRACT.md`
 
 ## Logging Rule
 
-Logging expectations are documented inside each feature reference instead of one global logging chapter:
+The global language and line-format contract is in `platform/LOGGING_CONTRACT.md`. Feature-specific event coverage remains in these references:
 - Analysis logs: `ANALYSIS_COMPATIBILITY.md`
 - USB creation logs: `USB_CREATION_WORKFLOWS.md`
 - Finish/cleanup logs: `FINISH_AND_CLEANUP.md`

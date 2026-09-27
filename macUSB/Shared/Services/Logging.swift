@@ -2,20 +2,11 @@ import Foundation
 import OSLog
 import Darwin
 
-/// Centralna infrastruktura logowania dla aplikacji macUSB.
+/// Central logging infrastructure for macUSB.
 ///
-/// Zasady formatu:
-/// - Milestone startu aplikacji:
-///   [HH:MM:SS] Start aplikacji
-///   ------------
-///   Wersja aplikacji: X (Y)
-///   Wersja macOS: A.B(.C)
-///   Model Maca: MacNN,N
-///   Architektura Maca: Apple Silicon (ARM64) / Intel (x86_64)
-///   ------------
-/// - Etapy: `AppLogging.stage("NAZWA ETAPU")` loguje nagłówek z separatorem.
-/// - Kroki: `AppLogging.info("komunikat", category: "FileAnalysis")` lub `AppLogging.error(...)`.
-/// - Brak RunID — eksport obejmuje pojedynczą sesję.
+/// The startup block uses English labels and prefixes every line with `[HH:MM:SS] [APP]`.
+/// Other logging paths are being migrated to the contract in
+/// `docs/reference/platform/LOGGING_CONTRACT.md` in stages.
 public enum AppLogging {
     private static let subsystem = Bundle.main.bundleIdentifier ?? "macUSB"
     private static let appLogger = Logger(subsystem: subsystem, category: "App")
@@ -50,15 +41,15 @@ public enum AppLogging {
         let macVer = macOSVersionString()
         let model = hardwareModelString()
         let architecture = MacHardwareArchitecture.current.diagnosticLabel
-        let message = """
-[\(time)] Start aplikacji
-------------
-Wersja aplikacji: \(appVer)
-Wersja macOS: \(macVer)
-Model Maca: \(model)
-Architektura Maca: \(architecture)
-------------
-"""
+        let prefix = "[\(time)] [APP]"
+        let message = [
+            "\(prefix) ┌─ macUSB session started",
+            "\(prefix) │ App version   : \(appVer)",
+            "\(prefix) │ macOS version : \(macVer)",
+            "\(prefix) │ Mac model     : \(model)",
+            "\(prefix) │ Architecture  : \(architecture)",
+            "\(prefix) └────────────────────────────────────"
+        ].joined(separator: "\n")
         appLogger.info("\(message, privacy: .public)")
         appendToBuffer(message)
     }

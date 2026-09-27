@@ -15,7 +15,7 @@ enum MacHardwareArchitecture: Equatable {
         case .intel:
             return "Intel (x86_64)"
         case .unknown:
-            return "Nieznana"
+            return "Unknown"
         }
     }
 
