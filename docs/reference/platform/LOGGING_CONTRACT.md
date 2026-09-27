@@ -8,6 +8,10 @@ This reference describes the diagnostic logging currently emitted by the app and
 - Raw output from external tools, system error descriptions, file paths, and other source data can retain their original language. Exported lines identify their stage; application-authored explanations around source data are in English. The legacy downloader assembly output normalization is described under Current Exceptions.
 - Keep messages readable and useful in exported diagnostics. Important app-side runtime events go through `AppLogging`.
 
+## Export Buffer
+
+`AppLogging` retains the most recent 10,000 appended log entries in memory for diagnostic export. Older entries are removed when the buffer exceeds this limit.
+
 ## Line Format
 
 - Keep the existing 24-hour local-time prefix `[HH:MM:SS]`.

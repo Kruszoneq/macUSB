@@ -39,7 +39,7 @@ public enum AppLogging {
 
     private static let bufferQueue = DispatchQueue(label: "macUSB.LoggingBuffer")
     private static var buffer: [String] = []
-    private static let bufferMaxLines: Int = 5000
+    private static let bufferMaxLines: Int = 10000
 
     @inline(__always) private static func appendToBuffer(_ message: String) {
         bufferQueue.async {
