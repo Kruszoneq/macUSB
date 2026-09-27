@@ -220,6 +220,7 @@ final class HelperWorkflowExecutor {
 
         guard let targetWholeDisk = try? resolveLinuxTargetWholeDiskName() else {
             os_log("Linux post-mount attempt skipped: cannot resolve target whole disk", type: .default)
+            emitLinuxPostMountDiagnostic("Raw-copy post-mount attempt: skipped because target whole disk could not be resolved.")
             return
         }
 
@@ -250,6 +251,7 @@ final class HelperWorkflowExecutor {
                 targetDevice,
                 process.terminationStatus
             )
+            emitLinuxPostMountDiagnostic("Raw-copy post-mount attempt: target=\(targetDevice), exitCode=\(process.terminationStatus).")
         } catch {
             os_log(
                 "Linux post-mount attempt failed to start: target=%{public}@ error=%{public}@",
@@ -257,6 +259,18 @@ final class HelperWorkflowExecutor {
                 targetDevice,
                 error.localizedDescription
             )
+            emitLinuxPostMountDiagnostic("Raw-copy post-mount attempt: target=\(targetDevice), launchError=\(error.localizedDescription).")
         }
+    }
+
+    private func emitLinuxPostMountDiagnostic(_ message: String) {
+        emitProgress(
+            stageKey: "finalize",
+            titleKey: HelperWorkflowLocalizationKeys.finalizeTitle,
+            percent: latestPercent,
+            statusKey: HelperWorkflowLocalizationKeys.finalizeStatus,
+            logLine: message,
+            shouldAdvancePercent: false
+        )
     }
 }

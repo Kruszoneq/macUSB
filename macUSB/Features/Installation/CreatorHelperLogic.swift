@@ -184,7 +184,7 @@ extension UniversalInstallationView {
                                     updateWorkflowCleanupOperation(for: normalizedStageKey)
                                     if isLinuxWorkflow, previousStageKey != normalizedStageKey {
                                         log(
-                                            "LinuxInstallFlow: stage transition \(previousStageKey.isEmpty ? "<start>" : previousStageKey) -> \(normalizedStageKey)",
+                                            "Stage transition: \(previousStageKey.isEmpty ? "<start>" : previousStageKey) -> \(normalizedStageKey)",
                                             category: "LinuxInstallFlow"
                                         )
                                     }
@@ -254,12 +254,12 @@ extension UniversalInstallationView {
                                                 withAnimation {
                                                     isHelperWorking = true
                                                 }
-                                                log("LinuxInstallFlow: użytkownik wyraził zgodę na wymuszenie odmontowania nośnika.", category: "LinuxInstallFlow")
+                                                log("User approved forced target unmount.", category: "LinuxInstallFlow")
                                                 startHelperWorkflow(true)
                                             },
                                             onCancel: {
                                                 workflowResultDetailMessage = String(localized: "Nośnik USB był używany przez inną aplikację. Nie wyrażono zgody na wymuszenie odmontowania, dlatego proces został przerwany. Zamknij aplikacje korzystające z nośnika i spróbuj ponownie.")
-                                                log("LinuxInstallFlow: użytkownik odmówił wymuszonego odmontowania nośnika.", category: "LinuxInstallFlow")
+                                                log("User declined forced target unmount.", category: "LinuxInstallFlow")
                                                 performLinuxUnmountDeclinedCleanupAndCancel()
                                             }
                                         )
@@ -316,7 +316,7 @@ extension UniversalInstallationView {
                                     }
                                     if isLinuxWorkflow {
                                         log(
-                                            "LinuxInstallFlow: workflow zakończony (success=\(result.success ? "TAK" : "NIE"), cancelled=\(result.isUserCancelled ? "TAK" : "NIE"), failedStage=\(result.failedStage ?? "brak"))",
+                                            "Workflow finished: success=\(result.success), cancelled=\(result.isUserCancelled), failedStage=\(result.failedStage ?? "none"), errorCode=\(result.errorCode.map(String.init) ?? "none").",
                                             category: "LinuxInstallFlow"
                                         )
                                     }
@@ -1060,6 +1060,8 @@ extension UniversalInstallationView {
             return false
         }
         return logLine.hasPrefix("Linux mount guard:")
+            || logLine.hasPrefix("Raw-copy mount guard:")
+            || logLine.hasPrefix("Raw-copy post-mount attempt:")
     }
 
     private func fetchWriteSpeedMBps(for wholeDisk: String) -> Double? {

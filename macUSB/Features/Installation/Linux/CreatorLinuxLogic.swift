@@ -43,7 +43,7 @@ extension UniversalInstallationView {
         }
 
         if isWindowsWorkflow {
-            log("Cleanup Windows: pomijam odmontowanie źródła (obsługa mountu po stronie helpera).")
+            log("Source image detach skipped: Windows source mount is managed by the helper.")
             if FileManager.default.fileExists(atPath: tempURL.path) {
                 try? FileManager.default.removeItem(at: tempURL)
             }
@@ -51,7 +51,7 @@ extension UniversalInstallationView {
         }
 
         if isLinuxWorkflow {
-            log("Cleanup Linux: pomijam odmontowanie obrazu (brak aktywnego mounted image path).")
+            log("Source image detach skipped: no active mounted image path.")
             if FileManager.default.fileExists(atPath: tempURL.path) {
                 try? FileManager.default.removeItem(at: tempURL)
             }

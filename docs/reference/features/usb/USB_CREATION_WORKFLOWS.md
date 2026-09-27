@@ -179,6 +179,8 @@ Linux workflow logs should additionally include:
 - verification summary (source hash preview vs target hash preview, compared byte count, pass/fail),
 - terminal result (`success/fail/cancel`) and failed stage when present.
 
+Recognized Linux creation uses English `[USB_LINUX]` diagnostics; the manually selected raw-image path uses `[USB_RAW]` for the same helper `dd` and SHA-256 stages. Forwarded helper lines, including raw command output, mount-guard activity, verification hashes, and the best-effort post-workflow mount attempt, append `[HELPER]`. The app ignores mount-guard and post-mount diagnostic-only progress events when mapping visible stages, so those logs do not change progress presentation or the terminal result.
+
 ## Update Trigger
 
 Update when stage sequencing, branching, or helper interaction semantics change.
