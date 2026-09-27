@@ -39,14 +39,14 @@ final class InstallerSourceImageUnmountRegistry {
 
         if let normalizedPath {
             AppLogging.info(
-                "Rejestr mount cleanup: zapisano źródło \(family.rawValue): \(normalizedPath) [reason=\(reason)]",
-                category: "ImageCleanup"
+                "Source image cleanup registry: tracked source \(family.rawValue): \(normalizedPath) [reason=\(reason)]",
+                stage: .analysis, workflow: family == .windows ? .windows : .linux
             )
         }
         if let normalizedHint {
             AppLogging.info(
-                "Rejestr mount cleanup: zapisano hint mount \(family.rawValue): \(normalizedHint) [reason=\(reason)]",
-                category: "ImageCleanup"
+                "Source image cleanup registry: tracked mount hint \(family.rawValue): \(normalizedHint) [reason=\(reason)]",
+                stage: .analysis, workflow: family == .windows ? .windows : .linux
             )
         }
     }
@@ -84,8 +84,8 @@ final class InstallerSourceImageUnmountRegistry {
 
         guard !trackedPaths.isEmpty || !fallbackHints.isEmpty else {
             AppLogging.info(
-                "Rejestr mount cleanup: brak śledzonych obrazów dla cleanupu [reason=\(reason)]",
-                category: "ImageCleanup"
+                "Source image cleanup registry: no tracked images to clean up [reason=\(reason)]",
+                stage: .analysis
             )
             if clearAfter {
                 clearTrackedState(for: families)
@@ -101,8 +101,8 @@ final class InstallerSourceImageUnmountRegistry {
         detachTargets = orderedDetachTargets(detachTargets)
         if detachTargets.isEmpty {
             AppLogging.info(
-                "Rejestr mount cleanup: nie znaleziono aktywnych encji do odmontowania [reason=\(reason)]",
-                category: "ImageCleanup"
+                "Source image cleanup registry: no active entities to detach [reason=\(reason)]",
+                stage: .analysis
             )
             if clearAfter {
                 clearTrackedState(for: families)
@@ -111,8 +111,8 @@ final class InstallerSourceImageUnmountRegistry {
         }
 
         AppLogging.info(
-            "Rejestr mount cleanup: start odmontowania (\(detachTargets.count) encji) [reason=\(reason)]",
-            category: "ImageCleanup"
+            "Source image cleanup registry: detaching (\(detachTargets.count) entities) [reason=\(reason)]",
+            stage: .analysis
         )
 
         for target in detachTargets {
@@ -127,16 +127,16 @@ final class InstallerSourceImageUnmountRegistry {
                 process.waitUntilExit()
             } catch {
                 AppLogging.error(
-                    "Rejestr mount cleanup: nie udało się uruchomić detach dla \(target): \(error.localizedDescription)",
-                    category: "ImageCleanup"
+                    "Source image cleanup registry: failed to start detach for \(target): \(error.localizedDescription)",
+                    stage: .analysis
                 )
                 continue
             }
 
             if process.terminationStatus == 0 {
                 AppLogging.info(
-                    "Rejestr mount cleanup: odmontowano \(target)",
-                    category: "ImageCleanup"
+                    "Source image cleanup registry: detached \(target)",
+                    stage: .analysis
                 )
             } else {
                 let stderrText = String(
@@ -146,13 +146,13 @@ final class InstallerSourceImageUnmountRegistry {
 
                 if stderrText.isEmpty {
                     AppLogging.error(
-                        "Rejestr mount cleanup: detach nie powiódł się dla \(target) (kod \(process.terminationStatus))",
-                        category: "ImageCleanup"
+                        "Source image cleanup registry: detach failed for \(target) (exit code \(process.terminationStatus))",
+                        stage: .analysis
                     )
                 } else {
                     AppLogging.error(
-                        "Rejestr mount cleanup: detach nie powiódł się dla \(target): \(stderrText)",
-                        category: "ImageCleanup"
+                        "Source image cleanup registry: detach failed for \(target): \(stderrText)",
+                        stage: .analysis
                     )
                 }
             }
@@ -206,8 +206,8 @@ final class InstallerSourceImageUnmountRegistry {
             try process.run()
         } catch {
             AppLogging.error(
-                "Rejestr mount cleanup: nie udało się uruchomić hdiutil info: \(error.localizedDescription)",
-                category: "ImageCleanup"
+                "Source image cleanup registry: failed to start hdiutil info: \(error.localizedDescription)",
+                stage: .analysis
             )
             return []
         }
@@ -220,13 +220,13 @@ final class InstallerSourceImageUnmountRegistry {
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             if stderrText.isEmpty {
                 AppLogging.error(
-                    "Rejestr mount cleanup: hdiutil info zwrócił kod \(process.terminationStatus)",
-                    category: "ImageCleanup"
+                    "Source image cleanup registry: hdiutil info exited with code \(process.terminationStatus)",
+                    stage: .analysis
                 )
             } else {
                 AppLogging.error(
-                    "Rejestr mount cleanup: hdiutil info błąd: \(stderrText)",
-                    category: "ImageCleanup"
+                    "Source image cleanup registry: hdiutil info failed: \(stderrText)",
+                    stage: .analysis
                 )
             }
             return []

@@ -21,13 +21,13 @@ extension MacOSInstallerAppInspection {
     }
 
     var logSummary: String {
-        let name = displayName ?? "brak"
-        let version = rawVersion ?? "brak"
-        let bundleID = bundleIdentifier ?? "brak"
+        let name = displayName ?? "none"
+        let version = rawVersion ?? "none"
+        let bundleID = bundleIdentifier ?? "none"
         let decision = isAccepted ? "accepted" : "rejected"
         let architecture = createInstallMediaInspection.architecture.diagnosticLabel
         let rawArchitectures = createInstallMediaInspection.rawArchitectures.joined(separator: ",")
-        return "name=\(name), version=\(version), bundleID=\(bundleID), createinstallmedia=\(hasCreateinstallmedia), createinstallmediaArchitecture=\(architecture), rawArchitectures=\(rawArchitectures.isEmpty ? "brak" : rawArchitectures), InstallESD=\(hasInstallESD), decision=\(decision), reason=\(decisionReason)"
+        return "name=\(name), version=\(version), bundleID=\(bundleID), createinstallmedia=\(hasCreateinstallmedia), createinstallmediaArchitecture=\(architecture), rawArchitectures=\(rawArchitectures.isEmpty ? "none" : rawArchitectures), InstallESD=\(hasInstallESD), decision=\(decision), reason=\(decisionReason)"
     }
 }
 
@@ -102,7 +102,7 @@ extension AnalysisLogic {
     }
 
     func applyInvalidMacOSInstallerAppState(reason: String) {
-        logError("Odrzucono aplikację .app jako instalator macOS: \(reason)")
+        logMacOSError("Rejected .app as a macOS installer: \(reason)")
         recognizedVersion = String(localized: "Nie rozpoznano instalatora")
         sourceAppURL = nil
         detectedSystemIcon = nil
@@ -135,7 +135,7 @@ extension AnalysisLogic {
         shouldShowSourceSizeUnavailableAlert = false
         resetLinuxDetectionState()
         resetWindowsDetectionState()
-        AppLogging.separator()
+        AppLogging.separator(stage: .analysis, workflow: isPPC ? .ppc : .macos)
     }
 
     private func isRestoreLegacyInstallerMetadata(name: String, rawVersion: String) -> Bool {

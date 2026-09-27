@@ -54,17 +54,17 @@ final class RawLinuxImageSelectionCoordinator {
         let handleResponse: (NSApplication.ModalResponse) -> Void = { response in
             self.activePanel = nil
             guard response == .OK, let url = panel.url else {
-                AppLogging.info("Anulowano wybór surowego obrazu Linux .img.", category: "FileAnalysis")
+                AppLogging.info("Raw Linux .img selection cancelled.", stage: .analysis, workflow: .raw)
                 return
             }
 
             let standardizedURL = url.standardizedFileURL
             guard ["iso", "img"].contains(standardizedURL.pathExtension.lowercased()) else {
-                AppLogging.error("Pominięto surowy obraz Linux: nieobsługiwane rozszerzenie .\(standardizedURL.pathExtension.lowercased()).", category: "FileAnalysis")
+                AppLogging.error("Raw Linux image rejected: unsupported extension .\(standardizedURL.pathExtension.lowercased()).", stage: .analysis, workflow: .raw)
                 return
             }
 
-            AppLogging.info("Wybrano surowy obraz Linux .img: \(standardizedURL.path)", category: "FileAnalysis")
+            AppLogging.info("Raw Linux .img selected: \(standardizedURL.path)", stage: .analysis, workflow: .raw)
             AnalysisSelectionHandoff.shared.setPendingRawLinuxImageURL(standardizedURL)
             NotificationCenter.default.post(name: .macUSBNavigateToAnalysis, object: nil)
             NotificationCenter.default.post(name: .macUSBApplyPendingRawLinuxImage, object: nil)

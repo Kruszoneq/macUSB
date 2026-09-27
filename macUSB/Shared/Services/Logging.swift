@@ -11,6 +11,16 @@ public enum AppLogging {
     public enum Stage: String {
         case permissions = "PERMISSIONS"
         case helper = "HELPER"
+        case analysis = "ANALYSIS"
+        case usb = "USB"
+    }
+
+    public enum Workflow: String {
+        case macos = "MACOS"
+        case windows = "WINDOWS"
+        case linux = "LINUX"
+        case ppc = "PPC"
+        case raw = "RAW"
     }
 
     private static let subsystem = Bundle.main.bundleIdentifier ?? "macUSB"
@@ -97,23 +107,41 @@ public enum AppLogging {
     }
 
     /// Logs a migrated diagnostic line with the operation stage after the timestamp.
-    public static func info(_ message: String, stage: Stage) {
-        let line = "[\(currentTimeString())] [\(stage.rawValue)] \(message)"
-        let logger = Logger(subsystem: subsystem, category: stage.rawValue)
+    public static func info(_ message: String, stage: Stage, workflow: Workflow? = nil, helperOrigin: Bool = false) {
+        let label = stageLabel(stage, workflow: workflow)
+        let line = formattedLine(message, label: label, helperOrigin: helperOrigin)
+        let logger = Logger(subsystem: subsystem, category: label)
         logger.info("\(line, privacy: .public)")
         appendToBuffer(line)
     }
 
-    public static func error(_ message: String, stage: Stage) {
-        let line = "[\(currentTimeString())] [\(stage.rawValue)] \(message)"
-        let logger = Logger(subsystem: subsystem, category: stage.rawValue)
+    public static func error(_ message: String, stage: Stage, workflow: Workflow? = nil, helperOrigin: Bool = false) {
+        let label = stageLabel(stage, workflow: workflow)
+        let line = formattedLine(message, label: label, helperOrigin: helperOrigin)
+        let logger = Logger(subsystem: subsystem, category: label)
         logger.error("\(line, privacy: .public)")
         appendToBuffer(line)
+    }
+
+    public static func separator(stage: Stage, workflow: Workflow? = nil) {
+        info("------------", stage: stage, workflow: workflow)
     }
 }
 
 // MARK: - Prywatne helpery
 private extension AppLogging {
+    static func formattedLine(_ message: String, label: String, helperOrigin: Bool) -> String {
+        let prefix = "[\(currentTimeString())] [\(label)]\(helperOrigin ? " [HELPER]" : "")"
+        return message.components(separatedBy: "\n")
+            .map { "\(prefix) \($0)" }
+            .joined(separator: "\n")
+    }
+
+    static func stageLabel(_ stage: Stage, workflow: Workflow?) -> String {
+        guard let workflow else { return stage.rawValue }
+        return "\(stage.rawValue)_\(workflow.rawValue)"
+    }
+
     static func currentTimeString() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss"

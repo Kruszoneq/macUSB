@@ -76,6 +76,8 @@ In PPC flow, specialized target formatting behavior must not be forced through s
 
 ## Logging and Diagnostics
 
+Analysis-screen target discovery, selection, and capacity-validation diagnostics use English `AppLogging` lines with the `USB` stage and the recognized workflow suffix (`MACOS`, `PPC`, `WINDOWS`, `LINUX`, or `RAW`). Before a workflow is known, the base `USB` stage is used.
+
 Validation logs should include:
 - computed required threshold,
 - selected target capacity,

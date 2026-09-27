@@ -80,23 +80,23 @@ extension AnalysisLogic {
             || normalizedBundleIdentifier.hasSuffix(".seed")
 
         let isBeta = detectedFromName || detectedFromBundleIdentifier
-        log(
-            "Klasyfikacja prerelease instalatora: beta=\(isBeta), name_signal=\(detectedFromName), seed_bundle_id=\(detectedFromBundleIdentifier), bundle_id=\(bundleIdentifier.isEmpty ? "brak" : bundleIdentifier)"
+        logMacOS(
+            "Installer prerelease classification: beta=\(isBeta), name_signal=\(detectedFromName), seed_bundle_id=\(detectedFromBundleIdentifier), bundle_id=\(bundleIdentifier.isEmpty ? "none" : bundleIdentifier)"
         )
         return isBeta
     }
 
     func readAppInfo(appUrl: URL) -> (String, String, URL)? {
         let plistUrl = appUrl.appendingPathComponent("Contents/Info.plist")
-        self.log("Odczyt Info.plist: \(plistUrl.path)")
+        self.logMacOS("Reading Info.plist: \(plistUrl.path)")
         if let d = try? Data(contentsOf: plistUrl),
            let dict = try? PropertyListSerialization.propertyList(from: d, format: nil) as? [String: Any] {
             let name = (dict["CFBundleDisplayName"] as? String) ?? appUrl.lastPathComponent
             let ver = (dict["CFBundleShortVersionString"] as? String) ?? "?"
-            self.log("Odczytano Info.plist: name=\(name), version=\(ver)")
+            self.logMacOS("Read Info.plist: name=\(name), version=\(ver)")
             return (name, ver, appUrl)
         }
-        self.logError("Nie udało się odczytać Info.plist")
+        self.logMacOSError("Failed to read Info.plist")
         return nil
     }
 }

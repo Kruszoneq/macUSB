@@ -17,6 +17,7 @@ This is the target contract for the staged unification of diagnostic logs. Exist
 
 - For an event belonging to a specific workflow, append its uppercase workflow name to the stage with an underscore: `[STAGE_WORKFLOW]`. Use the same workflow suffix throughout that operation, including errors. Use the base `[STAGE]` when no workflow has been identified or the event spans workflows.
 - Append a separate `[HELPER]` tag after the stage for every diagnostic emitted by the privileged helper or forwarded from it, including its tool output. This tag identifies the source, not the operation. App-side registration, XPC, and repair logs use the `HELPER` stage without the extra source tag. If a helper-origin event also has the `HELPER` stage, keep both tags: `[HELPER] [HELPER]`.
+- For a message containing multiple physical lines, repeat the time, stage, and optional helper-origin prefix on every line while keeping each line's source content intact.
 - Stage and workflow names use uppercase English letters (`A`–`Z`), with one underscore between the stage and workflow. Do not use lowercase or title case.
 - Use a stage label that identifies the operation producing the event, rather than the Swift file or logger implementation.
 - Examples:
@@ -54,7 +55,7 @@ The application starts each exported session with one English `APP` block. Every
 
 Use `Unknown` if the Mac architecture or model cannot be identified. This block is already implemented; other log paths still follow the staged migration noted above.
 
-Full Disk Access check/probe lines, automatic helper update lifecycle lines, app-side XPC helper code-signing requirement diagnostics, and ensure-ready XPC health checks also use the target format. The shared helper repair flow still uses its existing logging path during this staged migration.
+Full Disk Access check/probe lines, automatic helper update lifecycle lines, app-side XPC helper code-signing requirement diagnostics, and ensure-ready XPC health checks also use the target format. Analysis-screen diagnostics, including source selection, macOS/Windows/Linux recognition, manual raw-image selection, SHA-256 calculation, source-image cleanup, and USB target selection/validation, use the target format. The shared helper repair flow still uses its existing logging path during this staged migration.
 
 ## Update Trigger
 

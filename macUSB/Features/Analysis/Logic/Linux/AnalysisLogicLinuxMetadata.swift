@@ -35,7 +35,7 @@ extension AnalysisLogic {
     func readLinuxMetadataFromArchive(sourceURL: URL) -> LinuxImageMetadata? {
         guard let archiveIndex = indexLinuxArchive(sourceURL: sourceURL),
               !archiveIndex.topLevelEntries.isEmpty else {
-            self.log("bsdtar fallback: nie udało się odczytać listy plików archiwum: \(sourceURL.lastPathComponent)")
+            self.logLinux("bsdtar fallback: failed to read archive file list: \(sourceURL.lastPathComponent)")
             return nil
         }
 

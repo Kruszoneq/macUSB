@@ -26,7 +26,7 @@ extension AnalysisLogic {
 
         let waitResult = semaphore.wait(timeout: .now() + timeoutSeconds)
         if waitResult == .timedOut {
-            self.log("Przekroczono soft-timeout mountAndReadInfo (\(Int(timeoutSeconds)) s) dla \(dmgUrl.lastPathComponent). Pomijam wynik montowania i przechodzę do fallbacku Linux (bsdtar).")
+            self.logLinux("mountAndReadInfo soft timeout exceeded (\(Int(timeoutSeconds)) s) for \(dmgUrl.lastPathComponent). Skipping the mount result and continuing with Linux bsdtar fallback.")
             return (nil, true)
         }
 
@@ -34,12 +34,12 @@ extension AnalysisLogic {
     }
 
     func startAnalysis() {
-        cancelActiveImageAnalysisRun(reason: "Start nowej analizy")
+        cancelActiveImageAnalysisRun(reason: "starting new analysis")
         guard let url = selectedFileUrl else { return }
         MenuState.shared.lockLanguageChanges(reason: "analysis_started")
-        self.stage("Analiza pliku — start")
-        self.log("Rozpoczynam analizę pliku")
-        self.log("Źródło pliku do odczytu wersji: \(url.path)")
+        self.stage("File analysis started")
+        AppLogging.info("Starting file analysis", stage: .analysis)
+        AppLogging.info("Source file for version lookup: \(url.path)", stage: .analysis)
         withAnimation { isAnalyzing = true }
         detectedSystemIcon = nil
         isBetaInstaller = false
@@ -58,7 +58,7 @@ extension AnalysisLogic {
         resetWindowsDetectionState()
 
         let ext = url.pathExtension.lowercased()
-        self.log("Wykryto rozszerzenie: \(ext)")
+        self.log("Detected extension: \(ext)")
         if ext == "dmg" || ext == "iso" || ext == "cdr" {
             if ext == "iso" {
                 InstallerSourceImageUnmountRegistry.shared.registerSourceImage(
@@ -72,8 +72,8 @@ extension AnalysisLogic {
                     reason: "analysis_iso_start"
                 )
             }
-            self.stage("Analiza obrazu (DMG/ISO/CDR) — start")
-            self.log("Analiza obrazu (DMG/ISO/CDR): montowanie obrazu przez hdiutil (attach -plist -nobrowse -readonly), odczyt Info.plist z aplikacji oraz wykrywanie wersji i trybu instalacji.")
+            self.stage("Image analysis (DMG/ISO/CDR) started")
+            self.log("Image analysis (DMG/ISO/CDR): attaching with hdiutil (attach -plist -nobrowse -readonly), reading app Info.plist, and detecting the version and installation mode.")
             let analysisRunID = self.beginImageAnalysisRun(sourceURL: url)
             let oldMountPath = self.mountedDMGPath
             DispatchQueue.global(qos: .userInitiated).async {
@@ -102,7 +102,7 @@ extension AnalysisLogic {
                         let mountedImagePath = result?.mountedImagePath
                         let sourceAlreadyMounted = sourceAlreadyMountedPath != nil
                         if let mountPath = sourceAlreadyMountedPath {
-                            self.log("Wykryto, że wybrany obraz źródłowy jest już zamontowany: \(mountPath)")
+                            self.log("Selected source image is already mounted: \(mountPath)")
                         }
                         if let (_, _, _, mp) = mountedReadInfo {
                             self.mountedDMGPath = mp
@@ -123,7 +123,7 @@ extension AnalysisLogic {
                             ) else {
                                 self.completeImageAnalysisRunIfCurrent(
                                     analysisRunID,
-                                    reason: "Zablokowano instalator macOS przez zgodność architektury"
+                                    reason: "macOS installer blocked by architecture compatibility"
                                 )
                                 return
                             }
@@ -144,7 +144,7 @@ extension AnalysisLogic {
                                 rawVer: rawVer,
                                 userVisibleVersionFromMounted: userVisibleVersionFromMounted
                             )
-                            self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "Rozpoznano instalator macOS z obrazu")
+                            self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "macOS installer recognized from image")
                             if !compatibilityApplied {
                                 return
                             }
@@ -175,37 +175,37 @@ extension AnalysisLogic {
                             self.shouldShowAlreadyMountedSourceAlert = true
                             self.resetLinuxDetectionState()
                             self.resetWindowsDetectionState()
-                            self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "Analiza zatrzymana: obraz źródłowy był już zamontowany")
-                            AppLogging.separator()
+                            self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "analysis stopped: source image was already mounted")
+                            AppLogging.separator(stage: .analysis)
                         } else {
                             if ext == "iso" {
                                 if mountReadTimedOut {
-                                    self.log("Po soft-timeout mountAndReadInfo pomijam fallback Windows z mount-path i przechodzę do Linux fallback (bsdtar).")
+                                    self.logLinux("After the mountAndReadInfo soft timeout, skipping mounted Windows fallback and continuing with Linux bsdtar fallback.")
                                 }
 
                                 if let mountedImagePath {
-                                    self.log("Nie rozpoznano instalatora macOS. Przechodzę do procesu rozpoznawania Windows (z zamontowanego obrazu).")
+                                    self.logWindows("macOS installer not recognized. Starting Windows detection from the mounted image.")
                                     if let windowsResult = self.detectWindows(fromMountPath: mountedImagePath, sourceURL: url) {
                                         self.applyWindowsDetectionResult(
                                             windowsResult,
                                             sourceURL: url,
                                             mountedImagePath: mountedImagePath
                                         )
-                                        self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "Rozpoznano obraz Windows z zamontowanego źródła")
+                                        self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "Windows image recognized from mounted source")
                                         return
                                     }
 
                                     self.captureLinuxAttachSessionIfNeeded(sourceURL: url, reason: "linux_fallback_entry")
-                                    self.log("Nie rozpoznano instalatora macOS/Windows. Przechodzę do procesu rozpoznawania Linuxa (z zamontowanego obrazu).")
+                                    self.logLinux("macOS and Windows installers not recognized. Starting Linux detection from the mounted image.")
                                     if let linuxResult = self.detectLinux(fromMountPath: mountedImagePath, sourceURL: url) {
                                         self.applyLinuxDetectionResult(linuxResult, sourceURL: url, mountedImagePath: mountedImagePath)
-                                        self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "Rozpoznano obraz Linux z zamontowanego źródła")
+                                        self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "Linux image recognized from mounted source")
                                         return
                                     }
                                 }
 
                                 self.captureLinuxAttachSessionIfNeeded(sourceURL: url, reason: "linux_fallback_entry")
-                                self.log("Nie rozpoznano instalatora macOS/Windows. Przechodzę do procesu rozpoznawania Linuxa przez bsdtar (bez montowania).")
+                                self.logLinux("macOS and Windows installers not recognized. Starting Linux detection with bsdtar without mounting.")
                                 self.isAnalyzing = true
                                 DispatchQueue.global(qos: .userInitiated).async {
                                     let linuxResult = self.detectLinuxFromArchive(sourceURL: url)
@@ -220,12 +220,12 @@ extension AnalysisLogic {
                                             if let linuxResult {
                                                 let mountPathForFallback = self.mountedDMGPath
                                                 self.applyLinuxDetectionResult(linuxResult, sourceURL: url, mountedImagePath: mountPathForFallback)
-                                                self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "Rozpoznano obraz Linux przez bsdtar")
+                                                self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "Linux image recognized by bsdtar")
                                                 return
                                             }
 
-                                            self.log("Nie wykryto wiarygodnych sygnałów Linuxa. Kończę analizę jako nierozpoznaną.")
-                                            self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "Brak sygnałów Linuxa po fallbacku bsdtar")
+                                            self.logLinux("No reliable Linux markers found. Finishing analysis as unrecognized.")
+                                            self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "no Linux markers after bsdtar fallback")
                                             self.applyUnrecognizedInstallerState()
                                         }
                                     }
@@ -233,7 +233,7 @@ extension AnalysisLogic {
                                 return
                             }
 
-                            self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "Brak rozpoznania instalatora dla obrazu")
+                            self.completeImageAnalysisRunIfCurrent(analysisRunID, reason: "no installer recognized in image")
                             self.applyUnrecognizedInstallerState()
                         }
                     }
@@ -241,9 +241,9 @@ extension AnalysisLogic {
             }
         }
         else if ext == "app" {
-            self.stage("Analiza aplikacji (.app) — start")
-            self.log("Analiza aplikacji (.app): odczyt Info.plist, sprawdzenie payloadu instalatora (createinstallmedia/InstallESD.dmg) oraz wykrywanie wersji i trybu instalacji.")
-            self.log("Źródło pliku do odczytu wersji: \(url.path)")
+            self.stage("App analysis (.app) started", workflow: .macos)
+            self.logMacOS("App analysis (.app): reading Info.plist, checking installer payload (createinstallmedia/InstallESD.dmg), and detecting the version and installation mode.")
+            self.logMacOS("Source file for version lookup: \(url.path)")
             DispatchQueue.global(qos: .userInitiated).async {
                 let inspection = self.inspectMacOSInstallerApp(at: url)
                 let resolvedRequirement = try? USBTargetCapacityRequirement.forSource(at: url)
@@ -252,7 +252,7 @@ extension AnalysisLogic {
                     withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
                         self.isAnalyzing = false
                         self.mountedDMGPath = nil
-                        self.log("Walidacja aplikacji instalatora macOS: \(inspection.logSummary)")
+                        self.logMacOS("macOS installer app validation: \(inspection.logSummary)")
                         if let (name, rawVer, appURL) = inspection.appInfo {
                             self.recognizedVersion = self.formatDetectedMacOSName(rawVersion: rawVer, name: name)
                             self.isBetaInstaller = self.detectBetaInstaller(name: name, appURL: appURL)

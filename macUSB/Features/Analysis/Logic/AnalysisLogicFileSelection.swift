@@ -17,37 +17,37 @@ extension AnalysisLogic {
                 try task.run()
                 task.waitUntilExit()
             } catch {
-                self.logError("Nie udało się uruchomić odmontowania poprzedniego obrazu: \(mountPath) (\(error.localizedDescription))")
+                self.logUnclassifiedError("Failed to start detaching the previous image: \(mountPath) (\(error.localizedDescription))")
                 return
             }
 
             if task.terminationStatus == 0 {
-                self.log("Odmontowano poprzednio wybrany obraz: \(mountPath)")
+                self.logUnclassified("Detached previously selected image: \(mountPath)")
             } else {
                 let stderrText = String(decoding: errorPipe.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                 if stderrText.isEmpty {
-                    self.logError("Odmontowanie poprzedniego obrazu nie powiodło się: \(mountPath) (kod \(task.terminationStatus))")
+                    self.logUnclassifiedError("Detaching the previous image failed: \(mountPath) (exit code \(task.terminationStatus))")
                 } else {
-                    self.logError("Odmontowanie poprzedniego obrazu nie powiodło się: \(mountPath): \(stderrText)")
+                    self.logUnclassifiedError("Detaching the previous image failed: \(mountPath): \(stderrText)")
                 }
             }
         }
     }
 
     func handleDrop(providers: [NSItemProvider]) -> Bool {
-        self.log("Odebrano przeciągnięcie pliku (providers=\(providers.count)). Szukam URL...")
+        self.logUnclassified("Received file drop (providers=\(providers.count)). Looking for URL...")
         if let provider = providers.first(where: { $0.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) }) {
             provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { (item, _) in
                 if let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) {
-                    self.log("Przeciągnięto plik w formacie .\(url.pathExtension.lowercased())")
+                    self.logUnclassified("Dropped file with extension .\(url.pathExtension.lowercased())")
                     let ext = url.pathExtension.lowercased()
                     if ext == "dmg" || ext == "app" || ext == "iso" || ext == "cdr" {
                         self.processDroppedURL(url)
                     }
                 }
                 else if let url = item as? URL {
-                    self.log("Przeciągnięto plik w formacie .\(url.pathExtension.lowercased())")
+                    self.logUnclassified("Dropped file with extension .\(url.pathExtension.lowercased())")
                     let ext = url.pathExtension.lowercased()
                     if ext == "dmg" || ext == "app" || ext == "iso" || ext == "cdr" {
                         self.processDroppedURL(url)
@@ -62,9 +62,9 @@ extension AnalysisLogic {
     func processDroppedURL(_ url: URL) {
         DispatchQueue.main.async {
             let ext = url.pathExtension.lowercased()
-            self.log("Wybrano plik w formacie .\(ext). Resetuję stan i przygotowuję analizę.")
+            self.logUnclassified("Selected file with extension .\(ext). Resetting state and preparing analysis.")
             if ext == "dmg" || ext == "app" || ext == "iso" || ext == "cdr" {
-                self.cancelActiveImageAnalysisRun(reason: "Zmiana wybranego pliku podczas analizy")
+                self.cancelActiveImageAnalysisRun(reason: "source file changed during analysis")
                 let previousMountedPath = self.mountedDMGPath
                 withAnimation {
                     self.selectedFilePath = url.path
@@ -91,8 +91,8 @@ extension AnalysisLogic {
                     self.resetLinuxDetectionState()
                     self.resetWindowsDetectionState()
                 }
-                self.log("Lokalizacja wybranego pliku: \(url.path)")
-                self.log("Źródło do rozpoznania wersji: \(url.path)")
+                self.logUnclassified("Selected file path: \(url.path)")
+                self.logUnclassified("Source for version detection: \(url.path)")
                 self.detachPreviousMountedImageAfterSelectionChange(previousMountedPath)
             }
         }
@@ -101,7 +101,7 @@ extension AnalysisLogic {
     func applySelectedURLAndStartAnalysis(_ url: URL) {
         let ext = url.pathExtension.lowercased()
         guard ext == "dmg" || ext == "app" || ext == "iso" || ext == "cdr" else {
-            logError("Pominięto automatyczne podstawienie ścieżki. Nieobsługiwany format: .\(ext)")
+            logUnclassifiedError("Automatic path handoff skipped. Unsupported format: .\(ext)")
             return
         }
 
@@ -112,7 +112,7 @@ extension AnalysisLogic {
     }
 
     func selectDMGFile() {
-        self.log("Otwieram panel wyboru pliku…")
+        self.logUnclassified("Opening file selection panel…")
         let p = NSOpenPanel()
         p.allowedContentTypes = [.diskImage, .applicationBundle]
         // Dodajemy obsługę .iso i .cdr, które nie mają jeszcze UTType w UniformTypeIdentifiers, więc rozszerzamy allowedFileTypes
@@ -122,7 +122,7 @@ extension AnalysisLogic {
             if $0 == .OK, let url = p.url {
                 let ext = url.pathExtension.lowercased()
                 guard ext == "dmg" || ext == "iso" || ext == "cdr" || ext == "app" else { return }
-                self.cancelActiveImageAnalysisRun(reason: "Wybrano nowy plik źródłowy")
+                self.cancelActiveImageAnalysisRun(reason: "selected a new source file")
                 let previousMountedPath = self.mountedDMGPath
                 withAnimation {
                     self.selectedFilePath = url.path
@@ -149,12 +149,12 @@ extension AnalysisLogic {
                     self.resetLinuxDetectionState()
                     self.resetWindowsDetectionState()
                 }
-                self.log("Wybrano plik w formacie .\(ext)")
-                self.log("Lokalizacja wybranego pliku: \(url.path)")
-                self.log("Źródło do rozpoznania wersji: \(url.path)")
+                self.logUnclassified("Selected file with extension .\(ext)")
+                self.logUnclassified("Selected file path: \(url.path)")
+                self.logUnclassified("Source for version detection: \(url.path)")
                 self.detachPreviousMountedImageAfterSelectionChange(previousMountedPath)
             } else {
-                self.log("Anulowano wybór pliku")
+                self.logUnclassified("File selection cancelled")
             }
         }
     }
