@@ -253,8 +253,8 @@ Minor helper changes that do not alter behavior may proceed, but must still be r
 
 ## File naming rules
 
-- File names must use letters only (`A-Z`, `a-z`) by default.
-- Use `PascalCase` and compose names from:
+- For code files, use letters only (`A-Z`, `a-z`) in the filename stem by default.
+- Name code files in `PascalCase` (words joined together, each starting with an uppercase letter) and compose names from:
   - feature/domain prefix,
   - concrete responsibility,
   - role suffix.
@@ -263,8 +263,9 @@ Minor helper changes that do not alter behavior may proceed, but must still be r
   - `MacOSDiscoveryCatalogParser.swift`
   - `MacOSDownloadOrchestrator.swift`
   - `MacOSDownloaderListView.swift`
-- The underscore (`_`) is allowed only when an external or required structure mandates it (for example GitHub workflow conventions).
-- Do not use spaces, hyphens, digits, or other special characters in file names unless required by external format constraints.
+- In code filenames, the underscore (`_`) is allowed only when an external or required structure mandates it (for example GitHub workflow conventions).
+- Do not use spaces, hyphens, digits, or other special characters in code filenames unless required by external format constraints.
+- For new documentation files, write the filename stem in uppercase letters and separate words with underscores (for example `USB_CREATION_WORKFLOWS.md`).
 
 ## Large file split rule
 
