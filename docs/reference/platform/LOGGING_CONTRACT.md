@@ -15,21 +15,29 @@ This is the target contract for the staged unification of diagnostic logs. Exist
 
   `[HH:MM:SS] [STAGE] Message`
 
-- `STAGE` must be written entirely in uppercase letters (`APP`, `PERMISSIONS`, `ANALYSIS`, `USB`), never in lowercase or title case.
-- Use a stage label that identifies the operation producing the event, rather than the Swift file or logger implementation. Keep a label consistent across all entries for that operation, including its errors and forwarded helper diagnostics.
+- For an event belonging to a specific workflow, append its uppercase workflow name to the stage with an underscore: `[STAGE_WORKFLOW]`. Use the same workflow suffix throughout that operation, including errors. Use the base `[STAGE]` when no workflow has been identified or the event spans workflows.
+- Append a separate `[HELPER]` tag after the stage for every diagnostic emitted by the privileged helper or forwarded from it, including its tool output. This tag identifies the source, not the operation. App-side registration, XPC, and repair logs use the `HELPER` stage without the extra source tag. If a helper-origin event also has the `HELPER` stage, keep both tags: `[HELPER] [HELPER]`.
+- Stage and workflow names use uppercase English letters (`A`–`Z`), with one underscore between the stage and workflow. Do not use lowercase or title case.
+- Use a stage label that identifies the operation producing the event, rather than the Swift file or logger implementation.
 - Examples:
 
   `[14:32:08] [PERMISSIONS] Full Disk Access check started.`
 
-  `[14:32:11] [ANALYSIS] Selected source is a macOS installer image.`
+  `[14:32:11] [ANALYSIS_MACOS] Selected source is a macOS installer image.`
 
-  `[14:35:42] [USB] Target disk validation passed.`
+  `[14:33:20] [ANALYSIS_WINDOWS] Windows installer image detected.`
+
+  `[14:35:42] [USB_WINDOWS] Target disk validation passed.`
+
+  `[14:35:47] [USB_WINDOWS] [HELPER] Target format completed.`
 
 ## Stage Labels
 
 Use `APP` for startup and application lifecycle, `PERMISSIONS` for access and background-approval checks, `ANALYSIS` for source detection and compatibility, `USB` for target validation and media creation or cleanup, `DOWNLOADER` for installer discovery and download, `HELPER` for helper registration, XPC readiness, and repair, and `NOTIFICATIONS` for notification authorization and delivery. Add another short English label when an operation does not fit these stages, and use it consistently.
 
-The stage describes the work, even when a different component emits the line. For example, a helper diagnostic from USB creation uses `USB`; a helper connection diagnostic uses `HELPER`.
+Choose the workflow suffix from the actual branch of work. Examples include `ANALYSIS_LINUX`, `USB_MACOS`, and `USB_PPC`; use the same pattern for other workflows.
+
+The stage describes the work, even when a different component emits the line. For example, a helper diagnostic from a Windows USB creation workflow uses `USB_WINDOWS` plus the `HELPER` source tag; an app-side helper connection diagnostic uses the `HELPER` stage alone.
 
 ## Startup Block
 

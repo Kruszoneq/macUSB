@@ -114,8 +114,8 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 
 ### Logging and notifications invariants
 
-- Important runtime logs must go through `AppLogging`.
-- App-authored diagnostic logs use English and follow the timestamp-then-stage format defined in `docs/reference/platform/LOGGING_CONTRACT.md`. The `STAGE` label must use uppercase letters. Apply this contract as logging paths are migrated in stages.
+- Important app-side runtime logs must go through `AppLogging`.
+- App- and helper-authored diagnostic logs use English and follow the timestamp-then-stage format defined in `docs/reference/platform/LOGGING_CONTRACT.md`. Stage and workflow labels use uppercase letters; workflow-specific operations use `[STAGE_WORKFLOW]`, and helper-origin lines append `[HELPER]` after the stage. Apply this contract as logging paths are migrated in stages.
 - Logs remain human-readable and export-ready for diagnostics.
 - Notification permission prompting remains user-initiated from menu when state is not determined.
 - Completion notifications are gated by system authorization and app-level policy.
