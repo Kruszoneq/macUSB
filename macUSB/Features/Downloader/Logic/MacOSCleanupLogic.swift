@@ -40,16 +40,21 @@ extension MontereyDownloadFlowModel {
                 completedStages.insert(.cleanup)
                 return
             }
-            let reason = helperCleanupFailureMessage ?? String(localized: "Helper nie potwierdził usunięcia plików tymczasowych")
             cleanupWarningMessage = String(localized: "Instalator został przygotowany, ale usuwanie plików tymczasowych nie zostało ukończone automatycznie.")
             cleanupStatusText = String(localized: "Kończenie pracy z ostrzeżeniem...")
             summaryTemporaryFilesText = String(localized: "Wymaga ręcznego dokończenia")
             cleanupProgress = 1
             completedStages.insert(.cleanup)
             AppLogging.error(
-                "Helper cleanup was not confirmed: \(reason)",
+                "Helper cleanup was not confirmed.",
                 stage: .downloader, workflow: loggingWorkflow
             )
+            if let helperCleanupFailureMessage, !helperCleanupFailureMessage.isEmpty {
+                AppLogging.error(
+                    helperCleanupFailureMessage,
+                    stage: .downloader, workflow: loggingWorkflow, helperOrigin: true
+                )
+            }
             return
         }
 
