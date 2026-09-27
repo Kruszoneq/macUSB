@@ -12,16 +12,16 @@ extension HelperServiceManager {
                 self.startRepairPresentation()
             }
         }
-        reportHelperServiceEvent("Rozpoczęto naprawę helpera z menu.")
+        reportHelperRepairEvent("Manual helper repair started from the Tools menu.")
         PrivilegedOperationClient.shared.resetConnectionForRecovery()
-        reportHelperServiceEvent("Zresetowano lokalne połączenie XPC przed naprawą.")
+        reportHelperRepairEvent("Reset the local XPC connection before repair.")
 
         performFullRepairFromMenu { ready, message in
             self.finishRepairFlow()
             let summary = message ?? (ready
                                       ? String(localized: "Naprawa helpera zakończona")
                                       : String(localized: "Naprawa helpera zakończona błędem"))
-            self.reportHelperServiceEvent("Naprawa helpera zakończona: \(ready ? "OK" : "BŁĄD"). Szczegóły: \(summary)")
+            self.reportHelperRepairEvent("Manual helper repair finished: success=\(ready).", isError: !ready)
             DispatchQueue.main.async {
                 self.finishRepairPresentation(success: ready, message: summary)
             }
@@ -30,17 +30,19 @@ extension HelperServiceManager {
     func performFullRepairFromMenu(completion: @escaping EnsureCompletion) {
         let operationToken = AppActiveOperationRegistry.shared.begin(
             kind: .helperRepair,
-            context: "helper_full_repair"
+            context: "helper_full_repair",
+            logStage: .helper,
+            logWorkflow: .repair
         )
         let trackedCompletion: EnsureCompletion = { ready, message in
             operationToken.finish()
             completion(ready, message)
         }
-        reportHelperServiceEvent("Uruchamiam pełny reset helpera: unregister -> brak odpowiedzi starego -> register -> health-check.")
+        reportHelperRepairEvent("Starting full helper reset: unregister, verify old service shutdown, register, then check XPC health.")
 
         guard isLocationRequirementSatisfied() else {
             let message = String(localized: "Aby uruchomić helper systemowy, aplikacja musi znajdować się w katalogu Applications.")
-            reportHelperServiceEvent("Naprawa przerwana: warunek lokalizacji aplikacji niespełniony.")
+            reportHelperRepairEvent("Repair stopped: application location requirement not met.", isError: true)
             DispatchQueue.main.async {
                 self.presentMoveToApplicationsAlert()
                 trackedCompletion(false, message)
@@ -51,7 +53,7 @@ extension HelperServiceManager {
         coordinationQueue.async {
             if self.ensureInProgress {
                 let message = String(localized: "Trwa inna operacja helpera. Poczekaj chwilę i spróbuj ponownie.")
-                self.reportHelperServiceEvent("Naprawa przerwana: trwa równoległa operacja helpera.")
+                self.reportHelperRepairEvent("Repair stopped: another helper operation is active.", isError: true)
                 DispatchQueue.main.async {
                     trackedCompletion(false, message)
                 }
@@ -59,7 +61,7 @@ extension HelperServiceManager {
             }
 
             let service = SMAppService.daemon(plistName: Self.daemonPlistName)
-            self.reportHelperServiceEvent("Status helpera przed resetem: \(self.statusDescription(service.status)).")
+            self.reportHelperRepairEvent("Helper status before reset: \(self.diagnosticStatusDescription(service.status)).")
 
             self.performHardUnregisterPhase(service: service) { teardownOK, teardownMessage in
                 guard teardownOK else {
@@ -76,15 +78,16 @@ extension HelperServiceManager {
         service: SMAppService,
         completion: @escaping (Bool, String?) -> Void
     ) {
-        reportHelperServiceEvent("Wywołuję SMAppService.unregister() przed pełnym resetem helpera.")
+        reportHelperRepairEvent("Calling SMAppService.unregister() before the full helper reset.")
         service.unregister { error in
             self.coordinationQueue.async {
                 if let error {
-                    self.reportHelperServiceEvent(
-                        "SMAppService.unregister() zwróciło błąd: \(self.diagnosticErrorDescription(for: error)). Kontynuuję weryfikację teardown."
+                    self.reportHelperRepairEvent(
+                        "SMAppService.unregister() returned an error: \(self.diagnosticErrorDescription(for: error)). Continuing shutdown verification.",
+                        isError: true
                     )
                 } else {
-                    self.reportHelperServiceEvent("SMAppService.unregister() zakończone.")
+                    self.reportHelperRepairEvent("SMAppService.unregister() completed.")
                 }
 
                 self.schedulePostUnregisterVerification(
@@ -103,16 +106,16 @@ extension HelperServiceManager {
         completion: @escaping (Bool, String?) -> Void
     ) {
         let secondsText = Int(delaySeconds.rounded())
-        reportHelperServiceEvent("Oczekiwanie \(secondsText) s po unregister na stabilizację usługi.")
+        reportHelperRepairEvent("Waiting \(secondsText) s after unregister for service stabilization.")
 
         coordinationQueue.asyncAfter(deadline: .now() + delaySeconds) {
             let statusAfterUnregister = service.status
-            self.reportHelperServiceEvent("Status helpera po unregister: \(self.statusDescription(statusAfterUnregister)).")
+            self.reportHelperRepairEvent("Helper status after unregister: \(self.diagnosticStatusDescription(statusAfterUnregister)).")
 
             if statusAfterUnregister == .enabled {
                 if allowExtendedDelay {
-                    self.reportHelperServiceEvent(
-                        "Po 3 s brak zmiany statusu helpera (nadal aktywny). Dodaję dodatkowe 5 s przed kolejną próbą."
+                    self.reportHelperRepairEvent(
+                        "Helper status is still enabled after 3 s. Waiting another 5 s before retrying."
                     )
                     self.schedulePostUnregisterVerification(
                         service: service,
@@ -128,7 +131,7 @@ extension HelperServiceManager {
             }
 
             PrivilegedOperationClient.shared.resetConnectionForRecovery()
-            self.reportHelperServiceEvent("Zresetowano połączenie XPC po unregister. Sprawdzam, czy stary helper przestał odpowiadać.")
+            self.reportHelperRepairEvent("Reset the XPC connection after unregister; checking whether the old helper has stopped responding.")
             self.ensureOldHelperNoLongerResponds(
                 attempt: 1,
                 maxAttempts: 6,
@@ -146,14 +149,14 @@ extension HelperServiceManager {
         PrivilegedOperationClient.shared.queryHealth(withTimeout: 0.7) { ok, details in
             self.coordinationQueue.async {
                 if !ok {
-                    self.reportHelperServiceEvent("Stary helper nie odpowiada po unregister (\(details)). Teardown zakończony.")
+                    self.reportHelperRepairEvent("Old helper no longer responds after unregister: \(details). Shutdown verified.")
                     completion(true, nil)
                     return
                 }
 
                 if allowExtendedDelay, attempt == 1 {
-                    self.reportHelperServiceEvent(
-                        "Po 3 s brak zmiany odpowiedzi XPC (stary helper nadal odpowiada). Dodaję dodatkowe 5 s przed dalszą weryfikacją."
+                    self.reportHelperRepairEvent(
+                        "Old helper still responds over XPC after 3 s. Waiting another 5 s before retrying."
                     )
                     PrivilegedOperationClient.shared.resetConnectionForRecovery()
                     self.coordinationQueue.asyncAfter(deadline: .now() + 5.0) {
@@ -169,12 +172,12 @@ extension HelperServiceManager {
 
                 if attempt >= maxAttempts {
                     let message = "Po unregister stary helper nadal odpowiada przez XPC: \(details)"
-                    self.reportHelperServiceEvent(message)
+                    self.reportHelperRepairEvent("Old helper still responds over XPC after unregister: \(details).", isError: true)
                     completion(false, message)
                     return
                 }
 
-                self.reportHelperServiceEvent("Stary helper nadal odpowiada (próba \(attempt)/\(maxAttempts)). Ponawiam teardown check.")
+                self.reportHelperRepairEvent("Old helper still responds (attempt \(attempt)/\(maxAttempts)); retrying shutdown verification.")
                 PrivilegedOperationClient.shared.resetConnectionForRecovery()
                 self.coordinationQueue.asyncAfter(deadline: .now() + 0.25) {
                     self.ensureOldHelperNoLongerResponds(
@@ -201,18 +204,18 @@ extension HelperServiceManager {
         maxAttempts: Int,
         completion: @escaping EnsureCompletion
     ) {
-        reportHelperServiceEvent("Wywołuję SMAppService.register() po pełnym teardown (próba \(attempt)/\(maxAttempts)).")
+        reportHelperRepairEvent("Calling SMAppService.register() after shutdown (attempt \(attempt)/\(maxAttempts)).")
 
         do {
             try service.register()
-            reportHelperServiceEvent("SMAppService.register() po resecie zakończone bez błędu.")
+            reportHelperRepairEvent("SMAppService.register() completed without an error.")
         } catch {
             let details = diagnosticErrorDescription(for: error)
-            reportHelperServiceEvent("SMAppService.register() po resecie zwróciło błąd: \(details)")
+            reportHelperRepairEvent("SMAppService.register() returned an error: \(details)", isError: true)
 
             let statusAfterError = service.status
             if statusAfterError == .enabled {
-                reportHelperServiceEvent("Mimo błędu register() status helpera to enabled. Kontynuuję walidację.")
+                reportHelperRepairEvent("Helper status is enabled despite the register() error; continuing validation.")
                 finalizeHardRepairAfterSuccessfulRegister(service: service, completion: completion)
                 return
             }
@@ -225,7 +228,7 @@ extension HelperServiceManager {
             }
 
             let retryDelay = hardRegisterRetryDelaySeconds(for: attempt)
-            reportHelperServiceEvent("Retry register helpera za \(String(format: "%.2f", retryDelay)) s (próba \(attempt + 1)/\(maxAttempts)).")
+            reportHelperRepairEvent("Retrying helper registration in \(String(format: "%.2f", retryDelay)) s (attempt \(attempt + 1)/\(maxAttempts)).")
             PrivilegedOperationClient.shared.resetConnectionForRecovery()
 
             coordinationQueue.asyncAfter(deadline: .now() + retryDelay) {
@@ -240,12 +243,12 @@ extension HelperServiceManager {
         }
 
         let statusAfterRegister = service.status
-        reportHelperServiceEvent("Status helpera po rejestracji: \(statusDescription(statusAfterRegister)).")
+        reportHelperRepairEvent("Helper status after registration: \(diagnosticStatusDescription(statusAfterRegister)).")
 
         guard statusAfterRegister == .enabled else {
             if attempt < maxAttempts, statusAfterRegister == .notRegistered || statusAfterRegister == .notFound {
                 let retryDelay = hardRegisterRetryDelaySeconds(for: attempt)
-                reportHelperServiceEvent("Status po register to \(statusDescription(statusAfterRegister)). Ponawiam próbę za \(String(format: "%.2f", retryDelay)) s.")
+                reportHelperRepairEvent("Helper status after register() is \(diagnosticStatusDescription(statusAfterRegister)); retrying in \(String(format: "%.2f", retryDelay)) s.")
                 PrivilegedOperationClient.shared.resetConnectionForRecovery()
                 coordinationQueue.asyncAfter(deadline: .now() + retryDelay) {
                     self.attemptHardRegister(
@@ -278,7 +281,7 @@ extension HelperServiceManager {
     ) {
         coordinationQueue.asyncAfter(deadline: .now() + 0.3) {
             PrivilegedOperationClient.shared.resetConnectionForRecovery()
-            self.reportHelperServiceEvent("Ponownie zresetowano połączenie XPC po rejestracji.")
+            self.reportHelperRepairEvent("Reset the XPC connection after registration.")
             self.attemptHardRepairHealthValidation(
                 service: service,
                 attempt: 1,
@@ -300,7 +303,7 @@ extension HelperServiceManager {
             self.coordinationQueue.async {
                 let finalStatus = service.status
                 if ok, finalStatus == .enabled {
-                    self.reportHelperServiceEvent("Pełna naprawa helpera zakończona sukcesem. Health XPC: \(details).")
+                    self.reportHelperRepairEvent("Full helper repair succeeded. XPC health: \(details).")
                     DispatchQueue.main.async {
                         completion(true, nil)
                     }
@@ -309,8 +312,8 @@ extension HelperServiceManager {
 
                 if attempt < maxAttempts {
                     let retryDelay = 0.35 * Double(attempt)
-                    self.reportHelperServiceEvent(
-                        "Health-check helpera niegotowy (próba \(attempt)/\(maxAttempts)): status=\(self.statusDescription(finalStatus)), details=\(details). Ponawiam za \(String(format: "%.2f", retryDelay)) s."
+                    self.reportHelperRepairEvent(
+                        "Helper XPC health check not ready (attempt \(attempt)/\(maxAttempts)): status=\(self.diagnosticStatusDescription(finalStatus)), details=\(details). Retrying in \(String(format: "%.2f", retryDelay)) s."
                     )
                     PrivilegedOperationClient.shared.resetConnectionForRecovery()
                     self.coordinationQueue.asyncAfter(deadline: .now() + retryDelay) {
@@ -325,7 +328,10 @@ extension HelperServiceManager {
                 }
 
                 let message = "Helper po pełnym resecie nadal nie jest gotowy. Status: \(self.statusDescription(finalStatus)). Szczegóły XPC: \(details)"
-                self.reportHelperServiceEvent(message)
+                self.reportHelperRepairEvent(
+                    "Helper is still not ready after full reset: status=\(self.diagnosticStatusDescription(finalStatus)), XPC details=\(details).",
+                    isError: true
+                )
                 DispatchQueue.main.async {
                     completion(false, message)
                 }

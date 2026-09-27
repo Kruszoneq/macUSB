@@ -257,6 +257,8 @@ Daemon helper runtime:
   - daemon-side IPC contracts and payload types.
 - `macUSBHelper/Service/PrivilegedHelperService.swift`
   - XPC service entrypoints and active executor lifecycle, including downloader session cleanup endpoint.
+- `macUSBHelper/Service/HelperDiagnosticLogging.swift`
+  - timestamped, stage-labeled system diagnostics emitted by the daemon.
 - `macUSBHelper/Service/PrivilegedHelperServiceCapabilities.swift`
   - helper capability identifiers and advertised capability payload.
 - `macUSBHelper/Service/HelperListenerDelegate.swift`
@@ -319,9 +321,10 @@ Rules:
 - App-side XPC helper code-signing requirement configuration and rejection lines use English messages with the `[HH:MM:SS] [HELPER]` prefix.
 - Ensure-ready XPC health check lines use the same prefix. Successful checks include `uid`, `euid`, and `pid` when the helper supplies them; localized health details remain available to presentation flows.
 - Ensure-ready and IPC reload lifecycle lines also use English `[HELPER]` diagnostics, including interactive mode and English `SMAppService` status values. Localized completion messages and alerts remain presentation data.
-- Repair flow should produce readable operational logs.
+- Manual and automatic full repair write English `[HELPER_REPAIR]` operational logs through `AppLogging`; the repair-details alert uses the same label. Service status names in diagnostics are English, while repair alerts remain localized.
+- Direct daemon system logs carry an operation stage and the separate `[HELPER]` source tag. XPC trust and process lifecycle use `[HELPER] [HELPER]`; Rosetta and Linux post-mount use `[USB] [HELPER]` before app-side workflow selection is available.
 - Helper live tool output is diagnostic and must not become the UI source of truth for stage semantics.
-- Forwarded USB workflow diagnostics, including raw tool output, are recorded by app-side `AppLogging` with the operation's `USB` workflow label and a separate `[HELPER]` source tag. App-side XPC/repair diagnostics retain the `HELPER` stage without the source tag.
+- Forwarded USB workflow diagnostics, including raw tool output, are recorded by app-side `AppLogging` with the operation's `USB` workflow label and a separate `[HELPER]` source tag. App-side XPC diagnostics retain the base `HELPER` stage without the source tag; app-side repair uses `HELPER_REPAIR` without that source tag.
 - Forwarded downloader assembly diagnostics, including helper tool output, are recorded by app-side `AppLogging` with the selected `DOWNLOADER_MODERN` or `DOWNLOADER_OLDEST` workflow label and a separate `[HELPER]` source tag. Helper-authored downloader messages are English; localized progress status remains presentation data.
 - macUSBoot phase status keys are stable localization identifiers carried in progress events; live log lines remain technical diagnostics and never include binary contents.
 

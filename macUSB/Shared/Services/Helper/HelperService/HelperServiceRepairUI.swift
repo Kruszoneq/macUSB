@@ -26,22 +26,23 @@ extension HelperServiceManager {
 
     func reportHelperServiceEvent(
         _ message: String,
-        stage: AppLogging.Stage? = nil,
+        stage: AppLogging.Stage,
+        workflow: AppLogging.Workflow? = nil,
         isError: Bool = false
     ) {
-        if let stage {
-            if isError {
-                AppLogging.error(message, stage: stage)
-            } else {
-                AppLogging.info(message, stage: stage)
-            }
+        if isError {
+            AppLogging.error(message, stage: stage, workflow: workflow)
         } else {
-            AppLogging.info(message, category: "HelperService")
+            AppLogging.info(message, stage: stage, workflow: workflow)
         }
         repairSinkLock.lock()
         let sink = repairProgressSink
         repairSinkLock.unlock()
         sink?(message)
+    }
+
+    func reportHelperRepairEvent(_ message: String, isError: Bool = false) {
+        reportHelperServiceEvent(message, stage: .helper, workflow: .repair, isError: isError)
     }
 
     func setRepairProgressSink(_ sink: ((String) -> Void)?) {
@@ -53,7 +54,7 @@ extension HelperServiceManager {
     func startRepairPresentation() {
         dismissRepairProgressAlertIfNeeded()
         repairTechnicalLogs.removeAll(keepingCapacity: true)
-        appendRepairTechnicalLogLine("Rozpoczynanie operacji naprawy.")
+        appendRepairTechnicalLogLine("Helper repair started.")
         presentRepairProgressAlertIfNeeded()
         setRepairProgressSink { [weak self] message in
             DispatchQueue.main.async {
@@ -63,7 +64,7 @@ extension HelperServiceManager {
     }
 
     func finishRepairPresentation(success: Bool, message: String) {
-        appendRepairTechnicalLogLine(message)
+        appendRepairTechnicalLogLine("Helper repair finished: success=\(success).")
         dismissRepairProgressAlertIfNeeded()
         if !success, isHelperTrustVerificationFailureMessage(message) {
             presentHelperTrustVerificationFailureAlert()
@@ -165,7 +166,12 @@ extension HelperServiceManager {
         guard !trimmed.isEmpty else { return }
 
         let timestamp = repairLogFormatter.string(from: Date())
-        repairTechnicalLogs.append("[\(timestamp)] \(trimmed)")
+        let prefix = "[\(timestamp)] [HELPER_REPAIR]"
+        repairTechnicalLogs.append(
+            trimmed.components(separatedBy: "\n")
+                .map { "\(prefix) \($0)" }
+                .joined(separator: "\n")
+        )
         if repairTechnicalLogs.count > 800 {
             repairTechnicalLogs.removeFirst(repairTechnicalLogs.count - 800)
         }

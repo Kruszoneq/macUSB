@@ -126,6 +126,7 @@
 - `macUSBHelper/Workflow/Windows/MacUSBoot/*` — BIOS-only macUSBoot artifact validation, Disk Arbitration guard, raw-disk layout validation, transaction, disk operations, and orchestration.
 - `macUSBHelper/DownloaderAssembly/*`
 - `macUSBHelper/Rosetta/HelperRosettaInstaller.swift` — fixed-command, root-only Rosetta installer with bounded diagnostics.
+- `macUSBHelper/Service/HelperDiagnosticLogging.swift` — shared stage and source-tag formatting for daemon system logs.
 
 ## Localization catalog
 

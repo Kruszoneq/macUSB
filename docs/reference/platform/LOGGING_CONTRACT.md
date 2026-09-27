@@ -34,7 +34,7 @@ This is the target contract for the staged unification of diagnostic logs. Exist
 
 ## Stage Labels
 
-Use `APP` for startup and application lifecycle, `PERMISSIONS` for access and background-approval checks, `ANALYSIS` for source detection and compatibility, `USB` for target validation and media creation or cleanup, `DOWNLOADER` for installer discovery and download, `HELPER` for helper registration, XPC readiness, and repair, and `NOTIFICATIONS` for notification authorization and delivery. Add another short English label when an operation does not fit these stages, and use it consistently.
+Use `APP` for startup, application lifecycle, and update checks; `PERMISSIONS` for access and background-approval checks; `ANALYSIS` for source detection and compatibility; `USB` for target validation and media creation or cleanup; `DOWNLOADER` for installer discovery and download; `HELPER` for helper registration, XPC readiness, and repair; and `NOTIFICATIONS` for notification authorization and delivery. Add another short English label when an operation does not fit these stages, and use it consistently.
 
 Choose the workflow suffix from the actual branch of work. Examples include `ANALYSIS_LINUX`, `USB_MACOS`, and `USB_PPC`; use the same pattern for other workflows.
 
@@ -55,7 +55,11 @@ The application starts each exported session with one English `APP` block. Every
 
 Use `Unknown` if the Mac architecture or model cannot be identified. This block is already implemented; other log paths still follow the staged migration noted above.
 
-Full Disk Access check/probe lines, automatic helper update lifecycle lines, app-side XPC helper code-signing requirement diagnostics, and ensure-ready XPC health checks also use the target format. Analysis-screen diagnostics, including source selection, macOS/Windows/Linux recognition, manual raw-image selection, SHA-256 calculation, source-image cleanup, and USB target selection/validation, use the target format. The shared helper repair flow still uses its existing logging path during this staged migration.
+Full Disk Access check/probe lines, automatic helper update lifecycle lines, app-side XPC helper code-signing requirement diagnostics, and ensure-ready XPC health checks use the target format. Analysis-screen diagnostics, including source selection, macOS/Windows/Linux recognition, manual raw-image selection, SHA-256 calculation, source-image cleanup, and USB target selection/validation, use the target format. Manual and automatic full helper repair diagnostics use English `[HELPER_REPAIR]` lines; its separate technical-details alert uses the same prefix. Localized repair messages remain presentation data.
+
+Startup and menu update checks use English `[APP]` diagnostics for start, newer-version detection, no-newer-version results, and request or metadata failures. Their alerts remain localized.
+
+Daemon-side system log messages use the same timestamp, operation stage, and `[HELPER]` source tag. XPC trust and process lifecycle use `[HELPER] [HELPER]`. Direct Rosetta and Linux post-mount diagnostics use `[USB] [HELPER]` because the daemon does not receive the app-only presentation workflow label; the corresponding forwarded USB progress and results receive their selected workflow suffix in the app's exported log.
 
 Helper readiness and IPC reload diagnostics use English `[HELPER]` lines. `SMAppService` status values in those lines use English diagnostic names; localized status descriptions remain in the UI. App termination and protected-operation diagnostics use English `[APP]` lines unless an operation belongs to a known USB creation workflow, in which case its token start and finish lines use `[USB_WORKFLOW]`.
 

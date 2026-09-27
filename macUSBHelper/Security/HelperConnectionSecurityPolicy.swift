@@ -16,32 +16,26 @@ enum HelperConnectionSecurityPolicy {
     private static let trustLog = OSLog(subsystem: "com.kruszoneq.macusb.helper", category: "XPCTrust")
 
     static func configure(_ listener: NSXPCListener, machServiceName: String) {
-        os_log(
-            "Configuring XPC client trust requirement: machService=%{public}@ expectedClientBundleID=%{public}@",
-            log: trustLog,
-            type: .default,
-            machServiceName,
-            expectedClientBundleIdentifier
+        HelperDiagnosticLogging.info(
+            "Configuring XPC client trust requirement: machService=\(machServiceName) expectedClientBundleID=\(expectedClientBundleIdentifier)",
+            stage: .helper,
+            log: trustLog
         )
 
         listener.setConnectionCodeSigningRequirement(trustedClientRequirement)
 
-        os_log(
-            "XPC client trust requirement configured: machService=%{public}@ status=OK",
-            log: trustLog,
-            type: .default,
-            machServiceName
+        HelperDiagnosticLogging.info(
+            "XPC client trust requirement configured: machService=\(machServiceName) status=OK",
+            stage: .helper,
+            log: trustLog
         )
     }
 
     static func logAcceptedConnection(_ connection: NSXPCConnection) {
-        os_log(
-            "Accepted XPC connection prevalidated by code signing requirement: pid=%{public}d euid=%{public}d expectedClientBundleID=%{public}@",
-            log: trustLog,
-            type: .default,
-            connection.processIdentifier,
-            connection.effectiveUserIdentifier,
-            expectedClientBundleIdentifier
+        HelperDiagnosticLogging.info(
+            "Accepted XPC connection prevalidated by code signing requirement: pid=\(connection.processIdentifier) euid=\(connection.effectiveUserIdentifier) expectedClientBundleID=\(expectedClientBundleIdentifier)",
+            stage: .helper,
+            log: trustLog
         )
     }
 }

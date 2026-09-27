@@ -663,8 +663,8 @@ extension PrivilegedOperationClient: PrivilegedHelperClientXPCProtocol {
             event = try HelperXPCCodec.decode(DownloaderAssemblyProgressPayload.self, from: eventData as Data)
         } catch {
             AppLogging.error(
-                "Nie udalo sie zdekodowac postepu assembly downloadera: \(error.localizedDescription)",
-                category: "HelperLiveLog"
+                "Could not decode helper downloader assembly progress: \(error.localizedDescription)",
+                stage: .downloader
             )
             return
         }
@@ -686,8 +686,8 @@ extension PrivilegedOperationClient: PrivilegedHelperClientXPCProtocol {
             result = try HelperXPCCodec.decode(DownloaderAssemblyResultPayload.self, from: resultData as Data)
         } catch {
             AppLogging.error(
-                "Nie udalo sie zdekodowac wyniku assembly downloadera: \(error.localizedDescription)",
-                category: "HelperLiveLog"
+                "Could not decode helper downloader assembly result: \(error.localizedDescription)",
+                stage: .downloader
             )
             finishAllDownloaderAssemblyActivityAfterDecodeFailure()
             return

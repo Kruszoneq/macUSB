@@ -35,16 +35,16 @@ enum HelperRosettaInstaller {
         process.standardOutput = outputPipe
         process.standardError = outputPipe
 
-        os_log(
+        HelperDiagnosticLogging.info(
             "Rosetta installation started: /usr/sbin/softwareupdate --install-rosetta --agree-to-license",
-            type: .default
+            stage: .usb
         )
 
         do {
             try process.run()
         } catch {
             let diagnostic = boundedDiagnostic(error.localizedDescription)
-            os_log("Rosetta installation launch failed: %{public}@", type: .error, diagnostic)
+            HelperDiagnosticLogging.error("Rosetta installation launch failed: \(diagnostic)", stage: .usb)
             return RosettaInstallationResultPayload(
                 success: false,
                 terminationStatus: -1,
@@ -60,14 +60,14 @@ enum HelperRosettaInstaller {
         let diagnostic = output.isEmpty ? nil : boundedDiagnostic(output)
         let success = process.terminationReason == .exit && process.terminationStatus == 0
 
-        os_log(
-            "Rosetta installation finished: success=%{public}@ status=%{public}d",
-            type: success ? .default : .error,
-            success ? "true" : "false",
-            process.terminationStatus
-        )
+        let completionMessage = "Rosetta installation finished: success=\(success) status=\(process.terminationStatus)"
+        if success {
+            HelperDiagnosticLogging.info(completionMessage, stage: .usb)
+        } else {
+            HelperDiagnosticLogging.error(completionMessage, stage: .usb)
+        }
         if let diagnostic {
-            os_log("Rosetta installation output tail: %{public}@", type: .default, diagnostic)
+            HelperDiagnosticLogging.info("Rosetta installation output tail: \(diagnostic)", stage: .usb)
         }
 
         return RosettaInstallationResultPayload(

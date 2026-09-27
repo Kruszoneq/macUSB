@@ -4,7 +4,7 @@ import Darwin
 
 /// Central logging infrastructure for macUSB.
 ///
-/// Migrated startup, analysis, USB, and downloader diagnostics use the stage format
+/// App diagnostics use the stage format
 /// in `docs/reference/platform/LOGGING_CONTRACT.md`.
 public enum AppLogging {
     public enum Stage: String {
@@ -30,6 +30,7 @@ public enum AppLogging {
         case modern = "MODERN"
         case legacy = "LEGACY"
         case oldest = "OLDEST"
+        case repair = "REPAIR"
     }
 
     private static let subsystem = Bundle.main.bundleIdentifier ?? "macUSB"
@@ -76,43 +77,6 @@ public enum AppLogging {
         ].joined(separator: "\n")
         appLogger.info("\(message, privacy: .public)")
         appendToBuffer(message)
-    }
-
-    /// Loguje nagłówek etapu w spójnym stylu.
-    public static func stage(_ title: String) {
-        let time = currentTimeString()
-        let message = """
-------------
-[\(time)] \(title)
-------------
-"""
-        appLogger.info("\(message, privacy: .public)")
-        appendToBuffer(message)
-    }
-
-    /// Loguje prosty separator w logach.
-    public static func separator() {
-        let message = "------------"
-        appLogger.info("\(message, privacy: .public)")
-        appendToBuffer(message)
-    }
-
-    /// Log informacji dla danej kategorii (jednowierszowy, z godziną).
-    public static func info(_ message: String, category: String = "General") {
-        let t = currentTimeString()
-        let line = "[\(t)][\(category)] \(message)"
-        let logger = Logger(subsystem: subsystem, category: category)
-        logger.info("\(line, privacy: .public)")
-        appendToBuffer(line)
-    }
-
-    /// Log błędu dla danej kategorii (jednowierszowy, z godziną).
-    public static func error(_ message: String, category: String = "General") {
-        let t = currentTimeString()
-        let line = "[\(t)][\(category)][ERROR] \(message)"
-        let logger = Logger(subsystem: subsystem, category: category)
-        logger.error("\(line, privacy: .public)")
-        appendToBuffer(line)
     }
 
     /// Logs a migrated diagnostic line with the operation stage after the timestamp.
