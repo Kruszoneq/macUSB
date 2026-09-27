@@ -322,6 +322,7 @@ Rules:
 - Repair flow should produce readable operational logs.
 - Helper live tool output is diagnostic and must not become the UI source of truth for stage semantics.
 - Forwarded USB workflow diagnostics, including raw tool output, are recorded by app-side `AppLogging` with the operation's `USB` workflow label and a separate `[HELPER]` source tag. App-side XPC/repair diagnostics retain the `HELPER` stage without the source tag.
+- Forwarded downloader assembly diagnostics, including helper tool output, are recorded by app-side `AppLogging` with the selected `DOWNLOADER_MODERN` or `DOWNLOADER_OLDEST` workflow label and a separate `[HELPER]` source tag. Helper-authored downloader messages are English; localized progress status remains presentation data.
 - macUSBoot phase status keys are stable localization identifiers carried in progress events; live log lines remain technical diagnostics and never include binary contents.
 
 Diagnostics should allow answering:

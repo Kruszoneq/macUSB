@@ -176,6 +176,7 @@ final class MontereyDownloadFlowModel: ObservableObject {
     var didPlayCompletionSound: Bool = false
 
     var activeManifest: DownloadManifest?
+    var loggingWorkflow: AppLogging.Workflow = .modern
     var activeSessionID: String?
     var activeSessionRootURL: URL?
     var activeSessionPayloadURL: URL?

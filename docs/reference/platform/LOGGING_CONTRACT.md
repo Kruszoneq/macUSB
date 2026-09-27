@@ -61,6 +61,8 @@ Helper readiness and IPC reload diagnostics use English `[HELPER]` lines. `SMApp
 
 USB creation diagnostics from the installation summary through the finish screen use `USB` with the selected workflow suffix. macOS suffixes are `MACOS`, `SIERRA`, `CATALINA`, `LEGACYRESTORE`, `MAVERICKS`, and `PPC`; Windows uses `WINDOWS`, recognized Linux uses `LINUX`, and manual raw-image writing uses `RAW`. App-side creation and finish events pass through `AppLogging`. Privileged USB workflow event lines, including external tool output, receive the same workflow suffix and the `[HELPER]` source tag when forwarded by the app. Helper IPC payloads and localized UI messages remain unchanged.
 
+Downloader diagnostics use `DOWNLOADER` for window and prerequisite events before a workflow is identified, `DOWNLOADER_DISCOVERY` for installer discovery, and `DOWNLOADER_MODERN`, `DOWNLOADER_LEGACY`, or `DOWNLOADER_OLDEST` for the selected installer distribution workflow. App-side lines pass through `AppLogging`; forwarded helper assembly and tool-output lines append `[HELPER]`. UI localization keys and helper status payloads remain presentation data.
+
 ## Update Trigger
 
 Update when the log language, exported line format, or stage-label policy changes. Keep feature-specific logging expectations in their existing references.

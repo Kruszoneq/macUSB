@@ -30,8 +30,8 @@ final class MacOSDownloaderLogic: ObservableObject {
         }
         statusText = String(localized: "Łączenie z serwerami Apple...")
 
-        AppLogging.stage("Downloader: Rozpoczecie sprawdzania dostepnych wersji")
-        AppLogging.info("Start sprawdzania dostepnych instalatorow macOS/OS X.", category: "Downloader")
+        AppLogging.info("Installer discovery started.", stage: .downloader, workflow: .discovery)
+        AppLogging.info("Started checking available macOS/OS X installers.", stage: .downloader, workflow: .discovery)
 
         discoveryTask = Task { [weak self] in
             guard let self else { return }
@@ -47,7 +47,7 @@ final class MacOSDownloaderLogic: ObservableObject {
         if updateState {
             state = .cancelled
             statusText = ""
-            AppLogging.info("Anulowano sprawdzanie dostepnych wersji systemow.", category: "Downloader")
+            AppLogging.info("Cancelled discovery of available system versions.", stage: .downloader, workflow: .discovery)
         }
     }
 
@@ -76,16 +76,16 @@ final class MacOSDownloaderLogic: ObservableObject {
             if let localInstallerSnapshot {
                 localSnapshot = localInstallerSnapshot
                 AppLogging.info(
-                    "Ponowne uzycie wyniku wykrywania lokalnych instalatorow z aktywnej sesji downloadera.",
-                    category: "Downloader"
+                    "Reusing local installer discovery result from the active downloader session.",
+                    stage: .downloader, workflow: .discovery
                 )
             } else {
                 statusText = String(
                     localized: "downloader.local_installers.discovery_status"
                 )
                 AppLogging.info(
-                    "Rozpoczecie wykrywania lokalnych instalatorow przy otwarciu downloadera.",
-                    category: "Downloader"
+                    "Started local installer discovery on opening downloader.",
+                    stage: .downloader, workflow: .discovery
                 )
                 let discoveredSnapshot = try await catalogService.discoverLocalInstallers()
                 try Task.checkCancellation()
@@ -114,22 +114,22 @@ final class MacOSDownloaderLogic: ObservableObject {
             discoveryTask = nil
 
             AppLogging.info(
-                "Sprawdzanie zakonczone sukcesem. Znaleziono \(result.entries.count) pozycji, nierozpoznane lokalne instalatory: \(result.unrecognizedLocalInstallerCount).",
-                category: "Downloader"
+                "Discovery completed successfully. Found \(result.entries.count) entries; unrecognized local installers: \(result.unrecognizedLocalInstallerCount).",
+                stage: .downloader, workflow: .discovery
             )
         } catch is CancellationError {
             state = .cancelled
             statusText = ""
             discoveryTask = nil
-            AppLogging.info("Sprawdzanie przerwane przez uzytkownika.", category: "Downloader")
+            AppLogging.info("Discovery cancelled by the user.", stage: .downloader, workflow: .discovery)
         } catch {
             state = .failed
             statusText = ""
             errorText = error.localizedDescription
             discoveryTask = nil
             AppLogging.error(
-                "Blad podczas sprawdzania wersji systemow: \(error.localizedDescription)",
-                category: "Downloader"
+                "System version discovery failed: \(error.localizedDescription)",
+                stage: .downloader, workflow: .discovery
             )
         }
     }

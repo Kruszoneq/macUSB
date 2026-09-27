@@ -47,8 +47,8 @@ extension MontereyDownloadFlowModel {
             cleanupProgress = 1
             completedStages.insert(.cleanup)
             AppLogging.error(
-                "Helper cleanup niepotwierdzony: \(reason)",
-                category: "Downloader"
+                "Helper cleanup was not confirmed: \(reason)",
+                stage: .downloader, workflow: loggingWorkflow
             )
             return
         }
@@ -164,8 +164,8 @@ extension MontereyDownloadFlowModel {
 
         guard FileManager.default.fileExists(atPath: temporaryDownloadsURL.path) else {
             AppLogging.info(
-                "Cleanup downloadera: brak katalogu tymczasowego do usuniecia.",
-                category: "Downloader"
+                "Downloader cleanup: no temporary directory to remove.",
+                stage: .downloader, workflow: loggingWorkflow
             )
             return
         }
@@ -173,13 +173,13 @@ extension MontereyDownloadFlowModel {
         do {
             try FileManager.default.removeItem(at: temporaryDownloadsURL)
             AppLogging.info(
-                "Cleanup downloadera: usunieto katalog tymczasowy pobierania.",
-                category: "Downloader"
+                "Downloader cleanup: removed temporary download directory.",
+                stage: .downloader, workflow: loggingWorkflow
             )
         } catch {
             AppLogging.error(
-                "Cleanup downloadera nie powiodl sie: \(error.localizedDescription)",
-                category: "Downloader"
+                "Downloader cleanup failed: \(error.localizedDescription)",
+                stage: .downloader, workflow: loggingWorkflow
             )
         }
     }

@@ -29,7 +29,7 @@ extension MontereyDownloadFlowModel {
                         )
                         self.buildStatusText = event.statusText
                         if let logLine = event.logLine, !logLine.isEmpty {
-                            AppLogging.info(logLine, category: "Downloader")
+                            AppLogging.info(logLine, stage: .downloader, workflow: loggingWorkflow, helperOrigin: true)
                         }
                     }
                 },

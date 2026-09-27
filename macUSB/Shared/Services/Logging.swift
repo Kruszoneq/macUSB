@@ -4,9 +4,8 @@ import Darwin
 
 /// Central logging infrastructure for macUSB.
 ///
-/// The startup block uses English labels and prefixes every line with `[HH:MM:SS] [APP]`.
-/// Other logging paths are being migrated to the contract in
-/// `docs/reference/platform/LOGGING_CONTRACT.md` in stages.
+/// Migrated startup, analysis, USB, and downloader diagnostics use the stage format
+/// in `docs/reference/platform/LOGGING_CONTRACT.md`.
 public enum AppLogging {
     public enum Stage: String {
         case app = "APP"
@@ -14,6 +13,7 @@ public enum AppLogging {
         case helper = "HELPER"
         case analysis = "ANALYSIS"
         case usb = "USB"
+        case downloader = "DOWNLOADER"
     }
 
     public enum Workflow: String {
@@ -26,6 +26,10 @@ public enum AppLogging {
         case linux = "LINUX"
         case ppc = "PPC"
         case raw = "RAW"
+        case discovery = "DISCOVERY"
+        case modern = "MODERN"
+        case legacy = "LEGACY"
+        case oldest = "OLDEST"
     }
 
     private static let subsystem = Bundle.main.bundleIdentifier ?? "macUSB"

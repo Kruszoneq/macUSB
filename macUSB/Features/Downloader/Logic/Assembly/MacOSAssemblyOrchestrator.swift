@@ -20,7 +20,7 @@ extension MontereyDownloadFlowModel {
 
         AppLogging.info(
             "Assembly workflow=\(assemblySelection.workflow.rawValue), input=\(assemblySelection.inputURL.lastPathComponent), entry=\(entry.name) \(entry.version)",
-            category: "Downloader"
+            stage: .downloader, workflow: loggingWorkflow
         )
 
         let finalAppURL: URL
@@ -56,7 +56,7 @@ extension MontereyDownloadFlowModel {
 
         AppLogging.info(
             "Assembly success destination=\(finalAppURL.path)",
-            category: "Downloader"
+            stage: .downloader, workflow: loggingWorkflow
         )
     }
 
