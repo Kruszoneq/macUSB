@@ -1,11 +1,11 @@
 # Diagnostic Logging Contract
 
-This is the target contract for the staged unification of diagnostic logs. Existing log paths may use older wording and formatting until they are migrated. Feature references continue to define which events and details to record.
+This reference describes the diagnostic logging currently emitted by the app and privileged helper. Feature references define which events and details are recorded. The current workflow-label and source-output exceptions are stated below.
 
 ## Language
 
-- Write app- and helper-authored diagnostic messages and stage labels in English, regardless of the selected UI language. Do not localize diagnostic messages.
-- Preserve raw output from external tools, system error descriptions, file paths, and other source data verbatim. When that data is included in exported logs, identify its originating stage; the application-authored explanation around it remains in English.
+- App- and helper-authored diagnostic messages and stage labels use English, regardless of the selected UI language. Diagnostic messages are not localized.
+- Raw output from external tools, system error descriptions, file paths, and other source data can retain their original language. Exported lines identify their stage; application-authored explanations around source data are in English. The legacy downloader assembly output normalization is described under Current Exceptions.
 - Keep messages readable and useful in exported diagnostics. Important app-side runtime events go through `AppLogging`.
 
 ## Line Format
@@ -15,8 +15,8 @@ This is the target contract for the staged unification of diagnostic logs. Exist
 
   `[HH:MM:SS] [STAGE] Message`
 
-- For an event belonging to a specific workflow, append its uppercase workflow name to the stage with an underscore: `[STAGE_WORKFLOW]`. Use the same workflow suffix throughout that operation, including errors. Use the base `[STAGE]` when no workflow has been identified or the event spans workflows.
-- Append a separate `[HELPER]` tag after the stage for every diagnostic emitted by the privileged helper or forwarded from it, including its tool output. This tag identifies the source, not the operation. App-side registration, XPC, and repair logs use the `HELPER` stage without the extra source tag. If a helper-origin event also has the `HELPER` stage, keep both tags: `[HELPER] [HELPER]`.
+- When a call supplies a workflow, `AppLogging` appends its uppercase name to the stage with an underscore: `[STAGE_WORKFLOW]`. Calls without a workflow use the base `[STAGE]`. Most workflow-specific event and error calls supply the selected workflow; protected-operation token exceptions are described below.
+- Direct helper diagnostics and helper progress or tool-output lines forwarded into the app carry a separate `[HELPER]` tag after the stage. This tag identifies the source, not the operation. App-side registration, XPC, and repair logs use the `HELPER` stage without the extra source tag. If a direct helper diagnostic also has the `HELPER` stage, it carries both tags: `[HELPER] [HELPER]`. App-side error wrappers containing a helper result description are described under Current Exceptions.
 - For a message containing multiple physical lines, repeat the time, stage, and optional helper-origin prefix on every line while keeping each line's source content intact.
 - Stage and workflow names use uppercase English letters (`A`–`Z`), with one underscore between the stage and workflow. Do not use lowercase or title case.
 - Use a stage label that identifies the operation producing the event, rather than the Swift file or logger implementation.
@@ -34,7 +34,7 @@ This is the target contract for the staged unification of diagnostic logs. Exist
 
 ## Stage Labels
 
-Use `APP` for startup, application lifecycle, and update checks; `PERMISSIONS` for access and background-approval checks; `ANALYSIS` for source detection and compatibility; `USB` for target validation and media creation or cleanup; `DOWNLOADER` for installer discovery and download; `HELPER` for helper registration, XPC readiness, and repair; and `NOTIFICATIONS` for notification authorization and delivery. Add another short English label when an operation does not fit these stages, and use it consistently.
+The app currently emits `APP` for startup, application lifecycle, update checks, and default protected-operation tokens; `PERMISSIONS` for access and background-approval checks; `ANALYSIS` for source detection and compatibility; `USB` for target validation and media creation or cleanup; `DOWNLOADER` for installer discovery and download; and `HELPER` for helper registration, XPC readiness, and repair. Notification authorization and delivery currently emit no dedicated diagnostic lines or `NOTIFICATIONS` stage.
 
 Choose the workflow suffix from the actual branch of work. Examples include `ANALYSIS_LINUX`, `USB_MACOS`, and `USB_PPC`; use the same pattern for other workflows.
 
@@ -53,19 +53,25 @@ The application starts each exported session with one English `APP` block. Every
 [14:32:08] [APP] └────────────────────────────────────
 ```
 
-Use `Unknown` if the Mac architecture or model cannot be identified. This block is already implemented; other log paths still follow the staged migration noted above.
+Use `Unknown` if the Mac architecture or model cannot be identified.
 
-Full Disk Access check/probe lines, automatic helper update lifecycle lines, app-side XPC helper code-signing requirement diagnostics, and ensure-ready XPC health checks use the target format. Analysis-screen diagnostics, including source selection, macOS/Windows/Linux recognition, manual raw-image selection, SHA-256 calculation, source-image cleanup, and USB target selection/validation, use the target format. Manual and automatic full helper repair diagnostics use English `[HELPER_REPAIR]` lines; its separate technical-details alert uses the same prefix. Localized repair messages remain presentation data.
+Full Disk Access check/probe lines, automatic helper update lifecycle lines, app-side XPC helper code-signing requirement diagnostics, and ensure-ready XPC health checks use the line format above. Analysis-screen diagnostics, including source selection, macOS/Windows/Linux recognition, manual raw-image selection, SHA-256 calculation, source-image cleanup, and USB target selection/validation, use that format. Manual and automatic full helper repair diagnostics use English `[HELPER_REPAIR]` lines; its separate technical-details alert uses the same prefix. Localized repair messages remain presentation data.
 
 Startup and menu update checks use English `[APP]` diagnostics for start, newer-version detection, no-newer-version results, and request or metadata failures. Their alerts remain localized.
 
 Daemon-side system log messages use the same timestamp, operation stage, and `[HELPER]` source tag. XPC trust and process lifecycle use `[HELPER] [HELPER]`. Direct Rosetta and Linux post-mount diagnostics use `[USB] [HELPER]` because the daemon does not receive the app-only presentation workflow label; the corresponding forwarded USB progress and results receive their selected workflow suffix in the app's exported log.
 
-Helper readiness and IPC reload diagnostics use English `[HELPER]` lines. `SMAppService` status values in those lines use English diagnostic names; localized status descriptions remain in the UI. App termination and protected-operation diagnostics use English `[APP]` lines unless an operation belongs to a known USB creation workflow, in which case its token start and finish lines use `[USB_WORKFLOW]`.
+Helper readiness and IPC reload diagnostics use English `[HELPER]` lines. `SMAppService` status values in those lines use English diagnostic names; localized status descriptions remain in the UI. App termination coordination and cleanup lifecycle use English `[APP]` lines; tracked source-image detach events retain their `ANALYSIS` label and known image-family suffix. Protected-operation token start and finish lines use the stage and workflow supplied by their caller; without either override they use `[APP]`. USB creation, helper repair, finish cleanup, and USB eject supply their operation labels.
 
 USB creation diagnostics from the installation summary through the finish screen use `USB` with the selected workflow suffix. macOS suffixes are `MACOS`, `SIERRA`, `CATALINA`, `LEGACYRESTORE`, `MAVERICKS`, and `PPC`; Windows uses `WINDOWS`, recognized Linux uses `LINUX`, and manual raw-image writing uses `RAW`. App-side creation and finish events pass through `AppLogging`. Privileged USB workflow event lines, including external tool output, receive the same workflow suffix and the `[HELPER]` source tag when forwarded by the app. Helper IPC payloads and localized UI messages remain unchanged.
 
-Downloader diagnostics use `DOWNLOADER` for window and prerequisite events before a workflow is identified, `DOWNLOADER_DISCOVERY` for installer discovery, and `DOWNLOADER_MODERN`, `DOWNLOADER_LEGACY`, or `DOWNLOADER_OLDEST` for the selected installer distribution workflow. App-side lines pass through `AppLogging`; forwarded helper assembly and tool-output lines append `[HELPER]`. UI localization keys and helper status payloads remain presentation data.
+Downloader event diagnostics use `DOWNLOADER` for window and prerequisite events before a workflow is identified, `DOWNLOADER_DISCOVERY` for installer discovery, and `DOWNLOADER_MODERN`, `DOWNLOADER_LEGACY`, or `DOWNLOADER_OLDEST` for the selected installer distribution workflow. App-side lines pass through `AppLogging`; forwarded helper assembly and tool-output lines append `[HELPER]`. A missing helper-cleanup confirmation produces an English app-authored error and, when available, a separate `[HELPER]` line containing the helper's original error text. UI localization keys and helper status payloads remain presentation data.
+
+## Current Exceptions
+
+- The protected-operation registry defaults to `[APP]` when a caller supplies no stage or workflow. Its analysis and manual SHA-256 tokens, tracked-source-image cleanup token, downloader-window token, downloader assembly and cleanup tokens, Rosetta tokens, and app-termination cleanup token currently use that default. Their related event logs may carry `ANALYSIS`, `DOWNLOADER`, `USB`, or another operation stage.
+- The app-side legacy downloader assembly process combines captured standard output and standard error with a newline and trims leading and trailing whitespace before logging the result. The logged content is therefore not a byte-for-byte copy of the original process output.
+- On a failed USB workflow result, the app writes `Helper workflow failed: <errorMessage>` with the selected `[USB_WORKFLOW]` label and no separate `[HELPER]` tag. The embedded helper result description is source data and can retain its original language. Some app-side Rosetta failure lines similarly include a helper or system error description without the source tag.
 
 ## Update Trigger
 
