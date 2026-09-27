@@ -160,6 +160,8 @@ Creation workflow logs should include:
 - cancellation/failure shaping,
 - critical command outcomes used for diagnosis.
 
+Protected-operation start and finish diagnostics for a selected creation workflow, its helper activity, cleanup, and finish-screen eject use the same `[USB_WORKFLOW]` label. Their kind, context, identifier, and duration remain in the message.
+
 From summary entry through helper completion, macOS creation diagnostics use English `AppLogging` lines labeled `[USB_MACOS]`, `[USB_SIERRA]`, `[USB_CATALINA]`, `[USB_LEGACYRESTORE]`, `[USB_MAVERICKS]`, or `[USB_PPC]` according to the selected branch. Forwarded helper events and tool output append `[HELPER]` after that label. Logging labels do not alter helper workflow kinds, stage keys, or localized presentation keys.
 
 Windows summary logs additionally include boot-mode initialization, user selection changes, helper capability preflight/reload outcomes, and the boot mode sent in the request.

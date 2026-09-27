@@ -4,6 +4,16 @@ import ServiceManagement
 import Darwin
 
 extension HelperServiceManager {
+    func diagnosticStatusDescription(_ status: SMAppService.Status) -> String {
+        switch status {
+        case .enabled: return "enabled"
+        case .notRegistered: return "not registered"
+        case .requiresApproval: return "requires approval"
+        case .notFound: return "not found"
+        @unknown default: return "unknown"
+        }
+    }
+
     func statusDescription(_ status: SMAppService.Status) -> String {
         switch status {
         case .enabled:

@@ -9,6 +9,7 @@ import Darwin
 /// `docs/reference/platform/LOGGING_CONTRACT.md` in stages.
 public enum AppLogging {
     public enum Stage: String {
+        case app = "APP"
         case permissions = "PERMISSIONS"
         case helper = "HELPER"
         case analysis = "ANALYSIS"

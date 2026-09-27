@@ -89,7 +89,9 @@ extension UniversalInstallationView {
     func performEmergencyCleanup(mountPoint: URL, tempURL: URL) {
         let cleanupToken = AppActiveOperationRegistry.shared.begin(
             kind: .cleanup,
-            context: "installation_emergency_cleanup"
+            context: "installation_emergency_cleanup",
+            logStage: .usb,
+            logWorkflow: creationLogWorkflow
         )
         defer { cleanupToken.finish() }
         log("Emergency cleanup: detaching \(mountPoint.path)")

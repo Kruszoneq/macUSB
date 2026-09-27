@@ -48,8 +48,8 @@ final class AppTerminationCoordinator {
         }.joined(separator: ", ")
 
         AppLogging.info(
-            "Zablokowano zamknięcie aplikacji [source=\(source), active=\(details)].",
-            category: "AppLifecycle"
+            "Application termination blocked [source=\(source), active=\(details)].",
+            stage: .app
         )
     }
 

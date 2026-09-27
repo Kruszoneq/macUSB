@@ -70,8 +70,8 @@ final class MenuState: ObservableObject {
             languageChangesLockedForWorkflow = true
             refreshLanguageChangeAvailability()
             AppLogging.info(
-                "Zablokowano zmianę języka dla bieżącego przepływu [reason=\(reason)].",
-                category: "AppLifecycle"
+                "Language changes locked for the current workflow [reason=\(reason)].",
+                stage: .app
             )
         }
     }

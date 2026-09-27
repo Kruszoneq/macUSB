@@ -576,7 +576,9 @@ struct FinishUSBView: View {
         isCleaning = true
         let cleanupToken = AppActiveOperationRegistry.shared.begin(
             kind: .cleanup,
-            context: "finish_screen_cleanup"
+            context: "finish_screen_cleanup",
+            logStage: .usb,
+            logWorkflow: loggingWorkflow
         )
         DispatchQueue.global(qos: .userInitiated).async {
             var success = true

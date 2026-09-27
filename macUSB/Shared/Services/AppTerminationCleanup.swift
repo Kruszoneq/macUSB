@@ -22,7 +22,7 @@ final class AppTerminationCleanup {
         )
         defer { cleanupToken.finish() }
 
-        AppLogging.info("Rozpoczęto cleanup przed zamknięciem aplikacji.", category: "AppLifecycle")
+        AppLogging.info("Application termination cleanup started.", stage: .app)
 
         UserDefaults.standard.set(false, forKey: "AllowExternalDrives")
         UserDefaults.standard.synchronize()
@@ -34,20 +34,20 @@ final class AppTerminationCleanup {
             do {
                 try FileManager.default.removeItem(at: tempRootURL)
                 AppLogging.info(
-                    "Zamknięcie aplikacji: usunięto katalog macUSB_temp.",
-                    category: "Downloader"
+                    "Application termination: removed macUSB_temp directory.",
+                    stage: .app
                 )
             } catch {
                 AppLogging.error(
-                    "Zamknięcie aplikacji: nie udało się usunąć macUSB_temp: \(error.localizedDescription)",
-                    category: "Downloader"
+                    "Application termination: could not remove macUSB_temp: \(error.localizedDescription)",
+                    stage: .app
                 )
             }
         }
 
         InstallerSourceImageUnmountRegistry.shared.detachAllTrackedImagesOnAppTermination()
         PrivilegedOperationClient.shared.disconnectForAppTermination()
-        AppLogging.info("Zakończono cleanup przed zamknięciem aplikacji.", category: "AppLifecycle")
+        AppLogging.info("Application termination cleanup completed.", stage: .app)
     }
 }
 

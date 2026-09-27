@@ -128,7 +128,7 @@ final class PrivilegedOperationClient: NSObject {
                     self?.completionHandlers[workflowID] = onCompletion
                     self?.workflowLogWorkflows[workflowID] = logWorkflow
                     self?.pendingWorkflowLogWorkflow = nil
-                    self?.registerWorkflowActivityLocked(workflowID: workflowID)
+                    self?.registerWorkflowActivityLocked(workflowID: workflowID, logWorkflow: logWorkflow)
                     self?.lock.unlock()
 
                     onStarted(workflowID)
@@ -430,7 +430,7 @@ final class PrivilegedOperationClient: NSObject {
         existingConnection?.invalidationHandler = nil
         existingConnection?.interruptionHandler = nil
         existingConnection?.invalidate()
-        AppLogging.info("Rozłączono XPC helpera przed zamknięciem aplikacji.", category: "AppLifecycle")
+        AppLogging.info("Disconnected helper XPC before application termination.", stage: .app)
     }
 
     func helperProxy(

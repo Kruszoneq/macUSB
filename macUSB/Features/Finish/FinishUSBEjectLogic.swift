@@ -86,7 +86,9 @@ final class FinishUSBEjectLogic: ObservableObject {
         operationToken?.finish()
         operationToken = AppActiveOperationRegistry.shared.begin(
             kind: .usbEject,
-            context: shouldForceEject ? "usb_eject_force:\(disk)" : "usb_eject_standard:\(disk)"
+            context: shouldForceEject ? "usb_eject_force:\(disk)" : "usb_eject_standard:\(disk)",
+            logStage: .usb,
+            logWorkflow: loggingWorkflow
         )
         state = shouldForceEject ? .forceInProgress : .inProgress
 

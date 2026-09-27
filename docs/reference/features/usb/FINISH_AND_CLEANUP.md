@@ -46,6 +46,8 @@ Cleanup logs should include:
 
 Finish cleanup, duration/result, and eject diagnostics retain the workflow's `USB` label and use English `AppLogging` messages. Raw `stderr` and system error descriptions remain attached to the labeled diagnostic line. The result and error cards continue to use localized UI text.
 
+Allowed application termination records cleanup, temporary-directory removal, helper XPC disconnection, and termination-operation start/finish with English `[APP]` lines. Protected-operation details remain available in blocked-termination diagnostics.
+
 ## Update Trigger
 
 Update when finish result semantics or cleanup sequencing/ownership changes.

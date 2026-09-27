@@ -318,6 +318,7 @@ Rules:
 - Important runtime events should be routed through `AppLogging` on app-side.
 - App-side XPC helper code-signing requirement configuration and rejection lines use English messages with the `[HH:MM:SS] [HELPER]` prefix.
 - Ensure-ready XPC health check lines use the same prefix. Successful checks include `uid`, `euid`, and `pid` when the helper supplies them; localized health details remain available to presentation flows.
+- Ensure-ready and IPC reload lifecycle lines also use English `[HELPER]` diagnostics, including interactive mode and English `SMAppService` status values. Localized completion messages and alerts remain presentation data.
 - Repair flow should produce readable operational logs.
 - Helper live tool output is diagnostic and must not become the UI source of truth for stage semantics.
 - Forwarded USB workflow diagnostics, including raw tool output, are recorded by app-side `AppLogging` with the operation's `USB` workflow label and a separate `[HELPER]` source tag. App-side XPC/repair diagnostics retain the `HELPER` stage without the source tag.

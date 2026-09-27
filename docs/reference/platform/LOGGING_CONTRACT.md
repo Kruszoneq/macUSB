@@ -57,6 +57,8 @@ Use `Unknown` if the Mac architecture or model cannot be identified. This block 
 
 Full Disk Access check/probe lines, automatic helper update lifecycle lines, app-side XPC helper code-signing requirement diagnostics, and ensure-ready XPC health checks also use the target format. Analysis-screen diagnostics, including source selection, macOS/Windows/Linux recognition, manual raw-image selection, SHA-256 calculation, source-image cleanup, and USB target selection/validation, use the target format. The shared helper repair flow still uses its existing logging path during this staged migration.
 
+Helper readiness and IPC reload diagnostics use English `[HELPER]` lines. `SMAppService` status values in those lines use English diagnostic names; localized status descriptions remain in the UI. App termination and protected-operation diagnostics use English `[APP]` lines unless an operation belongs to a known USB creation workflow, in which case its token start and finish lines use `[USB_WORKFLOW]`.
+
 USB creation diagnostics from the installation summary through the finish screen use `USB` with the selected workflow suffix. macOS suffixes are `MACOS`, `SIERRA`, `CATALINA`, `LEGACYRESTORE`, `MAVERICKS`, and `PPC`; Windows uses `WINDOWS`, recognized Linux uses `LINUX`, and manual raw-image writing uses `RAW`. App-side creation and finish events pass through `AppLogging`. Privileged USB workflow event lines, including external tool output, receive the same workflow suffix and the `[HELPER]` source tag when forwarded by the app. Helper IPC payloads and localized UI messages remain unchanged.
 
 ## Update Trigger
