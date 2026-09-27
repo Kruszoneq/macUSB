@@ -23,7 +23,8 @@ final class InstallerSourceImageUnmountRegistry {
         path: String?,
         family: InstallerSourceImageFamily,
         mountHint: String? = nil,
-        reason: String
+        reason: String,
+        stage: AppLogging.Stage = .analysis
     ) {
         let normalizedPath = normalizedFileSystemPath(path)
         let normalizedHint = normalizedMountIdentifier(mountHint)
@@ -40,13 +41,13 @@ final class InstallerSourceImageUnmountRegistry {
         if let normalizedPath {
             AppLogging.info(
                 "Source image cleanup registry: tracked source \(family.rawValue): \(normalizedPath) [reason=\(reason)]",
-                stage: .analysis, workflow: family == .windows ? .windows : .linux
+                stage: stage, workflow: family == .windows ? .windows : .linux
             )
         }
         if let normalizedHint {
             AppLogging.info(
                 "Source image cleanup registry: tracked mount hint \(family.rawValue): \(normalizedHint) [reason=\(reason)]",
-                stage: .analysis, workflow: family == .windows ? .windows : .linux
+                stage: stage, workflow: family == .windows ? .windows : .linux
             )
         }
     }

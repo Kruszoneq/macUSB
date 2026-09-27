@@ -89,6 +89,7 @@ The stage key is `windows_install_macusboot`. Semantic localized phase keys are:
 - `helper.workflow.windows_install_macusboot.remounting`.
 
 Live diagnostics include full logical diskutil commands with safe arguments, exit codes and bounded output, artifact identity, raw-device geometry and lifecycle, guard lifecycle, layout decisions, sync/readback phases, and remount result. Binary contents are never logged.
+During BIOS USB creation, app-side capability checks use `[USB_WINDOWS]` and forwarded macUSBoot transaction diagnostics use `[USB_WINDOWS] [HELPER]`. UEFI creation does not emit macUSBoot transaction diagnostics because it does not run that stage.
 
 Failures use stable diagnostic categories for invalid artifact, target access, incompatible layout, occupied protected gap, StageTwo write/sync/readback, and MBR write/sync/readback. App-side presentation maps any failure at this stage to the localized macUSBoot installation error instead of exposing raw helper diagnostics.
 

@@ -320,6 +320,7 @@ Rules:
 - Ensure-ready XPC health check lines use the same prefix. Successful checks include `uid`, `euid`, and `pid` when the helper supplies them; localized health details remain available to presentation flows.
 - Repair flow should produce readable operational logs.
 - Helper live tool output is diagnostic and must not become the UI source of truth for stage semantics.
+- Forwarded USB workflow diagnostics, including raw tool output, are recorded by app-side `AppLogging` with the operation's `USB` workflow label and a separate `[HELPER]` source tag. App-side XPC/repair diagnostics retain the `HELPER` stage without the source tag.
 - macUSBoot phase status keys are stable localization identifiers carried in progress events; live log lines remain technical diagnostics and never include binary contents.
 
 Diagnostics should allow answering:

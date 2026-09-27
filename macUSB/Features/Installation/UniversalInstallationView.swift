@@ -624,7 +624,8 @@ struct UniversalInstallationView: View {
                     path: sourceAppURL.path,
                     family: .windows,
                     mountHint: windowsMountedSourcePath,
-                    reason: "installation_summary_on_appear"
+                    reason: "installation_summary_on_appear",
+                    stage: .usb
                 )
             }
             if isLinuxWorkflow && !isRawImageWorkflow {
@@ -632,7 +633,8 @@ struct UniversalInstallationView: View {
                     path: sourceAppURL.path,
                     family: .linux,
                     mountHint: linuxFlowContext?.mountedImagePath,
-                    reason: "installation_summary_on_appear"
+                    reason: "installation_summary_on_appear",
+                    stage: .usb
                 )
             }
             menuState.setDownloaderAccessBlocked(true, reason: downloaderBlockReason)

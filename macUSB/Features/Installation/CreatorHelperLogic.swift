@@ -190,7 +190,7 @@ extension UniversalInstallationView {
                                     }
                                     if isWindowsWorkflow, previousStageKey != normalizedStageKey {
                                         log(
-                                            "WindowsInstallFlow: stage transition \(previousStageKey.isEmpty ? "<start>" : previousStageKey) -> \(normalizedStageKey)",
+                                            "Stage transition: \(previousStageKey.isEmpty ? "<start>" : previousStageKey) -> \(normalizedStageKey)",
                                             category: "WindowsInstallFlow"
                                         )
                                     }
@@ -281,12 +281,12 @@ extension UniversalInstallationView {
                                                 withAnimation {
                                                     isHelperWorking = true
                                                 }
-                                                log("WindowsInstallFlow: użytkownik wyraził zgodę na wymuszenie odmontowania nośnika.", category: "WindowsInstallFlow")
+                                                log("User approved forced target unmount.", category: "WindowsInstallFlow")
                                                 startHelperWorkflow(true)
                                             },
                                             onCancel: {
                                                 workflowResultDetailMessage = String(localized: "Nośnik USB był używany przez inną aplikację. Nie wyrażono zgody na wymuszenie odmontowania, dlatego proces został przerwany. Zamknij aplikacje korzystające z nośnika i spróbuj ponownie.")
-                                                log("WindowsInstallFlow: użytkownik odmówił wymuszonego odmontowania nośnika.", category: "WindowsInstallFlow")
+                                                log("User declined forced target unmount.", category: "WindowsInstallFlow")
                                                 performWindowsUnmountDeclinedCleanupAndCancel()
                                             }
                                         )
@@ -322,7 +322,7 @@ extension UniversalInstallationView {
                                     }
                                     if isWindowsWorkflow {
                                         log(
-                                            "WindowsInstallFlow: workflow zakończony (success=\(result.success ? "TAK" : "NIE"), cancelled=\(result.isUserCancelled ? "TAK" : "NIE"), failedStage=\(result.failedStage ?? "brak"))",
+                                            "Workflow finished: success=\(result.success), cancelled=\(result.isUserCancelled), failedStage=\(result.failedStage ?? "none"), errorCode=\(result.errorCode.map(String.init) ?? "none").",
                                             category: "WindowsInstallFlow"
                                         )
                                     }
