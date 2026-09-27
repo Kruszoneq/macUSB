@@ -19,16 +19,18 @@ final class FinishUSBEjectLogic: ObservableObject {
 
     private let targetWholeDiskBSDName: String?
     private let isDebugMode: Bool
+    private let loggingWorkflow: AppLogging.Workflow
     private var availabilityTimer: Timer?
     private var operationToken: AppActiveOperationToken?
 
-    init(targetWholeDiskBSDName: String?, isDebugMode: Bool) {
+    init(targetWholeDiskBSDName: String?, isDebugMode: Bool, loggingWorkflow: AppLogging.Workflow) {
         if let targetWholeDiskBSDName, !targetWholeDiskBSDName.isEmpty {
             self.targetWholeDiskBSDName = USBDriveLogic.wholeDiskName(from: targetWholeDiskBSDName)
         } else {
             self.targetWholeDiskBSDName = nil
         }
         self.isDebugMode = isDebugMode
+        self.loggingWorkflow = loggingWorkflow
     }
 
     deinit {
@@ -69,13 +71,13 @@ final class FinishUSBEjectLogic: ObservableObject {
         guard state != .inProgress, state != .forceInProgress else { return }
 
         guard let disk = targetWholeDiskBSDName else {
-            AppLogging.info("FinishEject: brak identyfikatora whole disk, oznaczam nośnik jako niedostępny.", category: "Installation")
+            AppLogging.info("Eject unavailable: whole-disk identifier is missing.", stage: .usb, workflow: loggingWorkflow)
             state = .unavailable
             return
         }
 
         guard isDiskAvailable(disk) else {
-            AppLogging.info("FinishEject: nośnik /dev/\(disk) nie jest już dostępny.", category: "Installation")
+            AppLogging.info("Eject unavailable: /dev/\(disk) is no longer present.", stage: .usb, workflow: loggingWorkflow)
             state = .unavailable
             return
         }
@@ -98,13 +100,13 @@ final class FinishUSBEjectLogic: ObservableObject {
                 }
                 if result.exitCode == 0 {
                     let mode = shouldForceEject ? "force" : "standard"
-                    AppLogging.info("FinishEject: pomyślnie wysunięto /dev/\(disk), tryb=\(mode).", category: "Installation")
+                    AppLogging.info("Ejected /dev/\(disk) successfully: mode=\(mode).", stage: .usb, workflow: self.loggingWorkflow)
                     self.state = .ejected
                     return
                 }
 
                 if !self.isDiskAvailable(disk) {
-                    AppLogging.info("FinishEject: nośnik /dev/\(disk) został odłączony podczas operacji.", category: "Installation")
+                    AppLogging.info("Eject target /dev/\(disk) disconnected during the operation.", stage: .usb, workflow: self.loggingWorkflow)
                     self.state = .unavailable
                     return
                 }
@@ -116,8 +118,9 @@ final class FinishUSBEjectLogic: ObservableObject {
                 let classification = isSpotlightDissenter ? "spotlight_mds_stores" : "generic"
 
                 AppLogging.error(
-                    "FinishEject: nie udało się wysunąć /dev/\(disk), tryb=\(mode), klasyfikacja=\(classification), kod=\(result.exitCode), stderr=\(stderrText)",
-                    category: "Installation"
+                    "Eject failed: disk=/dev/\(disk), mode=\(mode), classification=\(classification), exitCode=\(result.exitCode), stderr=\(stderrText)",
+                    stage: .usb,
+                    workflow: self.loggingWorkflow
                 )
 
                 if shouldForceEject {
@@ -156,7 +159,7 @@ final class FinishUSBEjectLogic: ObservableObject {
             }
 
             if !isDiskAvailable(disk) {
-                AppLogging.info("FinishEject: wykryto odłączenie nośnika /dev/\(disk), dezaktywuję akcję wysuwania.", category: "Installation")
+                AppLogging.info("Eject target /dev/\(disk) disconnected; disabling the eject action.", stage: .usb, workflow: loggingWorkflow)
                 state = .unavailable
             }
         case .inProgress, .forceInProgress, .ejected, .unavailable, .debugDisabled:

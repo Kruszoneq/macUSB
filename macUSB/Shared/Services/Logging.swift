@@ -17,6 +17,10 @@ public enum AppLogging {
 
     public enum Workflow: String {
         case macos = "MACOS"
+        case sierra = "SIERRA"
+        case catalina = "CATALINA"
+        case legacyRestore = "LEGACYRESTORE"
+        case mavericks = "MAVERICKS"
         case windows = "WINDOWS"
         case linux = "LINUX"
         case ppc = "PPC"

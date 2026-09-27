@@ -4,7 +4,10 @@ import SwiftUI
 extension UniversalInstallationView {
     private func acquireUSBProcessSleepBlockIfNeeded() {
         guard usbProcessSleepBlockToken == nil else { return }
-        usbProcessSleepBlockToken = SystemSleepBlocker.shared.begin(reason: "Tworzenie nośnika USB")
+        usbProcessSleepBlockToken = SystemSleepBlocker.shared.begin(
+            reason: "USB creation",
+            usbLoggingWorkflow: creationLogWorkflow
+        )
     }
 
     private func releaseUSBProcessSleepBlockIfNeeded() {
@@ -79,6 +82,7 @@ extension UniversalInstallationView {
         do {
             try preflightTargetVolumeWriteAccess(drive.url)
         } catch {
+            logError("Target volume write preflight failed: path=\(drive.url.path), error=\(error.localizedDescription)")
             if cancellationRequestedBeforeWorkflowStart {
                 completeCancellationFlow()
                 return
@@ -100,6 +104,7 @@ extension UniversalInstallationView {
 
         HelperServiceManager.shared.ensureReadyForPrivilegedWork { ready, failureReason in
             guard ready else {
+                logError("Helper readiness check failed: \(failureReason ?? "no details")")
                 if cancellationRequestedBeforeWorkflowStart {
                     completeCancellationFlow()
                     return
@@ -122,6 +127,9 @@ extension UniversalInstallationView {
             DispatchQueue.global(qos: .userInitiated).async {
                 do {
                     var workflowRequest = try prepareHelperWorkflowRequest(for: drive)
+                    if !isWindowsWorkflow && !isLinuxWorkflow {
+                        log("Workflow selected: kind=\(workflowRequest.workflowKind.rawValue), source=\(workflowRequest.sourceAppPath), target=\(workflowRequest.targetBSDName), preformat=\(workflowRequest.needsPreformat), catalina=\(workflowRequest.isCatalina), sierra=\(workflowRequest.isSierra).")
+                    }
                     let transferTotals = calculateTransferStageTotals(for: workflowRequest)
                     DispatchQueue.main.async {
                         helperTransferMonitoringRequestedBSDName = workflowRequest.targetBSDName
@@ -144,7 +152,7 @@ extension UniversalInstallationView {
                                 completeCancellationFlow()
                                 return
                             }
-                            logError("Start helper workflow nieudany: \(message)", category: "Installation")
+                            logError("Helper workflow start failed: \(message)")
                             releaseUSBProcessSleepBlockIfNeeded()
                             withAnimation {
                                 isProcessing = false
@@ -163,6 +171,7 @@ extension UniversalInstallationView {
                         startHelperWorkflow = { allowCompatibilityRecovery in
                             PrivilegedOperationClient.shared.startWorkflow(
                                 request: workflowRequest,
+                                logWorkflow: creationLogWorkflow,
                                 onEvent: { event in
                                     guard event.workflowID == activeHelperWorkflowID else { return }
                                     if shouldIgnoreLinuxMountGuardStageEvent(event) {
@@ -184,6 +193,9 @@ extension UniversalInstallationView {
                                             "WindowsInstallFlow: stage transition \(previousStageKey.isEmpty ? "<start>" : previousStageKey) -> \(normalizedStageKey)",
                                             category: "WindowsInstallFlow"
                                         )
+                                    }
+                                    if !isLinuxWorkflow && !isWindowsWorkflow && previousStageKey != normalizedStageKey {
+                                        log("Stage transition: \(previousStageKey.isEmpty ? "<start>" : previousStageKey) -> \(normalizedStageKey)")
                                     }
                                     helperProgressPercent = max(helperProgressPercent, min(event.percent, 100))
                                     if let localization = HelperWorkflowLocalizationKeys.presentation(for: normalizedStageKey) {
@@ -297,7 +309,10 @@ extension UniversalInstallationView {
                                     }
 
                                     if !result.success, let errorMessageText = result.errorMessage {
-                                        logError("Helper zakończył się błędem: \(errorMessageText)", category: "Installation")
+                                        logError("Helper workflow failed: \(errorMessageText)")
+                                    }
+                                    if !isLinuxWorkflow && !isWindowsWorkflow {
+                                        log("Workflow finished: success=\(result.success), cancelled=\(result.isUserCancelled), failedStage=\(result.failedStage ?? "none")")
                                     }
                                     if isLinuxWorkflow {
                                         log(
@@ -324,7 +339,7 @@ extension UniversalInstallationView {
                                         return
                                     }
 
-                                    log("Wykryto niezgodność kontraktu IPC helpera. Rozpoczynam automatyczne przeładowanie helpera.", category: "Installation")
+                                    log("Helper IPC contract mismatch detected; reloading the helper.")
                                     helperStageTitleKey = HelperWorkflowLocalizationKeys.startingTitle
                                     helperStatusKey = HelperWorkflowLocalizationKeys.startingStatus
 
@@ -345,7 +360,7 @@ extension UniversalInstallationView {
                                         cancelHelperWorkflowIfNeeded { cancellationAccepted in
                                             if cancellationAccepted {
                                                 log(
-                                                    "Helper przyjął oczekujące żądanie anulowania; oczekuję na wynik końcowy workflow.",
+                                                    "Helper accepted pending cancellation; waiting for the final workflow result.",
                                                     category: isWindowsWorkflow ? "WindowsInstallFlow" : "Installation"
                                                 )
                                             } else {
@@ -354,7 +369,7 @@ extension UniversalInstallationView {
                                                     isCancelling = false
                                                 }
                                                 log(
-                                                    "Helper odrzucił oczekujące żądanie anulowania; aplikacja pozostaje w aktywnym workflow.",
+                                                    "Helper rejected pending cancellation; the workflow remains active.",
                                                     category: isWindowsWorkflow ? "WindowsInstallFlow" : "Installation"
                                                 )
                                             }
@@ -379,7 +394,7 @@ extension UniversalInstallationView {
                                     helperTransferMonitoringLastKnownPath = workflowRequest.targetVolumePath
                                     MenuState.shared.updateDebugCopiedData(bytes: 0)
                                     startHelperWriteSpeedMonitoring(for: drive)
-                                    log("Uruchomiono helper workflow: \(workflowID)")
+                                    log("Helper workflow started: \(workflowID)")
                                 }
                             )
                         }
@@ -388,6 +403,7 @@ extension UniversalInstallationView {
                     }
                 } catch {
                     DispatchQueue.main.async {
+                        logError("Helper workflow request preparation failed: \(error.localizedDescription)")
                         if cancellationRequestedBeforeWorkflowStart {
                             completeCancellationFlow()
                             return
@@ -588,13 +604,13 @@ extension UniversalInstallationView {
             return
         }
 
-        log("Wysyłam żądanie anulowania helper workflow: \(workflowID)")
+        log("Sending helper workflow cancellation request: \(workflowID)")
 
         PrivilegedOperationClient.shared.cancelWorkflow(workflowID) { cancelled, errorMessage in
             guard cancelled else {
                 if let errorMessage {
                     logError(
-                        "Żądanie anulowania helper workflow nie powiodło się: \(errorMessage)",
+                        "Helper workflow cancellation request failed: \(errorMessage)",
                         category: "Installation"
                     )
                 }
@@ -602,7 +618,7 @@ extension UniversalInstallationView {
                 return
             }
 
-            log("Helper przyjął żądanie anulowania; oczekuję na wynik końcowy workflow.")
+            log("Helper accepted cancellation; waiting for the final workflow result.")
             completion(true)
         }
     }
@@ -984,7 +1000,8 @@ extension UniversalInstallationView {
 
         AppLogging.info(
             "Transfer monitor fallback (\(reason)); stage=\(stageKey), requestedBSD=\(helperTransferMonitoringRequestedBSDName), targetPath=\(helperTransferMonitoringTargetVolumePath), failures=\(failureCount), speedSnapshotMBps=\(speedSnapshot), stagePercentSnapshot=\(stagePercentSnapshot), copiedBytes=\(copiedBytesSnapshot), totalBytes=\(totalBytesSnapshot)",
-            category: "HelperLiveLog"
+            stage: .usb,
+            workflow: creationLogWorkflow
         )
     }
 
@@ -1004,7 +1021,8 @@ extension UniversalInstallationView {
 
         AppLogging.info(
             "Transfer monitor recovery; stage=\(stageKey), requestedBSD=\(helperTransferMonitoringRequestedBSDName), targetPath=\(helperTransferMonitoringTargetVolumePath), previousFailures=\(previousFailures)",
-            category: "HelperLiveLog"
+            stage: .usb,
+            workflow: creationLogWorkflow
         )
 
         helperTransferMonitorFailureCount = 0

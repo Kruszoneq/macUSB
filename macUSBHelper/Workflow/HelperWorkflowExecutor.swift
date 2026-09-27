@@ -80,7 +80,7 @@ final class HelperWorkflowExecutor {
                 }
                 try throwIfCancelled()
                 if stage.key == "catalina_copy" {
-                    let transitionMessage = "Catalina: zakończono createinstallmedia, przejście do etapu ditto."
+                    let transitionMessage = "Catalina: createinstallmedia completed; starting ditto copy."
                     emit(stage: stage, percent: stage.startPercent, statusKey: stage.statusKey, logLine: transitionMessage)
                 } else {
                     emit(stage: stage, percent: stage.startPercent, statusKey: stage.statusKey)

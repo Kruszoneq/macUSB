@@ -44,6 +44,8 @@ Cleanup logs should include:
 - result and error details when cleanup fails,
 - finish-eject mode (`standard` or `force`) and Spotlight classification when applicable.
 
+Finish cleanup, duration/result, and eject diagnostics retain the workflow's `USB` label and use English `AppLogging` messages. Raw `stderr` and system error descriptions remain attached to the labeled diagnostic line. The result and error cards continue to use localized UI text.
+
 ## Update Trigger
 
 Update when finish result semantics or cleanup sequencing/ownership changes.

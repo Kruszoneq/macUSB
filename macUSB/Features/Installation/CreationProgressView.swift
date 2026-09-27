@@ -29,6 +29,7 @@ struct CreationProgressView: View {
     let isLinuxWorkflow: Bool
     let isRawImageSelection: Bool
     let isWindowsWorkflow: Bool
+    let loggingWorkflow: AppLogging.Workflow
     let windowsWillSplitWimExpected: Bool
     let windowsWillCreateAutounattendExpected: Bool
     let windowsWillInstallMacUSBootExpected: Bool
@@ -204,6 +205,7 @@ struct CreationProgressView: View {
                     isLinuxWorkflow: isLinuxWorkflow,
                     isRawImageSelection: isRawImageSelection,
                     isWindowsWorkflow: isWindowsWorkflow,
+                    loggingWorkflow: loggingWorkflow,
                     didFail: helperOperationFailed,
                     didCancel: didCancelCreation,
                     creationStartedAt: creationStartedAt,

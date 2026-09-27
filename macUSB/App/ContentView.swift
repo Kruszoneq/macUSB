@@ -64,6 +64,7 @@ struct ContentView: View {
                                 path = NavigationPath()
                             },
                             isPPC: false,
+                            loggingWorkflow: .macos,
                             didFail: false,
                             cleanupTempWorkURL: debugCleanupTempWorkURL,
                             shouldDetachMountPoint: false,
@@ -78,6 +79,7 @@ struct ContentView: View {
                                 path = NavigationPath()
                             },
                             isPPC: true,
+                            loggingWorkflow: .ppc,
                             didFail: false,
                             cleanupTempWorkURL: debugTigerCleanupTempWorkURL,
                             shouldDetachMountPoint: false,
@@ -93,6 +95,7 @@ struct ContentView: View {
                             },
                             isPPC: false,
                             isLinuxWorkflow: true,
+                            loggingWorkflow: .linux,
                             didFail: false,
                             cleanupTempWorkURL: debugLinuxCleanupTempWorkURL,
                             shouldDetachMountPoint: false,

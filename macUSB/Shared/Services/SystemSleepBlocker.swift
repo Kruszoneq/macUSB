@@ -11,11 +11,12 @@ final class SystemSleepBlocker {
     private var activeTokens: Set<UUID> = []
     private var activity: NSObjectProtocol?
     private var activeReason: String = ""
+    private var activeUSBLoggingWorkflow: AppLogging.Workflow?
 
     private init() {}
 
     @discardableResult
-    func begin(reason: String) -> UUID {
+    func begin(reason: String, usbLoggingWorkflow: AppLogging.Workflow? = nil) -> UUID {
         let token = UUID()
         lock.lock()
         defer { lock.unlock() }
@@ -26,11 +27,16 @@ final class SystemSleepBlocker {
         guard shouldStart else { return token }
 
         activeReason = reason
+        activeUSBLoggingWorkflow = usbLoggingWorkflow
         activity = ProcessInfo.processInfo.beginActivity(
             options: [.userInitiated, .idleSystemSleepDisabled],
             reason: reason
         )
-        AppLogging.info("Sleep blocker: aktywacja (\(reason))", category: "Power")
+        if let usbLoggingWorkflow {
+            AppLogging.info("Idle sleep prevention activated: reason=\(reason).", stage: .usb, workflow: usbLoggingWorkflow)
+        } else {
+            AppLogging.info("Sleep blocker: aktywacja (\(reason))", category: "Power")
+        }
         return token
     }
 
@@ -44,8 +50,13 @@ final class SystemSleepBlocker {
         if let activity {
             ProcessInfo.processInfo.endActivity(activity)
             self.activity = nil
-            AppLogging.info("Sleep blocker: dezaktywacja (\(activeReason))", category: "Power")
+            if let activeUSBLoggingWorkflow {
+                AppLogging.info("Idle sleep prevention released: reason=\(activeReason).", stage: .usb, workflow: activeUSBLoggingWorkflow)
+            } else {
+                AppLogging.info("Sleep blocker: dezaktywacja (\(activeReason))", category: "Power")
+            }
         }
         activeReason = ""
+        activeUSBLoggingWorkflow = nil
     }
 }

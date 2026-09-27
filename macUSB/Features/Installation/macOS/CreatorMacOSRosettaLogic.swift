@@ -71,7 +71,7 @@ extension UniversalInstallationView {
 
         let completion: (NSApplication.ModalResponse) -> Void = { response in
             guard response == .alertFirstButtonReturn else {
-                AppLogging.info("Użytkownik nie zaakceptował umowy licencyjnej Rosetty.", category: "Rosetta")
+                AppLogging.info("User declined the Rosetta license agreement.", stage: .usb, workflow: creationLogWorkflow)
                 return
             }
             startMacOSRosettaInstallation()
@@ -88,15 +88,16 @@ extension UniversalInstallationView {
         beginMacOSRosettaOperation(context: "installation")
         macOSRosettaState = .installing
         macOSRosettaRetryGeneration = UUID()
-        AppLogging.info("Rozpoczynam przygotowanie helpera do instalacji Rosetty.", category: "Rosetta")
+        AppLogging.info("Preparing the helper for Rosetta installation.", stage: .usb, workflow: creationLogWorkflow)
 
         HelperServiceManager.shared.ensureReadyForPrivilegedWork { ready, failureReason in
             guard ready else {
                 macOSRosettaState = .installFailed
                 finishMacOSRosettaOperation()
                 AppLogging.error(
-                    "Helper nie jest gotowy do instalacji Rosetty: \(failureReason ?? "brak szczegółów")",
-                    category: "Rosetta"
+                    "Helper is not ready for Rosetta installation: \(failureReason ?? "no details")",
+                    stage: .usb,
+                    workflow: creationLogWorkflow
                 )
                 return
             }
@@ -105,8 +106,10 @@ extension UniversalInstallationView {
                 switch result {
                 case .success(let payload):
                     AppLogging.info(
-                        "Helper zakończył instalację Rosetty: success=\(payload.success), status=\(payload.terminationStatus), details=\(payload.diagnosticMessage ?? "brak")",
-                        category: "Rosetta"
+                        "Rosetta installation helper finished: success=\(payload.success), status=\(payload.terminationStatus), details=\(payload.diagnosticMessage ?? "none")",
+                        stage: .usb,
+                        workflow: creationLogWorkflow,
+                        helperOrigin: true
                     )
                     guard payload.success else {
                         macOSRosettaState = .installFailed
@@ -119,8 +122,9 @@ extension UniversalInstallationView {
                     macOSRosettaState = .installFailed
                     finishMacOSRosettaOperation()
                     AppLogging.error(
-                        "Instalacja Rosetty przez helper nie powiodła się: \(error.localizedDescription)",
-                        category: "Rosetta"
+                        "Rosetta installation through the helper failed: \(error.localizedDescription)",
+                        stage: .usb,
+                        workflow: creationLogWorkflow
                     )
                 }
             }
@@ -135,8 +139,9 @@ extension UniversalInstallationView {
                 guard generation == macOSRosettaRetryGeneration else { return }
 
                 AppLogging.info(
-                    "Sprawdzenie Rosetty po instalacji: próba \(attempt)/5, wynik=\(availability.diagnosticLabel)",
-                    category: "Rosetta"
+                    "Rosetta post-install check: attempt=\(attempt)/5, result=\(availability.diagnosticLabel)",
+                    stage: .usb,
+                    workflow: creationLogWorkflow
                 )
 
                 if availability == .available {
@@ -181,8 +186,9 @@ extension UniversalInstallationView {
                     macOSRosettaState = .checkFailed
                 }
                 AppLogging.info(
-                    "Ręczne sprawdzenie Rosetty: \(availability.diagnosticLabel)",
-                    category: "Rosetta"
+                    "Manual Rosetta availability check: \(availability.diagnosticLabel)",
+                    stage: .usb,
+                    workflow: creationLogWorkflow
                 )
                 finishMacOSRosettaOperation()
             }

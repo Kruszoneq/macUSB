@@ -14,6 +14,7 @@ struct FinishUSBView: View {
     let isLinuxWorkflow: Bool
     let isRawImageSelection: Bool
     let isWindowsWorkflow: Bool
+    let loggingWorkflow: AppLogging.Workflow
     let didFail: Bool
     let didCancel: Bool
     let creationStartedAt: Date?
@@ -42,6 +43,7 @@ struct FinishUSBView: View {
         isLinuxWorkflow: Bool = false,
         isRawImageSelection: Bool = false,
         isWindowsWorkflow: Bool = false,
+        loggingWorkflow: AppLogging.Workflow,
         didFail: Bool,
         didCancel: Bool = false,
         creationStartedAt: Date? = nil,
@@ -61,6 +63,7 @@ struct FinishUSBView: View {
         self.isLinuxWorkflow = isLinuxWorkflow
         self.isRawImageSelection = isRawImageSelection
         self.isWindowsWorkflow = isWindowsWorkflow
+        self.loggingWorkflow = loggingWorkflow
         self.didFail = didFail
         self.didCancel = didCancel
         self.creationStartedAt = creationStartedAt
@@ -74,7 +77,8 @@ struct FinishUSBView: View {
         _ejectLogic = StateObject(
             wrappedValue: FinishUSBEjectLogic(
                 targetWholeDiskBSDName: targetWholeDiskBSDName,
-                isDebugMode: isDebugEjectMode
+                isDebugMode: isDebugEjectMode,
+                loggingWorkflow: loggingWorkflow
             )
         )
     }
@@ -596,34 +600,43 @@ struct FinishUSBView: View {
 
                     if !stillExists || isNoSuchFile {
                         AppLogging.info(
-                            "FinishUSBView: cleanup fallback pominięty, pliki TEMP zostały już usunięte wcześniej.",
-                            category: "Installation"
+                            "Fallback cleanup skipped: temporary files were already removed.",
+                            stage: .usb,
+                            workflow: self.loggingWorkflow
                         )
                     } else {
                         success = false
+                        AppLogging.error(
+                            "Fallback cleanup failed: path=\(self.tempWorkURL.path), error=\(error.localizedDescription)",
+                            stage: .usb,
+                            workflow: self.loggingWorkflow
+                        )
                         errorMsg = String(localized: "Nie udało się usunąć plików tymczasowych: \(error.localizedDescription)")
                     }
                 }
             } else {
                 AppLogging.info(
-                    "FinishUSBView: pomijam fallback cleanup TEMP, helper usunął pliki wcześniej.",
-                    category: "Installation"
+                    "Fallback cleanup skipped: helper already removed temporary files.",
+                    stage: .usb,
+                    workflow: self.loggingWorkflow
                 )
             }
             
             DispatchQueue.main.async {
                 let durationMetrics = self.currentCompletionDuration()
                 let durationText = self.makeCompletionDurationText(durationMetrics)
-                let resultState = self.didCancel ? "PRZERWANO" : (self.didFail ? "NIEPOWODZENIE" : "SUKCES")
+                let resultState = self.didCancel ? "cancelled" : (self.didFail ? "failed" : "success")
                 if let durationMetrics {
                     AppLogging.info(
-                        "Czas procesu USB: \(durationMetrics.displayText) (\(durationMetrics.totalSeconds)s), wynik: \(resultState).",
-                        category: "Installation"
+                        "USB creation duration: \(durationMetrics.displayText) (\(durationMetrics.totalSeconds)s), result=\(resultState), cleanupSuccess=\(success).",
+                        stage: .usb,
+                        workflow: self.loggingWorkflow
                     )
                 } else {
                     AppLogging.info(
-                        "Czas procesu USB: brak danych startu, wynik: \(resultState).",
-                        category: "Installation"
+                        "USB creation duration unavailable: start time missing, result=\(resultState), cleanupSuccess=\(success).",
+                        stage: .usb,
+                        workflow: self.loggingWorkflow
                     )
                 }
 
