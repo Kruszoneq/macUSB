@@ -67,6 +67,18 @@ USB creation diagnostics from the installation summary through the finish screen
 
 Downloader event diagnostics use `DOWNLOADER` for window and prerequisite events before a workflow is identified, `DOWNLOADER_DISCOVERY` for installer discovery, and `DOWNLOADER_MODERN`, `DOWNLOADER_LEGACY`, or `DOWNLOADER_OLDEST` for the selected installer distribution workflow. App-side lines pass through `AppLogging`; forwarded helper assembly and tool-output lines append `[HELPER]`. A missing helper-cleanup confirmation produces an English app-authored error and, when available, a separate `[HELPER]` line containing the helper's original error text. UI localization keys and helper status payloads remain presentation data.
 
+## New Logging Paths
+
+When adding a feature or a logging path:
+
+- Send app-side diagnostics through `AppLogging`; let it add the timestamp, stage, workflow suffix, and per-line prefix. Use `HelperDiagnosticLogging` for direct daemon system logs.
+- Write app- and helper-authored diagnostic text in English, independently of the UI language. Keep localized UI text out of diagnostic messages. Retain raw tool output, system error descriptions, paths, and other source data in their original form and identify their source.
+- Choose the stage for the operation being performed. Pass its workflow suffix to every log once the workflow is known, including errors, cleanup, and protected-operation token start and finish. Use the base stage only before workflow identification or for work that genuinely spans workflows.
+- Mark every new helper-origin diagnostic forwarded into the app with `helperOrigin: true`, including progress, tool output, and result details. Direct daemon diagnostics carry the same source tag. App-authored helper registration, XPC, and repair diagnostics use the `HELPER` stage without a helper-origin tag.
+- Record enough context to explain the operation and its result without using diagnostic output as the source of UI stage or status text. Update the relevant feature reference when the new path changes which events or details are logged.
+
+The exceptions below document existing paths; they are not templates for new logging code.
+
 ## Current Exceptions
 
 - The protected-operation registry defaults to `[APP]` when a caller supplies no stage or workflow. Its analysis and manual SHA-256 tokens, tracked-source-image cleanup token, downloader-window token, downloader assembly and cleanup tokens, Rosetta tokens, and app-termination cleanup token currently use that default. Their related event logs may carry `ANALYSIS`, `DOWNLOADER`, `USB`, or another operation stage.
