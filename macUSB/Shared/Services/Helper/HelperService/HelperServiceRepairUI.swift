@@ -24,8 +24,20 @@ extension HelperServiceManager {
         }
     }
 
-    func reportHelperServiceEvent(_ message: String) {
-        AppLogging.info(message, category: "HelperService")
+    func reportHelperServiceEvent(
+        _ message: String,
+        stage: AppLogging.Stage? = nil,
+        isError: Bool = false
+    ) {
+        if let stage {
+            if isError {
+                AppLogging.error(message, stage: stage)
+            } else {
+                AppLogging.info(message, stage: stage)
+            }
+        } else {
+            AppLogging.info(message, category: "HelperService")
+        }
         repairSinkLock.lock()
         let sink = repairProgressSink
         repairSinkLock.unlock()

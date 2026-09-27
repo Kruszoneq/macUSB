@@ -90,7 +90,10 @@ extension HelperServiceManager {
         reportHelperServiceEvent("Aktualny status SMAppService: \(statusDescription(service.status)).")
         switch service.status {
         case .enabled:
-            reportHelperServiceEvent("Helper jest oznaczony jako włączony. Weryfikuję health XPC.")
+            reportHelperServiceEvent(
+                "Helper service is enabled; checking XPC health.",
+                stage: .helper
+            )
             validateEnabledServiceHealth(interactive: interactive, allowRecovery: true) { ready, message in
                 self.finalizeEnsureRequests(ready: ready, message: message)
             }
@@ -155,12 +158,20 @@ extension HelperServiceManager {
                     presentsTrustFailureAlert: interactive
                 ) { ok, details in
                     if ok {
-                        self.reportHelperServiceEvent("Health XPC po błędzie register() jest poprawny.")
+                        let identity = PrivilegedOperationClient.shared.diagnosticHealthIdentity(from: details)
+                        self.reportHelperServiceEvent(
+                            "XPC health check passed after registration error\(identity.map { " \($0)" } ?? "").",
+                            stage: .helper
+                        )
                         completion(true, nil)
                         return
                     }
 
-                    self.reportHelperServiceEvent("Health XPC po błędzie register() nadal nie działa: \(details)")
+                    self.reportHelperServiceEvent(
+                        "XPC health check failed after registration error.",
+                        stage: .helper,
+                        isError: true
+                    )
                     completion(
                         false,
                         String(localized: "System zablokował rejestrację helpera z uruchomienia Xcode. Uruchom raz aplikację z katalogu Applications, zatwierdź działanie helpera w tle, a następnie wróć do testów w Xcode. Szczegóły XPC: \(details)")
@@ -215,29 +226,32 @@ extension HelperServiceManager {
         allowRecovery: Bool,
         completion: @escaping (Bool, String?) -> Void
     ) {
-        reportHelperServiceEvent("Rozpoczynam weryfikację health XPC helpera.")
+        reportHelperServiceEvent("XPC health check started.", stage: .helper)
         PrivilegedOperationClient.shared.queryHealth(
             withTimeout: 5,
             presentsTrustFailureAlert: interactive
         ) { ok, details in
             if ok {
-                self.reportHelperServiceEvent("Health XPC: OK (\(details)).")
+                let identity = PrivilegedOperationClient.shared.diagnosticHealthIdentity(from: details)
+                self.reportHelperServiceEvent(
+                    "XPC health check passed\(identity.map { " \($0)" } ?? "").",
+                    stage: .helper
+                )
                 completion(true, nil)
                 return
             }
-            self.reportHelperServiceEvent("Health XPC: BŁĄD (\(details)).")
+            self.reportHelperServiceEvent("XPC health check failed.", stage: .helper, isError: true)
 
             guard allowRecovery else {
                 completion(false, "Helper jest włączony, ale XPC nie odpowiada: \(details)")
                 return
             }
 
-            AppLogging.error(
-                "Weryfikacja health helpera nieudana: \(details). Próba resetu połączenia XPC.",
-                category: "Installation"
-            )
             PrivilegedOperationClient.shared.resetConnectionForRecovery()
-            self.reportHelperServiceEvent("Zresetowano połączenie XPC. Ponawiam health-check.")
+            self.reportHelperServiceEvent(
+                "XPC connection reset; retrying the health check.",
+                stage: .helper
+            )
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
                 PrivilegedOperationClient.shared.queryHealth(
@@ -245,11 +259,19 @@ extension HelperServiceManager {
                     presentsTrustFailureAlert: interactive
                 ) { retryOK, retryDetails in
                     if retryOK {
-                        self.reportHelperServiceEvent("Health XPC po resecie: OK (\(retryDetails)).")
+                        let identity = PrivilegedOperationClient.shared.diagnosticHealthIdentity(from: retryDetails)
+                        self.reportHelperServiceEvent(
+                            "XPC health check passed after connection reset\(identity.map { " \($0)" } ?? "").",
+                            stage: .helper
+                        )
                         completion(true, nil)
                         return
                     }
-                    self.reportHelperServiceEvent("Health XPC po resecie nadal nie działa: \(retryDetails).")
+                    self.reportHelperServiceEvent(
+                        "XPC health check failed after connection reset.",
+                        stage: .helper,
+                        isError: true
+                    )
 
                     self.recoverRegistrationAfterHealthFailure(
                         interactive: interactive,
@@ -287,10 +309,18 @@ extension HelperServiceManager {
                             presentsTrustFailureAlert: interactive
                         ) { recovered, recoveredDetails in
                             if recovered {
-                                self.reportHelperServiceEvent("Health XPC po odzyskiwaniu: OK (\(recoveredDetails)).")
+                                let identity = PrivilegedOperationClient.shared.diagnosticHealthIdentity(from: recoveredDetails)
+                                self.reportHelperServiceEvent(
+                                    "XPC health check passed after registration recovery\(identity.map { " \($0)" } ?? "").",
+                                    stage: .helper
+                                )
                                 completion(true, nil)
                             } else {
-                                self.reportHelperServiceEvent("Health XPC po odzyskiwaniu nadal nie działa: \(recoveredDetails).")
+                                self.reportHelperServiceEvent(
+                                    "XPC health check failed after registration recovery.",
+                                    stage: .helper,
+                                    isError: true
+                                )
                                 completion(
                                     false,
                                     "Helper został ponownie zarejestrowany, ale XPC nadal nie działa: \(recoveredDetails). Poprzedni błąd: \(healthDetails)"

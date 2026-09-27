@@ -159,6 +159,7 @@ Contract invariants:
 - If fingerprint changed, or no previous fingerprint exists (upgrade from older app versions), app runs automatic full helper repair in background.
 - Successful automatic repair updates stored fingerprint, remains visible in logs, and shows a short in-app toast at the bottom of the main window.
 - Failed automatic repair presents one warning `NSAlert` with guidance to run `Tools → Repair helper` manually.
+- Automatic update decision, start, completion, and failure lines use English messages with the `[HH:MM:SS] [HELPER]` prefix. The start line records whether the previous fingerprint was missing or changed.
 - Automatic and manual full repair own a repair token from the start of unregister through the final registration health check.
 
 ### Hard-Repair Flow
@@ -315,6 +316,8 @@ Important behavior:
 
 Rules:
 - Important runtime events should be routed through `AppLogging` on app-side.
+- App-side XPC helper code-signing requirement configuration and rejection lines use English messages with the `[HH:MM:SS] [HELPER]` prefix.
+- Ensure-ready XPC health check lines use the same prefix. Successful checks include `uid`, `euid`, and `pid` when the helper supplies them; localized health details remain available to presentation flows.
 - Repair flow should produce readable operational logs.
 - Helper live tool output is diagnostic and must not become the UI source of truth for stage semantics.
 - macUSBoot phase status keys are stable localization identifiers carried in progress events; live log lines remain technical diagnostics and never include binary contents.

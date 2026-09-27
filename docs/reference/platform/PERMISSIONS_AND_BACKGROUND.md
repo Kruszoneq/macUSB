@@ -42,6 +42,8 @@ Full Disk Access checks log:
 - success or the captured POSIX `errno` and description,
 - each probe signal and the final aggregate status.
 
+These check and probe lines use English messages with the `[HH:MM:SS] [PERMISSIONS]` prefix.
+
 Protected file contents are never logged.
 Logs should clearly indicate which prerequisite is missing and what the app did next.
 

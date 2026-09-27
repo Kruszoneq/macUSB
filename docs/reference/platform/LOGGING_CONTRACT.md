@@ -46,6 +46,8 @@ The application starts each exported session with one English `APP` block. Every
 
 Use `Unknown` if the Mac architecture or model cannot be identified. This block is already implemented; other log paths still follow the staged migration noted above.
 
+Full Disk Access check/probe lines, automatic helper update lifecycle lines, app-side XPC helper code-signing requirement diagnostics, and ensure-ready XPC health checks also use the target format. The shared helper repair flow still uses its existing logging path during this staged migration.
+
 ## Update Trigger
 
 Update when the log language, exported line format, or stage-label policy changes. Keep feature-specific logging expectations in their existing references.

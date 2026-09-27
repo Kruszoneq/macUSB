@@ -86,14 +86,14 @@ final class FullDiskAccessPermissionManager {
         trigger: FullDiskAccessCheckTrigger
     ) -> FullDiskAccessEvaluation {
         AppLogging.info(
-            "FDA check started: trigger=\(trigger.rawValue).",
-            category: "Permissions"
+            "Full Disk Access check started: trigger=\(trigger.rawValue).",
+            stage: .permissions
         )
 
         let evaluation = FullDiskAccessProbe.evaluate()
         for result in evaluation.results {
             var message =
-                "FDA probe: trigger=\(trigger.rawValue), id=\(result.identifier.rawValue), " +
+                "Full Disk Access probe: trigger=\(trigger.rawValue), id=\(result.identifier.rawValue), " +
                 "operation=\(result.operation.rawValue), path=\(result.path)"
             if let errnoCode = result.errnoCode {
                 let description = result.errorDescription ?? "Unknown error"
@@ -102,12 +102,12 @@ final class FullDiskAccessPermissionManager {
                 message += ", errno=none"
             }
             message += ", signal=\(result.signal.rawValue)."
-            AppLogging.info(message, category: "Permissions")
+            AppLogging.info(message, stage: .permissions)
         }
 
         AppLogging.info(
-            "FDA check completed: trigger=\(trigger.rawValue), status=\(evaluation.status.rawValue).",
-            category: "Permissions"
+            "Full Disk Access check completed: trigger=\(trigger.rawValue), status=\(evaluation.status.rawValue).",
+            stage: .permissions
         )
         return evaluation
     }

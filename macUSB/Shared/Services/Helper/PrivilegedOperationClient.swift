@@ -5,6 +5,9 @@ final class PrivilegedOperationClient: NSObject {
     private static let healthDetailsRegex = try? NSRegularExpression(
         pattern: #"^Helper odpowiada poprawnie \(uid=([0-9]+), euid=([0-9]+), pid=([0-9]+)\)$"#
     )
+    private static let healthIdentityRegex = try? NSRegularExpression(
+        pattern: #"\(uid=[0-9]+, euid=[0-9]+, pid=[0-9]+\)$"#
+    )
 
     typealias EventHandler = (HelperProgressEventPayload) -> Void
     typealias CompletionHandler = (HelperWorkflowResultPayload) -> Void
@@ -417,8 +420,9 @@ final class PrivilegedOperationClient: NSObject {
             DispatchQueue.main.async {
                 if HelperConnectionSecurityPolicy.isCodeSigningRequirementFailure(error) {
                     AppLogging.error(
-                        "Weryfikacja podpisu helpera XPC nie powiodła się: \(HelperConnectionSecurityPolicy.diagnosticSummary(for: error)).",
-                        category: "HelperService"
+                        "XPC helper code-signing verification failed: " +
+                        "\(HelperConnectionSecurityPolicy.diagnosticSummary(for: error)).",
+                        stage: .helper
                     )
                     if presentsTrustFailureAlert {
                         HelperServiceManager.shared.presentHelperTrustVerificationFailureAlert()
@@ -564,6 +568,16 @@ final class PrivilegedOperationClient: NSObject {
             euid,
             pid
         )
+    }
+
+    func diagnosticHealthIdentity(from details: String) -> String? {
+        guard let regex = Self.healthIdentityRegex else { return nil }
+        let nsString = details as NSString
+        let fullRange = NSRange(location: 0, length: nsString.length)
+        guard let match = regex.firstMatch(in: details, options: [], range: fullRange) else {
+            return nil
+        }
+        return nsString.substring(with: match.range)
     }
 }
 

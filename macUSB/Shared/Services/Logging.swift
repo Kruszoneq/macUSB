@@ -8,6 +8,11 @@ import Darwin
 /// Other logging paths are being migrated to the contract in
 /// `docs/reference/platform/LOGGING_CONTRACT.md` in stages.
 public enum AppLogging {
+    public enum Stage: String {
+        case permissions = "PERMISSIONS"
+        case helper = "HELPER"
+    }
+
     private static let subsystem = Bundle.main.bundleIdentifier ?? "macUSB"
     private static let appLogger = Logger(subsystem: subsystem, category: "App")
     private static var didLogStartup: Bool = false
@@ -87,6 +92,21 @@ public enum AppLogging {
         let t = currentTimeString()
         let line = "[\(t)][\(category)][ERROR] \(message)"
         let logger = Logger(subsystem: subsystem, category: category)
+        logger.error("\(line, privacy: .public)")
+        appendToBuffer(line)
+    }
+
+    /// Logs a migrated diagnostic line with the operation stage after the timestamp.
+    public static func info(_ message: String, stage: Stage) {
+        let line = "[\(currentTimeString())] [\(stage.rawValue)] \(message)"
+        let logger = Logger(subsystem: subsystem, category: stage.rawValue)
+        logger.info("\(line, privacy: .public)")
+        appendToBuffer(line)
+    }
+
+    public static func error(_ message: String, stage: Stage) {
+        let line = "[\(currentTimeString())] [\(stage.rawValue)] \(message)"
+        let logger = Logger(subsystem: subsystem, category: stage.rawValue)
         logger.error("\(line, privacy: .public)")
         appendToBuffer(line)
     }
