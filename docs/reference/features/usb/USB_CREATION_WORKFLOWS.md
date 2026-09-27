@@ -149,6 +149,7 @@ Windows summary pre-start prerequisites:
 - Idle sleep is blocked for the full USB creation runtime.
 - Sleep blocker is activated at creation process start.
 - Sleep blocker is released on every terminal path: success, failure, and cancellation.
+- Activation and release diagnostics use the selected `USB_WORKFLOW` label and an English reason.
 - The USB-creation token follows the same terminal coverage but is independent from the sleep blocker.
 
 ## Logging and Diagnostics

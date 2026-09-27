@@ -185,6 +185,7 @@ Power management contract during production download flow:
 - idle sleep is blocked for the full runtime of one download session,
 - activation starts when download workflow starts (`running` state),
 - release is guaranteed on every terminal path: success, failure, or cancellation.
+- activation and release diagnostics use the selected `DOWNLOADER_MODERN`, `DOWNLOADER_LEGACY`, or `DOWNLOADER_OLDEST` label and an English reason.
 
 Summary:
 - shows transfer, average speed, duration, and output file name,

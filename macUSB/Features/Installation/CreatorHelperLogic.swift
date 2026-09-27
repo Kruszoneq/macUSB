@@ -6,7 +6,8 @@ extension UniversalInstallationView {
         guard usbProcessSleepBlockToken == nil else { return }
         usbProcessSleepBlockToken = SystemSleepBlocker.shared.begin(
             reason: "USB creation",
-            usbLoggingWorkflow: creationLogWorkflow
+            loggingStage: .usb,
+            loggingWorkflow: creationLogWorkflow
         )
     }
 

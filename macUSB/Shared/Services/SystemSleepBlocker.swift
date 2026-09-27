@@ -11,12 +11,17 @@ final class SystemSleepBlocker {
     private var activeTokens: Set<UUID> = []
     private var activity: NSObjectProtocol?
     private var activeReason: String = ""
-    private var activeUSBLoggingWorkflow: AppLogging.Workflow?
+    private var activeLoggingStage: AppLogging.Stage?
+    private var activeLoggingWorkflow: AppLogging.Workflow?
 
     private init() {}
 
     @discardableResult
-    func begin(reason: String, usbLoggingWorkflow: AppLogging.Workflow? = nil) -> UUID {
+    func begin(
+        reason: String,
+        loggingStage: AppLogging.Stage,
+        loggingWorkflow: AppLogging.Workflow
+    ) -> UUID {
         let token = UUID()
         lock.lock()
         defer { lock.unlock() }
@@ -27,16 +32,17 @@ final class SystemSleepBlocker {
         guard shouldStart else { return token }
 
         activeReason = reason
-        activeUSBLoggingWorkflow = usbLoggingWorkflow
+        activeLoggingStage = loggingStage
+        activeLoggingWorkflow = loggingWorkflow
         activity = ProcessInfo.processInfo.beginActivity(
             options: [.userInitiated, .idleSystemSleepDisabled],
             reason: reason
         )
-        if let usbLoggingWorkflow {
-            AppLogging.info("Idle sleep prevention activated: reason=\(reason).", stage: .usb, workflow: usbLoggingWorkflow)
-        } else {
-            AppLogging.info("Sleep blocker: aktywacja (\(reason))", category: "Power")
-        }
+        AppLogging.info(
+            "Idle sleep prevention activated: reason=\(reason).",
+            stage: loggingStage,
+            workflow: loggingWorkflow
+        )
         return token
     }
 
@@ -50,13 +56,16 @@ final class SystemSleepBlocker {
         if let activity {
             ProcessInfo.processInfo.endActivity(activity)
             self.activity = nil
-            if let activeUSBLoggingWorkflow {
-                AppLogging.info("Idle sleep prevention released: reason=\(activeReason).", stage: .usb, workflow: activeUSBLoggingWorkflow)
-            } else {
-                AppLogging.info("Sleep blocker: dezaktywacja (\(activeReason))", category: "Power")
+            if let activeLoggingStage, let activeLoggingWorkflow {
+                AppLogging.info(
+                    "Idle sleep prevention released: reason=\(activeReason).",
+                    stage: activeLoggingStage,
+                    workflow: activeLoggingWorkflow
+                )
             }
         }
         activeReason = ""
-        activeUSBLoggingWorkflow = nil
+        activeLoggingStage = nil
+        activeLoggingWorkflow = nil
     }
 }

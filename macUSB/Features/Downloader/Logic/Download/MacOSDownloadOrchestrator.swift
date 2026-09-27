@@ -10,7 +10,11 @@ extension MontereyDownloadFlowModel {
         loggingWorkflow = logic.isOldestDownloadTarget(entry)
             ? .oldest
             : (logic.isLegacyAssemblyTarget(entry) ? .legacy : .modern)
-        let sleepBlockToken = SystemSleepBlocker.shared.begin(reason: "Pobieranie systemu macOS")
+        let sleepBlockToken = SystemSleepBlocker.shared.begin(
+            reason: "macOS installer download",
+            loggingStage: .downloader,
+            loggingWorkflow: loggingWorkflow
+        )
         defer { SystemSleepBlocker.shared.end(sleepBlockToken) }
 
         workflowState = .running
