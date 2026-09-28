@@ -410,7 +410,7 @@ struct macUSBApp: App {
         savePanel.allowedFileTypes = ["log"]
         let df = DateFormatter()
         df.dateFormat = "yyMMdd-HHmmss"
-        let prefix = previousSession ? "macUSB-previous-session" : "macUSB"
+        let prefix = previousSession ? "macUSB-prev" : "macUSB"
         savePanel.nameFieldStringValue = "\(prefix)-\(df.string(from: Date())).log"
         savePanel.canCreateDirectories = true
         savePanel.isExtensionHidden = false
