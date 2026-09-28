@@ -368,10 +368,10 @@ struct macUSBApp: App {
                     } else {
                         savePanel.directoryURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first
                     }
-                    savePanel.allowedFileTypes = ["txt"]
+                    savePanel.allowedFileTypes = ["log"]
                     let df = DateFormatter()
-                    df.dateFormat = "yyyyMMdd_HHmmss"
-                    savePanel.nameFieldStringValue = "macUSB_\(df.string(from: Date()))_logs.txt"
+                    df.dateFormat = "yyMMdd-HHmmss"
+                    savePanel.nameFieldStringValue = "macUSB-\(df.string(from: Date())).log"
                     savePanel.canCreateDirectories = true
                     savePanel.isExtensionHidden = false
                     savePanel.title = String(localized: "Eksportuj logi diagnostyczne")
