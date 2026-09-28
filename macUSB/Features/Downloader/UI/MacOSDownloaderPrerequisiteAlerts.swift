@@ -8,8 +8,8 @@ extension MacOSDownloaderWindowShellView {
         prerequisiteController.refresh(trigger: .warningAction) { snapshot in
             guard snapshot.requiresWarning else {
                 AppLogging.info(
-                    "Ostrzezenie wymagan downloadera nie jest juz aktualne.",
-                    category: "Downloader"
+                    "Downloader prerequisite warning is no longer current.",
+                    stage: .downloader
                 )
                 return
             }

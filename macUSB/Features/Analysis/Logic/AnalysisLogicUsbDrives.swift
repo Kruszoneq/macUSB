@@ -145,7 +145,7 @@ extension AnalysisLogic {
 
                 if self.unreadableExternalUSBMediaCount != unreadableCount {
                     self.log(
-                        "Wykryto nieczytelne nośniki USB: \(unreadableCount)",
+                        "Unreadable USB devices detected: \(unreadableCount)",
                         category: "USBSelection"
                     )
                 }
@@ -167,7 +167,7 @@ extension AnalysisLogic {
             isCapacitySufficient = false
             capacityCheckFinished = false
             if logResult {
-                log("Walidacja pojemności celu \(drive.device): brak ustalonego wymogu pojemności; wynik=nierozstrzygnięty.", category: "USBSelection")
+                log("Target capacity validation for \(drive.device): capacity requirement unavailable; result=undetermined.", category: "USBSelection")
             }
             return
         }
@@ -190,12 +190,12 @@ extension AnalysisLogic {
         }
 
         if logResult {
-            let kind = drive.isWholeDiskTarget ? "nośnik" : "wolumin"
-            let actualCapacity = capacityBytes.map { "\($0) B" } ?? "nieznana"
-            let result = sufficient ? "spełnia" : "nie spełnia"
-            let reason = capacityBytes == nil ? ", powód=brak odczytu pojemności" : ""
+            let kind = drive.isWholeDiskTarget ? "disk" : "volume"
+            let actualCapacity = capacityBytes.map { "\($0) B" } ?? "unknown"
+            let result = sufficient ? "sufficient" : "insufficient"
+            let reason = capacityBytes == nil ? ", reason=capacity could not be read" : ""
             log(
-                "Walidacja pojemności wybranego celu [\(kind) \(drive.device)]: wymagane=\(minCapacity) B, pojemność=\(actualCapacity), wynik=\(result)\(reason).",
+                "Selected target capacity validation [\(kind) \(drive.device)]: required=\(minCapacity) B, capacity=\(actualCapacity), result=\(result)\(reason).",
                 category: "USBSelection"
             )
         }

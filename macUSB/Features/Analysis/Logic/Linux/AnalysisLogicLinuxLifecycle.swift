@@ -88,16 +88,16 @@ private enum LinuxDistroIconCatalog {
 extension AnalysisLogic {
     func loadLinuxDetectedSystemIcon(for distro: String?) -> NSImage? {
         if let distro, let distroIcon = loadLinuxDistroIcon(for: distro) {
-            self.log("Załadowano ikonę Linux distro: \(distro)")
+            self.logLinux("Loaded Linux distribution icon: \(distro)")
             return distroIcon
         }
 
         guard let icon = loadLinuxDistroIcon(for: "linux") else {
-            self.log("Nie znaleziono fallback ikony linux.png - zostanie użyty SF Symbol.", category: "FileAnalysis")
+            self.logLinux("Fallback linux.png icon not found; using SF Symbol.", category: "FileAnalysis")
             return nil
         }
         icon.isTemplate = false
-        self.log("Załadowano fallback ikonę linux.png.", category: "FileAnalysis")
+        self.logLinux("Loaded fallback linux.png icon.", category: "FileAnalysis")
         return icon
     }
 
@@ -124,7 +124,7 @@ extension AnalysisLogic {
             }
         }
 
-        self.log("Brak dedykowanej ikony distro dla: \(distro). Kandydaci: \(candidates.joined(separator: ", "))", category: "FileAnalysis")
+        self.logLinux("No dedicated distribution icon for: \(distro). Candidates: \(candidates.joined(separator: ", "))", category: "FileAnalysis")
         return nil
     }
 
@@ -240,15 +240,15 @@ extension AnalysisLogic {
             sourceURL: sourceURL
         )
 
-        self.log("Rozpoznano obraz Linux: \(result.displayName)")
-        self.log("Linux source file: \(sourceURL.path)")
-        self.log("Linux details: distro=\(result.distro ?? "?") version=\(result.version ?? "?") edition=\(result.edition ?? "?") arch=\(result.archRaw ?? "?") arm=\(result.isARM ? "TAK" : "NIE")")
-        self.log("Linux classification: rule=\(result.classificationRule) matched_signal=\(result.matchedSignal ?? "none") version_source=\(result.versionSource ?? "none")")
-        self.log("Linux gate_signals: \(result.gateSignals.joined(separator: ", "))")
-        self.log("Linux evidence: \(result.evidence.joined(separator: ", "))")
+        self.logLinux("Recognized Linux image: \(result.displayName)")
+        self.logLinux("Linux source file: \(sourceURL.path)")
+        self.logLinux("Linux details: distro=\(result.distro ?? "?") version=\(result.version ?? "?") edition=\(result.edition ?? "?") arch=\(result.archRaw ?? "?") arm=\(result.isARM ? "yes" : "no")")
+        self.logLinux("Linux classification: rule=\(result.classificationRule) matched_signal=\(result.matchedSignal ?? "none") version_source=\(result.versionSource ?? "none")")
+        self.logLinux("Linux gate_signals: \(result.gateSignals.joined(separator: ", "))")
+        self.logLinux("Linux evidence: \(result.evidence.joined(separator: ", "))")
         cleanupLinuxAttachSession(reason: "linux_detection_completed_success")
         self.mountedDMGPath = nil
-        AppLogging.separator()
+        AppLogging.separator(stage: .analysis, workflow: .linux)
     }
 }
 
@@ -271,7 +271,7 @@ extension AnalysisLogic {
 
         guard let session = linuxAttachSessionForImagePath(sourcePath) else {
             linuxImageAttachSession = nil
-            self.log("Linux mount session: brak encji dla obrazu \(sourceURL.lastPathComponent) [reason=\(reason)]")
+            self.logLinux("Linux mount session: no entities for image \(sourceURL.lastPathComponent) [reason=\(reason)]")
             return
         }
 
@@ -295,31 +295,31 @@ extension AnalysisLogic {
         for devEntry in devDetachCandidates {
             let result = detachLinuxImageEntity(identifier: devEntry)
             if result.success {
-                self.log("Linux cleanup detach_ok identifier=\(devEntry) stage=dev-entry")
+                self.logLinux("Linux cleanup detach_ok identifier=\(devEntry) stage=dev-entry")
             } else {
-                self.logError("Linux cleanup detach_fail identifier=\(devEntry) stage=dev-entry details=\(result.details ?? "unknown")")
+                self.logLinuxError("Linux cleanup detach_fail identifier=\(devEntry) stage=dev-entry details=\(result.details ?? "unknown")")
             }
         }
 
         for mountPoint in session.mountPoints {
             let result = detachLinuxImageEntity(identifier: mountPoint)
             if result.success {
-                self.log("Linux cleanup detach_ok identifier=\(mountPoint) stage=mount-point")
+                self.logLinux("Linux cleanup detach_ok identifier=\(mountPoint) stage=mount-point")
             } else {
-                self.logError("Linux cleanup detach_fail identifier=\(mountPoint) stage=mount-point details=\(result.details ?? "unknown")")
+                self.logLinuxError("Linux cleanup detach_fail identifier=\(mountPoint) stage=mount-point details=\(result.details ?? "unknown")")
             }
         }
 
         let residualSession = linuxAttachSessionForImagePath(session.imagePath)
         let residualEntitiesCount = residualSession?.entityCount ?? 0
         let allDetached = residualEntitiesCount == 0
-        self.log("Linux cleanup summary reason=\(reason) all_detached=\(allDetached ? "TAK" : "NIE") residual_entities_count=\(residualEntitiesCount)")
+        self.logLinux("Linux cleanup summary reason=\(reason) all_detached=\(allDetached ? "yes" : "no") residual_entities_count=\(residualEntitiesCount)")
 
         linuxImageAttachSession = nil
     }
 
     private func logLinuxAttachSessionSnapshot(_ session: LinuxImageAttachSession, reason: String) {
-        self.log(
+        self.logLinux(
             "Linux mount session snapshot reason=\(reason) entities_count=\(session.entityCount) dev_entries=[\(session.devEntries.joined(separator: ", "))] mount_points=[\(session.mountPoints.joined(separator: ", "))]"
         )
     }
@@ -362,7 +362,7 @@ extension AnalysisLogic {
         do {
             try task.run()
         } catch {
-            self.logError("Linux mount session: nie udało się uruchomić hdiutil info: \(error.localizedDescription)")
+            self.logLinuxError("Linux mount session: failed to start hdiutil info: \(error.localizedDescription)")
             return nil
         }
         task.waitUntilExit()
@@ -373,9 +373,9 @@ extension AnalysisLogic {
             let stderrText = String(decoding: errorData, as: UTF8.self)
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             if stderrText.isEmpty {
-                self.logError("Linux mount session: hdiutil info zakończył się błędem (kod \(task.terminationStatus)).")
+                self.logLinuxError("Linux mount session: hdiutil info failed (exit code \(task.terminationStatus)).")
             } else {
-                self.logError("Linux mount session: hdiutil info zakończył się błędem: \(stderrText)")
+                self.logLinuxError("Linux mount session: hdiutil info failed: \(stderrText)")
             }
             return nil
         }

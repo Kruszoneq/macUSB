@@ -115,9 +115,9 @@ extension AnalysisLogic {
         shouldShowSourceSizeUnavailableAlert = requirement.usedFallback
 
         if let sourceBytes = requirement.sourceSizeBytes {
-            log("Source capacity: path=\(sourceURL.path), bytes=\(sourceBytes), margin=5%, minimum=\(requirement.minimumBytes), class=\(requirement.displayCapacityGB) GB")
+            log("Source capacity: path=\(sourceURL.path), bytes=\(sourceBytes), margin=5%, minimum=\(requirement.minimumBytes), class=\(requirement.displayCapacityGB) GB", workflow: selectedWorkflowForLogging)
         } else {
-            logError("Source size unavailable: path=\(sourceURL.path), fallback minimum=\(requirement.minimumBytes), class=\(requirement.displayCapacityGB) GB")
+            logError("Source size unavailable: path=\(sourceURL.path), fallback minimum=\(requirement.minimumBytes), class=\(requirement.displayCapacityGB) GB", workflow: selectedWorkflowForLogging)
         }
         if selectedDrive != nil { checkCapacity() }
     }

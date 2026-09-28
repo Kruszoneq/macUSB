@@ -108,13 +108,13 @@ final class AnalysisLogic: ObservableObject {
                 let fileSystem = selectedDrive?.fileSystemFormat?.rawValue ?? "unknown"
                 if isPPC {
                     self.log(
-                        "Wybrano nośnik: \(id) (\(speed)) — Pojemność: \(self.selectedDrive?.size ?? "?"), Schemat: \(partitionScheme), Format: \(fileSystem), Tryb: PPC, APM",
+                        "Selected target: \(id) (\(speed)) — Capacity: \(self.selectedDrive?.size ?? "?"), Partition scheme: \(partitionScheme), Format: \(fileSystem), Mode: PPC, APM",
                         category: "USBSelection"
                     )
                 } else {
-                    let needsFormattingText = (selectedDrive?.needsFormatting ?? true) ? "TAK" : "NIE"
+                    let needsFormattingText = (selectedDrive?.needsFormatting ?? true) ? "yes" : "no"
                     self.log(
-                        "Wybrano nośnik: \(id) (\(speed)) — Pojemność: \(self.selectedDrive?.size ?? "?"), Schemat: \(partitionScheme), Format: \(fileSystem), Wymaga formatowania w kolejnych etapach: \(needsFormattingText)",
+                        "Selected target: \(id) (\(speed)) — Capacity: \(self.selectedDrive?.size ?? "?"), Partition scheme: \(partitionScheme), Format: \(fileSystem), Requires formatting in later stages: \(needsFormattingText)",
                         category: "USBSelection"
                     )
                 }
@@ -214,16 +214,75 @@ final class AnalysisLogic: ObservableObject {
     }
 
     // MARK: - Logging
-    func log(_ message: String, category: String = "FileAnalysis") {
-        AppLogging.info(message, category: category)
+    var selectedWorkflowForLogging: AppLogging.Workflow? {
+        if isRawImageSelection { return .raw }
+        if isWindowsDetected { return .windows }
+        if isLinuxDetected { return .linux }
+        if isPPC { return .ppc }
+        if isSystemDetected { return .macos }
+        return nil
     }
 
-    func logError(_ message: String, category: String = "FileAnalysis") {
-        AppLogging.error(message, category: category)
+    func log(_ message: String, category: String = "FileAnalysis", workflow: AppLogging.Workflow? = nil) {
+        let stage: AppLogging.Stage = category == "USBSelection" ? .usb : .analysis
+        AppLogging.info(message, stage: stage, workflow: workflow ?? (stage == .usb ? selectedWorkflowForLogging : nil))
     }
 
-    func stage(_ title: String) {
-        AppLogging.stage(title)
+    func logError(_ message: String, category: String = "FileAnalysis", workflow: AppLogging.Workflow? = nil) {
+        let stage: AppLogging.Stage = category == "USBSelection" ? .usb : .analysis
+        AppLogging.error(message, stage: stage, workflow: workflow ?? (stage == .usb ? selectedWorkflowForLogging : nil))
+    }
+
+    func logUnclassified(_ message: String) {
+        AppLogging.info(message, stage: .analysis)
+    }
+
+    func logUnclassifiedError(_ message: String) {
+        AppLogging.error(message, stage: .analysis)
+    }
+
+    func logMacOS(_ message: String, category: String = "FileAnalysis") {
+        log(message, category: category, workflow: .macos)
+    }
+
+    func logMacOSError(_ message: String, category: String = "FileAnalysis") {
+        logError(message, category: category, workflow: .macos)
+    }
+
+    func logDetectedMacOS(_ message: String) {
+        log(message, workflow: isPPC ? .ppc : .macos)
+    }
+
+    func logDetectedMacOSError(_ message: String) {
+        logError(message, workflow: isPPC ? .ppc : .macos)
+    }
+
+    func logWindows(_ message: String, category: String = "FileAnalysis") {
+        log(message, category: category, workflow: .windows)
+    }
+
+    func logWindowsError(_ message: String, category: String = "FileAnalysis") {
+        logError(message, category: category, workflow: .windows)
+    }
+
+    func logLinux(_ message: String, category: String = "FileAnalysis") {
+        log(message, category: category, workflow: .linux)
+    }
+
+    func logLinuxError(_ message: String, category: String = "FileAnalysis") {
+        logError(message, category: category, workflow: .linux)
+    }
+
+    func logRaw(_ message: String, category: String = "FileAnalysis") {
+        log(message, category: category, workflow: .raw)
+    }
+
+    func logRawError(_ message: String, category: String = "FileAnalysis") {
+        logError(message, category: category, workflow: .raw)
+    }
+
+    func stage(_ title: String, workflow: AppLogging.Workflow? = nil) {
+        AppLogging.info(title, stage: .analysis, workflow: workflow)
     }
 
     func synchronizeDriveSelection(_ updates: () -> Void) {
@@ -240,7 +299,7 @@ final class AnalysisLogic: ObservableObject {
 
 extension AnalysisLogic {
     func beginImageAnalysisRun(sourceURL: URL) -> UUID {
-        cancelActiveImageAnalysisRun(reason: "Uruchamianie nowej analizy obrazu")
+        cancelActiveImageAnalysisRun(reason: "starting a new image analysis")
 
         let runID = UUID()
         activeImageAnalysisRunID = runID
@@ -250,7 +309,7 @@ extension AnalysisLogic {
         }
         imageAnalysisTimeoutWorkItem = timeoutWorkItem
 
-        log("Uruchomiono timeout analizy obrazu: \(Int(imageAnalysisTimeoutSeconds)) s [runID=\(runID.uuidString)]")
+        log("Image analysis timeout started: \(Int(imageAnalysisTimeoutSeconds)) s [runID=\(runID.uuidString)]")
         DispatchQueue.main.asyncAfter(deadline: .now() + imageAnalysisTimeoutSeconds, execute: timeoutWorkItem)
         return runID
     }
@@ -261,7 +320,7 @@ extension AnalysisLogic {
         imageAnalysisTimeoutWorkItem?.cancel()
         imageAnalysisTimeoutWorkItem = nil
         activeImageAnalysisRunID = nil
-        log("Zakończono analizę obrazu przed timeoutem [runID=\(runID.uuidString)]: \(reason)")
+        log("Image analysis completed before timeout [runID=\(runID.uuidString)]: \(reason)", workflow: selectedWorkflowForLogging)
         return true
     }
 
@@ -280,12 +339,12 @@ extension AnalysisLogic {
         imageAnalysisTimeoutWorkItem?.cancel()
         imageAnalysisTimeoutWorkItem = nil
         activeImageAnalysisRunID = nil
-        log("Anulowano aktywną sesję analizy obrazu [runID=\(runID.uuidString)]: \(reason)")
+        log("Active image analysis session cancelled [runID=\(runID.uuidString)]: \(reason)")
         cleanupLinuxAttachSession(reason: "cancel_active_run")
     }
 
     func logIgnoredStaleImageAnalysisCallback(_ runID: UUID, stage: String) {
-        log("Ignoruję spóźniony wynik analizy obrazu [runID=\(runID.uuidString)] (\(stage)).")
+        log("Ignoring stale image analysis result [runID=\(runID.uuidString)] (\(stage)).")
     }
 
     func applyUnrecognizedInstallerState(timeoutReason: String? = nil) {
@@ -304,8 +363,8 @@ extension AnalysisLogic {
         resetLinuxDetectionState()
         resetWindowsDetectionState()
         isAnalyzing = false
-        log("Analiza zakończona: nie rozpoznano instalatora.")
-        AppLogging.separator()
+        log("Analysis completed: installer not recognized.")
+        AppLogging.separator(stage: .analysis)
     }
 
     private func handleImageAnalysisTimeout(runID: UUID, sourceURL: URL) {
@@ -322,7 +381,7 @@ extension AnalysisLogic {
         detachMountedImageAfterAnalysisTimeout(sourceURL: sourceURL)
 
         applyUnrecognizedInstallerState(
-            timeoutReason: "Przekroczono timeout analizy obrazu (\(Int(imageAnalysisTimeoutSeconds)) s): \(sourceURL.lastPathComponent). Anuluję analizowanie i oznaczam obraz jako niewspierany/nierozpoznany."
+            timeoutReason: "Image analysis timed out (\(Int(imageAnalysisTimeoutSeconds)) s): \(sourceURL.lastPathComponent). Cancelling analysis and marking the image unsupported or unrecognized."
         )
     }
 
@@ -339,7 +398,7 @@ extension AnalysisLogic {
 
         let uniqueMountPaths = Array(Set(mountPaths)).sorted()
         guard !uniqueMountPaths.isEmpty else {
-            log("Timeout analizy obrazu: brak aktywnego mount-point do odmontowania dla \(sourceURL.lastPathComponent).")
+            log("Image analysis timeout: no active mount point to detach for \(sourceURL.lastPathComponent).")
             return
         }
 
@@ -354,19 +413,19 @@ extension AnalysisLogic {
                 try task.run()
                 task.waitUntilExit()
             } catch {
-                logError("Timeout analizy obrazu: nie udało się uruchomić odmontowania \(mountPath): \(error.localizedDescription)")
+                logError("Image analysis timeout: failed to start detaching \(mountPath): \(error.localizedDescription)")
                 continue
             }
 
             if task.terminationStatus == 0 {
-                log("Timeout analizy obrazu: odmontowano obraz \(mountPath).")
+                log("Image analysis timeout: detached image \(mountPath).")
             } else {
                 let stderrText = String(decoding: errorPipe.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                 if stderrText.isEmpty {
-                    logError("Timeout analizy obrazu: odmontowanie nie powiodło się dla \(mountPath) (kod \(task.terminationStatus)).")
+                    logError("Image analysis timeout: detaching failed for \(mountPath) (exit code \(task.terminationStatus)).")
                 } else {
-                    logError("Timeout analizy obrazu: odmontowanie nie powiodło się dla \(mountPath): \(stderrText)")
+                    logError("Image analysis timeout: detaching failed for \(mountPath): \(stderrText)")
                 }
             }
         }
@@ -389,7 +448,7 @@ extension AnalysisLogic {
         do {
             try task.run()
         } catch {
-            logError("Timeout analizy obrazu: nie udało się uruchomić hdiutil info: \(error.localizedDescription)")
+            logError("Image analysis timeout: failed to start hdiutil info: \(error.localizedDescription)")
             return nil
         }
         task.waitUntilExit()
@@ -400,9 +459,9 @@ extension AnalysisLogic {
             let stderrText = String(decoding: errorData, as: UTF8.self)
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             if stderrText.isEmpty {
-                logError("Timeout analizy obrazu: hdiutil info zakończył się błędem (kod \(task.terminationStatus)).")
+                logError("Image analysis timeout: hdiutil info failed (exit code \(task.terminationStatus)).")
             } else {
-                logError("Timeout analizy obrazu: hdiutil info zakończył się błędem: \(stderrText)")
+                logError("Image analysis timeout: hdiutil info failed: \(stderrText)")
             }
             return nil
         }

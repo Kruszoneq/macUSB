@@ -75,7 +75,7 @@ extension AnalysisLogic {
             !idwbinfoFields.isEmpty
 
         guard hasWindowsSignals else {
-            self.log("Brak wystarczających sygnałów Windows w ISO: \(sourceURL.lastPathComponent)")
+            self.logWindows("Insufficient Windows markers in ISO: \(sourceURL.lastPathComponent)")
             return nil
         }
 

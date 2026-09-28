@@ -26,7 +26,7 @@ extension AnalysisLogic {
 
         guard let iconURL,
               let icon = NSImage(contentsOf: iconURL) else {
-            self.log("Nie znaleziono ikony Windows w zasobach: \(iconName).svg")
+            self.logWindows("Windows icon not found in resources: \(iconName).svg")
             return nil
         }
 
@@ -85,10 +85,10 @@ extension AnalysisLogic {
         self.userSkippedAnalysis = false
 
         let windowsToolchainPresence = detectWindowsToolchainPresence()
-        self.log(
+        self.logWindows(
             "Windows toolchain presence: brew=\(windowsToolchainPresence.hasHomebrew), wimlib=\(windowsToolchainPresence.hasWimlib)"
         )
-        self.log(
+        self.logWindows(
             "Windows toolchain paths: brew=\(windowsToolchainPresence.homebrewPath ?? "not_found"), wimlib=\(windowsToolchainPresence.wimlibPath ?? "not_found")"
         )
 
@@ -112,20 +112,20 @@ extension AnalysisLogic {
             self.showUSBSection = false
         }
 
-        self.log("Rozpoznano obraz Windows: \(result.displayName)")
-        self.log(
-            "Windows support gate: supported=\(result.isSupported ? "TAK" : "NIE"), reason=\(result.supportReason.rawValue), has_eligible_boot_mode=\(result.bootCapabilities.eligibleModes.isEmpty ? "NIE" : "TAK"), hasEFI=\(result.bootCapabilities.hasUEFI ? "TAK" : "NIE")"
+        self.logWindows("Recognized Windows image: \(result.displayName)")
+        self.logWindows(
+            "Windows support gate: supported=\(result.isSupported ? "yes" : "no"), reason=\(result.supportReason.rawValue), has_eligible_boot_mode=\(result.bootCapabilities.eligibleModes.isEmpty ? "no" : "yes"), hasEFI=\(result.bootCapabilities.hasUEFI ? "yes" : "no")"
         )
-        self.log("Windows workflow flag: isWindowsWorkflowSupported=\(self.isWindowsWorkflowSupported ? "TAK" : "NIE")")
-        self.log("Windows workflow split-wim flag: \(self.windowsWillSplitWIM ? "TAK" : "NIE")")
-        self.log("Windows source file: \(sourceURL.path)")
-        self.log(
+        self.logWindows("Windows workflow flag: isWindowsWorkflowSupported=\(self.isWindowsWorkflowSupported ? "yes" : "no")")
+        self.logWindows("Windows workflow split-wim flag: \(self.windowsWillSplitWIM ? "yes" : "no")")
+        self.logWindows("Windows source file: \(sourceURL.path)")
+        self.logWindows(
             "Windows boot capabilities: detected=\(windowsBootModesLogValue(result.bootCapabilities.detectedModes)), eligible=\(windowsBootModesLogValue(result.bootCapabilities.eligibleModes)), family=\(result.family.rawValue), arch=\(result.arch.rawValue), workflow_supported=\(result.isSupported ? "yes" : "no")"
         )
-        self.log(
+        self.logWindows(
             "Windows boot marker evidence: BIOS present=\(windowsBootMarkersLogValue(result.bootCapabilities.biosPresentMarkers)) missing=\(windowsBootMarkersLogValue(result.bootCapabilities.biosMissingRequiredMarkers)); UEFI present=\(windowsBootMarkersLogValue(result.bootCapabilities.uefiPresentMarkers)) missing=\(windowsBootMarkersLogValue(result.bootCapabilities.uefiMissingRequiredMarkers))"
         )
-        AppLogging.separator()
+        AppLogging.separator(stage: .analysis, workflow: .windows)
     }
 
     private func windowsBootModesLogValue(_ modes: Set<WindowsBootMode>) -> String {
@@ -146,22 +146,22 @@ extension AnalysisLogic {
                 from: result.displayName,
                 architecture: result.arch
               ) != nil else {
-            self.log("Windows autounattend language check: pominięto, bo obraz nie jest wspieranym Windows 10 64-bit/11 dla tej funkcji.")
+            self.logWindows("Windows autounattend language check skipped: image is not supported Windows 10 64-bit or Windows 11 for this feature.")
             return nil
         }
 
         let macLanguage = CreatorWindowsAutounattendMacLocale.normalizedWindowsTag(Locale.preferredLanguages.first) ?? "unknown"
         let macRegion = CreatorWindowsAutounattendMacLocale.normalizedWindowsTag(Locale.current.identifier) ?? "unknown"
-        self.log(
-            "Windows autounattend language check: odczytuję sources/lang.ini z obrazu Windows (mount=\(mountedImagePath ?? "nil"))."
+        self.logWindows(
+            "Windows autounattend language check: reading sources/lang.ini from Windows image (mount=\(mountedImagePath ?? "nil"))."
         )
 
         let isoLanguageTags = CreatorWindowsAutounattendSourceInspection.availableLanguageTags(in: mountedImagePath)
-        let isoLanguagesDescription = isoLanguageTags?.sorted().joined(separator: ", ") ?? "brak/nie odczytano"
+        let isoLanguagesDescription = isoLanguageTags?.sorted().joined(separator: ", ") ?? "none/unreadable"
         let macLocale = CreatorWindowsAutounattendMacLocale.current(availableLanguageTags: isoLanguageTags)
 
-        self.log(
-            "Windows autounattend language check: języki ISO=\(isoLanguagesDescription); język macOS=\(macLanguage); region macOS=\(macRegion); zgodność=\((macLocale?.languageIsAvailableInSource == true) ? "TAK" : "NIE")."
+        self.logWindows(
+            "Windows autounattend language check: ISO languages=\(isoLanguagesDescription); macOS language=\(macLanguage); macOS region=\(macRegion); match=\((macLocale?.languageIsAvailableInSource == true) ? "yes" : "no")."
         )
 
         return macLocale

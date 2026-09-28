@@ -114,7 +114,8 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 
 ### Logging and notifications invariants
 
-- Important runtime logs must go through `AppLogging`.
+- Important app-side runtime logs must go through `AppLogging`.
+- App- and helper-authored diagnostic logs use English and follow the timestamp-then-stage format defined in `docs/reference/platform/LOGGING_CONTRACT.md`. Stage and workflow labels use uppercase letters; workflow-specific operations use `[STAGE_WORKFLOW]`, and helper-origin lines append `[HELPER]` after the stage. Apply this contract as logging paths are migrated in stages.
 - Logs remain human-readable and export-ready for diagnostics.
 - Notification permission prompting remains user-initiated from menu when state is not determined.
 - Completion notifications are gated by system authorization and app-level policy.
@@ -130,6 +131,7 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 ## UI copy and translation rules
 
 - All user-facing UI text must use localization keys.
+- For every new or modified UI text, name its semantic localization key using the `area.feature.element` format, adding more specific segments when needed. Use the same key in code and in `Localizable.xcstrings` (for example, `diagnostics.export.previous.menu`). Keep the Polish source text and all translations as catalog values, never as the key itself.
 - Polish is the source language for new UI copy.
 - When planning a change that introduces or modifies UI text, always include the proposed Polish and English wording.
 - During implementation, provide translations for every language supported by the application.

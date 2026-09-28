@@ -30,6 +30,7 @@ extension UniversalInstallationView {
     func resolveWindowsAutounattendStartReadiness() -> Bool {
         guard isWindowsWorkflow else { return true }
         guard windowsAutounattendConfiguration.canStartWorkflow else {
+            logError("Windows answer-file configuration blocked start: local account display name is invalid.", category: "WindowsInstallFlow")
             errorMessage = String(localized: "installation.summary.windows.autounattend.account_name.placeholder")
             return false
         }
@@ -41,10 +42,12 @@ extension UniversalInstallationView {
         guard isWindowsWorkflow,
               windowsAutounattendConfiguration.hasSelectedOption,
               windowsAutounattendConfiguration.existingFileDecision == nil,
-              CreatorWindowsAutounattendSourceInspection.existingAutounattendPath(in: windowsMountedSourcePath) != nil else {
+              let existingPath = CreatorWindowsAutounattendSourceInspection.existingAutounattendPath(in: windowsMountedSourcePath) else {
             completion(true)
             return
         }
+
+        log("Windows source answer file detected: path=\(existingPath).", category: "WindowsInstallFlow")
 
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
@@ -58,14 +61,17 @@ extension UniversalInstallationView {
         let completionHandler = { (response: NSApplication.ModalResponse) in
             switch response {
             case .alertFirstButtonReturn:
+                self.log("Windows source answer file retained; generated answer file disabled.", category: "WindowsInstallFlow")
                 self.windowsAutounattendConfiguration.existingFileDecision = .useExisting
                 self.persistWindowsAutounattendConfiguration()
                 completion(true)
             case .alertSecondButtonReturn:
+                self.log("Windows source answer file will be replaced with the generated answer file.", category: "WindowsInstallFlow")
                 self.windowsAutounattendConfiguration.existingFileDecision = .replaceWithMacUSB
                 self.persistWindowsAutounattendConfiguration()
                 completion(true)
             default:
+                self.log("Windows answer-file conflict cancelled by user.", category: "WindowsInstallFlow")
                 self.windowsAutounattendConfiguration.existingFileDecision = nil
                 self.persistWindowsAutounattendConfiguration()
                 completion(false)

@@ -581,6 +581,7 @@ struct UniversalInstallationView: View {
                     isLinuxWorkflow: isLinuxWorkflow,
                     isRawImageSelection: isRawImageWorkflow,
                     isWindowsWorkflow: isWindowsWorkflow,
+                    loggingWorkflow: creationLogWorkflow,
                     windowsWillSplitWimExpected: windowsWillSplitWim,
                     windowsWillCreateAutounattendExpected: windowsAutounattendConfiguration.shouldGenerateMacUSBFile,
                     windowsWillInstallMacUSBootExpected: resolvedWindowsBootMode == .bios,
@@ -623,7 +624,8 @@ struct UniversalInstallationView: View {
                     path: sourceAppURL.path,
                     family: .windows,
                     mountHint: windowsMountedSourcePath,
-                    reason: "installation_summary_on_appear"
+                    reason: "installation_summary_on_appear",
+                    stage: .usb
                 )
             }
             if isLinuxWorkflow && !isRawImageWorkflow {
@@ -631,15 +633,12 @@ struct UniversalInstallationView: View {
                     path: sourceAppURL.path,
                     family: .linux,
                     mountHint: linuxFlowContext?.mountedImagePath,
-                    reason: "installation_summary_on_appear"
+                    reason: "installation_summary_on_appear",
+                    stage: .usb
                 )
             }
             menuState.setDownloaderAccessBlocked(true, reason: downloaderBlockReason)
-            AppLogging.separator()
-            AppLogging.separator()
-            AppLogging.info("Przejście do kreatora", category: "Navigation")
-            AppLogging.separator()
-            AppLogging.separator()
+            AppLogging.info("Entered USB creation summary.", stage: .usb, workflow: creationLogWorkflow)
             refreshRequiredPermissionsState()
             if isWindowsWorkflow {
                 refreshWindowsPrerequisiteToolchainPresence()

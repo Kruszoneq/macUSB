@@ -6,12 +6,12 @@ extension AnalysisLogic {
             return nil
         }
         guard let result = classifyWindowsImage(from: metadata) else {
-            self.log("Wykryto sygnały Windows, ale nie udało się jednoznacznie sklasyfikować rodziny: \(sourceURL.lastPathComponent)")
+            self.logWindows("Windows markers detected, but family could not be classified unambiguously: \(sourceURL.lastPathComponent)")
             return nil
         }
 
-        self.log("Windows detection: display=\(result.displayName) family=\(result.family.rawValue) supported=\(result.isSupported ? "TAK" : "NIE") arch=\(result.arch.rawValue)")
-        self.log("Windows detection evidence: \(result.evidence.joined(separator: ", "))")
+        self.logWindows("Windows detection: display=\(result.displayName) family=\(result.family.rawValue) supported=\(result.isSupported ? "yes" : "no") arch=\(result.arch.rawValue)")
+        self.logWindows("Windows detection evidence: \(result.evidence.joined(separator: ", "))")
         return result
     }
 }

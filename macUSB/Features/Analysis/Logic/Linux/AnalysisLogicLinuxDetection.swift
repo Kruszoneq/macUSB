@@ -29,7 +29,7 @@ extension AnalysisLogic {
 
     func detectLinuxFromArchive(sourceURL: URL) -> LinuxDetectionResult? {
         guard let metadata = readLinuxMetadataFromArchive(sourceURL: sourceURL) else {
-            self.log("Brak możliwości odczytu zawartości ISO przez bsdtar: \(sourceURL.lastPathComponent)")
+            self.logLinux("Could not read ISO contents with bsdtar: \(sourceURL.lastPathComponent)")
             return nil
         }
         return detectLinux(fromMetadata: metadata, sourceURL: sourceURL)
@@ -38,10 +38,10 @@ extension AnalysisLogic {
     private func detectLinux(fromMetadata metadata: LinuxImageMetadata, sourceURL: URL) -> LinuxDetectionResult? {
         let gateDecision = linuxImageSupportDecision(metadata)
         guard gateDecision.isSupported else {
-            self.log("Brak wiarygodnych markerów Linuxa w obrazie: \(sourceURL.lastPathComponent)")
+            self.logLinux("No reliable Linux markers in image: \(sourceURL.lastPathComponent)")
             return nil
         }
-        self.log("Linux gate_signals: \(gateDecision.gateSignals.sorted().joined(separator: ", "))")
+        self.logLinux("Linux gate_signals: \(gateDecision.gateSignals.sorted().joined(separator: ", "))")
 
         let classification = classifyLinuxDistribution(from: metadata)
         let architecture = normalizeLinuxArchitecture(from: metadata)

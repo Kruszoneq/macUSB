@@ -35,7 +35,7 @@ extension HelperWorkflowExecutor {
             titleKey: stage.titleKey,
             percent: latestPercent,
             statusKey: stage.statusKey,
-            logLine: "Linux verify: start (source=\(sourcePath), device=\(rawDevicePath), bytes=\(sourceBytes))",
+            logLine: "Raw-copy verification started: source=\(sourcePath), device=\(rawDevicePath), bytes=\(sourceBytes)",
             shouldAdvancePercent: false
         )
 
@@ -49,7 +49,7 @@ extension HelperWorkflowExecutor {
             titleKey: stage.titleKey,
             percent: latestPercent,
             statusKey: stage.statusKey,
-            logLine: "Linux verify: source=\(sourcePreview), device=\(devicePreview)",
+            logLine: "Raw-copy verification hashes: source=\(sourcePreview), device=\(devicePreview)",
             shouldAdvancePercent: false
         )
 
@@ -66,7 +66,7 @@ extension HelperWorkflowExecutor {
             titleKey: stage.titleKey,
             percent: latestPercent,
             statusKey: stage.statusKey,
-            logLine: "Linux verify: completed successfully",
+            logLine: "Raw-copy verification completed successfully.",
             shouldAdvancePercent: false
         )
     }

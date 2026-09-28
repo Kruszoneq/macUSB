@@ -106,13 +106,10 @@ final class HelperProcessLifecycle {
     }
 
     private func logState(_ message: String) {
-        os_log(
-            "%{public}@ connections=%{public}d operations=%{public}d",
-            log: log,
-            type: .default,
-            message,
-            activeConnections,
-            activeOperations
+        HelperDiagnosticLogging.info(
+            "\(message) connections=\(activeConnections) operations=\(activeOperations)",
+            stage: .helper,
+            log: log
         )
     }
 }

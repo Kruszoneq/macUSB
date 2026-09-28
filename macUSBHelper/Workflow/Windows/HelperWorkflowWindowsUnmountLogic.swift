@@ -55,7 +55,7 @@ extension HelperWorkflowExecutor {
                         titleKey: stage.titleKey,
                         percent: latestPercent,
                         statusKey: stage.statusKey,
-                        logLine: "Windows unmount retry \(attempt)/\(retryCount): odmontowanie nieudane (kod \(unmountStatus.exitCode)), ponawiam za \(retryDelaySeconds)s.",
+                        logLine: "Windows unmount retry \(attempt)/\(retryCount): unmount failed (exitCode=\(unmountStatus.exitCode)); retrying in \(retryDelaySeconds)s.",
                         shouldAdvancePercent: false
                     )
                     try waitWindowsUnmountRetryDelay(seconds: retryDelaySeconds)

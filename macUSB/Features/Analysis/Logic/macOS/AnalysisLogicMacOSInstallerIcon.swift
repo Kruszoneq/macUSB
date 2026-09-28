@@ -16,19 +16,19 @@ extension AnalysisLogic {
 
         for installerURL in self.candidateInstallerLocations(from: appURL) {
             let resourcesURL = installerURL.appendingPathComponent("Contents/Resources", isDirectory: true)
-            self.log("Próba odczytu ikony systemu z katalogu: \(resourcesURL.path)")
+            self.logMacOS("Attempting to read system icon from directory: \(resourcesURL.path)")
             guard let iconURL = self.findIconURL(in: resourcesURL, preferredFileNames: iconFileCandidates),
                   let icon = NSImage(contentsOf: iconURL) else {
                 continue
             }
 
             self.detectedSystemIcon = icon
-            self.log("Odczytano ikonę systemu z pliku: \(iconURL.path)")
+            self.logMacOS("Read system icon from file: \(iconURL.path)")
             return
         }
 
         self.detectedSystemIcon = nil
-        self.log("Nie znaleziono ikony instalatora (\(iconFileCandidates.joined(separator: ", "))) dla: \(appURL.path)")
+        self.logMacOS("Installer icon not found (\(iconFileCandidates.joined(separator: ", "))) for: \(appURL.path)")
     }
 
     private func candidateInstallerLocations(from url: URL) -> [URL] {

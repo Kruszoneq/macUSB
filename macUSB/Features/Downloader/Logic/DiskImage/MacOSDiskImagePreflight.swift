@@ -2,9 +2,11 @@ import Foundation
 
 struct MacOSDiskImagePreflight {
     private let fileManager: FileManager
+    private let workflow: AppLogging.Workflow
 
-    init(fileManager: FileManager = .default) {
+    init(fileManager: FileManager = .default, workflow: AppLogging.Workflow) {
         self.fileManager = fileManager
+        self.workflow = workflow
     }
 
     func prepare(
@@ -13,15 +15,15 @@ struct MacOSDiskImagePreflight {
         installerBytes: Int64
     ) throws -> MacOSDiskImagePreflightPlan {
         AppLogging.info(
-            "Preflight miejsca przed pobieraniem z obrazem DMG: rozpoczęcie dla \(entry.displayTitle).",
-            category: "Downloader"
+            "DMG download space preflight started for \(entry.displayTitle).",
+            stage: .downloader, workflow: workflow
         )
         guard configuration.isEnabled,
               let destinationDirectoryURL = configuration.destinationDirectoryURL
         else {
             AppLogging.error(
-                "Preflight miejsca przed pobieraniem z obrazem DMG: brak aktywnej konfiguracji lub katalogu docelowego.",
-                category: "Downloader"
+                "DMG download space preflight: active configuration or destination directory missing.",
+                stage: .downloader, workflow: workflow
             )
             throw MacOSDiskImagePreflightError.destinationUnavailable
         }
@@ -33,8 +35,8 @@ struct MacOSDiskImagePreflight {
               fileManager.isWritableFile(atPath: destinationURL.path)
         else {
             AppLogging.error(
-                "Preflight miejsca przed pobieraniem z obrazem DMG: katalog docelowy jest niedostępny lub niezapisywalny: \(destinationURL.path).",
-                category: "Downloader"
+                "DMG download space preflight: destination directory unavailable or not writable: \(destinationURL.path).",
+                stage: .downloader, workflow: workflow
             )
             throw MacOSDiskImagePreflightError.destinationUnavailable
         }
@@ -46,8 +48,8 @@ struct MacOSDiskImagePreflight {
             destinationVolume = try volumeSnapshot(for: destinationURL)
         } catch {
             AppLogging.error(
-                "Preflight miejsca przed pobieraniem z obrazem DMG: nie udało się odczytać pojemności woluminu: \(error.localizedDescription)",
-                category: "Downloader"
+                "DMG download space preflight: failed to read volume capacity: \(error.localizedDescription)",
+                stage: .downloader, workflow: workflow
             )
             throw error
         }
@@ -57,10 +59,10 @@ struct MacOSDiskImagePreflight {
         if systemVolume.identifier == destinationVolume.identifier {
             let combinedRequiredBytes = systemRequiredBytes + diskImageRequiredBytes
             logCapacityResult(
-                location: "wspólny wolumin katalogu tymczasowego i obrazu DMG",
+                location: "shared temporary and DMG volume",
                 requiredBytes: combinedRequiredBytes,
                 availableBytes: systemVolume.availableBytes,
-                details: "tymczasowe=\(MacOSDownloadDiskSpaceDiagnostics.describe(systemRequiredBytes)), DMG=\(MacOSDownloadDiskSpaceDiagnostics.describe(diskImageRequiredBytes))"
+                details: "temporary=\(MacOSDownloadDiskSpaceDiagnostics.describe(systemRequiredBytes)), DMG=\(MacOSDownloadDiskSpaceDiagnostics.describe(diskImageRequiredBytes))"
             )
             guard systemVolume.availableBytes >= combinedRequiredBytes else {
                 throw MacOSDiskImagePreflightError.insufficientSpace(
@@ -71,12 +73,12 @@ struct MacOSDiskImagePreflight {
             }
         } else {
             logCapacityResult(
-                location: "wolumin katalogu tymczasowego",
+                location: "temporary directory volume",
                 requiredBytes: systemRequiredBytes,
                 availableBytes: systemVolume.availableBytes
             )
             logCapacityResult(
-                location: "wolumin docelowy obrazu DMG",
+                location: "DMG destination volume",
                 requiredBytes: diskImageRequiredBytes,
                 availableBytes: destinationVolume.availableBytes
             )
@@ -115,8 +117,8 @@ struct MacOSDiskImagePreflight {
         }
 
         AppLogging.info(
-            "Preflight miejsca przed pobieraniem z obrazem DMG: zakończono pomyślnie; katalog docelowy=\(destinationURL.path), planowany plik=\(resolvedURL.lastPathComponent).",
-            category: "Downloader"
+            "DMG download space preflight passed; destination directory=\(destinationURL.path), planned file=\(resolvedURL.lastPathComponent).",
+            stage: .downloader, workflow: workflow
         )
 
         return MacOSDiskImagePreflightPlan(
@@ -138,10 +140,10 @@ struct MacOSDiskImagePreflight {
         availableBytes: Int64,
         details: String? = nil
     ) {
-        let detailSuffix = details.map { ", składniki=[\($0)]" } ?? ""
+        let detailSuffix = details.map { ", components=[\($0)]" } ?? ""
         AppLogging.info(
-            "Preflight miejsca przed pobieraniem [\(location)]: wymagane=\(MacOSDownloadDiskSpaceDiagnostics.describe(requiredBytes)), dostępne=\(MacOSDownloadDiskSpaceDiagnostics.describe(availableBytes)), wynik=\(MacOSDownloadDiskSpaceDiagnostics.status(requiredBytes: requiredBytes, availableBytes: availableBytes))\(detailSuffix).",
-            category: "Downloader"
+            "Download space preflight [\(location)]: required=\(MacOSDownloadDiskSpaceDiagnostics.describe(requiredBytes)), available=\(MacOSDownloadDiskSpaceDiagnostics.describe(availableBytes)), result=\(MacOSDownloadDiskSpaceDiagnostics.status(requiredBytes: requiredBytes, availableBytes: availableBytes))\(detailSuffix).",
+            stage: .downloader, workflow: workflow
         )
     }
 

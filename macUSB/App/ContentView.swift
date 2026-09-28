@@ -64,6 +64,7 @@ struct ContentView: View {
                                 path = NavigationPath()
                             },
                             isPPC: false,
+                            loggingWorkflow: .macos,
                             didFail: false,
                             cleanupTempWorkURL: debugCleanupTempWorkURL,
                             shouldDetachMountPoint: false,
@@ -78,6 +79,7 @@ struct ContentView: View {
                                 path = NavigationPath()
                             },
                             isPPC: true,
+                            loggingWorkflow: .ppc,
                             didFail: false,
                             cleanupTempWorkURL: debugTigerCleanupTempWorkURL,
                             shouldDetachMountPoint: false,
@@ -93,6 +95,7 @@ struct ContentView: View {
                             },
                             isPPC: false,
                             isLinuxWorkflow: true,
+                            loggingWorkflow: .linux,
                             didFail: false,
                             cleanupTempWorkURL: debugLinuxCleanupTempWorkURL,
                             shouldDetachMountPoint: false,
@@ -123,25 +126,25 @@ struct ContentView: View {
         .onReceive(NotificationCenter.default.publisher(for: .macUSBDebugGoToBigSurSummary)) { _ in
             scheduleDebugSummaryNavigation(
                 route: .debugFinishUSBBigSurSuccess,
-                logMessage: "DEBUG: Zaplanowano przejście do podsumowania Big Sur za 2 sekundy"
+                logMessage: "DEBUG: Scheduled Big Sur summary navigation in 2 seconds."
             )
         }
         .onReceive(NotificationCenter.default.publisher(for: .macUSBDebugGoToTigerSummary)) { _ in
             scheduleDebugSummaryNavigation(
                 route: .debugFinishUSBTigerSuccess,
-                logMessage: "DEBUG: Zaplanowano przejście do podsumowania Tiger (isPPC) za 2 sekundy"
+                logMessage: "DEBUG: Scheduled Tiger (PPC) summary navigation in 2 seconds."
             )
         }
         .onReceive(NotificationCenter.default.publisher(for: .macUSBDebugGoToLinuxSummary)) { _ in
             scheduleDebugSummaryNavigation(
                 route: .debugFinishUSBLinuxSuccess,
-                logMessage: "DEBUG: Zaplanowano przejście do podsumowania Linux (Ubuntu 24.04) za 2 sekundy"
+                logMessage: "DEBUG: Scheduled Linux (Ubuntu 24.04) summary navigation in 2 seconds."
             )
         }
     }
 
     private func scheduleDebugSummaryNavigation(route: AppRoute, logMessage: String) {
-        AppLogging.info(logMessage, category: "Navigation")
+        AppLogging.info(logMessage, stage: .app)
         pendingDebugNavigationWorkItem?.cancel()
 
         let workItem = DispatchWorkItem {

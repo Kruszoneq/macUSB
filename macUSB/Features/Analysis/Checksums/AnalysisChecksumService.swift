@@ -53,9 +53,9 @@ struct AnalysisChecksumService: Sendable {
         try Task.checkCancellation()
 
         let fileSize = try resolveFileSize(for: fileURL)
-        await logStage("SHA-256 pliku źródłowego - start")
-        await logInfo("Rozpoczynam obliczanie SHA-256 dla pliku źródłowego: \(fileURL.path)")
-        await logInfo("Rozmiar pliku źródłowego: \(fileSize) bytes")
+        await logStage("Source file SHA-256 calculation started")
+        await logInfo("Calculating source file SHA-256: \(fileURL.path)")
+        await logInfo("Source file size: \(fileSize) bytes")
 
         let fd = open(fileURL.path, O_RDONLY)
         guard fd >= 0 else {
@@ -115,7 +115,7 @@ struct AnalysisChecksumService: Sendable {
         try Task.checkCancellation()
 
         let digest = hasher.finalize().map { String(format: "%02x", $0) }.joined()
-        await logInfo("Zakończono obliczanie SHA-256 dla pliku źródłowego: \(digest)")
+        await logInfo("Source file SHA-256 calculation completed: \(digest)")
         await logSeparator()
         return digest
     }
@@ -132,12 +132,12 @@ struct AnalysisChecksumService: Sendable {
         #if os(macOS)
         let result = fcntl(fileDescriptor, F_NOCACHE, 1)
         if result == 0 {
-            await logInfo("Włączono F_NOCACHE dla odczytu pliku źródłowego.")
+            await logInfo("F_NOCACHE enabled for source file reads.")
         } else {
-            await logInfo("Nie udało się włączyć F_NOCACHE dla odczytu pliku źródłowego: \(String(cString: strerror(errno)))")
+            await logInfo("Could not enable F_NOCACHE for source file reads: \(String(cString: strerror(errno)))")
         }
         #else
-        await logInfo("F_NOCACHE jest niedostępne poza macOS.")
+        await logInfo("F_NOCACHE is unavailable outside macOS.")
         #endif
     }
 
@@ -163,26 +163,26 @@ struct AnalysisChecksumService: Sendable {
 
         let percent = min(100, Int((Double(progress.processedBytes) / Double(progress.totalBytes)) * 100))
         while percent >= nextLoggedPercent {
-            await logInfo("Postęp obliczania SHA-256 pliku źródłowego: \(nextLoggedPercent)%")
+            await logInfo("Source file SHA-256 progress: \(nextLoggedPercent)%")
             nextLoggedPercent += progressLogIntervalPercent
         }
     }
 
     nonisolated private func logStage(_ title: String) async {
         await MainActor.run {
-            AppLogging.stage(title)
+            AppLogging.info(title, stage: .analysis)
         }
     }
 
     nonisolated private func logInfo(_ message: String) async {
         await MainActor.run {
-            AppLogging.info(message, category: "Checksum")
+            AppLogging.info(message, stage: .analysis)
         }
     }
 
     nonisolated private func logSeparator() async {
         await MainActor.run {
-            AppLogging.separator()
+            AppLogging.separator(stage: .analysis)
         }
     }
 }

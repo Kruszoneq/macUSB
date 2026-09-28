@@ -24,8 +24,8 @@ extension MacOSCatalogService {
             throw CancellationError()
         } catch {
             AppLogging.error(
-                "Nie udalo sie odczytac folderu /Applications podczas wykrywania lokalnych instalatorow: \(error.localizedDescription)",
-                category: "Downloader"
+                "Could not read /Applications during local installer discovery: \(error.localizedDescription)",
+                stage: .downloader, workflow: .discovery
             )
             return MacOSLocalInstallerDiscoverySnapshot(
                 identities: [],
@@ -34,8 +34,8 @@ extension MacOSCatalogService {
         }
 
         AppLogging.info(
-            "Wykrywanie lokalnych instalatorow: znaleziono \(applicationURLs.count) kandydatow nazwowych w /Applications.",
-            category: "Downloader"
+            "Local installer discovery: found \(applicationURLs.count) name candidates in /Applications.",
+            stage: .downloader, workflow: .discovery
         )
 
         var identities = Set<MacOSLocalInstallerIdentity>()
@@ -48,8 +48,8 @@ extension MacOSCatalogService {
                 validatedLocalInstallerCandidate(at: appURL)
             }) else {
                 AppLogging.info(
-                    "Pominieto aplikacje podobna z nazwy do instalatora, ale bez wymaganej struktury lub payloadu: \(appURL.path)",
-                    category: "Downloader"
+                    "Ignored installer-like app without required structure or payload: \(appURL.path)",
+                    stage: .downloader, workflow: .discovery
                 )
                 continue
             }
@@ -58,14 +58,14 @@ extension MacOSCatalogService {
                 if let identity = try await readLocalInstallerIdentity(from: candidate) {
                     identities.insert(identity)
                     AppLogging.info(
-                        "Rozpoznano lokalny instalator \(appURL.lastPathComponent): version=\(identity.version), build=\(identity.build).",
-                        category: "Downloader"
+                        "Recognized local installer \(appURL.lastPathComponent): version=\(identity.version), build=\(identity.build).",
+                        stage: .downloader, workflow: .discovery
                     )
                 } else {
                     unrecognizedCount += 1
                     AppLogging.error(
-                        "Nie udalo sie odczytac wersji lub buildu lokalnego instalatora: \(appURL.path)",
-                        category: "Downloader"
+                        "Could not read local installer version or build: \(appURL.path)",
+                        stage: .downloader, workflow: .discovery
                     )
                 }
             } catch is CancellationError {
@@ -73,15 +73,15 @@ extension MacOSCatalogService {
             } catch {
                 unrecognizedCount += 1
                 AppLogging.error(
-                    "Blad odczytu tozsamosci lokalnego instalatora \(appURL.path): \(error.localizedDescription)",
-                    category: "Downloader"
+                    "Failed to read local installer identity \(appURL.path): \(error.localizedDescription)",
+                    stage: .downloader, workflow: .discovery
                 )
             }
         }
 
         AppLogging.info(
-            "Wykrywanie lokalnych instalatorow zakonczone: rozpoznane tozsamosci=\(identities.count), nierozpoznane=\(unrecognizedCount).",
-            category: "Downloader"
+            "Local installer discovery completed: recognized identities=\(identities.count), unrecognized=\(unrecognizedCount).",
+            stage: .downloader, workflow: .discovery
         )
         return MacOSLocalInstallerDiscoverySnapshot(
             identities: identities,
@@ -100,14 +100,14 @@ extension MacOSCatalogService {
         }
         for identity in snapshot.identities where !entries.contains(where: identity.matches) {
             AppLogging.info(
-                "Lokalny instalator version=\(identity.version), build=\(identity.build) nie wystepuje w aktywnym katalogu Apple; pozostaje bez oznaczenia.",
-                category: "Downloader"
+                "Local installer version=\(identity.version), build=\(identity.build) absent from active Apple catalog; leaving it unmarked.",
+                stage: .downloader, workflow: .discovery
             )
         }
 
         AppLogging.info(
-            "Zastosowano wynik wykrywania lokalnych instalatorow: rozpoznane tozsamosci=\(snapshot.identities.count), nierozpoznane=\(snapshot.unrecognizedInstallerCount), dopasowane wpisy katalogu=\(enrichedEntries.filter(\.isDownloaded).count).",
-            category: "Downloader"
+            "Applied local installer discovery result: recognized identities=\(snapshot.identities.count), unrecognized=\(snapshot.unrecognizedInstallerCount), matched catalog entries=\(enrichedEntries.filter(\.isDownloaded).count).",
+            stage: .downloader, workflow: .discovery
         )
         return MacOSInstallerDiscoveryResult(
             entries: enrichedEntries,
@@ -212,8 +212,8 @@ extension MacOSCatalogService {
         } catch {
             if operationError is CancellationError {
                 AppLogging.error(
-                    "Cleanup po anulowaniu wykrywania lokalnego instalatora nie powiodl sie: \(error.localizedDescription)",
-                    category: "Downloader"
+                    "Cleanup after local installer discovery cancellation failed: \(error.localizedDescription)",
+                    stage: .downloader, workflow: .discovery
                 )
                 throw CancellationError()
             }

@@ -21,7 +21,7 @@ Primary runtime goals:
 - execute privileged operations through helper architecture,
 - keep the user flow guided and non-technical.
 
-The Help menu provides diagnostic-log export through its menu item and the `Option-L` keyboard shortcut.
+The Help menu provides current-session diagnostic-log export through its menu item and the `Option-L` keyboard shortcut. A second menu item exports logs from the immediately preceding app session when they are available.
 
 ## Runtime Boundaries
 

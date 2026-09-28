@@ -80,7 +80,7 @@ final class HelperWorkflowExecutor {
                 }
                 try throwIfCancelled()
                 if stage.key == "catalina_copy" {
-                    let transitionMessage = "Catalina: zakończono createinstallmedia, przejście do etapu ditto."
+                    let transitionMessage = "Catalina: createinstallmedia completed; starting ditto copy."
                     emit(stage: stage, percent: stage.startPercent, statusKey: stage.statusKey, logLine: transitionMessage)
                 } else {
                     emit(stage: stage, percent: stage.startPercent, statusKey: stage.statusKey)
@@ -219,7 +219,8 @@ final class HelperWorkflowExecutor {
         guard request.workflowKind == .linux else { return }
 
         guard let targetWholeDisk = try? resolveLinuxTargetWholeDiskName() else {
-            os_log("Linux post-mount attempt skipped: cannot resolve target whole disk", type: .default)
+            HelperDiagnosticLogging.info("Linux post-mount attempt skipped: cannot resolve target whole disk", stage: .usb)
+            emitLinuxPostMountDiagnostic("Raw-copy post-mount attempt: skipped because target whole disk could not be resolved.")
             return
         }
 
@@ -244,19 +245,22 @@ final class HelperWorkflowExecutor {
         do {
             try process.run()
             process.waitUntilExit()
-            os_log(
-                "Linux post-mount attempt finished: target=%{public}@ exitCode=%{public}d",
-                type: .default,
-                targetDevice,
-                process.terminationStatus
-            )
+            HelperDiagnosticLogging.info("Linux post-mount attempt finished: target=\(targetDevice) exitCode=\(process.terminationStatus)", stage: .usb)
+            emitLinuxPostMountDiagnostic("Raw-copy post-mount attempt: target=\(targetDevice), exitCode=\(process.terminationStatus).")
         } catch {
-            os_log(
-                "Linux post-mount attempt failed to start: target=%{public}@ error=%{public}@",
-                type: .error,
-                targetDevice,
-                error.localizedDescription
-            )
+            HelperDiagnosticLogging.error("Linux post-mount attempt failed to start: target=\(targetDevice) error=\(error.localizedDescription)", stage: .usb)
+            emitLinuxPostMountDiagnostic("Raw-copy post-mount attempt: target=\(targetDevice), launchError=\(error.localizedDescription).")
         }
+    }
+
+    private func emitLinuxPostMountDiagnostic(_ message: String) {
+        emitProgress(
+            stageKey: "finalize",
+            titleKey: HelperWorkflowLocalizationKeys.finalizeTitle,
+            percent: latestPercent,
+            statusKey: HelperWorkflowLocalizationKeys.finalizeStatus,
+            logLine: message,
+            shouldAdvancePercent: false
+        )
     }
 }

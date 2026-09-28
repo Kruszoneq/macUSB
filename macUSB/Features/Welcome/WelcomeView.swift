@@ -127,6 +127,7 @@ struct WelcomeView: View {
     
     func checkForUpdates(completion: @escaping () -> Void) {
         let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+        AppLogging.info("Update check started: trigger=startup, currentVersion=\(currentVersion).", stage: .app)
         
         URLSession.shared.dataTask(with: versionCheckURL) { data, response, error in
             let finishOnMain: () -> Void = {
@@ -136,6 +137,7 @@ struct WelcomeView: View {
             }
 
             guard let data = data, error == nil else {
+                AppLogging.error("Update check failed: trigger=startup, details=\(error?.localizedDescription ?? "response data missing").", stage: .app)
                 finishOnMain()
                 return
             }
@@ -146,6 +148,7 @@ struct WelcomeView: View {
                    let downloadLink = json["url"] {
                     
                     if remoteVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+                        AppLogging.info("Update check completed: trigger=startup, newerVersion=\(remoteVersion), currentVersion=\(currentVersion).", stage: .app)
                         DispatchQueue.main.async {
                             let alert = NSAlert()
                             alert.icon = NSApplication.shared.applicationIconImage
@@ -163,13 +166,15 @@ struct WelcomeView: View {
                             completion()
                         }
                     } else {
+                        AppLogging.info("Update check completed: trigger=startup, no newer version found, currentVersion=\(currentVersion), remoteVersion=\(remoteVersion).", stage: .app)
                         finishOnMain()
                     }
                 } else {
+                    AppLogging.error("Update check failed: trigger=startup, invalid update metadata.", stage: .app)
                     finishOnMain()
                 }
             } catch {
-                print("Błąd sprawdzania aktualizacji: \(error)")
+                AppLogging.error("Update check failed: trigger=startup, details=\(error.localizedDescription).", stage: .app)
                 finishOnMain()
             }
         }.resume()

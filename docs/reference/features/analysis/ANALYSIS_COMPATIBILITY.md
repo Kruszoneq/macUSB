@@ -164,6 +164,8 @@ Checksum calculation:
 
 ## Logging and Diagnostics
 
+Analysis-screen app diagnostics are written through `AppLogging` in English with `[HH:MM:SS] [ANALYSIS]` before the workflow is known, then `[ANALYSIS_MACOS]`, `[ANALYSIS_PPC]`, `[ANALYSIS_WINDOWS]`, `[ANALYSIS_LINUX]`, or `[ANALYSIS_RAW]` when a branch is known. The manual SHA-256 action uses the shared `ANALYSIS` stage because it applies across source workflows. Source-image registration diagnostics use `ANALYSIS_WINDOWS` or `ANALYSIS_LINUX` when the image family is known. Shared source-image discovery and detach diagnostics use the base `ANALYSIS` stage. Diagnostic fields, raw tool output, paths, and system error descriptions remain available in the exported log.
+
 Analysis should log:
 - selected source type,
 - detected compatibility family/flags,

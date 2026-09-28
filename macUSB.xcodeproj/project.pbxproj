@@ -58,6 +58,7 @@
 		F10000012F00000100000009 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F00000100000019 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift */; };
 		F10000012F0000010000000A /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000012F0000010000001A /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift */; };
 		G10000012F00000100000001 /* Rosetta/HelperRosettaInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = G10000012F00000100000002 /* Rosetta/HelperRosettaInstaller.swift */; };
+		H20000012F00000100000001 /* Service/HelperDiagnosticLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = H20000012F00000100000002 /* Service/HelperDiagnosticLogging.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -180,6 +181,7 @@
 		F10000012F00000100000019 /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootDiskOperations.swift; sourceTree = "<group>"; };
 		F10000012F0000010000001A /* Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflow/Windows/MacUSBoot/HelperWorkflowWindowsMacUSBootInstaller.swift; sourceTree = "<group>"; };
 		G10000012F00000100000002 /* Rosetta/HelperRosettaInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rosetta/HelperRosettaInstaller.swift; sourceTree = "<group>"; };
+		H20000012F00000100000002 /* Service/HelperDiagnosticLogging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service/HelperDiagnosticLogging.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -592,6 +594,7 @@
 				F10000012F00000100000011 /* Service/PrivilegedHelperServiceCapabilities.swift */,
 				A10000012F00000100000023 /* Service/HelperListenerDelegate.swift */,
 				H10000012F00000100000002 /* Service/HelperProcessLifecycle.swift */,
+				H20000012F00000100000002 /* Service/HelperDiagnosticLogging.swift */,
 				G10000012F00000100000002 /* Rosetta/HelperRosettaInstaller.swift */,
 				A10000012F00000100000024 /* Workflow/HelperWorkflowExecutor.swift */,
 				A10000012F00000100000025 /* Workflow/HelperWorkflowStages.swift */,
@@ -850,6 +853,7 @@
 				F10000012F00000100000001 /* Service/PrivilegedHelperServiceCapabilities.swift in Sources */,
 				A10000012F00000100000033 /* Service/HelperListenerDelegate.swift in Sources */,
 				H10000012F00000100000001 /* Service/HelperProcessLifecycle.swift in Sources */,
+				H20000012F00000100000001 /* Service/HelperDiagnosticLogging.swift in Sources */,
 				G10000012F00000100000001 /* Rosetta/HelperRosettaInstaller.swift in Sources */,
 				A10000012F00000100000034 /* Workflow/HelperWorkflowExecutor.swift in Sources */,
 				A10000012F00000100000035 /* Workflow/HelperWorkflowStages.swift in Sources */,

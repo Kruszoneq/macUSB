@@ -22,11 +22,11 @@ extension MontereyDownloadFlowModel {
 
         AppLogging.info(
             "Legacy assembly: start entry=\(entry.name) \(entry.version), workspace=\(workspaceURL.path)",
-            category: "Downloader"
+            stage: .downloader, workflow: loggingWorkflow
         )
         AppLogging.info(
             "Legacy assembly: inputs resolved InstallAssistantAuto=\(files.installAssistantAuto.lastPathComponent), RecoveryHDMetaDmg=\(files.recoveryHDMetaDmg.lastPathComponent), InstallESDDmg=\(files.installESDDmg.lastPathComponent)",
-            category: "Downloader"
+            stage: .downloader, workflow: loggingWorkflow
         )
 
         do {
@@ -44,7 +44,7 @@ extension MontereyDownloadFlowModel {
             if recoveryMounted {
                 AppLogging.info(
                     "Legacy assembly: cleanup detach recovery mount=\(mountURL.path)",
-                    category: "Downloader"
+                    stage: .downloader, workflow: loggingWorkflow
                 )
                 _ = detachDiskImageWithRetry(
                     mountURL: mountURL,
@@ -67,7 +67,7 @@ extension MontereyDownloadFlowModel {
         let appURL = try locateInstallerApp(in: payloadURL)
         AppLogging.info(
             "Legacy assembly: detected app bundle path=\(appURL.path)",
-            category: "Downloader"
+            stage: .downloader, workflow: loggingWorkflow
         )
         let sharedSupportURL = appURL.appendingPathComponent("Contents/SharedSupport", isDirectory: true)
 
@@ -113,7 +113,7 @@ extension MontereyDownloadFlowModel {
         buildProgress = 0.74
         AppLogging.info(
             "Legacy assembly: detach recovery mount=\(mountURL.path)",
-            category: "Downloader"
+            stage: .downloader, workflow: loggingWorkflow
         )
         _ = detachDiskImageWithRetry(
             mountURL: mountURL,
@@ -129,8 +129,8 @@ extension MontereyDownloadFlowModel {
         )
         if destinationURL.lastPathComponent != preferredName {
             AppLogging.info(
-                "Legacy assembly: wykryto kolizje nazwy w /Applications, używam \(destinationURL.lastPathComponent)",
-                category: "Downloader"
+                "Legacy assembly: name collision in /Applications, using \(destinationURL.lastPathComponent)",
+                stage: .downloader, workflow: loggingWorkflow
             )
         }
         try await runLegacyFileStepWithProgress(
@@ -144,7 +144,7 @@ extension MontereyDownloadFlowModel {
 
         AppLogging.info(
             "Legacy assembly: installer ready path=\(destinationURL.path)",
-            category: "Downloader"
+            stage: .downloader, workflow: loggingWorkflow
         )
         return destinationURL
     }
@@ -226,13 +226,13 @@ extension MontereyDownloadFlowModel {
 
         if destinationURL.lastPathComponent != preferredName {
             AppLogging.info(
-                "Oldest assembly: wykryto kolizje nazwy w /Applications, używam \(destinationURL.lastPathComponent)",
-                category: "Downloader"
+                "Oldest assembly: name collision in /Applications, using \(destinationURL.lastPathComponent)",
+                stage: .downloader, workflow: loggingWorkflow
             )
         }
         AppLogging.info(
             "Oldest assembly: installer ready path=\(destinationURL.path)",
-            category: "Downloader"
+            stage: .downloader, workflow: loggingWorkflow
         )
 
         return destinationURL
@@ -394,16 +394,16 @@ extension MontereyDownloadFlowModel {
     ) async throws {
         guard let installESDSourceURL = locateInstallESD(in: expandedPackageRootURL) else {
             AppLogging.error(
-                "Oldest assembly: brak InstallESD.dmg w rozpakowanym pakiecie \(expandedPackageRootURL.path) dla \(entry.version)",
-                category: "Downloader"
+                "Oldest assembly: InstallESD.dmg missing from expanded package \(expandedPackageRootURL.path) for \(entry.version)",
+                stage: .downloader, workflow: loggingWorkflow
             )
             throw DownloadFailureReason.assemblyFailed(
                 String(localized: "Nie można dokończyć przygotowania. Brakuje pliku InstallESD.dmg. Spróbuj ponownie pobrać ten system.")
             )
         }
         AppLogging.info(
-            "Oldest assembly: znaleziono InstallESD.dmg source=\(installESDSourceURL.path)",
-            category: "Downloader"
+            "Oldest assembly: found InstallESD.dmg source=\(installESDSourceURL.path)",
+            stage: .downloader, workflow: loggingWorkflow
         )
 
         try await runLegacyFileStepWithProgress(
@@ -558,7 +558,7 @@ extension MontereyDownloadFlowModel {
         if !details.isEmpty {
             AppLogging.info(
                 "Oldest payload extraction output: \(details)",
-                category: "Downloader"
+                stage: .downloader, workflow: loggingWorkflow
             )
         }
 

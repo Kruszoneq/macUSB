@@ -3,7 +3,7 @@ import Foundation
 extension UniversalInstallationView {
     func startWindowsCreationProcessWithHelper() {
         log(
-            "WindowsInstallFlow: start workflow (source=\(sourceAppURL.path), mounted=\(windowsMountedSourcePath ?? "brak"), target=\(targetDrive?.device ?? "brak"))",
+            "Windows workflow starting: source=\(sourceAppURL.path), mountedSource=\(windowsMountedSourcePath ?? "none"), target=\(targetDrive?.device ?? "none"), bootMode=\(resolvedWindowsBootMode?.rawValue ?? "none").",
             category: "WindowsInstallFlow"
         )
         startCreationProcessWithHelper()
@@ -22,17 +22,24 @@ extension UniversalInstallationView {
             }
         }
 
-        log(
-            "WindowsInstallFlow: przygotowano helper request (source=\(sourceAppURL.path), mounted=\(windowsMountedSourcePath ?? "brak"), targetBSD=\(helperTargetBSDName), label=\(targetLabel), bootMode=\(helperBootMode?.rawValue ?? "brak"))",
-            category: "WindowsInstallFlow"
-        )
-
         let autounattendPayload = CreatorWindowsAutounattendWindowsVersion.detected(
             from: systemName,
             architecture: windowsArchitecture
         ) != nil
             ? windowsAutounattendConfiguration.helperPayload()
             : nil
+
+        log(
+            "Windows helper request prepared: source=\(sourceAppURL.path), mountedSource=\(windowsMountedSourcePath ?? "none"), targetBSD=\(helperTargetBSDName), label=\(targetLabel), bootMode=\(helperBootMode?.rawValue ?? "none"), splitWIM=\(windowsWillSplitWim), generatedAnswerFile=\(autounattendPayload != nil), sourceAnswerFileDecision=\(windowsAutounattendConfiguration.existingFileDecision?.rawValue ?? "none").",
+            category: "WindowsInstallFlow"
+        )
+        if autounattendPayload != nil {
+            let options = windowsAutounattendConfiguration
+            log(
+                "Windows answer-file options: hardwareBypass=\(options.skipHardwareRequirements), macLocale=\(options.useMacLanguageAndRegion), preventDeviceEncryption=\(options.preventDeviceEncryption), disableDataCollection=\(options.disableDataCollection), skipWirelessSetup=\(options.skipWirelessSetup), skipMicrosoftAccount=\(options.skipMicrosoftAccountRequirement), createLocalAccount=\(options.createLocalAccount).",
+                category: "WindowsInstallFlow"
+            )
+        }
 
         return HelperWorkflowRequestPayload(
             workflowKind: .windows,

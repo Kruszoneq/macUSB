@@ -31,7 +31,7 @@ For Windows BIOS creation, macUSBoot owns one final whole-disk mount attempt aft
 App-termination path must execute centralized source-image cleanup for Windows/Linux workflows:
 - tracked source ISO image entities are force-detached on app termination (final shutdown step),
 - this applies regardless of active screen (`analysis`, `summary`, `progress`, `finish`) to prevent stale mounted installer images after app exit.
-- An idle termination runs the centralized cleanup exactly once before exit. Failure to remove temporary files or detach an image is logged but does not cancel termination.
+- An idle termination runs the centralized cleanup exactly once before exit. Failure to remove temporary files, discover tracked source images, or detach an image is logged and produces an error termination result, but does not cancel termination.
 - Finish-screen cleanup, emergency installation cleanup, downloader cleanup, tracked-image detach, and termination cleanup own cleanup-operation tokens for their full execution.
 
 Downloader-specific cleanup behavior is detailed in `docs/reference/features/downloader/DOWNLOADER.md`.
@@ -43,6 +43,10 @@ Cleanup logs should include:
 - cleanup executor (app/helper),
 - result and error details when cleanup fails,
 - finish-eject mode (`standard` or `force`) and Spotlight classification when applicable.
+
+Finish cleanup, duration/result, and eject diagnostics retain the selected `[USB_WORKFLOW]` label and use English `AppLogging` messages. Finish cleanup records its app executor, requested mount-point detach and temporary path, detach exit status, temporary-file removal or skip/failure, and final duration/result/cleanup status. Forwarded helper diagnostics retain the same workflow label followed by `[HELPER]`; app-run `hdiutil` and `diskutil` diagnostics have no helper source tag. Raw `stderr` and system error descriptions remain attached to the labeled diagnostic line. The result and error cards continue to use localized UI text.
+
+Allowed application termination records cleanup, temporary-directory removal, helper XPC disconnection, and termination-operation start/finish with English `[APP]` lines. After these lines, the app records an `[APP]` separator and a final success or cleanup-error line. Protected-operation details remain available in blocked-termination diagnostics.
 
 ## Update Trigger
 

@@ -172,7 +172,7 @@ extension MacOSCatalogService {
                     let delay = retryDelayNanoseconds(forAttempt: attempt)
                     AppLogging.info(
                         "SizeProbe stage=retry host=\(url.host ?? "unknown") attempt=\(attempt + 1) delay_ms=\(delay / 1_000_000)",
-                        category: "Downloader"
+                        stage: .downloader, workflow: .discovery
                     )
                     try await Task.sleep(nanoseconds: delay)
                     continue
@@ -217,7 +217,7 @@ extension MacOSCatalogService {
         let trustFlag = isTrustFailure(error) ? "1" : "0"
         AppLogging.info(
             "SizeProbe stage=content_length method=\(method.rawValue) host=\(host) code=\(nsError.code) stream=\(streamCode ?? 0) trust=\(trustFlag) action=\(action) url=\(url.absoluteString)",
-            category: "Downloader"
+            stage: .downloader, workflow: .discovery
         )
     }
 
@@ -283,7 +283,7 @@ extension MacOSCatalogService {
     func logSizeProbeSummary(_ summary: SizeProbeSummary) {
         AppLogging.info(
             "SizeProbe summary total=\(summary.totalEntries) prefilled=\(summary.catalogPrefilledSizes) network=\(summary.resolvedByNetworkProbe) unresolved=\(summary.unresolvedAfterProbe) skipped_failed_host=\(summary.skippedDueToTrustFailedHost) retries=\(summary.retriesPerformed) trust_failed_hosts=\(summary.trustFailedHosts) suppressed_logs=\(summary.suppressedRepeatedFailureLogs)",
-            category: "Downloader"
+            stage: .downloader, workflow: .discovery
         )
     }
 

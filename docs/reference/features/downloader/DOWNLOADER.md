@@ -185,6 +185,7 @@ Power management contract during production download flow:
 - idle sleep is blocked for the full runtime of one download session,
 - activation starts when download workflow starts (`running` state),
 - release is guaranteed on every terminal path: success, failure, or cancellation.
+- activation and release diagnostics use the selected `DOWNLOADER_MODERN`, `DOWNLOADER_LEGACY`, or `DOWNLOADER_OLDEST` label and an English reason.
 
 Summary:
 - shows transfer, average speed, duration, and output file name,
@@ -348,8 +349,12 @@ Downloader logs should include:
 - disk-image creation start and terminal result, including technical error details when creation fails,
 - cleanup result and final destination status.
 
-Logging category:
-- downloader events are written via `AppLogging` with category `Downloader`.
+Logging contract:
+- app-side downloader event diagnostics are written through `AppLogging` with the `DOWNLOADER` stage and English messages. Exported lines use `[HH:MM:SS] [DOWNLOADER] Message` for window and prerequisite events without an identified workflow.
+- discovery uses `DOWNLOADER_DISCOVERY`; a selected download uses `DOWNLOADER_MODERN`, `DOWNLOADER_LEGACY`, or `DOWNLOADER_OLDEST` across manifest lookup, transfer, verification, assembly, disk-image work, and cleanup. Event and error logs keep the selected workflow label, except helper assembly progress and result decode failures, which use the base `[DOWNLOADER]` label. Protected-operation token logs for the downloader window, helper assembly, and cleanup currently use the registry's default `[APP]` label.
+- helper assembly progress and tool output forwarded into the app use the same selected downloader workflow label followed by the separate `[HELPER]` source tag. The app's legacy assembly process combines stdout and stderr with a newline and trims surrounding whitespace before logging; other forwarded output and system error descriptions retain their source text.
+- an unconfirmed helper cleanup writes an English app error with the selected downloader workflow label. If the helper supplied an error description, a separate line carries that raw description with the same workflow label and `[HELPER]` source tag.
+- capacity diagnostics retain exact bytes and decimal GB, and verification logs retain expected and actual sizes or hashes. Localized status text and alerts remain presentation data.
 
 ---
 

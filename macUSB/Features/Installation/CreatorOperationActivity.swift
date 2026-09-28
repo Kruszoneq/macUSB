@@ -23,7 +23,9 @@ extension UniversalInstallationView {
         }
         usbCreationOperationToken = AppActiveOperationRegistry.shared.begin(
             kind: .usbCreation,
-            context: "usb_creation:\(workflow)"
+            context: "usb_creation:\(workflow)",
+            logStage: .usb,
+            logWorkflow: creationLogWorkflow
         )
     }
 
@@ -40,7 +42,9 @@ extension UniversalInstallationView {
             guard workflowCleanupOperationToken == nil else { return }
             workflowCleanupOperationToken = AppActiveOperationRegistry.shared.begin(
                 kind: .cleanup,
-                context: "helper_workflow_stage:\(normalizedStageKey)"
+                context: "helper_workflow_stage:\(normalizedStageKey)",
+                logStage: .usb,
+                logWorkflow: creationLogWorkflow
             )
         } else {
             finishWorkflowCleanupOperationIfNeeded()

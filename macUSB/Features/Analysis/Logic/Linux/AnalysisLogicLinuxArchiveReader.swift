@@ -14,7 +14,7 @@ extension AnalysisLogic {
         do {
             try task.run()
         } catch {
-            self.logError("Nie udało się uruchomić bsdtar -tf: \(error.localizedDescription)")
+            self.logLinuxError("Failed to start bsdtar -tf: \(error.localizedDescription)")
             return nil
         }
 
@@ -67,7 +67,7 @@ extension AnalysisLogic {
         let errorData = syncQueue.sync { stderrBuffer }
 
         if timedOut {
-            self.logError("bsdtar -tf timeout po \(Int(timeout)) s: \(sourceURL.lastPathComponent)")
+            self.logLinuxError("bsdtar -tf timed out after \(Int(timeout)) s: \(sourceURL.lastPathComponent)")
             return nil
         }
 
@@ -75,9 +75,9 @@ extension AnalysisLogic {
             let stderrText = String(decoding: errorData, as: UTF8.self)
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             if stderrText.isEmpty {
-                self.logError("bsdtar -tf zakończył się błędem (kod \(task.terminationStatus)).")
+                self.logLinuxError("bsdtar -tf failed (exit code \(task.terminationStatus)).")
             } else {
-                self.logError("bsdtar -tf zakończył się błędem: \(stderrText)")
+                self.logLinuxError("bsdtar -tf failed: \(stderrText)")
             }
             return nil
         }
@@ -126,7 +126,7 @@ extension AnalysisLogic {
         do {
             try task.run()
         } catch {
-            self.logError("Nie udało się uruchomić bsdtar -xOf: \(error.localizedDescription)")
+            self.logLinuxError("Failed to start bsdtar -xOf: \(error.localizedDescription)")
             return nil
         }
 
@@ -182,7 +182,7 @@ extension AnalysisLogic {
         let errorData = syncQueue.sync { stderrBuffer }
 
         if timedOut {
-            self.logError("bsdtar -xOf timeout po \(Int(timeout)) s dla: \(relativePath)")
+            self.logLinuxError("bsdtar -xOf timed out after \(Int(timeout)) s for: \(relativePath)")
             return nil
         }
 
@@ -193,9 +193,9 @@ extension AnalysisLogic {
                 let clean = String(decoding: errorData, as: UTF8.self)
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                 if clean.isEmpty {
-                    self.logError("bsdtar -xOf zakończył się błędem (kod \(task.terminationStatus)) dla: \(relativePath)")
+                    self.logLinuxError("bsdtar -xOf failed (exit code \(task.terminationStatus)) for: \(relativePath)")
                 } else {
-                    self.logError("bsdtar -xOf zakończył się błędem dla \(relativePath): \(clean)")
+                    self.logLinuxError("bsdtar -xOf failed for \(relativePath): \(clean)")
                 }
             }
             return nil

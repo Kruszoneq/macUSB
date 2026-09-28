@@ -2,7 +2,7 @@ import Foundation
 
 extension UniversalInstallationView {
     func startLinuxCreationProcessWithHelper() {
-        log("LinuxInstallFlow: start workflow (source=\(linuxFlowContext?.sourcePath ?? "brak"), target=\(targetDrive?.device ?? "brak"))", category: "LinuxInstallFlow")
+        log("Raw-copy workflow starting: source=\(linuxFlowContext?.sourcePath ?? "none"), target=\(targetDrive?.device ?? "none"), manualRawImage=\(linuxFlowContext?.isRawImageSelection == true).", category: "LinuxInstallFlow")
         startCreationProcessWithHelper()
     }
 
@@ -20,7 +20,7 @@ extension UniversalInstallationView {
         let requesterUID = Int(getuid())
 
         log(
-            "LinuxInstallFlow: przygotowano helper request (source=\(linuxFlowContext.sourcePath), targetBSD=\(helperTargetBSDName), targetVolume=\(helperTargetVolumePath))",
+            "Raw-copy helper request prepared: source=\(linuxFlowContext.sourcePath), targetBSD=\(helperTargetBSDName), targetVolume=\(helperTargetVolumePath).",
             category: "LinuxInstallFlow"
         )
 

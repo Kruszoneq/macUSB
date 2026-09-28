@@ -71,8 +71,8 @@ final class AnalysisChecksumViewModel: ObservableObject {
             } catch is CancellationError {
                 await MainActor.run {
                     AppLogging.info(
-                        "Anulowano obliczanie SHA-256 dla pliku źródłowego: \(sourceURL.path)",
-                        category: "Checksum"
+                        "Source file SHA-256 calculation cancelled: \(sourceURL.path)",
+                        stage: .analysis
                     )
                 }
                 await MainActor.run { [weak self] in
@@ -81,8 +81,8 @@ final class AnalysisChecksumViewModel: ObservableObject {
             } catch {
                 await MainActor.run {
                     AppLogging.error(
-                        "Błąd obliczania SHA-256 dla pliku źródłowego \(sourceURL.path): \(error.localizedDescription)",
-                        category: "Checksum"
+                        "Source file SHA-256 calculation failed for \(sourceURL.path): \(error.localizedDescription)",
+                        stage: .analysis
                     )
                 }
                 await MainActor.run { [weak self] in
@@ -110,7 +110,7 @@ final class AnalysisChecksumViewModel: ObservableObject {
         guard let checksum else { return }
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(checksum, forType: .string)
-        AppLogging.info("Skopiowano SHA-256 pliku źródłowego do schowka.", category: "Checksum")
+        AppLogging.info("Source file SHA-256 copied to the clipboard.", stage: .analysis)
     }
 
     private func markCancelled() {

@@ -149,6 +149,7 @@ Windows summary pre-start prerequisites:
 - Idle sleep is blocked for the full USB creation runtime.
 - Sleep blocker is activated at creation process start.
 - Sleep blocker is released on every terminal path: success, failure, and cancellation.
+- Activation and release diagnostics use the selected `USB_WORKFLOW` label and an English reason.
 - The USB-creation token follows the same terminal coverage but is independent from the sleep blocker.
 
 ## Logging and Diagnostics
@@ -160,7 +161,14 @@ Creation workflow logs should include:
 - cancellation/failure shaping,
 - critical command outcomes used for diagnosis.
 
+Protected-operation start and finish diagnostics for a selected creation workflow, its helper activity, cleanup, and finish-screen eject use the same `[USB_WORKFLOW]` label. Their kind, context, identifier, and duration remain in the message.
+
+A failed terminal helper result is logged by the app as `Helper workflow failed: <errorMessage>` under the selected USB label without an extra `[HELPER]` tag; the embedded result description may retain its original language. If a helper progress event or workflow result cannot be decoded, the app logs the decode error under the base `[USB]` label without a workflow suffix or `[HELPER]` tag.
+
+From summary entry through helper completion, macOS creation diagnostics use English `AppLogging` lines labeled `[USB_MACOS]`, `[USB_SIERRA]`, `[USB_CATALINA]`, `[USB_LEGACYRESTORE]`, `[USB_MAVERICKS]`, or `[USB_PPC]` according to the selected branch. Forwarded helper progress events and tool output append `[HELPER]` after that label. Logging labels do not alter helper workflow kinds, stage keys, or localized presentation keys.
+
 Windows summary logs additionally include boot-mode initialization, user selection changes, helper capability preflight/reload outcomes, and the boot mode sent in the request.
+Windows creation diagnostics use English `[USB_WINDOWS]` lines from summary entry through the finish screen. They include the resolved BIOS/UEFI mode, WIM-split decision, generated answer-file option flags without account names, conflict resolution for a source answer file, force-unmount decision, stage transitions, and the terminal result. Forwarded helper progress diagnostics and raw tool output use `[USB_WINDOWS] [HELPER]`. The diagnostic labels and option summaries do not change the selected mode, answer-file payload, stage graph, or localized UI.
 
 Windows macUSBoot helper logs additionally include:
 - semantic phase transitions and artifact identity/hash validation,
@@ -175,6 +183,8 @@ Linux workflow logs should additionally include:
 - raw-copy progress and speed metrics,
 - verification summary (source hash preview vs target hash preview, compared byte count, pass/fail),
 - terminal result (`success/fail/cancel`) and failed stage when present.
+
+Recognized Linux creation uses English `[USB_LINUX]` diagnostics; the manually selected raw-image path uses `[USB_RAW]` for the same helper `dd` and SHA-256 stages. Forwarded helper lines, including raw command output, mount-guard activity, verification hashes, and the best-effort post-workflow mount attempt, append `[HELPER]`. The app ignores mount-guard and post-mount diagnostic-only progress events when mapping visible stages, so those logs do not change progress presentation or the terminal result.
 
 ## Update Trigger
 

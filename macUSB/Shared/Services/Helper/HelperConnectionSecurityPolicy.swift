@@ -23,15 +23,16 @@ enum HelperConnectionSecurityPolicy {
 
     static func configure(_ connection: NSXPCConnection, machServiceName: String) {
         AppLogging.info(
-            "Rozpoczynam konfigurację weryfikacji podpisu helpera XPC: machService=\(machServiceName), expectedHelperBundleID=\(expectedHelperBundleIdentifier).",
-            category: "HelperService"
+            "Configuring XPC helper code-signing requirement: " +
+            "machService=\(machServiceName), expectedHelperBundleID=\(expectedHelperBundleIdentifier).",
+            stage: .helper
         )
 
         connection.setCodeSigningRequirement(trustedHelperRequirement)
 
         AppLogging.info(
-            "Weryfikacja podpisu helpera XPC skonfigurowana: machService=\(machServiceName), status=OK.",
-            category: "HelperService"
+            "XPC helper code-signing requirement configured: machService=\(machServiceName), status=OK.",
+            stage: .helper
         )
     }
 

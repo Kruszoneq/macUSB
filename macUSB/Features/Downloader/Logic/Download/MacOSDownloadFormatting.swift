@@ -12,7 +12,7 @@ enum MacOSDownloadDiskSpaceDiagnostics {
     }
 
     static func status(requiredBytes: Int64, availableBytes: Int64) -> String {
-        availableBytes >= requiredBytes ? "OK" : "BRAK MIEJSCA"
+        availableBytes >= requiredBytes ? "OK" : "INSUFFICIENT SPACE"
     }
 }
 

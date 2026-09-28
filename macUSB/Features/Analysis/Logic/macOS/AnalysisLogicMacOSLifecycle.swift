@@ -4,8 +4,8 @@ import Foundation
 extension AnalysisLogic {
     func forceTigerMultiDVDSelection() {
         MenuState.shared.lockLanguageChanges(reason: "manual_tiger_selection")
-        cancelActiveImageAnalysisRun(reason: "Ręczne przełączenie na Tiger Multi DVD")
-        self.log("Ręcznie wybrano tryb Tiger Multi DVD")
+        cancelActiveImageAnalysisRun(reason: "manual Tiger Multi DVD selection")
+        self.log("Tiger Multi DVD mode selected manually", workflow: .ppc)
         let fileURL = self.selectedFileUrl
         DispatchQueue.global(qos: .userInitiated).async {
             let resolvedRequirement = fileURL.flatMap { try? USBTargetCapacityRequirement.forSource(at: $0) }
@@ -61,13 +61,13 @@ extension AnalysisLogic {
                     self.resetWindowsDetectionState()
                 }
                 let flags = [self.isPPC ? "isPPC" : nil].compactMap { $0 }.joined(separator: ", ")
-                self.log("Ustawiono Tiger Multi DVD: recognizedVersion=\(self.recognizedVersion). Flagi: \(flags.isEmpty ? "brak" : flags)")
+                self.log("Tiger Multi DVD mode set: recognizedVersion=\(self.recognizedVersion). Flags: \(flags.isEmpty ? "none" : flags)", workflow: .ppc)
             }
         }
     }
 
     func resetAll() {
-        cancelActiveImageAnalysisRun(reason: "Pełny reset stanu analizy")
+        cancelActiveImageAnalysisRun(reason: "full analysis state reset")
         let oldMount = self.mountedDMGPath
         if let path = oldMount {
             let task = Process()
@@ -127,6 +127,6 @@ extension AnalysisLogic {
 
     // Call this from the UI when the user presses the "Przejdź dalej" button
     func recordProceedPressed() {
-        self.log("Użytkownik nacisnął przycisk 'Przejdź dalej'. Wybrany nośnik: \(self.selectedDrive?.url.path ?? "brak"), źródło: \(self.sourceAppURL?.path ?? "brak"), rozpoznano: \(self.recognizedVersion)")
+        self.log("User selected Continue. Selected target: \(self.selectedDrive?.url.path ?? "none"), source: \(self.sourceAppURL?.path ?? "none"), recognized: \(self.recognizedVersion)", workflow: selectedWorkflowForLogging)
     }
 }

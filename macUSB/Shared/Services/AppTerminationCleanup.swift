@@ -5,16 +5,18 @@ final class AppTerminationCleanup {
 
     private let lock = NSLock()
     private var didPerformCleanup = false
+    private var cleanupSucceeded = true
 
     private init() {}
 
-    func performIfNeeded() {
+    @discardableResult
+    func performIfNeeded() -> Bool {
         let shouldPerform = lock.withLock {
             guard !didPerformCleanup else { return false }
             didPerformCleanup = true
             return true
         }
-        guard shouldPerform else { return }
+        guard shouldPerform else { return lock.withLock { cleanupSucceeded } }
 
         let cleanupToken = AppActiveOperationRegistry.shared.begin(
             kind: .cleanup,
@@ -22,7 +24,8 @@ final class AppTerminationCleanup {
         )
         defer { cleanupToken.finish() }
 
-        AppLogging.info("Rozpoczęto cleanup przed zamknięciem aplikacji.", category: "AppLifecycle")
+        AppLogging.info("Application termination cleanup started.", stage: .app)
+        var succeeded = true
 
         UserDefaults.standard.set(false, forKey: "AllowExternalDrives")
         UserDefaults.standard.synchronize()
@@ -34,20 +37,25 @@ final class AppTerminationCleanup {
             do {
                 try FileManager.default.removeItem(at: tempRootURL)
                 AppLogging.info(
-                    "Zamknięcie aplikacji: usunięto katalog macUSB_temp.",
-                    category: "Downloader"
+                    "Application termination: removed macUSB_temp directory.",
+                    stage: .app
                 )
             } catch {
+                succeeded = false
                 AppLogging.error(
-                    "Zamknięcie aplikacji: nie udało się usunąć macUSB_temp: \(error.localizedDescription)",
-                    category: "Downloader"
+                    "Application termination: could not remove macUSB_temp: \(error.localizedDescription)",
+                    stage: .app
                 )
             }
         }
 
-        InstallerSourceImageUnmountRegistry.shared.detachAllTrackedImagesOnAppTermination()
+        if !InstallerSourceImageUnmountRegistry.shared.detachAllTrackedImagesOnAppTermination() {
+            succeeded = false
+        }
         PrivilegedOperationClient.shared.disconnectForAppTermination()
-        AppLogging.info("Zakończono cleanup przed zamknięciem aplikacji.", category: "AppLifecycle")
+        AppLogging.info("Application termination cleanup completed.", stage: .app)
+        lock.withLock { cleanupSucceeded = succeeded }
+        return succeeded
     }
 }
 
