@@ -37,57 +37,65 @@ public enum AppLogging {
     private static let appLogger = Logger(subsystem: subsystem, category: "App")
     private static var didLogStartup: Bool = false
 
+    public static var diagnosticLogsDirectoryURL: URL {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent(subsystem, isDirectory: true)
+            .appendingPathComponent("DiagnosticLogs", isDirectory: true)
+    }
+
     private static let bufferQueue = DispatchQueue(label: "macUSB.LoggingBuffer")
     private static var buffer: [String] = []
     private static let bufferMaxLines: Int = 10000
     private static var currentSessionURL: URL?
     private static var previousSessionURL: URL?
     private static var currentSessionHandle: FileHandle?
-    private static var previousSessionAvailable = false
 
     /// Starts a new log session and makes the immediately preceding session available for export.
     public static func startSession() {
+        let startedAt = Date()
         bufferQueue.sync {
             guard currentSessionURL == nil else { return }
             do {
-                let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-                    .appendingPathComponent(subsystem, isDirectory: true)
-                    .appendingPathComponent("DiagnosticLogs", isDirectory: true)
+                let directory = diagnosticLogsDirectoryURL
                 try FileManager.default.createDirectory(
                     at: directory,
                     withIntermediateDirectories: true,
                     attributes: [.posixPermissions: 0o700]
                 )
+                let existing = try sessionLogFiles(in: directory)
+                previousSessionURL = existing.filter { $0.size > 0 }
+                    .max { lhs, rhs in
+                        if lhs.modifiedAt == rhs.modifiedAt {
+                            if lhs.createdAt != rhs.createdAt {
+                                return lhs.createdAt < rhs.createdAt
+                            }
+                            if lhs.url.lastPathComponent == "current-session.log" { return false }
+                            if rhs.url.lastPathComponent == "current-session.log" { return true }
+                            return lhs.url.lastPathComponent < rhs.url.lastPathComponent
+                        }
+                        return lhs.modifiedAt < rhs.modifiedAt
+                    }?.url
 
-                let current = directory.appendingPathComponent("current-session.log")
-                let previous = directory.appendingPathComponent("previous-session.log")
-                if FileManager.default.fileExists(atPath: current.path) {
-                    let data = try Data(contentsOf: current)
-                    if data.isEmpty {
-                        try? FileManager.default.removeItem(at: previous)
-                    } else {
-                        try data.write(to: previous, options: .atomic)
-                        try FileManager.default.setAttributes(
-                            [.posixPermissions: 0o600],
-                            ofItemAtPath: previous.path
-                        )
-                        previousSessionAvailable = true
-                    }
-                    try FileManager.default.removeItem(at: current)
-                } else {
-                    try? FileManager.default.removeItem(at: previous)
-                }
-
-                guard FileManager.default.createFile(
-                    atPath: current.path,
-                    contents: nil,
-                    attributes: [.posixPermissions: 0o600]
-                ) else {
-                    throw CocoaError(.fileWriteUnknown)
-                }
-                currentSessionHandle = try FileHandle(forWritingTo: current)
+                let (current, handle) = try createSessionLog(in: directory, startedAt: startedAt)
                 currentSessionURL = current
-                previousSessionURL = previous
+                currentSessionHandle = handle
+
+                if let previous = previousSessionURL, isLegacySessionLog(previous) {
+                    do {
+                        previousSessionURL = try migrateLegacySessionLog(previous, into: directory)
+                    } catch {
+                        appLogger.error("Failed to rename the previous diagnostic log: \(error.localizedDescription, privacy: .public)")
+                    }
+                }
+
+                for file in existing where file.url != previousSessionURL {
+                    guard FileManager.default.fileExists(atPath: file.url.path) else { continue }
+                    do {
+                        try FileManager.default.removeItem(at: file.url)
+                    } catch {
+                        appLogger.error("Failed to remove an older diagnostic log: \(error.localizedDescription, privacy: .public)")
+                    }
+                }
             } catch {
                 appLogger.error("Failed to initialize diagnostic log storage: \(error.localizedDescription, privacy: .public)")
             }
@@ -95,23 +103,35 @@ public enum AppLogging {
     }
 
     public static var hasPreviousSessionLogs: Bool {
-        bufferQueue.sync { previousSessionAvailable }
+        bufferQueue.sync { previousSessionURL != nil }
     }
 
-    public static func previousSessionLogText() throws -> String {
-        try bufferQueue.sync {
-            guard previousSessionAvailable, let previousSessionURL else {
-                throw CocoaError(.fileReadNoSuchFile)
-            }
-            let data = try Data(contentsOf: previousSessionURL)
-            return String(decoding: data, as: UTF8.self)
+    public static func exportPreviousSession(to destination: URL) throws {
+        let (source, current) = try bufferQueue.sync { () throws -> (URL, URL?) in
+            guard let previousSessionURL else { throw CocoaError(.fileReadNoSuchFile) }
+            return (previousSessionURL, currentSessionURL)
+        }
+        guard destination.standardizedFileURL != current?.standardizedFileURL,
+              destination.standardizedFileURL != source.standardizedFileURL else {
+            throw CocoaError(.fileWriteNoPermission)
+        }
+
+        let fileManager = FileManager.default
+        let temporary = destination.deletingLastPathComponent()
+            .appendingPathComponent(".macUSB-log-export-\(UUID().uuidString).tmp")
+        defer { try? fileManager.removeItem(at: temporary) }
+        try fileManager.copyItem(at: source, to: temporary)
+        if fileManager.fileExists(atPath: destination.path) {
+            _ = try fileManager.replaceItemAt(destination, withItemAt: temporary)
+        } else {
+            try fileManager.moveItem(at: temporary, to: destination)
         }
     }
 
-    /// Appends the final termination result and flushes the bounded export buffer.
+    /// Appends the final termination result and closes the session file without rewriting it.
     public static func finishSession(cleanupSucceeded: Bool) {
         bufferQueue.sync {
-            guard let currentSessionURL else { return }
+            guard currentSessionHandle != nil else { return }
             let separator = formattedLine("------------", label: Stage.app.rawValue, helperOrigin: false)
             let result = formattedLine(
                 cleanupSucceeded
@@ -135,16 +155,6 @@ public enum AppLogging {
             persist(result)
             try? currentSessionHandle?.close()
             currentSessionHandle = nil
-            do {
-                let data = Data(buffer.joined(separator: "\n").utf8)
-                try data.write(to: currentSessionURL, options: .atomic)
-                try FileManager.default.setAttributes(
-                    [.posixPermissions: 0o600],
-                    ofItemAtPath: currentSessionURL.path
-                )
-            } catch {
-                appLogger.error("Failed to finalize diagnostic log storage: \(error.localizedDescription, privacy: .public)")
-            }
         }
     }
 
@@ -219,6 +229,84 @@ public enum AppLogging {
 
 // MARK: - Prywatne helpery
 private extension AppLogging {
+    struct SessionLogFile {
+        let url: URL
+        let size: Int
+        let modifiedAt: Date
+        let createdAt: Date
+    }
+
+    static func sessionLogFiles(in directory: URL) throws -> [SessionLogFile] {
+        let keys: Set<URLResourceKey> = [
+            .isRegularFileKey, .fileSizeKey, .contentModificationDateKey, .creationDateKey
+        ]
+        return try FileManager.default.contentsOfDirectory(
+            at: directory,
+            includingPropertiesForKeys: Array(keys),
+            options: [.skipsHiddenFiles]
+        ).compactMap { url in
+            guard isManagedSessionLog(url),
+                  let values = try? url.resourceValues(forKeys: keys),
+                  values.isRegularFile == true else { return nil }
+            return SessionLogFile(
+                url: url,
+                size: values.fileSize ?? 0,
+                modifiedAt: values.contentModificationDate ?? .distantPast,
+                createdAt: values.creationDate ?? .distantPast
+            )
+        }
+    }
+
+    static func isManagedSessionLog(_ url: URL) -> Bool {
+        let name = url.lastPathComponent
+        if name == "current-session.log" || name == "previous-session.log" { return true }
+        return name.range(
+            of: #"^log-[0-9]{6}-[0-9]{6}(-[0-9]+)?\.log$"#,
+            options: .regularExpression
+        ) != nil
+    }
+
+    static func isLegacySessionLog(_ url: URL) -> Bool {
+        let name = url.lastPathComponent
+        return name == "current-session.log" || name == "previous-session.log"
+    }
+
+    static func sessionLogURL(in directory: URL, startedAt: Date, attempt: Int) -> URL {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.timeZone = .current
+        formatter.dateFormat = "yyMMdd-HHmmss"
+        let suffix = attempt == 1 ? "" : "-\(attempt)"
+        return directory.appendingPathComponent("log-\(formatter.string(from: startedAt))\(suffix).log")
+    }
+
+    static func createSessionLog(in directory: URL, startedAt: Date) throws -> (URL, FileHandle) {
+        for attempt in 1...1000 {
+            let url = sessionLogURL(in: directory, startedAt: startedAt, attempt: attempt)
+            let descriptor = Darwin.open(url.path, O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC, mode_t(0o600))
+            if descriptor >= 0 {
+                return (url, FileHandle(fileDescriptor: descriptor, closeOnDealloc: true))
+            }
+            if errno != EEXIST {
+                throw NSError(domain: NSPOSIXErrorDomain, code: Int(errno))
+            }
+        }
+        throw CocoaError(.fileWriteFileExists)
+    }
+
+    static func migrateLegacySessionLog(_ source: URL, into directory: URL) throws -> URL {
+        let startedAt = (try? source.resourceValues(forKeys: [.contentModificationDateKey]))?
+            .contentModificationDate ?? Date()
+        for attempt in 1...1000 {
+            let destination = sessionLogURL(in: directory, startedAt: startedAt, attempt: attempt)
+            guard !FileManager.default.fileExists(atPath: destination.path) else { continue }
+            try FileManager.default.moveItem(at: source, to: destination)
+            return destination
+        }
+        throw CocoaError(.fileWriteFileExists)
+    }
+
     static func persist(_ message: String) {
         guard let currentSessionHandle else { return }
         do {

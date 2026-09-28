@@ -8,13 +8,15 @@ This reference describes the diagnostic logging currently emitted by the app and
 - Raw output from external tools, system error descriptions, file paths, and other source data can retain their original language. Exported lines identify their stage; application-authored explanations around source data are in English. The legacy downloader assembly output normalization is described under Current Exceptions.
 - Keep messages readable and useful in exported diagnostics. Important app-side runtime events go through `AppLogging`.
 
-## Export Buffer
+## Export Buffer and Session Files
 
-`AppLogging` retains the most recent 10,000 appended log entries in memory for diagnostic export. Older entries are removed when the buffer exceeds this limit.
-The diagnostic export saves UTF-8 text with the `.log` extension. The Save panel suggests a name in the form `macUSB-yymmdd-hhmmss.log`.
-After the user confirms the Save panel, the app appends `[HH:MM:SS] [APP] Diagnostic log generated for export.` to the in-memory buffer and uses that entry as the final line of the exported snapshot.
-The app also appends each entry to `~/Library/Application Support/<bundle identifier>/DiagnosticLogs/current-session.log` as it is recorded. After termination cleanup and its operation-token finish log, normal termination appends an `[APP]` separator followed by the final result: `Application terminated successfully.` or `Application terminated with cleanup errors.` The latter means temporary-directory removal, source-image discovery, or image detachment failed; these errors do not prevent exit. The app then rewrites the file from the bounded export buffer, including that final result. At the next launch, the current file becomes `previous-session.log`; only the immediately preceding session is retained. A session interrupted before normal termination can still be exported from the entries already written to disk, but has no termination result marker.
-The Help menu offers a separate previous-session export directly below the current-session export. It is disabled when the immediately preceding session has no stored logs. The previous-session export reads the saved file without adding the current session's export marker and suggests `macUSB-prev-yymmdd-hhmmss.log`.
+`AppLogging` retains the most recent 10,000 appended entries in memory for current-session export. Older entries leave that buffer, but the session file on disk is never rewritten from it. Current-session export saves a UTF-8 `.log` file named `macUSB-yymmdd-hhmmss.log` by default. After the user confirms the Save panel, the app appends `[HH:MM:SS] [APP] Diagnostic log generated for export.` to the buffer and uses it as the final line of the exported snapshot.
+
+Each launch creates a new file under `~/Library/Application Support/<bundle identifier>/DiagnosticLogs/`, named `log-yymmdd-hhmmss.log` using the local launch time. If that name is taken, a numeric suffix such as `log-yymmdd-hhmmss-2.log` prevents overwriting it. Entries are queued for append to the active file. Normal termination appends an `[APP]` separator and the final result, `Application terminated successfully.` or `Application terminated with cleanup errors.`, then closes the file without rewriting it. The latter result means temporary-directory removal, source-image discovery, or image detachment failed; these errors do not prevent exit. An interrupted session retains entries already written to its file but has no termination result marker. Pending asynchronous appends may be absent after an abrupt process exit.
+
+At launch, the newest nonempty earlier session file becomes the previous session. The app creates the new file before deleting older session files, then retains only the active and previous files. An empty file left by an interrupted startup is ignored and removed at the next successful launch. Existing `current-session.log` and `previous-session.log` files are considered during the first launch after this change; the selected previous file is renamed to the new scheme when possible, using its last modification time because its original launch time is unavailable. If a new file cannot be created, the prior log is left available and older files are not deleted. Failed removal of an older file is reported in the system log.
+
+The Help menu offers previous-session export directly below current-session export and disables it when there are no earlier stored logs. Previous-session export copies the retained file without loading it all into memory or adding the current session's export marker. Its suggested name is `macUSB-prev-yymmdd-hhmmss.log`. Unlike the current-session snapshot, it contains every entry written to the retained file, including the startup block when present.
 
 ## Line Format
 
@@ -50,7 +52,7 @@ The stage describes the work, even when a different component emits the line. Fo
 
 ## Startup Block
 
-The application starts each exported session with one English `APP` block. Every line carries the same local timestamp and stage prefix. The labels are aligned for scanning, and the values report the application version and build, macOS version, Mac model, and physical Mac architecture:
+Near startup, the application records one English `APP` block in the session file. Every line carries the same local timestamp and stage prefix. The labels are aligned for scanning, and the values report the application version and build, macOS version, Mac model, and physical Mac architecture. Current-session export may omit this block after its 10,000-entry memory buffer fills; previous-session export copies the retained file and includes it when it was recorded:
 
 ```text
 [14:32:08] [APP] ┌─ macUSB session started
@@ -95,4 +97,4 @@ The exceptions below document existing paths; they are not templates for new log
 
 ## Update Trigger
 
-Update when the log language, exported line format, or stage-label policy changes. Keep feature-specific logging expectations in their existing references.
+Update when the log language, exported line format, session-file lifecycle, retention, or stage-label policy changes. Keep feature-specific logging expectations in their existing references.

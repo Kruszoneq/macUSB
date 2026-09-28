@@ -386,6 +386,11 @@ struct macUSBApp: App {
                 Button(String(localized: "Otwórz macUSB_temp")) {
                     openMacUSBTempFolderInFinder()
                 }
+                Button {
+                    NSWorkspace.shared.open(AppLogging.diagnosticLogsDirectoryURL)
+                } label: {
+                    Text(verbatim: "Open Diagnostic Logs Folder")
+                }
                 Divider()
                 Text(String(localized: "Informacje"))
                 Text(verbatim: menuState.debugCopiedDataLabel)
@@ -423,10 +428,11 @@ struct macUSBApp: App {
         guard savePanel.runModal() == .OK, let url = savePanel.url else { return }
 
         do {
-            let text = try previousSession
-                ? AppLogging.previousSessionLogText()
-                : AppLogging.prepareExportedLogText()
-            try Data(text.utf8).write(to: url)
+            if previousSession {
+                try AppLogging.exportPreviousSession(to: url)
+            } else {
+                try Data(AppLogging.prepareExportedLogText().utf8).write(to: url)
+            }
             defaults.set(url.deletingLastPathComponent().path, forKey: "DiagnosticsExportLastDirectory")
         } catch {
             let alert = NSAlert()
