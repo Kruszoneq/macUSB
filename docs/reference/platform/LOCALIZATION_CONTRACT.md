@@ -8,6 +8,7 @@
 ## Runtime Policy
 
 - All user-facing UI text must originate from localization catalog keys rather than prelocalized literal strings.
+- For every new or modified UI text, name its semantic localization key using the `area.feature.element` format, adding more specific segments when needed. Use the same key in code and in `Localizable.xcstrings` (for example, `diagnostics.export.previous.menu`). Keep the Polish source text and all translations as catalog values, never as the key itself.
 - UI state, workflow payloads, and helper transport must carry localization keys for as long as possible.
 - APIs that accept localization keys should receive keys directly.
 - Resolve a key with `String(localized:)` only at the presentation boundary when an API requires a `String`.

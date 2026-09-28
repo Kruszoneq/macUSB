@@ -131,6 +131,7 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 ## UI copy and translation rules
 
 - All user-facing UI text must use localization keys.
+- For every new or modified UI text, name its semantic localization key using the `area.feature.element` format, adding more specific segments when needed. Use the same key in code and in `Localizable.xcstrings` (for example, `diagnostics.export.previous.menu`). Keep the Polish source text and all translations as catalog values, never as the key itself.
 - Polish is the source language for new UI copy.
 - When planning a change that introduces or modifies UI text, always include the proposed Polish and English wording.
 - During implementation, provide translations for every language supported by the application.

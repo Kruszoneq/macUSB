@@ -361,13 +361,13 @@ struct macUSBApp: App {
                 Button {
                     exportDiagnosticLogs(previousSession: false)
                 } label: {
-                    Label(String(localized: "Eksportuj logi diagnostyczne..."), systemImage: "square.and.arrow.down")
+                    Label(String(localized: "diagnostics.export.current.menu"), systemImage: "square.and.arrow.down")
                 }
                 .keyboardShortcut("l", modifiers: [.option])
                 Button {
                     exportDiagnosticLogs(previousSession: true)
                 } label: {
-                    Label(String(localized: "Eksportuj logi z poprzedniej sesji..."), systemImage: "square.and.arrow.down")
+                    Label(String(localized: "diagnostics.export.previous.menu"), systemImage: "square.and.arrow.down")
                 }
                 .disabled(!AppLogging.hasPreviousSessionLogs)
             }
@@ -415,11 +415,11 @@ struct macUSBApp: App {
         savePanel.canCreateDirectories = true
         savePanel.isExtensionHidden = false
         savePanel.title = previousSession
-            ? String(localized: "Eksportuj logi z poprzedniej sesji")
-            : String(localized: "Eksportuj logi diagnostyczne")
+            ? String(localized: "diagnostics.export.previous.panel.title")
+            : String(localized: "diagnostics.export.current.panel.title")
         savePanel.message = previousSession
-            ? String(localized: "Wybierz miejsce zapisu logów z poprzedniej sesji")
-            : String(localized: "Wybierz miejsce zapisu pliku z logami diagnostycznymi")
+            ? String(localized: "diagnostics.export.previous.panel.message")
+            : String(localized: "diagnostics.export.current.panel.message")
         guard savePanel.runModal() == .OK, let url = savePanel.url else { return }
 
         do {
