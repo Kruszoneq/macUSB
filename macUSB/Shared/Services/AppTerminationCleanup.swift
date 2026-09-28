@@ -5,16 +5,18 @@ final class AppTerminationCleanup {
 
     private let lock = NSLock()
     private var didPerformCleanup = false
+    private var cleanupSucceeded = true
 
     private init() {}
 
-    func performIfNeeded() {
+    @discardableResult
+    func performIfNeeded() -> Bool {
         let shouldPerform = lock.withLock {
             guard !didPerformCleanup else { return false }
             didPerformCleanup = true
             return true
         }
-        guard shouldPerform else { return }
+        guard shouldPerform else { return lock.withLock { cleanupSucceeded } }
 
         let cleanupToken = AppActiveOperationRegistry.shared.begin(
             kind: .cleanup,
@@ -23,6 +25,7 @@ final class AppTerminationCleanup {
         defer { cleanupToken.finish() }
 
         AppLogging.info("Application termination cleanup started.", stage: .app)
+        var succeeded = true
 
         UserDefaults.standard.set(false, forKey: "AllowExternalDrives")
         UserDefaults.standard.synchronize()
@@ -38,6 +41,7 @@ final class AppTerminationCleanup {
                     stage: .app
                 )
             } catch {
+                succeeded = false
                 AppLogging.error(
                     "Application termination: could not remove macUSB_temp: \(error.localizedDescription)",
                     stage: .app
@@ -45,9 +49,13 @@ final class AppTerminationCleanup {
             }
         }
 
-        InstallerSourceImageUnmountRegistry.shared.detachAllTrackedImagesOnAppTermination()
+        if !InstallerSourceImageUnmountRegistry.shared.detachAllTrackedImagesOnAppTermination() {
+            succeeded = false
+        }
         PrivilegedOperationClient.shared.disconnectForAppTermination()
         AppLogging.info("Application termination cleanup completed.", stage: .app)
+        lock.withLock { cleanupSucceeded = succeeded }
+        return succeeded
     }
 }
 

@@ -108,10 +108,31 @@ public enum AppLogging {
         }
     }
 
-    /// Flushes the bounded export buffer after termination cleanup has logged its final events.
-    public static func finishSession() {
+    /// Appends the final termination result and flushes the bounded export buffer.
+    public static func finishSession(cleanupSucceeded: Bool) {
         bufferQueue.sync {
             guard let currentSessionURL else { return }
+            let separator = formattedLine("------------", label: Stage.app.rawValue, helperOrigin: false)
+            let result = formattedLine(
+                cleanupSucceeded
+                    ? "Application terminated successfully."
+                    : "Application terminated with cleanup errors.",
+                label: Stage.app.rawValue,
+                helperOrigin: false
+            )
+            let logger = Logger(subsystem: subsystem, category: Stage.app.rawValue)
+            logger.info("\(separator, privacy: .public)")
+            if cleanupSucceeded {
+                logger.info("\(result, privacy: .public)")
+            } else {
+                logger.error("\(result, privacy: .public)")
+            }
+            buffer.append(contentsOf: [separator, result])
+            if buffer.count > bufferMaxLines {
+                buffer.removeFirst(buffer.count - bufferMaxLines)
+            }
+            persist(separator)
+            persist(result)
             try? currentSessionHandle?.close()
             currentSessionHandle = nil
             do {

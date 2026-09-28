@@ -52,7 +52,8 @@ final class InstallerSourceImageUnmountRegistry {
         }
     }
 
-    func detachAllTrackedImagesOnAppTermination() {
+    @discardableResult
+    func detachAllTrackedImagesOnAppTermination() -> Bool {
         detachTrackedImages(
             reason: "app_termination",
             families: Set(InstallerSourceImageFamily.allCases),
@@ -60,11 +61,12 @@ final class InstallerSourceImageUnmountRegistry {
         )
     }
 
+    @discardableResult
     func detachTrackedImages(
         reason: String,
         families: Set<InstallerSourceImageFamily>,
         clearAfter: Bool
-    ) {
+    ) -> Bool {
         let cleanupToken = AppActiveOperationRegistry.shared.begin(
             kind: .cleanup,
             context: "source_image_detach:\(reason)"
@@ -91,10 +93,12 @@ final class InstallerSourceImageUnmountRegistry {
             if clearAfter {
                 clearTrackedState(for: families)
             }
-            return
+            return true
         }
 
-        var detachTargets = collectDetachTargetsForTrackedPaths(trackedPaths)
+        let collected = collectDetachTargetsForTrackedPaths(trackedPaths)
+        var succeeded = collected.succeeded
+        var detachTargets = collected.targets
         if detachTargets.isEmpty && !fallbackHints.isEmpty {
             detachTargets = Array(fallbackHints)
         }
@@ -108,7 +112,7 @@ final class InstallerSourceImageUnmountRegistry {
             if clearAfter {
                 clearTrackedState(for: families)
             }
-            return
+            return succeeded
         }
 
         AppLogging.info(
@@ -127,6 +131,7 @@ final class InstallerSourceImageUnmountRegistry {
                 try process.run()
                 process.waitUntilExit()
             } catch {
+                succeeded = false
                 AppLogging.error(
                     "Source image cleanup registry: failed to start detach for \(target): \(error.localizedDescription)",
                     stage: .analysis
@@ -140,6 +145,7 @@ final class InstallerSourceImageUnmountRegistry {
                     stage: .analysis
                 )
             } else {
+                succeeded = false
                 let stderrText = String(
                     decoding: errorPipe.fileHandleForReading.readDataToEndOfFile(),
                     as: UTF8.self
@@ -162,6 +168,7 @@ final class InstallerSourceImageUnmountRegistry {
         if clearAfter {
             clearTrackedState(for: families)
         }
+        return succeeded
     }
 
     private func clearTrackedState(for families: Set<InstallerSourceImageFamily>) {
@@ -194,7 +201,8 @@ final class InstallerSourceImageUnmountRegistry {
         return trimmed
     }
 
-    private func collectDetachTargetsForTrackedPaths(_ trackedPaths: Set<String>) -> [String] {
+    private func collectDetachTargetsForTrackedPaths(_ trackedPaths: Set<String>) -> (targets: [String], succeeded: Bool) {
+        guard !trackedPaths.isEmpty else { return ([], true) }
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
         process.arguments = ["info", "-plist"]
@@ -210,7 +218,7 @@ final class InstallerSourceImageUnmountRegistry {
                 "Source image cleanup registry: failed to start hdiutil info: \(error.localizedDescription)",
                 stage: .analysis
             )
-            return []
+            return ([], false)
         }
         process.waitUntilExit()
 
@@ -230,7 +238,7 @@ final class InstallerSourceImageUnmountRegistry {
                     stage: .analysis
                 )
             }
-            return []
+            return ([], false)
         }
 
         guard let plist = try? PropertyListSerialization.propertyList(
@@ -239,7 +247,11 @@ final class InstallerSourceImageUnmountRegistry {
             format: nil
         ) as? [String: Any],
               let images = plist["images"] as? [[String: Any]] else {
-            return []
+            AppLogging.error(
+                "Source image cleanup registry: hdiutil info returned invalid image data.",
+                stage: .analysis
+            )
+            return ([], false)
         }
 
         var targets = Set<String>()
@@ -262,7 +274,7 @@ final class InstallerSourceImageUnmountRegistry {
             }
         }
 
-        return Array(targets)
+        return (Array(targets), true)
     }
 
     private func orderedDetachTargets(_ targets: [String]) -> [String] {

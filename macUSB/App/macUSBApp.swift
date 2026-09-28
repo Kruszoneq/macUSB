@@ -23,8 +23,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationWillTerminate(_ notification: Notification) {
-        AppTerminationCleanup.shared.performIfNeeded()
-        AppLogging.finishSession()
+        let cleanupSucceeded = AppTerminationCleanup.shared.performIfNeeded()
+        AppLogging.finishSession(cleanupSucceeded: cleanupSucceeded)
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
