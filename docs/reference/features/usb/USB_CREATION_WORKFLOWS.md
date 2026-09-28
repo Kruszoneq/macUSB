@@ -163,7 +163,7 @@ Creation workflow logs should include:
 
 Protected-operation start and finish diagnostics for a selected creation workflow, its helper activity, cleanup, and finish-screen eject use the same `[USB_WORKFLOW]` label. Their kind, context, identifier, and duration remain in the message.
 
-A failed terminal helper result is logged by the app as `Helper workflow failed: <errorMessage>` under the selected USB label without an extra `[HELPER]` tag; the embedded result description may retain its original language.
+A failed terminal helper result is logged by the app as `Helper workflow failed: <errorMessage>` under the selected USB label without an extra `[HELPER]` tag; the embedded result description may retain its original language. If a helper progress event or workflow result cannot be decoded, the app logs the decode error under the base `[USB]` label without a workflow suffix or `[HELPER]` tag.
 
 From summary entry through helper completion, macOS creation diagnostics use English `AppLogging` lines labeled `[USB_MACOS]`, `[USB_SIERRA]`, `[USB_CATALINA]`, `[USB_LEGACYRESTORE]`, `[USB_MAVERICKS]`, or `[USB_PPC]` according to the selected branch. Forwarded helper progress events and tool output append `[HELPER]` after that label. Logging labels do not alter helper workflow kinds, stage keys, or localized presentation keys.
 
