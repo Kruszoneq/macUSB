@@ -50,10 +50,17 @@ public enum AppLogging {
         }
     }
 
-    /// Zwraca sklejone logi z bufora w formie tekstu.
-    public static func exportedLogText() -> String {
+    public static func prepareExportedLogText() -> String {
+        let marker = formattedLine("Diagnostic log generated for export.", label: Stage.app.rawValue, helperOrigin: false)
+        appLogger.info("\(marker, privacy: .public)")
         var snapshot: [String] = []
-        bufferQueue.sync { snapshot = buffer }
+        bufferQueue.sync {
+            buffer.append(marker)
+            if buffer.count > bufferMaxLines {
+                buffer.removeFirst(buffer.count - bufferMaxLines)
+            }
+            snapshot = buffer
+        }
         return snapshot.joined(separator: "\n")
     }
 

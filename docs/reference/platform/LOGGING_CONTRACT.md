@@ -12,6 +12,7 @@ This reference describes the diagnostic logging currently emitted by the app and
 
 `AppLogging` retains the most recent 10,000 appended log entries in memory for diagnostic export. Older entries are removed when the buffer exceeds this limit.
 The diagnostic export saves UTF-8 text with the `.log` extension. The Save panel suggests a name in the form `macUSB-yymmdd-hhmmss.log`.
+After the user confirms the Save panel, the app appends `[HH:MM:SS] [APP] Diagnostic log generated for export.` to the in-memory buffer and uses that entry as the final line of the exported snapshot.
 
 ## Line Format
 

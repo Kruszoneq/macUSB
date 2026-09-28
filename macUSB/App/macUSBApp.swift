@@ -377,7 +377,7 @@ struct macUSBApp: App {
                     savePanel.title = String(localized: "Eksportuj logi diagnostyczne")
                     savePanel.message = String(localized: "Wybierz miejsce zapisu pliku z logami diagnostycznymi")
                     if savePanel.runModal() == .OK, let url = savePanel.url {
-                        let text = AppLogging.exportedLogText()
+                        let text = AppLogging.prepareExportedLogText()
                         do {
                             try text.data(using: .utf8)?.write(to: url)
                             let dir = url.deletingLastPathComponent()
