@@ -40,6 +40,92 @@ public enum AppLogging {
     private static let bufferQueue = DispatchQueue(label: "macUSB.LoggingBuffer")
     private static var buffer: [String] = []
     private static let bufferMaxLines: Int = 10000
+    private static var currentSessionURL: URL?
+    private static var previousSessionURL: URL?
+    private static var currentSessionHandle: FileHandle?
+    private static var previousSessionAvailable = false
+
+    /// Starts a new log session and makes the immediately preceding session available for export.
+    public static func startSession() {
+        bufferQueue.sync {
+            guard currentSessionURL == nil else { return }
+            do {
+                let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+                    .appendingPathComponent(subsystem, isDirectory: true)
+                    .appendingPathComponent("DiagnosticLogs", isDirectory: true)
+                try FileManager.default.createDirectory(
+                    at: directory,
+                    withIntermediateDirectories: true,
+                    attributes: [.posixPermissions: 0o700]
+                )
+
+                let current = directory.appendingPathComponent("current-session.log")
+                let previous = directory.appendingPathComponent("previous-session.log")
+                if FileManager.default.fileExists(atPath: current.path) {
+                    let data = try Data(contentsOf: current)
+                    if data.isEmpty {
+                        try? FileManager.default.removeItem(at: previous)
+                    } else {
+                        try data.write(to: previous, options: .atomic)
+                        try FileManager.default.setAttributes(
+                            [.posixPermissions: 0o600],
+                            ofItemAtPath: previous.path
+                        )
+                        previousSessionAvailable = true
+                    }
+                    try FileManager.default.removeItem(at: current)
+                } else {
+                    try? FileManager.default.removeItem(at: previous)
+                }
+
+                guard FileManager.default.createFile(
+                    atPath: current.path,
+                    contents: nil,
+                    attributes: [.posixPermissions: 0o600]
+                ) else {
+                    throw CocoaError(.fileWriteUnknown)
+                }
+                currentSessionHandle = try FileHandle(forWritingTo: current)
+                currentSessionURL = current
+                previousSessionURL = previous
+            } catch {
+                appLogger.error("Failed to initialize diagnostic log storage: \(error.localizedDescription, privacy: .public)")
+            }
+        }
+    }
+
+    public static var hasPreviousSessionLogs: Bool {
+        bufferQueue.sync { previousSessionAvailable }
+    }
+
+    public static func previousSessionLogText() throws -> String {
+        try bufferQueue.sync {
+            guard previousSessionAvailable, let previousSessionURL else {
+                throw CocoaError(.fileReadNoSuchFile)
+            }
+            let data = try Data(contentsOf: previousSessionURL)
+            return String(decoding: data, as: UTF8.self)
+        }
+    }
+
+    /// Flushes the bounded export buffer after termination cleanup has logged its final events.
+    public static func finishSession() {
+        bufferQueue.sync {
+            guard let currentSessionURL else { return }
+            try? currentSessionHandle?.close()
+            currentSessionHandle = nil
+            do {
+                let data = Data(buffer.joined(separator: "\n").utf8)
+                try data.write(to: currentSessionURL, options: .atomic)
+                try FileManager.default.setAttributes(
+                    [.posixPermissions: 0o600],
+                    ofItemAtPath: currentSessionURL.path
+                )
+            } catch {
+                appLogger.error("Failed to finalize diagnostic log storage: \(error.localizedDescription, privacy: .public)")
+            }
+        }
+    }
 
     @inline(__always) private static func appendToBuffer(_ message: String) {
         bufferQueue.async {
@@ -47,6 +133,7 @@ public enum AppLogging {
             if buffer.count > bufferMaxLines {
                 buffer.removeFirst(buffer.count - bufferMaxLines)
             }
+            persist(message)
         }
     }
 
@@ -59,6 +146,7 @@ public enum AppLogging {
             if buffer.count > bufferMaxLines {
                 buffer.removeFirst(buffer.count - bufferMaxLines)
             }
+            persist(marker)
             snapshot = buffer
         }
         return snapshot.joined(separator: "\n")
@@ -110,6 +198,15 @@ public enum AppLogging {
 
 // MARK: - Prywatne helpery
 private extension AppLogging {
+    static func persist(_ message: String) {
+        guard let currentSessionHandle else { return }
+        do {
+            try currentSessionHandle.write(contentsOf: Data((message + "\n").utf8))
+        } catch {
+            appLogger.error("Failed to append diagnostic log: \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
     static func formattedLine(_ message: String, label: String, helperOrigin: Bool) -> String {
         let prefix = "[\(currentTimeString())] [\(label)]\(helperOrigin ? " [HELPER]" : "")"
         return message.components(separatedBy: "\n")

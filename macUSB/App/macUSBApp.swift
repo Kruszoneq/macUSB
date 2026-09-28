@@ -24,6 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationWillTerminate(_ notification: Notification) {
         AppTerminationCleanup.shared.performIfNeeded()
+        AppLogging.finishSession()
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
@@ -61,8 +62,10 @@ struct macUSBApp: App {
                     }
                 }
                 NSApplication.shared.terminate(nil)
+                return
             }
         }
+        AppLogging.startSession()
     }
     
     var body: some Scene {
@@ -356,46 +359,17 @@ struct macUSBApp: App {
                 }
                 Divider()
                 Button {
-                    let savePanel = NSSavePanel()
-                    let defaults = UserDefaults.standard
-                    if let lastPath = defaults.string(forKey: "DiagnosticsExportLastDirectory") {
-                        let lastURL = URL(fileURLWithPath: lastPath, isDirectory: true)
-                        if FileManager.default.fileExists(atPath: lastURL.path) {
-                            savePanel.directoryURL = lastURL
-                        } else {
-                            savePanel.directoryURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first
-                        }
-                    } else {
-                        savePanel.directoryURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first
-                    }
-                    savePanel.allowedFileTypes = ["log"]
-                    let df = DateFormatter()
-                    df.dateFormat = "yyMMdd-HHmmss"
-                    savePanel.nameFieldStringValue = "macUSB-\(df.string(from: Date())).log"
-                    savePanel.canCreateDirectories = true
-                    savePanel.isExtensionHidden = false
-                    savePanel.title = String(localized: "Eksportuj logi diagnostyczne")
-                    savePanel.message = String(localized: "Wybierz miejsce zapisu pliku z logami diagnostycznymi")
-                    if savePanel.runModal() == .OK, let url = savePanel.url {
-                        let text = AppLogging.prepareExportedLogText()
-                        do {
-                            try text.data(using: .utf8)?.write(to: url)
-                            let dir = url.deletingLastPathComponent()
-                            UserDefaults.standard.set(dir.path, forKey: "DiagnosticsExportLastDirectory")
-                        } catch {
-                            let alert = NSAlert()
-                            alert.icon = NSApp.applicationIconImage
-                            alert.alertStyle = .warning
-                            alert.messageText = String(localized: "Nie udało się zapisać pliku z logami")
-                            alert.informativeText = error.localizedDescription
-                            alert.addButton(withTitle: String(localized: "OK"))
-                            alert.runModal()
-                        }
-                    }
+                    exportDiagnosticLogs(previousSession: false)
                 } label: {
                     Label(String(localized: "Eksportuj logi diagnostyczne..."), systemImage: "square.and.arrow.down")
                 }
                 .keyboardShortcut("l", modifiers: [.option])
+                Button {
+                    exportDiagnosticLogs(previousSession: true)
+                } label: {
+                    Label(String(localized: "Eksportuj logi z poprzedniej sesji..."), systemImage: "square.and.arrow.down")
+                }
+                .disabled(!AppLogging.hasPreviousSessionLogs)
             }
             #if DEBUG
             CommandMenu("DEBUG") {
@@ -417,6 +391,51 @@ struct macUSBApp: App {
                 Text(verbatim: menuState.debugCopiedDataLabel)
             }
             #endif
+        }
+    }
+
+    private func exportDiagnosticLogs(previousSession: Bool) {
+        let savePanel = NSSavePanel()
+        let defaults = UserDefaults.standard
+        if let lastPath = defaults.string(forKey: "DiagnosticsExportLastDirectory") {
+            let lastURL = URL(fileURLWithPath: lastPath, isDirectory: true)
+            if FileManager.default.fileExists(atPath: lastURL.path) {
+                savePanel.directoryURL = lastURL
+            } else {
+                savePanel.directoryURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first
+            }
+        } else {
+            savePanel.directoryURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first
+        }
+        savePanel.allowedFileTypes = ["log"]
+        let df = DateFormatter()
+        df.dateFormat = "yyMMdd-HHmmss"
+        let prefix = previousSession ? "macUSB-previous-session" : "macUSB"
+        savePanel.nameFieldStringValue = "\(prefix)-\(df.string(from: Date())).log"
+        savePanel.canCreateDirectories = true
+        savePanel.isExtensionHidden = false
+        savePanel.title = previousSession
+            ? String(localized: "Eksportuj logi z poprzedniej sesji")
+            : String(localized: "Eksportuj logi diagnostyczne")
+        savePanel.message = previousSession
+            ? String(localized: "Wybierz miejsce zapisu logów z poprzedniej sesji")
+            : String(localized: "Wybierz miejsce zapisu pliku z logami diagnostycznymi")
+        guard savePanel.runModal() == .OK, let url = savePanel.url else { return }
+
+        do {
+            let text = try previousSession
+                ? AppLogging.previousSessionLogText()
+                : AppLogging.prepareExportedLogText()
+            try Data(text.utf8).write(to: url)
+            defaults.set(url.deletingLastPathComponent().path, forKey: "DiagnosticsExportLastDirectory")
+        } catch {
+            let alert = NSAlert()
+            alert.icon = NSApp.applicationIconImage
+            alert.alertStyle = .warning
+            alert.messageText = String(localized: "Nie udało się zapisać pliku z logami")
+            alert.informativeText = error.localizedDescription
+            alert.addButton(withTitle: String(localized: "OK"))
+            alert.runModal()
         }
     }
 
