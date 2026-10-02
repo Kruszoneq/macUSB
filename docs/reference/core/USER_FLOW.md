@@ -48,17 +48,19 @@ Windows-specific runtime behavior:
 
 ## Tools Flow: Downloader
 
-- `Tools -> Download macOS installer...` opens downloader window.
+- `Tools -> Download macOS installer...` opens downloader window on the macOS tab, and `Tools -> Download a Linux image...` opens the same window on the Linux tab.
+- A segmented `macOS`/`Linux` switch in the downloader header changes the active tab; it is disabled while a download, failure summary, or completion summary is shown on either tab.
 - The downloader window owns an active-operation token from presentation until the window is fully closed, including discovery, list, process, and summary states.
 - `Tools -> Write a Raw Image to a Drive...` is placed under the downloader action, separated by a divider, and is enabled only on Welcome or on `SystemAnalysisView` before any source file is selected.
 - `SystemAnalysisView` also exposes `Pobierz` between `Wybierz` and `Analizuj` for direct downloader access.
 - Downloader opening is blocked during USB creation operation stages (`UniversalInstallationView`, `CreationProgressView`, `FinishUSBView`), and `Tools -> Pobierz instalator macOS...` is disabled there.
-- Discovery starts on entering downloader window (never on app startup).
-- Downloader also passively checks Full Disk Access and helper XPC readiness on entry and app activation. Missing prerequisites do not block discovery or selection, but they surface an orange warning action and block `Download` before any session begins.
+- Discovery for each tab starts the first time that tab is shown in the downloader window (never on app startup).
+- Downloader also passively checks Full Disk Access and helper XPC readiness on entry and app activation. Missing prerequisites do not block discovery or selection, but they surface an orange warning action and block macOS `Download` before any session begins. Linux image downloads do not use the helper and are not gated by these prerequisites.
 - Selecting the prerequisite warning or attempting a blocked download presents an actionable app-icon alert. Returning from System Settings refreshes the state without rerunning discovery or clearing selection.
 - While discovery runs, header/options remain visible; list area shows scanning panel.
 - After discovery completes, grouped systems list is shown.
 - On downloader summary, when final `.app` or `.dmg` exists, the icon action can pass its path to analysis and trigger automatic analysis; from Welcome, app navigates to analysis first.
+- On a successful Linux download summary, the `.iso` is passed to analysis through the same handoff and analyzed by the standard Linux detection path.
 - Downloader options can enable session-only DMG output and select its destination directory. Preflight resolves output-name collisions and checks the system and destination volumes before any session directory or payload download is started.
 - A DMG-enabled workflow adds an indeterminate disk-image stage after `.app` assembly. Success removes the source `.app`; cancellation or image-creation failure restores it.
 

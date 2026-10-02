@@ -17,11 +17,44 @@ struct MacOSDownloaderWindowShellView: View {
     @State var selectedInstallerID: String?
     @State var activeDownloadEntry: MacOSInstallerEntry?
 
+    @State var selectedSource: DownloaderSourceKind
+    @StateObject var linuxLogic = LinuxDownloaderLogic()
+    @StateObject var linuxDownloadFlowModel = LinuxDownloadFlowModel()
+    @State var isLinuxOptionsPresented = false
+    @State var linuxShowAllVersions = false
+    @State var linuxShowARMImages = false
+    @State var linuxDestinationDirectoryURL: URL = LinuxDownloaderDefaults.destinationDirectoryURL
+    @State var selectedLinuxImageID: String?
+    @State var activeLinuxEntry: LinuxImageEntry?
+
+    init(
+        contentHeight: CGFloat,
+        initialSource: DownloaderSourceKind = .macOS,
+        onClose: @escaping () -> Void
+    ) {
+        self.contentHeight = contentHeight
+        self.onClose = onClose
+        _selectedSource = State(initialValue: initialSource)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
             VStack(alignment: .leading, spacing: 8) {
-                Text(String(localized: "Pobieranie systemu macOS"))
-                    .font(.title3.weight(.semibold))
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    Text(managerTitleText)
+                        .font(.title3.weight(.semibold))
+                    Spacer(minLength: 8)
+                    Picker(selection: sourceSelectionBinding) {
+                        Text(verbatim: "macOS").tag(DownloaderSourceKind.macOS)
+                        Text(verbatim: "Linux").tag(DownloaderSourceKind.linux)
+                    } label: {
+                        EmptyView()
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .fixedSize()
+                    .disabled(isAnyDownloadActive)
+                }
                 Text(managerDescriptionText)
                     .font(.body)
                     .foregroundStyle(.secondary)
@@ -32,12 +65,23 @@ struct MacOSDownloaderWindowShellView: View {
             .macUSBPanelSurface(.subtle)
 
             ZStack(alignment: .topLeading) {
-                if let activeDownloadEntry {
-                    downloaderProgressSection(for: activeDownloadEntry)
-                        .transition(downloaderScreenTransition)
-                } else {
-                    installerSelectionSection
-                        .transition(downloaderScreenTransition)
+                switch selectedSource {
+                case .macOS:
+                    if let activeDownloadEntry {
+                        downloaderProgressSection(for: activeDownloadEntry)
+                            .transition(downloaderScreenTransition)
+                    } else {
+                        installerSelectionSection
+                            .transition(downloaderScreenTransition)
+                    }
+                case .linux:
+                    if let activeLinuxEntry {
+                        linuxProgressSection(for: activeLinuxEntry)
+                            .transition(downloaderScreenTransition)
+                    } else {
+                        linuxImageSelectionSection
+                            .transition(downloaderScreenTransition)
+                    }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -87,9 +131,58 @@ struct MacOSDownloaderWindowShellView: View {
                 preserveDownloadedFilesInDebug: $downloadFlowModel.preserveDownloadedFilesInDebug
             )
         }
+        .sheet(isPresented: $isLinuxOptionsPresented) {
+            LinuxDownloaderOptionsView(
+                showAllVersions: Binding(
+                    get: { linuxShowAllVersions },
+                    set: { newValue in
+                        withAnimation(.easeInOut(duration: 0.24)) {
+                            linuxShowAllVersions = newValue
+                        }
+                    }
+                ),
+                showARMImages: Binding(
+                    get: { linuxShowARMImages },
+                    set: { newValue in
+                        withAnimation(.easeInOut(duration: 0.24)) {
+                            linuxShowARMImages = newValue
+                        }
+                    }
+                ),
+                destinationDirectoryURL: $linuxDestinationDirectoryURL
+            )
+        }
         .task {
-            logic.startDiscovery()
+            startDiscoveryIfNeeded(for: selectedSource)
             prerequisiteController.refresh(trigger: .initialPresentation)
+        }
+        .onChange(of: selectedSource) {
+            startDiscoveryIfNeeded(for: selectedSource)
+        }
+        .onChange(of: linuxDestinationDirectoryURL) {
+            linuxLogic.refreshDownloadedState(destinationDirectoryURL: linuxDestinationDirectoryURL)
+        }
+        .onChange(of: linuxShowAllVersions) {
+            ensureSelectedLinuxImageIsVisible()
+        }
+        .onChange(of: linuxShowARMImages) {
+            ensureSelectedLinuxImageIsVisible()
+        }
+        .onChange(of: linuxLogic.distributionGroups) {
+            ensureSelectedLinuxImageIsVisible()
+        }
+        .onChange(of: linuxDownloadFlowModel.isFinished) {
+            guard linuxDownloadFlowModel.isFinished,
+                  linuxDownloadFlowModel.workflowState == .completed,
+                  let activeLinuxEntry
+            else { return }
+            sendLinuxDownloadCompletionNotificationIfInactive(for: activeLinuxEntry)
+        }
+        .onChange(of: linuxDownloadFlowModel.pendingDiskSpaceAlert) {
+            guard let context = linuxDownloadFlowModel.pendingDiskSpaceAlert else { return }
+            linuxDownloadFlowModel.pendingDiskSpaceAlert = nil
+            presentLinuxInsufficientDiskSpaceAlert(context: context)
+            returnToLinuxImageList()
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             prerequisiteController.refresh(trigger: .appActivation)
@@ -138,6 +231,44 @@ struct MacOSDownloaderWindowShellView: View {
             prerequisiteController.invalidate()
             logic.cancelDiscovery(updateState: false)
             downloadFlowModel.stop()
+            linuxLogic.cancelDiscovery(updateState: false)
+            linuxDownloadFlowModel.stop()
+        }
+    }
+
+    var sourceSelectionBinding: Binding<DownloaderSourceKind> {
+        Binding(
+            get: { selectedSource },
+            set: { newValue in
+                guard !isAnyDownloadActive else { return }
+                withAnimation(MacUSBDesignTokens.stageTransitionAnimation) {
+                    selectedSource = newValue
+                }
+            }
+        )
+    }
+
+    var isAnyDownloadActive: Bool {
+        activeDownloadEntry != nil || activeLinuxEntry != nil
+    }
+
+    var managerTitleText: String {
+        switch selectedSource {
+        case .macOS:
+            return String(localized: "Pobieranie systemu macOS")
+        case .linux:
+            return String(localized: "downloader.linux.title")
+        }
+    }
+
+    func startDiscoveryIfNeeded(for source: DownloaderSourceKind) {
+        switch source {
+        case .macOS:
+            guard logic.state == .idle else { return }
+            logic.startDiscovery()
+        case .linux:
+            guard !linuxLogic.hasStartedDiscovery else { return }
+            linuxLogic.startDiscovery(destinationDirectoryURL: linuxDestinationDirectoryURL)
         }
     }
 
@@ -154,6 +285,15 @@ struct MacOSDownloaderWindowShellView: View {
     }
 
     var managerDescriptionText: String {
+        if selectedSource == .linux {
+            if activeLinuxEntry == nil {
+                return String(localized: "downloader.linux.description.select")
+            }
+            if linuxDownloadFlowModel.isFinished {
+                return String(localized: "Pobieranie zakończone. Podsumowanie jest dostępne poniżej")
+            }
+            return String(localized: "downloader.linux.description.running")
+        }
         if activeDownloadEntry == nil {
             return String(localized: "Wybierz instalator dostępny na serwerach Apple")
         }
@@ -164,9 +304,13 @@ struct MacOSDownloaderWindowShellView: View {
     }
 
     var shouldConfirmCloseDuringDownload: Bool {
-        activeDownloadEntry != nil
+        let isMacOSDownloadRunning = activeDownloadEntry != nil
             && !downloadFlowModel.isFinished
             && downloadFlowModel.workflowState == .running
+        let isLinuxDownloadRunning = activeLinuxEntry != nil
+            && !linuxDownloadFlowModel.isFinished
+            && linuxDownloadFlowModel.workflowState == .running
+        return isMacOSDownloadRunning || isLinuxDownloadRunning
     }
 
     func handleCloseRequest() {
@@ -184,14 +328,21 @@ struct MacOSDownloaderWindowShellView: View {
                 "Confirmed download cancellation and closing the downloader window.",
                 stage: .downloader
             )
-            downloadFlowModel.stop()
-            if !downloadFlowModel.shouldRetainSessionFilesForDebugMode() {
-                downloadFlowModel.cleanupTemporaryDownloadsFolder()
+            if activeDownloadEntry != nil {
+                downloadFlowModel.stop()
+                if !downloadFlowModel.shouldRetainSessionFilesForDebugMode() {
+                    downloadFlowModel.cleanupTemporaryDownloadsFolder()
+                }
+                activeDownloadEntry = nil
             }
-            activeDownloadEntry = nil
+            if activeLinuxEntry != nil {
+                linuxDownloadFlowModel.stop()
+                activeLinuxEntry = nil
+            }
         }
 
         logic.cancelDiscovery()
+        linuxLogic.cancelDiscovery()
         onClose()
     }
 
@@ -200,7 +351,7 @@ struct MacOSDownloaderWindowShellView: View {
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
         alert.messageText = String(localized: "Anulować pobieranie systemu?")
-        if downloadFlowModel.shouldRetainSessionFilesForDebugMode() {
+        if activeDownloadEntry != nil, downloadFlowModel.shouldRetainSessionFilesForDebugMode() {
             alert.informativeText = String(localized: "Po zamknięciu okna pobieranie zostanie przerwane, a pliki tymczasowe pozostaną do czasu zamknięcia aplikacji")
         } else {
             alert.informativeText = String(localized: "Po zamknięciu okna pobieranie zostanie przerwane, a pliki tymczasowe zostaną usunięte")

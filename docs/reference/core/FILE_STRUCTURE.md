@@ -101,6 +101,8 @@
 - `macUSB/Features/Downloader/Logic/Assembly/*`
 - `macUSB/Features/Downloader/Logic/MacOSVerificationLogic.swift`
 - `macUSB/Features/Downloader/Logic/MacOSCleanupLogic.swift`
+- `macUSB/Features/Downloader/Logic/Linux/*` — Linux image discovery from official distribution indexes, single-file download, SHA-256 verification, and destination placement.
+- `macUSB/Features/Downloader/UI/Linux/*` — Linux tab list, options, process, summary, and alerts as extensions of the shared downloader shell.
 
 ### Helper (app-side)
 

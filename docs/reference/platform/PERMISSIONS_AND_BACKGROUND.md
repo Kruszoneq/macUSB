@@ -28,7 +28,7 @@ Startup and helper readiness flows must surface missing prerequisites.
 - After the final client disconnects, the helper cancels cancellable work and exits once no privileged operation remains. Non-cancellable safety-critical work reaches its terminal state before exit.
 - The helper remains registered and approved while its process is stopped, so the next app launch can start it through the Mach service without repeating approval.
 - Downloader presentation and app reactivation passively refresh Full Disk Access, helper service approval, and XPC health without registering or repairing the helper.
-- Downloader discovery remains available with missing prerequisites, but a download session cannot start until Full Disk Access and helper readiness are confirmed.
+- Downloader discovery remains available with missing prerequisites, but a macOS download session cannot start until Full Disk Access and helper readiness are confirmed. Linux image downloads run entirely in the app and are not gated by these prerequisites.
 - Downloader prerequisite alerts use the current System Settings terminology `Aktywność aplikacji w tle` / `App Background Activity` and open the corresponding settings panel directly.
 - Missing prerequisites are visible and can block reliable helper operations.
 - External drive support defaults to disabled on launch/termination unless explicitly enabled.

@@ -1,6 +1,11 @@
 import SwiftUI
 import AppKit
 
+enum DownloaderSourceKind: Hashable {
+    case macOS
+    case linux
+}
+
 @MainActor
 final class MacOSDownloaderWindowManager {
     static let shared = MacOSDownloaderWindowManager()
@@ -20,7 +25,7 @@ final class MacOSDownloaderWindowManager {
         return true
     }
 
-    func present() {
+    func present(source: DownloaderSourceKind = .macOS) {
         guard !MenuState.shared.isDownloaderAccessBlocked else {
             AppLogging.info(
                 "Downloader opening blocked: USB creation is running or showing its summary.",
@@ -45,7 +50,10 @@ final class MacOSDownloaderWindowManager {
         let sheetContentHeight = downloaderWindowHeight
         MenuState.shared.lockLanguageChanges(reason: "downloader_opened")
 
-        let contentView = MacOSDownloaderWindowShellView(contentHeight: sheetContentHeight) { [weak self] in
+        let contentView = MacOSDownloaderWindowShellView(
+            contentHeight: sheetContentHeight,
+            initialSource: source
+        ) { [weak self] in
             self?.close()
         }
         let hostingController = NSHostingController(rootView: contentView)
@@ -71,7 +79,7 @@ final class MacOSDownloaderWindowManager {
         parentWindow.beginSheet(window)
 
         AppLogging.info(
-            "Opened the macOS downloader window.",
+            "Opened the downloader window (tab: \(source)).",
             stage: .downloader
         )
     }

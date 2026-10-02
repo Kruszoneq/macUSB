@@ -23,6 +23,7 @@ Scope note:
 13. [File Structure](#13-file-structure)
 14. [Cross-Feature Safety Checklist](#14-cross-feature-safety-checklist)
 15. [How to Extend Beyond Current Scope](#15-how-to-extend-beyond-current-scope)
+16. [Linux Image Downloads](#16-linux-image-downloads)
 
 ---
 
@@ -32,7 +33,8 @@ Downloader provides:
 - official macOS/OS X installer discovery from Apple sources,
 - staged download/verify/build flow,
 - final installer `.app` creation and target placement, with optional conversion to a user-selected `.dmg` destination,
-- deterministic temp cleanup and end-state summary.
+- deterministic temp cleanup and end-state summary,
+- a separate Linux tab that downloads official Linux `.iso` images and verifies them against published SHA-256 checksums (see [Linux Image Downloads](#16-linux-image-downloads)).
 
 Current production scope:
 - full download pipeline is enabled for selected Catalina, Big Sur, Monterey, Ventura, Sonoma, Sequoia, Tahoe, and Golden Gate entries,
@@ -46,8 +48,8 @@ Current production scope:
 
 - Do not modify USB creation logic while working on downloader.
 - Do not modify analysis logic while working on downloader.
-- Downloader network sources must stay Apple-official allowlisted endpoints.
-- Discovery runs on entering downloader window, not at app startup.
+- macOS downloader network sources must stay Apple-official allowlisted endpoints; Linux tab sources must stay the official distribution endpoints listed in section 16.
+- Discovery for each tab runs the first time that tab is shown in the downloader window, not at app startup.
 - Downloader UI must remain stylistically aligned with app design system.
 - Final cleanup stage must be explicit and ordered as the last stage before summary.
 - The downloader window is a protected operation from presentation until full close, regardless of discovery, download, failure, cancellation, or summary state.
@@ -128,7 +130,7 @@ Discovery pipeline (`MacOSCatalogService`, orchestrated by `MacOSDownloaderLogic
 11. Group by family and sort newest-first, with stable before Public Beta for equal builds.
 
 Discovery UX contract:
-- starts automatically on entering downloader window,
+- starts automatically the first time the macOS tab is shown in the downloader window,
 - always discovers stable and Public Beta entries together,
 - starts with Public Beta visibility disabled whenever the downloader window is opened,
 - changes to the beta visibility option immediately and smoothly refilter the retained discovery results while the options sheet remains open, without rerunning Apple catalog or local-installer discovery,
@@ -247,7 +249,8 @@ App-side operation tracking:
 Window:
 - fixed-width sheet from coordinator,
 - app-like liquid/glass-compatible surfaces and tokens.
-- can be opened from `Tools -> Pobierz instalator macOS...` and from the analysis screen button `Pobierz`.
+- can be opened from `Tools -> Pobierz instalator macOS...` and from the analysis screen button `Pobierz` on the macOS tab, and from `Tools -> Pobierz obraz systemu Linux...` on the Linux tab.
+- the header contains a segmented `macOS`/`Linux` switch; it is disabled while either tab shows an active download or its summary, and each tab keeps its own selection, options, and discovery results for the lifetime of the window.
 - opening is blocked while USB creation flow is in operation screens (`UniversalInstallationView`, `CreationProgressView`, `FinishUSBView`), and the Tools menu item is disabled in those stages.
 - the window-level active-operation token remains held across list, process, failure, cancellation, and summary UI until the window is fully closed.
 
@@ -419,3 +422,42 @@ Extension strategy for additional families:
 3. Reuse helper assembly/cleanup transport and result mapping.
 4. Keep stage keys and UI stage order stable unless explicitly redesigned.
 5. Preserve cross-feature isolation and verify USB/analysis parity after each extension.
+
+---
+
+## 16. Linux Image Downloads
+
+Scope:
+- Linux images are discovered and downloaded entirely in the app process; no helper operation, Full Disk Access gate, or package assembly is involved.
+- The Linux tab does not modify Linux analysis; a downloaded `.iso` is handed to analysis through `AnalysisSelectionHandoff` and goes through the standard Linux detection path.
+
+Discovery sources (all HTTPS, queried in parallel on first entry to the Linux tab and on manual refresh):
+- Ubuntu: `changelogs.ubuntu.com/meta-release` selects supported releases (LTS releases only within five years of their release date); Desktop and Server images come from `releases.ubuntu.com/<version>/SHA256SUMS` (x86_64) and `cdimage.ubuntu.com/releases/<version>/release/SHA256SUMS` (ARM64), keeping the newest point release per release directory.
+- Debian: `cdimage.debian.org/debian-cd/current/{amd64,arm64}/iso-cd/SHA256SUMS`, netinst images only.
+- Linux Mint: newest version directory from `pub.linuxmint.io/stable/`, then its `sha256sum.txt` (Cinnamon, MATE, Xfce).
+- Proxmox VE and Proxmox Backup Server: `enterprise.proxmox.com/iso/SHA256SUMS`.
+- NixOS: newest stable channel (`YY.05` or `YY.11`, considered only after its release month has ended) from `channels.nixos.org/nixos-<channel>/latest-nixos-{graphical,minimal}-{x86_64,aarch64}-linux.iso.sha256`; the download URL is built from the pinned file name on `releases.nixos.org`.
+- CachyOS: newest release directory from `us.cachyos.org/ISO/{desktop,handheld}/`, checksum and image from `cdn77.cachyos.org`.
+- Image sizes are probed with `HEAD` requests; an unknown size is probed again before download.
+- A source that fails or yields no images is reported in a warning card above the list while other sources stay available; when every source fails, the standard discovery failure view is shown.
+
+List and options:
+- entries are grouped by distribution; by default only the newest version per edition, architecture, and Ubuntu LTS/non-LTS line is shown,
+- `Pokaż wszystkie wersje` shows every discovered version (for example older supported Ubuntu LTS releases and older Proxmox ISOs),
+- ARM64 images are hidden unless `Pokaż obrazy dla procesorów ARM` is enabled,
+- the destination folder defaults to the user's Downloads folder and can be changed in options for the lifetime of the window,
+- an entry whose file name already exists in the destination folder shows the `POBRANY` badge and requires a redownload confirmation; the new copy is saved under a numbered name.
+
+Download pipeline (`LinuxDownloadFlowModel`):
+1. Connection: validate that the destination folder exists and is writable, resolve the image size, and require 105% of the image size free on the temporary volume and, when different, on the destination volume; insufficient space shows the standard disk-space alert and returns to the list.
+2. Download: one file into `macUSB_temp/linux_downloads/<session_id>/`, with up to three attempts for transient network errors and the same progress and speed sampling as the macOS flow.
+3. Verification: streaming SHA-256 of the downloaded file compared with the value read from the distribution's checksum list during discovery; a mismatch deletes the file and fails the session.
+4. Finalizing: move the verified image to the destination folder (` (2)`, ` (3)`, … suffixes on collision) and remove the session directory.
+- Idle sleep is blocked for the whole session; cancellation and failure remove the session directory.
+- Summary shows transfer metrics, image name, destination, and checksum result, with `Pokaż w Finderze` and an action that hands the image to analysis and closes the downloader.
+- Linux discovery logs use `DOWNLOADER_DISCOVERY`; Linux download sessions use `DOWNLOADER_LINUX`, including source URLs, expected and computed SHA-256 values, and preflight capacity results.
+
+Code:
+- `Logic/Linux/LinuxDiscoveryModels.swift`, `LinuxDiscoveryParsing.swift`, `LinuxDiscoverySources.swift`, `LinuxDiscoveryOrchestrator.swift`
+- `Logic/Linux/LinuxDownloadState.swift`, `LinuxDownloadOrchestrator.swift`, `LinuxDownloadChecksumVerifier.swift`
+- `UI/Linux/LinuxDownloaderListView.swift`, `LinuxDownloaderProcessView.swift`, `LinuxDownloaderSummaryView.swift`, `LinuxDownloaderOptionsView.swift`, `LinuxDownloaderAlerts.swift`

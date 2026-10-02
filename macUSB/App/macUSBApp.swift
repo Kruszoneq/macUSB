@@ -268,6 +268,12 @@ struct macUSBApp: App {
                     Label(String(localized: "Pobierz instalator macOS..."), systemImage: "square.and.arrow.down")
                 }
                 .disabled(menuState.isDownloaderAccessBlocked)
+                Button {
+                    MacOSDownloaderWindowManager.shared.present(source: .linux)
+                } label: {
+                    Label(String(localized: "downloader.linux.menu"), systemImage: "square.and.arrow.down")
+                }
+                .disabled(menuState.isDownloaderAccessBlocked)
                 Divider()
                 Button {
                     RawLinuxImageSelectionCoordinator.shared.presentSelectionFlow()
