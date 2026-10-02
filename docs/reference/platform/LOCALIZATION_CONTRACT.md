@@ -2,13 +2,13 @@
 
 ## Source Policy
 
-- Source language is Polish (`pl`) in `macUSB/Resources/Localizable.xcstrings`.
+- Source language is Polish (`pl`) in every string catalog under `macUSB/Resources/`.
 - New UI copy must be authored in Polish first.
 
 ## Runtime Policy
 
 - All user-facing UI text must originate from localization catalog keys rather than prelocalized literal strings.
-- For every new or modified UI text, name its semantic localization key using the `area.feature.element` format, adding more specific segments when needed. Use the same key in code and in `Localizable.xcstrings` (for example, `diagnostics.export.previous.menu`). Keep the Polish source text and all translations as catalog values, never as the key itself.
+- Semantic localization identifiers follow `area.feature.element`, with additional segments where needed. Polish source text and translations are catalog values; code references the same key in its owning table.
 - UI state, workflow payloads, and helper transport must carry localization keys for as long as possible.
 - APIs that accept localization keys should receive keys directly.
 - Resolve a key with `String(localized:)` only at the presentation boundary when an API requires a `String`.
@@ -19,9 +19,22 @@
 
 Supported language handling must remain coherent between runtime behavior and localization catalog.
 
+## Catalog and Table Map
+
+Each `.xcstrings` file represents a separate localization table in the app bundle. The table name is the filename without its extension; a key prefix does not choose a table.
+
+| Catalog | Table | Scope |
+| --- | --- | --- |
+| `macUSB/Resources/Downloader.xcstrings` | `Downloader` | Downloader discovery, selection, download, verification, installer assembly, disk-image output, cleanup, summary, alerts, and completion notifications. Shared labels used by downloader have downloader-owned copies. |
+| `macUSB/Resources/Localizable.xcstrings` | `Localizable` (default) | App-wide text and areas without a dedicated catalog, including analysis, USB creation, finish, menus, and helper workflow keys. |
+
+Named-table lookups use `String(localized: ..., table: "Downloader")`, `Text(..., tableName: "Downloader")`, or a `LocalizedStringResource` that carries the table. Dynamic-key rendering uses the same owning table. Automatic extraction must see the intended table at literal lookup sites; intentionally indirect keys are manually managed.
+
+Catalog separation does not require changing helper IPC payloads or workflow identifiers. The app chooses the presentation table for keys received from the helper. Removing an entry from `Localizable` is safe only after its remaining consumers have been checked; copied shared entries stay available to their original consumers.
+
 ## String Catalog Serialization Policy
 
-`macUSB/Resources/Localizable.xcstrings` must be edited in the target serialization format produced by Xcode. Translation work must not introduce a compact or partially sorted JSON style that Xcode will rewrite later.
+Every `.xcstrings` catalog under `macUSB/Resources/` uses the target serialization format produced by Xcode. Translation work must not introduce a compact or partially sorted JSON style that Xcode will rewrite later.
 
 Required format:
 
@@ -39,4 +52,4 @@ Before finishing translation work, verify that opening or saving the catalog in 
 
 ## Update Trigger
 
-Update when localization source policy, key strategy, catalog serialization, extraction-state handling, or language coverage behavior changes.
+Update when catalog ownership, table selection, localization source policy, key strategy, catalog serialization, extraction-state handling, or language coverage behavior changes.
