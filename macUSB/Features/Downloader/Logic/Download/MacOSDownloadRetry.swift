@@ -25,7 +25,7 @@ extension MontereyDownloadFlowModel {
                     if recovered {
                         networkWarningMessage = nil
                         downloadFileName = String(
-                            format: String(localized: "Pobieranie pliku %@..."),
+                            format: String(localized: "downloader.transfer.status.downloading_file", table: "Downloader"),
                             item.name
                         )
                         AppLogging.info(
@@ -35,7 +35,7 @@ extension MontereyDownloadFlowModel {
                         continue
                     }
 
-                    throw DownloadFailureReason.downloadFailed(String(localized: "Brak dostępu do internetu przez ponad 1 minutę"))
+                    throw DownloadFailureReason.downloadFailed(String(localized: "downloader.network.error.reconnect_timeout", table: "Downloader"))
                 }
 
                 lastError = error
@@ -51,7 +51,7 @@ extension MontereyDownloadFlowModel {
             }
         }
 
-        throw lastError ?? DownloadFailureReason.downloadFailed(String(localized: "Nieznany błąd pobierania"))
+        throw lastError ?? DownloadFailureReason.downloadFailed(String(localized: "downloader.transfer.error.unknown", table: "Downloader"))
     }
 
     func isOfflineDownloadError(_ error: Error) -> Bool {
@@ -81,7 +81,7 @@ extension MontereyDownloadFlowModel {
             let remaining = max(0, timeoutSeconds - elapsed)
 
             networkWarningMessage = String(
-                format: String(localized: "Pobieranie zostało wstrzymane. Wznowienie nastąpi automatycznie po odzyskaniu połączenia (pozostało: %@ s)."),
+                format: String(localized: "downloader.network.warning.reconnect_countdown", table: "Downloader"),
                 String(remaining)
             )
             downloadSpeedText = "0.0 MB/s"

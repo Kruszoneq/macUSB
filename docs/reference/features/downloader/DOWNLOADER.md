@@ -244,6 +244,15 @@ App-side operation tracking:
 
 ## 9. UI Contract
 
+Localization:
+- localized downloader-owned strings reside in `macUSB/Resources/Downloader.xcstrings`, with Polish as the source language and the same 13-language set as the app,
+- UI, localized error wrappers, discovery/download/assembly/cleanup statuses, alerts, completion notifications, and the Tools-menu entry select the `Downloader` table explicitly,
+- source-text keys have semantic `downloader.*` identifiers; source wording and existing translations remain catalog values,
+- prerequisite alert title/message keys are rendered dynamically from the same table and are manually managed for extraction,
+- shared labels and formatting strings have downloader-owned entries; their original entries remain available when other app/helper consumers use them,
+- DEBUG-only text uses untranslated English literals from code, without catalog entries or automatic extraction; this includes the developer section, retain-files toggle, retention statuses/result, and the retention-specific cancellation message,
+- raw helper status text and technical diagnostic details retain their existing transport contract; this catalog migration does not introduce new translations for previously untranslated helper or command output.
+
 Window:
 - fixed-width sheet from coordinator,
 - app-like liquid/glass-compatible surfaces and tokens.
@@ -322,16 +331,18 @@ User-facing messaging:
 ## 11. DEBUG Behavior
 
 Debug-only option:
-- `DEBUG: Nie usuwaj pobranych plików`
+- `Save downloaded files (Debug)` under the `Developer` heading; both labels are untranslated English literals.
 
 When enabled:
 - session files are retained after success/failure/cancel inside current app runtime.
+- retention-specific cleanup statuses, the temporary-files summary value, and the close-confirmation message use untranslated English literals.
 
 When disabled:
 - normal final cleanup stage executes.
 
 Release:
 - no DEBUG controls in downloader options UI.
+- `shouldRetainSessionFilesForDebugMode()` always returns `false`, so retention-specific text cannot be displayed.
 
 ---
 

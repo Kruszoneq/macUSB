@@ -13,7 +13,7 @@ extension MontereyDownloadFlowModel {
         entry: MacOSInstallerEntry
     ) async throws {
         currentStage = .buildingInstaller
-        buildStatusText = String(localized: "Przygotowywanie instalatora...")
+        buildStatusText = String(localized: "downloader.assembly.status.preparing_installer", table: "Downloader")
         buildProgress = 0
 
         let assemblySelection = try resolveAssemblyInput(in: manifest)
@@ -50,7 +50,7 @@ extension MontereyDownloadFlowModel {
         }
 
         finalInstallerAppURL = finalAppURL
-        buildStatusText = String(localized: "Instalator został przygotowany")
+        buildStatusText = String(localized: "downloader.assembly.status.installer_prepared", table: "Downloader")
         buildProgress = 1.0
         completedStages.insert(.buildingInstaller)
 
@@ -80,7 +80,7 @@ extension MontereyDownloadFlowModel {
         entry: MacOSInstallerEntry
     ) async throws -> URL {
         guard let outputDirectory = activeSessionOutputURL else {
-            throw DownloadFailureReason.assemblyFailed(String(localized: "Brak katalogu output sesji"))
+            throw DownloadFailureReason.assemblyFailed(String(localized: "downloader.assembly.error.missing_output_directory", table: "Downloader"))
         }
         let request = DownloaderAssemblyRequestPayload(
             packagePath: diskImageURL.path,
@@ -110,16 +110,16 @@ extension MontereyDownloadFlowModel {
 
         guard result.success else {
             throw DownloadFailureReason.assemblyFailed(
-                result.errorMessage ?? String(localized: "Helper zwrócił błąd składania instalatora")
+                result.errorMessage ?? String(localized: "downloader.assembly.error.helper_failed", table: "Downloader")
             )
         }
         guard let outputAppPath = result.outputAppPath else {
-            throw DownloadFailureReason.assemblyFailed(String(localized: "Helper nie zwrócił ścieżki do instalatora .app"))
+            throw DownloadFailureReason.assemblyFailed(String(localized: "downloader.assembly.error.helper_missing_installer_path", table: "Downloader"))
         }
 
         let producedURL = URL(fileURLWithPath: outputAppPath)
         guard FileManager.default.fileExists(atPath: producedURL.path) else {
-            throw DownloadFailureReason.assemblyFailed(String(localized: "Zbudowana aplikacja instalatora nie istnieje"))
+            throw DownloadFailureReason.assemblyFailed(String(localized: "downloader.assembly.error.installer_missing", table: "Downloader"))
         }
         return producedURL
     }
@@ -129,7 +129,7 @@ extension MontereyDownloadFlowModel {
         entry: MacOSInstallerEntry
     ) async throws -> URL {
         guard let outputDirectory = activeSessionOutputURL else {
-            throw DownloadFailureReason.assemblyFailed(String(localized: "Brak katalogu output sesji"))
+            throw DownloadFailureReason.assemblyFailed(String(localized: "downloader.assembly.error.missing_output_directory", table: "Downloader"))
         }
         let request = DownloaderAssemblyRequestPayload(
             packagePath: packageURL.path,
@@ -159,16 +159,16 @@ extension MontereyDownloadFlowModel {
 
         guard result.success else {
             throw DownloadFailureReason.assemblyFailed(
-                result.errorMessage ?? String(localized: "Helper zwrócił błąd składania instalatora")
+                result.errorMessage ?? String(localized: "downloader.assembly.error.helper_failed", table: "Downloader")
             )
         }
         guard let outputAppPath = result.outputAppPath else {
-            throw DownloadFailureReason.assemblyFailed(String(localized: "Helper nie zwrócił ścieżki do instalatora .app"))
+            throw DownloadFailureReason.assemblyFailed(String(localized: "downloader.assembly.error.helper_missing_installer_path", table: "Downloader"))
         }
 
         let producedURL = URL(fileURLWithPath: outputAppPath)
         guard FileManager.default.fileExists(atPath: producedURL.path) else {
-            throw DownloadFailureReason.assemblyFailed(String(localized: "Zbudowana aplikacja instalatora nie istnieje"))
+            throw DownloadFailureReason.assemblyFailed(String(localized: "downloader.assembly.error.installer_missing", table: "Downloader"))
         }
         return producedURL
     }
@@ -191,7 +191,7 @@ extension MontereyDownloadFlowModel {
                 || item.url.lastPathComponent.caseInsensitiveCompare("InstallAssistantAuto.pkg") == .orderedSame
         }) {
             guard let url = downloadedFileURLsByItemID[legacyItem.id] else {
-                throw DownloadFailureReason.assemblyFailed(String(localized: "Nie znaleziono pobranego InstallAssistantAuto.pkg"))
+                throw DownloadFailureReason.assemblyFailed(String(localized: "downloader.assembly.error.missing_install_assistant_auto", table: "Downloader"))
             }
             return (url, .legacy)
         }
@@ -201,7 +201,7 @@ extension MontereyDownloadFlowModel {
                 || item.url.lastPathComponent.caseInsensitiveCompare("InstallAssistant.pkg") == .orderedSame
         }) {
             guard let url = downloadedFileURLsByItemID[modernItem.id] else {
-                throw DownloadFailureReason.assemblyFailed(String(localized: "Nie znaleziono pobranego InstallAssistant.pkg"))
+                throw DownloadFailureReason.assemblyFailed(String(localized: "downloader.assembly.error.missing_install_assistant", table: "Downloader"))
             }
             return (url, .modern)
         }
@@ -211,13 +211,13 @@ extension MontereyDownloadFlowModel {
                 || item.name.lowercased().hasSuffix(".dmg")
         }) {
             guard let url = downloadedFileURLsByItemID[oldestDiskImageItem.id] else {
-                throw DownloadFailureReason.assemblyFailed(String(localized: "Nie znaleziono pobranego obrazu .dmg"))
+                throw DownloadFailureReason.assemblyFailed(String(localized: "downloader.assembly.error.missing_downloaded_image", table: "Downloader"))
             }
             return (url, .oldestDiskImage)
         }
 
         throw DownloadFailureReason.assemblyFailed(
-            String(localized: "Nie znaleziono pliku instalatora dla wybranego systemu (wymagany InstallAssistant.pkg, InstallAssistantAuto.pkg lub obraz .dmg)")
+            String(localized: "downloader.assembly.error.missing_installer_payload", table: "Downloader")
         )
     }
 }

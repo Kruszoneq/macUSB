@@ -8,7 +8,7 @@ struct AnalysisChecksumTriggerView: View {
             HStack(spacing: 8) {
                 Image(systemName: "checkmark.shield")
                     .font(.subheadline)
-                Text(String(localized: "checksum.analysis.trigger"))
+                Text(String(localized: "analysis.checksum.analysis.trigger", table: "Analysis"))
                     .font(.subheadline.weight(.medium))
             }
             .foregroundColor(.accentColor)
@@ -17,6 +17,6 @@ struct AnalysisChecksumTriggerView: View {
             .padding(.vertical, 1)
         }
         .buttonStyle(.plain)
-        .help(String(localized: "checksum.analysis.trigger.help"))
+        .help(String(localized: "analysis.checksum.analysis.trigger.help", table: "Analysis"))
     }
 }

@@ -19,8 +19,8 @@ extension HelperServiceManager {
         performFullRepairFromMenu { ready, message in
             self.finishRepairFlow()
             let summary = message ?? (ready
-                                      ? String(localized: "Naprawa helpera zakończona")
-                                      : String(localized: "Naprawa helpera zakończona błędem"))
+                                      ? String(localized: "app.helper.repair.completed.message", table: "App")
+                                      : String(localized: "app.helper.repair.failed.message", table: "App"))
             self.reportHelperRepairEvent("Manual helper repair finished: success=\(ready).", isError: !ready)
             DispatchQueue.main.async {
                 self.finishRepairPresentation(success: ready, message: summary)
@@ -41,7 +41,7 @@ extension HelperServiceManager {
         reportHelperRepairEvent("Starting full helper reset: unregister, verify old service shutdown, register, then check XPC health.")
 
         guard isLocationRequirementSatisfied() else {
-            let message = String(localized: "Aby uruchomić helper systemowy, aplikacja musi znajdować się w katalogu Applications.")
+            let message = String(localized: "app.helper.location.required.detail", table: "App")
             reportHelperRepairEvent("Repair stopped: application location requirement not met.", isError: true)
             DispatchQueue.main.async {
                 self.presentMoveToApplicationsAlert()
@@ -52,7 +52,7 @@ extension HelperServiceManager {
 
         coordinationQueue.async {
             if self.ensureInProgress {
-                let message = String(localized: "Trwa inna operacja helpera. Poczekaj chwilę i spróbuj ponownie.")
+                let message = String(localized: "app.helper.operation.busy.message", table: "App")
                 self.reportHelperRepairEvent("Repair stopped: another helper operation is active.", isError: true)
                 DispatchQueue.main.async {
                     trackedCompletion(false, message)
@@ -66,7 +66,7 @@ extension HelperServiceManager {
             self.performHardUnregisterPhase(service: service) { teardownOK, teardownMessage in
                 guard teardownOK else {
                     DispatchQueue.main.async {
-                        trackedCompletion(false, teardownMessage ?? String(localized: "Nie udało się usunąć starej rejestracji helpera."))
+                        trackedCompletion(false, teardownMessage ?? String(localized: "app.helper.repair.unregister_failed.message", table: "App"))
                     }
                     return
                 }
@@ -126,7 +126,7 @@ extension HelperServiceManager {
                     return
                 }
 
-                completion(false, String(localized: "Helper pozostał aktywny po unregister. Przerwano naprawę."))
+                completion(false, String(localized: "app.helper.repair.still_active.message", table: "App"))
                 return
             }
 
@@ -263,9 +263,9 @@ extension HelperServiceManager {
 
             let message: String
             if statusAfterRegister == .requiresApproval {
-                message = String(localized: "Helper został zarejestrowany, ale wymaga zatwierdzenia przez użytkownika.")
+                message = String(localized: "app.helper.registration.requires_approval.message", table: "App")
             } else {
-                message = String(localized: "Nie udało się aktywować helpera po pełnym resecie.")
+                message = String(localized: "app.helper.repair.activation_failed.message", table: "App")
             }
             DispatchQueue.main.async {
                 completion(false, message)
@@ -327,7 +327,7 @@ extension HelperServiceManager {
                     return
                 }
 
-                let message = "Helper po pełnym resecie nadal nie jest gotowy. Status: \(self.statusDescription(finalStatus)). Szczegóły XPC: \(details)"
+                let message = "\(String(localized: "app.helper.repair.failure.message", table: "App")) \(String(format: String(localized: "app.helper.status.service", table: "App"), self.statusDescription(finalStatus))) \(String(format: String(localized: "app.helper.status.details", table: "App"), details))"
                 self.reportHelperRepairEvent(
                     "Helper is still not ready after full reset: status=\(self.diagnosticStatusDescription(finalStatus)), XPC details=\(details).",
                     isError: true
@@ -372,7 +372,7 @@ extension HelperServiceManager {
                 DispatchQueue.main.async {
                     self.presentOperationSummary(
                         success: false,
-                        message: String(localized: "Trwa inna operacja helpera. Poczekaj chwilę i spróbuj ponownie.")
+                        message: String(localized: "app.helper.operation.busy.message", table: "App")
                     )
                 }
                 return
@@ -383,14 +383,14 @@ extension HelperServiceManager {
             do {
                 if service.status == .notRegistered || service.status == .notFound {
                     DispatchQueue.main.async {
-                        self.presentOperationSummary(success: true, message: String(localized: "Helper jest już usunięty"))
+                        self.presentOperationSummary(success: true, message: String(localized: "app.helper.unregister.already_removed.message", table: "App"))
                     }
                     return
                 }
 
                 try service.unregister()
                 DispatchQueue.main.async {
-                    self.presentOperationSummary(success: true, message: String(localized: "Helper został usunięty"))
+                    self.presentOperationSummary(success: true, message: String(localized: "app.helper.unregister.removed.message", table: "App"))
                 }
             } catch {
                 DispatchQueue.main.async {

@@ -23,10 +23,10 @@ final class RawLinuxImageSelectionCoordinator {
         let alert = NSAlert()
         alert.alertStyle = .warning
         alert.icon = NSApp.applicationIconImage
-        alert.messageText = String(localized: "raw_linux_img.alert.title")
-        alert.informativeText = String(localized: "raw_linux_img.alert.message")
-        alert.addButton(withTitle: String(localized: "Anuluj"))
-        alert.addButton(withTitle: String(localized: "raw_linux_img.alert.continue_button"))
+        alert.messageText = String(localized: "app.raw_image.selection.warning.title", table: "App")
+        alert.informativeText = String(localized: "app.raw_image.selection.warning.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.action.cancel", table: "App"))
+        alert.addButton(withTitle: String(localized: "app.raw_image.selection.action.continue", table: "App"))
         activeAlert = alert
 
         let handleResponse: (NSApplication.ModalResponse) -> Void = { response in
@@ -47,8 +47,8 @@ final class RawLinuxImageSelectionCoordinator {
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
         panel.canChooseFiles = true
-        panel.title = String(localized: "raw_linux_img.panel.title")
-        panel.message = String(localized: "raw_linux_img.panel.message")
+        panel.title = String(localized: "app.raw_image.selection.picker.title", table: "App")
+        panel.message = String(localized: "app.raw_image.selection.picker.message", table: "App")
         activePanel = panel
 
         let handleResponse: (NSApplication.ModalResponse) -> Void = { response in

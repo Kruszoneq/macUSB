@@ -85,16 +85,16 @@ struct macUSBApp: App {
         .commands {
             CommandGroup(replacing: .newItem) { }
             
-            CommandMenu(String(localized: "Opcje")) {
+            CommandMenu(String(localized: "app.menu.options.title", table: "App")) {
                 Menu {
-                    Button(String(localized: "Mac OS X Tiger 10.4 (Multi DVD)")) {
+                    Button(String(localized: "app.macos.tiger.menu.multi_dvd", table: "App")) {
                         let alert = NSAlert()
                         alert.alertStyle = .informational
                         alert.icon = NSApp.applicationIconImage
-                        alert.messageText = String(localized: "Tworzenie USB z Mac OS X Tiger (Multi DVD)")
-                        alert.informativeText = String(localized: "Dla wybranego obrazu zostanie pominięta weryfikacja wersji. Aplikacja wymusi rozpoznanie pliku jako „Mac OS X Tiger 10.4”, aby umożliwić jego zamontowanie i zapis na USB. Czy chcesz kontynuować?")
-                        alert.addButton(withTitle: String(localized: "Nie"))
-                        alert.addButton(withTitle: String(localized: "Tak"))
+                        alert.messageText = String(localized: "app.macos.tiger.override.title", table: "App")
+                        alert.informativeText = String(localized: "app.macos.tiger.override.message", table: "App")
+                        alert.addButton(withTitle: String(localized: "app.action.no", table: "App"))
+                        alert.addButton(withTitle: String(localized: "app.action.yes", table: "App"))
                         if let window = NSApp.keyWindow ?? NSApp.mainWindow {
                             alert.beginSheetModal(for: window) { response in
                                 if response == .alertSecondButtonReturn {
@@ -111,16 +111,16 @@ struct macUSBApp: App {
                     .keyboardShortcut("t", modifiers: [.option, .command])
                     .disabled(!menuState.skipAnalysisEnabled)
                 } label: {
-                    Label(String(localized: "Pomiń analizowanie pliku"), systemImage: "doc.text.magnifyingglass")
+                    Label(String(localized: "app.macos.menu.skip_analysis", table: "App"), systemImage: "doc.text.magnifyingglass")
                 }
                 Divider()
                 Button {
                     let alert = NSAlert()
                     alert.alertStyle = .informational
                     alert.icon = NSApp.applicationIconImage
-                    alert.messageText = String(localized: "Włącz obsługę zewnętrznych dysków twardych")
-                    alert.informativeText = String(localized: "Ta funkcja umożliwia tworzenie instalatora na zewnętrznych dyskach twardych i SSD. Zachowaj szczególną ostrożność przy wyborze dysku docelowego z listy, aby uniknąć przypadkowej utraty danych!")
-                    alert.addButton(withTitle: String(localized: "OK"))
+                    alert.messageText = String(localized: "app.external_drives.enable.title", table: "App")
+                    alert.informativeText = String(localized: "app.external_drives.enable.message", table: "App")
+                    alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
 
                     if let window = NSApp.keyWindow ?? NSApp.mainWindow {
                         alert.beginSheetModal(for: window) { _ in menuState.enableExternalDrives() }
@@ -129,13 +129,13 @@ struct macUSBApp: App {
                         menuState.enableExternalDrives()
                     }
                 } label: {
-                    Label(String(localized: "Włącz obsługę zewnętrznych dysków twardych"), systemImage: "externaldrive.badge.plus")
+                    Label(String(localized: "app.external_drives.enable.title", table: "App"), systemImage: "externaldrive.badge.plus")
                 }
                 Divider()
                 Button {
                     resetExternalVolumeAccessPermissions()
                 } label: {
-                    Label(String(localized: "Resetuj uprawnienia dostępu do dysków zewnętrznych"), systemImage: "arrow.clockwise.circle")
+                    Label(String(localized: "app.external_drives.permissions.reset.menu", table: "App"), systemImage: "arrow.clockwise.circle")
                 }
                 Divider()
                 Menu {
@@ -143,105 +143,105 @@ struct macUSBApp: App {
                         languageManager.currentLanguage = "auto"
                     } label: {
                         if languageManager.isAuto {
-                            Label(String(localized: "Automatycznie"), systemImage: "checkmark")
+                            Label(String(localized: "app.language.automatic", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text(String(localized: "Automatycznie"))
+                            Text(String(localized: "app.language.automatic", table: "App"))
                         }
                     }
                     Divider()
                     Button { languageManager.currentLanguage = "pl" } label: {
                         if languageManager.currentLanguage == "pl" {
-                            Label("Polski", systemImage: "checkmark")
+                            Label(String(localized: "app.language.name.pl", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text("Polski")
+                            Text("app.language.name.pl", tableName: "App")
                         }
                     }
                     Button { languageManager.currentLanguage = "en" } label: {
                         if languageManager.currentLanguage == "en" {
-                            Label("English", systemImage: "checkmark")
+                            Label(String(localized: "app.language.name.en", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text("English")
+                            Text("app.language.name.en", tableName: "App")
                         }
                     }
                     Button { languageManager.currentLanguage = "de" } label: {
                         if languageManager.currentLanguage == "de" {
-                            Label("Deutsch", systemImage: "checkmark")
+                            Label(String(localized: "app.language.name.de", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text("Deutsch")
+                            Text("app.language.name.de", tableName: "App")
                         }
                     }
                     Button { languageManager.currentLanguage = "fr" } label: {
                         if languageManager.currentLanguage == "fr" {
-                            Label("Français", systemImage: "checkmark")
+                            Label(String(localized: "app.language.name.fr", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text("Français")
+                            Text("app.language.name.fr", tableName: "App")
                         }
                     }
                     Button { languageManager.currentLanguage = "es" } label: {
                         if languageManager.currentLanguage == "es" {
-                            Label("Español", systemImage: "checkmark")
+                            Label(String(localized: "app.language.name.es", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text("Español")
+                            Text("app.language.name.es", tableName: "App")
                         }
                     }
                     Button { languageManager.currentLanguage = "pt-BR" } label: {
                         if languageManager.currentLanguage == "pt-BR" {
-                            Label("Português (BR)", systemImage: "checkmark")
+                            Label(String(localized: "app.language.name.pt_br", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text("Português (BR)")
+                            Text("app.language.name.pt_br", tableName: "App")
                         }
                     }
                     Button { languageManager.currentLanguage = "ru" } label: {
                         if languageManager.currentLanguage == "ru" {
-                            Label("Русский", systemImage: "checkmark")
+                            Label(String(localized: "app.language.name.ru", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text("Русский")
+                            Text("app.language.name.ru", tableName: "App")
                         }
                     }
                     Button { languageManager.currentLanguage = "zh-Hans" } label: {
                         if languageManager.currentLanguage == "zh-Hans" {
-                            Label("简体中文", systemImage: "checkmark")
+                            Label(String(localized: "app.language.name.zh_hans", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text("简体中文")
+                            Text("app.language.name.zh_hans", tableName: "App")
                         }
                     }
                     Button { languageManager.currentLanguage = "ja" } label: {
                         if languageManager.currentLanguage == "ja" {
-                            Label("日本語", systemImage: "checkmark")
+                            Label(String(localized: "app.language.name.ja", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text("日本語")
+                            Text("app.language.name.ja", tableName: "App")
                         }
                     }
                     Button { languageManager.currentLanguage = "it" } label: {
                         if languageManager.currentLanguage == "it" {
-                            Label("Italiano", systemImage: "checkmark")
+                            Label(String(localized: "app.language.name.it", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text("Italiano")
+                            Text("app.language.name.it", tableName: "App")
                         }
                     }
                     Button { languageManager.currentLanguage = "uk" } label: {
                         if languageManager.currentLanguage == "uk" {
-                            Label("Українська", systemImage: "checkmark")
+                            Label(String(localized: "app.language.name.uk", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text("Українська")
+                            Text("app.language.name.uk", tableName: "App")
                         }
                     }
                     Button { languageManager.currentLanguage = "vi" } label: {
                         if languageManager.currentLanguage == "vi" {
-                            Label("Tiếng Việt", systemImage: "checkmark")
+                            Label(String(localized: "app.language.name.vi", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text("Tiếng Việt")
+                            Text("app.language.name.vi", tableName: "App")
                         }
                     }
                     Button { languageManager.currentLanguage = "tr" } label: {
                         if languageManager.currentLanguage == "tr" {
-                            Label("Türkçe", systemImage: "checkmark")
+                            Label(String(localized: "app.language.name.tr", table: "App"), systemImage: "checkmark")
                         } else {
-                            Text("Türkçe")
+                            Text("app.language.name.tr", tableName: "App")
                         }
                     }
                 } label: {
-                    Label(String(localized: "Język"), systemImage: "globe")
+                    Label(String(localized: "app.language.menu.title", table: "App"), systemImage: "globe")
                 }
                 .disabled(!menuState.isLanguageChangeEnabled)
                 Divider()
@@ -250,29 +250,29 @@ struct macUSBApp: App {
                 } label: {
                     if menuState.notificationsEnabled {
                         Label(
-                            String(localized: "Powiadomienia włączone"),
+                            String(localized: "app.notifications.menu.enabled", table: "App"),
                             systemImage: "bell.and.waves.left.and.right"
                         )
                     } else {
                         Label(
-                            String(localized: "Powiadomienia wyłączone"),
+                            String(localized: "app.notifications.menu.disabled", table: "App"),
                             systemImage: "bell.slash"
                         )
                     }
                 }
             }
-            CommandMenu(String(localized: "Narzędzia")) {
+            CommandMenu(String(localized: "app.menu.tools.title", table: "App")) {
                 Button {
                     MacOSDownloaderWindowManager.shared.present()
                 } label: {
-                    Label(String(localized: "Pobierz instalator macOS..."), systemImage: "square.and.arrow.down")
+                    Label(String(localized: "app.macos.menu.download_installer", table: "App"), systemImage: "square.and.arrow.down")
                 }
                 .disabled(menuState.isDownloaderAccessBlocked)
                 Divider()
                 Button {
                     RawLinuxImageSelectionCoordinator.shared.presentSelectionFlow()
                 } label: {
-                    Label(String(localized: "raw_linux_img.menu.write"), systemImage: "externaldrive.fill.badge.plus")
+                    Label(String(localized: "app.raw_image.menu.write", table: "App"), systemImage: "externaldrive.fill.badge.plus")
                 }
                 .disabled(!menuState.rawLinuxImageSelectionEnabled)
                 Divider()
@@ -293,29 +293,29 @@ struct macUSBApp: App {
                         }
                     }
                 } label: {
-                    Label(String(localized: "Otwórz Narzędzie dyskowe"), systemImage: "externaldrive")
+                    Label(String(localized: "app.menu.tools.disk_utility", table: "App"), systemImage: "externaldrive")
                 }
                 Divider()
                 Button {
                     HelperServiceManager.shared.presentStatusAlert()
                 } label: {
-                    Label(String(localized: "Status helpera"), systemImage: "info.circle")
+                    Label(String(localized: "app.helper.menu.status", table: "App"), systemImage: "info.circle")
                 }
                 Button {
                     HelperServiceManager.shared.repairRegistrationFromMenu()
                 } label: {
-                    Label(String(localized: "Napraw helpera"), systemImage: "wrench.and.screwdriver")
+                    Label(String(localized: "app.helper.menu.repair", table: "App"), systemImage: "wrench.and.screwdriver")
                 }
                 Divider()
                 Button {
                     SMAppService.openSystemSettingsLoginItems()
                 } label: {
-                    Label(String(localized: "Ustawienia działania w tle…"), systemImage: "gearshape")
+                    Label(String(localized: "app.permissions.background.menu", table: "App"), systemImage: "gearshape")
                 }
                 Button {
                     FullDiskAccessPermissionManager.shared.openFullDiskAccessSettings(showFallbackAlertIfNeeded: true)
                 } label: {
-                    Label(String(localized: "Przyznaj pełny dostęp do dysku..."), systemImage: "lock.shield")
+                    Label(String(localized: "app.permissions.full_disk_access.menu", table: "App"), systemImage: "lock.shield")
                 }
             }
             CommandGroup(replacing: .windowList) { }
@@ -323,7 +323,7 @@ struct macUSBApp: App {
                 Button {
                     UpdateChecker.shared.checkFromMenu()
                 } label: {
-                    Label(String(localized: "Sprawdź dostępność aktualizacji"), systemImage: "arrow.triangle.2.circlepath")
+                    Label(String(localized: "app.update.menu.check", table: "App"), systemImage: "arrow.triangle.2.circlepath")
                 }
             }
             CommandGroup(after: .help) {
@@ -333,21 +333,21 @@ struct macUSBApp: App {
                         NSWorkspace.shared.open(url)
                     }
                 } label: {
-                    Label(String(localized: "Strona internetowa macUSB"), systemImage: "globe")
+                    Label(String(localized: "app.menu.help.website", table: "App"), systemImage: "globe")
                 }
                 Button {
                     if let url = URL(string: "https://github.com/Kruszoneq/macUSB") {
                         NSWorkspace.shared.open(url)
                     }
                 } label: {
-                    Label(String(localized: "Repozytorium macUSB na GitHub"), systemImage: "chevron.left.forwardslash.chevron.right")
+                    Label(String(localized: "app.menu.help.repository", table: "App"), systemImage: "chevron.left.forwardslash.chevron.right")
                 }
                 Button {
                     if let url = URL(string: "https://github.com/Kruszoneq/macUSB/issues") {
                         NSWorkspace.shared.open(url)
                     }
                 } label: {
-                    Label(String(localized: "Zgłoś błąd (GitHub)"), systemImage: "exclamationmark.triangle")
+                    Label(String(localized: "app.menu.help.report_bug", table: "App"), systemImage: "exclamationmark.triangle")
                 }
                 Divider()
                 Button {
@@ -355,36 +355,44 @@ struct macUSBApp: App {
                         NSWorkspace.shared.open(url)
                     }
                 } label: {
-                    Label(String(localized: "Wesprzyj projekt macUSB"), systemImage: "cup.and.saucer")
+                    Label(String(localized: "app.menu.help.support_project", table: "App"), systemImage: "cup.and.saucer")
                 }
                 Divider()
                 Button {
                     exportDiagnosticLogs(previousSession: false)
                 } label: {
-                    Label(String(localized: "diagnostics.export.current.menu"), systemImage: "square.and.arrow.down")
+                    Label(String(localized: "app.diagnostics.export.current.menu", table: "App"), systemImage: "square.and.arrow.down")
                 }
                 .keyboardShortcut("l", modifiers: [.option])
                 Button {
                     exportDiagnosticLogs(previousSession: true)
                 } label: {
-                    Label(String(localized: "diagnostics.export.previous.menu"), systemImage: "square.and.arrow.down")
+                    Label(String(localized: "app.diagnostics.export.previous.menu", table: "App"), systemImage: "square.and.arrow.down")
                 }
                 .disabled(!AppLogging.hasPreviousSessionLogs)
             }
             #if DEBUG
-            CommandMenu("DEBUG") {
-                Button(String(localized: "Przejdź do podsumowania (Big Sur) (2s delay)")) {
+            CommandMenu(Text(verbatim: "DEBUG")) {
+                Button {
                     NotificationCenter.default.post(name: .macUSBDebugGoToBigSurSummary, object: nil)
+                } label: {
+                    Text(verbatim: "Go to Summary (Big Sur) (2s delay)")
                 }
-                Button(String(localized: "Przejdź do podsumowania (Tiger) (2s delay)")) {
+                Button {
                     NotificationCenter.default.post(name: .macUSBDebugGoToTigerSummary, object: nil)
+                } label: {
+                    Text(verbatim: "Go to Summary (Tiger) (2s delay)")
                 }
-                Button(String(localized: "Przejdź do podsumowania Linux (2s delay)")) {
+                Button {
                     NotificationCenter.default.post(name: .macUSBDebugGoToLinuxSummary, object: nil)
+                } label: {
+                    Text(verbatim: "Go to Linux Summary (2s delay)")
                 }
                 Divider()
-                Button(String(localized: "Otwórz macUSB_temp")) {
+                Button {
                     openMacUSBTempFolderInFinder()
+                } label: {
+                    Text(verbatim: "Open macUSB_temp")
                 }
                 Button {
                     NSWorkspace.shared.open(AppLogging.diagnosticLogsDirectoryURL)
@@ -392,7 +400,7 @@ struct macUSBApp: App {
                     Text(verbatim: "Open Diagnostic Logs Folder")
                 }
                 Divider()
-                Text(String(localized: "Informacje"))
+                Text(verbatim: "Information")
                 Text(verbatim: menuState.debugCopiedDataLabel)
             }
             #endif
@@ -420,11 +428,11 @@ struct macUSBApp: App {
         savePanel.canCreateDirectories = true
         savePanel.isExtensionHidden = false
         savePanel.title = previousSession
-            ? String(localized: "diagnostics.export.previous.panel.title")
-            : String(localized: "diagnostics.export.current.panel.title")
+            ? String(localized: "app.diagnostics.export.previous.panel.title", table: "App")
+            : String(localized: "app.diagnostics.export.current.panel.title", table: "App")
         savePanel.message = previousSession
-            ? String(localized: "diagnostics.export.previous.panel.message")
-            : String(localized: "diagnostics.export.current.panel.message")
+            ? String(localized: "app.diagnostics.export.previous.panel.message", table: "App")
+            : String(localized: "app.diagnostics.export.current.panel.message", table: "App")
         guard savePanel.runModal() == .OK, let url = savePanel.url else { return }
 
         do {
@@ -438,9 +446,9 @@ struct macUSBApp: App {
             let alert = NSAlert()
             alert.icon = NSApp.applicationIconImage
             alert.alertStyle = .warning
-            alert.messageText = String(localized: "Nie udało się zapisać pliku z logami")
+            alert.messageText = String(localized: "app.diagnostics.export.failure.title", table: "App")
             alert.informativeText = error.localizedDescription
-            alert.addButton(withTitle: String(localized: "OK"))
+            alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
             alert.runModal()
         }
     }
@@ -474,9 +482,9 @@ struct macUSBApp: App {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Wyczyszczono uprawnienia dostępu do dysków zewnętrznych")
-        alert.informativeText = String(localized: "Uprawnienia aplikacji macUSB do nośników zewnętrznych zostały zresetowane. Przy kolejnej próbie tworzenia nośnika system poprosi ponownie o zgodę.")
-        alert.addButton(withTitle: String(localized: "OK"))
+        alert.messageText = String(localized: "app.external_drives.permissions.reset.success.title", table: "App")
+        alert.informativeText = String(localized: "app.external_drives.permissions.reset.success.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
         alert.runModal()
     }
 
@@ -484,16 +492,16 @@ struct macUSBApp: App {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Nie udało się wyczyścić uprawnień dostępu do dysków zewnętrznych")
+        alert.messageText = String(localized: "app.external_drives.permissions.reset.failure.title", table: "App")
         var informativeText = String.localizedStringWithFormat(
-            String(localized: "Nie udało się zresetować uprawnień dostępu do nośników zewnętrznych. Spróbuj ponownie lub uruchom ręcznie w Terminalu: tccutil reset SystemPolicyRemovableVolumes %@"),
+            String(localized: "app.external_drives.permissions.reset.failure.message", table: "App"),
             bundleId
         )
         if let details, !details.isEmpty {
             informativeText += "\n\n\(details)"
         }
         alert.informativeText = informativeText
-        alert.addButton(withTitle: String(localized: "OK"))
+        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
         alert.runModal()
     }
 
@@ -504,8 +512,9 @@ struct macUSBApp: App {
             let alert = NSAlert()
             alert.icon = NSApp.applicationIconImage
             alert.alertStyle = .warning
-            alert.messageText = String(localized: "Wybrany folder nie istnieje")
-            alert.addButton(withTitle: String(localized: "OK"))
+            alert.messageText = "The selected folder does not exist"
+            alert.informativeText = "The macUSB_temp folder has not been created or has already been removed."
+            alert.addButton(withTitle: "OK")
             alert.runModal()
             return
         }

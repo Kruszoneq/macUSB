@@ -175,9 +175,9 @@ struct ContentView: View {
         let alert = NSAlert()
         alert.alertStyle = .informational
         alert.icon = NSApp.applicationIconImage
-        alert.messageText = String(localized: "Wymagany restart aplikacji")
-        alert.informativeText = String(localized: "Aby zmienić język interfejsu we wszystkich elementach aplikacji (w tym menu i przyciskach), wymagany jest restart. Kliknij poniżej, aby uruchomić aplikację ponownie.")
-        alert.addButton(withTitle: String(localized: "Uruchom aplikację ponownie"))
+        alert.messageText = String(localized: "app.language.restart.title", table: "App")
+        alert.informativeText = String(localized: "app.language.restart.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.language.restart.action", table: "App"))
 
         if let window = NSApp.keyWindow ?? NSApp.mainWindow {
             alert.beginSheetModal(for: window) { response in

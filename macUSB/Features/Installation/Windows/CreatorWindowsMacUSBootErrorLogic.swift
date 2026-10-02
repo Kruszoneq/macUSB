@@ -7,6 +7,6 @@ extension UniversalInstallationView {
               result.failedStage == CreationProgressWindowsMapping.installMacUSBootStageKey else {
             return nil
         }
-        return String(localized: "installation.error.windows.macusboot")
+        return String(localized: "creator.windows.error.macusboot", table: "Creator")
     }
 }

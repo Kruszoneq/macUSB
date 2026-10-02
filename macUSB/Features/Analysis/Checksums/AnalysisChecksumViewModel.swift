@@ -86,7 +86,7 @@ final class AnalysisChecksumViewModel: ObservableObject {
                     )
                 }
                 await MainActor.run { [weak self] in
-                    self?.failureMessage = String(localized: "checksum.sheet.failed.description")
+                    self?.failureMessage = String(localized: "analysis.checksum.sheet.failed.description", table: "Analysis")
                     self?.phase = .failed
                     self?.checksumTask = nil
                     self?.finishOperationActivity()

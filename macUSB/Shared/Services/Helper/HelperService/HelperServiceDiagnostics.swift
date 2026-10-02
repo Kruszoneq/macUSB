@@ -17,15 +17,15 @@ extension HelperServiceManager {
     func statusDescription(_ status: SMAppService.Status) -> String {
         switch status {
         case .enabled:
-            return String(localized: "Włączony")
+            return String(localized: "app.helper.status.enabled", table: "App")
         case .notRegistered:
-            return String(localized: "Nie zarejestrowany")
+            return String(localized: "app.helper.status.not_registered", table: "App")
         case .requiresApproval:
-            return String(localized: "Wymaga zatwierdzenia")
+            return String(localized: "app.helper.status.requires_approval", table: "App")
         case .notFound:
-            return String(localized: "Nie znaleziono")
+            return String(localized: "app.helper.status.not_found", table: "App")
         @unknown default:
-            return String(localized: "Nieznany")
+            return String(localized: "app.helper.status.unknown", table: "App")
         }
     }
     func isAppInstalledInApplications() -> Bool {
@@ -60,19 +60,19 @@ extension HelperServiceManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Wymagana lokalizacja /Applications")
-        alert.informativeText = String(localized: "Aby używać helpera uprzywilejowanego, przenieś aplikację macUSB do katalogu Applications i uruchom ją ponownie.")
-        alert.addButton(withTitle: String(localized: "OK"))
+        alert.messageText = String(localized: "app.helper.location.required.title", table: "App")
+        alert.informativeText = String(localized: "app.helper.location.required.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
         presentAlert(alert)
     }
     func presentApprovalRequiredAlert(onDismiss: (() -> Void)? = nil) {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Wymagane narzędzie pomocnicze")
-        alert.informativeText = String(localized: "macUSB wymaga zezwolenia na działanie w tle, aby umożliwić zarządzanie nośnikami. Przejdź do ustawień systemowych, aby nadać wymagane uprawnienia")
-        alert.addButton(withTitle: String(localized: "Przejdź do ustawień systemowych"))
-        alert.addButton(withTitle: String(localized: "Nie teraz"))
+        alert.messageText = String(localized: "app.helper.approval.required.title", table: "App")
+        alert.informativeText = String(localized: "app.helper.approval.required.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.action.open_system_settings", table: "App"))
+        alert.addButton(withTitle: String(localized: "app.action.not_now", table: "App"))
 
         let handler: (NSApplication.ModalResponse) -> Void = { response in
             if response == .alertFirstButtonReturn {
@@ -92,18 +92,18 @@ extension HelperServiceManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Nie udało się zarejestrować helpera")
+        alert.messageText = String(localized: "app.helper.registration.failure.title", table: "App")
         alert.informativeText = error.localizedDescription
-        alert.addButton(withTitle: String(localized: "OK"))
+        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
         presentAlert(alert)
     }
     func presentAutomaticHelperUpdateFailureAlert() {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Nie udało się automatycznie zaktualizować helpera")
-        alert.informativeText = String(localized: "macUSB wykrył nową wersję aplikacji, ale automatyczna aktualizacja helpera zakończyła się błędem. Wybierz Narzędzia → Napraw helpera i uruchom naprawę ręcznie.")
-        alert.addButton(withTitle: String(localized: "Rozumiem"))
+        alert.messageText = String(localized: "app.helper.auto_update.failure.title", table: "App")
+        alert.informativeText = String(localized: "app.helper.auto_update.failure.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.action.acknowledge", table: "App"))
         presentAlert(alert)
     }
     func presentHelperTrustVerificationFailureAlert() {
@@ -114,7 +114,7 @@ extension HelperServiceManager {
             alert.alertStyle = .warning
             alert.messageText = HelperConnectionSecurityPolicy.localizedFailureTitle
             alert.informativeText = HelperConnectionSecurityPolicy.localizedFailureMessage
-            alert.addButton(withTitle: String(localized: "OK"))
+            alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
 
             let clearWindow: (NSApplication.ModalResponse) -> Void = { _ in
                 self.helperTrustVerificationAlertWindow = nil
@@ -169,9 +169,9 @@ extension HelperServiceManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = success ? .informational : .warning
-        alert.messageText = success ? String(localized: "Operacja zakończona") : String(localized: "Operacja nie powiodła się")
+        alert.messageText = success ? String(localized: "app.helper.operation.success.title", table: "App") : String(localized: "app.helper.operation.failure.title", table: "App")
         alert.informativeText = message
-        alert.addButton(withTitle: String(localized: "OK"))
+        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
         presentAlert(alert)
     }
     func presentAlert(_ alert: NSAlert) {

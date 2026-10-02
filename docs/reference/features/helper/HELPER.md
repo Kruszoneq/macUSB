@@ -118,6 +118,7 @@ Contract invariants:
 - Stage keys and status keys are treated as stable technical identifiers.
 - App-side localization rendering must stay compatible with helper payload content.
 - Helper workflow `stageTitleKey` and `statusKey` values must be localization catalog keys only (no user-facing literal strings in payload fields).
+- USB workflow presentation identifiers are `creator.*` keys shared through `HelperWorkflowLocalizationKeys.swift` and rendered from `Creator.xcstrings` by the app. The app decoder normalizes older `helper.workflow.*` identifiers, including macUSBoot phase statuses, into their current catalog keys. Workflow/stage identifiers and IPC fields retain their existing shape.
 - IPC shape changes are major helper changes and require explicit confirmation before implementation.
 - `queryCapabilities` returns `HelperCapabilitiesPayload`; a macUSBoot-compatible helper advertises `windows.macusboot.v1` only after the signed bundle resource set passes full artifact validation against names, sizes, and SHA-256 values compiled into the helper executable. The manifest and checksum file are consistency metadata and cannot authorize a different artifact. Capability versions describe functional contract compatibility; app version/build fingerprint changes remain responsible for helper re-registration.
 

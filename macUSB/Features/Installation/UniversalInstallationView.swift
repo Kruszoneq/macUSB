@@ -125,11 +125,11 @@ struct UniversalInstallationView: View {
     private var requiredPermissionsWarningMessage: String {
         switch (missingFullDiskAccess, missingHelperBackgroundApproval) {
         case (true, true):
-            return String(localized: "Nie przyznano wymaganych zgód: „Pełny dostęp do dysku” dla macUSB oraz zgody na „Działanie w tle” dla narzędzia pomocniczego. Aplikacja może nie działać poprawnie.")
+            return String(localized: "summary.permissions.warning.both", table: "Summary")
         case (true, false):
-            return String(localized: "Nie przyznano wymaganej zgody: „Pełny dostęp do dysku” dla macUSB. Aplikacja może nie działać poprawnie.")
+            return String(localized: "summary.permissions.warning.full_disk_access", table: "Summary")
         case (false, true):
-            return String(localized: "Nie przyznano wymaganej zgody na „Działanie w tle” dla narzędzia pomocniczego. Aplikacja może nie działać poprawnie.")
+            return String(localized: "summary.permissions.warning.background", table: "Summary")
         case (false, false):
             return ""
         }
@@ -169,12 +169,12 @@ struct UniversalInstallationView: View {
                 .fill(Color.secondary.opacity(0.20))
                 .frame(height: 1)
             if windowsPrerequisiteShouldBlockStart {
-                Text(String(localized: "installation.summary.windows.wimlib.divider.warning"))
+                Text(String(localized: "summary.windows.wimlib.divider.warning", table: "Summary"))
                     .font(.caption)
                     .foregroundColor(.orange)
                     .fontWeight(.semibold)
             } else {
-                Text(isRawImageWorkflow ? "Przebieg zapisu" : "Przebieg tworzenia")
+                Text(LocalizedStringKey(isRawImageWorkflow ? "summary.raw_image.title" : "summary.title"), tableName: "Summary")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -213,7 +213,7 @@ struct UniversalInstallationView: View {
                                         .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 }
                                 VStack(alignment: .leading, spacing: 3) {
-                                    Text(isRawImageWorkflow ? "Wybrany obraz" : "Wybrana wersja systemu").font(.caption).foregroundColor(.secondary)
+                                    Text(LocalizedStringKey(isRawImageWorkflow ? "summary.raw_image.selected_image.label" : "summary.selected_system.label"), tableName: "Summary").font(.caption).foregroundColor(.secondary)
                                     HStack(spacing: 8) {
                                         Text(systemName).font(.headline).foregroundColor(.primary).bold()
                                         if isBetaInstaller && !isRawImageWorkflow {
@@ -234,7 +234,7 @@ struct UniversalInstallationView: View {
                                         .foregroundColor(.secondary)
                                         .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                     VStack(alignment: .leading, spacing: 3) {
-                                        Text("Wybrany nośnik USB").font(.caption).foregroundColor(.secondary)
+                                        Text(LocalizedStringKey("summary.selected_drive.label"), tableName: "Summary").font(.caption).foregroundColor(.secondary)
                                         Text(name).font(.headline)
                                     }
                                     Spacer()
@@ -259,12 +259,12 @@ struct UniversalInstallationView: View {
                                     .foregroundColor(.accentColor)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(isRawImageWorkflow ? "Możliwy komunikat o nieczytelnym nośniku" : "Komunikat o nieczytelności nośnika w trakcie tworzenia.")
+                                    Text(LocalizedStringKey(isRawImageWorkflow ? "summary.raw_image.unreadable.title" : "summary.linux.unreadable.title"), tableName: "Summary")
                                         .font(.headline)
                                         .foregroundColor(.accentColor)
-                                    Text(isRawImageWorkflow
-                                         ? "Podczas zapisu macOS może poinformować, że nośnik jest nieczytelny. Jest to oczekiwane zachowanie. Aby kontynuować, wybierz „Ignoruj”."
-                                         : "Podczas tworzenia nośnika startowego Linux system macOS może wyświetlić komunikat: „Dołączony dysk nie jest czytelny dla tego komputera.” Jest to spodziewane zachowanie. Aby kontynuować, w tym oknie wybierz „Ignoruj”.")
+                                    Text(LocalizedStringKey(isRawImageWorkflow
+                                         ? "summary.raw_image.unreadable.description"
+                                         : "summary.linux.unreadable.description"), tableName: "Summary")
                                         .font(.subheadline)
                                         .foregroundColor(.accentColor)
                                 }
@@ -304,7 +304,7 @@ struct UniversalInstallationView: View {
                                     .foregroundColor(.orange)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Brak wymaganych zgód")
+                                    Text(LocalizedStringKey("summary.permissions.warning.title"), tableName: "Summary")
                                         .font(.headline)
                                         .foregroundColor(.orange)
                                     Text(requiredPermissionsWarningMessage)
@@ -325,12 +325,12 @@ struct UniversalInstallationView: View {
                                     .foregroundColor(.orange)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Wybrano nośnik USB 2.0")
+                                    Text(LocalizedStringKey("summary.usb_legacy.title"), tableName: "Summary")
                                         .font(.headline)
                                         .foregroundColor(.orange)
-                                    Text(isRawImageWorkflow
-                                         ? "Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces zapisu może potrwać kilkanaście minut"
-                                         : "Wybrany nośnik pracuje w starszym standardzie przesyłu danych. Proces tworzenia instalatora może potrwać kilkanaście minut")
+                                    Text(LocalizedStringKey(isRawImageWorkflow
+                                         ? "summary.raw_image.usb_legacy.description"
+                                         : "summary.usb_legacy.description"), tableName: "Summary")
                                         .font(.subheadline)
                                         .foregroundColor(.orange.opacity(0.8))
                                 }
@@ -354,41 +354,41 @@ struct UniversalInstallationView: View {
                             HStack(alignment: .top) {
                                 Image(systemName: "gearshape.2").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 8) {
-                                    Text("Przebieg procesu").font(.headline)
+                                    Text(LocalizedStringKey("summary.process.title"), tableName: "Summary").font(.headline)
                                     VStack(alignment: .leading, spacing: 4) {
                                         if isRawImageWorkflow {
-                                            Text("• Plik obrazu zostanie przygotowany")
-                                            Text("• Wybrany nośnik USB zostanie odmontowany")
-                                            Text("• Obraz zostanie zapisany na nośniku USB")
-                                            Text("• Zapis zostanie zweryfikowany")
+                                            Text(LocalizedStringKey("summary.raw_image.process.prepare"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.process.unmount"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.raw_image.process.copy"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.raw_image.process.verify"), tableName: "Summary")
                                         } else if isLinuxWorkflow {
-                                            Text("• Pliki obrazu Linux zostaną przygotowane")
-                                            Text("• Wybrany nośnik USB zostanie odmontowany")
-                                            Text("• Obraz Linux zostanie zapisany na nośniku USB")
+                                            Text(LocalizedStringKey("summary.linux.process.prepare"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.process.unmount"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.linux.process.copy"), tableName: "Summary")
                                         } else if isWindowsWorkflow {
-                                            Text("installation.summary.process.windows.prepare_source")
-                                            Text("installation.summary.process.windows.prepare_target")
-                                            Text("installation.summary.process.windows.create_and_verify")
+                                            Text(LocalizedStringKey("summary.windows.process.prepare_source"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.windows.process.prepare_target"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.windows.process.create_and_verify"), tableName: "Summary")
                                             if resolvedWindowsBootMode == .bios {
-                                                Text("installation.summary.windows.macusboot")
+                                                Text(LocalizedStringKey("summary.windows.macusboot"), tableName: "Summary")
                                             }
                                         } else if isRestoreLegacy {
-                                            Text("• Obraz z systemem zostanie skopiowany i zweryfikowany")
-                                            Text("• Nośnik USB zostanie sformatowany")
-                                            Text("• Obraz systemu zostanie przywrócony")
+                                            Text(LocalizedStringKey("summary.macos.process.verify"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.macos.process.format"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.macos.process.restore"), tableName: "Summary")
                                         } else if isPPC {
-                                            Text("• Nośnik USB zostanie odpowiednio sformatowany")
-                                            Text("• Obraz instalacyjny zostanie przywrócony")
+                                            Text(LocalizedStringKey("summary.macos.ppc.process.format"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.macos.ppc.process.restore"), tableName: "Summary")
                                         } else {
-                                            Text("• Pliki systemowe zostaną przygotowane")
-                                            Text("• Nośnik USB zostanie sformatowany")
-                                            Text("• Pliki instalacyjne zostaną skopiowane")
+                                            Text(LocalizedStringKey("summary.macos.process.prepare"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.macos.process.format"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.macos.process.copy"), tableName: "Summary")
                                             if isCatalina {
-                                                Text("• Struktura instalatora zostanie sfinalizowana")
+                                                Text(LocalizedStringKey("summary.macos.catalina.process.finalize"), tableName: "Summary")
                                             }
                                         }
                                         if !isRawImageWorkflow {
-                                            Text("installation.summary.process.cleanup_temp")
+                                            Text(LocalizedStringKey("summary.process.cleanup_temp"), tableName: "Summary")
                                         }
                                     }
                                     .font(.subheadline).foregroundColor(.secondary)
@@ -401,7 +401,7 @@ struct UniversalInstallationView: View {
                             StatusCard(tone: .neutral, density: .compact) {
                                 HStack(alignment: .center, spacing: 15) {
                                     Image(systemName: "clock").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                                    Text("Cały proces może potrwać kilka minut.").font(.subheadline).foregroundColor(.secondary)
+                                    Text(LocalizedStringKey("summary.duration.description"), tableName: "Summary").font(.subheadline).foregroundColor(.secondary)
                                     Spacer()
                                 }
                             }
@@ -416,7 +416,7 @@ struct UniversalInstallationView: View {
                                     .foregroundColor(.red)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Wystąpił błąd")
+                                    Text(LocalizedStringKey("summary.error.card.title"), tableName: "Summary")
                                         .font(.headline)
                                         .foregroundColor(.red)
                                     Text(errorMessage)
@@ -439,7 +439,7 @@ struct UniversalInstallationView: View {
                     VStack(spacing: MacUSBDesignTokens.bottomBarContentSpacing) {
                         Button(action: showStartCreationAlert) {
                             HStack {
-                                Text("Rozpocznij")
+                                Text(LocalizedStringKey("summary.action.start"), tableName: "Summary")
                                 Image(systemName: "arrow.right.circle.fill")
                             }
                             .frame(maxWidth: .infinity)
@@ -450,7 +450,7 @@ struct UniversalInstallationView: View {
 
                         Button(action: returnToAnalysisViewPreservingSelection) {
                             HStack {
-                                Text("Wróć")
+                                Text(LocalizedStringKey("summary.action.back"), tableName: "Summary")
                                 Image(systemName: "arrow.left.circle")
                             }
                             .frame(maxWidth: .infinity)
@@ -470,10 +470,10 @@ struct UniversalInstallationView: View {
                                 .foregroundColor(.orange)
                                 .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Przerywanie działania")
+                                Text(LocalizedStringKey("summary.cancelling.card.title"), tableName: "Summary")
                                     .font(.headline)
                                     .foregroundColor(.orange)
-                                Text("Proszę czekać...")
+                                Text(LocalizedStringKey("summary.wait.description"), tableName: "Summary")
                                     .font(.caption)
                                     .foregroundColor(.orange.opacity(0.8))
                             }
@@ -492,10 +492,10 @@ struct UniversalInstallationView: View {
                                 .foregroundColor(.orange)
                                 .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Proces przerwany")
+                                Text(LocalizedStringKey("summary.cancelled.card.title"), tableName: "Summary")
                                     .font(.headline)
                                     .foregroundColor(.orange)
-                                Text("Działanie przerwane przez użytkownika. Możesz zacząć od początku.")
+                                Text(LocalizedStringKey("summary.cancelled.card.description"), tableName: "Summary")
                                     .font(.caption)
                                     .foregroundColor(.orange.opacity(0.8))
                             }
@@ -510,7 +510,7 @@ struct UniversalInstallationView: View {
                         self.rootIsActive = false
                     }) {
                         HStack {
-                            Text("Zacznij od początku")
+                            Text(LocalizedStringKey("summary.action.restart"), tableName: "Summary")
                             Image(systemName: "arrow.counterclockwise")
                         }
                         .frame(maxWidth: .infinity)
@@ -527,10 +527,10 @@ struct UniversalInstallationView: View {
                                 .foregroundColor(.red)
                                 .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Odłączono nośnik USB")
+                                Text(LocalizedStringKey("summary.disconnected.title"), tableName: "Summary")
                                     .font(.headline)
                                     .foregroundColor(.red)
-                                Text("Dalsze działanie aplikacji zostało zablokowane. Aby zacząć od nowa, uruchom ponownie aplikację.")
+                                Text(LocalizedStringKey("summary.disconnected.card.description"), tableName: "Summary")
                                     .font(.caption)
                                     .foregroundColor(.red.opacity(0.8))
                             }
@@ -545,7 +545,7 @@ struct UniversalInstallationView: View {
                         self.rootIsActive = false
                     }) {
                         HStack {
-                            Text("Zacznij od początku")
+                            Text(LocalizedStringKey("summary.action.restart"), tableName: "Summary")
                             Image(systemName: "arrow.counterclockwise")
                         }
                         .frame(maxWidth: .infinity)
@@ -556,7 +556,7 @@ struct UniversalInstallationView: View {
             }
         }
         .frame(width: MacUSBDesignTokens.windowWidth, height: MacUSBDesignTokens.windowHeight)
-        .navigationTitle("Szczegóły operacji")
+        .navigationTitle(Text(LocalizedStringKey("summary.navigation.title"), tableName: "Summary"))
         .navigationBarBackButtonHidden(isTabLocked)
         .background(
             WindowAccessor_Universal { window in

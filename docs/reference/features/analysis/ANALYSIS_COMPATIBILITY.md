@@ -14,6 +14,10 @@ Windows-specific behavior details are documented in:
 
 - `docs/reference/features/analysis/WINDOWS_ANALYSIS_FLOW.md`
 
+## Localization Ownership
+
+All localized source/target selection, requirements, recognition/results, compatibility/capacity alerts, actions, transitions, and checksum presentation use `Analysis.xcstrings`. Workflow-specific keys include their family under `analysis.`; shared controls and USB requirements use universal analysis keys. The Tools-menu raw-image warning and picker belong to `App.xcstrings`. Table selection, naming, and source-language details are defined in `docs/reference/platform/LOCALIZATION_CONTRACT.md`.
+
 ## Detection Source of Truth
 
 Analysis flags are the source of truth for workflow branch selection.

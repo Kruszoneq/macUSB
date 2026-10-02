@@ -105,9 +105,9 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 
 ### Localization invariants
 
-- Source language is Polish (`pl`) in `Localizable.xcstrings`.
-- New UI copy is authored in Polish first.
-- UI state, workflow payloads, and helper transport must carry localization keys instead of prelocalized strings.
+- Source language is Polish (`pl`) in every string catalog under `macUSB/Resources/`.
+- New localized UI copy is authored in Polish first; DEBUG-only text follows the exception in `UI copy and translation rules` below.
+- Localized UI state, workflow payloads, and helper transport must carry localization keys instead of prelocalized strings.
 - Resolve a key with `String(localized:)` only at a presentation boundary where an API requires a `String`; APIs that accept localization keys should receive keys directly.
 - Helper localization keys and app-side rendering keys must remain synchronized.
 - For strings that mirror macOS system UI, notifications, or alerts, match Apple’s terminology in each language instead of inventing custom wording.
@@ -130,8 +130,15 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 
 ## UI copy and translation rules
 
-- All user-facing UI text must use localization keys.
-- For every new or modified UI text, name its semantic localization key using the `area.feature.element` format, adding more specific segments when needed. Use the same key in code and in `Localizable.xcstrings` (for example, `diagnostics.export.previous.menu`). Keep the Polish source text and all translations as catalog values, never as the key itself.
+The localization-key, source-language, catalog, and translation-review rules in this section apply to localized UI text. Text shown exclusively in DEBUG is exempt from those rules.
+
+- All user-facing UI text available outside DEBUG must use localization keys.
+- Text shown only in DEBUG must be an untranslated English literal in code, with no localization key or `.xcstrings` entry. This includes DEBUG-only controls, statuses, summary values, and alert messages. In SwiftUI, use `Text(verbatim:)` and nonlocalizing label builders so automatic extraction does not create catalog entries for these literals.
+- For every new or modified localized UI text, name its semantic localization key using the `area.feature.element` format, adding more specific segments when needed. Use the same key in code and in the string catalog assigned to that feature or workflow stage (for example, `downloader.disk_image.stage.title` in `Downloader.xcstrings`). Keep the Polish source text and all translations as catalog values, never as the key itself.
+- Select the owning catalog using the table map in `docs/reference/platform/LOCALIZATION_CONTRACT.md`. Welcome, menu actions, and their app/helper messages belong to `App.xcstrings`; analysis belongs to `Analysis.xcstrings`; pre-start USB summary, prerequisites, and confirmation belong to `Summary.xcstrings`; downloader belongs to `Downloader.xcstrings`; USB execution/progress and helper workflow presentation belong to `Creator.xcstrings`; finish/result/cleanup/ejection presentation and USB completion notifications belong to `FinishUSB.xcstrings`. Workflow-qualified and shared-key names follow the naming contract in that reference. Other areas remain in `Localizable.xcstrings` until they receive a dedicated catalog. Add future feature catalogs deliberately and update the table map with their scope.
+- Explicitly select a dedicated catalog using `table:`, `tableName:`, or a table-bearing `LocalizedStringResource`, including dynamic-key presentation boundaries and extraction anchors. A semantic key prefix does not select its table.
+- Give shared text a feature-owned copy when isolating that feature's catalog. Keep the original entry for other consumers and use a semantic key in the dedicated catalog.
+- During catalog-only migrations, copy existing wording and translations without rewriting them. When replacing a Polish source-text key with a semantic key, preserve its effective Polish source value explicitly in the destination catalog.
 - Polish is the source language for new UI copy.
 - When planning a change that introduces or modifies UI text, always include the proposed Polish and English wording.
 - During implementation, provide translations for every language supported by the application.
@@ -141,7 +148,7 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
   - correct macOS and Apple terminology,
   - consistency with the meaning and context of the UI element.
 - Before completing the task, perform a final verification of all localization keys and translations.
-- Edit `Localizable.xcstrings` in the exact target serialization format produced by Xcode: two-space indentation, spaced `"key" : value` separators, expanded multiline objects, Xcode's case-insensitive natural catalog order for string keys, lexicographically ordered locale identifiers, and no compact inline localization entries. Opening or saving the catalog in Xcode must not produce a formatting-only diff.
+- Edit every `.xcstrings` catalog in the exact target serialization format produced by Xcode: two-space indentation, spaced `"key" : value` separators, expanded multiline objects, Xcode's case-insensitive natural catalog order for string keys, lexicographically ordered locale identifiers, and no compact inline localization entries. Opening or saving the catalog in Xcode must not produce a formatting-only diff.
 - Mark an actively used localization key as `"extractionState" : "manual"` when it is intentionally resolved through dynamic indirection that Xcode string extraction cannot discover; do not accept `stale` for such a key.
 - In the post-implementation report, list every localization key created or modified together with its translation in every supported language.
 - Do not place a period at the end of banner or alert titles.

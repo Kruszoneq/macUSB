@@ -12,7 +12,7 @@ extension UniversalInstallationView {
 
         runWindowsMacUSBootPreflight { ready, message in
             guard ready else {
-                errorMessage = message ?? String(localized: "Nie udało się automatycznie odświeżyć helpera. Otwórz Narzędzia → Napraw helpera i spróbuj ponownie.")
+                errorMessage = message ?? String(localized: "summary.windows.error.helper_refresh_failed", table: "Summary")
                 finishUSBCreationOperationIfNeeded()
                 return
             }
@@ -39,10 +39,10 @@ extension UniversalInstallationView {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Ostrzeżenie o utracie danych")
-        alert.informativeText = String(localized: "Wszystkie dane na wybranym nośniku zostaną usunięte. Czy na pewno chcesz rozpocząć proces?")
-        alert.addButton(withTitle: String(localized: "Nie"))
-        alert.addButton(withTitle: String(localized: "Tak"))
+        alert.messageText = String(localized: "summary.start.alert.title", table: "Summary")
+        alert.informativeText = String(localized: "summary.start.alert.description", table: "Summary")
+        alert.addButton(withTitle: String(localized: "summary.action.no", table: "Summary"))
+        alert.addButton(withTitle: String(localized: "summary.action.yes", table: "Summary"))
 
         let completionHandler = { (response: NSApplication.ModalResponse) in
             if response == .alertSecondButtonReturn {
@@ -133,10 +133,10 @@ extension UniversalInstallationView {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Czy przerwać tworzenie nośnika?")
-        alert.informativeText = String(localized: "Nośnik USB nie będzie zdatny do rozruchu, jeśli proces zostanie zatrzymany przed zakończeniem. Konieczne będzie ponowne przygotowanie urządzenia.")
-        alert.addButton(withTitle: String(localized: "Kontynuuj"))
-        alert.addButton(withTitle: String(localized: "Przerwij"))
+        alert.messageText = String(localized: "creator.cancel.alert.title", table: "Creator")
+        alert.informativeText = String(localized: "creator.cancel.alert.description", table: "Creator")
+        alert.addButton(withTitle: String(localized: "creator.action.continue", table: "Creator"))
+        alert.addButton(withTitle: String(localized: "creator.action.stop", table: "Creator"))
 
         let completionHandler = { (response: NSApplication.ModalResponse) in
             guard response == .alertSecondButtonReturn else { return }
@@ -305,10 +305,10 @@ extension UniversalInstallationView {
     func showUSBDisconnectAlert() {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
-        alert.messageText = String(localized: "Odłączono nośnik USB")
-        alert.informativeText = String(localized: "Dalsze działanie aplikacji zostanie zablokowane")
+        alert.messageText = String(localized: "creator.disconnected.title", table: "Creator")
+        alert.informativeText = String(localized: "creator.disconnected.alert.description", table: "Creator")
         alert.alertStyle = .warning
-        alert.addButton(withTitle: String(localized: "Kontynuuj"))
+        alert.addButton(withTitle: String(localized: "creator.action.continue", table: "Creator"))
 
         let completionHandler = { (_: NSApplication.ModalResponse) in
             DispatchQueue.main.async {

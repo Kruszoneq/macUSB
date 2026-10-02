@@ -103,7 +103,7 @@ extension AnalysisLogic {
 
     func applyInvalidMacOSInstallerAppState(reason: String) {
         logMacOSError("Rejected .app as a macOS installer: \(reason)")
-        recognizedVersion = String(localized: "Nie rozpoznano instalatora")
+        recognizedVersion = String(localized: "analysis.result.unrecognized.description", table: "Analysis")
         sourceAppURL = nil
         detectedSystemIcon = nil
         isBetaInstaller = false

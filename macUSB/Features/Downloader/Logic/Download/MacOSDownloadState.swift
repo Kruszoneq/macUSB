@@ -37,42 +37,42 @@ enum DownloadFailureReason: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .unsupportedSelection:
-            return String(localized: "Wybrana pozycja nie jest wspierana w aktualnym pobieraniu")
+            return String(localized: "downloader.selection.error.unsupported", table: "Downloader")
         case let .insufficientDiskSpace(requiredMinimumBytes, availableBytes, installerBytes):
             return String(
-                format: String(localized: "Brak wolnego miejsca: wymagane minimum %@ (250%% rozmiaru instalatora %@), dostępne %@."),
+                format: String(localized: "downloader.space.error.insufficient", table: "Downloader"),
                 DownloadManifestItem.formatBytes(requiredMinimumBytes),
                 DownloadManifestItem.formatBytes(installerBytes),
                 DownloadManifestItem.formatBytes(availableBytes)
             )
         case let .sessionInitializationFailed(details):
             return String(
-                format: String(localized: "Nie udało się rozpocząć pobierania. Nie udało się przygotować sesji pobierania: %@"),
+                format: String(localized: "downloader.session.error.initialization", table: "Downloader"),
                 details
             )
         case let .downloadFailed(details):
             return String(
-                format: String(localized: "Nie udało się pobrać plików instalatora: %@"),
+                format: String(localized: "downloader.transfer.error.failed", table: "Downloader"),
                 details
             )
         case let .verificationFailed(details):
             return String(
-                format: String(localized: "Weryfikacja plików nie powiodła się: %@"),
+                format: String(localized: "downloader.verification.error.failed", table: "Downloader"),
                 details
             )
         case let .assemblyFailed(details):
             return String(
-                format: String(localized: "Nie udało się przygotować instalatora: %@"),
+                format: String(localized: "downloader.assembly.error.failed", table: "Downloader"),
                 details
             )
         case let .diskImageCreationFailed(details):
             return String(
-                format: String(localized: "downloader.disk_image.error.creation"),
+                format: String(localized: "downloader.disk_image.error.creation", table: "Downloader"),
                 details
             )
         case let .cleanupFailed(details):
             return String(
-                format: String(localized: "Usuwanie plików tymczasowych nie zostało ukończone: %@"),
+                format: String(localized: "downloader.cleanup.error.failed", table: "Downloader"),
                 details
             )
         }
@@ -135,32 +135,32 @@ final class MontereyDownloadFlowModel: ObservableObject {
     @Published var networkWarningMessage: String?
     @Published var hasExpiredButTrustedAppleSignature: Bool = false
 
-    @Published var connectionStatusText: String = String(localized: "Łączenie z serwerami Apple...")
+    @Published var connectionStatusText: String = String(localized: "downloader.connection.status.connecting", table: "Downloader")
     @Published var downloadCurrentIndex: Int = 0
     @Published var downloadTotal: Int = 0
-    @Published var downloadFileName: String = String(localized: "Oczekiwanie...")
+    @Published var downloadFileName: String = String(localized: "downloader.transfer.status.waiting", table: "Downloader")
     @Published var downloadProgress: Double = 0
     @Published var downloadSpeedText: String = "0.0 MB/s"
     @Published var downloadTransferredText: String = "0.0MB/0.0MB"
     @Published var verifyCurrentIndex: Int = 0
     @Published var verifyTotal: Int = 0
-    @Published var verifyFileName: String = String(localized: "Oczekiwanie...")
+    @Published var verifyFileName: String = String(localized: "downloader.transfer.status.waiting", table: "Downloader")
     @Published var verifyProgress: Double = 0
-    @Published var buildStatusText: String = String(localized: "Przygotowywanie instalatora...")
+    @Published var buildStatusText: String = String(localized: "downloader.assembly.status.preparing_installer", table: "Downloader")
     @Published var buildProgress: Double? = nil
     @Published var diskImageStageStatus: MacOSDiskImageStageStatus = .preparing
-    @Published var cleanupStatusText: String = String(localized: "Przygotowanie czyszczenia...")
+    @Published var cleanupStatusText: String = String(localized: "downloader.cleanup.status.preparing", table: "Downloader")
     @Published var cleanupProgress: Double = 0
     @Published var summaryTotalDownloadedText: String = "0.0 GB"
     @Published var summaryAverageSpeedText: String = "0.0 MB/s"
     @Published var summaryDurationText: String = String(
-        format: String(localized: "%02dm %02ds"),
+        format: String(localized: "downloader.summary.duration.format", table: "Downloader"),
         0,
         0
     )
-    @Published var summaryLocationText: String = String(localized: "Brak danych")
-    @Published var summaryTemporaryFilesText: String = String(localized: "Brak danych")
-    @Published var summaryCreatedFileText: String = String(localized: "Brak danych")
+    @Published var summaryLocationText: String = String(localized: "downloader.summary.value.unavailable", table: "Downloader")
+    @Published var summaryTemporaryFilesText: String = String(localized: "downloader.summary.value.unavailable", table: "Downloader")
+    @Published var summaryCreatedFileText: String = String(localized: "downloader.summary.value.unavailable", table: "Downloader")
     @Published var discoveredDownloadItems: [DownloadManifestItem] = []
     @Published var pendingDiskSpaceAlert: DiskSpaceAlertContext?
     @Published var suppressInlineFailureMessage: Bool = false
@@ -258,32 +258,32 @@ final class MontereyDownloadFlowModel: ObservableObject {
         networkWarningMessage = nil
         hasExpiredButTrustedAppleSignature = false
 
-        connectionStatusText = String(localized: "Łączenie z serwerami Apple...")
+        connectionStatusText = String(localized: "downloader.connection.status.connecting", table: "Downloader")
         downloadCurrentIndex = 0
         downloadTotal = 0
-        downloadFileName = String(localized: "Oczekiwanie...")
+        downloadFileName = String(localized: "downloader.transfer.status.waiting", table: "Downloader")
         downloadProgress = 0
         downloadSpeedText = "0.0 MB/s"
         downloadTransferredText = "0.0MB/0.0MB"
         verifyCurrentIndex = 0
         verifyTotal = 0
-        verifyFileName = String(localized: "Oczekiwanie...")
+        verifyFileName = String(localized: "downloader.transfer.status.waiting", table: "Downloader")
         verifyProgress = 0
-        buildStatusText = String(localized: "Przygotowywanie instalatora...")
+        buildStatusText = String(localized: "downloader.assembly.status.preparing_installer", table: "Downloader")
         buildProgress = nil
         diskImageStageStatus = .preparing
-        cleanupStatusText = String(localized: "Przygotowanie czyszczenia...")
+        cleanupStatusText = String(localized: "downloader.cleanup.status.preparing", table: "Downloader")
         cleanupProgress = 0
         summaryTotalDownloadedText = "0.0 GB"
         summaryAverageSpeedText = "0.0 MB/s"
         summaryDurationText = String(
-            format: String(localized: "%02dm %02ds"),
+            format: String(localized: "downloader.summary.duration.format", table: "Downloader"),
             0,
             0
         )
-        summaryLocationText = String(localized: "Brak danych")
-        summaryTemporaryFilesText = String(localized: "Brak danych")
-        summaryCreatedFileText = String(localized: "Brak danych")
+        summaryLocationText = String(localized: "downloader.summary.value.unavailable", table: "Downloader")
+        summaryTemporaryFilesText = String(localized: "downloader.summary.value.unavailable", table: "Downloader")
+        summaryCreatedFileText = String(localized: "downloader.summary.value.unavailable", table: "Downloader")
         discoveredDownloadItems = []
         pendingDiskSpaceAlert = nil
         suppressInlineFailureMessage = false

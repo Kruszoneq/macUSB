@@ -20,7 +20,7 @@ struct MacOSDownloaderWindowShellView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
             VStack(alignment: .leading, spacing: 8) {
-                Text(String(localized: "Pobieranie systemu macOS"))
+                Text(String(localized: "downloader.window.title", table: "Downloader"))
                     .font(.title3.weight(.semibold))
                 Text(managerDescriptionText)
                     .font(.body)
@@ -143,8 +143,8 @@ struct MacOSDownloaderWindowShellView: View {
 
     var closeButtonTitle: String {
         shouldConfirmCloseDuringDownload
-            ? String(localized: "Anuluj")
-            : String(localized: "Zamknij")
+            ? String(localized: "downloader.action.cancel", table: "Downloader")
+            : String(localized: "downloader.action.close", table: "Downloader")
     }
 
     var downloaderScreenTransition: AnyTransition {
@@ -155,12 +155,12 @@ struct MacOSDownloaderWindowShellView: View {
 
     var managerDescriptionText: String {
         if activeDownloadEntry == nil {
-            return String(localized: "Wybierz instalator dostępny na serwerach Apple")
+            return String(localized: "downloader.window.selection.description", table: "Downloader")
         }
         if downloadFlowModel.isFinished {
-            return String(localized: "Pobieranie zakończone. Podsumowanie jest dostępne poniżej")
+            return String(localized: "downloader.window.summary.description", table: "Downloader")
         }
-        return String(localized: "Trwa pobieranie i przygotowywanie instalatora")
+        return String(localized: "downloader.window.process.description", table: "Downloader")
     }
 
     var shouldConfirmCloseDuringDownload: Bool {
@@ -199,14 +199,14 @@ struct MacOSDownloaderWindowShellView: View {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Anulować pobieranie systemu?")
+        alert.messageText = String(localized: "downloader.cancellation.alert.title", table: "Downloader")
         if downloadFlowModel.shouldRetainSessionFilesForDebugMode() {
-            alert.informativeText = String(localized: "Po zamknięciu okna pobieranie zostanie przerwane, a pliki tymczasowe pozostaną do czasu zamknięcia aplikacji")
+            alert.informativeText = "When you close the window, the download will stop and the temporary files will remain until you close the application"
         } else {
-            alert.informativeText = String(localized: "Po zamknięciu okna pobieranie zostanie przerwane, a pliki tymczasowe zostaną usunięte")
+            alert.informativeText = String(localized: "downloader.cancellation.alert.message", table: "Downloader")
         }
-        alert.addButton(withTitle: String(localized: "Kontynuuj pobieranie"))
-        alert.addButton(withTitle: String(localized: "Anuluj pobieranie i zamknij"))
+        alert.addButton(withTitle: String(localized: "downloader.cancellation.continue.action", table: "Downloader"))
+        alert.addButton(withTitle: String(localized: "downloader.cancellation.confirm.action", table: "Downloader"))
         return alert.runModal() == .alertSecondButtonReturn
     }
 
@@ -223,15 +223,15 @@ struct MacOSDownloaderWindowShellView: View {
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
         alert.messageText = String(
-            localized: "downloader.local_installers.unrecognized_title"
+            localized: "downloader.local_installers.unrecognized_title", table: "Downloader"
         )
         alert.informativeText = String(
             format: String(
-                localized: "downloader.local_installers.unrecognized_message"
+                localized: "downloader.local_installers.unrecognized_message", table: "Downloader"
             ),
             String(logic.unrecognizedLocalInstallerCount)
         )
-        alert.addButton(withTitle: String(localized: "common.action.ok"))
+        alert.addButton(withTitle: String(localized: "downloader.local_installers.acknowledge.action", table: "Downloader"))
         alert.runModal()
     }
 
@@ -240,19 +240,19 @@ struct MacOSDownloaderWindowShellView: View {
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
         alert.messageText = String(
-            localized: "downloader.local_installers.redownload_title"
+            localized: "downloader.local_installers.redownload_title", table: "Downloader"
         )
         alert.informativeText = String(
-            localized: "downloader.local_installers.redownload_message"
+            localized: "downloader.local_installers.redownload_message", table: "Downloader"
         )
         alert.addButton(
             withTitle: String(
-                localized: "downloader.local_installers.redownload_cancel"
+                localized: "downloader.local_installers.redownload_cancel", table: "Downloader"
             )
         )
         alert.addButton(
             withTitle: String(
-                localized: "downloader.local_installers.redownload_confirm"
+                localized: "downloader.local_installers.redownload_confirm", table: "Downloader"
             )
         )
         return alert.runModal() == .alertSecondButtonReturn
@@ -263,19 +263,19 @@ struct MacOSDownloaderWindowShellView: View {
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
         alert.messageText = String(
-            localized: "downloader.intel_bootable_installer_warning.title"
+            localized: "downloader.intel_bootable_installer_warning.title", table: "Downloader"
         )
         alert.informativeText = String(
-            localized: "downloader.intel_bootable_installer_warning.message"
+            localized: "downloader.intel_bootable_installer_warning.message", table: "Downloader"
         )
         alert.addButton(
             withTitle: String(
-                localized: "downloader.intel_bootable_installer_warning.confirm"
+                localized: "downloader.intel_bootable_installer_warning.confirm", table: "Downloader"
             )
         )
         alert.addButton(
             withTitle: String(
-                localized: "downloader.intel_bootable_installer_warning.cancel"
+                localized: "downloader.intel_bootable_installer_warning.cancel", table: "Downloader"
             )
         )
         return alert.runModal() == .alertFirstButtonReturn
@@ -402,9 +402,9 @@ struct MacOSDownloaderWindowShellView: View {
     func sendDownloadCompletionNotificationIfInactive(for entry: MacOSInstallerEntry) {
         guard !NSApp.isActive else { return }
 
-        let title = String(localized: "Pobieranie zakończone")
+        let title = String(localized: "downloader.notification.completed.title", table: "Downloader")
         let body = String(
-            format: String(localized: "Pobieranie systemu %@ %@ zostało zakończone pomyślnie."),
+            format: String(localized: "downloader.notification.completed.message", table: "Downloader"),
             entry.name,
             entry.version
         )

@@ -118,6 +118,8 @@ Windows summary pre-start prerequisites:
 
 ## Helper and Privilege Invariants
 
+The complete pre-start summary, start confirmation, prerequisites, Windows configuration sheets, BIOS capability preflight error, and Rosetta UI use `Summary.xcstrings`. Execution/progress, cancellation, unmount recovery, helper titles/statuses, and raw-image progress overrides use `Creator.xcstrings`. Workflow-specific identifiers include `macos`, `windows`, `linux`, or `raw_image` under the owning stage prefix; shared controls and stages use universal identifiers. Catalog ownership and helper compatibility handling are defined in `docs/reference/platform/LOCALIZATION_CONTRACT.md`.
+
 - Privileged operations must run through helper (`SMAppService + XPC`).
 - No terminal fallback privileged execution path.
 - Stage progression shown in UI must remain deterministic.

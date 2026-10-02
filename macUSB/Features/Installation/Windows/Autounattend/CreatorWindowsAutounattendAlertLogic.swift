@@ -31,7 +31,7 @@ extension UniversalInstallationView {
         guard isWindowsWorkflow else { return true }
         guard windowsAutounattendConfiguration.canStartWorkflow else {
             logError("Windows answer-file configuration blocked start: local account display name is invalid.", category: "WindowsInstallFlow")
-            errorMessage = String(localized: "installation.summary.windows.autounattend.account_name.placeholder")
+            errorMessage = String(localized: "summary.windows.autounattend.account_name.placeholder", table: "Summary")
             return false
         }
         errorMessage = ""
@@ -52,11 +52,11 @@ extension UniversalInstallationView {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "installation.summary.windows.autounattend.conflict.title")
-        alert.informativeText = String(localized: "installation.summary.windows.autounattend.conflict.body")
-        alert.addButton(withTitle: String(localized: "installation.summary.windows.autounattend.conflict.use_existing"))
-        alert.addButton(withTitle: String(localized: "installation.summary.windows.autounattend.conflict.replace"))
-        alert.addButton(withTitle: String(localized: "installation.summary.windows.autounattend.conflict.stop"))
+        alert.messageText = String(localized: "summary.windows.autounattend.conflict.title", table: "Summary")
+        alert.informativeText = String(localized: "summary.windows.autounattend.conflict.body", table: "Summary")
+        alert.addButton(withTitle: String(localized: "summary.windows.autounattend.conflict.use_existing", table: "Summary"))
+        alert.addButton(withTitle: String(localized: "summary.windows.autounattend.conflict.replace", table: "Summary"))
+        alert.addButton(withTitle: String(localized: "summary.windows.autounattend.conflict.stop", table: "Summary"))
 
         let completionHandler = { (response: NSApplication.ModalResponse) in
             switch response {

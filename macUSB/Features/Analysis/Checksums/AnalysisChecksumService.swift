@@ -21,20 +21,20 @@ enum AnalysisChecksumError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .fileSizeUnavailable:
-            return String(localized: "checksum.error.file_size_unavailable")
+            return String(localized: "analysis.checksum.error.file_size_unavailable", table: "Analysis")
         case let .openFailed(errno):
             return String(
-                format: String(localized: "checksum.error.open_failed"),
+                format: String(localized: "analysis.checksum.error.open_failed", table: "Analysis"),
                 String(cString: strerror(errno))
             )
         case let .bufferAllocationFailed(code):
             return String(
-                format: String(localized: "checksum.error.buffer_allocation_failed"),
+                format: String(localized: "analysis.checksum.error.buffer_allocation_failed", table: "Analysis"),
                 code
             )
         case let .readFailed(errno):
             return String(
-                format: String(localized: "checksum.error.read_failed"),
+                format: String(localized: "analysis.checksum.error.read_failed", table: "Analysis"),
                 String(cString: strerror(errno))
             )
         }

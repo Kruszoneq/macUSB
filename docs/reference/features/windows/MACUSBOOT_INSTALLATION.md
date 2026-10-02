@@ -78,15 +78,15 @@ Every terminal path closes the raw descriptor and releases the Disk Arbitration 
 
 ## Progress and Diagnostics
 
-The stage key is `windows_install_macusboot`. Semantic localized phase keys are:
+The stage key is `windows_install_macusboot`. Semantic localized phase keys belong to `Creator.xcstrings` and are rendered with the `Creator` table:
 
-- `helper.workflow.windows_install_macusboot.checking_artifact`,
-- `helper.workflow.windows_install_macusboot.unmounting`,
-- `helper.workflow.windows_install_macusboot.checking_layout`,
-- `helper.workflow.windows_install_macusboot.writing_stage_two`,
-- `helper.workflow.windows_install_macusboot.writing_mbr`,
-- `helper.workflow.windows_install_macusboot.verifying`,
-- `helper.workflow.windows_install_macusboot.remounting`.
+- `creator.windows.workflow.install_macusboot.checking_artifact`,
+- `creator.windows.workflow.install_macusboot.unmounting`,
+- `creator.windows.workflow.install_macusboot.checking_layout`,
+- `creator.windows.workflow.install_macusboot.writing_stage_two`,
+- `creator.windows.workflow.install_macusboot.writing_mbr`,
+- `creator.windows.workflow.install_macusboot.verifying`,
+- `creator.windows.workflow.install_macusboot.remounting`.
 
 Live diagnostics include full logical diskutil commands with safe arguments, exit codes and bounded output, artifact identity, raw-device geometry and lifecycle, guard lifecycle, layout decisions, sync/readback phases, and remount result. Binary contents are never logged.
 During BIOS USB creation, app-side capability checks use `[USB_WINDOWS]` and forwarded macUSBoot transaction diagnostics use `[USB_WINDOWS] [HELPER]`. UEFI creation does not emit macUSBoot transaction diagnostics because it does not run that stage.

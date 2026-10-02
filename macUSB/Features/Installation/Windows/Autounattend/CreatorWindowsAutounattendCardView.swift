@@ -18,7 +18,7 @@ struct CreatorWindowsAutounattendCardView: View {
         ].filter { $0 }.count
 
         return String(
-            format: String(localized: "installation.summary.windows.autounattend.selected_count"),
+            format: String(localized: "summary.windows.autounattend.selected_count", table: "Summary"),
             selectedCount
         )
     }
@@ -33,10 +33,10 @@ struct CreatorWindowsAutounattendCardView: View {
 
                 VStack(alignment: .leading, spacing: 10) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(String(localized: "installation.summary.windows.autounattend.card.title"))
+                        Text(String(localized: "summary.windows.autounattend.card.title", table: "Summary"))
                             .font(.headline)
                             .foregroundColor(.accentColor)
-                        Text(String(localized: "installation.summary.windows.autounattend.card.body"))
+                        Text(String(localized: "summary.windows.autounattend.card.body", table: "Summary"))
                             .font(.subheadline)
                             .foregroundColor(.accentColor)
                     }
@@ -47,7 +47,7 @@ struct CreatorWindowsAutounattendCardView: View {
 
                     Button(action: { isOptionsPresented = true }) {
                         HStack {
-                            Text(String(localized: "installation.summary.windows.autounattend.configure.button"))
+                            Text(String(localized: "summary.windows.autounattend.configure.button", table: "Summary"))
                             Image(systemName: "slider.horizontal.3")
                         }
                         .frame(maxWidth: .infinity)
