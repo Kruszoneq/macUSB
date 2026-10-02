@@ -20,6 +20,7 @@ Debug helper identity must stay isolated from Release (`bundle id`, daemon plist
 - debug temp-folder helpers,
 - an `Open Diagnostic Logs Folder` menu action that opens the session-log directory in Finder,
 - debug-only downloader toggles.
+- disabled finish-screen ejection, with a verbatim `DEBUG` action label and no localization entry.
 
 The diagnostic-log folder action uses an English label without localization and appears only in Debug builds.
 

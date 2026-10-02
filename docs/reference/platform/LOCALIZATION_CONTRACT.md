@@ -29,11 +29,17 @@ The table map covers localized text; DEBUG-only English literals are outside cat
 | Catalog | Table | Scope |
 | --- | --- | --- |
 | `macUSB/Resources/Downloader.xcstrings` | `Downloader` | Downloader discovery, selection, download, verification, installer assembly, disk-image output, cleanup, summary, alerts, and completion notifications. Shared labels used by downloader have downloader-owned copies. |
-| `macUSB/Resources/Localizable.xcstrings` | `Localizable` (default) | App-wide text and areas without a dedicated catalog, including analysis, USB creation, finish, menus, and helper workflow keys. |
+| `macUSB/Resources/Creator.xcstrings` | `Creator` | USB creation summary, prerequisites, destructive confirmation, cancellation, unmount recovery, progress, and helper workflow titles/statuses for macOS, Windows, Linux, and manual raw images. Shared creator labels have creator-owned copies. |
+| `macUSB/Resources/FinishUSB.xcstrings` | `FinishUSB` | Finish result, Linux/raw-image final error cards, cleanup, duration, next-step guidance, safe/forced ejection, and USB completion notifications. Shared finish labels have finish-owned copies. |
+| `macUSB/Resources/Localizable.xcstrings` | `Localizable` (default) | App-wide text and areas without a dedicated catalog, including analysis, menus, permissions, and helper service/repair UI. |
 
-Named-table lookups use `String(localized: ..., table: "Downloader")`, `Text(..., tableName: "Downloader")`, or a `LocalizedStringResource` that carries the table. Dynamic-key rendering uses the same owning table. Automatic extraction must see the intended table at literal lookup sites; intentionally indirect keys are manually managed.
+Named-table lookups use `String(localized: ..., table: "Creator")`, `Text(..., tableName: "FinishUSB")`, or a `LocalizedStringResource` that carries the owning table. Downloader uses the same APIs with `Downloader`. Dynamic-key rendering and extraction anchors use the same owning table; intentionally indirect keys are manually managed.
 
-Catalog separation does not require changing helper IPC payloads or workflow identifiers. The app chooses the presentation table for keys received from the helper. Removing an entry from `Localizable` is safe only after its remaining consumers have been checked; copied shared entries stay available to their original consumers.
+Creator identifiers start with `creator.`. Workflow-specific copy includes `macos`, `windows`, `linux`, or `raw_image` immediately after that prefix; shared copy uses element-oriented identifiers such as `creator.action.cancel`, `creator.summary.process.unmount`, or `creator.workflow.cleanup_temp.status`. Finish follows the same distinction under `finish.`; existing Windows guidance retains `finish.nextsteps.windows.pc.*`.
+
+Helper workflow localization constants are shared between app and daemon and now emit `creator.*` identifiers. The IPC schema, workflow kinds, and technical stage identifiers remain unchanged. App-side decoding maps earlier `helper.workflow.*` title/status identifiers through `HelperWorkflowLocalizationKeys.catalogKey(for:)`, including individual macUSBoot phase statuses, before rendering them from `Creator`.
+
+Removing an entry from `Localizable` is safe only after its remaining consumers have been checked; copied shared entries stay available to their original consumers. Migrated Polish source-text keys retain their exact effective Polish value explicitly under `pl` in the destination catalog. Both USB catalogs retain the existing wording in all 13 supported languages and mark migrated entries as manually managed.
 
 ## String Catalog Serialization Policy
 

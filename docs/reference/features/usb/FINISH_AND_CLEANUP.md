@@ -23,6 +23,8 @@ Finish screen must report:
 - Standard and forced eject attempts own a USB-eject token from `diskutil` launch through the final success, unavailable, Spotlight-blocked, or failure state.
 - debug finish routes keep the eject card visible with a disabled `DEBUG` action.
 
+Result, cleanup, completion duration, guidance, ejection cards/actions, and USB completion notifications use the `FinishUSB` localization table. `LinuxWorkflowErrorMapper` carries finish-owned keys for final error cards; neutral verification mismatch/short-read keys are shared with manual raw images, while generic Linux/raw-image verification descriptions have separate identifiers. The disabled debug eject action displays a verbatim `DEBUG` literal without a catalog entry. Catalog ownership is defined in `docs/reference/platform/LOCALIZATION_CONTRACT.md`.
+
 ## Cleanup Determinism
 
 Cleanup ownership and ordering must remain deterministic.

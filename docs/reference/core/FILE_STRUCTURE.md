@@ -132,6 +132,9 @@
 
 - `macUSB/Resources/Localizable.xcstrings` — app-wide text and areas without a dedicated catalog.
 - `macUSB/Resources/Downloader.xcstrings` — downloader-owned text and feature-specific copies of shared labels, selected through the `Downloader` table.
+- `macUSB/Resources/Creator.xcstrings` — one `Creator` table for shared USB creator UI and macOS, Windows, Linux, and raw-image workflow presentation.
+- `macUSB/Resources/FinishUSB.xcstrings` — the `FinishUSB` table for results, final error cards, cleanup, guidance, ejection, and USB completion notifications.
+- `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift` — shared app/daemon workflow presentation identifiers, legacy identifier normalization, stage mapping, and `Creator` extraction anchors.
 
 ## Bundled bootloader resources
 

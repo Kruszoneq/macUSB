@@ -118,6 +118,8 @@ Windows summary pre-start prerequisites:
 
 ## Helper and Privilege Invariants
 
+Summary, start/cancel/unmount alerts, prerequisites, and progress presentation use the single `Creator` localization table for macOS, Windows, Linux, and manual raw images. Workflow-specific identifiers include their family under `creator.`; shared controls and stages use common creator identifiers. Helper titles/statuses and raw-image progress overrides resolve through this same table. Catalog ownership and compatibility handling are defined in `docs/reference/platform/LOCALIZATION_CONTRACT.md`.
+
 - Privileged operations must run through helper (`SMAppService + XPC`).
 - No terminal fallback privileged execution path.
 - Stage progression shown in UI must remain deterministic.
