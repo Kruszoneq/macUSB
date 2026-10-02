@@ -44,9 +44,9 @@ extension MacOSDownloaderWindowShellView {
             messageKey: "downloader.prerequisites.full_disk_access.message"
         )
         alert.addButton(
-            withTitle: String(localized: "downloader.prerequisites.full_disk_access.open")
+            withTitle: String(localized: "downloader.prerequisites.full_disk_access.open", table: "Downloader")
         )
-        alert.addButton(withTitle: String(localized: "Nie teraz"))
+        alert.addButton(withTitle: String(localized: "downloader.action.not_now", table: "Downloader"))
         presentPrerequisiteAlert(alert) { response in
             guard response == .alertFirstButtonReturn else { return }
             _ = FullDiskAccessPermissionManager.shared.openFullDiskAccessSettings(
@@ -61,9 +61,9 @@ extension MacOSDownloaderWindowShellView {
             messageKey: "downloader.prerequisites.background_activity.message"
         )
         alert.addButton(
-            withTitle: String(localized: "downloader.prerequisites.background_activity.open")
+            withTitle: String(localized: "downloader.prerequisites.background_activity.open", table: "Downloader")
         )
-        alert.addButton(withTitle: String(localized: "Nie teraz"))
+        alert.addButton(withTitle: String(localized: "downloader.action.not_now", table: "Downloader"))
         presentPrerequisiteAlert(alert) { response in
             guard response == .alertFirstButtonReturn else { return }
             SMAppService.openSystemSettingsLoginItems()
@@ -76,12 +76,12 @@ extension MacOSDownloaderWindowShellView {
             messageKey: "downloader.prerequisites.combined.message"
         )
         alert.addButton(
-            withTitle: String(localized: "downloader.prerequisites.combined.full_disk_access_action")
+            withTitle: String(localized: "downloader.prerequisites.combined.full_disk_access_action", table: "Downloader")
         )
         alert.addButton(
-            withTitle: String(localized: "downloader.prerequisites.combined.background_activity_action")
+            withTitle: String(localized: "downloader.prerequisites.combined.background_activity_action", table: "Downloader")
         )
-        alert.addButton(withTitle: String(localized: "Nie teraz"))
+        alert.addButton(withTitle: String(localized: "downloader.action.not_now", table: "Downloader"))
         presentPrerequisiteAlert(alert) { response in
             switch response {
             case .alertFirstButtonReturn:
@@ -102,9 +102,9 @@ extension MacOSDownloaderWindowShellView {
             messageKey: "downloader.prerequisites.full_disk_and_helper_unavailable.message"
         )
         alert.addButton(
-            withTitle: String(localized: "downloader.prerequisites.combined.full_disk_access_action")
+            withTitle: String(localized: "downloader.prerequisites.combined.full_disk_access_action", table: "Downloader")
         )
-        alert.addButton(withTitle: String(localized: "Zamknij"))
+        alert.addButton(withTitle: String(localized: "downloader.action.close", table: "Downloader"))
         presentPrerequisiteAlert(alert) { response in
             guard response == .alertFirstButtonReturn else { return }
             _ = FullDiskAccessPermissionManager.shared.openFullDiskAccessSettings(
@@ -118,7 +118,7 @@ extension MacOSDownloaderWindowShellView {
             titleKey: "downloader.prerequisites.helper_unavailable.title",
             messageKey: "downloader.prerequisites.helper_unavailable.message"
         )
-        alert.addButton(withTitle: String(localized: "Zamknij"))
+        alert.addButton(withTitle: String(localized: "downloader.action.close", table: "Downloader"))
         presentPrerequisiteAlert(alert, completion: nil)
     }
 
@@ -126,8 +126,8 @@ extension MacOSDownloaderWindowShellView {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: String.LocalizationValue(titleKey))
-        alert.informativeText = String(localized: String.LocalizationValue(messageKey))
+        alert.messageText = String(localized: String.LocalizationValue(titleKey), table: "Downloader")
+        alert.informativeText = String(localized: String.LocalizationValue(messageKey), table: "Downloader")
         return alert
     }
 

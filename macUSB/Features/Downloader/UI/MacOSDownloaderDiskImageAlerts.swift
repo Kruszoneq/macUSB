@@ -8,18 +8,18 @@ extension MacOSDownloaderWindowShellView {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "downloader.disk_image.collision.title")
+        alert.messageText = String(localized: "downloader.disk_image.collision.title", table: "Downloader")
         alert.informativeText = String(
-            format: String(localized: "downloader.disk_image.collision.message"),
+            format: String(localized: "downloader.disk_image.collision.message", table: "Downloader"),
             context.directoryURL.path,
             context.existingFileName,
             context.proposedFileName
         )
         alert.addButton(
-            withTitle: String(localized: "downloader.disk_image.collision.continue")
+            withTitle: String(localized: "downloader.disk_image.collision.continue", table: "Downloader")
         )
         alert.addButton(
-            withTitle: String(localized: "downloader.disk_image.collision.cancel")
+            withTitle: String(localized: "downloader.disk_image.collision.cancel", table: "Downloader")
         )
         return alert.runModal() == .alertFirstButtonReturn
     }
@@ -31,33 +31,33 @@ extension MacOSDownloaderWindowShellView {
 
         switch context.diskImageLocation {
         case .systemVolume:
-            alert.messageText = String(localized: "downloader.disk_image.space.system.title")
+            alert.messageText = String(localized: "downloader.disk_image.space.system.title", table: "Downloader")
             alert.informativeText = String(
-                format: String(localized: "downloader.disk_image.space.system.message"),
+                format: String(localized: "downloader.disk_image.space.system.message", table: "Downloader"),
                 context.requiredMinimumText,
                 context.availableText
             )
             alert.addButton(
-                withTitle: String(localized: "downloader.disk_image.space.return")
+                withTitle: String(localized: "downloader.disk_image.space.return", table: "Downloader")
             )
         case .destinationVolume:
-            alert.messageText = String(localized: "downloader.disk_image.space.destination.title")
+            alert.messageText = String(localized: "downloader.disk_image.space.destination.title", table: "Downloader")
             alert.informativeText = String(
-                format: String(localized: "downloader.disk_image.space.destination.message"),
+                format: String(localized: "downloader.disk_image.space.destination.message", table: "Downloader"),
                 context.requiredMinimumText,
                 context.availableText
             )
             alert.addButton(
-                withTitle: String(localized: "downloader.disk_image.space.return")
+                withTitle: String(localized: "downloader.disk_image.space.return", table: "Downloader")
             )
         case nil:
-            alert.messageText = String(localized: "Za mało miejsca na dysku")
+            alert.messageText = String(localized: "downloader.space.alert.title", table: "Downloader")
             alert.informativeText = String(
-                format: String(localized: "Aby rozpocząć pobieranie, potrzebujesz więcej wolnego miejsca na dysku.\n\nWymagane minimum: %@. Dostępne: %@.\n\nZwolnij miejsce i spróbuj ponownie."),
+                format: String(localized: "downloader.space.alert.message", table: "Downloader"),
                 context.requiredMinimumText,
                 context.availableText
             )
-            alert.addButton(withTitle: String(localized: "OK"))
+            alert.addButton(withTitle: String(localized: "downloader.action.ok", table: "Downloader"))
         }
 
         alert.runModal()
@@ -71,13 +71,13 @@ extension MacOSDownloaderWindowShellView {
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
         alert.messageText = String(
-            localized: "downloader.disk_image.folder_unavailable.title"
+            localized: "downloader.disk_image.folder_unavailable.title", table: "Downloader"
         )
         alert.informativeText = String(
-            localized: "downloader.disk_image.folder_unavailable.message"
+            localized: "downloader.disk_image.folder_unavailable.message", table: "Downloader"
         )
         alert.addButton(
-            withTitle: String(localized: "downloader.disk_image.space.return")
+            withTitle: String(localized: "downloader.disk_image.space.return", table: "Downloader")
         )
         alert.runModal()
     }

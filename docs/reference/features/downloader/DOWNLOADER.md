@@ -244,6 +244,14 @@ App-side operation tracking:
 
 ## 9. UI Contract
 
+Localization:
+- downloader-owned strings reside in `macUSB/Resources/Downloader.xcstrings`, with Polish as the source language and the same 13-language set as the app,
+- UI, localized error wrappers, discovery/download/assembly/cleanup statuses, alerts, completion notifications, and the Tools-menu entry select the `Downloader` table explicitly,
+- source-text keys have semantic `downloader.*` identifiers; source wording and existing translations remain catalog values,
+- prerequisite alert title/message keys are rendered dynamically from the same table and are manually managed for extraction,
+- shared labels and formatting strings have downloader-owned entries; their original entries remain available when other app/helper consumers use them,
+- raw helper status text and technical diagnostic details retain their existing transport contract; this catalog migration does not introduce new translations for previously untranslated helper or command output.
+
 Window:
 - fixed-width sheet from coordinator,
 - app-like liquid/glass-compatible surfaces and tokens.

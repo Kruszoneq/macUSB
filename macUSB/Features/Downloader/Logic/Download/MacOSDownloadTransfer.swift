@@ -16,12 +16,12 @@ extension MontereyDownloadFlowModel {
         for (index, item) in manifest.items.enumerated() {
             try Task.checkCancellation()
             guard let payloadURL = activeSessionPayloadURL else {
-                throw DownloadFailureReason.sessionInitializationFailed(String(localized: "Brak katalogu payload sesji"))
+                throw DownloadFailureReason.sessionInitializationFailed(String(localized: "downloader.transfer.error.missing_payload_directory", table: "Downloader"))
             }
 
             downloadCurrentIndex = index + 1
             downloadFileName = String(
-                format: String(localized: "Pobieranie pliku %@..."),
+                format: String(localized: "downloader.transfer.status.downloading_file", table: "Downloader"),
                 item.name
             )
 
@@ -168,7 +168,7 @@ final class FileDownloadTaskDelegate: NSObject, URLSessionDownloadDelegate {
             continuation?.resume(
                 throwing: DownloadFailureReason.downloadFailed(
                     String(
-                        format: String(localized: "Serwer zwrócił niepoprawny kod odpowiedzi dla %@"),
+                        format: String(localized: "downloader.transfer.error.invalid_response", table: "Downloader"),
                         fileName
                     )
                 )
@@ -198,7 +198,7 @@ final class FileDownloadTaskDelegate: NSObject, URLSessionDownloadDelegate {
             continuation?.resume(
                 throwing: DownloadFailureReason.downloadFailed(
                     String(
-                        format: String(localized: "Nie udało się zapisać pliku %@: %@"),
+                        format: String(localized: "downloader.transfer.error.file_write", table: "Downloader"),
                         fileName,
                         error.localizedDescription
                     )

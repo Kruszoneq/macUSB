@@ -3,7 +3,7 @@ import SwiftUI
 extension MacOSDownloaderWindowShellView {
     func downloaderProgressSection(for entry: MacOSInstallerEntry) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(String(localized: "Pobieranie systemu"))
+            Text(String(localized: "downloader.process.title", table: "Downloader"))
                 .font(.headline)
 
             ScrollView {
@@ -15,7 +15,11 @@ extension MacOSDownloaderWindowShellView {
 
                             VStack(alignment: .leading, spacing: 2) {
                                 HStack(spacing: 7) {
-                                    Text("\(entry.family) \(entry.version)")
+                                    Text(String(
+                                        format: String(localized: "downloader.installer.identity.format", table: "Downloader"),
+                                        entry.family,
+                                        entry.version
+                                    ))
                                         .font(.headline)
                                         .foregroundStyle(.primary)
 
@@ -50,7 +54,7 @@ extension MacOSDownloaderWindowShellView {
                                                 .foregroundStyle(.orange)
 
                                             VStack(alignment: .leading, spacing: 4) {
-                                                Text(String(localized: "Połączenie internetowe zostało utracone"))
+                                                Text(String(localized: "downloader.network.warning.title", table: "Downloader"))
                                                     .font(.subheadline.weight(.semibold))
                                                 Text(networkWarningMessage)
                                                     .font(.caption)
@@ -66,7 +70,7 @@ extension MacOSDownloaderWindowShellView {
                                    !failureMessage.isEmpty {
                                     StatusCard(tone: .warning, density: .compact) {
                                         VStack(alignment: .leading, spacing: 4) {
-                                            Text(String(localized: "Nie udało się dokończyć pobierania"))
+                                            Text(String(localized: "downloader.summary.failed.title", table: "Downloader"))
                                                 .font(.subheadline.weight(.semibold))
                                             Text(failureMessage)
                                                 .font(.caption)
@@ -114,7 +118,7 @@ extension MacOSDownloaderWindowShellView {
             Capsule()
                 .fill(Color.secondary.opacity(0.20))
                 .frame(height: 1)
-            Text(String(localized: "Etapy pobierania"))
+            Text(String(localized: "downloader.process.stages.title", table: "Downloader"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
             Capsule()
@@ -261,20 +265,20 @@ extension MacOSDownloaderWindowShellView {
     func downloadStageTitle(for stage: MontereyDownloadFlowStage) -> String {
         switch stage {
         case .connection:
-            return String(localized: "Łączenie z serwerami Apple")
+            return String(localized: "downloader.connection.stage.title", table: "Downloader")
         case .downloading:
-            return String(localized: "Pobieranie plików")
+            return String(localized: "downloader.transfer.stage.title", table: "Downloader")
         case .verifying:
-            return String(localized: "Weryfikowanie plików")
+            return String(localized: "downloader.verification.stage.title", table: "Downloader")
         case .buildingInstaller:
             return String(
-                format: String(localized: "Przygotowywanie instalatora %@"),
+                format: String(localized: "downloader.assembly.stage.title", table: "Downloader"),
                 installerFamilyLabelForBuildStage()
             )
         case .creatingDiskImage:
-            return String(localized: "downloader.disk_image.stage.title")
+            return String(localized: "downloader.disk_image.stage.title", table: "Downloader")
         case .cleanup:
-            return String(localized: "Kończenie pracy")
+            return String(localized: "downloader.cleanup.stage.title", table: "Downloader")
         }
     }
 
@@ -306,11 +310,11 @@ extension MacOSDownloaderWindowShellView {
         case .verifying:
             let fileName = downloadFlowModel.verifyFileName.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !fileName.isEmpty else { return nil }
-            if fileName == String(localized: "Oczekiwanie...") {
+            if fileName == String(localized: "downloader.transfer.status.waiting", table: "Downloader") {
                 return fileName
             }
             return String(
-                format: String(localized: "Weryfikowanie pliku %@..."),
+                format: String(localized: "downloader.verification.status.checking_file", table: "Downloader"),
                 fileName
             )
         case .buildingInstaller:
@@ -318,13 +322,13 @@ extension MacOSDownloaderWindowShellView {
         case .creatingDiskImage:
             switch downloadFlowModel.diskImageStageStatus {
             case .preparing:
-                return String(localized: "downloader.disk_image.stage.preparing")
+                return String(localized: "downloader.disk_image.stage.preparing", table: "Downloader")
             case .creating:
-                return String(localized: "downloader.disk_image.stage.creating")
+                return String(localized: "downloader.disk_image.stage.creating", table: "Downloader")
             case .removingSource:
-                return String(localized: "downloader.disk_image.stage.removing_source")
+                return String(localized: "downloader.disk_image.stage.removing_source", table: "Downloader")
             case .completed:
-                return String(localized: "downloader.disk_image.stage.completed")
+                return String(localized: "downloader.disk_image.stage.completed", table: "Downloader")
             }
         case .cleanup:
             return downloadFlowModel.cleanupStatusText
@@ -357,10 +361,10 @@ extension MacOSDownloaderWindowShellView {
         let speed = downloadFlowModel.downloadSpeedText
             .trimmingCharacters(in: .whitespacesAndNewlines)
         if speed.isEmpty {
-            return String(localized: "Szybkość pobierania: - MB/s")
+            return String(localized: "downloader.transfer.speed.unavailable", table: "Downloader")
         }
         return String(
-            format: String(localized: "Szybkość pobierania: %@"),
+            format: String(localized: "downloader.transfer.speed.format", table: "Downloader"),
             speed
         )
     }

@@ -128,9 +128,10 @@
 - `macUSBHelper/Rosetta/HelperRosettaInstaller.swift` — fixed-command, root-only Rosetta installer with bounded diagnostics.
 - `macUSBHelper/Service/HelperDiagnosticLogging.swift` — shared stage and source-tag formatting for daemon system logs.
 
-## Localization catalog
+## Localization catalogs
 
-- `macUSB/Resources/Localizable.xcstrings`
+- `macUSB/Resources/Localizable.xcstrings` — app-wide text and areas without a dedicated catalog.
+- `macUSB/Resources/Downloader.xcstrings` — downloader-owned text and feature-specific copies of shared labels, selected through the `Downloader` table.
 
 ## Bundled bootloader resources
 

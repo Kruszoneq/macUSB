@@ -28,7 +28,7 @@ final class MacOSDownloaderLogic: ObservableObject {
         if localInstallerSnapshot == nil {
             unrecognizedLocalInstallerCount = 0
         }
-        statusText = String(localized: "Łączenie z serwerami Apple...")
+        statusText = String(localized: "downloader.connection.status.connecting", table: "Downloader")
 
         AppLogging.info("Installer discovery started.", stage: .downloader, workflow: .discovery)
         AppLogging.info("Started checking available macOS/OS X installers.", stage: .downloader, workflow: .discovery)
@@ -81,7 +81,7 @@ final class MacOSDownloaderLogic: ObservableObject {
                 )
             } else {
                 statusText = String(
-                    localized: "downloader.local_installers.discovery_status"
+                    localized: "downloader.local_installers.discovery_status", table: "Downloader"
                 )
                 AppLogging.info(
                     "Started local installer discovery on opening downloader.",

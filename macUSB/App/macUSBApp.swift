@@ -265,7 +265,7 @@ struct macUSBApp: App {
                 Button {
                     MacOSDownloaderWindowManager.shared.present()
                 } label: {
-                    Label(String(localized: "Pobierz instalator macOS..."), systemImage: "square.and.arrow.down")
+                    Label(String(localized: "downloader.menu.open.title", table: "Downloader"), systemImage: "square.and.arrow.down")
                 }
                 .disabled(menuState.isDownloaderAccessBlocked)
                 Divider()
