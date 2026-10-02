@@ -125,11 +125,11 @@ struct UniversalInstallationView: View {
     private var requiredPermissionsWarningMessage: String {
         switch (missingFullDiskAccess, missingHelperBackgroundApproval) {
         case (true, true):
-            return String(localized: "creator.permissions.warning.both", table: "Creator")
+            return String(localized: "summary.permissions.warning.both", table: "Summary")
         case (true, false):
-            return String(localized: "creator.permissions.warning.full_disk_access", table: "Creator")
+            return String(localized: "summary.permissions.warning.full_disk_access", table: "Summary")
         case (false, true):
-            return String(localized: "creator.permissions.warning.background", table: "Creator")
+            return String(localized: "summary.permissions.warning.background", table: "Summary")
         case (false, false):
             return ""
         }
@@ -169,12 +169,12 @@ struct UniversalInstallationView: View {
                 .fill(Color.secondary.opacity(0.20))
                 .frame(height: 1)
             if windowsPrerequisiteShouldBlockStart {
-                Text(String(localized: "creator.windows.summary.wimlib.divider.warning", table: "Creator"))
+                Text(String(localized: "summary.windows.wimlib.divider.warning", table: "Summary"))
                     .font(.caption)
                     .foregroundColor(.orange)
                     .fontWeight(.semibold)
             } else {
-                Text(LocalizedStringKey(isRawImageWorkflow ? "creator.raw_image.summary.title" : "creator.summary.title"), tableName: "Creator")
+                Text(LocalizedStringKey(isRawImageWorkflow ? "summary.raw_image.title" : "summary.title"), tableName: "Summary")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -213,7 +213,7 @@ struct UniversalInstallationView: View {
                                         .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 }
                                 VStack(alignment: .leading, spacing: 3) {
-                                    Text(LocalizedStringKey(isRawImageWorkflow ? "creator.raw_image.selected_image.label" : "creator.summary.selected_system.label"), tableName: "Creator").font(.caption).foregroundColor(.secondary)
+                                    Text(LocalizedStringKey(isRawImageWorkflow ? "summary.raw_image.selected_image.label" : "summary.selected_system.label"), tableName: "Summary").font(.caption).foregroundColor(.secondary)
                                     HStack(spacing: 8) {
                                         Text(systemName).font(.headline).foregroundColor(.primary).bold()
                                         if isBetaInstaller && !isRawImageWorkflow {
@@ -234,7 +234,7 @@ struct UniversalInstallationView: View {
                                         .foregroundColor(.secondary)
                                         .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                     VStack(alignment: .leading, spacing: 3) {
-                                        Text(LocalizedStringKey("creator.summary.selected_drive.label"), tableName: "Creator").font(.caption).foregroundColor(.secondary)
+                                        Text(LocalizedStringKey("summary.selected_drive.label"), tableName: "Summary").font(.caption).foregroundColor(.secondary)
                                         Text(name).font(.headline)
                                     }
                                     Spacer()
@@ -259,12 +259,12 @@ struct UniversalInstallationView: View {
                                     .foregroundColor(.accentColor)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(LocalizedStringKey(isRawImageWorkflow ? "creator.raw_image.summary.unreadable.title" : "creator.linux.summary.unreadable.title"), tableName: "Creator")
+                                    Text(LocalizedStringKey(isRawImageWorkflow ? "summary.raw_image.unreadable.title" : "summary.linux.unreadable.title"), tableName: "Summary")
                                         .font(.headline)
                                         .foregroundColor(.accentColor)
                                     Text(LocalizedStringKey(isRawImageWorkflow
-                                         ? "creator.raw_image.summary.unreadable.description"
-                                         : "creator.linux.summary.unreadable.description"), tableName: "Creator")
+                                         ? "summary.raw_image.unreadable.description"
+                                         : "summary.linux.unreadable.description"), tableName: "Summary")
                                         .font(.subheadline)
                                         .foregroundColor(.accentColor)
                                 }
@@ -304,7 +304,7 @@ struct UniversalInstallationView: View {
                                     .foregroundColor(.orange)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(LocalizedStringKey("creator.permissions.warning.title"), tableName: "Creator")
+                                    Text(LocalizedStringKey("summary.permissions.warning.title"), tableName: "Summary")
                                         .font(.headline)
                                         .foregroundColor(.orange)
                                     Text(requiredPermissionsWarningMessage)
@@ -325,12 +325,12 @@ struct UniversalInstallationView: View {
                                     .foregroundColor(.orange)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(LocalizedStringKey("creator.summary.usb_legacy.title"), tableName: "Creator")
+                                    Text(LocalizedStringKey("summary.usb_legacy.title"), tableName: "Summary")
                                         .font(.headline)
                                         .foregroundColor(.orange)
                                     Text(LocalizedStringKey(isRawImageWorkflow
-                                         ? "creator.raw_image.summary.usb_legacy.description"
-                                         : "creator.summary.usb_legacy.description"), tableName: "Creator")
+                                         ? "summary.raw_image.usb_legacy.description"
+                                         : "summary.usb_legacy.description"), tableName: "Summary")
                                         .font(.subheadline)
                                         .foregroundColor(.orange.opacity(0.8))
                                 }
@@ -354,41 +354,41 @@ struct UniversalInstallationView: View {
                             HStack(alignment: .top) {
                                 Image(systemName: "gearshape.2").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 8) {
-                                    Text(LocalizedStringKey("creator.summary.process.title"), tableName: "Creator").font(.headline)
+                                    Text(LocalizedStringKey("summary.process.title"), tableName: "Summary").font(.headline)
                                     VStack(alignment: .leading, spacing: 4) {
                                         if isRawImageWorkflow {
-                                            Text(LocalizedStringKey("creator.raw_image.summary.process.prepare"), tableName: "Creator")
-                                            Text(LocalizedStringKey("creator.summary.process.unmount"), tableName: "Creator")
-                                            Text(LocalizedStringKey("creator.raw_image.summary.process.copy"), tableName: "Creator")
-                                            Text(LocalizedStringKey("creator.raw_image.summary.process.verify"), tableName: "Creator")
+                                            Text(LocalizedStringKey("summary.raw_image.process.prepare"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.process.unmount"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.raw_image.process.copy"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.raw_image.process.verify"), tableName: "Summary")
                                         } else if isLinuxWorkflow {
-                                            Text(LocalizedStringKey("creator.linux.summary.process.prepare"), tableName: "Creator")
-                                            Text(LocalizedStringKey("creator.summary.process.unmount"), tableName: "Creator")
-                                            Text(LocalizedStringKey("creator.linux.summary.process.copy"), tableName: "Creator")
+                                            Text(LocalizedStringKey("summary.linux.process.prepare"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.process.unmount"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.linux.process.copy"), tableName: "Summary")
                                         } else if isWindowsWorkflow {
-                                            Text(LocalizedStringKey("creator.windows.summary.process.prepare_source"), tableName: "Creator")
-                                            Text(LocalizedStringKey("creator.windows.summary.process.prepare_target"), tableName: "Creator")
-                                            Text(LocalizedStringKey("creator.windows.summary.process.create_and_verify"), tableName: "Creator")
+                                            Text(LocalizedStringKey("summary.windows.process.prepare_source"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.windows.process.prepare_target"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.windows.process.create_and_verify"), tableName: "Summary")
                                             if resolvedWindowsBootMode == .bios {
-                                                Text(LocalizedStringKey("creator.windows.summary.macusboot"), tableName: "Creator")
+                                                Text(LocalizedStringKey("summary.windows.macusboot"), tableName: "Summary")
                                             }
                                         } else if isRestoreLegacy {
-                                            Text(LocalizedStringKey("creator.macos.summary.process.verify"), tableName: "Creator")
-                                            Text(LocalizedStringKey("creator.macos.summary.process.format"), tableName: "Creator")
-                                            Text(LocalizedStringKey("creator.macos.summary.process.restore"), tableName: "Creator")
+                                            Text(LocalizedStringKey("summary.macos.process.verify"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.macos.process.format"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.macos.process.restore"), tableName: "Summary")
                                         } else if isPPC {
-                                            Text(LocalizedStringKey("creator.macos.ppc.summary.process.format"), tableName: "Creator")
-                                            Text(LocalizedStringKey("creator.macos.ppc.summary.process.restore"), tableName: "Creator")
+                                            Text(LocalizedStringKey("summary.macos.ppc.process.format"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.macos.ppc.process.restore"), tableName: "Summary")
                                         } else {
-                                            Text(LocalizedStringKey("creator.macos.summary.process.prepare"), tableName: "Creator")
-                                            Text(LocalizedStringKey("creator.macos.summary.process.format"), tableName: "Creator")
-                                            Text(LocalizedStringKey("creator.macos.summary.process.copy"), tableName: "Creator")
+                                            Text(LocalizedStringKey("summary.macos.process.prepare"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.macos.process.format"), tableName: "Summary")
+                                            Text(LocalizedStringKey("summary.macos.process.copy"), tableName: "Summary")
                                             if isCatalina {
-                                                Text(LocalizedStringKey("creator.macos.catalina.summary.process.finalize"), tableName: "Creator")
+                                                Text(LocalizedStringKey("summary.macos.catalina.process.finalize"), tableName: "Summary")
                                             }
                                         }
                                         if !isRawImageWorkflow {
-                                            Text(LocalizedStringKey("creator.summary.process.cleanup_temp"), tableName: "Creator")
+                                            Text(LocalizedStringKey("summary.process.cleanup_temp"), tableName: "Summary")
                                         }
                                     }
                                     .font(.subheadline).foregroundColor(.secondary)
@@ -401,7 +401,7 @@ struct UniversalInstallationView: View {
                             StatusCard(tone: .neutral, density: .compact) {
                                 HStack(alignment: .center, spacing: 15) {
                                     Image(systemName: "clock").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                                    Text(LocalizedStringKey("creator.summary.duration.description"), tableName: "Creator").font(.subheadline).foregroundColor(.secondary)
+                                    Text(LocalizedStringKey("summary.duration.description"), tableName: "Summary").font(.subheadline).foregroundColor(.secondary)
                                     Spacer()
                                 }
                             }
@@ -416,7 +416,7 @@ struct UniversalInstallationView: View {
                                     .foregroundColor(.red)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(LocalizedStringKey("creator.error.card.title"), tableName: "Creator")
+                                    Text(LocalizedStringKey("summary.error.card.title"), tableName: "Summary")
                                         .font(.headline)
                                         .foregroundColor(.red)
                                     Text(errorMessage)
@@ -439,7 +439,7 @@ struct UniversalInstallationView: View {
                     VStack(spacing: MacUSBDesignTokens.bottomBarContentSpacing) {
                         Button(action: showStartCreationAlert) {
                             HStack {
-                                Text(LocalizedStringKey("creator.action.start"), tableName: "Creator")
+                                Text(LocalizedStringKey("summary.action.start"), tableName: "Summary")
                                 Image(systemName: "arrow.right.circle.fill")
                             }
                             .frame(maxWidth: .infinity)
@@ -450,7 +450,7 @@ struct UniversalInstallationView: View {
 
                         Button(action: returnToAnalysisViewPreservingSelection) {
                             HStack {
-                                Text(LocalizedStringKey("creator.action.back"), tableName: "Creator")
+                                Text(LocalizedStringKey("summary.action.back"), tableName: "Summary")
                                 Image(systemName: "arrow.left.circle")
                             }
                             .frame(maxWidth: .infinity)
@@ -470,10 +470,10 @@ struct UniversalInstallationView: View {
                                 .foregroundColor(.orange)
                                 .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(LocalizedStringKey("creator.cancelling.card.title"), tableName: "Creator")
+                                Text(LocalizedStringKey("summary.cancelling.card.title"), tableName: "Summary")
                                     .font(.headline)
                                     .foregroundColor(.orange)
-                                Text(LocalizedStringKey("creator.wait.description"), tableName: "Creator")
+                                Text(LocalizedStringKey("summary.wait.description"), tableName: "Summary")
                                     .font(.caption)
                                     .foregroundColor(.orange.opacity(0.8))
                             }
@@ -492,10 +492,10 @@ struct UniversalInstallationView: View {
                                 .foregroundColor(.orange)
                                 .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(LocalizedStringKey("creator.cancelled.card.title"), tableName: "Creator")
+                                Text(LocalizedStringKey("summary.cancelled.card.title"), tableName: "Summary")
                                     .font(.headline)
                                     .foregroundColor(.orange)
-                                Text(LocalizedStringKey("creator.cancelled.card.description"), tableName: "Creator")
+                                Text(LocalizedStringKey("summary.cancelled.card.description"), tableName: "Summary")
                                     .font(.caption)
                                     .foregroundColor(.orange.opacity(0.8))
                             }
@@ -510,7 +510,7 @@ struct UniversalInstallationView: View {
                         self.rootIsActive = false
                     }) {
                         HStack {
-                            Text(LocalizedStringKey("creator.action.restart"), tableName: "Creator")
+                            Text(LocalizedStringKey("summary.action.restart"), tableName: "Summary")
                             Image(systemName: "arrow.counterclockwise")
                         }
                         .frame(maxWidth: .infinity)
@@ -527,10 +527,10 @@ struct UniversalInstallationView: View {
                                 .foregroundColor(.red)
                                 .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(LocalizedStringKey("creator.disconnected.title"), tableName: "Creator")
+                                Text(LocalizedStringKey("summary.disconnected.title"), tableName: "Summary")
                                     .font(.headline)
                                     .foregroundColor(.red)
-                                Text(LocalizedStringKey("creator.disconnected.card.description"), tableName: "Creator")
+                                Text(LocalizedStringKey("summary.disconnected.card.description"), tableName: "Summary")
                                     .font(.caption)
                                     .foregroundColor(.red.opacity(0.8))
                             }
@@ -545,7 +545,7 @@ struct UniversalInstallationView: View {
                         self.rootIsActive = false
                     }) {
                         HStack {
-                            Text(LocalizedStringKey("creator.action.restart"), tableName: "Creator")
+                            Text(LocalizedStringKey("summary.action.restart"), tableName: "Summary")
                             Image(systemName: "arrow.counterclockwise")
                         }
                         .frame(maxWidth: .infinity)
@@ -556,7 +556,7 @@ struct UniversalInstallationView: View {
             }
         }
         .frame(width: MacUSBDesignTokens.windowWidth, height: MacUSBDesignTokens.windowHeight)
-        .navigationTitle(Text(LocalizedStringKey("creator.summary.navigation.title"), tableName: "Creator"))
+        .navigationTitle(Text(LocalizedStringKey("summary.navigation.title"), tableName: "Summary"))
         .navigationBarBackButtonHidden(isTabLocked)
         .background(
             WindowAccessor_Universal { window in

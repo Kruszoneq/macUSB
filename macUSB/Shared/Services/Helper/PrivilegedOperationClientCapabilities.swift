@@ -27,7 +27,7 @@ extension PrivilegedOperationClient {
             finishOnce(.failure(NSError(
                 domain: "macUSB",
                 code: 2,
-                userInfo: [NSLocalizedDescriptionKey: String(localized: "Nie udało się uzyskać połączenia XPC z helperem.")]
+                userInfo: [NSLocalizedDescriptionKey: String(localized: "app.helper.xpc.connection_failed.message", table: "App")]
             )))
             return
         }
@@ -37,7 +37,7 @@ extension PrivilegedOperationClient {
             finishOnce(.failure(NSError(
                 domain: "macUSB",
                 code: 3,
-                userInfo: [NSLocalizedDescriptionKey: String(localized: "Przekroczono czas oczekiwania na odpowiedź helpera XPC.")]
+                userInfo: [NSLocalizedDescriptionKey: String(localized: "app.helper.xpc.response_timeout.message", table: "App")]
             )))
         }
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 5, execute: timeout)

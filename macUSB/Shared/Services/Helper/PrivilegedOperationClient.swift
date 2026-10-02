@@ -72,7 +72,7 @@ final class PrivilegedOperationClient: NSObject {
         guard let proxy = helperProxy(presentsTrustFailureAlert: true, onError: { message in
             failStart(message)
         }) else {
-            failStart(String(localized: "Nie udało się uzyskać połączenia XPC z helperem."))
+            failStart(String(localized: "app.helper.xpc.connection_failed.message", table: "App"))
             return
         }
 
@@ -81,7 +81,7 @@ final class PrivilegedOperationClient: NSObject {
             requestData = try HelperXPCCodec.encode(request)
         } catch {
             let message = String(
-                format: String(localized: "Nie udało się zakodować żądania helpera: %@"),
+                format: String(localized: "app.helper.xpc.encoding_failed.message", table: "App"),
                 error.localizedDescription
             )
             failStart(message)
@@ -92,7 +92,7 @@ final class PrivilegedOperationClient: NSObject {
             self?.resetConnection()
             DispatchQueue.main.async {
                 finishOnce {
-                    onStartError(String(localized: "Przekroczono czas oczekiwania na odpowiedź helpera XPC."))
+                    onStartError(String(localized: "app.helper.xpc.response_timeout.message", table: "App"))
                 }
             }
         }
@@ -119,7 +119,7 @@ final class PrivilegedOperationClient: NSObject {
                         self?.lock.lock()
                         self?.pendingWorkflowLogWorkflow = nil
                         self?.lock.unlock()
-                        onStartError(String(localized: "Helper nie zwrócił identyfikatora zadania."))
+                        onStartError(String(localized: "app.helper.xpc.task_identifier_missing.message", table: "App"))
                         return
                     }
 
@@ -191,7 +191,7 @@ final class PrivilegedOperationClient: NSObject {
         guard let proxy = helperProxy(presentsTrustFailureAlert: true, onError: { message in
             failStart(message)
         }) else {
-            failStart(String(localized: "Nie udało się uzyskać połączenia XPC z helperem."))
+            failStart(String(localized: "app.helper.xpc.connection_failed.message", table: "App"))
             return
         }
 
@@ -207,7 +207,7 @@ final class PrivilegedOperationClient: NSObject {
             self?.resetConnection()
             DispatchQueue.main.async {
                 finishOnce {
-                    onStartError(String(localized: "Przekroczono czas oczekiwania na odpowiedź helpera XPC."))
+                    onStartError(String(localized: "app.helper.xpc.response_timeout.message", table: "App"))
                 }
             }
         }
@@ -229,7 +229,7 @@ final class PrivilegedOperationClient: NSObject {
                     }
 
                     guard let workflowID = workflowID as String?, !workflowID.isEmpty else {
-                        onStartError(String(localized: "Helper nie zwrócił identyfikatora zadania."))
+                        onStartError(String(localized: "app.helper.xpc.task_identifier_missing.message", table: "App"))
                         return
                     }
 
@@ -283,7 +283,7 @@ final class PrivilegedOperationClient: NSObject {
         guard let proxy = helperProxy(presentsTrustFailureAlert: true, onError: { message in
             fail(message)
         }) else {
-            fail(String(localized: "Nie udało się uzyskać połączenia XPC z helperem."))
+            fail(String(localized: "app.helper.xpc.connection_failed.message", table: "App"))
             return
         }
 
@@ -359,7 +359,7 @@ final class PrivilegedOperationClient: NSObject {
         guard let proxy = helperProxy(presentsTrustFailureAlert: presentsTrustFailureAlert, onError: { message in
             failHealth(message)
         }) else {
-            failHealth(String(localized: "Nie udało się utworzyć proxy XPC helpera."))
+            failHealth(String(localized: "app.helper.xpc.proxy_failed.message", table: "App"))
             return
         }
 
@@ -368,7 +368,7 @@ final class PrivilegedOperationClient: NSObject {
             DispatchQueue.main.async {
                 finishOnce(
                     false,
-                    "\(String(localized: "Timeout połączenia XPC z helperem")) (limit: \(String(format: "%.1f", timeout)) s)"
+                    "\(String(localized: "app.helper.xpc.connection_timeout.message", table: "App")) (limit: \(String(format: "%.1f", timeout)) s)"
                 )
             }
         }
@@ -452,7 +452,7 @@ final class PrivilegedOperationClient: NSObject {
                 }
 
                 let message = String(
-                    format: String(localized: "Błąd połączenia z helperem: %@"),
+                    format: String(localized: "app.helper.xpc.connection_error.message", table: "App"),
                     self.diagnosticErrorDescription(for: error)
                 )
                 onError(message)
@@ -460,7 +460,7 @@ final class PrivilegedOperationClient: NSObject {
         }
         guard let typedProxy = proxy as? PrivilegedHelperToolXPCProtocol else {
             DispatchQueue.main.async {
-                onError(String(localized: "Nie udało się utworzyć proxy XPC helpera."))
+                onError(String(localized: "app.helper.xpc.proxy_failed.message", table: "App"))
             }
             return nil
         }
@@ -487,10 +487,10 @@ final class PrivilegedOperationClient: NSObject {
         newConnection.exportedInterface = NSXPCInterface(with: PrivilegedHelperClientXPCProtocol.self)
         newConnection.exportedObject = self
         newConnection.invalidationHandler = { [weak self] in
-            self?.handleConnectionInvalidation(String(localized: "Połączenie z helperem zostało unieważnione."))
+            self?.handleConnectionInvalidation(String(localized: "app.helper.xpc.connection_invalidated.message", table: "App"))
         }
         newConnection.interruptionHandler = { [weak self] in
-            self?.handleConnectionInvalidation(String(localized: "Połączenie z helperem zostało przerwane."))
+            self?.handleConnectionInvalidation(String(localized: "app.helper.xpc.connection_interrupted.message", table: "App"))
         }
         newConnection.resume()
         connection = newConnection
@@ -587,7 +587,7 @@ final class PrivilegedOperationClient: NSObject {
         let euid = nsString.substring(with: match.range(at: 2))
         let pid = nsString.substring(with: match.range(at: 3))
         return String(
-            format: String(localized: "Helper odpowiada poprawnie (uid=%@, euid=%@, pid=%@)"),
+            format: String(localized: "app.helper.xpc.health.identity", table: "App"),
             uid,
             euid,
             pid

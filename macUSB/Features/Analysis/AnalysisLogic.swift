@@ -351,7 +351,7 @@ extension AnalysisLogic {
         if let timeoutReason {
             logError(timeoutReason)
         }
-        recognizedVersion = String(localized: "Nie rozpoznano instalatora")
+        recognizedVersion = String(localized: "analysis.result.unrecognized.description", table: "Analysis")
         usbTargetCapacityRequirement = nil
         shouldShowSourceSizeUnavailableAlert = false
         sourceAppURL = nil

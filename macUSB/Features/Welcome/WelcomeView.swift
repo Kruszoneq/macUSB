@@ -32,7 +32,7 @@ struct WelcomeView: View {
                     .frame(width: 128, height: 128)
             }
 
-            Text(MacUSBBranding.appName)
+            Text(verbatim: MacUSBBranding.appName)
                 .font(.system(size: 40 * MacUSBDesignTokens.headlineScale(for: visualMode), weight: .semibold))
             
             // Opis z obsługą tłumaczeń
@@ -51,7 +51,7 @@ struct WelcomeView: View {
                 navigateToAnalysis = true
             } label: {
                 HStack {
-                    Text("Rozpocznij") // Klucz do tłumaczenia
+                    Text("app.welcome.action.start", tableName: "App") // Klucz do tłumaczenia
                         .font(.headline)
                         .padding(.vertical, 8)
                         .padding(.horizontal, 30)
@@ -66,10 +66,10 @@ struct WelcomeView: View {
             HStack {
                 Spacer()
                 HStack(spacing: 6) {
-                    Text("macUSB by Kruszoneq")
-                    Text("•")
+                    Text("app.welcome.footer.credit", tableName: "App")
+                    Text(verbatim: "•")
                     Link(destination: supportProjectURL) {
-                        Text(String(localized: "welcome.footer.support_project"))
+                        Text(String(localized: "app.welcome.footer.support_project", table: "App"))
                             .foregroundColor(.accentColor)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
@@ -93,7 +93,7 @@ struct WelcomeView: View {
             .padding(.bottom, 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .navigationTitle("Start")
+        .navigationTitle(Text("app.welcome.navigation.title", tableName: "App"))
         .background(
             NavigationLink(
                 destination: SystemAnalysisView(isTabLocked: $dummyLock),
@@ -153,12 +153,12 @@ struct WelcomeView: View {
                             let alert = NSAlert()
                             alert.icon = NSApplication.shared.applicationIconImage
                             alert.alertStyle = .informational
-                            alert.messageText = String(localized: "Dostępna aktualizacja!")
-                            let remoteVersionLine = String(localized: "Dostępna jest nowa wersja: \(remoteVersion). Zalecamy aktualizację!")
-                            let currentVersionLine = String(localized: "Aktualnie uruchomiona wersja: \(currentVersion)")
+                            alert.messageText = String(localized: "app.update.available.title", table: "App")
+                            let remoteVersionLine = String(format: String(localized: "app.update.available.message", table: "App"), remoteVersion)
+                            let currentVersionLine = String(format: String(localized: "app.update.current_version", table: "App"), currentVersion)
                             alert.informativeText = "\(remoteVersionLine)\n\(currentVersionLine)"
-                            alert.addButton(withTitle: String(localized: "Pobierz"))
-                            alert.addButton(withTitle: String(localized: "Ignoruj"))
+                            alert.addButton(withTitle: String(localized: "app.update.action.download", table: "App"))
+                            alert.addButton(withTitle: String(localized: "app.update.action.ignore", table: "App"))
                             let response = alert.runModal()
                             if response == .alertFirstButtonReturn, let url = URL(string: downloadLink) {
                                 NSWorkspace.shared.open(url)

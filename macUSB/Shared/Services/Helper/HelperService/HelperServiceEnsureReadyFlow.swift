@@ -46,7 +46,7 @@ extension HelperServiceManager {
                 }
             } catch {
                 self.reportHelperReadinessEvent("Forced helper reload failed: \(error.localizedDescription)")
-                let fallback = String(localized: "Nie udało się automatycznie odświeżyć helpera. Otwórz Narzędzia → Napraw helpera i spróbuj ponownie.")
+                let fallback = String(localized: "app.helper.reload.failure.message", table: "App")
                 let mergedMessage = "\(fallback) (\(error.localizedDescription))"
                 DispatchQueue.main.async {
                     completion(false, mergedMessage)
@@ -57,7 +57,7 @@ extension HelperServiceManager {
     func ensureReadyForPrivilegedWork(interactive: Bool, completion: @escaping (Bool, String?) -> Void) {
         reportHelperReadinessEvent("Checking helper startup requirements (interactive=\(interactive ? "yes" : "no")).")
         guard isLocationRequirementSatisfied() else {
-            let message = String(localized: "Aby uruchomić helper systemowy, aplikacja musi znajdować się w katalogu Applications.")
+            let message = String(localized: "app.helper.location.required.detail", table: "App")
             reportHelperReadinessEvent("Application location requirement not met.")
             if interactive {
                 presentMoveToApplicationsAlert()
@@ -110,7 +110,7 @@ extension HelperServiceManager {
             }
             finalizeEnsureRequests(
                 ready: false,
-                message: String(localized: "Helper wymaga zatwierdzenia w Ustawieniach systemowych.")
+                message: String(localized: "app.helper.approval.required.detail", table: "App")
             )
 
         case .notRegistered, .notFound:
@@ -121,7 +121,7 @@ extension HelperServiceManager {
 
         @unknown default:
             reportHelperReadinessEvent("Unknown helper status detected.")
-            finalizeEnsureRequests(ready: false, message: String(localized: "Nieznany status helpera."))
+            finalizeEnsureRequests(ready: false, message: String(localized: "app.helper.status.unknown.message", table: "App"))
         }
     }
     func registerAndValidate(interactive: Bool, completion: @escaping EnsureCompletion) {
@@ -145,9 +145,9 @@ extension HelperServiceManager {
 
             if isLikelyBackgroundTaskPolicyBlock(error) {
                 let details = diagnosticErrorDescription(for: error)
-                let guidance = String(localized: "System blokuje rejestrację helpera (Background Task Management). Usuń stare wpisy macUSB z „Login Items / Allow in the Background”, uruchom `sudo sfltool resetbtm`, uruchom ponownie macOS i uruchom tylko wersję z /Applications.")
+                let guidance = String(localized: "app.helper.registration.policy_block.message", table: "App")
                 reportHelperReadinessEvent("BTM block detected during register(): \(details)")
-                completion(false, "\(guidance) Szczegóły: \(details)")
+                completion(false, "\(guidance) \(String(format: String(localized: "app.helper.status.details", table: "App"), details))")
                 return
             }
 
@@ -175,7 +175,7 @@ extension HelperServiceManager {
                     )
                     completion(
                         false,
-                        String(localized: "System zablokował rejestrację helpera z uruchomienia Xcode. Uruchom raz aplikację z katalogu Applications, zatwierdź działanie helpera w tle, a następnie wróć do testów w Xcode. Szczegóły XPC: \(details)")
+                        "The system blocked helper registration from Xcode. Launch the app once from Applications, approve the helper’s background activity, then return to testing in Xcode. XPC details: \(details)"
                     )
                 }
                 return
@@ -213,13 +213,13 @@ extension HelperServiceManager {
             if interactive {
                 presentApprovalRequiredAlert()
             }
-            completion(false, String(localized: "Helper został zarejestrowany, ale wymaga zatwierdzenia przez użytkownika."))
+            completion(false, String(localized: "app.helper.registration.requires_approval.message", table: "App"))
         case .notRegistered, .notFound:
             reportHelperReadinessEvent("Helper is still inactive after registration.")
-            completion(false, String(localized: "Nie udało się aktywować helpera."))
+            completion(false, String(localized: "app.helper.registration.activation_failed.message", table: "App"))
         @unknown default:
             reportHelperReadinessEvent("Unknown helper status after registration.")
-            completion(false, String(localized: "Nieznany status helpera po rejestracji."))
+            completion(false, String(localized: "app.helper.registration.unknown_status.message", table: "App"))
         }
     }
     func validateEnabledServiceHealth(
@@ -243,7 +243,7 @@ extension HelperServiceManager {
             self.reportHelperReadinessEvent("XPC health check failed.", isError: true)
 
             guard allowRecovery else {
-                completion(false, "Helper jest włączony, ale XPC nie odpowiada: \(details)")
+                completion(false, "\(String(localized: "app.helper.status.failure.message", table: "App")) \(String(format: String(localized: "app.helper.status.details", table: "App"), details))")
                 return
             }
 
@@ -272,7 +272,7 @@ extension HelperServiceManager {
 
                     self.recoverRegistrationAfterHealthFailure(
                         interactive: interactive,
-                        healthDetails: "\(details). Po resecie XPC: \(retryDetails)",
+                        healthDetails: "\(details). After XPC reset: \(retryDetails)",
                         completion: completion
                     )
                 }
@@ -318,7 +318,7 @@ extension HelperServiceManager {
                                 )
                                 completion(
                                     false,
-                                    "Helper został ponownie zarejestrowany, ale XPC nadal nie działa: \(recoveredDetails). Poprzedni błąd: \(healthDetails)"
+                                    "\(String(localized: "app.helper.status.failure.message", table: "App")) \(String(format: String(localized: "app.helper.status.details", table: "App"), "\(recoveredDetails). Previous error: \(healthDetails)"))"
                                 )
                             }
                         }
@@ -389,7 +389,7 @@ extension HelperServiceManager {
                 self.reportHelperReadinessEvent("Recovery blocked in Xcode session and helper still does not respond over XPC.")
                 completion(
                     false,
-                    "System zablokował ponowną rejestrację helpera z sesji Xcode. Uruchom aplikację z katalogu /Applications i wykonaj naprawę helpera. Szczegóły XPC: \(details). Poprzedni błąd: \(healthDetails)"
+                    "The system blocked helper re-registration from Xcode. Launch the app from /Applications and repair the helper. XPC details: \(details). Previous error: \(healthDetails)"
                 )
             }
             return
@@ -399,7 +399,7 @@ extension HelperServiceManager {
             let details = diagnosticErrorDescription(for: error)
             completion(
                 false,
-                "System blokuje ponowną rejestrację helpera (Background Task Management). Usuń stare wpisy macUSB z „Login Items / Allow in the Background”, uruchom `sudo sfltool resetbtm`, uruchom ponownie macOS i uruchom tylko wersję z /Applications. Szczegóły: \(details)"
+                "\(String(localized: "app.helper.registration.policy_block.message", table: "App")) \(String(format: String(localized: "app.helper.status.details", table: "App"), details))"
             )
             return
         }
@@ -409,7 +409,7 @@ extension HelperServiceManager {
         }
         completion(
             false,
-            "Helper nie odpowiada przez XPC (\(healthDetails)). Nie udało się ponownie zarejestrować helpera: \(diagnosticErrorDescription(for: error))"
+            "\(String(localized: "app.helper.reload.failure.message", table: "App")) \(String(format: String(localized: "app.helper.status.details", table: "App"), "\(healthDetails). \(diagnosticErrorDescription(for: error))"))"
         )
     }
 }

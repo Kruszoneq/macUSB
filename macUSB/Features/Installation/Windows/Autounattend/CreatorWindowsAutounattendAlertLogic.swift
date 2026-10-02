@@ -31,7 +31,7 @@ extension UniversalInstallationView {
         guard isWindowsWorkflow else { return true }
         guard windowsAutounattendConfiguration.canStartWorkflow else {
             logError("Windows answer-file configuration blocked start: local account display name is invalid.", category: "WindowsInstallFlow")
-            errorMessage = String(localized: "creator.windows.summary.autounattend.account_name.placeholder", table: "Creator")
+            errorMessage = String(localized: "summary.windows.autounattend.account_name.placeholder", table: "Summary")
             return false
         }
         errorMessage = ""
@@ -52,11 +52,11 @@ extension UniversalInstallationView {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "creator.windows.summary.autounattend.conflict.title", table: "Creator")
-        alert.informativeText = String(localized: "creator.windows.summary.autounattend.conflict.body", table: "Creator")
-        alert.addButton(withTitle: String(localized: "creator.windows.summary.autounattend.conflict.use_existing", table: "Creator"))
-        alert.addButton(withTitle: String(localized: "creator.windows.summary.autounattend.conflict.replace", table: "Creator"))
-        alert.addButton(withTitle: String(localized: "creator.windows.summary.autounattend.conflict.stop", table: "Creator"))
+        alert.messageText = String(localized: "summary.windows.autounattend.conflict.title", table: "Summary")
+        alert.informativeText = String(localized: "summary.windows.autounattend.conflict.body", table: "Summary")
+        alert.addButton(withTitle: String(localized: "summary.windows.autounattend.conflict.use_existing", table: "Summary"))
+        alert.addButton(withTitle: String(localized: "summary.windows.autounattend.conflict.replace", table: "Summary"))
+        alert.addButton(withTitle: String(localized: "summary.windows.autounattend.conflict.stop", table: "Summary"))
 
         let completionHandler = { (response: NSApplication.ModalResponse) in
             switch response {

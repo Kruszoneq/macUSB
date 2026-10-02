@@ -7,21 +7,21 @@ enum MacOSArchitectureBlockReason: Equatable {
 }
 
 extension MacOSArchitectureBlockReason {
-    var titleLocalizationKey: String.LocalizationValue {
+    var titleLocalizationResource: LocalizedStringResource {
         switch self {
         case .intelRequiresAppleSilicon:
-            return "analysis.macos.architecture.intel_incompatible.title"
+            return LocalizedStringResource("analysis.macos.architecture.intel_incompatible.title", table: "Analysis")
         case .unknownCreateInstallMediaArchitecture, .unknownHostArchitecture:
-            return "analysis.macos.architecture.unknown.title"
+            return LocalizedStringResource("analysis.macos.architecture.unknown.title", table: "Analysis")
         }
     }
 
-    var descriptionLocalizationKey: String.LocalizationValue {
+    var descriptionLocalizationResource: LocalizedStringResource {
         switch self {
         case .intelRequiresAppleSilicon:
-            return "analysis.macos.architecture.intel_incompatible.description"
+            return LocalizedStringResource("analysis.macos.architecture.intel_incompatible.description", table: "Analysis")
         case .unknownCreateInstallMediaArchitecture, .unknownHostArchitecture:
-            return "analysis.macos.architecture.unknown.description"
+            return LocalizedStringResource("analysis.macos.architecture.unknown.description", table: "Analysis")
         }
     }
 }

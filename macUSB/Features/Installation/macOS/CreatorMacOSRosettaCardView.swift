@@ -28,41 +28,41 @@ struct CreatorMacOSRosettaCardView: View {
     private var titleKey: String {
         switch state {
         case .available, .missing, .installing:
-            return "creator.macos.rosetta.missing.title"
+            return "summary.macos.rosetta.missing.title"
         case .checking, .checkFailed:
-            return "creator.macos.rosetta.check_failed.title"
+            return "summary.macos.rosetta.check_failed.title"
         case .installFailed:
-            return "creator.macos.rosetta.install_failed.title"
+            return "summary.macos.rosetta.install_failed.title"
         case .notAvailable:
-            return "creator.macos.rosetta.not_available.title"
+            return "summary.macos.rosetta.not_available.title"
         }
     }
 
     private var descriptionKey: String {
         switch state {
         case .available, .missing, .installing:
-            return "creator.macos.rosetta.missing.description"
+            return "summary.macos.rosetta.missing.description"
         case .checking, .checkFailed:
-            return "creator.macos.rosetta.check_failed.description"
+            return "summary.macos.rosetta.check_failed.description"
         case .installFailed:
-            return "creator.macos.rosetta.install_failed.description"
+            return "summary.macos.rosetta.install_failed.description"
         case .notAvailable:
-            return "creator.macos.rosetta.not_available.description"
+            return "summary.macos.rosetta.not_available.description"
         }
     }
 
     private var actionKey: String {
         switch state {
         case .missing:
-            return "creator.macos.rosetta.install.action"
+            return "summary.macos.rosetta.install.action"
         case .installing:
-            return "creator.macos.rosetta.installing.action"
+            return "summary.macos.rosetta.installing.action"
         case .checking, .checkFailed, .notAvailable:
-            return "creator.macos.rosetta.check.action"
+            return "summary.macos.rosetta.check.action"
         case .installFailed:
-            return "creator.macos.rosetta.retry.action"
+            return "summary.macos.rosetta.retry.action"
         case .available:
-            return "creator.macos.rosetta.installed.action"
+            return "summary.macos.rosetta.installed.action"
         }
     }
 
@@ -77,10 +77,10 @@ struct CreatorMacOSRosettaCardView: View {
                         .frame(width: MacUSBDesignTokens.iconColumnWidth)
 
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(String(localized: String.LocalizationValue(titleKey), table: "Creator"))
+                        Text(String(localized: String.LocalizationValue(titleKey), table: "Summary"))
                             .font(.headline)
                             .foregroundColor(tint)
-                        Text(String(localized: String.LocalizationValue(descriptionKey), table: "Creator"))
+                        Text(String(localized: String.LocalizationValue(descriptionKey), table: "Summary"))
                             .font(.subheadline)
                             .foregroundColor(tint.opacity(0.8))
                             .fixedSize(horizontal: false, vertical: true)
@@ -91,7 +91,7 @@ struct CreatorMacOSRosettaCardView: View {
 
                 Button(action: action) {
                     HStack {
-                        Text(String(localized: String.LocalizationValue(actionKey), table: "Creator"))
+                        Text(String(localized: String.LocalizationValue(actionKey), table: "Summary"))
                             .contentTransition(.opacity)
                     }
                         .frame(maxWidth: .infinity)

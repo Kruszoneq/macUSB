@@ -127,10 +127,10 @@ final class FullDiskAccessPermissionManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Wymagany pełny dostęp do dysku")
-        alert.informativeText = String(localized: "Aby aplikacja macUSB działała poprawnie, przyznaj jej uprawnienie „Pełny dostęp do dysku” w ustawieniach systemowych.")
-        alert.addButton(withTitle: String(localized: "Przejdź do ustawień systemowych"))
-        alert.addButton(withTitle: String(localized: "Nie teraz"))
+        alert.messageText = String(localized: "app.permissions.full_disk_access.required.title", table: "App")
+        alert.informativeText = String(localized: "app.permissions.full_disk_access.required.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.action.open_system_settings", table: "App"))
+        alert.addButton(withTitle: String(localized: "app.action.not_now", table: "App"))
 
         let handleResponse: (NSApplication.ModalResponse) -> Void = { response in
             if response == .alertFirstButtonReturn {
@@ -159,9 +159,9 @@ final class FullDiskAccessPermissionManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Otworzono Ustawienia systemowe")
-        alert.informativeText = String(localized: "Nie udało się otworzyć bezpośrednio zakładki „Pełny dostęp do dysku”. Przejdź do: Prywatność i ochrona -> Pełny dostęp do dysku.")
-        alert.addButton(withTitle: String(localized: "OK"))
+        alert.messageText = String(localized: "app.permissions.full_disk_access.settings_fallback.title", table: "App")
+        alert.informativeText = String(localized: "app.permissions.full_disk_access.settings_fallback.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
 
         if let window = NSApp.keyWindow ?? NSApp.mainWindow {
             alert.beginSheetModal(for: window, completionHandler: nil)

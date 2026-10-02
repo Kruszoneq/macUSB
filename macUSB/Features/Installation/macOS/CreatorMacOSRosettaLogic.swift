@@ -64,10 +64,10 @@ extension UniversalInstallationView {
         let alert = NSAlert()
         alert.alertStyle = .informational
         alert.icon = NSApp.applicationIconImage
-        alert.messageText = String(localized: "creator.macos.rosetta.license.title", table: "Creator")
-        alert.informativeText = String(localized: "creator.macos.rosetta.license.description", table: "Creator")
-        alert.addButton(withTitle: String(localized: "creator.macos.rosetta.license.agree", table: "Creator"))
-        alert.addButton(withTitle: String(localized: "creator.macos.rosetta.license.disagree", table: "Creator"))
+        alert.messageText = String(localized: "summary.macos.rosetta.license.title", table: "Summary")
+        alert.informativeText = String(localized: "summary.macos.rosetta.license.description", table: "Summary")
+        alert.addButton(withTitle: String(localized: "summary.macos.rosetta.license.agree", table: "Summary"))
+        alert.addButton(withTitle: String(localized: "summary.macos.rosetta.license.disagree", table: "Summary"))
 
         let completion: (NSApplication.ModalResponse) -> Void = { response in
             guard response == .alertFirstButtonReturn else {

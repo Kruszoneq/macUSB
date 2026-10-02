@@ -29,10 +29,10 @@ extension HelperServiceManager {
                         let alert = NSAlert()
                         alert.icon = NSApp.applicationIconImage
                         alert.alertStyle = .warning
-                        alert.messageText = String(localized: "Sprawdzenie statusu helpera zakończone niepowodzeniem")
-                        alert.informativeText = String(localized: "Nie udało się potwierdzić gotowości helpera.")
-                        alert.addButton(withTitle: String(localized: "OK"))
-                        alert.addButton(withTitle: String(localized: "Szczegóły"))
+                        alert.messageText = String(localized: "app.helper.status.failure.title", table: "App")
+                        alert.informativeText = String(localized: "app.helper.status.failure.message", table: "App")
+                        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
+                        alert.addButton(withTitle: String(localized: "app.action.details", table: "App"))
 
                         let handler: (NSApplication.ModalResponse) -> Void = { response in
                             guard response == .alertSecondButtonReturn else { return }
@@ -56,7 +56,7 @@ extension HelperServiceManager {
     func evaluateStatus(completion: @escaping (HelperStatusSnapshot) -> Void) {
         let serviceStatus = SMAppService.daemon(plistName: Self.daemonPlistName).status
         let serviceStatusLine = String(
-            format: String(localized: "Status usługi: %@"),
+            format: String(localized: "app.helper.status.service", table: "App"),
             statusDescription(serviceStatus)
         )
         let serviceHealthy = serviceStatus == .enabled
@@ -64,19 +64,19 @@ extension HelperServiceManager {
         let locationLine: String
         let locationHealthy: Bool
         if isAppInstalledInApplications() {
-            locationLine = String(localized: "Lokalizacja aplikacji: /Applications (OK)")
+            locationLine = String(localized: "app.helper.status.location.applications", table: "App")
             locationHealthy = true
         } else {
             #if DEBUG
             if Self.isRunningFromXcodeDevelopmentBuild() {
-                locationLine = String(localized: "Lokalizacja aplikacji: środowisko Xcode (bypass DEBUG)")
+                locationLine = "App location: Xcode environment (DEBUG bypass)"
                 locationHealthy = true
             } else {
-                locationLine = String(localized: "Lokalizacja aplikacji: poza /Applications")
+                locationLine = String(localized: "app.helper.status.location.outside_applications", table: "App")
                 locationHealthy = false
             }
             #else
-            locationLine = String(localized: "Lokalizacja aplikacji: poza /Applications")
+            locationLine = String(localized: "app.helper.status.location.outside_applications", table: "App")
             locationHealthy = false
             #endif
         }
@@ -85,20 +85,20 @@ extension HelperServiceManager {
             withTimeout: statusHealthTimeout,
             presentsTrustFailureAlert: true
         ) { ok, details in
-            let xpcHealthValue = ok ? String(localized: "OK") : String(localized: "BŁĄD")
+            let xpcHealthValue = ok ? String(localized: "app.action.ok", table: "App") : String(localized: "app.helper.status.error", table: "App")
             let lines: [String] = [
                 serviceStatusLine,
                 String(
-                    format: String(localized: "Mach service: %@"),
+                    format: String(localized: "app.helper.status.mach_service", table: "App"),
                     Self.machServiceName
                 ),
                 locationLine,
                 String(
-                    format: String(localized: "XPC health: %@"),
+                    format: String(localized: "app.helper.status.xpc_health", table: "App"),
                     xpcHealthValue
                 ),
                 String(
-                    format: String(localized: "Szczegóły: %@"),
+                    format: String(localized: "app.helper.status.details", table: "App"),
                     details
                 )
             ]
@@ -117,10 +117,10 @@ extension HelperServiceManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Sprawdzenie statusu helpera zakończone pomyślnie")
-        alert.informativeText = String(localized: "Helper działa prawidłowo i jest gotowy do pracy.")
-        alert.addButton(withTitle: String(localized: "OK"))
-        alert.addButton(withTitle: String(localized: "Szczegóły"))
+        alert.messageText = String(localized: "app.helper.status.success.title", table: "App")
+        alert.informativeText = String(localized: "app.helper.status.success.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
+        alert.addButton(withTitle: String(localized: "app.action.details", table: "App"))
 
         if let window = NSApp.keyWindow ?? NSApp.mainWindow {
             alert.beginSheetModal(for: window) { response in
@@ -140,11 +140,11 @@ extension HelperServiceManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Sprawdzenie statusu helpera zakończone wymaganym działaniem")
-        alert.informativeText = String(localized: "Aby helper działał poprawnie, wymagane jest zezwolenie na działanie w tle w Ustawieniach systemowych.")
-        alert.addButton(withTitle: String(localized: "Ustawienia systemowe"))
-        alert.addButton(withTitle: String(localized: "OK"))
-        alert.addButton(withTitle: String(localized: "Szczegóły"))
+        alert.messageText = String(localized: "app.helper.status.approval.title", table: "App")
+        alert.informativeText = String(localized: "app.helper.status.approval.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.action.system_settings", table: "App"))
+        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
+        alert.addButton(withTitle: String(localized: "app.action.details", table: "App"))
 
         let handleResponse: (NSApplication.ModalResponse) -> Void = { response in
             if response == .alertFirstButtonReturn {
@@ -169,9 +169,9 @@ extension HelperServiceManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Szczegóły statusu helpera")
+        alert.messageText = String(localized: "app.helper.status.details.title", table: "App")
         alert.informativeText = detailsText
-        alert.addButton(withTitle: String(localized: "OK"))
+        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
         presentAlert(alert)
     }
     func presentStatusCheckingPanelIfNeeded() {
@@ -180,9 +180,9 @@ extension HelperServiceManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Sprawdzanie statusu helpera")
-        alert.informativeText = String(localized: "Trwa sprawdzanie gotowości helpera systemowego.")
-        alert.addButton(withTitle: String(localized: "Sprawdzanie…"))
+        alert.messageText = String(localized: "app.helper.status.checking.title", table: "App")
+        alert.informativeText = String(localized: "app.helper.status.checking.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.helper.status.checking.action", table: "App"))
         alert.buttons.first?.isEnabled = false
 
         if let ownerWindow = NSApp.keyWindow ?? NSApp.mainWindow {

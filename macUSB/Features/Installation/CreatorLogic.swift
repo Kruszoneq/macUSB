@@ -12,7 +12,7 @@ extension UniversalInstallationView {
 
         runWindowsMacUSBootPreflight { ready, message in
             guard ready else {
-                errorMessage = message ?? String(localized: "creator.error.helper_refresh_failed", table: "Creator")
+                errorMessage = message ?? String(localized: "summary.windows.error.helper_refresh_failed", table: "Summary")
                 finishUSBCreationOperationIfNeeded()
                 return
             }
@@ -39,10 +39,10 @@ extension UniversalInstallationView {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "creator.start.alert.title", table: "Creator")
-        alert.informativeText = String(localized: "creator.start.alert.description", table: "Creator")
-        alert.addButton(withTitle: String(localized: "creator.action.no", table: "Creator"))
-        alert.addButton(withTitle: String(localized: "creator.action.yes", table: "Creator"))
+        alert.messageText = String(localized: "summary.start.alert.title", table: "Summary")
+        alert.informativeText = String(localized: "summary.start.alert.description", table: "Summary")
+        alert.addButton(withTitle: String(localized: "summary.action.no", table: "Summary"))
+        alert.addButton(withTitle: String(localized: "summary.action.yes", table: "Summary"))
 
         let completionHandler = { (response: NSApplication.ModalResponse) in
             if response == .alertSecondButtonReturn {

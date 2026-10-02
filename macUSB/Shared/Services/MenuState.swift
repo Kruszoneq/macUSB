@@ -12,7 +12,7 @@ final class MenuState: ObservableObject {
     @Published private(set) var isDownloaderAccessBlocked: Bool = false
     @Published private(set) var isLanguageChangeEnabled: Bool = true
     @Published var debugCopiedDataLabel: String = String(
-        format: String(localized: "Przekopiowane dane: %.1f GB"),
+        format: "Copied data: %.1f GB",
         0.0
     )
 
@@ -30,7 +30,7 @@ final class MenuState: ObservableObject {
     func updateDebugCopiedData(bytes: Int64) {
         let gigabytes = max(0, Double(bytes)) / 1_073_741_824
         let label = String(
-            format: String(localized: "Przekopiowane dane: %.1f GB"),
+            format: "Copied data: %.1f GB",
             gigabytes
         )
 

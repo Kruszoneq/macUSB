@@ -8,7 +8,7 @@ extension HelperServiceManager {
                 DispatchQueue.main.async {
                     self.presentOperationSummary(
                         success: false,
-                        message: String(localized: "Trwa już naprawa helpera. Poczekaj na jej zakończenie.")
+                        message: String(localized: "app.helper.repair.already_running.message", table: "App")
                     )
                 }
                 return false
@@ -81,9 +81,9 @@ extension HelperServiceManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Naprawa helpera")
-        alert.informativeText = String(localized: "Trwa odświeżanie rejestracji i połączenia helpera systemowego.")
-        alert.addButton(withTitle: String(localized: "Naprawianie…"))
+        alert.messageText = String(localized: "app.helper.repair.running.title", table: "App")
+        alert.informativeText = String(localized: "app.helper.repair.running.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.helper.repair.running.action", table: "App"))
         alert.buttons.first?.isEnabled = false
 
         if let ownerWindow = NSApp.keyWindow ?? NSApp.mainWindow {
@@ -124,17 +124,17 @@ extension HelperServiceManager {
         alert.alertStyle = success ? .informational : .warning
 
         if success {
-            alert.messageText = String(localized: "Naprawa helpera zakończona pomyślnie")
-            alert.informativeText = String(localized: "Rejestracja helpera i weryfikacja komunikacji zostały zakończone pomyślnie.")
-            alert.addButton(withTitle: String(localized: "OK"))
+            alert.messageText = String(localized: "app.helper.repair.success.title", table: "App")
+            alert.informativeText = String(localized: "app.helper.repair.success.message", table: "App")
+            alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
             presentAlert(alert)
             return
         }
 
-        alert.messageText = String(localized: "Naprawa helpera zakończona niepowodzeniem")
-        alert.informativeText = String(localized: "Nie udało się przywrócić pełnej gotowości helpera. Szczegóły zapisano w logach diagnostycznych.")
-        alert.addButton(withTitle: String(localized: "OK"))
-        alert.addButton(withTitle: String(localized: "Szczegóły"))
+        alert.messageText = String(localized: "app.helper.repair.failure.title", table: "App")
+        alert.informativeText = String(localized: "app.helper.repair.failure.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
+        alert.addButton(withTitle: String(localized: "app.action.details", table: "App"))
 
         let handler: (NSApplication.ModalResponse) -> Void = { response in
             guard response == .alertSecondButtonReturn else { return }
@@ -155,9 +155,9 @@ extension HelperServiceManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Szczegóły naprawy helpera")
+        alert.messageText = String(localized: "app.helper.repair.details.title", table: "App")
         alert.informativeText = technicalOutput
-        alert.addButton(withTitle: String(localized: "OK"))
+        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
         presentAlert(alert)
     }
 
