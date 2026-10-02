@@ -19,7 +19,7 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
                     Image(systemName: "slider.horizontal.3")
                         .font(.title3)
                         .foregroundColor(.white)
-                    Text(String(localized: "installation.summary.windows.autounattend.card.title"))
+                    Text(String(localized: "creator.windows.summary.autounattend.card.title", table: "Creator"))
                         .font(.headline)
                     Spacer()
                 }
@@ -29,50 +29,50 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
 
             if windowsVersion.supportsHardwareBypass {
                 Toggle(
-                    String(localized: "installation.summary.windows.autounattend.option.hardware_bypass"),
+                    String(localized: "creator.windows.summary.autounattend.option.hardware_bypass", table: "Creator"),
                     isOn: binding(\.skipHardwareRequirements)
                 )
             }
 
             VStack(alignment: .leading, spacing: 6) {
                 Toggle(
-                    String(localized: "installation.summary.windows.autounattend.option.use_mac_language_region"),
+                    String(localized: "creator.windows.summary.autounattend.option.use_mac_language_region", table: "Creator"),
                     isOn: binding(\.useMacLanguageAndRegion)
                 )
                 .disabled(!configuration.canUseMacLanguageAndRegion)
                 .opacity(configuration.canUseMacLanguageAndRegion ? 1 : 0.55)
 
                 if !configuration.canUseMacLanguageAndRegion {
-                    Text(String(localized: "installation.summary.windows.autounattend.option.use_mac_language_region.unavailable"))
+                    Text(String(localized: "creator.windows.summary.autounattend.option.use_mac_language_region.unavailable", table: "Creator"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
 
             Toggle(
-                String(localized: "installation.summary.windows.autounattend.option.prevent_device_encryption"),
+                String(localized: "creator.windows.summary.autounattend.option.prevent_device_encryption", table: "Creator"),
                 isOn: binding(\.preventDeviceEncryption)
             )
 
             Toggle(
-                String(localized: "installation.summary.windows.autounattend.option.disable_data_collection"),
+                String(localized: "creator.windows.summary.autounattend.option.disable_data_collection", table: "Creator"),
                 isOn: binding(\.disableDataCollection)
             )
 
             Toggle(
-                String(localized: "installation.summary.windows.autounattend.option.skip_wireless_setup"),
+                String(localized: "creator.windows.summary.autounattend.option.skip_wireless_setup", table: "Creator"),
                 isOn: binding(\.skipWirelessSetup)
             )
 
             Toggle(
-                String(localized: "installation.summary.windows.autounattend.option.skip_microsoft_account"),
+                String(localized: "creator.windows.summary.autounattend.option.skip_microsoft_account", table: "Creator"),
                 isOn: binding(\.skipMicrosoftAccountRequirement)
             )
             .disabled(configuration.skipWirelessSetup)
             .opacity(configuration.skipWirelessSetup ? 0.55 : 1)
 
             Toggle(
-                String(localized: "installation.summary.windows.autounattend.option.local_account"),
+                String(localized: "creator.windows.summary.autounattend.option.local_account", table: "Creator"),
                 isOn: binding(\.createLocalAccount)
             )
             .disabled(!configuration.skipMicrosoftAccountRequirement)
@@ -80,23 +80,23 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
 
             if configuration.createLocalAccount {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(String(localized: "installation.summary.windows.autounattend.account_name.label"))
+                    Text(String(localized: "creator.windows.summary.autounattend.account_name.label", table: "Creator"))
                         .font(.caption)
                         .foregroundColor(.secondary)
 
                     TextField(
-                        String(localized: "installation.summary.windows.autounattend.account_name.placeholder"),
+                        String(localized: "creator.windows.summary.autounattend.account_name.placeholder", table: "Creator"),
                         text: binding(\.localAccountDisplayName)
                     )
                     .textFieldStyle(.roundedBorder)
 
                     if shouldShowLocalAccountDisplayNameInvalidCharacters {
-                        Text(String(localized: "installation.summary.windows.autounattend.account_name.invalid_characters"))
+                        Text(String(localized: "creator.windows.summary.autounattend.account_name.invalid_characters", table: "Creator"))
                             .font(.caption)
                             .foregroundColor(.orange)
                     }
 
-                    Text(String(localized: "installation.summary.windows.autounattend.account_name.first_boot_password_note"))
+                    Text(String(localized: "creator.windows.summary.autounattend.account_name.first_boot_password_note", table: "Creator"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -107,7 +107,7 @@ struct CreatorWindowsAutounattendOptionsSheetView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text(String(localized: "installation.summary.windows.autounattend.done.button"))
+                    Text(String(localized: "creator.windows.summary.autounattend.done.button", table: "Creator"))
                         .padding(.horizontal, 16)
                         .padding(.vertical, 6)
                 }

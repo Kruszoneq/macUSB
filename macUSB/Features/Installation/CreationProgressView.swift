@@ -59,7 +59,7 @@ struct CreationProgressView: View {
             Capsule()
                 .fill(Color.secondary.opacity(0.20))
                 .frame(height: 1)
-            Text(isRawImageSelection ? "Etapy zapisu" : "Etapy tworzenia")
+            Text(LocalizedStringKey(isRawImageSelection ? "creator.raw_image.progress.stages.title" : "creator.progress.stages.title"), tableName: "Creator")
                 .font(.caption)
                 .foregroundColor(.secondary)
             Capsule()
@@ -138,7 +138,7 @@ struct CreationProgressView: View {
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             }
                             VStack(alignment: .leading) {
-                                Text(isRawImageSelection ? "Wybrany obraz" : "Wybrany system")
+                                Text(LocalizedStringKey(isRawImageSelection ? "creator.raw_image.selected_image.label" : "creator.progress.selected_system.label"), tableName: "Creator")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 HStack(spacing: 8) {
@@ -175,7 +175,7 @@ struct CreationProgressView: View {
             BottomActionBar {
                 Button(action: onCancelRequested) {
                     HStack {
-                        Text(isCancelling ? "Przerywanie..." : "Przerwij")
+                        Text(LocalizedStringKey(isCancelling ? "creator.action.stopping" : "creator.action.stop"), tableName: "Creator")
                         Image(systemName: "xmark.circle")
                     }
                     .frame(maxWidth: .infinity)
@@ -186,7 +186,7 @@ struct CreationProgressView: View {
             }
         }
         .frame(width: MacUSBDesignTokens.windowWidth, height: MacUSBDesignTokens.windowHeight)
-        .navigationTitle(isRawImageSelection ? "Zapisywanie obrazu" : "Tworzenie nośnika")
+        .navigationTitle(Text(LocalizedStringKey(isRawImageSelection ? "creator.raw_image.progress.navigation.title" : "creator.progress.navigation.title"), tableName: "Creator"))
         .navigationBarBackButtonHidden(true)
         .onAppear {
             menuState.setDownloaderAccessBlocked(true, reason: downloaderBlockReason)
@@ -234,7 +234,7 @@ struct CreationProgressView: View {
                             .font(sectionIconFont)
                             .foregroundColor(.secondary)
                             .frame(width: 24)
-                        Text(LocalizedStringKey(stage.titleKey))
+                        Text(LocalizedStringKey(stage.titleKey), tableName: "Creator")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         Spacer()
@@ -252,7 +252,7 @@ struct CreationProgressView: View {
                                 .font(sectionIconFont)
                                 .foregroundColor(.accentColor)
                                 .frame(width: 24)
-                            Text(LocalizedStringKey(stage.titleKey))
+                            Text(LocalizedStringKey(stage.titleKey), tableName: "Creator")
                                 .font(.headline)
                             Spacer()
                             if shouldShowCopyProgress(for: stage.key) {
@@ -262,7 +262,7 @@ struct CreationProgressView: View {
                                     .foregroundColor(.accentColor)
                             }
                         }
-                        Text(LocalizedStringKey(effectiveStatusKey(for: stage.key)))
+                        Text(LocalizedStringKey(effectiveStatusKey(for: stage.key)), tableName: "Creator")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         if shouldShowCopyProgress(for: stage.key) {
@@ -287,7 +287,7 @@ struct CreationProgressView: View {
                             .font(sectionIconFont)
                             .foregroundColor(.green)
                             .frame(width: 24)
-                        Text(LocalizedStringKey(stage.titleKey))
+                        Text(LocalizedStringKey(stage.titleKey), tableName: "Creator")
                             .font(.subheadline)
                         Spacer()
                     }
@@ -464,12 +464,12 @@ struct CreationProgressView: View {
         let rawValue = normalized.split(separator: " ").first.map(String.init) ?? ""
 
         guard let measured = Double(rawValue), measured.isFinite else {
-            return String(localized: "Szybkość zapisu: - MB/s")
+            return String(localized: "creator.progress.write_speed.unavailable", table: "Creator")
         }
 
         let rounded = max(0, Int(measured.rounded()))
         return String(
-            format: String(localized: "Szybkość zapisu: %d MB/s"),
+            format: String(localized: "creator.progress.write_speed.value", table: "Creator"),
             rounded
         )
     }

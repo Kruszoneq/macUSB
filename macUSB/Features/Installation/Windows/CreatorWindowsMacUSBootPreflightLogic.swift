@@ -56,7 +56,7 @@ extension UniversalInstallationView {
     ) {
         guard allowReload else {
             logError("macUSBoot preflight: capability remains unavailable after helper reload.", category: "WindowsInstallFlow")
-            completion(false, String(localized: "Nie udało się automatycznie odświeżyć helpera. Otwórz Narzędzia → Napraw helpera i spróbuj ponownie."))
+            completion(false, String(localized: "creator.error.helper_refresh_failed", table: "Creator"))
             return
         }
 

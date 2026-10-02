@@ -32,7 +32,7 @@ extension UniversalInstallationView {
     func startCreationProcessWithHelper() {
         guard let drive = targetDrive else {
             navigateToCreationProgress = false
-            errorMessage = String(localized: "Błąd: Nie wybrano dysku.")
+            errorMessage = String(localized: "creator.error.target_missing", table: "Creator")
             finishUSBCreationOperationIfNeeded()
             return
         }
@@ -45,8 +45,8 @@ extension UniversalInstallationView {
             isProcessing = true
         }
 
-        processingTitle = String(localized: "Rozpoczynanie...")
-        processingSubtitle = String(localized: "Przygotowywanie operacji...")
+        processingTitle = String(localized: "creator.progress.preparing.title", table: "Creator")
+        processingSubtitle = String(localized: "creator.progress.preparing.description", table: "Creator")
         isHelperWorking = false
         errorMessage = ""
         workflowResultDetailMessage = nil
@@ -119,7 +119,7 @@ extension UniversalInstallationView {
                     startUSBMonitoring()
                     stopHelperWriteSpeedMonitoring()
                     usbProcessStartedAt = nil
-                    errorMessage = failureReason ?? String(localized: "Helper nie jest gotowy do pracy.")
+                    errorMessage = failureReason ?? String(localized: "creator.error.helper_not_ready", table: "Creator")
                 }
                 finishUSBCreationOperationIfNeeded()
                 return
@@ -259,7 +259,7 @@ extension UniversalInstallationView {
                                                 startHelperWorkflow(true)
                                             },
                                             onCancel: {
-                                                workflowResultDetailMessage = String(localized: "Nośnik USB był używany przez inną aplikację. Nie wyrażono zgody na wymuszenie odmontowania, dlatego proces został przerwany. Zamknij aplikacje korzystające z nośnika i spróbuj ponownie.")
+                                                workflowResultDetailMessage = String(localized: "creator.unmount.cancelled.description", table: "Creator")
                                                 log("User declined forced target unmount.", category: "LinuxInstallFlow")
                                                 performLinuxUnmountDeclinedCleanupAndCancel()
                                             }
@@ -286,7 +286,7 @@ extension UniversalInstallationView {
                                                 startHelperWorkflow(true)
                                             },
                                             onCancel: {
-                                                workflowResultDetailMessage = String(localized: "Nośnik USB był używany przez inną aplikację. Nie wyrażono zgody na wymuszenie odmontowania, dlatego proces został przerwany. Zamknij aplikacje korzystające z nośnika i spróbuj ponownie.")
+                                                workflowResultDetailMessage = String(localized: "creator.unmount.cancelled.description", table: "Creator")
                                                 log("User declined forced target unmount.", category: "WindowsInstallFlow")
                                                 performWindowsUnmountDeclinedCleanupAndCancel()
                                             }
@@ -454,7 +454,7 @@ extension UniversalInstallationView {
                 throw NSError(
                     domain: "macUSB",
                     code: 404,
-                    userInfo: [NSLocalizedDescriptionKey: String(localized: "Nie znaleziono pliku InstallESD.dmg.")]
+                    userInfo: [NSLocalizedDescriptionKey: String(localized: "creator.macos.error.install_esd_missing", table: "Creator")]
                 )
             }
 
@@ -485,7 +485,7 @@ extension UniversalInstallationView {
                 throw NSError(
                     domain: "macUSB",
                     code: 404,
-                    userInfo: [NSLocalizedDescriptionKey: String(localized: "Nie znaleziono źródłowego pliku obrazu.")]
+                    userInfo: [NSLocalizedDescriptionKey: String(localized: "creator.macos.error.source_image_missing", table: "Creator")]
                 )
             }
 
@@ -590,7 +590,7 @@ extension UniversalInstallationView {
                     domain: "macUSB",
                     code: code,
                     userInfo: [
-                        NSLocalizedDescriptionKey: String(localized: "Brak uprawnień do zapisu na wybranym nośniku USB. Zresetuj uprawnienia aplikacji w menu Opcje → Resetuj uprawnienia dostępu do dysków zewnętrznych, a następnie spróbuj ponownie.")
+                        NSLocalizedDescriptionKey: String(localized: "creator.error.target_write_permission", table: "Creator")
                     ]
                 )
             }

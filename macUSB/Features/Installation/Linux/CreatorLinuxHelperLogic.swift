@@ -11,7 +11,7 @@ extension UniversalInstallationView {
             throw NSError(
                 domain: "macUSB",
                 code: 400,
-                userInfo: [NSLocalizedDescriptionKey: String(localized: "Brak źródła obrazu Linux do utworzenia nośnika USB.")]
+                userInfo: [NSLocalizedDescriptionKey: String(localized: "creator.linux.error.source_missing", table: "Creator")]
             )
         }
 

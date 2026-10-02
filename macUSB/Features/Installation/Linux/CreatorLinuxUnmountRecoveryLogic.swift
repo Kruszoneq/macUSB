@@ -40,12 +40,12 @@ extension UniversalInstallationView {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Nie można odmontować nośnika USB")
+        alert.messageText = String(localized: "creator.unmount.alert.title", table: "Creator")
         alert.informativeText = linuxFlowContext?.isRawImageSelection == true
-            ? String(localized: "Wybrany nośnik jest używany przez inną aplikację. Aby kontynuować zapis obrazu, macUSB może wymusić odmontowanie urządzenia. Niezapisane dane na tym nośniku mogą zostać utracone. Czy chcesz wymusić odmontowanie?")
-            : String(localized: "Wybrany nośnik jest używany przez inną aplikację. Aby kontynuować tworzenie nośnika startowego Linux, macUSB może wymusić odmontowanie urządzenia. Niezapisane dane na tym nośniku mogą zostać utracone. Czy chcesz wymusić odmontowanie?")
-        alert.addButton(withTitle: String(localized: "Anuluj"))
-        alert.addButton(withTitle: String(localized: "Wymuś odmontowanie"))
+            ? String(localized: "creator.raw_image.unmount.alert.description", table: "Creator")
+            : String(localized: "creator.linux.unmount.alert.description", table: "Creator")
+        alert.addButton(withTitle: String(localized: "creator.action.cancel", table: "Creator"))
+        alert.addButton(withTitle: String(localized: "creator.action.force_unmount", table: "Creator"))
 
         let completionHandler = { (response: NSApplication.ModalResponse) in
             if response == .alertSecondButtonReturn {

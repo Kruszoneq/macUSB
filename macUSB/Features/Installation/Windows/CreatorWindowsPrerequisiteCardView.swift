@@ -20,10 +20,10 @@ struct CreatorWindowsPrerequisiteCardView: View {
                         .frame(width: iconColumnWidth)
 
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(String(localized: "installation.summary.windows.wimlib.required.title"))
+                        Text(String(localized: "creator.windows.summary.wimlib.required.title", table: "Creator"))
                             .font(.headline)
                             .foregroundColor(.orange)
-                        Text(String(localized: "installation.summary.windows.wimlib.required.body"))
+                        Text(String(localized: "creator.windows.summary.wimlib.required.body", table: "Creator"))
                             .font(.subheadline)
                             .foregroundColor(.orange.opacity(0.9))
                     }
@@ -42,18 +42,18 @@ struct CreatorWindowsPrerequisiteCardView: View {
 
                     VStack(alignment: .leading, spacing: 2) {
                         if hasHomebrew {
-                            Text(String(localized: "installation.summary.windows.wimlib.brew_available.title"))
+                            Text(String(localized: "creator.windows.summary.wimlib.brew_available.title", table: "Creator"))
                                 .font(.headline)
                                 .foregroundColor(.orange)
                             styledInstructionWithCommand(
-                                String(localized: "installation.summary.windows.wimlib.brew_available.body")
+                                String(localized: "creator.windows.summary.wimlib.brew_available.body", table: "Creator")
                             )
                         } else {
-                            Text(String(localized: "installation.summary.windows.wimlib.brew_missing.title"))
+                            Text(String(localized: "creator.windows.summary.wimlib.brew_missing.title", table: "Creator"))
                                 .font(.headline)
                                 .foregroundColor(.orange)
                             styledInstructionWithCommand(
-                                String(localized: "installation.summary.windows.wimlib.brew_missing.body")
+                                String(localized: "creator.windows.summary.wimlib.brew_missing.body", table: "Creator")
                             )
                         }
                     }
@@ -65,7 +65,7 @@ struct CreatorWindowsPrerequisiteCardView: View {
                     if !hasHomebrew {
                         Button(action: onOpenHomebrewWebsite) {
                             HStack {
-                                Text(String(localized: "installation.summary.windows.wimlib.open_homebrew.button"))
+                                Text(String(localized: "creator.windows.summary.wimlib.open_homebrew.button", table: "Creator"))
                                 Image(systemName: "safari")
                             }
                             .frame(maxWidth: .infinity)
@@ -76,7 +76,7 @@ struct CreatorWindowsPrerequisiteCardView: View {
 
                     Button(action: onRefreshProbe) {
                         HStack {
-                            Text(String(localized: "installation.summary.windows.wimlib.refresh.button"))
+                            Text(String(localized: "creator.windows.summary.wimlib.refresh.button", table: "Creator"))
                             if isRefreshing {
                                 ProgressView()
                                     .controlSize(.small)

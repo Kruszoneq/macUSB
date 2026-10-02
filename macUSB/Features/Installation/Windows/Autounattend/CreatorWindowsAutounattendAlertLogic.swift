@@ -31,7 +31,7 @@ extension UniversalInstallationView {
         guard isWindowsWorkflow else { return true }
         guard windowsAutounattendConfiguration.canStartWorkflow else {
             logError("Windows answer-file configuration blocked start: local account display name is invalid.", category: "WindowsInstallFlow")
-            errorMessage = String(localized: "installation.summary.windows.autounattend.account_name.placeholder")
+            errorMessage = String(localized: "creator.windows.summary.autounattend.account_name.placeholder", table: "Creator")
             return false
         }
         errorMessage = ""
@@ -52,11 +52,11 @@ extension UniversalInstallationView {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "installation.summary.windows.autounattend.conflict.title")
-        alert.informativeText = String(localized: "installation.summary.windows.autounattend.conflict.body")
-        alert.addButton(withTitle: String(localized: "installation.summary.windows.autounattend.conflict.use_existing"))
-        alert.addButton(withTitle: String(localized: "installation.summary.windows.autounattend.conflict.replace"))
-        alert.addButton(withTitle: String(localized: "installation.summary.windows.autounattend.conflict.stop"))
+        alert.messageText = String(localized: "creator.windows.summary.autounattend.conflict.title", table: "Creator")
+        alert.informativeText = String(localized: "creator.windows.summary.autounattend.conflict.body", table: "Creator")
+        alert.addButton(withTitle: String(localized: "creator.windows.summary.autounattend.conflict.use_existing", table: "Creator"))
+        alert.addButton(withTitle: String(localized: "creator.windows.summary.autounattend.conflict.replace", table: "Creator"))
+        alert.addButton(withTitle: String(localized: "creator.windows.summary.autounattend.conflict.stop", table: "Creator"))
 
         let completionHandler = { (response: NSApplication.ModalResponse) in
             switch response {

@@ -85,13 +85,13 @@ struct CreatorWindowsBootModeCardView: View {
             configurableCard(selectionEnabled: selectionEnabled)
         case .biosOnly:
             informationalCard(
-                titleKey: "installation.summary.windows.bios_only.title",
-                bodyKey: "installation.summary.windows.bios_only.body"
+                titleKey: "creator.windows.summary.bios_only.title",
+                bodyKey: "creator.windows.summary.bios_only.body"
             )
         case .uefiOnly:
             informationalCard(
-                titleKey: "installation.summary.windows.uefi_only.title",
-                bodyKey: "installation.summary.windows.uefi_only.body"
+                titleKey: "creator.windows.summary.uefi_only.title",
+                bodyKey: "creator.windows.summary.uefi_only.body"
             )
         }
     }
@@ -105,7 +105,7 @@ struct CreatorWindowsBootModeCardView: View {
                         .foregroundColor(.accentColor)
                         .frame(width: MacUSBDesignTokens.iconColumnWidth)
 
-                    Text(String(localized: "installation.summary.windows.boot_mode.body"))
+                    Text(String(localized: "creator.windows.summary.boot_mode.body", table: "Creator"))
                         .font(.headline)
                         .foregroundColor(.accentColor)
 
@@ -113,7 +113,7 @@ struct CreatorWindowsBootModeCardView: View {
                 }
 
                 Picker(
-                    String(localized: "installation.summary.windows.boot_mode.body"),
+                    String(localized: "creator.windows.summary.boot_mode.body", table: "Creator"),
                     selection: $selectedMode
                 ) {
                     Text(verbatim: "BIOS")
@@ -138,10 +138,10 @@ struct CreatorWindowsBootModeCardView: View {
                     .foregroundColor(.accentColor)
                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(String(localized: titleKey))
+                    Text(String(localized: titleKey, table: "Creator"))
                         .font(.headline)
                         .foregroundColor(.accentColor)
-                    Text(String(localized: bodyKey))
+                    Text(String(localized: bodyKey, table: "Creator"))
                         .font(.subheadline)
                         .foregroundColor(.accentColor)
                 }
