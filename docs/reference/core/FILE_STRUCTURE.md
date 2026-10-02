@@ -130,9 +130,12 @@
 
 ## Localization catalogs
 
-- `macUSB/Resources/Localizable.xcstrings` — app-wide text and areas without a dedicated catalog.
+- `macUSB/Resources/App.xcstrings` — Welcome, system menus and related app/helper messages, permission/notification prompts, update checks, startup toasts, log export, and the Tools raw-image picker, selected through `App`.
+- `macUSB/Resources/Analysis.xcstrings` — all localized analysis/source/USB selection and manual checksum presentation, selected through `Analysis`.
+- `macUSB/Resources/Summary.xcstrings` — complete pre-start summary, workflow-specific prerequisite/configuration cards, options sheets, Rosetta UI, and destructive confirmation, selected through `Summary`.
+- `macUSB/Resources/Localizable.xcstrings` — residual shared/legacy entries and areas without a dedicated catalog.
 - `macUSB/Resources/Downloader.xcstrings` — downloader-owned text and feature-specific copies of shared labels, selected through the `Downloader` table.
-- `macUSB/Resources/Creator.xcstrings` — one `Creator` table for shared USB creator UI and macOS, Windows, Linux, and raw-image workflow presentation.
+- `macUSB/Resources/Creator.xcstrings` — the `Creator` table for USB execution/progress, cancellation/unmount recovery, and macOS, Windows, Linux, and raw-image helper workflow presentation.
 - `macUSB/Resources/FinishUSB.xcstrings` — the `FinishUSB` table for results, final error cards, cleanup, guidance, ejection, and USB completion notifications.
 - `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift` — shared app/daemon workflow presentation identifiers, legacy identifier normalization, stage mapping, and `Creator` extraction anchors.
 

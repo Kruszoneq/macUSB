@@ -16,11 +16,12 @@ Debug helper identity must stay isolated from Release (`bundle id`, daemon plist
 
 ## Current Examples
 
-- debug-only menu shortcuts,
+- debug-only menu shortcuts with verbatim English labels,
 - debug temp-folder helpers,
 - an `Open Diagnostic Logs Folder` menu action that opens the session-log directory in Finder,
 - debug-only downloader toggles.
 - disabled finish-screen ejection, with a verbatim `DEBUG` action label and no localization entry.
+- the copied-data metric in the DEBUG menu, missing-temp-folder alert, Xcode-only helper location status, and registration/recovery guidance, all displayed as English literals.
 
 The diagnostic-log folder action uses an English label without localization and appears only in Debug builds.
 

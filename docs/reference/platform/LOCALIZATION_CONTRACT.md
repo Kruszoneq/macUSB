@@ -28,18 +28,38 @@ The table map covers localized text; DEBUG-only English literals are outside cat
 
 | Catalog | Table | Scope |
 | --- | --- | --- |
-| `macUSB/Resources/Downloader.xcstrings` | `Downloader` | Downloader discovery, selection, download, verification, installer assembly, disk-image output, cleanup, summary, alerts, and completion notifications. Shared labels used by downloader have downloader-owned copies. |
-| `macUSB/Resources/Creator.xcstrings` | `Creator` | USB creation summary, prerequisites, destructive confirmation, cancellation, unmount recovery, progress, and helper workflow titles/statuses for macOS, Windows, Linux, and manual raw images. Shared creator labels have creator-owned copies. |
+| `macUSB/Resources/App.xcstrings` | `App` | Welcome screen, system menu bar and its actions, update checks, language/restart UI, permission and notification prompts, diagnostic-log export, helper status/repair/readiness/trust UI, startup toasts, and the Tools-menu raw-image warning and picker. |
+| `macUSB/Resources/Analysis.xcstrings` | `Analysis` | Source and USB selection, requirements, analysis progress/results, recognition and compatibility messages, capacity alerts, transitions, and the manual SHA-256 action, sheet, and errors across all supported workflows. |
+| `macUSB/Resources/Summary.xcstrings` | `Summary` | Complete pre-start summary: selected source/target, process and duration cards, permissions, Linux/raw-image guidance, Windows boot-mode/WIM prerequisites/automatic configuration, Rosetta status/license UI, start/back actions, destructive confirmation, and Windows helper-capability preflight errors. |
+| `macUSB/Resources/Downloader.xcstrings` | `Downloader` | Downloader discovery, selection, download, verification, installer assembly, disk-image output, cleanup, summary, alerts, and completion notifications. Shared labels used by downloader have downloader-owned copies; its system-menu entry belongs to `App`. |
+| `macUSB/Resources/Creator.xcstrings` | `Creator` | USB execution, cancellation, unmount recovery, progress, and helper workflow titles/statuses for macOS, Windows, Linux, and manual raw images. Shared execution labels have creator-owned copies. Summary copies of labels also used during execution stay in `Summary`. |
 | `macUSB/Resources/FinishUSB.xcstrings` | `FinishUSB` | Finish result, Linux/raw-image final error cards, cleanup, duration, next-step guidance, safe/forced ejection, and USB completion notifications. Shared finish labels have finish-owned copies. |
-| `macUSB/Resources/Localizable.xcstrings` | `Localizable` (default) | App-wide text and areas without a dedicated catalog, including analysis, menus, permissions, and helper service/repair UI. |
+| `macUSB/Resources/Localizable.xcstrings` | `Localizable` (default) | Residual shared and legacy entries for areas without a dedicated catalog. Active app/menu/helper UI, analysis, and pre-start summary text use their named tables. |
 
-Named-table lookups use `String(localized: ..., table: "Creator")`, `Text(..., tableName: "FinishUSB")`, or a `LocalizedStringResource` that carries the owning table. Downloader uses the same APIs with `Downloader`. Dynamic-key rendering and extraction anchors use the same owning table; intentionally indirect keys are manually managed.
+Named-table lookups use `String(localized: ..., table: "App")`, `Text(..., tableName: "Analysis")`, or a `LocalizedStringResource` that carries the owning table. Summary, Creator, Downloader, and FinishUSB use the same APIs with their respective table names. Dynamic-key rendering and extraction anchors use the same owning table; intentionally indirect keys are manually managed. Resource-valued divider titles, macOS architecture messages, and Windows BIOS/UEFI card titles/descriptions carry their table through intermediate APIs so Xcode does not extract them into `Localizable`.
 
-Creator identifiers start with `creator.`. Workflow-specific copy includes `macos`, `windows`, `linux`, or `raw_image` immediately after that prefix; shared copy uses element-oriented identifiers such as `creator.action.cancel`, `creator.summary.process.unmount`, or `creator.workflow.cleanup_temp.status`. Finish follows the same distinction under `finish.`; existing Windows guidance retains `finish.nextsteps.windows.pc.*`.
+## Workflow and Shared Key Names
+
+Keys specific to a workflow must contain its name. Follow the established Creator/Finish naming scheme: the stage or area comes first, followed by `macos`, `windows`, `linux`, or `raw_image`, then the feature and element. More precise macOS families such as `ppc`, `catalina`, `sierra`, `mavericks`, or `tiger` can follow `macos`.
+
+Examples:
+
+- `app.macos.tiger.override.message`
+- `analysis.macos.architecture.intel_incompatible.title`
+- `analysis.windows.server.unsupported_edition.description`
+- `analysis.linux.unknown.display_name`
+- `summary.windows.autounattend.card.title`
+- `summary.macos.ppc.process.restore`
+- `summary.raw_image.unreadable.description`
+- `creator.windows.workflow.prepare_target.status`
+
+Text common to several workflows uses universal stage/element keys, such as `analysis.action.proceed`, `analysis.usb.requirements.capacity`, `summary.action.start`, `summary.process.unmount`, or `creator.workflow.cleanup_temp.status`. Do not assign a shared stage label to a single workflow merely because it first appeared there. Existing Windows finish guidance retains its established `finish.nextsteps.windows.pc.*` identifiers.
+
+The identifier prefix and table ownership are separate: every consumer must select the table explicitly, including dynamic lookup and extraction sites.
 
 Helper workflow localization constants are shared between app and daemon and now emit `creator.*` identifiers. The IPC schema, workflow kinds, and technical stage identifiers remain unchanged. App-side decoding maps earlier `helper.workflow.*` title/status identifiers through `HelperWorkflowLocalizationKeys.catalogKey(for:)`, including individual macUSBoot phase statuses, before rendering them from `Creator`.
 
-Removing an entry from `Localizable` is safe only after its remaining consumers have been checked; copied shared entries stay available to their original consumers. Migrated Polish source-text keys retain their exact effective Polish value explicitly under `pl` in the destination catalog. Both USB catalogs retain the existing wording in all 13 supported languages and mark migrated entries as manually managed.
+Removing an entry from `Localizable` is safe only after its remaining consumers have been checked; copied shared entries stay available to their original consumers. Migrated Polish source-text keys retain their exact effective Polish value explicitly under `pl` in the destination catalog. The App, Analysis, Summary, Creator, and FinishUSB migrations retain existing wording in all 13 supported languages and mark intentionally indirect entries as manually managed. App, Analysis, and Summary contain explicit Polish values even where the previous source-text identifier supplied the Polish fallback. Branding slogans, detected product names, filenames, architecture labels, BIOS/UEFI abbreviations, and command examples remain existing verbatim data; no new translations are authored for them.
 
 ## String Catalog Serialization Policy
 

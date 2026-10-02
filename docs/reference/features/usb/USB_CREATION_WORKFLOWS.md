@@ -118,7 +118,7 @@ Windows summary pre-start prerequisites:
 
 ## Helper and Privilege Invariants
 
-Summary, start/cancel/unmount alerts, prerequisites, and progress presentation use the single `Creator` localization table for macOS, Windows, Linux, and manual raw images. Workflow-specific identifiers include their family under `creator.`; shared controls and stages use common creator identifiers. Helper titles/statuses and raw-image progress overrides resolve through this same table. Catalog ownership and compatibility handling are defined in `docs/reference/platform/LOCALIZATION_CONTRACT.md`.
+The complete pre-start summary, start confirmation, prerequisites, Windows configuration sheets, BIOS capability preflight error, and Rosetta UI use `Summary.xcstrings`. Execution/progress, cancellation, unmount recovery, helper titles/statuses, and raw-image progress overrides use `Creator.xcstrings`. Workflow-specific identifiers include `macos`, `windows`, `linux`, or `raw_image` under the owning stage prefix; shared controls and stages use universal identifiers. Catalog ownership and helper compatibility handling are defined in `docs/reference/platform/LOCALIZATION_CONTRACT.md`.
 
 - Privileged operations must run through helper (`SMAppService + XPC`).
 - No terminal fallback privileged execution path.
