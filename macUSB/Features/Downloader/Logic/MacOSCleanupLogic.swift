@@ -20,13 +20,13 @@ extension MontereyDownloadFlowModel {
         if shouldRetainSessionFilesForDebugMode() {
             switch completionReason {
             case .success:
-                cleanupStatusText = String(localized: "downloader.cleanup.status.debug_success", table: "Downloader")
+                cleanupStatusText = "DEBUG mode: session files retained after success..."
             case .failed:
-                cleanupStatusText = String(localized: "downloader.cleanup.status.debug_failure", table: "Downloader")
+                cleanupStatusText = "DEBUG mode: session files retained after failure..."
             case .cancelled:
-                cleanupStatusText = String(localized: "downloader.cleanup.status.debug_cancelled", table: "Downloader")
+                cleanupStatusText = "DEBUG mode: session files retained after cancellation..."
             }
-            summaryTemporaryFilesText = String(localized: "downloader.cleanup.result.debug_retained", table: "Downloader")
+            summaryTemporaryFilesText = "Retained (DEBUG mode)"
             cleanupProgress = 1
             completedStages.insert(.cleanup)
             return

@@ -201,7 +201,7 @@ struct MacOSDownloaderWindowShellView: View {
         alert.alertStyle = .warning
         alert.messageText = String(localized: "downloader.cancellation.alert.title", table: "Downloader")
         if downloadFlowModel.shouldRetainSessionFilesForDebugMode() {
-            alert.informativeText = String(localized: "downloader.cancellation.alert.debug_message", table: "Downloader")
+            alert.informativeText = "When you close the window, the download will stop and the temporary files will remain until you close the application"
         } else {
             alert.informativeText = String(localized: "downloader.cancellation.alert.message", table: "Downloader")
         }

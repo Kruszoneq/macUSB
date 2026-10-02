@@ -3,13 +3,14 @@
 ## Source Policy
 
 - Source language is Polish (`pl`) in every string catalog under `macUSB/Resources/`.
-- New UI copy must be authored in Polish first.
+- New localized UI copy must be authored in Polish first; DEBUG-only text follows the separate runtime contract below.
 
 ## Runtime Policy
 
-- All user-facing UI text must originate from localization catalog keys rather than prelocalized literal strings.
+- All user-facing UI text available outside DEBUG originates from localization catalog keys rather than prelocalized literal strings.
+- DEBUG-only UI text is displayed as untranslated English literals from code and has no localization keys or catalog entries. This exception includes controls, statuses, summary values, and alert messages; these literals are excluded from automatic string extraction.
 - Semantic localization identifiers follow `area.feature.element`, with additional segments where needed. Polish source text and translations are catalog values; code references the same key in its owning table.
-- UI state, workflow payloads, and helper transport must carry localization keys for as long as possible.
+- Localized UI state, workflow payloads, and helper transport must carry localization keys for as long as possible.
 - APIs that accept localization keys should receive keys directly.
 - Resolve a key with `String(localized:)` only at the presentation boundary when an API requires a `String`.
 - Helper localization keys and app-side rendering keys must stay synchronized.
@@ -22,6 +23,8 @@ Supported language handling must remain coherent between runtime behavior and lo
 ## Catalog and Table Map
 
 Each `.xcstrings` file represents a separate localization table in the app bundle. The table name is the filename without its extension; a key prefix does not choose a table.
+
+The table map covers localized text; DEBUG-only English literals are outside catalog ownership.
 
 | Catalog | Table | Scope |
 | --- | --- | --- |

@@ -56,7 +56,7 @@ struct MacOSDownloaderDiskImageOptionsView: View {
                 Capsule()
                     .fill(Color.secondary.opacity(0.20))
                     .frame(height: 1)
-                Text(String(localized: "downloader.options.developer.title", table: "Downloader"))
+                Text(verbatim: "Developer")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                 Capsule()
@@ -65,8 +65,10 @@ struct MacOSDownloaderDiskImageOptionsView: View {
             }
             .padding(.vertical, 2)
 
-            Toggle(String(localized: "downloader.options.retain_files", table: "Downloader"), isOn: $preserveDownloadedFilesInDebug)
-                .toggleStyle(.checkbox)
+            Toggle(isOn: $preserveDownloadedFilesInDebug) {
+                Text(verbatim: "Save downloaded files (Debug)")
+            }
+            .toggleStyle(.checkbox)
             #endif
 
             Spacer(minLength: 0)

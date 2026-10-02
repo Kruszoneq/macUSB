@@ -5,6 +5,10 @@
 DEBUG UI/actions exist only in `#if DEBUG` builds.
 Release must not expose DEBUG controls.
 
+## UI Text
+
+Text displayed exclusively in DEBUG uses untranslated English literals from code, including downloader controls, retention statuses, summary values, and cancellation messages. These texts have no localization keys or string-catalog entries and are excluded from automatic string extraction.
+
 ## Runtime Safety
 
 Debug routing and helper/debug convenience actions must remain deterministic and must not change production semantics.
