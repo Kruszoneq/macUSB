@@ -165,7 +165,7 @@ struct SystemAnalysisUSBSectionView: View {
             .opacity(isSelectionEnabled ? 1.0 : 0.5)
 
             if let notice = logic.usbDiscoveryNotice {
-                AnalysisUSBDiscoveryNoticeView(logic: logic, notice: notice)
+                AnalysisUSBDiscoveryNoticeView(logic: logic, notice: notice, sectionIconFont: sectionIconFont)
                     .transition(.move(edge: .top).combined(with: .opacity))
             }
 
@@ -198,32 +198,33 @@ struct SystemAnalysisUSBSectionView: View {
                     .transition(.opacity)
                 }
                 if logic.isUSBAvailabilityConfirmationExpired {
-                    StatusCard(tone: .subtle, density: .compact) {
+                    StatusCard(tone: .warning, density: .compact) {
                         HStack(alignment: .center) {
-                            Image(systemName: "info.circle").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            Image(systemName: "exclamationmark.triangle.fill").font(sectionIconFont).foregroundColor(.orange).frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading) {
-                                Text("analysis.usb.discovery.availability.title", tableName: "Analysis").font(.headline)
-                                Text("analysis.usb.discovery.availability.description", tableName: "Analysis").font(.subheadline).foregroundColor(.secondary)
+                                Text("analysis.usb.discovery.availability.title", tableName: "Analysis").font(.headline).foregroundColor(.orange)
+                                Text("analysis.usb.discovery.availability.description", tableName: "Analysis").font(.subheadline).foregroundColor(.orange.opacity(0.8))
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .transition(.move(edge: .top).combined(with: .opacity))
-                } else if logic.capacityCheckFinished && logic.isCapacitySufficient {
-                    VStack(alignment: .leading, spacing: 15) {
-                        StatusCard(tone: .warning, density: .compact) {
-                            HStack(alignment: .center) {
-                                Image(systemName: "exclamationmark.triangle.fill").font(sectionIconFont).foregroundColor(.orange).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                                VStack(alignment: .leading) {
-                                    Text("analysis.usb.destructive.title", tableName: "Analysis").font(.headline).foregroundColor(.orange)
-                                    Text("analysis.usb.destructive.description", tableName: "Analysis").font(.subheadline).foregroundColor(.orange.opacity(0.8))
-                                }
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                    }
-                    .transition(.move(edge: .top).combined(with: .opacity))
                 }
+                // The warning follows target selection, independently of
+                // activity and verification. Readiness gates Continue only.
+                VStack(alignment: .leading, spacing: 15) {
+                    StatusCard(tone: .warning, density: .compact) {
+                        HStack(alignment: .center) {
+                            Image(systemName: "exclamationmark.triangle.fill").font(sectionIconFont).foregroundColor(.orange).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            VStack(alignment: .leading) {
+                                Text("analysis.usb.destructive.title", tableName: "Analysis").font(.headline).foregroundColor(.orange)
+                                Text("analysis.usb.destructive.description", tableName: "Analysis").font(.subheadline).foregroundColor(.orange.opacity(0.8))
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+                .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
         .animation(.easeInOut(duration: 0.24), value: logic.usbDiscoveryNotice)

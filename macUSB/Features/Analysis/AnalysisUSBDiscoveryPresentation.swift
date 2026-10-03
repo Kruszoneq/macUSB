@@ -10,7 +10,7 @@ struct AnalysisUSBDiscoveryNotice: Equatable {
 
 extension AnalysisLogic {
     var usbDiscoveryNotice: AnalysisUSBDiscoveryNotice? {
-        // The availability card occupies the destructive-warning position.
+        // The availability card accompanies the persistent destructive warning.
         // Never repeat this selected-target problem above the same selector.
         if isUSBAvailabilityConfirmationExpired { return nil }
         let alternative = usbDiscoveryState.hasCurrentSnapshot && selectableUSBTargets.contains { drive in
@@ -48,10 +48,6 @@ extension AnalysisLogic {
         selectedDrive != nil && usbTargetReadiness.problem == .confirmationExpired
     }
 
-    var canRetryUSBDiscovery: Bool {
-        usbDiscoveryState.activity != .checking && usbDiscoveryState.activity != .waiting
-    }
-
     /// The setter of the picker binding is the deliberate-selection boundary.
     /// Automatic snapshot application never calls this alert path.
     func selectUSBTarget(_ selectionID: String?) {
@@ -85,30 +81,36 @@ extension AnalysisLogic {
 struct AnalysisUSBDiscoveryNoticeView: View {
     @ObservedObject var logic: AnalysisLogic
     let notice: AnalysisUSBDiscoveryNotice
+    let sectionIconFont: Font
 
     var body: some View {
         StatusCard(tone: notice.waiting ? .subtle : .warning, density: .compact) {
-            HStack(alignment: .top, spacing: 10) {
+            HStack(alignment: .center) {
                 Image(systemName: notice.waiting ? "hourglass.circle" : "exclamationmark.triangle.fill")
+                    .font(sectionIconFont)
                     .foregroundStyle(notice.waiting ? Color.secondary : Color.orange)
                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(LocalizedStringKey(notice.titleKey), tableName: "Analysis").font(.headline)
-                    Text(LocalizedStringKey(notice.descriptionKey), tableName: "Analysis").font(.subheadline)
+                VStack(alignment: .leading) {
+                    Text(LocalizedStringKey(notice.titleKey), tableName: "Analysis")
+                        .font(.headline)
+                        .foregroundColor(notice.waiting ? .primary : .orange)
+                    Text(LocalizedStringKey(notice.descriptionKey), tableName: "Analysis")
+                        .font(.subheadline)
+                        .foregroundColor(notice.waiting ? .secondary : .orange.opacity(0.8))
                     if logic.usbDiscoveryState.activity == .waiting && !notice.waiting {
-                        Text("analysis.usb.discovery.waiting.description", tableName: "Analysis").font(.subheadline)
+                        Text("analysis.usb.discovery.waiting.description", tableName: "Analysis")
+                            .font(.subheadline)
+                            .foregroundColor(.orange.opacity(0.8))
                     }
                     if notice.offersVerifiedAlternative {
-                        Text("analysis.usb.discovery.partial.alternative", tableName: "Analysis").font(.subheadline)
+                        Text("analysis.usb.discovery.partial.alternative", tableName: "Analysis")
+                            .font(.subheadline)
+                            .foregroundColor(notice.waiting ? .secondary : .orange.opacity(0.8))
                     }
-                    Button { logic.retryUSBDiscovery() } label: {
-                        Text("analysis.usb.discovery.retry.action", tableName: "Analysis")
-                    }
-                    .macUSBSecondaryButtonStyle()
-                    .disabled(!logic.canRetryUSBDiscovery)
                 }
                 .fixedSize(horizontal: false, vertical: true)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }
