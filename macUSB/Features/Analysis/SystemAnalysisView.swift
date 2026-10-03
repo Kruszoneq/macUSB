@@ -208,7 +208,7 @@ struct SystemAnalysisView: View {
     private func handleViewAppear() {
         installOptionModifierMonitorIfNeeded()
         logic.setMacOSCreateInstallMediaVolumeOverrideActive(isOptionModifierPressed)
-        logic.refreshDrives()
+        logic.setDriveRefreshVisible(true)
         updateMenuState()
         consumePendingDownloaderInstallerAndAnalyze()
         consumePendingRawLinuxImageAndApply()
@@ -661,7 +661,16 @@ struct SystemAnalysisView: View {
             analysisContentWithBackgrounds
                 .onReceive(driveRefreshTimer) { _ in
                     updateOptionModifierState(NSEvent.modifierFlags.contains(.option))
-                    logic.refreshDrives()
+                    if !navigateToInstall { logic.refreshDrives() }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+                    if !navigateToInstall { logic.refreshDrives(force: true) }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: NSApplication.willResignActiveNotification)) { _ in
+                    logic.cancelDriveRefresh()
+                }
+                .onChange(of: navigateToInstall) {
+                    logic.setDriveRefreshVisible(!navigateToInstall)
                 }
                 .onReceive(NotificationCenter.default.publisher(for: .macUSBResetToStart)) { _ in
                     handleResetToStartNotification()
@@ -727,6 +736,7 @@ struct SystemAnalysisView: View {
                     handleViewAppear()
                 }
                 .onDisappear {
+                    logic.setDriveRefreshVisible(false)
                     removeOptionModifierMonitor()
                     MenuState.shared.rawLinuxImageSelectionEnabled = false
                     AppWindowCloseGuard.shared.setBeforeAllowedClose(nil)

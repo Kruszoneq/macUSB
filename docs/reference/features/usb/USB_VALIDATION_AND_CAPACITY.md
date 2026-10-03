@@ -54,7 +54,13 @@ The shared physical target snapshot is built as follows:
 
 This physical enumeration does not depend on a readable or mounted macOS volume. A connected USB medium that macOS cannot mount can therefore still appear directly as a selectable whole-disk target.
 
-The analysis screen starts discovery when it appears and requests refresh every `0.5 s`. Refreshes are serialized so a new enumeration does not start while the previous one is running. Workflow-state changes may request an additional refresh; the current snapshot remains authoritative until a completed refresh replaces it.
+The analysis screen starts discovery when it appears or the app becomes active. Its `0.5 s` UI tick still updates Option state, but physical discovery is throttled to at most once every `2.5 s` while the screen is visible and the app is active. Refreshes are serialized per analysis owner; duplicate requests are skipped instead of queued. Hiding the screen, navigating to installation, or deactivating the app cancels its current discovery. Workflow-state changes may request a refresh through the same throttle.
+
+Read-only discovery commands share a single active subprocess slot. stdout and stderr are drained together with nonblocking reads while the child runs, retaining at most `4 MiB` per stream. Queries have a `5 s` deadline, then a `0.5 s` termination grace before SIGKILL and another bounded cleanup period. If exit cannot be observed, the child keeps the slot and further commands are rejected until Foundation observes/reaps exit. These bounds cover the child execution and stream-draining path; a kernel operation blocking process launch or mounted-volume metadata cannot be forcibly completed by this userspace policy.
+
+A failed, cancelled, malformed or incomplete physical enumeration does not replace the last successfully displayed target list. Capacity admission remains blocked until a new complete snapshot succeeds; the initial waiting state is retained if no successful snapshot exists yet. IOKit parent traversal owns a separate retained starting reference and releases every acquired ancestor on all return paths.
+
+Run the standalone resource/scheduling regression checks with `bash scripts/TestUSBDiscovery.sh`. They compile production utilities and use mocked registry ownership plus synthetic child processes; they do not launch macUSB, invoke diskutil or modify media.
 
 The Option presentation additionally reads mounted external, non-network volumes and keeps only volumes that:
 
