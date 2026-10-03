@@ -174,13 +174,20 @@ final class AnalysisLogic: ObservableObject {
     var lastUnreadableUSBDetectionDate: Date = .distantPast
     let unreadableUSBDetectionInterval: TimeInterval = 2.5
     var isUnreadableUSBDetectionRunning: Bool = false
-    var isPhysicalDriveRefreshRunning: Bool = false
+    var driveRefreshPolicy = USBDriveRefreshPolicy()
+    var isDriveRefreshVisible = false
+    var hasCurrentUSBTargetSnapshot = false
+    var driveRefreshCancellation: USBDiscoveryCancellation?
     var physicalDriveRefreshGeneration: UInt = 0
     var wholeDiskCapacityCache: [String: Int64] = [:]
     var physicalUSBTargetsCache: [USBDrive] = []
     var macOSOptionUSBTargetsCache: [USBDrive] = []
     var isMacOSCreateInstallMediaVolumeOverrideActive: Bool = false
     @Published var hasPreparedUSBTargetSnapshot: Bool = false
+
+    deinit {
+        driveRefreshCancellation?.cancel()
+    }
     let imageAnalysisTimeoutSeconds: TimeInterval = 20
     var activeImageAnalysisRunID: UUID? = nil
     var imageAnalysisTimeoutWorkItem: DispatchWorkItem? = nil

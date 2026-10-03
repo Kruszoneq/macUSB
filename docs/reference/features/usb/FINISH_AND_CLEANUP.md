@@ -34,6 +34,7 @@ App-termination path must execute centralized source-image cleanup for Windows/L
 - tracked source ISO image entities are force-detached on app termination (final shutdown step),
 - this applies regardless of active screen (`analysis`, `summary`, `progress`, `finish`) to prevent stale mounted installer images after app exit.
 - An idle termination runs the centralized cleanup exactly once before exit. Failure to remove temporary files, discover tracked source images, or detach an image is logged and produces an error termination result, but does not cancel termination.
+- Application termination first closes read-only discovery admission and cancels its owned child with bounded termination/cleanup. Destructive helper pipelines and the user-requested finish eject command retain their separate ownership.
 - Finish-screen cleanup, emergency installation cleanup, downloader cleanup, tracked-image detach, and termination cleanup own cleanup-operation tokens for their full execution.
 
 Downloader-specific cleanup behavior is detailed in `docs/reference/features/downloader/DOWNLOADER.md`.

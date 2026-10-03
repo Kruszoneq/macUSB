@@ -63,24 +63,58 @@ extension AnalysisLogic {
         normalizeSelectionForCurrentTargetCatalogIfNeeded()
     }
 
-    func refreshDrives() {
+    func setDriveRefreshVisible(_ visible: Bool) {
+        isDriveRefreshVisible = visible
+        if visible {
+            refreshDrives(force: true)
+        } else {
+            cancelDriveRefresh()
+        }
+    }
+
+    func cancelDriveRefresh() {
+        physicalDriveRefreshGeneration &+= 1
+        driveRefreshCancellation?.cancel()
+        hasCurrentUSBTargetSnapshot = false
+        isCapacitySufficient = false
+        capacityCheckFinished = false
+    }
+
+    func refreshDrives(force: Bool = false) {
         let allowExternal = UserDefaults.standard.bool(forKey: "AllowExternalDrives")
-        guard !isPhysicalDriveRefreshRunning else { return }
+        guard driveRefreshPolicy.begin(
+            at: ProcessInfo.processInfo.systemUptime,
+            visible: isDriveRefreshVisible,
+            active: NSApp.isActive,
+            force: force
+        ) else { return }
 
         physicalDriveRefreshGeneration &+= 1
         let refreshGeneration = physicalDriveRefreshGeneration
-        isPhysicalDriveRefreshRunning = true
+        let cancellation = USBDiscoveryCancellation()
+        driveRefreshCancellation = cancellation
 
         DispatchQueue.global(qos: .utility).async { [weak self] in
             let enumerated = USBDriveLogic.enumerateAvailableMacOSTargetSetsWithCapacities(
-                allowExternalHardDrives: allowExternal
+                allowExternalHardDrives: allowExternal,
+                cancellation: cancellation
             )
 
             DispatchQueue.main.async {
                 guard let self else { return }
-                guard self.physicalDriveRefreshGeneration == refreshGeneration else { return }
-
-                self.isPhysicalDriveRefreshRunning = false
+                self.driveRefreshPolicy.finish()
+                self.driveRefreshCancellation = nil
+                guard self.physicalDriveRefreshGeneration == refreshGeneration else {
+                    self.refreshDrives(force: true)
+                    return
+                }
+                guard let enumerated else {
+                    self.hasCurrentUSBTargetSnapshot = false
+                    self.isCapacitySufficient = false
+                    self.capacityCheckFinished = false
+                    return
+                }
+                self.hasCurrentUSBTargetSnapshot = true
                 self.physicalUSBTargetsCache = enumerated.physicalDrives
                 self.macOSOptionUSBTargetsCache = enumerated.optionDrives
                 self.wholeDiskCapacityCache = enumerated.capacityByWholeDisk
@@ -157,6 +191,11 @@ extension AnalysisLogic {
     }
 
     func checkCapacity(logResult: Bool = false) {
+        guard hasCurrentUSBTargetSnapshot else {
+            isCapacitySufficient = false
+            capacityCheckFinished = false
+            return
+        }
         guard let drive = selectedDrive else {
             isCapacitySufficient = false
             capacityCheckFinished = false
