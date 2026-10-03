@@ -38,12 +38,22 @@ final class USBDiscoveryProcessRunner: @unchecked Sendable {
         case exitStatus(Int32)
     }
 
+    struct Report {
+        let result: Result<Data, Failure>
+        let stdout: Data
+        let stderr: Data
+        let duration: TimeInterval
+        let exitStatus: Int32?
+        let detail: String?
+    }
+
     private final class Session: @unchecked Sendable {
         let process = Process()
         private let lock = NSLock()
         private var started = false
         private var cancelled = false
         var finished = false // Protected by the runner lock.
+        var diagnostic: ((String) -> Void)?
 
         var isCancelled: Bool {
             lock.lock()
@@ -95,13 +105,39 @@ final class USBDiscoveryProcessRunner: @unchecked Sendable {
         self.maximumOutputBytes = maximumOutputBytes
     }
 
+    var isOccupied: Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        return active != nil
+    }
+
     func run(arguments: [String], cancellation: USBDiscoveryCancellation? = nil) -> Result<Data, Failure> {
+        runReport(arguments: arguments, cancellation: cancellation).result
+    }
+
+    func runReport(
+        arguments: [String], cancellation: USBDiscoveryCancellation? = nil,
+        diagnostic: ((String) -> Void)? = nil
+    ) -> Report {
+        let startedAt = ProcessInfo.processInfo.systemUptime
+        var streams = [Data(), Data()]
+        var launched = false
+        var failureDetail: String?
         let session = Session()
+        session.diagnostic = diagnostic
+        func report(_ result: Result<Data, Failure>, detail: String? = nil) -> Report {
+            Report(
+                result: result, stdout: streams[0], stderr: streams[1],
+                duration: ProcessInfo.processInfo.systemUptime - startedAt,
+                exitStatus: launched && !session.process.isRunning ? session.process.terminationStatus : nil,
+                detail: detail ?? failureDetail
+            )
+        }
         lock.lock()
         guard !isShuttingDown, active == nil else {
             let failure: Failure = isShuttingDown ? .cancelled : .busy
             lock.unlock()
-            return .failure(failure)
+            return report(.failure(failure))
         }
         active = session
         lock.unlock()
@@ -109,7 +145,7 @@ final class USBDiscoveryProcessRunner: @unchecked Sendable {
         defer { finish(session) }
         cancellation?.observe { [weak session] in session?.cancel() }
         defer { cancellation?.observe(nil) }
-        guard !session.isCancelled else { return .failure(.cancelled) }
+        guard !session.isCancelled else { return report(.failure(.cancelled)) }
 
         let output = Pipe()
         let errors = Pipe()
@@ -126,20 +162,21 @@ final class USBDiscoveryProcessRunner: @unchecked Sendable {
             if let session { self?.releaseFinished(session) }
         }
 
-        let startedAt = ProcessInfo.processInfo.systemUptime
-        do { try process.run() } catch { return .failure(.launchFailed) }
+        do { try process.run() } catch { return report(.failure(.launchFailed), detail: error.localizedDescription) }
+        launched = true
         session.didStart()
         try? output.fileHandleForWriting.close()
         try? errors.fileHandleForWriting.close()
 
         let descriptors = [output.fileHandleForReading.fileDescriptor, errors.fileHandleForReading.fileDescriptor]
         guard descriptors.allSatisfy({ fcntl($0, F_SETFL, fcntl($0, F_GETFL) | O_NONBLOCK) != -1 }) else {
+            let savedError = errno
+            diagnostic?("Nonblocking pipe setup failed; requesting immediate SIGKILL for discovery child pid=\(process.processIdentifier).")
             session.cancel()
             session.killIfRunning()
-            return .failure(.readFailed)
+            return report(.failure(.readFailed), detail: "Nonblocking pipe setup failed: errno=\(savedError)")
         }
 
-        var streams = [Data(), Data()]
         var ended = [false, false]
         var failure: Failure?
         var stoppingAt: TimeInterval?
@@ -152,23 +189,28 @@ final class USBDiscoveryProcessRunner: @unchecked Sendable {
             if now - startedAt >= timeout, failure == nil { failure = .timedOut }
             if failure != nil, stoppingAt == nil {
                 stoppingAt = now
+                diagnostic?("Stopping discovery child pid=\(process.processIdentifier), reason=\(String(describing: failure)).")
                 session.cancel()
             }
             if let stoppingAt, now - stoppingAt >= terminationGrace, !didKill {
+                diagnostic?("Termination grace expired; requesting SIGKILL for discovery child pid=\(process.processIdentifier).")
                 session.killIfRunning()
                 didKill = true
             }
             if let stoppingAt, now - stoppingAt >= terminationGrace * 2 {
                 // Foundation observes/reaps exit asynchronously. Retain exclusion if
                 // even SIGKILL cannot finish an uninterruptible kernel operation.
-                return .failure(failure ?? .timedOut)
+                return report(.failure(failure ?? .timedOut))
             }
 
             var polls = descriptors.enumerated().map { index, fd in
                 pollfd(fd: ended[index] ? -1 : fd, events: Int16(POLLIN | POLLHUP), revents: 0)
             }
             let ready = polls.withUnsafeMutableBufferPointer { Darwin.poll($0.baseAddress, 2, 25) }
-            if ready < 0, errno != EINTR { failure = .readFailed }
+            if ready < 0, errno != EINTR {
+                failure = .readFailed
+                failureDetail = "Pipe poll failed: errno=\(errno)"
+            }
             for index in 0..<2 where !ended[index] && polls[index].revents != 0 {
                 let count = bytes.withUnsafeMutableBytes { Darwin.read(descriptors[index], $0.baseAddress, $0.count) }
                 if count > 0 {
@@ -176,19 +218,21 @@ final class USBDiscoveryProcessRunner: @unchecked Sendable {
                         streams[index].append(contentsOf: bytes.prefix(count))
                     } else if failure == nil {
                         failure = .outputLimit
+                        failureDetail = "Stream \(index == 0 ? "stdout" : "stderr") exceeded \(maximumOutputBytes) retained bytes"
                     }
                 } else if count == 0 {
                     ended[index] = true
                 } else if errno != EAGAIN && errno != EINTR {
                     ended[index] = true
                     failure = failure ?? .readFailed
+                    failureDetail = failureDetail ?? "Pipe read failed: stream=\(index == 0 ? "stdout" : "stderr"), errno=\(errno)"
                 }
             }
             if !process.isRunning, ended.allSatisfy({ $0 }) {
                 process.waitUntilExit()
-                if let failure { return .failure(failure) }
-                guard process.terminationStatus == 0 else { return .failure(.exitStatus(process.terminationStatus)) }
-                return .success(streams[0])
+                if let failure { return report(.failure(failure)) }
+                guard process.terminationStatus == 0 else { return report(.failure(.exitStatus(process.terminationStatus))) }
+                return report(.success(streams[0]))
             }
         }
     }
@@ -217,14 +261,21 @@ final class USBDiscoveryProcessRunner: @unchecked Sendable {
         lock.lock()
         session.finished = true
         lock.unlock()
+        if session.process.isRunning {
+            session.diagnostic?("Discovery child pid=\(session.process.processIdentifier) still running; retaining subprocess slot until observed exit.")
+        }
         releaseFinished(session)
     }
 
     private func releaseFinished(_ session: Session) {
         lock.lock()
-        defer { lock.unlock() }
-        guard active === session, session.finished, !session.process.isRunning else { return }
+        guard active === session, session.finished, !session.process.isRunning else {
+            lock.unlock()
+            return
+        }
         session.process.terminationHandler = nil
         active = nil
+        lock.unlock()
+        session.diagnostic?("Discovery subprocess slot released after observed child exit.")
     }
 }

@@ -48,7 +48,7 @@ extension AnalysisLogic {
             self.isPPC = false
             self.legacyArchInfo = nil
             self.selectedDrive = nil
-            self.capacityCheckFinished = false
+            self.usbTargetReadiness = .noSelection
             self.shouldShowMavericksDialog = false
             self.shouldShowAlreadyMountedSourceAlert = false
             self.shouldShowSourceSizeUnavailableAlert = false

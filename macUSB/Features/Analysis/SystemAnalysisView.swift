@@ -568,6 +568,7 @@ struct SystemAnalysisView: View {
 
     private var canProceedToInstall: Bool {
         canUseUSBSelection
+            && logic.usbDiscoveryState.admissionRequest == nil
             && logic.selectedDriveForInstallation != nil
             && logic.capacityCheckFinished
             && logic.isCapacitySufficient
@@ -575,6 +576,13 @@ struct SystemAnalysisView: View {
     }
 
     private func handleProceedToInstall() {
+        logic.confirmUSBTargetForHandoff {
+            completeProceedToInstall()
+        }
+    }
+
+    private func completeProceedToInstall() {
+        guard canProceedToInstall else { return }
         selectedDriveDisplayNameSnapshot = logic.selectedDrive?.displayName
         selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
         isBetaInstallerSnapshot = logic.isBetaInstaller
@@ -664,7 +672,7 @@ struct SystemAnalysisView: View {
                     if !navigateToInstall { logic.refreshDrives() }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
-                    if !navigateToInstall { logic.refreshDrives(force: true) }
+                    if !navigateToInstall { logic.refreshDrives(force: true, reason: "application active") }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: NSApplication.willResignActiveNotification)) { _ in
                     logic.cancelDriveRefresh()
@@ -681,6 +689,7 @@ struct SystemAnalysisView: View {
     private var analysisContentWithMenuStateHandlers: AnyView {
         AnyView(
             analysisContentWithResetHandlers
+                .onChange(of: menuState.externalDrivesEnabled) { _, _ in logic.usbExternalDrivePreferenceChanged() }
                 .onChange(of: logic.showUnsupportedMessage) { _ in updateMenuState() }
                 .onChange(of: logic.recognizedVersion) { _ in updateMenuState() }
                 .onChange(of: logic.isAnalyzing) { _ in updateMenuState() }
@@ -759,179 +768,6 @@ struct SystemAnalysisView: View {
             sectionIconFont: sectionIconFont,
             isSelectionEnabled: canUseUSBSelection
         )
-    }
-}
-
-struct SystemAnalysisUSBSectionView: View {
-    @ObservedObject var logic: AnalysisLogic
-    let sectionIconFont: Font
-    let isSelectionEnabled: Bool
-
-    private var shouldShowWaitingForSystemDetectionCard: Bool {
-        let isUSBConnected = !logic.presentedUSBTargets.isEmpty || logic.hasUnreadableExternalUSBMedia
-        let isAwaitingSystemRecognition = logic.recognizedVersion.isEmpty || logic.isAnalyzing
-        let isPreparingInitialTargetSnapshot = !logic.hasPreparedUSBTargetSnapshot
-        return (isUSBConnected || isPreparingInitialTargetSnapshot)
-            && isAwaitingSystemRecognition
-            && !isSelectionEnabled
-    }
-
-    private func pickerDisplayName(for drive: USBDrive) -> String {
-        guard drive.isWholeDiskTarget else { return drive.displayName }
-        let speedText = drive.usbSpeed?.rawValue ?? "USB"
-        return "\(drive.device) - \(drive.size) - \(speedText)"
-    }
-
-    private var preservedPickerSelection: USBDrive? {
-        guard let selectedDrive = logic.selectedDrive,
-              !logic.presentedUSBTargets.contains(where: { $0.selectionID == selectedDrive.selectionID }) else {
-            return nil
-        }
-        return selectedDrive
-    }
-
-    private func sectionDivider(_ title: LocalizedStringResource) -> some View {
-        HStack(spacing: 10) {
-            Capsule()
-                .fill(Color.secondary.opacity(0.20))
-                .frame(height: 1)
-            Text(title)
-                .font(.caption)
-                .foregroundColor(.secondary)
-            Capsule()
-                .fill(Color.secondary.opacity(0.20))
-                .frame(height: 1)
-        }
-        .padding(.horizontal, 2)
-        .padding(.vertical, 2)
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
-            sectionDivider(LocalizedStringResource("analysis.usb.section.title", table: "Analysis"))
-            StatusCard(tone: .neutral, density: .compact) {
-                HStack(alignment: .top) {
-                    Image(systemName: "externaldrive.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("analysis.usb.requirements.title", tableName: "Analysis").font(.headline)
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text(
-                                String(
-                                    format: String(localized: "analysis.usb.requirements.capacity", table: "Analysis"),
-                                    logic.requiredUSBCapacityDisplayValue
-                                )
-                            )
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            Text("analysis.usb.requirements.speed", tableName: "Analysis").font(.subheadline).foregroundColor(.secondary)
-                        }
-                    }
-                }
-            }
-
-            VStack(alignment: .leading, spacing: 10) {
-                if shouldShowWaitingForSystemDetectionCard {
-                    StatusCard(tone: .subtle, density: .compact) {
-                        HStack(alignment: .center, spacing: 10) {
-                            Image(systemName: "hourglass.circle")
-                                .font(sectionIconFont)
-                                .foregroundColor(.secondary)
-                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(String(localized: "analysis.usb.waiting_for_system_detection.title", table: "Analysis"))
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
-                                Text(String(localized: "analysis.usb.waiting_for_system_detection.description", table: "Analysis"))
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
-                            Spacer()
-                        }
-                    }
-                } else {
-                    Text("analysis.usb.target.label", tableName: "Analysis").font(.subheadline)
-                    if !logic.hasPreparedUSBTargetSnapshot {
-                        ProgressView()
-                            .controlSize(.small)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    } else if logic.presentedUSBTargets.isEmpty && !logic.hasUnreadableExternalUSBMedia {
-                        StatusCard(tone: .error, density: .compact) {
-                            HStack {
-                                Image(systemName: "externaldrive.badge.xmark").font(sectionIconFont).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                                VStack(alignment: .leading) {
-                                    Text("analysis.usb.missing.title", tableName: "Analysis").font(.headline).foregroundColor(.red)
-                                    Text("analysis.usb.missing.description", tableName: "Analysis").font(.caption).foregroundColor(.red.opacity(0.8))
-                                }
-                            }
-                        }
-                    } else if !logic.presentedUSBTargets.isEmpty {
-                        HStack {
-                            Picker("", selection: $logic.selectedDriveSelectionID) {
-                                Text("analysis.usb.target.placeholder", tableName: "Analysis").tag(nil as String?)
-                                if let preservedPickerSelection {
-                                    Text(pickerDisplayName(for: preservedPickerSelection))
-                                        .tag(Optional(preservedPickerSelection.selectionID))
-                                }
-                                ForEach(logic.presentedUSBTargets) { drive in
-                                    Text(pickerDisplayName(for: drive)).tag(Optional(drive.selectionID))
-                                }
-                            }
-                            .labelsHidden()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                    }
-                }
-            }
-            .disabled(!isSelectionEnabled)
-            .opacity(isSelectionEnabled ? 1.0 : 0.5)
-            .onChange(of: logic.selectedDrive) { _ in logic.checkCapacity() }
-
-            if logic.selectedDrive != nil {
-                if logic.capacityCheckFinished && !logic.isCapacitySufficient {
-                    StatusCard(tone: .error, density: .compact) {
-                        HStack {
-                            Image(systemName: "xmark.circle.fill").font(sectionIconFont).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                            VStack(alignment: .leading) {
-                                if logic.selectedDrive?.isWholeDiskTarget == false {
-                                    Text("analysis.usb.volume_capacity_too_small.title", tableName: "Analysis")
-                                        .font(.headline).foregroundColor(.red)
-                                } else {
-                                    Text("analysis.usb.capacity_too_small.title", tableName: "Analysis")
-                                        .font(.headline).foregroundColor(.red)
-                                }
-                                Text(
-                                    String(
-                                        format: String(localized: "analysis.usb.capacity_too_small.description", table: "Analysis"),
-                                        logic.selectedDrive?.isWholeDiskTarget == false
-                                            ? logic.requiredVolumeCapacityDisplayValue
-                                            : logic.requiredUSBCapacityDisplayValue
-                                    )
-                                )
-                                .font(.caption)
-                                .foregroundColor(.red.opacity(0.8))
-                            }
-                        }
-                    }
-                    .transition(.opacity)
-                }
-                if logic.capacityCheckFinished && logic.isCapacitySufficient {
-                    VStack(alignment: .leading, spacing: 15) {
-                        StatusCard(tone: .warning, density: .compact) {
-                            HStack(alignment: .center) {
-                                Image(systemName: "exclamationmark.triangle.fill").font(sectionIconFont).foregroundColor(.orange).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                                VStack(alignment: .leading) {
-                                    Text("analysis.usb.destructive.title", tableName: "Analysis").font(.headline).foregroundColor(.orange)
-                                    Text("analysis.usb.destructive.description", tableName: "Analysis").font(.subheadline).foregroundColor(.orange.opacity(0.8))
-                                }
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                    }
-                    .transition(.opacity)
-                }
-            }
-        }
     }
 }
 

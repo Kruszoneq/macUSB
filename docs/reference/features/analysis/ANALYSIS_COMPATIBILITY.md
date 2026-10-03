@@ -16,7 +16,11 @@ Windows-specific behavior details are documented in:
 
 ## Localization Ownership
 
-All localized source/target selection, requirements, recognition/results, compatibility/capacity alerts, actions, transitions, and checksum presentation use `Analysis.xcstrings`. Workflow-specific keys include their family under `analysis.`; shared controls and USB requirements use universal analysis keys. The Tools-menu raw-image warning and picker belong to `App.xcstrings`. Table selection, naming, and source-language details are defined in `docs/reference/platform/LOCALIZATION_CONTRACT.md`.
+All localized source/target selection, requirements, recognition/results, compatibility/capacity alerts, actions, transitions, and checksum presentation use `Analysis.xcstrings`. Discovery error/waiting presentation and deliberate-selection alerts use `analysis.usb.discovery.*` in the same explicit table; indirectly resolved reason/title keys are manually managed. Workflow-specific keys include their family under `analysis.`; shared controls and USB requirements use universal analysis keys. The Tools-menu raw-image warning and picker belong to `App.xcstrings`. Table selection, naming, and source-language details are defined in `docs/reference/platform/LOCALIZATION_CONTRACT.md`.
+
+## USB Admission Boundary
+
+Prepared physical and Option target presentation, per-device partial failures, retry/lifecycle state, identity verification and selected-target readiness are defined in `../usb/USB_VALIDATION_AND_CAPACITY.md`. Ordinary discovery remains automatic at 2.5-second intervals; the 0.5-second UI tick and immediate Option presentation stay separate. Only a currently verified selected target with known sufficient capacity is passed to the existing installation summary. Source detection flags, creation workflows, helper payloads and destructive confirmation remain unchanged.
 
 ## Detection Source of Truth
 

@@ -61,40 +61,11 @@ final class AnalysisLogic: ObservableObject {
     @Published var windowsAutounattendMacLocale: CreatorWindowsAutounattendMacLocale? = nil
 
     @Published var presentedUSBTargets: [USBDrive] = []
-    @Published var hasUnreadableExternalUSBMedia: Bool = false
-    @Published var unreadableExternalUSBMediaCount: Int = 0
     @Published var selectedDriveSelectionID: String? {
         didSet {
             guard !isSynchronizingDriveSelection else { return }
 
-            let normalizedSelectionID: String?
-            if let selectedDriveSelectionID, selectedDriveSelectionID.isEmpty {
-                normalizedSelectionID = nil
-            } else {
-                normalizedSelectionID = selectedDriveSelectionID
-            }
-
-            if normalizedSelectionID != selectedDriveSelectionID {
-                synchronizeDriveSelection {
-                    self.selectedDriveSelectionID = normalizedSelectionID
-                }
-                return
-            }
-
-            guard let selectionID = normalizedSelectionID else {
-                if selectedDrive != nil {
-                    selectedDrive = nil
-                }
-                return
-            }
-
-            if let matchingDrive = selectableUSBTargets.first(where: { $0.selectionID == selectionID }) {
-                if selectedDrive?.selectionID != matchingDrive.selectionID {
-                    selectedDrive = matchingDrive
-                }
-            } else if selectedDrive != nil {
-                selectedDrive = nil
-            }
+            resolveUSBSelection(selectedDriveSelectionID)
         }
     }
 
@@ -120,7 +91,8 @@ final class AnalysisLogic: ObservableObject {
                 }
             }
 
-            if oldValue?.selectionID != selectedDrive?.selectionID, selectedDrive != nil {
+            if !isSynchronizingDriveSelection {
+                selectedTargetIdentity = selectedDrive.flatMap { usbDiscoveryState.snapshot?.verification[$0.selectionID]?.identity }
                 checkCapacity(logResult: true)
             }
 
@@ -138,7 +110,13 @@ final class AnalysisLogic: ObservableObject {
     /// needsFormatting jest wymuszana na false, ponieważ formatowanie
     /// (APM + HFS+) jest już wbudowane w dalszy proces.
     var selectedDriveForInstallation: USBDrive? {
-        guard let drive = selectedDrive else { return nil }
+        guard usbTargetReadiness.isReady, usbDiscoveryState.hasCurrentSnapshot,
+              usbDiscoveryState.snapshot?.allowExternalDrives == UserDefaults.standard.bool(forKey: "AllowExternalDrives"),
+              let drive = selectedDrive,
+              let proof = usbDiscoveryState.snapshot?.verification[drive.selectionID], proof.problem == nil,
+              proof.identity == selectedTargetIdentity,
+              case .success(let bytes) = proof.capacity,
+              let required = usbTargetCapacityRequirement?.minimumBytes, bytes >= required else { return nil }
         let installationDrive: USBDrive
         if requiresWholeDiskMacOSTarget {
             if drive.isWholeDiskTarget {
@@ -167,23 +145,29 @@ final class AnalysisLogic: ObservableObject {
         )
     }
 
-    @Published var isCapacitySufficient: Bool = false
-    @Published var capacityCheckFinished: Bool = false
+    @Published var usbDiscoveryState = AnalysisUSBDiscoveryState()
+    @Published var usbTargetReadiness: USBTargetReadiness = .noSelection
     @Published var usbTargetCapacityRequirement: USBTargetCapacityRequirement? = nil
     @Published var shouldShowSourceSizeUnavailableAlert: Bool = false
-    var lastUnreadableUSBDetectionDate: Date = .distantPast
-    let unreadableUSBDetectionInterval: TimeInterval = 2.5
-    var isUnreadableUSBDetectionRunning: Bool = false
     var driveRefreshPolicy = USBDriveRefreshPolicy()
     var isDriveRefreshVisible = false
-    var hasCurrentUSBTargetSnapshot = false
     var driveRefreshCancellation: USBDiscoveryCancellation?
     var physicalDriveRefreshGeneration: UInt = 0
-    var wholeDiskCapacityCache: [String: Int64] = [:]
-    var physicalUSBTargetsCache: [USBDrive] = []
-    var macOSOptionUSBTargetsCache: [USBDrive] = []
+    var selectedTargetIdentity: String?
+    var isUSBSelectionAlertPresented = false
+    let usbDiscoveryDiagnostics = USBDiscoveryDiagnostics()
     var isMacOSCreateInstallMediaVolumeOverrideActive: Bool = false
-    @Published var hasPreparedUSBTargetSnapshot: Bool = false
+
+    var physicalUSBTargetsCache: [USBDrive] { usbDiscoveryState.snapshot?.physicalDrives ?? [] }
+    var macOSOptionUSBTargetsCache: [USBDrive] { usbDiscoveryState.snapshot?.optionDrives ?? [] }
+    var hasPreparedUSBTargetSnapshot: Bool { usbDiscoveryState.snapshot != nil }
+    var isCapacitySufficient: Bool { usbTargetReadiness.isReady }
+    var capacityCheckFinished: Bool {
+        switch usbTargetReadiness {
+        case .ready, .insufficient: return true
+        default: return false
+        }
+    }
 
     deinit {
         driveRefreshCancellation?.cancel()

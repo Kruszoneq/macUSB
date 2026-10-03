@@ -100,7 +100,7 @@ struct USBDriveLogic {
     }
 
     /// Returns true if the mounted volume at the given URL is a network filesystem.
-    private static func isNetworkVolume(url: URL) -> Bool {
+    static func isNetworkVolume(url: URL) -> Bool {
         guard let fsName = fileSystemTypeName(url: url) else { return false }
         let networkTypes: Set<String> = ["smbfs", "afpfs", "webdav", "nfs", "cifs"]
         return networkTypes.contains(fsName)

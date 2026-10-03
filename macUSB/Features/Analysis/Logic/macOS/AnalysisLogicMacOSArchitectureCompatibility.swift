@@ -91,8 +91,7 @@ extension AnalysisLogic {
         showUSBSection = false
         selectedDrive = nil
         selectedDriveSelectionID = nil
-        isCapacitySufficient = false
-        capacityCheckFinished = false
+        usbTargetReadiness = .noSelection
         withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) {
             showUnsupportedMessage = true
         }

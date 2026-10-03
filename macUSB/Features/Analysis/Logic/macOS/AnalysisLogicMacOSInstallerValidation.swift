@@ -129,8 +129,7 @@ extension AnalysisLogic {
         shouldShowAlreadyMountedSourceAlert = false
         selectedDrive = nil
         selectedDriveSelectionID = nil
-        isCapacitySufficient = false
-        capacityCheckFinished = false
+        usbTargetReadiness = .noSelection
         usbTargetCapacityRequirement = nil
         shouldShowSourceSizeUnavailableAlert = false
         resetLinuxDetectionState()
