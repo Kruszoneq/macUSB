@@ -47,6 +47,7 @@ The shared physical target snapshot is built as follows:
 
 - use `diskutil list -plist external` to obtain external whole-disk identifiers,
 - read `diskutil info -plist /dev/diskX` for each candidate,
+- bind info metadata to the requested `DeviceIdentifier` and require `WholeDisk=true` (the diskutil plist key, distinct from IOMedia's `Whole` registry property),
 - include only external, physical USB devices,
 - when `AllowExternalDrives` is disabled, exclude non-removable external USB disks,
 - retain per-target identity and capacity evidence from the same scan for admission,

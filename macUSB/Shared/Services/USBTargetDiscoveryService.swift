@@ -69,9 +69,12 @@ enum USBTargetDiscoveryService {
             let after = USBDiscoveryRegistryProbe.media(named: device)
             let sameMedia = before?.identity != nil && before?.identity == after?.identity
             let registryUSB = sameMedia && after?.isExternalPhysicalUSB == true
+            // diskutil info names this field WholeDisk; IOMedia uses Whole.
+            // Bind all info-derived metadata to the same validated device.
+            let matchingInfo = info.flatMap { $0["DeviceIdentifier"] as? String == device && $0["WholeDisk"] as? Bool == true ? $0 : nil }
 
             if let info {
-                let matchesRequestedDevice = info["DeviceIdentifier"] as? String == device && info["Whole"] as? Bool == true
+                let matchesRequestedDevice = matchingInfo != nil
                 // Explicit exclusions are ordinary filtering, not discovery failures.
                 let internalMedia = (info["Internal"] as? Bool) ?? (info["OSInternalMedia"] as? Bool)
                 if matchesRequestedDevice, let bus = info["BusProtocol"] as? String, bus.uppercased() != "USB" {
@@ -86,11 +89,12 @@ enum USBTargetDiscoveryService {
                 let confirmedByInfo = (info["BusProtocol"] as? String)?.uppercased() == "USB"
                     && internalMedia == false
                     && (info["VirtualOrPhysical"] as? String)?.lowercased() == "physical"
-                    && info["DeviceIdentifier"] as? String == device
-                    && info["Whole"] as? Bool == true
-                if (!confirmedByInfo && !registryUSB) || info["DeviceIdentifier"] as? String != device || info["Whole"] as? Bool != true || info["Error"] != nil {
+                    && matchesRequestedDevice
+                if (!confirmedByInfo && !registryUSB) || !matchesRequestedDevice || info["Error"] != nil {
                     problem = .incompleteData
-                    record("Device \(device) has incomplete type/identity data. Keys=\(info.keys.sorted()).", key: "metadata.\(device)", signature: "incompleteData")
+                    let reportedDevice = info["DeviceIdentifier"] as? String ?? "missing or invalid"
+                    let wholeDisk = (info["WholeDisk"] as? Bool).map(String.init) ?? "missing or invalid"
+                    record("Device \(device) has incomplete type/identity data: DeviceIdentifier=\(reportedDevice), WholeDisk=\(wholeDisk), infoUSB=\(confirmedByInfo), registryUSB=\(registryUSB), errorPresent=\(info["Error"] != nil). Keys=\(info.keys.sorted()).", key: "metadata.\(device)", signature: "incompleteData:\(reportedDevice):\(wholeDisk):\(confirmedByInfo):\(registryUSB)")
                 }
                 guard confirmedByInfo || registryUSB else {
                     issues.append(USBDiscoveryIssue(device: device, problem: problem ?? .incompleteData))
@@ -101,7 +105,6 @@ enum USBTargetDiscoveryService {
                 record("Device \(device) omitted after query failure: registry does not confirm current physical external USB media.", key: "qualification.\(device)", signature: "unconfirmedUSB"); continue
             }
 
-            let matchingInfo = info.flatMap { $0["DeviceIdentifier"] as? String == device && $0["Whole"] as? Bool == true ? $0 : nil }
             let removable = (matchingInfo?["RemovableMedia"] as? Bool) ?? (matchingInfo?["Removable"] as? Bool) ?? after?.removable
             if !allowExternalDrives, removable == false {
                 if let problem { issues.append(USBDiscoveryIssue(device: device, problem: problem)) }
