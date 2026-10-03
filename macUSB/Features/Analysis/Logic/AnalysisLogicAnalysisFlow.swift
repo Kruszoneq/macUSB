@@ -43,7 +43,7 @@ extension AnalysisLogic {
         withAnimation { isAnalyzing = true }
         detectedSystemIcon = nil
         isBetaInstaller = false
-        selectedDrive = nil; capacityCheckFinished = false
+        selectedDrive = nil; usbTargetReadiness = .noSelection
         showUSBSection = false; showUnsupportedMessage = false
         isUnsupportedSierra = false
         isPPC = false

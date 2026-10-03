@@ -75,7 +75,7 @@ extension AnalysisLogic {
                     self.detectedSystemIcon = nil
                     self.isBetaInstaller = false
                     self.selectedDrive = nil
-                    self.capacityCheckFinished = false
+                    self.usbTargetReadiness = .noSelection
                     self.showUSBSection = false
                     self.showUnsupportedMessage = false
                     self.isSierra = false
@@ -133,7 +133,7 @@ extension AnalysisLogic {
                     self.detectedSystemIcon = nil
                     self.isBetaInstaller = false
                     self.selectedDrive = nil
-                    self.capacityCheckFinished = false
+                    self.usbTargetReadiness = .noSelection
                     self.showUSBSection = false
                     self.showUnsupportedMessage = false
                     self.isSierra = false

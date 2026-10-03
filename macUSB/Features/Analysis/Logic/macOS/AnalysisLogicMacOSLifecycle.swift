@@ -50,7 +50,7 @@ extension AnalysisLogic {
                     self.macOSRosettaRequirement = .notRequired
                     self.legacyArchInfo = nil
                     self.selectedDrive = nil
-                    self.capacityCheckFinished = false
+                    self.usbTargetReadiness = .noSelection
                     if let fileURL {
                         self.applySourceCapacityRequirement(resolvedRequirement, sourceURL: fileURL)
                     } else {
@@ -114,13 +114,8 @@ extension AnalysisLogic {
                 self.isMacOSCreateInstallMediaVolumeOverrideActive = false
                 self.presentedUSBTargets = self.physicalUSBTargetsCache
                 self.selectedDrive = nil
-                self.hasUnreadableExternalUSBMedia = false
-                self.unreadableExternalUSBMediaCount = 0
-                self.lastUnreadableUSBDetectionDate = .distantPast
-                self.isUnreadableUSBDetectionRunning = false
 
-                self.isCapacitySufficient = false
-                self.capacityCheckFinished = false
+                self.usbTargetReadiness = .noSelection
             }
         }
     }

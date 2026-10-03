@@ -25,6 +25,7 @@ final class AppTerminationCleanup {
         defer { cleanupToken.finish() }
 
         AppLogging.info("Application termination cleanup started.", stage: .app)
+        USBDiscoveryProcessRunner.shared.shutdown()
         var succeeded = true
 
         UserDefaults.standard.set(false, forKey: "AllowExternalDrives")
