@@ -12,7 +12,8 @@ enum USBDiscoveryVolumeCollector {
     static func collect(
         physical: [USBDrive], verification: [String: USBTargetVerification],
         allowExternalDrives: Bool, cancellation: USBDiscoveryCancellation,
-        record: (String, String, String) -> Void
+        record: (String, String, String) -> Void,
+        recover: (String, String) -> Void
     ) -> Collection {
         var result = Collection()
         let keys: Set<URLResourceKey> = [.volumeNameKey, .volumeIsRemovableKey, .volumeIsInternalKey, .volumeTotalCapacityKey, .volumeUUIDStringKey]
@@ -21,6 +22,7 @@ enum USBDiscoveryVolumeCollector {
             record("Mounted-volume enumeration returned no metadata; physical targets remain independently verified.", "volumes", "incompleteData")
             return result
         }
+        recover("Mounted-volume enumeration recovered.", "volumes")
         for url in urls {
             if cancellation.isCancelled { return result }
             let device = USBDriveLogic.getBSDName(from: url)
@@ -58,11 +60,12 @@ enum USBDiscoveryVolumeCollector {
                 size: capacity.map { ByteCountFormatter.string(fromByteCount: $0, countStyle: .file) } ?? "--",
                 url: url, usbSpeed: parent.usbSpeed, partitionScheme: .gpt, fileSystemFormat: .hfsPlus
             )
-            let proof = USBTargetVerification(identity: identity, capacity: problem.map { .failure($0) } ?? capacity.map { .success($0) } ?? .failure(.capacityUnavailable))
+            let proof = USBTargetVerification(identity: identity, capacity: problem.map { .failure($0) } ?? capacity.map { .success($0) } ?? .failure(.capacityUnavailable), confirmedAt: problem == nil ? ProcessInfo.processInfo.systemUptime : nil)
+            if problem == nil { recover("Volume \(device) metadata recovered.", "metadata.\(device)") }
             result.drives.append(drive)
             result.verification[drive.selectionID] = proof
             if let problem { result.issues.append(USBDiscoveryIssue(device: device, problem: problem)) }
-            record("Volume \(device) qualification=\(problem == nil ? "verified" : "unavailable"), capacity=\(capacity.map(String.init) ?? "unknown") B, identity=\(identity ?? "unknown"), reason=\(problem.map { String(describing: $0) } ?? "none").", "qualification.\(device)", "\(proof)")
+            record("Volume \(device) qualification=\(problem == nil ? "verified" : "unavailable"), capacity=\(capacity.map(String.init) ?? "unknown") B, identity=\(identity ?? "unknown"), reason=\(problem.map { String(describing: $0) } ?? "none").", "qualification.\(device)", "\(proof.identity ?? "unknown"):\(proof.capacity)")
         }
         result.drives.sort { $0.device.localizedStandardCompare($1.device) == .orderedAscending }
         return result

@@ -113,7 +113,7 @@ final class AnalysisLogic: ObservableObject {
         guard usbTargetReadiness.isReady, usbDiscoveryState.hasCurrentSnapshot,
               usbDiscoveryState.snapshot?.allowExternalDrives == UserDefaults.standard.bool(forKey: "AllowExternalDrives"),
               let drive = selectedDrive,
-              let proof = usbDiscoveryState.snapshot?.verification[drive.selectionID], proof.problem == nil,
+              let proof = usbDiscoveryState.snapshot?.verification[drive.selectionID], proof.problem == nil, proof.isFresh(),
               proof.identity == selectedTargetIdentity,
               case .success(let bytes) = proof.capacity,
               let required = usbTargetCapacityRequirement?.minimumBytes, bytes >= required else { return nil }

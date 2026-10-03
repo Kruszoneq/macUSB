@@ -70,16 +70,22 @@ extension AnalysisLogic {
     }
 
     func usbExternalDrivePreferenceChanged() {
+        log("USB discovery preference changed: AllowExternalDrives=\(UserDefaults.standard.bool(forKey: "AllowExternalDrives")).", category: "USBSelection")
         cancelDriveRefresh(reason: "external-drive preference changed")
         refreshDrives(force: true, reason: "external-drive preference changed")
     }
 
     func retryUSBDiscovery() {
+        log("USB discovery manually retried.", category: "USBSelection")
         refreshDrives(force: true, reason: "user retry")
     }
 
     func refreshDrives(force: Bool = false, reason: String = "periodic or workflow refresh") {
-        guard isDriveRefreshVisible, NSApp.isActive, !driveRefreshPolicy.isRunning else { return }
+        guard isDriveRefreshVisible, NSApp.isActive else { return }
+        // Evaluate evidence on every existing UI tick, even while a worker or
+        // an unreaped child prevents another scan from starting.
+        withAnimation(.easeInOut(duration: 0.24)) { checkCapacity() }
+        guard !driveRefreshPolicy.isRunning else { return }
         // The worker may have returned after bounded cleanup while its child
         // still owns the process slot. Never queue another scan behind it.
         if USBDiscoveryProcessRunner.shared.isOccupied {
@@ -87,6 +93,7 @@ extension AnalysisLogic {
             usbDiscoveryDiagnostics.record("USB discovery waiting: generation=\(physicalDriveRefreshGeneration), reason=\(reason), subprocess slot still occupied.", key: "slot", signature: "busy", workflow: selectedWorkflowForLogging)
             return
         }
+        usbDiscoveryDiagnostics.recover("USB discovery resumed: subprocess slot available.", key: "slot", workflow: selectedWorkflowForLogging)
         guard driveRefreshPolicy.begin(at: ProcessInfo.processInfo.systemUptime, visible: true, active: true, force: force) else { return }
         let allowExternal = UserDefaults.standard.bool(forKey: "AllowExternalDrives")
         physicalDriveRefreshGeneration &+= 1
@@ -96,10 +103,10 @@ extension AnalysisLogic {
         usbDiscoveryState.activity = .checking
         let workflow = selectedWorkflowForLogging
         let diagnostics = usbDiscoveryDiagnostics
-        diagnostics.record("USB scan started: generation=\(generation), reason=\(reason), AllowExternalDrives=\(allowExternal).", key: "scan.start", signature: "\(reason):\(allowExternal)", workflow: workflow, force: reason == "user retry")
+        if reason == "user retry" { diagnostics.record("USB scan started: generation=\(generation), reason=\(reason), AllowExternalDrives=\(allowExternal).", key: "scan.start", signature: "\(reason):\(allowExternal)", workflow: workflow, force: true) }
         let startedAt = ProcessInfo.processInfo.systemUptime
         DispatchQueue.global(qos: .utility).async { [weak self] in
-            let result = USBTargetDiscoveryService.scan(allowExternalDrives: allowExternal, cancellation: cancellation, scanID: generation, workflow: workflow, diagnostics: diagnostics)
+            let result = USBTargetDiscoveryService.scan(allowExternalDrives: allowExternal, cancellation: cancellation, scanID: generation, workflow: workflow, diagnostics: diagnostics, manualRetry: reason == "user retry")
             DispatchQueue.main.async {
                 guard let self else { return }
                 self.driveRefreshPolicy.finish()
@@ -115,11 +122,12 @@ extension AnalysisLogic {
                     self.usbDiscoveryState.activity = .idle
                     switch result {
                     case .complete(let snapshot), .partial(let snapshot):
-                        self.usbDiscoveryState.snapshot = snapshot
+                        let presentation = self.retainingUnresolvedUSBSelection(in: self.retainingUSBConfirmationTimes(in: snapshot))
+                        self.usbDiscoveryState.snapshot = presentation
                         self.usbDiscoveryState.outcome = .current
-                        self.applyUSBDiscoverySnapshot(snapshot)
+                        self.applyUSBDiscoverySnapshot(presentation)
                         if snapshot.issues.contains(where: { $0.problem == .query(.busy) }) { self.usbDiscoveryState.activity = .waiting }
-                        diagnostics.record("USB scan completed: generation=\(generation), duration=\(elapsed)s, physicalTargets=\(snapshot.physicalDrives.count), optionTargets=\(snapshot.optionDrives.count), issues=\(snapshot.issues).", key: "scan.result", signature: "\(snapshot.physicalDrives.map(\.device)):\(snapshot.issues)", workflow: workflow)
+                        diagnostics.recordSnapshot(snapshot, message: "USB scan completed: generation=\(generation), duration=\(elapsed)s, physicalTargets=\(snapshot.physicalDrives.count), optionTargets=\(snapshot.optionDrives.count), issues=\(snapshot.issues).", workflow: workflow, force: reason == "user retry")
                     case .failed(let problem):
                         self.usbDiscoveryState.outcome = .failed(problem)
                         self.checkCapacity()
@@ -136,6 +144,42 @@ extension AnalysisLogic {
                 }
             }
         }
+    }
+
+    private func retainingUSBConfirmationTimes(in snapshot: USBDiscoverySnapshot) -> USBDiscoverySnapshot {
+        guard usbDiscoveryState.snapshot?.allowExternalDrives == snapshot.allowExternalDrives else { return snapshot }
+        var verification = snapshot.verification
+        for (id, var proof) in verification where proof.confirmedAt == nil {
+            guard let previous = usbDiscoveryState.snapshot?.verification[id],
+                  previous.identity == proof.identity,
+                  proof.problem != .identityChanged, proof.problem != .targetMissing else { continue }
+            // Preserve the age of the last successful read during uncertainty,
+            // without restoring its capacity or authorizing failed evidence.
+            proof.confirmedAt = previous.confirmedAt
+            verification[id] = proof
+        }
+        return USBDiscoverySnapshot(physicalDrives: snapshot.physicalDrives, optionDrives: snapshot.optionDrives,
+            verification: verification, issues: snapshot.issues, allowExternalDrives: snapshot.allowExternalDrives)
+    }
+
+    private func retainingUnresolvedUSBSelection(in snapshot: USBDiscoverySnapshot) -> USBDiscoverySnapshot {
+        guard let selected = selectedDrive,
+              !snapshot.optionDrives.contains(where: { $0.selectionID == selected.selectionID }),
+              let issue = snapshot.issues.first(where: {
+                  $0.device == selected.device || $0.device == USBDriveLogic.wholeDiskName(from: selected.device)
+                      || (!selected.isWholeDiskTarget && $0.device == "mounted volumes")
+              }) else { return snapshot }
+        // A read error is not proof of removal. Retain the selected row with
+        // explicitly failed evidence; never authorize it from the old cache.
+        var physical = snapshot.physicalDrives
+        var option = snapshot.optionDrives
+        if selected.isWholeDiskTarget { physical.append(selected) }
+        option.append(selected)
+        physical.sort { $0.device.localizedStandardCompare($1.device) == .orderedAscending }
+        option.sort { $0.device.localizedStandardCompare($1.device) == .orderedAscending }
+        var verification = snapshot.verification
+        verification[selected.selectionID] = USBTargetVerification(identity: selectedTargetIdentity, capacity: .failure(issue.problem), confirmedAt: usbDiscoveryState.snapshot?.verification[selected.selectionID]?.confirmedAt)
+        return USBDiscoverySnapshot(physicalDrives: physical, optionDrives: option, verification: verification, issues: snapshot.issues, allowExternalDrives: snapshot.allowExternalDrives)
     }
 
     private func applyUSBDiscoverySnapshot(_ snapshot: USBDiscoverySnapshot) {
@@ -168,6 +212,14 @@ extension AnalysisLogic {
             if usbTargetReadiness.problem == nil { setUSBReadiness(.noSelection) }
             return
         }
+        if let snapshot = usbDiscoveryState.snapshot,
+           snapshot.allowExternalDrives == UserDefaults.standard.bool(forKey: "AllowExternalDrives"),
+           let proof = snapshot.verification[drive.selectionID],
+           proof.identity == selectedTargetIdentity,
+           proof.problem != .identityChanged, proof.problem != .targetMissing,
+           proof.isConfirmationExpired() {
+            setUSBReadiness(.unverified(.confirmationExpired), logResult: logResult); return
+        }
         guard usbDiscoveryState.hasCurrentSnapshot,
               usbDiscoveryState.snapshot?.allowExternalDrives == UserDefaults.standard.bool(forKey: "AllowExternalDrives") else {
             setUSBReadiness(.unverified(usbDiscoveryState.failure ?? .query(.cancelled)), logResult: logResult)
@@ -182,6 +234,9 @@ extension AnalysisLogic {
         guard selectedTargetIdentity == verification.identity else {
             setUSBReadiness(.unverified(.identityChanged), logResult: logResult); return
         }
+        guard verification.isFresh() else {
+            setUSBReadiness(.unverified(.confirmationExpired), logResult: logResult); return
+        }
         guard let required = usbTargetCapacityRequirement?.minimumBytes else {
             setUSBReadiness(.awaitingRequirement, logResult: logResult); return
         }
@@ -194,8 +249,8 @@ extension AnalysisLogic {
 
     private func setUSBReadiness(_ readiness: USBTargetReadiness, logResult: Bool = false) {
         let previous = usbTargetReadiness
-        usbTargetReadiness = readiness
         guard previous != readiness || logResult else { return }
+        if previous != readiness { usbTargetReadiness = readiness }
         log("Selected USB target readiness: generation=\(physicalDriveRefreshGeneration), device=\(selectedDrive?.device ?? "none"), previous=\(previous), result=\(readiness), required=\(usbTargetCapacityRequirement?.minimumBytes.description ?? "unknown") B; readiness \(readiness.isReady ? "available" : "blocked").", category: "USBSelection")
     }
 }

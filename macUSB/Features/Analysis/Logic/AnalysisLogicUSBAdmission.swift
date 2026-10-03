@@ -40,6 +40,7 @@ extension AnalysisLogic {
                     readiness = actual >= required ? .ready(required: required, actual: actual) : .insufficient(required: required, actual: actual)
                 } else { readiness = .unverified(.capacityUnavailable) }
             }
+            let confirmedAt = ProcessInfo.processInfo.systemUptime
             DispatchQueue.main.async {
                 guard let self else { return }
                 guard let pending = self.usbDiscoveryState.admissionRequest, pending.id == request else {
@@ -78,7 +79,7 @@ extension AnalysisLogic {
                         case .unverified(let problem): capacity = .failure(problem)
                         default: capacity = .failure(.incompleteData)
                         }
-                        verification[selected.selectionID] = USBTargetVerification(identity: expectedIdentity, capacity: capacity)
+                        verification[selected.selectionID] = USBTargetVerification(identity: expectedIdentity, capacity: capacity, confirmedAt: readiness.problem == nil ? confirmedAt : snapshot.verification[selected.selectionID]?.confirmedAt)
                         var issues = snapshot.issues.filter { $0.device != selected.device }
                         if let problem = readiness.problem { issues.append(USBDiscoveryIssue(device: selected.device, problem: problem)) }
                         self.usbDiscoveryState.snapshot = USBDiscoverySnapshot(

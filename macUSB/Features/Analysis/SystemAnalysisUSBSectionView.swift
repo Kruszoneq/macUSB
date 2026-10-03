@@ -35,7 +35,7 @@ struct SystemAnalysisUSBSectionView: View {
 
     private var needsExplicitReselectionAction: Bool {
         guard let problem = logic.usbTargetReadiness.problem, logic.selectedDrive != nil else { return false }
-        return problem != .query(.busy) && problem != .query(.cancelled)
+        return problem != .query(.busy) && problem != .query(.cancelled) && problem != .confirmationExpired
     }
 
     /// A failed selection must remain actionable even if the user chooses the
@@ -197,7 +197,19 @@ struct SystemAnalysisUSBSectionView: View {
                     }
                     .transition(.opacity)
                 }
-                if logic.capacityCheckFinished && logic.isCapacitySufficient {
+                if logic.isUSBAvailabilityConfirmationExpired {
+                    StatusCard(tone: .subtle, density: .compact) {
+                        HStack(alignment: .center) {
+                            Image(systemName: "info.circle").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                            VStack(alignment: .leading) {
+                                Text("analysis.usb.discovery.availability.title", tableName: "Analysis").font(.headline)
+                                Text("analysis.usb.discovery.availability.description", tableName: "Analysis").font(.subheadline).foregroundColor(.secondary)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                } else if logic.capacityCheckFinished && logic.isCapacitySufficient {
                     VStack(alignment: .leading, spacing: 15) {
                         StatusCard(tone: .warning, density: .compact) {
                             HStack(alignment: .center) {
@@ -210,7 +222,7 @@ struct SystemAnalysisUSBSectionView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
-                    .transition(.opacity)
+                    .transition(.move(edge: .top).combined(with: .opacity))
                 }
             }
         }

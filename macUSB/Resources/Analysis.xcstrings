@@ -4406,6 +4406,172 @@
         }
       }
     },
+    "analysis.usb.discovery.availability.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Überprüfung des Laufwerks dauert länger als erwartet. Warte, bis seine Verfügbarkeit bestätigt wurde."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The drive check is taking longer than expected. Wait for its availability to be confirmed."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La comprobación de la unidad está tardando más de lo esperado. Espera a que se confirme su disponibilidad."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La vérification du support prend plus de temps que prévu. Attendez que sa disponibilité soit confirmée."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La verifica dell’unità sta richiedendo più tempo del previsto. Attendi la conferma della sua disponibilità."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ドライブの確認に予想以上の時間がかかっています。利用可能であることが確認されるまでお待ちください。"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprawdzanie nośnika trwa zbyt długo. Poczekaj na potwierdzenie jego dostępności."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A verificação da unidade está demorando mais do que o esperado. Aguarde a confirmação da disponibilidade."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверка носителя занимает больше времени, чем ожидалось. Дождитесь подтверждения его доступности."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sürücü denetimi beklenenden uzun sürüyor. Kullanılabilirliğinin doğrulanmasını bekleyin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перевірка носія триває довше, ніж очікувалося. Дочекайтеся підтвердження його доступності."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Việc kiểm tra ổ đĩa đang mất nhiều thời gian hơn dự kiến. Hãy chờ xác nhận ổ đĩa khả dụng."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "驱动器检查所需的时间比预期更长。请等待确认驱动器可用。"
+          }
+        }
+      }
+    },
+    "analysis.usb.discovery.availability.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfügbarkeit des Laufwerks kann nicht bestätigt werden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Can’t confirm drive availability"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede confirmar la disponibilidad de la unidad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de confirmer la disponibilité du support"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile confermare la disponibilità dell’unità"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ドライブの利用可能状態を確認できません"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie można potwierdzić dostępności nośnika"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não é possível confirmar a disponibilidade da unidade"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удаётся подтвердить доступность носителя"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sürücünün kullanılabilirliği doğrulanamıyor"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдається підтвердити доступність носія"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể xác nhận ổ đĩa khả dụng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法确认驱动器是否可用"
+          }
+        }
+      }
+    },
     "analysis.usb.discovery.capacity.description" : {
       "extractionState" : "manual",
       "localizations" : {

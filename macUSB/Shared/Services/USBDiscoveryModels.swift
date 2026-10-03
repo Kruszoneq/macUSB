@@ -8,6 +8,7 @@ enum USBDiscoveryProblem: Error, Equatable {
     case identityUnavailable
     case identityChanged
     case targetMissing
+    case confirmationExpired
 
     var descriptionKey: String {
         switch self {
@@ -18,6 +19,7 @@ enum USBDiscoveryProblem: Error, Equatable {
         case .query(.exitStatus): return "analysis.usb.discovery.device.description"
         case .capacityUnavailable: return "analysis.usb.discovery.capacity.description"
         case .identityUnavailable, .identityChanged: return "analysis.usb.discovery.identity.description"
+        case .confirmationExpired: return "analysis.usb.discovery.availability.description"
         case .targetMissing: return "analysis.usb.discovery.missing.description"
         }
     }
@@ -31,6 +33,21 @@ struct USBDiscoveryIssue: Equatable {
 struct USBTargetVerification: Equatable {
     let identity: String?
     let capacity: Result<Int64, USBDiscoveryProblem>
+    // Timestamp of this target's successful metadata/identity read, never a
+    // scan start or another device's success. Uptime is monotonic.
+    var confirmedAt: TimeInterval? = nil
+
+    static let maximumConfirmationAge: TimeInterval = 20
+
+    func isFresh(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) -> Bool {
+        guard problem == nil, confirmedAt != nil else { return false }
+        return !isConfirmationExpired(at: now)
+    }
+
+    func isConfirmationExpired(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) -> Bool {
+        guard let confirmedAt else { return false }
+        return now - confirmedAt >= Self.maximumConfirmationAge
+    }
 
     var problem: USBDiscoveryProblem? {
         if case .failure(let problem) = capacity { return problem }

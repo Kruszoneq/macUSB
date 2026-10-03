@@ -10,19 +10,25 @@ struct AnalysisUSBDiscoveryNotice: Equatable {
 
 extension AnalysisLogic {
     var usbDiscoveryNotice: AnalysisUSBDiscoveryNotice? {
+        // The availability card occupies the destructive-warning position.
+        // Never repeat this selected-target problem above the same selector.
+        if isUSBAvailabilityConfirmationExpired { return nil }
         let alternative = usbDiscoveryState.hasCurrentSnapshot && selectableUSBTargets.contains { drive in
             guard let required = usbTargetCapacityRequirement?.minimumBytes,
-                  let proof = usbDiscoveryState.snapshot?.verification[drive.selectionID], proof.problem == nil,
+                  let proof = usbDiscoveryState.snapshot?.verification[drive.selectionID], proof.problem == nil, proof.isFresh(),
                   case .success(let actual) = proof.capacity else { return false }
             return actual >= required
         }
         if let failure = usbDiscoveryState.failure {
             return AnalysisUSBDiscoveryNotice(titleKey: "analysis.usb.discovery.refresh.title", descriptionKey: usbSelectionProblemDescriptionKey(failure), offersVerifiedAlternative: false, waiting: false)
         }
+        if usbTargetReadiness.problem == .targetMissing,
+           usbDiscoveryState.hasCurrentSnapshot, selectableUSBTargets.isEmpty,
+           usbDiscoveryState.snapshot?.issues.isEmpty == true { return nil }
         if let problem = usbTargetReadiness.problem, problem != .query(.cancelled), problem != .query(.busy) {
             return AnalysisUSBDiscoveryNotice(titleKey: "analysis.usb.discovery.unavailable.title", descriptionKey: problem.descriptionKey, offersVerifiedAlternative: alternative, waiting: false)
         }
-        if usbDiscoveryState.activity == .waiting {
+        if usbDiscoveryState.activity == .waiting && selectedDrive == nil {
             return AnalysisUSBDiscoveryNotice(titleKey: "analysis.usb.discovery.waiting.title", descriptionKey: "analysis.usb.discovery.waiting.description", offersVerifiedAlternative: false, waiting: true)
         }
         if usbDiscoveryState.hasCurrentSnapshot, let issues = usbDiscoveryState.snapshot?.issues, !issues.isEmpty {
@@ -38,6 +44,10 @@ extension AnalysisLogic {
         return problem.descriptionKey
     }
 
+    var isUSBAvailabilityConfirmationExpired: Bool {
+        selectedDrive != nil && usbTargetReadiness.problem == .confirmationExpired
+    }
+
     var canRetryUSBDiscovery: Bool {
         usbDiscoveryState.activity != .checking && usbDiscoveryState.activity != .waiting
     }
@@ -51,7 +61,7 @@ extension AnalysisLogic {
             checkCapacity()
         }
         guard let problem = usbTargetReadiness.problem,
-              problem != .query(.busy), problem != .query(.cancelled),
+              problem != .query(.busy), problem != .query(.cancelled), problem != .confirmationExpired,
               !isUSBSelectionAlertPresented else { return }
         isUSBSelectionAlertPresented = true
         log("User attempted unavailable USB target selection: device=\(selectedDrive?.device ?? "none"), reason=\(problem).", category: "USBSelection")

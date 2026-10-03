@@ -5,16 +5,24 @@ import Foundation
 enum USBTargetDiscoveryService {
     static func scan(
         allowExternalDrives: Bool, cancellation: USBDiscoveryCancellation,
-        scanID: UInt, workflow: AppLogging.Workflow?, diagnostics: USBDiscoveryDiagnostics
+        scanID: UInt, workflow: AppLogging.Workflow?, diagnostics: USBDiscoveryDiagnostics, manualRetry: Bool = false
     ) -> USBDiscoveryResult {
         func record(_ text: String, key: String, signature: String) {
-            diagnostics.record("Scan \(scanID): \(text)", key: key, signature: signature, workflow: workflow)
+            diagnostics.record("Scan \(scanID): \(text)", key: key, signature: signature, workflow: workflow, force: manualRetry)
         }
         func query(_ arguments: [String], device: String) -> Result<[String: Any], USBDiscoveryProblem> {
             let command = "/usr/sbin/diskutil " + arguments.joined(separator: " ")
             let report = USBDiscoveryProcessRunner.shared.runReport(
                 arguments: arguments, cancellation: cancellation,
-                diagnostic: { message in record(message, key: "process.\(device).\(message.components(separatedBy: " pid=").first ?? message)", signature: message.components(separatedBy: " pid=").first ?? message) }
+                diagnostic: { message in
+                    if message == "Discovery subprocess slot released after observed child exit." {
+                        diagnostics.recover("Scan \(scanID): \(message)", key: "process.\(device).retained", workflow: workflow)
+                    } else {
+                        let signature = message.replacingOccurrences(of: #"pid=\d+"#, with: "pid=<child>", options: .regularExpression)
+                        let key = message.contains("retaining subprocess slot") ? "process.\(device).retained" : "process.\(device).\(signature)"
+                        record(message, key: key, signature: signature)
+                    }
+                }
             )
             let status = report.exitStatus.map(String.init) ?? "unavailable"
             let duration = String(format: "%.3f", report.duration)
@@ -30,7 +38,10 @@ enum USBTargetDiscoveryService {
                     guard let plist = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] else {
                         throw USBDiscoveryProblem.malformedData
                     }
-                    record("Query device=\(device), command=\(command), duration=\(duration)s, result=success, exit=\(status), stdout=\(data.count) bytes, stderr (bounded): \(snippet(report.stderr)).", key: "query.\(device)", signature: "success:\(snippet(report.stderr))")
+                    if manualRetry {
+                        record("Query device=\(device), command=\(command), duration=\(duration)s, result=success, exit=\(status), stdout=\(data.count) bytes, stderr (bounded): \(snippet(report.stderr)).", key: "query.\(device)", signature: "recovered")
+                    }
+                    diagnostics.recover("Scan \(scanID): Query recovered: device=\(device), command=\(command), result=success, exit=\(status).", key: "query.\(device)", workflow: workflow)
                     return .success(plist)
                 } catch {
                     record("Query device=\(device), command=\(command), duration=\(duration)s, exit=\(status), category=malformedData, parsing=\(error).\nstdout (bounded): \(snippet(data))\nstderr (bounded): \(snippet(report.stderr))", key: "query.\(device)", signature: "malformedData:\(error):\(snippet(data))")
@@ -53,6 +64,8 @@ enum USBTargetDiscoveryService {
             return .failed(.incompleteData)
         }
 
+        diagnostics.recover("Scan \(scanID): Whole-disk enumeration recovered.", key: "enumeration", workflow: workflow)
+
         var drives: [USBDrive] = []
         var verification: [String: USBTargetVerification] = [:]
         var issues: [USBDiscoveryIssue] = []
@@ -67,6 +80,7 @@ enum USBTargetDiscoveryService {
             case .failure(let failure): info = nil; problem = failure
             }
             let after = USBDiscoveryRegistryProbe.media(named: device)
+            let confirmedAt = ProcessInfo.processInfo.systemUptime
             let sameMedia = before?.identity != nil && before?.identity == after?.identity
             let registryUSB = sameMedia && after?.isExternalPhysicalUSB == true
             // diskutil info names this field WholeDisk; IOMedia uses Whole.
@@ -124,19 +138,24 @@ enum USBTargetDiscoveryService {
                 usbSpeed: USBDriveLogic.detectUSBSpeed(forBSDName: device),
                 partitionScheme: USBDriveLogic.detectPartitionScheme(forBSDName: device)
             )
+            if problem == nil {
+                diagnostics.recover("Scan \(scanID): Device \(device) metadata recovered.", key: "metadata.\(device)", workflow: workflow)
+            }
             drives.append(drive)
             verification[drive.selectionID] = USBTargetVerification(
                 identity: sameMedia ? after.map { String($0.identity) } : nil,
-                capacity: problem.map { .failure($0) } ?? capacity.map { .success($0) } ?? .failure(.capacityUnavailable)
+                capacity: problem.map { .failure($0) } ?? capacity.map { .success($0) } ?? .failure(.capacityUnavailable),
+                confirmedAt: problem == nil ? confirmedAt : nil
             )
             if let problem { issues.append(USBDiscoveryIssue(device: device, problem: problem)) }
-            record("Device \(device) qualification=\(problem == nil ? "verified" : "unavailable"), identity=\(after.map { String($0.identity) } ?? "unknown"), capacity=\(capacity.map(String.init) ?? "unknown") B, reason=\(problem.map { String(describing: $0) } ?? "none").", key: "qualification.\(device)", signature: "\(verification[drive.selectionID]!)")
+            record("Device \(device) qualification=\(problem == nil ? "verified" : "unavailable"), identity=\(after.map { String($0.identity) } ?? "unknown"), capacity=\(capacity.map(String.init) ?? "unknown") B, reason=\(problem.map { String(describing: $0) } ?? "none").", key: "qualification.\(device)", signature: "\(verification[drive.selectionID]!.identity ?? "unknown"):\(verification[drive.selectionID]!.capacity)")
         }
         drives.sort { $0.device.localizedStandardCompare($1.device) == .orderedAscending }
         let physical = drives
         let collected = USBDiscoveryVolumeCollector.collect(
             physical: physical, verification: verification, allowExternalDrives: allowExternalDrives,
-            cancellation: cancellation, record: { record($0, key: $1, signature: $2) }
+            cancellation: cancellation, record: { record($0, key: $1, signature: $2) },
+            recover: { diagnostics.recover("Scan \(scanID): " + $0, key: $1, workflow: workflow) }
         )
         let volumes = collected.drives
         verification.merge(collected.verification) { _, new in new }
@@ -154,7 +173,7 @@ enum USBTargetDiscoveryService {
                     verification[candidate.selectionID] = USBTargetVerification(identity: verification[candidate.selectionID]?.identity, capacity: .failure(problem))
                 }
                 issues.append(USBDiscoveryIssue(device: drive.device, problem: problem))
-                record("Device \(drive.device) lost identity verification before publication: current=\(currentID ?? "unknown"), reason=\(problem).", key: "qualification.\(drive.device)", signature: "\(problem)")
+                record("Device \(drive.device) lost identity verification before publication: current=\(currentID ?? "unknown"), reason=\(problem).", key: "publication.\(drive.device)", signature: "\(problem)")
                 continue
             }
         }
@@ -166,8 +185,11 @@ enum USBTargetDiscoveryService {
             if currentID == nil || currentID != verification[volume.selectionID]?.identity {
                 verification[volume.selectionID] = USBTargetVerification(identity: verification[volume.selectionID]?.identity, capacity: .failure(.identityUnavailable))
                 issues.append(USBDiscoveryIssue(device: volume.device, problem: .identityUnavailable))
-                record("Volume \(volume.device) lost identity verification before publication.", key: "qualification.\(volume.device)", signature: "identityUnavailable")
+                record("Volume \(volume.device) lost identity verification before publication.", key: "publication.\(volume.device)", signature: "identityUnavailable")
             }
+        }
+        for drive in physical + volumes where verification[drive.selectionID]?.problem == nil {
+            diagnostics.recover("Scan \(scanID): Device \(drive.device) publication verification recovered.", key: "publication.\(drive.device)", workflow: workflow)
         }
         let byParent = Dictionary(grouping: volumes) { USBDriveLogic.wholeDiskName(from: $0.device) }
         let option = physical.flatMap { [$0] + (byParent[$0.device] ?? []) }
