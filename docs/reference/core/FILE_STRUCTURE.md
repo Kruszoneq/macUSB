@@ -16,6 +16,7 @@
 ### Welcome layout
 
 - `macUSB/Features/Welcome/WelcomeView.swift` — welcome UI, manual and optional automatic analysis navigation.
+- `macUSB/Features/Welcome/WelcomeAutoSkipPreferences.swift` — NSAlert confirmation before persisting the automatic welcome-skip preference.
 - `macUSB/Features/Welcome/WelcomeStartupCoordinator.swift` — session-owned startup orchestration, prerequisite gating, and one-shot automatic navigation.
 - `macUSB/Features/Welcome/WelcomeStartupUpdateChecker.swift` — startup update request, metadata validation, existing update alert, and explicit up-to-date/update-available/failure result.
 

@@ -132,11 +132,13 @@ struct WelcomeView: View {
             MenuState.shared.resetLanguageChangesForWelcome()
             MenuState.shared.rawLinuxImageSelectionEnabled = true
             isWelcomeVisible = true
+            startupCoordinator.setWelcomeActive(true)
             startupCoordinator.startIfNeeded()
             attemptAutomaticNavigation()
         }
         .onDisappear {
             isWelcomeVisible = false
+            startupCoordinator.setWelcomeActive(false)
             MenuState.shared.rawLinuxImageSelectionEnabled = false
         }
     }

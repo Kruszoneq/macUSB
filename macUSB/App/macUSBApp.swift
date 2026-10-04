@@ -86,7 +86,10 @@ struct macUSBApp: App {
             CommandGroup(replacing: .newItem) { }
             
             CommandMenu(String(localized: "app.menu.options.title", table: "App")) {
-                Toggle(isOn: $menuState.skipWelcomeEnabled) {
+                Toggle(isOn: Binding(
+                    get: { menuState.skipWelcomeEnabled },
+                    set: { WelcomeAutoSkipPreferences.shared.setEnabled($0) }
+                )) {
                     Text("app.welcome.auto_skip.menu", tableName: "App")
                 }
                 Divider()
