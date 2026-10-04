@@ -40,6 +40,12 @@
             "value" : "戻る"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terug"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -121,6 +127,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "いいえ"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nee"
           }
         },
         "pl" : {
@@ -206,6 +218,12 @@
             "value" : "最初からやり直す"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin opnieuw"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -287,6 +305,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開始"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
           }
         },
         "pl" : {
@@ -372,6 +396,12 @@
             "value" : "はい"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ja"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -453,6 +483,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ユーザーによって操作が中断されました。最初からやり直せます。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewerking afgebroken door de gebruiker. Je kunt opnieuw beginnen."
           }
         },
         "pl" : {
@@ -538,6 +574,12 @@
             "value" : "プロセスが中断されました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proces afgebroken"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -619,6 +661,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "操作を中止しています"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewerking afbreken"
           }
         },
         "pl" : {
@@ -704,6 +752,12 @@
             "value" : "アプリケーションのそれ以上の操作はブロックされました。最初からやり直すには、アプリケーションを再起動してください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verder gebruik van de app is geblokkeerd. Start de app opnieuw om overnieuw te beginnen."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -785,6 +839,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "USBメモリが切断されました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-schijf losgekoppeld"
           }
         },
         "pl" : {
@@ -870,6 +930,12 @@
             "value" : "すべての処理には数分かかる場合があります。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het hele proces kan een paar minuten duren."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -951,6 +1017,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "エラーが発生しました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er is een fout opgetreden"
           }
         },
         "pl" : {
@@ -1036,6 +1108,12 @@
             "value" : "• Linux イメージが USB ドライブに書き込まれます"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• De Linux-image wordt naar de USB-schijf geschreven"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1117,6 +1195,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• Linux イメージファイルが準備されます"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Linux-imagebestanden worden voorbereid"
           }
         },
         "pl" : {
@@ -1202,6 +1286,12 @@
             "value" : "Linux起動メディアの作成中に、macOSが次のメッセージを表示する場合があります:「接続したディスクは、このコンピュータで読み取れないディスクでした。」これは想定内の動作です。続けるには、このウインドウで「無視」を選択してください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bij het aanmaken van Linux-opstartmedia kan macOS deze melding tonen: “De schijf die je hebt aangesloten, kan niet door deze computer worden gelezen.” Dit is normaal. Kies in dat venster “Negeer” om door te gaan."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1283,6 +1373,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "作成中に表示されるディスク読み取り不可メッセージ"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Melding over onleesbaar medium tijdens het aanmaken"
           }
         },
         "pl" : {
@@ -1368,6 +1464,12 @@
             "value" : "• インストーラ構成が最終処理されます"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• De structuur van het installatieprogramma wordt afgerond"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1449,6 +1551,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• USBドライブは適切にフォーマットされます"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• De USB-schijf wordt op de juiste manier geformatteerd"
           }
         },
         "pl" : {
@@ -1534,6 +1642,12 @@
             "value" : "• インストールイメージが復元されます"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• De installatie-image wordt teruggezet"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1615,6 +1729,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• インストールファイルがコピーされます"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Installatiebestanden worden gekopieerd"
           }
         },
         "pl" : {
@@ -1700,6 +1820,12 @@
             "value" : "• USBドライブはフォーマットされます"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• De USB-schijf wordt geformatteerd"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1781,6 +1907,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• システムファイルが準備されます"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Systeembestanden worden voorbereid"
           }
         },
         "pl" : {
@@ -1866,6 +1998,12 @@
             "value" : "• システムイメージが復元されます"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• De systeemimage wordt teruggezet"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1947,6 +2085,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• システムイメージがコピーされ、検証されます"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• De systeemimage wordt gekopieerd en geverifieerd"
           }
         },
         "pl" : {
@@ -2032,6 +2176,12 @@
             "value" : "もう一度確認"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer opnieuw"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2113,6 +2263,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSBはRosettaが利用可能かどうかを確認できませんでした。続けるには、もう一度確認してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB kon niet bevestigen of Rosetta beschikbaar is. Controleer opnieuw om door te gaan."
           }
         },
         "pl" : {
@@ -2198,6 +2354,12 @@
             "value" : "Rosettaを確認できませんでした"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosetta kon niet worden gecontroleerd"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2279,6 +2441,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rosettaをインストール"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installeer Rosetta"
           }
         },
         "pl" : {
@@ -2364,6 +2532,12 @@
             "value" : "インターネット接続を確認して、もう一度お試しください。詳細は診断ログに保存されました。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer je internetverbinding en probeer het opnieuw. Details zijn bewaard in het diagnostische logboek."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2445,6 +2619,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rosettaをインストールできませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosetta kon niet worden geïnstalleerd"
           }
         },
         "pl" : {
@@ -2530,6 +2710,12 @@
             "value" : "Rosettaがインストールされました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosetta is geïnstalleerd"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2611,6 +2797,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rosettaをインストール中"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosetta installeren"
           }
         },
         "pl" : {
@@ -2696,6 +2888,12 @@
             "value" : "同意する"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akkoord"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2777,6 +2975,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "「同意する」を選択すると、Rosettaに関するAppleソフトウェア使用許諾契約の条件に同意したことになります。同意すると、このMacにRosettaがインストールされます。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Door “Akkoord” te kiezen, ga je akkoord met de softwarelicentieovereenkomst van Apple voor Rosetta. Rosetta wordt daarna op deze Mac geïnstalleerd."
           }
         },
         "pl" : {
@@ -2862,6 +3066,12 @@
             "value" : "同意しない"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niet akkoord"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2943,6 +3153,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rosettaをインストール"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installeer Rosetta"
           }
         },
         "pl" : {
@@ -3028,6 +3244,12 @@
             "value" : "選択したインストーラのcreateinstallmediaツールはIntelプロセッサ向けで、このMacではRosettaが必要です。インストールメディアの作成を開始するには、Rosettaをインストールしてください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het hulpprogramma createinstallmedia in het geselecteerde installatieprogramma is gemaakt voor Intel-processors en vereist Rosetta op deze Mac. Installeer Rosetta om het installatiemedium aan te maken."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3109,6 +3331,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rosettaが必要です"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosetta is vereist"
           }
         },
         "pl" : {
@@ -3194,6 +3422,12 @@
             "value" : "Rosettaのインストールは完了しましたが、まだ利用可能であることを確認できません。しばらく待ってから、もう一度確認してください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De installatie van Rosetta is klaar, maar de beschikbaarheid kan nog niet worden bevestigd. Wacht even en controleer opnieuw."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3275,6 +3509,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rosettaはまだ利用できません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosetta is nog niet beschikbaar"
           }
         },
         "pl" : {
@@ -3360,6 +3600,12 @@
             "value" : "もう一度試す"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probeer opnieuw"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3441,6 +3687,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "操作の詳細"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details van bewerking"
           }
         },
         "pl" : {
@@ -3526,6 +3778,12 @@
             "value" : "ヘルパーツールの「バックグラウンドでの実行を許可」が不足しています。アプリが正しく動作しない可能性があります。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De vereiste bevoegdheid “Sta toe op de achtergrond” voor de helper ontbreekt. De app werkt mogelijk niet goed."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3607,6 +3865,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "必要な許可が不足しています: macUSB の「フルディスクアクセス」と、ヘルパーツールの「バックグラウンドでの実行を許可」。アプリが正しく動作しない可能性があります。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vereiste bevoegdheden ontbreken: “Volledige schijftoegang” voor macUSB en “Sta toe op de achtergrond” voor de helper. De app werkt mogelijk niet goed."
           }
         },
         "pl" : {
@@ -3692,6 +3956,12 @@
             "value" : "必要な許可が不足しています: macUSB の「フルディスクアクセス」。アプリが正しく動作しない可能性があります。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De vereiste bevoegdheid ontbreekt: “Volledige schijftoegang” voor macUSB. De app werkt mogelijk niet goed."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3773,6 +4043,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "必要な許可が不足しています"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vereiste bevoegdheden ontbreken"
           }
         },
         "pl" : {
@@ -3858,6 +4134,12 @@
             "value" : "• 一時ファイルは自動的に削除されます"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Tijdelijke bestanden worden automatisch verwijderd"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3939,6 +4221,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "プロセスの概要"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overzicht van het proces"
           }
         },
         "pl" : {
@@ -4024,6 +4312,12 @@
             "value" : "• 選択したUSBドライブはマウント解除されます"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• De geselecteerde USB-schijf wordt gedeactiveerd"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4105,6 +4399,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• イメージがUSBドライブに書き込まれます"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• De image wordt naar de USB-schijf geschreven"
           }
         },
         "pl" : {
@@ -4190,6 +4490,12 @@
             "value" : "• イメージファイルが準備されます"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Het imagebestand wordt voorbereid"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4271,6 +4577,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• 書き込みが検証されます"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Het schrijven wordt geverifieerd"
           }
         },
         "pl" : {
@@ -4356,6 +4668,12 @@
             "value" : "選択したイメージ"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geselecteerde image"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4437,6 +4755,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "書き込み処理"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verloop van het schrijven"
           }
         },
         "pl" : {
@@ -4522,6 +4846,12 @@
             "value" : "書き込み中に、ドライブを読み取れないというメッセージがmacOSに表示される場合があります。これは想定される動作です。続けるには「無視」を選択してください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdens het schrijven kan macOS melden dat de schijf onleesbaar is. Dit is normaal. Kies “Negeer” om door te gaan."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4603,6 +4933,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ディスクを読み取れないというメッセージが表示される場合があります"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mogelijke melding over onleesbare schijf"
           }
         },
         "pl" : {
@@ -4688,6 +5024,12 @@
             "value" : "選択したドライブは古いデータ転送規格を使用しています。書き込みには数分以上かかる場合があります"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De geselecteerde schijf gebruikt een oudere standaard voor gegevensoverdracht. Het schrijven kan enkele minuten duren"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4769,6 +5111,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択されたUSBメモリ"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geselecteerde USB-schijf"
           }
         },
         "pl" : {
@@ -4854,6 +5202,12 @@
             "value" : "選択されたシステムバージョン"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geselecteerde systeemversie"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4935,6 +5289,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したドライブ上のすべてのデータが削除されます。処理を開始してもよろしいですか？"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle gegevens op de geselecteerde schijf worden gewist. Weet je zeker dat je wilt beginnen?"
           }
         },
         "pl" : {
@@ -5020,6 +5380,12 @@
             "value" : "データ消失の警告"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waarschuwing voor gegevensverlies"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5101,6 +5467,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "作成プロセス"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verloop van het aanmaken"
           }
         },
         "pl" : {
@@ -5186,6 +5558,12 @@
             "value" : "選択されたドライブは古いデータ転送規格を使用しています。インストーラの作成には十数分かかる場合があります。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De geselecteerde schijf gebruikt een oudere standaard voor gegevensoverdracht. Het aanmaken van het installatieprogramma kan enkele minuten duren."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5267,6 +5645,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "USB 2.0ドライブが選択されました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB 2.0-schijf geselecteerd"
           }
         },
         "pl" : {
@@ -5352,6 +5736,12 @@
             "value" : "お待ちください..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Even geduld..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5433,6 +5823,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Windows の初回起動時に、このアカウントのパスワードの設定を求められます"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bij de eerste start vraagt Windows je om een wachtwoord voor dit account in te stellen"
           }
         },
         "pl" : {
@@ -5518,6 +5914,12 @@
             "value" : "表示名に使用できない文字が含まれています"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De weergavenaam bevat tekens die niet zijn toegestaan"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5599,6 +6001,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "表示名"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weergavenaam"
           }
         },
         "pl" : {
@@ -5684,6 +6092,12 @@
             "value" : "表示名を入力"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voer een weergavenaam in"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5765,6 +6179,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したWindowsの制限を回避し、システムの初期設定を簡単にします。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omzeil bepaalde Windows-beperkingen en vereenvoudig de eerste configuratie van het systeem."
           }
         },
         "pl" : {
@@ -5850,6 +6270,12 @@
             "value" : "Windowsインストールの構成"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuratie van Windows-installatie"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5931,6 +6357,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "構成…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configureer…"
           }
         },
         "pl" : {
@@ -6016,6 +6448,12 @@
             "value" : "選択したWindowsイメージには独自の自動構成が含まれています。そのまま使用するか、macUSBの構成に置き換えるか、ドライブの作成を停止できます。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De geselecteerde Windows-image bevat een eigen automatische configuratie. Je kunt die behouden, vervangen door de macUSB-configuratie of het aanmaken van de schijf stoppen."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6097,6 +6535,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSBの構成を使用"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik macUSB-configuratie"
           }
         },
         "pl" : {
@@ -6182,6 +6626,12 @@
             "value" : "停止"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6263,6 +6713,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "このイメージにはすでにAutounattend.xmlが含まれています"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze image bevat al Autounattend.xml"
           }
         },
         "pl" : {
@@ -6348,6 +6804,12 @@
             "value" : "イメージのファイルを保持"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Behoud bestand uit image"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6429,6 +6891,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "完了"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gereed"
           }
         },
         "pl" : {
@@ -6514,6 +6982,12 @@
             "value" : "データ収集を制限し、プライバシーの質問をスキップ"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beperk gegevensverzameling en sla privacyvragen over"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6595,6 +7069,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Windows 11のハードウェア要件を回避（TPM 2.0、Secure Boot、RAMを含む）"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omzeil de hardwarevereisten van Windows 11, waaronder TPM 2.0, Secure Boot en RAM"
           }
         },
         "pl" : {
@@ -6680,6 +7160,12 @@
             "value" : "ローカルアカウントを自動的に作成"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maak automatisch een lokaal account aan"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6761,6 +7247,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "BitLockerの自動暗号化を防止"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorkom automatische BitLocker-versleuteling"
           }
         },
         "pl" : {
@@ -6846,6 +7338,12 @@
             "value" : "Microsoftアカウントの要件を回避"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omzeil de verplichting van een Microsoft-account"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6927,6 +7425,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wi-Fiネットワーク設定の要件を回避"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omzeil de verplichte configuratie van een wifinetwerk"
           }
         },
         "pl" : {
@@ -7012,6 +7516,12 @@
             "value" : "このMacの言語と地域の設定を使用"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik de taal- en regio-instellingen van deze Mac"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7093,6 +7603,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "このWindowsイメージには、このMacで使用されている言語が含まれていません。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze Windows-image bevat de taal van deze Mac niet."
           }
         },
         "pl" : {
@@ -7178,6 +7694,12 @@
             "value" : "選択済み：%d"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geselecteerd: %d"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7259,6 +7781,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "このUSBメディアはLegacy BIOS起動専用として準備されます。UEFI起動には対応していません。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit USB-medium wordt alleen voorbereid voor opstarten via Legacy BIOS. Opstarten via UEFI wordt niet ondersteund."
           }
         },
         "pl" : {
@@ -7344,6 +7872,12 @@
             "value" : "BIOS対応メディア"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BIOS-compatibel medium"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7425,6 +7959,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Windowsのインストール先となるコンピュータが対応している起動モードを選択してください"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies een opstartmodus die wordt ondersteund door de computer waarop Windows wordt geïnstalleerd"
           }
         },
         "pl" : {
@@ -7510,6 +8050,12 @@
             "value" : "helper を自動的に更新できませんでした。ツール → helper を修復 を開いて、もう一度お試しください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper kon niet automatisch worden vernieuwd. Open Hulpmiddelen → Repareer helper en probeer het opnieuw."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7591,6 +8137,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• macUSBootブートローダがUSBドライブにインストールされます"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• De bootloader macUSBoot wordt op de USB-schijf geïnstalleerd"
           }
         },
         "pl" : {
@@ -7676,6 +8228,12 @@
             "value" : "• Windowsのセットアップファイルをコピーして確認します"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Windows-installatiebestanden worden gekopieerd en gecontroleerd"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7757,6 +8315,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• Windowsイメージを確認し、コピーできるように準備します"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• De Windows-image wordt gecontroleerd en voorbereid voor het kopiëren"
           }
         },
         "pl" : {
@@ -7842,6 +8406,12 @@
             "value" : "• USBドライブは MBR（MS-DOS/FAT32）としてフォーマットされます"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• De USB-schijf wordt geformatteerd als MBR (MS-DOS/FAT32)"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7923,6 +8493,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "このUSBメディアはUEFI起動専用として準備されます。Legacy BIOSでの起動には対応していません。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit USB-medium wordt alleen voorbereid voor opstarten via UEFI. Opstarten via Legacy BIOS wordt niet ondersteund."
           }
         },
         "pl" : {
@@ -8008,6 +8584,12 @@
             "value" : "UEFI対応メディア"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UEFI-compatibel medium"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8089,6 +8671,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "wimlib をインストールする最も簡単な方法:"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De snelste manier om wimlib te installeren is:"
           }
         },
         "pl" : {
@@ -8174,6 +8762,12 @@
             "value" : "Homebrew でインストール"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installeer met Homebrew"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8255,6 +8849,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "先に Homebrew をインストールし、その後 wimlib をインストールしてください:"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installeer eerst Homebrew en gebruik dat om wimlib te installeren:"
           }
         },
         "pl" : {
@@ -8340,6 +8940,12 @@
             "value" : "先に Homebrew をインストール"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installeer eerst Homebrew"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8421,6 +9027,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "注意"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WAARSCHUWING!"
           }
         },
         "pl" : {
@@ -8506,6 +9118,12 @@
             "value" : "Homebrew のサイトを開く"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open website van Homebrew"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8587,6 +9205,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "再確認"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer opnieuw"
           }
         },
         "pl" : {
@@ -8672,6 +9296,12 @@
             "value" : "この Windows イメージでは install.wim ファイルの分割が必要です。USB インストーラの作成を開始するには wimlib をインストールしてから再確認してください"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voor deze Windows-image moet het bestand install.wim worden opgesplitst. Installeer wimlib en controleer opnieuw om het USB-installatieprogramma aan te maken"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8753,6 +9383,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "続行するには wimlib が必要です"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "wimlib is vereist om door te gaan"
           }
         },
         "pl" : {

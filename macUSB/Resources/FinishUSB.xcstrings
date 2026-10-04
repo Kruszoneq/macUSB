@@ -40,6 +40,12 @@
             "value" : "完了して終了"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rond af en sluit"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -121,6 +127,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最初からやり直す"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begin opnieuw"
           }
         },
         "pl" : {
@@ -206,6 +218,12 @@
             "value" : "一時ファイルの削除に失敗しました: %@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdelijke bestanden verwijderen mislukt: %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -287,6 +305,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "クリーンアップエラー"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opruimfout"
           }
         },
         "pl" : {
@@ -372,6 +396,12 @@
             "value" : "一時ファイルを削除中"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdelijke bestanden opruimen"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -453,6 +483,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$02d分 %2$02d秒で完了"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voltooid in %1$02dm %2$02ds"
           }
         },
         "pl" : {
@@ -538,6 +574,12 @@
             "value" : "作業完了！"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klaar!"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -619,6 +661,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ドライブを取り出す"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Werp schijf uit"
           }
         },
         "pl" : {
@@ -704,6 +752,12 @@
             "value" : "強制的に取り出す"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forceer uitwerpen"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -785,6 +839,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "作業が完了したら、コンピュータから取り外す前にドライブを取り出してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Werp de schijf na afloop uit voordat je deze loskoppelt van je Mac."
           }
         },
         "pl" : {
@@ -870,6 +930,12 @@
             "value" : "USBドライブを安全に取り出す"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Werp de USB-schijf veilig uit"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -951,6 +1017,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ドライブを使用中のアプリを閉じて、もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sluit apps die de schijf gebruiken en probeer het opnieuw."
           }
         },
         "pl" : {
@@ -1036,6 +1108,12 @@
             "value" : "再試行"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probeer opnieuw"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1117,6 +1195,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ドライブを取り出せません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schijf kan niet worden uitgeworpen"
           }
         },
         "pl" : {
@@ -1202,6 +1286,12 @@
             "value" : "macOSはまだドライブを取り出せません。ドライブを使用している可能性のあるアプリを終了して、もう一度お試しください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS kan de schijf nog steeds niet uitwerpen. Sluit alle apps die de schijf mogelijk gebruiken en probeer het opnieuw."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1283,6 +1373,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ドライブを強制的に取り出せません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schijf kan niet geforceerd worden uitgeworpen"
           }
         },
         "pl" : {
@@ -1368,6 +1464,12 @@
             "value" : "Spotlightがこのドライブの索引を作成中のため、macOSはドライブを安全に取り出せません。強制的に取り出すと、この処理を中断できます。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spotlight indexeert deze schijf, waardoor macOS deze niet veilig kan uitwerpen. Je kunt de schijf geforceerd uitwerpen om dit proces te stoppen."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1449,6 +1551,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spotlightのためドライブを取り出せません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spotlight verhindert het uitwerpen"
           }
         },
         "pl" : {
@@ -1534,6 +1642,12 @@
             "value" : "USBドライブを取り外せます。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je kunt de USB-schijf nu loskoppelen."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1615,6 +1729,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ドライブは安全に取り出されました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De schijf is veilig uitgeworpen"
           }
         },
         "pl" : {
@@ -1700,6 +1820,12 @@
             "value" : "ドライブはアプリの外で取り外されたか、取り出されました。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De schijf is losgekoppeld of buiten de app om uitgeworpen."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1781,6 +1907,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ドライブは利用できません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De schijf is niet meer beschikbaar"
           }
         },
         "pl" : {
@@ -1866,6 +1998,12 @@
             "value" : "メディアの作成を完了できませんでした"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aanmaken van medium kon niet worden voltooid"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1947,6 +2085,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "USBメディア上のデータがソースイメージと一致することを確認できませんでした。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er kon niet worden bevestigd dat de gegevens op de USB-schijf overeenkomen met de bronimage."
           }
         },
         "pl" : {
@@ -2032,6 +2176,12 @@
             "value" : "検証中にUSBメディアからすべてのデータを読み取れませんでした。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdens de verificatie konden niet alle gegevens van de USB-schijf worden gelezen."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2113,6 +2263,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "操作を完了できませんでした。再試行し、選択したUSBメディアを確認してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De bewerking kon niet worden voltooid. Probeer het opnieuw en controleer de geselecteerde USB-schijf."
           }
         },
         "pl" : {
@@ -2198,6 +2354,12 @@
             "value" : "Linuxメディアの書き込み検証に失敗しました。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verificatie van het geschreven Linux-medium mislukt."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2279,6 +2441,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• USBドライブを対象のコンピュータ（MacまたはPC）に接続します"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Sluit de USB-schijf aan op de doelcomputer (Mac of pc)"
           }
         },
         "pl" : {
@@ -2364,6 +2532,12 @@
             "value" : "• コンピュータを起動し、起動メニューでUSBドライブからの起動を選択します"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Start de computer en kies in het opstartmenu voor opstarten vanaf de USB-schijf"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2445,6 +2619,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• Linuxが起動したら、システムインストーラの案内に従ってください"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Volg de instructies van het installatieprogramma nadat Linux is gestart"
           }
         },
         "pl" : {
@@ -2530,6 +2710,12 @@
             "value" : "Linux起動メディアが作成されました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opstartbaar Linux-medium aangemaakt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2611,6 +2797,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• USBメモリを対象のMacに接続します"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Sluit de USB-schijf aan op de Mac waarop je wilt installeren"
           }
         },
         "pl" : {
@@ -2696,6 +2888,12 @@
             "value" : "• Option (⌥) キーを押しながらコンピュータを起動します"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Start de computer terwijl je de Option-toets (⌥) ingedrukt houdt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2777,6 +2975,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• リストからmacOSまたはOS Xのインストーラを選択します"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Selecteer het macOS- of OS X-installatieprogramma in de lijst"
           }
         },
         "pl" : {
@@ -2862,6 +3066,12 @@
             "value" : "USB からの起動手順（GitHub）"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instructies voor opstarten vanaf USB (GitHub)"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2943,6 +3153,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "PowerPC MacでUSBドライブからインストーラを起動するには、Open Firmwareコンソールでコマンドを入力する必要があります。詳しい手順はアプリケーションのウェブサイトをご覧ください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Om het installatieprogramma vanaf een USB-schijf op te starten op een PowerPC-Mac, moet je een commando invoeren in de Open Firmware-console. De volledige instructies staan op de website van de app."
           }
         },
         "pl" : {
@@ -3028,6 +3244,12 @@
             "value" : "PowerPC Mac の場合"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voor PowerPC-Macs"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3109,6 +3331,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "処理結果"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultaat van bewerking"
           }
         },
         "pl" : {
@@ -3194,6 +3422,12 @@
             "value" : "次は何をしますか？"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wat nu?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3275,6 +3509,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "準備したUSBドライブをPCに接続します"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sluit de voorbereide USB-schijf aan op je pc"
           }
         },
         "pl" : {
@@ -3360,6 +3600,12 @@
             "value" : "PCを起動してブートメニューを開きます"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start je pc en open het opstartmenu (Boot Menu)"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3441,6 +3687,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "起動デバイスの一覧からUSBドライブを選択し、Windowsセットアップを開始します"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecteer de USB-schijf in de lijst met opstartapparaten en start Windows Setup"
           }
         },
         "pl" : {
@@ -3526,6 +3778,12 @@
             "value" : "選択したメディアでのインストーラ作成処理は失敗しました。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het aanmaken van het installatieprogramma op het geselecteerde medium is mislukt."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3607,6 +3865,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "エラーが発生しました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er is een fout opgetreden"
           }
         },
         "pl" : {
@@ -3692,6 +3956,12 @@
             "value" : "メディアへの書き込み処理が正常に完了しました。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het schrijven naar het medium is geslaagd."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3773,6 +4043,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラの準備ができました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatieprogramma is gereed"
           }
         },
         "pl" : {
@@ -3858,6 +4134,12 @@
             "value" : "イメージの書き込み検証に失敗しました。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verificatie van de geschreven image mislukt."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3939,6 +4221,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したドライブへのイメージの書き込みに失敗しました。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het schrijven van de image naar de geselecteerde schijf is mislukt."
           }
         },
         "pl" : {
@@ -4024,6 +4312,12 @@
             "value" : "イメージがドライブに正常に書き込まれました。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De image is naar de schijf geschreven."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4105,6 +4399,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "イメージをUSBドライブに書き込めませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De image kon niet naar de USB-schijf worden geschreven"
           }
         },
         "pl" : {
@@ -4190,6 +4490,12 @@
             "value" : "RAWイメージをUSBドライブに書き込みました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onbewerkte image naar de USB-schijf geschreven"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4271,6 +4577,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "プロセスはユーザーによって停止されました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het proces is gestopt door de gebruiker"
           }
         },
         "pl" : {
@@ -4356,6 +4668,12 @@
             "value" : "中断の詳細"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details van onderbreking"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4437,6 +4755,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "中止しました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geannuleerd"
           }
         },
         "pl" : {
@@ -4522,6 +4846,12 @@
             "value" : "最初からもう一度お試しください"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probeer opnieuw vanaf het begin"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4603,6 +4933,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "エラーの詳細"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foutdetails"
           }
         },
         "pl" : {
@@ -4688,6 +5024,12 @@
             "value" : "失敗！"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mislukt!"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4769,6 +5111,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "USBメディアは正常に準備されました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het USB-medium is correct voorbereid"
           }
         },
         "pl" : {
@@ -4854,6 +5202,12 @@
             "value" : "成功！"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gelukt!"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4935,6 +5289,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "メディアの作成は中止されました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aanmaken van medium is geannuleerd"
           }
         },
         "pl" : {
@@ -5020,6 +5380,12 @@
             "value" : "インストーラの作成に失敗しました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatieprogramma aanmaken mislukt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5103,6 +5469,12 @@
             "value" : "システムインストーラが作成されました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systeeminstallatieprogramma aangemaakt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5184,6 +5556,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "お待ちください"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Even geduld"
           }
         },
         "pl" : {

@@ -240,6 +240,13 @@ struct macUSBApp: App {
                             Text("app.language.name.tr", tableName: "App")
                         }
                     }
+                    Button { languageManager.currentLanguage = "nl" } label: {
+                        if languageManager.currentLanguage == "nl" {
+                            Label(String(localized: "app.language.name.nl", table: "App"), systemImage: "checkmark")
+                        } else {
+                            Text("app.language.name.nl", tableName: "App")
+                        }
+                    }
                 } label: {
                     Label(String(localized: "app.language.menu.title", table: "App"), systemImage: "globe")
                 }

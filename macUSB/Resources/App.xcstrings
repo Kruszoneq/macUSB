@@ -40,6 +40,12 @@
             "value" : "なるほど"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begrepen"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -121,6 +127,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "キャンセル"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuleer"
           }
         },
         "pl" : {
@@ -206,6 +218,12 @@
             "value" : "閉じる"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sluit"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -287,6 +305,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "詳細"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details"
           }
         },
         "pl" : {
@@ -372,6 +396,12 @@
             "value" : "いいえ"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nee"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -455,6 +485,12 @@
             "value" : "今はしない"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niet nu"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -533,6 +569,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
@@ -621,6 +663,12 @@
             "value" : "システム設定を開く"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga naar Systeeminstellingen"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -702,6 +750,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "システム設定"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systeeminstellingen"
           }
         },
         "pl" : {
@@ -787,6 +841,12 @@
             "value" : "はい"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ja"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -868,6 +928,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "診断ログをエクスポート..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporteer diagnostische logboeken..."
           }
         },
         "pl" : {
@@ -953,6 +1019,12 @@
             "value" : "診断ログファイルの保存先を選択"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecteer een locatie om het bestand met diagnostische logboeken te bewaren"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1034,6 +1106,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "診断ログをエクスポート"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporteer diagnostische logboeken"
           }
         },
         "pl" : {
@@ -1119,6 +1197,12 @@
             "value" : "ログファイルを保存できませんでした"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Logboekbestand bewaren mislukt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1200,6 +1284,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "前回のセッションのログをエクスポート..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporteer logboeken van vorige sessie..."
           }
         },
         "pl" : {
@@ -1285,6 +1375,12 @@
             "value" : "前回のセッションのログの保存先を選択"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies waar je de logboeken van de vorige sessie wilt bewaren"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1366,6 +1462,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "前回のセッションのログをエクスポート"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporteer logboeken van vorige sessie"
           }
         },
         "pl" : {
@@ -1451,6 +1553,12 @@
             "value" : "この機能を使用すると、外付けハードドライブやSSDにインストーラを作成できます。データの誤消去を防ぐため、ターゲットドライブを選択する際は十分注意してください！"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Met deze functie kun je het installatieprogramma op externe harde schijven en SSD's zetten. Controleer de geselecteerde doelschijf zorgvuldig om te voorkomen dat je per ongeluk gegevens kwijtraakt!"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1532,6 +1640,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "外付けハードドライブのサポートを有効にする"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schakel ondersteuning voor externe harde schijven in"
           }
         },
         "pl" : {
@@ -1617,6 +1731,12 @@
             "value" : "外部メディアへのアクセス権をリセットできませんでした。再試行するか、次のコマンドをターミナルで手動実行してください: tccutil reset SystemPolicyRemovableVolumes %@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegangsrechten voor externe media konden niet opnieuw worden ingesteld. Probeer het opnieuw of voer dit commando handmatig uit in Terminal: tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1698,6 +1818,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "外付けドライブのアクセス権を消去できませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegangsrechten voor externe schijven konden niet worden gewist"
           }
         },
         "pl" : {
@@ -1783,6 +1909,12 @@
             "value" : "外付けドライブのアクセス権をリセット"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stel toegangsrechten voor externe schijven opnieuw in"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1864,6 +1996,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSB の外部メディアに対する権限をリセットしました。次回 USB インストーラを作成するときに、システムが再度許可を求めます。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De bevoegdheden van macUSB voor externe media zijn opnieuw ingesteld. Het systeem vraagt opnieuw om toestemming wanneer je weer een USB-installatieprogramma maakt."
           }
         },
         "pl" : {
@@ -1949,6 +2087,12 @@
             "value" : "外付けドライブのアクセス権を消去しました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegangsrechten voor externe schijven gewist"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2030,6 +2174,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーはシステム設定での承認が必要です。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper moet worden goedgekeurd in Systeeminstellingen."
           }
         },
         "pl" : {
@@ -2115,6 +2265,12 @@
             "value" : "macUSB でドライブ管理を有効にするには、バックグラウンド動作の許可が必要です。必要な権限を付与するため、システム設定に移動してください"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB heeft toestemming voor achtergrondactiviteit nodig om schijven te kunnen beheren. Ga naar Systeeminstellingen om de vereiste bevoegdheden te geven"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2196,6 +2352,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "必要な補助ツール"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vereiste helper"
           }
         },
         "pl" : {
@@ -2281,6 +2443,12 @@
             "value" : "macUSB はアプリケーションの新しいバージョンを検出しましたが、ヘルパーの自動更新がエラーで終了しました。 [ツール] → [修復ヘルパー] を選択し、手動で修復を実行します。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB heeft een nieuwe versie van de app gevonden, maar het automatisch bijwerken van de helper is mislukt. Kies Hulpmiddelen → Repareer helper en voer de reparatie handmatig uit."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2362,6 +2530,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーの自動更新に失敗しました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper automatisch bijwerken mislukt"
           }
         },
         "pl" : {
@@ -2447,6 +2621,12 @@
             "value" : "システムヘルパーを実行するには、アプリがApplicationsフォルダに配置されている必要があります。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Om de systeemhelper te kunnen gebruiken, moet de app in de map Apps staan."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2528,6 +2708,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "特権ヘルパーを使用するには、macUSBアプリをApplicationsフォルダに移動して再起動してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Om de helper met beheerdersrechten te gebruiken, verplaats je de macUSB-app naar de map Apps en open je de app opnieuw."
           }
         },
         "pl" : {
@@ -2613,6 +2799,12 @@
             "value" : "必須の場所 /Applications"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vereiste locatie /Applications"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2694,6 +2886,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーを修復"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repareer helper"
           }
         },
         "pl" : {
@@ -2779,6 +2977,12 @@
             "value" : "ヘルパーのステータス"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status van helper"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2860,6 +3064,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "別のヘルパー操作を実行中です。しばらく待ってから再試行してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er is al een andere helperbewerking bezig. Wacht even en probeer het opnieuw."
           }
         },
         "pl" : {
@@ -2945,6 +3155,12 @@
             "value" : "操作に失敗しました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewerking mislukt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3026,6 +3242,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "操作が完了しました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewerking voltooid"
           }
         },
         "pl" : {
@@ -3111,6 +3333,12 @@
             "value" : "ヘルパーの有効化に失敗しました。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper activeren mislukt."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3192,6 +3420,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーを登録できませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper registreren mislukt"
           }
         },
         "pl" : {
@@ -3277,6 +3511,12 @@
             "value" : "システムはヘルパー (バックグラウンド タスク管理) の登録をブロックします。 「ログイン項目 / バックグラウンドでの許可」から古い macUSB エントリを削除し、`sudo sfltool resetbtm` を実行し、macOS を再起動して、/Applications のバージョンのみを実行します。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het systeem blokkeert de registratie van de helper (Background Task Management). Verwijder oude macUSB-onderdelen uit \"Inlogonderdelen / Sta toe op de achtergrond\", voer `sudo sfltool resetbtm` uit, start macOS opnieuw op en open alleen de versie in /Applications."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3358,6 +3598,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーは登録されましたが、ユーザーの承認が必要です。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper is geregistreerd, maar moet nog door de gebruiker worden goedgekeurd."
           }
         },
         "pl" : {
@@ -3443,6 +3689,12 @@
             "value" : "登録後のヘルパーステータスが不明です。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onbekende helperstatus na registratie."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3524,6 +3776,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "helper を自動的に更新できませんでした。ツール → helper を修復 を開いて、もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper kon niet automatisch worden vernieuwd. Open Hulpmiddelen → Repareer helper en probeer het opnieuw."
           }
         },
         "pl" : {
@@ -3609,6 +3867,12 @@
             "value" : "フルリセット後にヘルパーをアクティブ化できませんでした。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper activeren mislukt na volledige reset."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3690,6 +3954,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパー修復はすでに進行中です。完了までお待ちください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper wordt al gerepareerd. Wacht tot dit klaar is."
           }
         },
         "pl" : {
@@ -3775,6 +4045,12 @@
             "value" : "ヘルパー修復が完了しました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reparatie van helper voltooid"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3856,6 +4132,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパー修理の詳細"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details van helperreparatie"
           }
         },
         "pl" : {
@@ -3941,6 +4223,12 @@
             "value" : "ヘルパー修復に失敗しました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reparatie van helper mislukt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4022,6 +4310,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーを完全な準備状態に戻すことができませんでした。詳細は診断ログに記録されます。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper kon niet volledig worden hersteld. Details staan in de diagnostische logboeken."
           }
         },
         "pl" : {
@@ -4107,6 +4401,12 @@
             "value" : "ヘルパーの修復に失敗しました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reparatie van helper mislukt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4188,6 +4488,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ログエントリがありません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen logboekregels"
           }
         },
         "pl" : {
@@ -4273,6 +4579,12 @@
             "value" : "技術ログを隠す"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verberg technisch logboek"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4354,6 +4666,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "技術ログを表示する"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toon technisch logboek"
           }
         },
         "pl" : {
@@ -4439,6 +4757,12 @@
             "value" : "ヘルパーの登録を更新し、準備完了を確認しています"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helperregistratie vernieuwen en gereedheid bevestigen"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4520,6 +4844,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "システムサービスを更新し、準備ができているかを確認します"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systeemservice vernieuwen en gereedheid controleren"
           }
         },
         "pl" : {
@@ -4605,6 +4935,12 @@
             "value" : "ヘルパー修理を準備中です"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reparatie van helper voorbereiden"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4686,6 +5022,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "修理の進捗状況"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voortgang van reparatie"
           }
         },
         "pl" : {
@@ -4771,6 +5113,12 @@
             "value" : "システムヘルパーの修復"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systeemhelper repareren"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4852,6 +5200,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "修正中…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repareren…"
           }
         },
         "pl" : {
@@ -4937,6 +5291,12 @@
             "value" : "システム ヘルパーの登録と接続が更新されています。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De registratie van en de verbinding met de systeemhelper worden vernieuwd."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5018,6 +5378,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパー修復"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper repareren"
           }
         },
         "pl" : {
@@ -5103,6 +5469,12 @@
             "value" : "ヘルパーは登録解除後もアクティブなままでした。修理が中断されました。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper bleef actief na het afmelden. Reparatie afgebroken."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5184,6 +5556,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパー登録と通信認証が無事完了しました。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De registratie van de helper en de controle van de communicatie zijn geslaagd."
           }
         },
         "pl" : {
@@ -5269,6 +5647,12 @@
             "value" : "ヘルパーの修復が正常に完了しました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reparatie van helper is geslaagd"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5350,6 +5734,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "古いヘルパー登録の削除に失敗しました。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oude helperregistratie verwijderen mislukt."
           }
         },
         "pl" : {
@@ -5435,6 +5825,12 @@
             "value" : "ヘルパーが適切に動作するには、システム設定でヘルパーのバックグラウンドでの実行を許可する必要があります。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper werkt alleen goed als je in Systeeminstellingen toestaat dat deze op de achtergrond draait."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5516,6 +5912,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーのステータス確認が完了しました（対応が必要です）"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statuscontrole van helper voltooid, actie vereist"
           }
         },
         "pl" : {
@@ -5601,6 +6003,12 @@
             "value" : "チェック中…"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleren…"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5682,6 +6090,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "システム ヘルパーの準備がチェックされています。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De gereedheid van de systeemhelper wordt gecontroleerd."
           }
         },
         "pl" : {
@@ -5767,6 +6181,12 @@
             "value" : "ヘルパーのステータスを確認する"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status van helper controleren"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5848,6 +6268,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "詳細: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details: %@"
           }
         },
         "pl" : {
@@ -5933,6 +6359,12 @@
             "value" : "ヘルパーステータスの詳細"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details van helperstatus"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6014,6 +6446,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "有効"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingeschakeld"
           }
         },
         "pl" : {
@@ -6099,6 +6537,12 @@
             "value" : "エラー"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FOUT"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6180,6 +6624,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーの準備は確認できなかった。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De gereedheid van de helper kon niet worden bevestigd."
           }
         },
         "pl" : {
@@ -6265,6 +6715,12 @@
             "value" : "ヘルパーのステータス確認に失敗しました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statuscontrole van helper mislukt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6346,6 +6802,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "アプリの場所: /Applications (OK)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locatie van app: /Applications (OK)"
           }
         },
         "pl" : {
@@ -6431,6 +6893,12 @@
             "value" : "アプリの場所: /Applications の外"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locatie van app: buiten /Applications"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6512,6 +6980,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Machサービス: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mach-service: %@"
           }
         },
         "pl" : {
@@ -6597,6 +7071,12 @@
             "value" : "見つかりません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niet gevonden"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6678,6 +7158,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "未登録"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niet geregistreerd"
           }
         },
         "pl" : {
@@ -6763,6 +7249,12 @@
             "value" : "承認が必要"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goedkeuring vereist"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6844,6 +7336,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "サービス状態: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status van service: %@"
           }
         },
         "pl" : {
@@ -6929,6 +7427,12 @@
             "value" : "ヘルパーは正常に動作しており、使用可能です。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper werkt goed en is klaar voor gebruik."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7010,6 +7514,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーのステータス確認が正常に完了しました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statuscontrole van helper geslaagd"
           }
         },
         "pl" : {
@@ -7095,6 +7605,12 @@
             "value" : "不明"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onbekend"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7176,6 +7692,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーのステータスが不明です。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onbekende helperstatus."
           }
         },
         "pl" : {
@@ -7261,6 +7783,12 @@
             "value" : "XPC状態: %@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "XPC-status: %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7342,6 +7870,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSB は、信頼された署名済みヘルパーと通信していることを確認できません。操作は停止されました。現在の macUSB アプリを「アプリケーション」フォルダから開き、ツール → ヘルパーを修復 を選択してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB kan niet bevestigen dat het communiceert met een vertrouwde, ondertekende helper. De bewerking is gestopt. Open de huidige macUSB-app vanuit de map Apps en kies daarna Hulpmiddelen → Repareer helper."
           }
         },
         "pl" : {
@@ -7427,6 +7961,12 @@
             "value" : "macUSB はヘルパーを検証できません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB kan de helper niet verifiëren"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7508,6 +8048,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーはすでに削除されています"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper is al verwijderd"
           }
         },
         "pl" : {
@@ -7593,6 +8139,12 @@
             "value" : "ヘルパーが削除されました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper is verwijderd"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7674,6 +8226,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "helper との接続エラー: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fout bij verbinding met helper: %@"
           }
         },
         "pl" : {
@@ -7759,6 +8317,12 @@
             "value" : "helper への XPC 接続を確立できませんでした。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "XPC-verbinding met de helper opzetten mislukt."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7840,6 +8404,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "helper との接続が中断されました。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinding met helper is onderbroken."
           }
         },
         "pl" : {
@@ -7925,6 +8495,12 @@
             "value" : "helper との接続が無効化されました。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinding met helper is ongeldig geworden."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8006,6 +8582,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "helper への XPC 接続がタイムアウトしました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time-out van XPC-verbinding met helper"
           }
         },
         "pl" : {
@@ -8091,6 +8673,12 @@
             "value" : "helper リクエストのエンコードに失敗しました: %@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helperverzoek coderen mislukt: %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8172,6 +8760,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "helper は正常に応答しています (uid=%@, euid=%@, pid=%@)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper reageert correct (uid=%@, euid=%@, pid=%@)"
           }
         },
         "pl" : {
@@ -8257,6 +8851,12 @@
             "value" : "helper の XPC プロキシを作成できませんでした。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "XPC-proxy voor helper aanmaken mislukt."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8338,6 +8938,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "helper XPC 応答の待機がタイムアウトしました。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time-out bij het wachten op XPC-antwoord van de helper."
           }
         },
         "pl" : {
@@ -8423,6 +9029,12 @@
             "value" : "helper がワークフロー識別子を返しませんでした。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper heeft geen workflow-ID teruggegeven."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8504,6 +9116,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "自動"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch"
           }
         },
         "pl" : {
@@ -8589,6 +9207,12 @@
             "value" : "言語"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taal"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8667,6 +9291,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deutsch"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deutsch"
@@ -8755,6 +9385,12 @@
             "value" : "English"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8833,6 +9469,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Español"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Español"
@@ -8921,6 +9563,12 @@
             "value" : "Français"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Français"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8999,6 +9647,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Italiano"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Italiano"
@@ -9087,6 +9741,12 @@
             "value" : "日本語"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日本語"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9131,6 +9791,95 @@
         }
       }
     },
+    "app.language.name.nl" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        }
+      }
+    },
     "app.language.name.pl" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9165,6 +9914,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polski"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Polski"
@@ -9253,6 +10008,12 @@
             "value" : "Português (BR)"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Português (BR)"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9331,6 +10092,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Русский"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Русский"
@@ -9419,6 +10186,12 @@
             "value" : "Türkçe"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Türkçe"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9497,6 +10270,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Українська"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Українська"
@@ -9585,6 +10364,12 @@
             "value" : "Tiếng Việt"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiếng Việt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9663,6 +10448,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简体中文"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "简体中文"
@@ -9751,6 +10542,12 @@
             "value" : "アプリケーションを再起動"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start app opnieuw"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9832,6 +10629,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "アプリケーションのすべての要素（メニューやボタンを含む）でインターフェース言語を変更するには、再起動が必要です。以下をクリックしてアプリケーションを再起動してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Om de taal van de interface in alle onderdelen van de app te wijzigen (ook in menu's en knoppen), moet de app opnieuw worden gestart. Klik hieronder om de app opnieuw te starten."
           }
         },
         "pl" : {
@@ -9917,6 +10720,12 @@
             "value" : "アプリケーションの再起動が必要です"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App moet opnieuw worden gestart"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9998,6 +10807,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macOS インストーラーをダウンロード..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download het macOS-installatieprogramma..."
           }
         },
         "pl" : {
@@ -10083,6 +10898,12 @@
             "value" : "ファイル分析をスキップ"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sla bestandsanalyse over"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10161,6 +10982,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac OS X Tiger 10.4 (Multi DVD)"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mac OS X Tiger 10.4 (Multi DVD)"
@@ -10249,6 +11076,12 @@
             "value" : "選択されたイメージのバージョン確認はスキップされます。アプリケーションはファイルを「Mac OS X Tiger 10.4」として強制的に認識させ、マウントおよびUSBへの書き込みを可能にします。続けますか？"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voor de geselecteerde image wordt de versiecontrole overgeslagen. De app behandelt het bestand als “Mac OS X Tiger 10.4”, zodat het kan worden geactiveerd en naar USB kan worden geschreven. Wil je doorgaan?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10330,6 +11163,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mac OS X Tiger (Multi DVD) USBを作成中"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB met Mac OS X Tiger (Multi DVD) aanmaken"
           }
         },
         "pl" : {
@@ -10415,6 +11254,12 @@
             "value" : "バグを報告 (GitHub)"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meld een fout (GitHub)"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10496,6 +11341,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSBのGitHubリポジトリ"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub-repository van macUSB"
           }
         },
         "pl" : {
@@ -10581,6 +11432,12 @@
             "value" : "macUSB プロジェクトを支援"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steun het macUSB-project"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10662,6 +11519,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSBウェブサイト"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Website van macUSB"
           }
         },
         "pl" : {
@@ -10747,6 +11610,12 @@
             "value" : "オプション"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opties"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10828,6 +11697,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ディスクユーティリティを開く"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Schijfhulpprogramma"
           }
         },
         "pl" : {
@@ -10913,6 +11788,12 @@
             "value" : "ツール"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hulpmiddelen"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10994,6 +11875,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSB の通知はシステム設定でブロックされています。処理の完了情報を受け取るには、システムでこのアプリの通知表示を許可してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meldingen voor macUSB zijn geblokkeerd in Systeeminstellingen. Om bericht te krijgen als een proces klaar is, moet je de app toestaan om meldingen te tonen."
           }
         },
         "pl" : {
@@ -11079,6 +11966,12 @@
             "value" : "通知は無効です"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meldingen zijn uitgeschakeld"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11160,6 +12053,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "通知を有効にする"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schakel meldingen in"
           }
         },
         "pl" : {
@@ -11245,6 +12144,12 @@
             "value" : "これにより、インストールメディアの準備プロセス完了時に通知を受け取れます。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zo krijg je bericht wanneer het voorbereiden van het installatiemedium klaar is."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11326,6 +12231,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "通知を有効にしますか？"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wil je meldingen inschakelen?"
           }
         },
         "pl" : {
@@ -11411,6 +12322,12 @@
             "value" : "通知オフ"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meldingen uitgeschakeld"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11492,6 +12409,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "通知オン"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meldingen ingeschakeld"
           }
         },
         "pl" : {
@@ -11577,6 +12500,12 @@
             "value" : "バックグラウンド動作の設定…"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instellingen voor achtergrondactiviteit…"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11658,6 +12587,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "フルディスクアクセスを許可..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef volledige schijftoegang..."
           }
         },
         "pl" : {
@@ -11743,6 +12678,12 @@
             "value" : "macUSB を正しく動作させるには、システム設定で「フルディスクアクセス」を許可してください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef macUSB in Systeeminstellingen de bevoegdheid “Volledige schijftoegang”, zodat de app goed werkt."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11824,6 +12765,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "フルディスクアクセスが必要です"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volledige schijftoegang vereist"
           }
         },
         "pl" : {
@@ -11909,6 +12856,12 @@
             "value" : "「フルディスクアクセス」を直接開けませんでした。次へ移動してください: プライバシーとセキュリティ -> フルディスクアクセス。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het onderdeel “Volledige schijftoegang” kon niet rechtstreeks worden geopend. Ga naar: Privacy en beveiliging -> Volledige schijftoegang."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11990,6 +12943,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "システム設定を開きました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systeeminstellingen geopend"
           }
         },
         "pl" : {
@@ -12075,6 +13034,12 @@
             "value" : "RAWイメージをドライブに書き込む…"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schrijf een onbewerkte image naar een schijf…"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12156,6 +13121,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "続けてイメージを選択…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga door en kies een image…"
           }
         },
         "pl" : {
@@ -12241,6 +13212,12 @@
             "value" : ".isoまたは.img形式のイメージファイルを選択してください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies een imagebestand in .iso- of .img-indeling."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12322,6 +13299,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "RAWイメージを選択"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies een onbewerkte image"
           }
         },
         "pl" : {
@@ -12407,6 +13390,12 @@
             "value" : "選択した.isoまたは.imgファイルは、内容を解析せずにUSBドライブへ直接書き込まれます。macUSBはイメージの互換性や、作成されたドライブが起動可能かどうかを確認しません。続けますか？"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het geselecteerde .iso- of .img-bestand wordt rechtstreeks naar de USB-schijf geschreven zonder dat de inhoud wordt geanalyseerd. macUSB controleert niet of de image compatibel is en of de schijf daarna opstartbaar is. Wil je doorgaan?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12488,6 +13477,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "RAWイメージをドライブに書き込む"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schrijf een onbewerkte image naar een schijf"
           }
         },
         "pl" : {
@@ -12573,6 +13568,12 @@
             "value" : "macUSBを使い続ける"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blijf in macUSB"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12654,6 +13655,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSBは現在、安全に中断できない操作を実行しています。処理が完了してから、もう一度アプリを終了してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB voert een bewerking uit die niet veilig kan worden onderbroken. Wacht tot het huidige werk klaar is en probeer de app dan opnieuw te stoppen."
           }
         },
         "pl" : {
@@ -12739,6 +13746,12 @@
             "value" : "現在macUSBを終了できません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB kan nu niet worden gestopt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12820,6 +13833,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーツールはアップデートされ、使用できる状態です。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper is bijgewerkt en klaar voor gebruik."
           }
         },
         "pl" : {
@@ -12905,6 +13924,12 @@
             "value" : "完了"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gelukt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12986,6 +14011,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーツールをアップデート中…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper bijwerken…"
           }
         },
         "pl" : {
@@ -13071,6 +14102,12 @@
             "value" : "アップデート"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13152,6 +14189,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロード"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download"
           }
         },
         "pl" : {
@@ -13237,6 +14280,12 @@
             "value" : "無視"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Negeer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13318,6 +14367,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "新しいバージョンが利用可能です: %@。アップデートをお勧めします！"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er is een nieuwe versie beschikbaar: %@. We raden je aan om bij te werken!"
           }
         },
         "pl" : {
@@ -13403,6 +14458,12 @@
             "value" : "アップデートが利用可能です！"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update beschikbaar!"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13484,6 +14545,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "現在実行中のバージョン: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huidige versie: %@"
           }
         },
         "pl" : {
@@ -13569,6 +14636,12 @@
             "value" : "アップデートを確認"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoek naar updates"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13650,6 +14723,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最新バージョンのアプリケーションを使用しています"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je gebruikt de nieuwste beschikbare versie van de app"
           }
         },
         "pl" : {
@@ -13735,6 +14814,12 @@
             "value" : "利用可能なアップデートはありません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen updates beschikbaar"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13818,6 +14903,12 @@
             "value" : "開始"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13896,6 +14987,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB by Kruszoneq"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSB by Kruszoneq"
@@ -13984,6 +15081,12 @@
             "value" : "プロジェクトを支援する"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steun het project!"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14065,6 +15168,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開始"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
           }
         },
         "pl" : {

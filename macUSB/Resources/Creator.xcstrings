@@ -40,6 +40,12 @@
             "value" : "キャンセル"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuleer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -121,6 +127,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "続ける"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga door"
           }
         },
         "pl" : {
@@ -206,6 +218,12 @@
             "value" : "強制アンマウント"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forceer deactiveren"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -287,6 +305,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "中断"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop"
           }
         },
         "pl" : {
@@ -372,6 +396,12 @@
             "value" : "中断中..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stoppen..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -453,6 +483,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "完了前に処理を停止すると、このUSBメディアは起動可能ではなくなります。デバイスを再度準備する必要があります。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het USB-medium is niet opstartbaar als het proces wordt gestopt voordat het klaar is. Je moet het apparaat dan opnieuw voorbereiden."
           }
         },
         "pl" : {
@@ -538,6 +574,12 @@
             "value" : "USBメディアの作成を中断しますか？"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aanmaken van het USB-medium stoppen?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -619,6 +661,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "アプリケーションのそれ以上の操作はブロックされます"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verder gebruik van de app wordt geblokkeerd"
           }
         },
         "pl" : {
@@ -704,6 +752,12 @@
             "value" : "USBメモリが切断されました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-schijf losgekoppeld"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -785,6 +839,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーの準備ができていません。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper is niet gereed."
           }
         },
         "pl" : {
@@ -870,6 +930,12 @@
             "value" : "エラー: ドライブが選択されていません。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fout: geen schijf geselecteerd."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -951,6 +1017,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択した USB メディアに書き込む権限がありません。オプション → 「外付けドライブのアクセス権をリセット」でアプリの権限をリセットしてから、もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen toestemming om naar het geselecteerde USB-medium te schrijven. Stel de bevoegdheden van de app opnieuw in via Opties → Stel toegangsrechten voor externe schijven opnieuw in en probeer het daarna opnieuw."
           }
         },
         "pl" : {
@@ -1036,6 +1108,12 @@
             "value" : "USBドライブを作成するためのLinuxイメージがありません。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er is geen bron voor een Linux-image beschikbaar om een USB-schijf te maken."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1117,6 +1195,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したドライブは別のアプリで使用中です。Linux 起動メディアの作成を続行するために、macUSB はデバイスを強制的にアンマウントできます。このドライブ上の未保存データは失われる可能性があります。強制アンマウントしますか？"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De geselecteerde schijf wordt gebruikt door een andere app. Om door te gaan met het aanmaken van Linux-opstartmedia kan macUSB het apparaat geforceerd deactiveren. Niet-bewaarde gegevens op deze schijf kunnen verloren gaan. Wil je de schijf geforceerd deactiveren?"
           }
         },
         "pl" : {
@@ -1202,6 +1286,12 @@
             "value" : "Linux イメージを対象ディスクに書き込み中..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux-image naar de doelschijf schrijven..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1283,6 +1373,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Linux メディアを作成中"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux-medium aanmaken"
           }
         },
         "pl" : {
@@ -1368,6 +1464,12 @@
             "value" : "ソースイメージとUSBメディアのデータ整合性を確認中..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleren of de gegevens op het USB-medium overeenkomen met de bronimage..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1449,6 +1551,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Linuxメディアを検証中"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux-medium verifiëren"
           }
         },
         "pl" : {
@@ -1534,6 +1642,12 @@
             "value" : "InstallESD.dmgファイルが見つかりませんでした。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestand InstallESD.dmg niet gevonden."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1615,6 +1729,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ソースイメージファイルが見つかりません。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bronbestand van image niet gevonden."
           }
         },
         "pl" : {
@@ -1700,6 +1820,12 @@
             "value" : "最終的なインストーラ構成のための領域を準備しています。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ruimte vrijmaken voor de definitieve structuur van het installatieprogramma."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1781,6 +1907,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラ構成の準備"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Structuur van installatieprogramma voorbereiden"
           }
         },
         "pl" : {
@@ -1866,6 +1998,12 @@
             "value" : "インストーラAppの最終構成を整えています。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De definitieve structuur van de installatie-app afronden."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1947,6 +2085,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストールメディアへのファイルコピー"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestanden naar installatiemedium kopiëren"
           }
         },
         "pl" : {
@@ -2032,6 +2176,12 @@
             "value" : "インストーラファイルの権限を最終調整しています。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestandsbevoegdheden van installatieprogramma afronden."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2113,6 +2263,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラファイル権限の適用"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestandsbevoegdheden van installatieprogramma toepassen"
           }
         },
         "pl" : {
@@ -2198,6 +2354,12 @@
             "value" : "選択したUSBメディアへインストーラファイルをコピーしています。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestanden van installatieprogramma naar het geselecteerde USB-medium kopiëren."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2279,6 +2441,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストールメディアの作成"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatiemedium aanmaken"
           }
         },
         "pl" : {
@@ -2364,6 +2532,12 @@
             "value" : "書き込み前にインストーライメージを検証しています。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image van installatieprogramma verifiëren vóór het schrijven."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2445,6 +2619,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーライメージの検証"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image van installatieprogramma verifiëren"
           }
         },
         "pl" : {
@@ -2530,6 +2710,12 @@
             "value" : "PowerPCインストーラ向けにUSBメディアを調整しています。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-medium aanpassen voor een PowerPC-installatieprogramma."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2611,6 +2797,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "USBメディアの準備"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-medium voorbereiden"
           }
         },
         "pl" : {
@@ -2696,6 +2888,12 @@
             "value" : "PowerPC対応メディアへシステムイメージを転送しています。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systeemimage overzetten naar PowerPC-compatibel medium."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2777,6 +2975,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストールメディアの作成"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatiemedium aanmaken"
           }
         },
         "pl" : {
@@ -2862,6 +3066,12 @@
             "value" : "インストーラ作成のためにUSBメディアを構成しています。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-medium configureren voor het aanmaken van het installatieprogramma."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2943,6 +3153,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "USBメディアの準備"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-medium voorbereiden"
           }
         },
         "pl" : {
@@ -3028,6 +3244,12 @@
             "value" : "選択したUSBメディアへシステムイメージを転送しています。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systeemimage overzetten naar het geselecteerde USB-medium."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3109,6 +3331,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストールメディアの作成"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatiemedium aanmaken"
           }
         },
         "pl" : {
@@ -3194,6 +3422,12 @@
             "value" : "USBメディアを作成中"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-medium aanmaken"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3275,6 +3509,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "操作を準備中..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewerking voorbereiden..."
           }
         },
         "pl" : {
@@ -3360,6 +3600,12 @@
             "value" : "開始中..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starten..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3441,6 +3687,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したシステム"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geselecteerd systeem"
           }
         },
         "pl" : {
@@ -3526,6 +3778,12 @@
             "value" : "作成ステージ"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stappen van het aanmaken"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3607,6 +3865,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "書き込み速度: - MB/s"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schrijfsnelheid: - MB/s"
           }
         },
         "pl" : {
@@ -3692,6 +3956,12 @@
             "value" : "書き込み速度: %d MB/s"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schrijfsnelheid: %d MB/s"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3773,6 +4043,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "イメージを書き込み中"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image schrijven"
           }
         },
         "pl" : {
@@ -3858,6 +4134,12 @@
             "value" : "書き込みステージ"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schrijfstappen"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3939,6 +4221,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したイメージ"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geselecteerde image"
           }
         },
         "pl" : {
@@ -4024,6 +4312,12 @@
             "value" : "選択したドライブは別のアプリで使用されています。イメージの書き込みを続けるため、macUSBはデバイスを強制的にアンマウントできます。このドライブ上の未保存データは失われる可能性があります。強制的にアンマウントしますか？"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De geselecteerde schijf wordt gebruikt door een andere app. Om door te gaan met het schrijven van de image kan macUSB het apparaat geforceerd deactiveren. Niet-bewaarde gegevens op deze schijf kunnen verloren gaan. Wil je de schijf geforceerd deactiveren?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4105,6 +4399,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "RAWイメージをUSBドライブに書き込み中…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onbewerkte image naar de USB-schijf schrijven…"
           }
         },
         "pl" : {
@@ -4190,6 +4490,12 @@
             "value" : "イメージを書き込み中"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image schrijven"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4271,6 +4577,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "イメージデータとUSBドライブを比較中…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imagegegevens vergelijken met de USB-schijf…"
           }
         },
         "pl" : {
@@ -4356,6 +4668,12 @@
             "value" : "書き込みを検証中"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schrijven verifiëren"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4437,6 +4755,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "USB ドライブをアンマウントできません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-schijf kan niet worden gedeactiveerd"
           }
         },
         "pl" : {
@@ -4522,6 +4846,12 @@
             "value" : "USB ドライブは別のアプリで使用中でした。強制アンマウントへの同意が得られなかったため、処理を中止しました。このドライブを使用しているアプリを終了して、もう一度お試しください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De USB-schijf was in gebruik door een andere app. Er is geen toestemming gegeven om de schijf geforceerd te deactiveren, dus het proces is geannuleerd. Sluit apps die deze schijf gebruiken en probeer het opnieuw."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4603,6 +4933,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSBootをインストールできませんでした。USBドライブを再作成してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSBoot kon niet worden geïnstalleerd. Probeer de USB-schijf opnieuw aan te maken."
           }
         },
         "pl" : {
@@ -4688,6 +5024,12 @@
             "value" : "選択したドライブは別のアプリで使用中です。Windows 起動メディアの作成を続行するために、macUSB はデバイスを強制的にアンマウントできます。このドライブ上の未保存データは失われる可能性があります。強制アンマウントしますか？"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De geselecteerde schijf wordt gebruikt door een andere app. Om door te gaan met het aanmaken van Windows-opstartmedia kan macUSB het apparaat geforceerd deactiveren. Niet-bewaarde gegevens op deze schijf kunnen verloren gaan. Wil je de schijf geforceerd deactiveren?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4769,6 +5111,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "空き容量を確保するため一時ファイルを削除しています。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdelijke bestanden verwijderen en proces afronden..."
           }
         },
         "pl" : {
@@ -4854,6 +5202,12 @@
             "value" : "一時ファイルの整理"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdelijke bestanden opruimen"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4935,6 +5289,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Autounattend.xmlをドライブに追加しています。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autounattend.xml aan de schijf toevoegen."
           }
         },
         "pl" : {
@@ -5020,6 +5380,12 @@
             "value" : "構成ファイルを作成中"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuratiebestand aanmaken"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5101,6 +5467,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Windows インストーラファイルを USB メディアにコピー中..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Windows-installatiebestanden naar het USB-medium kopiëren..."
           }
         },
         "pl" : {
@@ -5186,6 +5558,12 @@
             "value" : "Windows メディアを作成中"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Windows-medium aanmaken"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5267,6 +5645,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSBootファイルを確認中…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSBoot-bestanden controleren…"
           }
         },
         "pl" : {
@@ -5352,6 +5736,12 @@
             "value" : "MBR/FAT32レイアウトを確認中…"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MBR/FAT32-indeling controleren…"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5433,6 +5823,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "USBドライブを再マウント中…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-schijf opnieuw activeren…"
           }
         },
         "pl" : {
@@ -5518,6 +5914,12 @@
             "value" : "ブートローダをインストール中"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bootloader installeren"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5599,6 +6001,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "USBドライブのマウントを解除中…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-schijf deactiveren…"
           }
         },
         "pl" : {
@@ -5684,6 +6092,12 @@
             "value" : "macUSBootのインストールを検証中…"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatie van macUSBoot verifiëren…"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5765,6 +6179,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSBootコードをMBRに書き込み中…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSBoot-code naar de MBR schrijven…"
           }
         },
         "pl" : {
@@ -5850,6 +6270,12 @@
             "value" : "macUSBootの第2ステージを書き込み中…"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSBoot stage 2 schrijven…"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5931,6 +6357,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "安全に処理を進めるためソースファイルを準備しています。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ISO-bron valideren, image activeren en FAT32-limieten controleren..."
           }
         },
         "pl" : {
@@ -6016,6 +6448,12 @@
             "value" : "インストーラファイルの準備"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestanden van installatieprogramma voorbereiden"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6097,6 +6535,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "対象ディスクをアンマウント中..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-apparaat deactiveren en MBR/FAT32-indeling voorbereiden..."
           }
         },
         "pl" : {
@@ -6182,6 +6626,12 @@
             "value" : "対象ディスクを準備中"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doelschijf voorbereiden"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6263,6 +6713,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したUSBメディアへシステムイメージを転送しています。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "install.wim opsplitsen in FAT32-compatibele delen..."
           }
         },
         "pl" : {
@@ -6348,6 +6804,12 @@
             "value" : "インストールメディアの作成"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Windows-installatiebestand opsplitsen"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6429,6 +6891,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ソースイメージとUSBメディアのデータ整合性を確認中..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opstartbestanden en structuur van Windows-installatieprogramma controleren..."
           }
         },
         "pl" : {
@@ -6514,6 +6982,12 @@
             "value" : "Windows メディアを検証中"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Windows-medium verifiëren"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6595,6 +7069,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "空き容量を確保するため一時ファイルを削除しています。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdelijke bestanden verwijderen om ruimte vrij te maken."
           }
         },
         "pl" : {
@@ -6680,6 +7160,12 @@
             "value" : "一時ファイルの整理"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdelijke bestanden opruimen"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6761,6 +7247,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "処理を完了し、概要を準備しています。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewerking afronden en samenvatting voorbereiden."
           }
         },
         "pl" : {
@@ -6846,6 +7338,12 @@
             "value" : "処理の完了"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proces afronden"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6927,6 +7425,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開始中..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starten..."
           }
         },
         "pl" : {
@@ -7012,6 +7516,12 @@
             "value" : "安全に処理を進めるためソースファイルを準備しています。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bronbestanden voorbereiden voor een veilige workflow."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7093,6 +7603,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラファイルの準備"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestanden van installatieprogramma voorbereiden"
           }
         },
         "pl" : {
@@ -7178,6 +7694,12 @@
             "value" : "処理を準備中..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewerking voorbereiden..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7259,6 +7781,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "プロセスを開始中"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proces starten"
           }
         },
         "pl" : {
@@ -7344,6 +7872,12 @@
             "value" : "対象ディスクをアンマウント中..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doelschijf deactiveren..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7425,6 +7959,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "対象ディスクを準備中"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doelschijf voorbereiden"
           }
         },
         "pl" : {
