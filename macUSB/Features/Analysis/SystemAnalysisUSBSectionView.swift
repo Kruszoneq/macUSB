@@ -6,7 +6,7 @@ struct SystemAnalysisUSBSectionView: View {
     let isSelectionEnabled: Bool
 
     private var isSelectedTargetCapacityInsufficient: Bool {
-        if case .insufficient = logic.usbTargetReadiness { return true }
+        if case .insufficient = logic.usbTargetPresentationReadiness { return true }
         return false
     }
 
@@ -21,7 +21,7 @@ struct SystemAnalysisUSBSectionView: View {
     }
 
     private func pickerDisplayName(for drive: USBDrive) -> String {
-        if logic.usbDiscoveryState.failure != nil || logic.usbDiscoveryState.snapshot?.verification[drive.selectionID]?.problem != nil {
+        if logic.usbDiscoveryPresentationState.failure != nil || logic.usbDiscoveryPresentationState.snapshot?.verification[drive.selectionID]?.problem != nil {
             let mediaSuffix = drive.mediaKind == .sdCard ? " - \(drive.mediaDisplayName)" : ""
             return "\(drive.device) - " + String(localized: "analysis.usb.discovery.unavailable.label", table: "Analysis") + mediaSuffix
         }
@@ -39,7 +39,7 @@ struct SystemAnalysisUSBSectionView: View {
     }
 
     private var needsExplicitReselectionAction: Bool {
-        guard let problem = logic.usbTargetReadiness.problem, logic.selectedDrive != nil else { return false }
+        guard let problem = logic.usbTargetPresentationReadiness.problem, logic.selectedDrive != nil else { return false }
         return problem != .query(.busy) && problem != .query(.cancelled) && problem != .confirmationExpired
     }
 
@@ -134,7 +134,7 @@ struct SystemAnalysisUSBSectionView: View {
                         ProgressView()
                             .controlSize(.small)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                    } else if logic.presentedUSBTargets.isEmpty && logic.usbDiscoveryState.hasCurrentSnapshot && logic.usbDiscoveryState.snapshot?.issues.isEmpty == true {
+                    } else if logic.presentedUSBTargets.isEmpty && logic.usbDiscoveryPresentationState.hasCurrentSnapshot && logic.usbDiscoveryPresentationState.snapshot?.issues.isEmpty == true {
                         StatusCard(tone: .error, density: .compact) {
                             HStack {
                                 Image(systemName: "externaldrive.badge.xmark").font(sectionIconFont).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
@@ -233,6 +233,6 @@ struct SystemAnalysisUSBSectionView: View {
             }
         }
         .animation(.easeInOut(duration: 0.24), value: logic.usbDiscoveryNotice)
-        .animation(.easeInOut(duration: 0.24), value: logic.usbTargetReadiness)
+        .animation(.easeInOut(duration: 0.24), value: logic.usbTargetPresentationReadiness)
     }
 }

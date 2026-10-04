@@ -147,6 +147,7 @@ final class AnalysisLogic: ObservableObject {
     }
 
     @Published var usbDiscoveryState = AnalysisUSBDiscoveryState()
+    @Published var heldUSBDiscoveryPresentation: AnalysisUSBHeldPresentation?
     @Published var usbTargetReadiness: USBTargetReadiness = .noSelection
     @Published var usbTargetCapacityRequirement: USBTargetCapacityRequirement? = nil
     @Published var shouldShowSourceSizeUnavailableAlert: Bool = false
