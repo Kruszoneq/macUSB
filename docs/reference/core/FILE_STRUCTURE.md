@@ -13,6 +13,12 @@
 - `macUSB/Features/Finish/*` — result and cleanup UX.
 - `macUSB/Features/Downloader/*` — downloader coordinator + UI + logic split.
 
+### Welcome layout
+
+- `macUSB/Features/Welcome/WelcomeView.swift` — welcome UI, manual and optional automatic analysis navigation.
+- `macUSB/Features/Welcome/WelcomeStartupCoordinator.swift` — session-owned startup orchestration, prerequisite gating, and one-shot automatic navigation.
+- `macUSB/Features/Welcome/WelcomeStartupUpdateChecker.swift` — startup update request, metadata validation, existing update alert, and explicit up-to-date/update-available/failure result.
+
 ### Analysis layout
 
 - `macUSB/Features/Analysis/SystemAnalysisView.swift` — analysis UI screen and navigation/lifecycle wiring.

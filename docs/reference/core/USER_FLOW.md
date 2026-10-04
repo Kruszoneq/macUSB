@@ -9,6 +9,7 @@ Destructive start requires explicit confirmation.
 
 ## Current Runtime Behavior
 
+- Welcome optionally navigates to analysis automatically after successful startup checks when `Options → Automatically skip the welcome screen` is enabled. The preference persists across launches and updates, defaults to disabled, and is consumed at most once per app session. Failed helper preparation, unavailable permission/readiness, failed update checks, and available app updates block the automatic transition; manual Start remains available. Detailed gating is defined in `platform/PERMISSIONS_AND_BACKGROUND.md`.
 - User selects source and runs analysis.
 - Analysis resolves compatibility flags and workflow branch.
 - Supported-source analysis computes an exact USB capacity requirement from source size plus 5% and presents the smallest fitting drive class; unreadable source size triggers a fallback alert.

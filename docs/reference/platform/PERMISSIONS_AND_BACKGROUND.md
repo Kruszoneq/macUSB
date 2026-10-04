@@ -33,6 +33,17 @@ Startup and helper readiness flows must surface missing prerequisites.
 - Missing prerequisites are visible and can block reliable helper operations.
 - External drive support defaults to disabled on launch/termination unless explicitly enabled.
 
+## Optional Automatic Welcome Transition
+
+- `Options → Automatically skip the welcome screen` is disabled by default. `MenuState.skipWelcomeEnabled` stores the choice under the stable `SkipWelcomeScreenV1` UserDefaults key; startup, termination, and app-version changes do not reset it.
+- `WelcomeStartupCoordinator` owns one startup sequence per app session, independently of Welcome view recreation: Full Disk Access prompt, helper bootstrap including any version/build-driven auto-repair, notification-state refresh without prompting, and app-update check.
+- The welcome screen remains visible during this preparation. Automatic navigation uses the same analysis destination as the manual Start button.
+- Navigation requires successful helper bootstrap/auto-repair, a successful update response confirming no newer version, confirmed Full Disk Access, and a fresh passive helper status/XPC health check. Denied or unknown access and missing background approval block it.
+- Network/HTTP failures, invalid update metadata or app version, any newer app version (even after Ignore), and failed helper bootstrap/auto-repair block automatic navigation for that session. The manual Start action remains available.
+- With the option enabled, permissions and helper health are rechecked after the startup update check. Returning from System Settings, regaining the key window after a dialog, changing the option, or changes in protected-operation activity refresh these prerequisites without rerunning bootstrap or the update request.
+- Automatic navigation waits while the app is inactive, a modal window or sheet is open, or any protected operation is active. It happens at most once per launch; manual or automatic navigation consumes the opportunity, so Back and reset do not immediately navigate again.
+- This option does not select an image, run analysis, or start USB creation. Existing destructive confirmation and notification authorization remain user-initiated.
+
 ## Logging and Diagnostics
 
 Important startup and helper-approval milestones are logged via `AppLogging`.
@@ -46,6 +57,7 @@ These check and probe lines use English messages with the `[HH:MM:SS] [PERMISSIO
 
 Protected file contents are never logged.
 Logs should clearly indicate which prerequisite is missing and what the app did next.
+The automatic welcome transition records startup blockers, final Full Disk Access/helper readiness, and the actual transition through `AppLogging` under `[APP]`, in English. The transition entry is written immediately before navigation.
 
 ## Update Trigger
 

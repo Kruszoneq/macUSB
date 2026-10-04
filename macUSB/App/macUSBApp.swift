@@ -86,6 +86,10 @@ struct macUSBApp: App {
             CommandGroup(replacing: .newItem) { }
             
             CommandMenu(String(localized: "app.menu.options.title", table: "App")) {
+                Toggle(isOn: $menuState.skipWelcomeEnabled) {
+                    Text("app.welcome.auto_skip.menu", tableName: "App")
+                }
+                Divider()
                 Menu {
                     Button(String(localized: "app.macos.tiger.menu.multi_dvd", table: "App")) {
                         let alert = NSAlert()
