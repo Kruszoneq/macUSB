@@ -5,6 +5,11 @@ struct SystemAnalysisUSBSectionView: View {
     let sectionIconFont: Font
     let isSelectionEnabled: Bool
 
+    private var isSelectedTargetCapacityInsufficient: Bool {
+        if case .insufficient = logic.usbTargetReadiness { return true }
+        return false
+    }
+
     private var shouldShowWaitingForSystemDetectionCard: Bool {
         let isUSBConnected = !logic.presentedUSBTargets.isEmpty
         let isAwaitingSystemRecognition = logic.recognizedVersion.isEmpty || logic.isAnalyzing
@@ -170,7 +175,7 @@ struct SystemAnalysisUSBSectionView: View {
             }
 
             if logic.selectedDrive != nil {
-                if case .insufficient = logic.usbTargetReadiness {
+                if isSelectedTargetCapacityInsufficient {
                     StatusCard(tone: .error, density: .compact) {
                         HStack {
                             Image(systemName: "xmark.circle.fill").font(sectionIconFont).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
@@ -210,21 +215,21 @@ struct SystemAnalysisUSBSectionView: View {
                     }
                     .transition(.move(edge: .top).combined(with: .opacity))
                 }
-                // The warning follows target selection, independently of
-                // activity and verification. Readiness gates Continue only.
-                VStack(alignment: .leading, spacing: 15) {
-                    StatusCard(tone: .warning, density: .compact) {
-                        HStack(alignment: .center) {
-                            Image(systemName: "exclamationmark.triangle.fill").font(sectionIconFont).foregroundColor(.orange).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                            VStack(alignment: .leading) {
-                                Text("analysis.usb.destructive.title", tableName: "Analysis").font(.headline).foregroundColor(.orange)
-                                Text("analysis.usb.destructive.description", tableName: "Analysis").font(.subheadline).foregroundColor(.orange.opacity(0.8))
+                if !isSelectedTargetCapacityInsufficient {
+                    VStack(alignment: .leading, spacing: 15) {
+                        StatusCard(tone: .warning, density: .compact) {
+                            HStack(alignment: .center) {
+                                Image(systemName: "exclamationmark.triangle.fill").font(sectionIconFont).foregroundColor(.orange).frame(width: MacUSBDesignTokens.iconColumnWidth)
+                                VStack(alignment: .leading) {
+                                    Text("analysis.usb.destructive.title", tableName: "Analysis").font(.headline).foregroundColor(.orange)
+                                    Text("analysis.usb.destructive.description", tableName: "Analysis").font(.subheadline).foregroundColor(.orange.opacity(0.8))
+                                }
                             }
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
+                    .transition(.move(edge: .top).combined(with: .opacity))
                 }
-                .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
         .animation(.easeInOut(duration: 0.24), value: logic.usbDiscoveryNotice)
