@@ -40,6 +40,12 @@
             "value" : "分析"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyseer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -121,6 +127,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "キャンセル"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuleer"
           }
         },
         "pl" : {
@@ -206,6 +218,12 @@
             "value" : "選択"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecteer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -287,6 +305,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "閉じる"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sluit"
           }
         },
         "pl" : {
@@ -372,6 +396,12 @@
             "value" : "ダウンロード"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -450,6 +480,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
@@ -538,6 +574,12 @@
             "value" : "次へ"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga door"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -619,6 +661,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "チェックサムを計算"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereken checksum"
           }
         },
         "pl" : {
@@ -704,6 +752,12 @@
             "value" : "このISOファイルのSHA-256チェックサムを計算します"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereken de SHA-256-checksum van dit ISO-bestand"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -785,6 +839,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "チェックサム用バッファを作成できませんでした（コード%d）。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De checksumbuffer kon niet worden aangemaakt (code %d)."
           }
         },
         "pl" : {
@@ -870,6 +930,12 @@
             "value" : "ISOファイルのサイズを読み取れませんでした。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De grootte van het ISO-bestand kon niet worden gelezen."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -951,6 +1017,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ISOファイルを開けませんでした：%@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het ISO-bestand kon niet worden geopend: %@"
           }
         },
         "pl" : {
@@ -1036,6 +1108,12 @@
             "value" : "ISOファイルを読み取れませんでした：%@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het ISO-bestand kon niet worden gelezen: %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1117,6 +1195,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "チェックサムの計算はキャンセルされました。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het berekenen van de checksum is geannuleerd."
           }
         },
         "pl" : {
@@ -1202,6 +1286,12 @@
             "value" : "SHA-256チェックサムを計算しました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De SHA-256-checksum is berekend"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1283,6 +1373,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "チェックサムをコピー"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopieer checksum"
           }
         },
         "pl" : {
@@ -1368,6 +1464,12 @@
             "value" : "チェックサムを計算できませんでした。詳しくは診断ログで確認できます。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De checksum kon niet worden berekend. Meer details staan in de diagnostische logboeken."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1449,6 +1551,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%d%%完了"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d%% voltooid"
           }
         },
         "pl" : {
@@ -1534,6 +1642,12 @@
             "value" : "SHA-256チェックサムを計算中です…"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SHA-256-checksum berekenen…"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1615,6 +1729,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "SHA-256チェックサム"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SHA-256-checksum"
           }
         },
         "pl" : {
@@ -1700,6 +1820,12 @@
             "value" : ".dmg、.iso、.cdr、または .app ファイルを手動で選択するか、上にドラッグしてください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecteer handmatig een .dmg-, .iso-, .cdr- of .app-bestand of sleep het naar het vak hierboven."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1781,6 +1907,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラファイルを待機中"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wachten op installatiebestand"
           }
         },
         "pl" : {
@@ -1866,6 +1998,12 @@
             "value" : "Linux - 未認識のディストリビューション"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - onbekende distributie"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1947,6 +2085,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したインストーラのcreateinstallmediaツールは、Appleシリコン搭載Mac専用です。インストールメディアを作成するには、Appleシリコン搭載Macを使用してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het hulpprogramma createinstallmedia in het geselecteerde installatieprogramma is alleen bedoeld voor Macs met Apple silicon. Gebruik een Mac met Apple silicon om installatiemedia te maken."
           }
         },
         "pl" : {
@@ -2032,6 +2176,12 @@
             "value" : "このインストーラにはAppleシリコン搭載Macが必要です"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit installatieprogramma vereist een Mac met Apple silicon"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2115,6 +2265,12 @@
             "value" : "createinstallmediaツールのアーキテクチャを読み取れませんでした。安全のため、このインストーラは使用できません。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De architectuur van het hulpprogramma createinstallmedia kon niet worden gelezen. Uit veiligheidsoverwegingen kan dit installatieprogramma niet worden gebruikt."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2196,6 +2352,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラの互換性を確認できませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compatibiliteit van installatieprogramma kon niet worden gecontroleerd"
           }
         },
         "pl" : {
@@ -2282,6 +2444,12 @@
             "value" : "選択したシステムイメージがMavericks ForeverのWebサイトからのものであることを確認してください。他のバージョンでは、USBインストーラの作成中にエラーが発生する可能性があります。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zorg dat de geselecteerde systeemimage van de website Mavericks Forever komt. Andere versies kunnen fouten geven bij het aanmaken van het USB-installatieprogramma."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2364,6 +2532,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OS X Mavericksが検出されました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OS X Mavericks gevonden"
           }
         },
         "pl" : {
@@ -2450,6 +2624,12 @@
             "value" : "このバージョンの macOS Sierra はこのアプリケーションではサポートされていません。より新しいインストーラが必要です。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze versie van macOS Sierra wordt niet ondersteund door de app. Er is een nieuwere versie van het installatieprogramma nodig."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2531,6 +2711,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• ハードドライブに少なくとも15GBの空き容量が必要です"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Er is minimaal 15 GB vrije ruimte op de harde schijf nodig"
           }
         },
         "pl" : {
@@ -2616,6 +2802,12 @@
             "value" : "ソースとターゲットの設定"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bron en doel configureren"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2697,6 +2889,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "RAWイメージを選択済み"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onbewerkte image geselecteerd"
           }
         },
         "pl" : {
@@ -2782,6 +2980,12 @@
             "value" : "互換性のあるインストーラが検出されました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compatibel installatieprogramma gevonden"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2863,6 +3067,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "分析エラー"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analysefout"
           }
         },
         "pl" : {
@@ -2948,6 +3158,12 @@
             "value" : "分析は実行されませんでした - ユーザーの選択"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyse niet uitgevoerd - keuze van gebruiker"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3031,6 +3247,12 @@
             "value" : "システムが正常に検出されました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systeem herkend"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3112,6 +3334,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラが認識されませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatieprogramma niet herkend"
           }
         },
         "pl" : {
@@ -3198,6 +3426,12 @@
             "value" : "選択されたシステムはアプリケーションでサポートされていません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het geselecteerde systeem wordt niet ondersteund door de app"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3281,6 +3515,12 @@
             "value" : "ファイルを分析中、お待ちください"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestand analyseren, even geduld"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3362,6 +3602,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "分析中"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyseren"
           }
         },
         "pl" : {
@@ -3448,6 +3694,12 @@
             "value" : "選択した .cdr または .iso ファイルは、すでに macOS にマウントされています。このイメージをアンマウントしてから、もう一度「解析」を選択してください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het geselecteerde .cdr- of .iso-bestand is al geactiveerd in macOS. Deactiveer deze image en kies daarna opnieuw “Analyseer”."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3530,6 +3782,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したイメージはすでにマウントされています"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geselecteerde image is al geactiveerd"
           }
         },
         "pl" : {
@@ -3615,6 +3873,12 @@
             "value" : "ソースファイル..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bronbestand..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3696,6 +3960,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• インストーラーがありませんか? 「ダウンロード」ボタンを使用してください"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Geen installatieprogramma? Gebruik de knop \"Download\""
           }
         },
         "pl" : {
@@ -3781,6 +4051,12 @@
             "value" : "• 許可されるファイル形式は .dmg, .iso, .cdr および .app です"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Toegestane bestandsindelingen zijn .dmg, .iso, .cdr en .app"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3862,6 +4138,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• 選択したファイルにはmacOS、Windows、またはLinuxのインストーラが含まれている必要があります"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Het geselecteerde bestand moet een installatieprogramma van macOS, Windows of Linux bevatten"
           }
         },
         "pl" : {
@@ -3947,6 +4229,12 @@
             "value" : "要件"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vereisten"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4028,6 +4316,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ファイルの選択"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestand selecteren"
           }
         },
         "pl" : {
@@ -4113,6 +4407,12 @@
             "value" : "最低%@GBが必要です。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Min. %@ GB vereist."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4194,6 +4494,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択されたUSBメモリの容量が小さすぎます"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Capaciteit van de geselecteerde USB-schijf is te klein"
           }
         },
         "pl" : {
@@ -4279,6 +4585,12 @@
             "value" : "選択したUSBメモリ上のすべてのファイルは完全に消去されます！"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle bestanden op de geselecteerde USB-schijf worden definitief gewist!"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4360,6 +4672,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "警告！"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WAARSCHUWING!"
           }
         },
         "pl" : {
@@ -4445,6 +4763,12 @@
             "value" : "ドライブの確認に予想以上の時間がかかっています。利用可能であることが確認されるまでお待ちください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het controleren van de schijf duurt langer dan verwacht. Wacht tot de beschikbaarheid is bevestigd."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4526,6 +4850,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ドライブの利用可能状態を確認できません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beschikbaarheid van schijf kan niet worden bevestigd"
           }
         },
         "pl" : {
@@ -4611,6 +4941,12 @@
             "value" : "このドライブの容量を読み取れませんでした。USB接続を確認して、もう一度お試しください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De capaciteit van deze schijf kon niet worden gelezen. Controleer de USB-verbinding en probeer het opnieuw."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4692,6 +5028,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "閉じる"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sluit"
           }
         },
         "pl" : {
@@ -4777,6 +5119,12 @@
             "value" : "読み取ったデータが不完全または無効です。ドライブを選択する前にもう一度確認してください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De ontvangen gegevens zijn onvolledig of ongeldig. Controleer opnieuw voordat je een schijf selecteert."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4858,6 +5206,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "このドライブの情報を読み取れませんでした。USB接続を確認して、もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De informatie van deze schijf kon niet worden gelezen. Controleer de USB-verbinding en probeer het opnieuw."
           }
         },
         "pl" : {
@@ -4943,6 +5297,12 @@
             "value" : "選択したドライブが同じドライブであることを確認できませんでした。もう一度確認して、再度選択してください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De identiteit van de geselecteerde schijf kon niet worden bevestigd. Controleer opnieuw en selecteer de schijf opnieuw."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5024,6 +5384,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したドライブは利用できなくなりました。接続して、もう一度選択してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De geselecteerde schijf is niet meer beschikbaar. Sluit de schijf aan en selecteer deze opnieuw."
           }
         },
         "pl" : {
@@ -5109,6 +5475,12 @@
             "value" : "正常に確認できたドライブを選択できます。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je kunt een schijf selecteren die wel is gecontroleerd."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5190,6 +5562,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "USB接続を確認して、残りのドライブをもう一度確認してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer de USB-verbinding en controleer de overige schijven daarna opnieuw."
           }
         },
         "pl" : {
@@ -5275,6 +5653,12 @@
             "value" : "一部のドライブを確認できませんでした"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sommige schijven konden niet worden gecontroleerd"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5356,6 +5740,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ドライブの確認を開始または完了できませんでした。もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De schijfcontrole kon niet worden gestart of voltooid. Probeer het opnieuw."
           }
         },
         "pl" : {
@@ -5441,6 +5831,12 @@
             "value" : "ドライブが利用可能か確認できませんでした。もう一度お試しください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De beschikbaarheid van de schijf kon niet worden bevestigd. Probeer het opnieuw."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5522,6 +5918,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ドライブのリストを更新できませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schijvenlijst kon niet worden vernieuwd"
           }
         },
         "pl" : {
@@ -5607,6 +6009,12 @@
             "value" : "再確認"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer opnieuw"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5688,6 +6096,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "確認に時間がかかりすぎました。USB接続を確認して、もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De controle duurde te lang. Controleer de USB-verbinding en probeer het opnieuw."
           }
         },
         "pl" : {
@@ -5773,6 +6187,12 @@
             "value" : "利用不可"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niet beschikbaar"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5854,6 +6274,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "このドライブは選択できません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze schijf kan niet worden geselecteerd"
           }
         },
         "pl" : {
@@ -5939,6 +6365,12 @@
             "value" : "前の確認がまだ完了していません。しばらくお待ちください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De vorige controle is nog niet klaar. Even geduld."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6020,6 +6452,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "確認の完了を待っています"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wachten tot de controle klaar is"
           }
         },
         "pl" : {
@@ -6105,6 +6543,12 @@
             "value" : "USBメモリを接続して検出を待機してください..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sluit een USB-schijf aan en wacht tot deze is herkend..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6186,6 +6630,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "USBメモリが検出されませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen USB-schijf gevonden"
           }
         },
         "pl" : {
@@ -6271,6 +6721,12 @@
             "value" : "• インストーラを作成するには、最低%@GBの容量を持つUSBメモリが必要です"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Voor het installatieprogramma is een USB-schijf van minimaal %@ GB nodig"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6352,6 +6808,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• USB 3.0以上の高速なドライブの使用を推奨します"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Een USB 3.0-schijf of sneller wordt aanbevolen"
           }
         },
         "pl" : {
@@ -6437,6 +6899,12 @@
             "value" : "ハードウェア要件"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hardwarevereisten"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6518,6 +6986,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "USBメモリの選択"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "USB-schijf selecteren"
           }
         },
         "pl" : {
@@ -6603,6 +7077,12 @@
             "value" : "選択したインストーラのサイズを確認できませんでした。USBドライブには代替の容量区分として %@ GB を適用しました。インストーラを作成する前にソースを確認してください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De grootte van het geselecteerde installatieprogramma kon niet worden bepaald. Er is een standaard schijfgrootte van %@ GB aangehouden. Controleer de bron voordat je het installatieprogramma aanmaakt."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6684,6 +7164,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ソースのサイズを読み取れませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grootte van bron kon niet worden gelezen"
           }
         },
         "pl" : {
@@ -6769,6 +7255,12 @@
             "value" : "代替の容量しきい値を使用"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik standaardwaarde"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6850,6 +7342,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "対象のUSBメモリを選択:"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecteer de USB-doelschijf:"
           }
         },
         "pl" : {
@@ -6935,6 +7433,12 @@
             "value" : "選択..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7016,6 +7520,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したボリュームの容量が不足しています"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het geselecteerde volume is te klein"
           }
         },
         "pl" : {
@@ -7101,6 +7611,12 @@
             "value" : "接続されたUSBデバイスは、システム認識が完了し、必要なメディア要件が確定した後に利用可能になります。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het aangesloten USB-apparaat komt beschikbaar zodra het systeem is herkend en de vereisten voor het medium zijn bepaald."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7182,6 +7698,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "システム解析を待機中"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wachten op systeemanalyse"
           }
         },
         "pl" : {
@@ -7268,6 +7790,12 @@
             "value" : "検出された Windows Server のバージョンはサポートされていません。Windows Server 2008 R2 以降のインストーラがサポートされています。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De gevonden Windows Server-versie wordt niet ondersteund. Installatieprogramma's van Windows Server 2008 R2 of nieuwer worden ondersteund."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7350,6 +7878,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "検出された Windows のバージョンはサポートされていません。Windows Vista 以降のインストーラがサポートされています。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De gevonden Windows-versie wordt niet ondersteund. Installatieprogramma's van Windows Vista of nieuwer worden ondersteund."
           }
         },
         "pl" : {

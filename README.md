@@ -289,6 +289,7 @@ By default, the interface follows the system language automatically. A supported
 - 🇺🇦 Ukrainian (uk)
 - 🇻🇳 Vietnamese (vi)
 - 🇹🇷 Turkish (tr)
+- 🇳🇱 Dutch (nl)
 
 ---
 

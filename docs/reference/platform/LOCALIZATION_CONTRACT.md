@@ -71,7 +71,7 @@ Required format:
 - use Xcode's spaced separator form, for example `"de" : {` and `"state" : "translated"`;
 - keep every object member and every `stringUnit` field on its own line; never use compact inline localization objects such as `"de":{"stringUnit":...}`;
 - keep entries in the `strings` dictionary in Xcode's deterministic, case-insensitive natural catalog order instead of prepending or appending a block outside its sorted position; symbols are ordered before text, and semantic keys are collated with the surrounding source strings;
-- keep locale identifiers inside `localizations` in lexicographic order, for example `de`, `en`, `es`, `fr`, `it`, `ja`, `pl`, `pt-BR`, `ru`, `tr`, `uk`, `vi`, `zh-Hans` for the complete supported set;
+- keep locale identifiers inside `localizations` in lexicographic order, for example `de`, `en`, `es`, `fr`, `it`, `ja`, `nl`, `pl`, `pt-BR`, `ru`, `tr`, `uk`, `vi`, `zh-Hans` for the complete supported set;
 - preserve Xcode's schema property order and top-level order: `sourceLanguage`, `strings`, then `version`;
 - do not substitute code-point sorting or run a general-purpose JSON formatter whose output differs from Xcode serialization.
 

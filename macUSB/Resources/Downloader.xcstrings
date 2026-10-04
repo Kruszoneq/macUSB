@@ -39,6 +39,12 @@
             "value" : "キャンセル"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuleer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -119,6 +125,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "閉じる"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sluit"
           }
         },
         "pl" : {
@@ -203,6 +215,12 @@
             "value" : "今はしない"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niet nu"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -280,6 +298,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
@@ -367,6 +391,12 @@
             "value" : "インストーラーをターゲットの場所に保存できませんでした。権限を確認して再試行してください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het installatieprogramma kon niet op de doellocatie worden bewaard. Controleer je bevoegdheden en probeer het opnieuw."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -447,6 +477,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラーの準備に失敗しました: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatieprogramma voorbereiden mislukt: %@"
           }
         },
         "pl" : {
@@ -531,6 +567,12 @@
             "value" : "インストーラーのアセンブル中にヘルパーがエラーを返しました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper gaf een fout bij het samenstellen van het installatieprogramma"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -611,6 +653,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーは .app インストーラへのパスを返しませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper heeft het pad naar het .app-installatieprogramma niet teruggegeven"
           }
         },
         "pl" : {
@@ -695,6 +743,12 @@
             "value" : "ビルドされたインストーラー アプリケーションが存在しません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De samengestelde installatie-app bestaat niet"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -775,6 +829,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロードした .dmg イメージが見つかりませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De gedownloade .dmg-schijfkopie is niet gevonden"
           }
         },
         "pl" : {
@@ -859,6 +919,12 @@
             "value" : "ダウンロードしたInstallAssistant.pkgが見つかりませんでした"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De gedownloade InstallAssistant.pkg is niet gevonden"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -939,6 +1005,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロードしたInstallAssistantAuto.pkgが見つかりませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De gedownloade InstallAssistantAuto.pkg is niet gevonden"
           }
         },
         "pl" : {
@@ -1023,6 +1095,12 @@
             "value" : "準備を完了できません。InstallESD.dmg ファイルが見つかりません。このシステムを再度ダウンロードしてください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De voorbereiding kan niet worden voltooid. Het bestand InstallESD.dmg ontbreekt. Download dit systeem opnieuw."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1103,6 +1181,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したシステムのインストーラー ファイルが見つかりません (InstallAssistant.pkg、InstallAssistantAuto.pkg、または .dmg イメージが必要です)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen installatiebestand gevonden voor het geselecteerde systeem (InstallAssistant.pkg, InstallAssistantAuto.pkg of .dmg-schijfkopie vereist)"
           }
         },
         "pl" : {
@@ -1187,6 +1271,12 @@
             "value" : "セッション出力ディレクトリがありません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uitvoermap van sessie ontbreekt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1267,6 +1357,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ インストーラーの準備"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatieprogramma van %@ voorbereiden"
           }
         },
         "pl" : {
@@ -1351,6 +1447,12 @@
             "value" : "必要なリソースを追加しています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vereiste onderdelen toevoegen..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1431,6 +1533,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "システム イメージをインストーラーに追加しています..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systeemimage toevoegen aan het installatieprogramma..."
           }
         },
         "pl" : {
@@ -1515,6 +1623,12 @@
             "value" : "インストーラー パッケージをコピーしています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatiepakket kopiëren..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1595,6 +1709,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラー パッケージを解凍しています..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatiepakket uitpakken..."
           }
         },
         "pl" : {
@@ -1679,6 +1799,12 @@
             "value" : "拡張開梱を準備しています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uitgebreid uitpakken voorbereiden..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1759,6 +1885,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラーの準備が完了しています..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorbereiding van installatieprogramma afronden..."
           }
         },
         "pl" : {
@@ -1843,6 +1975,12 @@
             "value" : "リソースの準備を完了しています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorbereiding van onderdelen afronden..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1923,6 +2061,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラーが用意されています"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het installatieprogramma is voorbereid"
           }
         },
         "pl" : {
@@ -2007,6 +2151,12 @@
             "value" : "インストーラーイメージを開いています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schijfkopie van installatieprogramma openen..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2087,6 +2237,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "リカバリパッケージを開いています..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herstelpakket openen..."
           }
         },
         "pl" : {
@@ -2171,6 +2327,12 @@
             "value" : "インストーラーのコンテンツを準備しています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inhoud van installatieprogramma voorbereiden..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2251,6 +2413,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラー ファイルを準備しています..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestanden van installatieprogramma voorbereiden..."
           }
         },
         "pl" : {
@@ -2335,6 +2503,12 @@
             "value" : "インストーラー ファイル (%@/%@) を準備しています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestanden van installatieprogramma voorbereiden (%1$@/%2$@)..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2415,6 +2589,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラーを準備しています..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatieprogramma voorbereiden..."
           }
         },
         "pl" : {
@@ -2499,6 +2679,12 @@
             "value" : "インストーラー リソースを準備しています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onderdelen van installatieprogramma voorbereiden..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2579,6 +2765,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ウィンドウを閉じるとダウンロードが停止し、一時ファイルが削除されます。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als je het venster sluit, stopt de download en worden de tijdelijke bestanden verwijderd"
           }
         },
         "pl" : {
@@ -2663,6 +2855,12 @@
             "value" : "システムのダウンロードをキャンセルしますか?"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloaden van systeem annuleren?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2745,6 +2943,12 @@
             "value" : "ダウンロードをキャンセルして閉じます"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuleer download en sluit"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2825,6 +3029,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロードを続ける"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga door met downloaden"
           }
         },
         "pl" : {
@@ -2910,6 +3120,12 @@
             "value" : "Developer Beta"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bèta voor ontwikkelaars"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2991,6 +3207,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Public Beta"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Publieke bèta"
           }
         },
         "pl" : {
@@ -3075,6 +3297,12 @@
             "value" : "一時ファイルの削除が完了していません: %@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdelijke bestanden verwijderen niet voltooid: %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3155,6 +3383,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーはセッションディレクトリの削除を確認しませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper heeft het verwijderen van de sessiemap niet bevestigd"
           }
         },
         "pl" : {
@@ -3239,6 +3473,12 @@
             "value" : "自動的に完了"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch voltooid"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3319,6 +3559,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "未完了"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niet voltooid"
           }
         },
         "pl" : {
@@ -3403,6 +3649,12 @@
             "value" : "手動で完了する必要があります"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moet handmatig worden afgerond"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3483,6 +3735,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "クリーンアップするデータがありません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen gegevens om op te ruimen"
           }
         },
         "pl" : {
@@ -3567,6 +3825,12 @@
             "value" : "仕上げ作業"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afronden"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3647,6 +3911,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "仕上げ作業中..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afronden..."
           }
         },
         "pl" : {
@@ -3731,6 +4001,12 @@
             "value" : "警告を出して作業を終了します..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afronden met waarschuwing..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3811,6 +4087,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "掃除の準備中…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opruimen voorbereiden..."
           }
         },
         "pl" : {
@@ -3895,6 +4177,12 @@
             "value" : "一時ファイルを整理しています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tijdelijke bestanden opruimen..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3975,6 +4263,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラーは準備されましたが、一時ファイルの削除が自動的に完了していません。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het installatieprogramma is voorbereid, maar de tijdelijke bestanden zijn niet automatisch opgeruimd."
           }
         },
         "pl" : {
@@ -4059,6 +4353,12 @@
             "value" : "Apple サーバーに接続する"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinden met Apple-servers"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4139,6 +4439,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "一時ディレクトリの空き容量を確認しています..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beschikbare ruimte in de tijdelijke map controleren..."
           }
         },
         "pl" : {
@@ -4223,6 +4529,12 @@
             "value" : "Apple サーバーに接続しています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinden met Apple-servers..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4303,6 +4615,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apple サーバーに接続し、選択したシステムのマニフェストをダウンロードしています..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinden met Apple-servers en manifest van het geselecteerde systeem ophalen..."
           }
         },
         "pl" : {
@@ -4387,6 +4705,12 @@
             "value" : "合計サイズ %@ の %@ ファイルが検出されました..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ bestanden gevonden met een totale grootte van %2$@..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4467,6 +4791,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "再度ウィンドウを開いて検索を開始してください"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open het venster opnieuw om te zoeken"
           }
         },
         "pl" : {
@@ -4551,6 +4881,12 @@
             "value" : "検索がキャンセルされました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoeken geannuleerd"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4631,6 +4967,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "現在の Apple ディレクトリにインストーラーが見つかりません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen installatieprogramma's gevonden in de huidige Apple-catalogus"
           }
         },
         "pl" : {
@@ -4715,6 +5057,12 @@
             "value" : "利用可能なシステムがありません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen systemen beschikbaar"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4795,6 +5143,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "現在、Apple サーバーへの接続は利用できません。しばらくしてからもう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De Apple-servers zijn op dit moment niet bereikbaar. Probeer het zo opnieuw."
           }
         },
         "pl" : {
@@ -4879,6 +5233,12 @@
             "value" : "システムリストの更新に失敗しました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systeemlijst vernieuwen mislukt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4959,6 +5319,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "利用可能なシステムのチェックは一時停止されています。接続が回復したら、もう一度更新してください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het controleren op beschikbare systemen is onderbroken. Vernieuw opnieuw zodra de verbinding is hersteld."
           }
         },
         "pl" : {
@@ -5043,6 +5409,12 @@
             "value" : "インターネット接続が利用できません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen internetverbinding beschikbaar"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5123,6 +5495,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "利用可能なシステムを検索する"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoek naar beschikbare systemen"
           }
         },
         "pl" : {
@@ -5207,6 +5585,12 @@
             "value" : "古いバージョンも含めて…"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inclusief oudere versies..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5287,6 +5671,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ファイルリストとメタデータ分析..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestandslijst en metagegevens analyseren..."
           }
         },
         "pl" : {
@@ -5371,6 +5761,12 @@
             "value" : "バージョンメタデータを分析しています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metagegevens van versie analyseren..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5451,6 +5847,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ファイルサイズを決定しています..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestandsgroottes bepalen..."
           }
         },
         "pl" : {
@@ -5535,6 +5937,12 @@
             "value" : "インストーラーのサイズを確認しています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grootte van installatieprogramma's controleren..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5615,6 +6023,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apple カタログをダウンロードしています..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple-catalogus downloaden..."
           }
         },
         "pl" : {
@@ -5699,6 +6113,12 @@
             "value" : "選択したシステムのマニフェストをダウンロードしています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manifest van het geselecteerde systeem downloaden..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5779,6 +6199,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最も古いシステムのマニフェストを準備しています..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manifest voor het oudste systeem voorbereiden..."
           }
         },
         "pl" : {
@@ -5863,6 +6289,12 @@
             "value" : "Apple サーバーでインストーラーを検索しています..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoeken naar installatieprogramma's op de servers van Apple..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5943,6 +6375,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロードをキャンセル"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuleer download"
           }
         },
         "pl" : {
@@ -6027,6 +6465,12 @@
             "value" : "新しい名前で続ける"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga door met nieuwe naam"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6107,6 +6551,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "フォルダ「%@」にはすでに「%@」があります。続けると、新しいディスクイメージは「%@」として保存されます。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De map “%@” bevat al “%@”. Als je doorgaat, wordt de nieuwe schijfkopie bewaard als “%@”."
           }
         },
         "pl" : {
@@ -6191,6 +6641,12 @@
             "value" : "ディスクイメージファイルはすでに存在します"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er bestaat al een schijfkopiebestand"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6271,6 +6727,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ディスクイメージを作成できませんでした：%@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De schijfkopie kon niet worden aangemaakt: %@"
           }
         },
         "pl" : {
@@ -6355,6 +6817,12 @@
             "value" : "フォルダが存在し、ファイルを保存する権限があることを確認してから、もう一度お試しください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer of de map nog bestaat en of je bevoegd bent om daar bestanden te bewaren en probeer het opnieuw."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6435,6 +6903,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したフォルダは使用できません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De geselecteerde map kan niet worden gebruikt"
           }
         },
         "pl" : {
@@ -6519,6 +6993,12 @@
             "value" : "変更"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wijzig"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6599,6 +7079,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ディスクイメージの保存先フォルダを変更"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wijzig de doelmap voor de schijfkopie"
           }
         },
         "pl" : {
@@ -6683,6 +7169,12 @@
             "value" : "インストーラをディスクイメージ（.dmg）として保存"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaar installatieprogramma als schijfkopie (.dmg)"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6763,6 +7255,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ディスクイメージは作成されましたが、元のインストーラ「%@」を削除できませんでした。両方のファイルがディスクに残っています。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De schijfkopie is aangemaakt, maar het broninstallatieprogramma “%@” kon niet worden verwijderd. Beide bestanden blijven op de schijf staan."
           }
         },
         "pl" : {
@@ -6847,6 +7345,12 @@
             "value" : "完成した.dmgファイルは選択したフォルダに保存されます。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het voltooide .dmg-bestand wordt in de geselecteerde map bewaard."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6927,6 +7431,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "フォルダを選択"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies map"
           }
         },
         "pl" : {
@@ -7011,6 +7521,12 @@
             "value" : "ディスクイメージの保存先フォルダを選択"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies een map voor de schijfkopie"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7091,6 +7607,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選択したフォルダを含むボリュームに、ディスクイメージを作成するための十分な空き領域がありません。\n\n必要な空き容量：%@ GB\n使用可能な空き容量：%@ GB"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het volume met de geselecteerde map heeft onvoldoende vrije ruimte om de schijfkopie aan te maken.\n\nVereiste ruimte: %@ GB\nBeschikbare ruimte: %@ GB"
           }
         },
         "pl" : {
@@ -7175,6 +7697,12 @@
             "value" : "保存先の空き領域が不足しています"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onvoldoende ruimte op de bestemming"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7255,6 +7783,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンローダに戻る"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terug naar downloader"
           }
         },
         "pl" : {
@@ -7339,6 +7873,12 @@
             "value" : "システムボリュームに、インストーラのダウンロードと準備、およびディスクイメージの作成に必要な空き領域がありません。\n\n必要な空き容量：%@ GB\n使用可能な空き容量：%@ GB"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het systeemvolume heeft onvoldoende vrije ruimte om het installatieprogramma te downloaden en voor te bereiden en de schijfkopie aan te maken.\n\nVereiste ruimte: %@ GB\nBeschikbare ruimte: %@ GB"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7419,6 +7959,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "システムボリュームの空き領域が不足しています"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onvoldoende ruimte op het systeemvolume"
           }
         },
         "pl" : {
@@ -7503,6 +8049,12 @@
             "value" : "ディスクイメージが作成されました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De schijfkopie is aangemaakt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7583,6 +8135,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ディスクイメージを作成中..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schijfkopie aanmaken..."
           }
         },
         "pl" : {
@@ -7667,6 +8225,12 @@
             "value" : "ディスクイメージを準備中..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schijfkopie voorbereiden..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7747,6 +8311,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "元のインストーラを削除中..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Broninstallatieprogramma verwijderen..."
           }
         },
         "pl" : {
@@ -7831,6 +8401,12 @@
             "value" : "ディスクイメージの作成"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schijfkopie aanmaken"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7913,6 +8489,12 @@
             "value" : "ディスクイメージ"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schijfkopie"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7990,6 +8572,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ %@"
@@ -8077,6 +8665,12 @@
             "value" : "キャンセル"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuleer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8157,6 +8751,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロード"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download"
           }
         },
         "pl" : {
@@ -8241,6 +8841,12 @@
             "value" : "選択したバージョンのmacOSは正常にダウンロードされ、インストーラが作成されます。ただし、Intelプロセッサ搭載Macでは、このインストーラを使ってUSBドライブに起動可能なインストーラを作成することはできません。続けますか？"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De geselecteerde versie van macOS wordt gewoon gedownload en het installatieprogramma wordt aangemaakt. Op een Mac met Intel kan dit installatieprogramma echter niet worden gebruikt om een opstartbaar installatieprogramma op een USB-schijf te zetten. Wil je doorgaan?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8323,6 +8929,12 @@
             "value" : "このMacでは起動可能なインストーラを作成できません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op deze Mac kan geen opstartbaar installatieprogramma worden gemaakt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8400,6 +9012,12 @@
           }
         },
         "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
@@ -8487,6 +9105,12 @@
             "value" : "ローカルのインストーラを検出中..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokale installatieprogramma's zoeken..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8567,6 +9191,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロード済み"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GEDOWNLOAD"
           }
         },
         "pl" : {
@@ -8651,6 +9281,12 @@
             "value" : "キャンセル"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuleer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8731,6 +9367,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "もう一度ダウンロード"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download opnieuw"
           }
         },
         "pl" : {
@@ -8815,6 +9457,12 @@
             "value" : "選択したインストーラはすでに「アプリケーション」フォルダにあります。もう一度ダウンロードしますか？"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het geselecteerde installatieprogramma staat al in de map Apps. Wil je het opnieuw downloaden?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8895,6 +9543,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラはダウンロード済みです"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatieprogramma al gedownload"
           }
         },
         "pl" : {
@@ -8979,6 +9633,12 @@
             "value" : "「アプリケーション」フォルダに、バージョンまたはビルドを読み取れないmacOSインストーラが見つかりました。数：%@。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In de map Apps zijn macOS-installatieprogramma's gevonden waarvan de versie of build niet kon worden gelezen. Aantal: %@."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9059,6 +9719,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ローカルのインストーラを識別できませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokale installatieprogramma's konden niet worden herkend"
           }
         },
         "pl" : {
@@ -9143,6 +9809,12 @@
             "value" : "1分以上インターネットにアクセスできない"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langer dan 1 minuut geen internetverbinding"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9223,6 +9895,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インターネット接続が 1 分間回復できませんでした。一時ファイルが削除されました。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De internetverbinding is 1 minuut lang niet hersteld. De tijdelijke bestanden zijn verwijderd."
           }
         },
         "pl" : {
@@ -9307,6 +9985,12 @@
             "value" : "インターネット接続が 1 分間回復できませんでした。一時ファイルの削除の確認に失敗しました。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De internetverbinding is 1 minuut lang niet hersteld. Het verwijderen van tijdelijke bestanden kon niet worden bevestigd."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9387,6 +10071,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロードは一時停止されました。接続が復元されると (残り %@ 秒)、自動的に再開されます。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De download is gepauzeerd en gaat automatisch verder zodra de verbinding is hersteld (resterend: %@ s)."
           }
         },
         "pl" : {
@@ -9471,6 +10161,12 @@
             "value" : "インターネット接続が失われました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Internetverbinding is verbroken"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9551,6 +10247,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "システム %@ %@ のダウンロードが正常に完了しました。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloaden van %@ %@ is voltooid."
           }
         },
         "pl" : {
@@ -9635,6 +10337,12 @@
             "value" : "ダウンロード完了"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download voltooid"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9715,6 +10423,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "オプション"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opties"
           }
         },
         "pl" : {
@@ -9799,6 +10513,12 @@
             "value" : "すべてのバージョンを表示"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toon alle versies"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9881,6 +10601,12 @@
             "value" : "ベータ版を表示"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toon bètaversies"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9961,6 +10687,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロードオプション"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloadopties"
           }
         },
         "pl" : {
@@ -10046,6 +10778,12 @@
             "value" : "macOSインストーラをダウンロードして準備するには、「システム設定」でmacUSBの「アプリのバックグラウンドでのアクティビティ」をオンにしてください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schakel in Systeeminstellingen de achtergrondactiviteit van apps in voor macUSB om een macOS-installatieprogramma te downloaden en voor te bereiden."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10126,6 +10864,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "バックグラウンドアクティビティ設定を開く"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open instellingen voor achtergrondactiviteit"
           }
         },
         "pl" : {
@@ -10211,6 +10955,12 @@
             "value" : "アプリのバックグラウンドでのアクティビティが必要です"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achtergrondactiviteit van apps vereist"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10293,6 +11043,12 @@
             "value" : "バックグラウンドアクティビティ"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achtergrondactiviteit"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10373,6 +11129,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "フルディスクアクセス"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volledige schijftoegang"
           }
         },
         "pl" : {
@@ -10458,6 +11220,12 @@
             "value" : "macOSインストーラをダウンロードして準備するには、「システム設定」でmacUSBにフルディスクアクセスを許可し、macUSBの「アプリのバックグラウンドでのアクティビティ」をオンにしてください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef macUSB in Systeeminstellingen volledige schijftoegang en schakel de achtergrondactiviteit van apps in voor macUSB om een macOS-installatieprogramma te downloaden en voor te bereiden."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10539,6 +11307,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "アクセス権が必要です"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bevoegdheden vereist"
           }
         },
         "pl" : {
@@ -10624,6 +11398,12 @@
             "value" : "macOSインストーラをダウンロードして準備するには、「システム設定」でmacUSBにフルディスクアクセスを許可してください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef macUSB in Systeeminstellingen volledige schijftoegang om een macOS-installatieprogramma te downloaden en voor te bereiden."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10704,6 +11484,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "フルディスクアクセスを開く"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Volledige schijftoegang"
           }
         },
         "pl" : {
@@ -10789,6 +11575,12 @@
             "value" : "フルディスクアクセスが必要です"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volledige schijftoegang vereist"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10870,6 +11662,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macOSインストーラをダウンロードして準備するには、「システム設定」でmacUSBにフルディスクアクセスを許可してください。macUSBのヘルパーも利用できません。「ツール」＞「ヘルパーを修復」と選択してから、もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef macUSB in Systeeminstellingen volledige schijftoegang om een macOS-installatieprogramma te downloaden en voor te bereiden. De helper van macUSB is ook niet beschikbaar. Kies Hulpmiddelen → Repareer helper en probeer het opnieuw."
           }
         },
         "pl" : {
@@ -10955,6 +11753,12 @@
             "value" : "macUSBのヘルパーを利用できません。「ツール」＞「ヘルパーを修復」と選択してから、もう一度お試しください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De helper van macUSB is niet beschikbaar. Kies Hulpmiddelen → Repareer helper en probeer het opnieuw."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11036,6 +11840,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ヘルパーを利用できません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper niet beschikbaar"
           }
         },
         "pl" : {
@@ -11120,6 +11930,12 @@
             "value" : "必要なアクセス権またはヘルパー接続を利用できません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vereiste bevoegdheden of verbinding met helper niet beschikbaar"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11200,6 +12016,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロード手順"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloadstappen"
           }
         },
         "pl" : {
@@ -11284,6 +12106,12 @@
             "value" : "システムダウンロード"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systeem downloaden"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11364,6 +12192,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロード"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download"
           }
         },
         "pl" : {
@@ -11448,6 +12282,12 @@
             "value" : "選択したアイテムは現在のダウンロードではサポートされていません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het geselecteerde onderdeel wordt in de huidige download niet ondersteund"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11528,6 +12368,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "システムリストを更新する"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vernieuw de systeemlijst"
           }
         },
         "pl" : {
@@ -11612,6 +12458,12 @@
             "value" : "利用可能なシステム"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beschikbare systemen"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11692,6 +12544,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロードを開始できませんでした。ダウンロード セッションの準備に失敗しました: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De download kon niet worden gestart. Downloadsessie voorbereiden mislukt: %@"
           }
         },
         "pl" : {
@@ -11776,6 +12634,12 @@
             "value" : "このインストーラは Apple により正しく署名されています。署名に過去使用されていた証明書は期限切れですが、これは古いシステムリリースでは想定内であり、ダウンロードしたファイルの整合性には影響しません。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit installatieprogramma is correct ondertekend door Apple. Het certificaat waarmee destijds is ondertekend, is verlopen. Dat is normaal bij oudere systeemversies en heeft geen invloed op de integriteit van het gedownloade bestand."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11856,6 +12720,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Appleの署名が確認されました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Handtekening van Apple bevestigd"
           }
         },
         "pl" : {
@@ -11940,6 +12810,12 @@
             "value" : "ダウンロードを開始するには、さらに多くの空きディスク容量が必要です。\n\n最低限必要な値: %@。利用可能: %@。\n\nスペースを解放して、再試行してください。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Om te kunnen downloaden heb je meer vrije schijfruimte nodig.\n\nMinimaal vereist: %@. Beschikbaar: %@.\n\nMaak ruimte vrij en probeer het opnieuw."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12020,6 +12896,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ディスク容量が足りない"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onvoldoende schijfruimte"
           }
         },
         "pl" : {
@@ -12104,6 +12986,12 @@
             "value" : "空き容量なし: 最小 %@ が必要 (インストーラー サイズ %@ の 250%%)、%@ が使用可能。"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onvoldoende vrije ruimte: minimaal %@ vereist (250%% van de grootte van het installatieprogramma, %@), %@ beschikbaar."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12184,6 +13072,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "このインストーラーを使用して USB の作成に進みます"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga door en maak een USB met dit installatieprogramma"
           }
         },
         "pl" : {
@@ -12268,6 +13162,12 @@
             "value" : "平均速度"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemiddelde snelheid"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12348,6 +13248,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "クリーンアップ状態"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status van opruimen"
           }
         },
         "pl" : {
@@ -12432,6 +13338,12 @@
             "value" : "詳細"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12512,6 +13424,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%02d分 %02d秒"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%02dm %02ds"
           }
         },
         "pl" : {
@@ -12596,6 +13514,12 @@
             "value" : "ダウンロード時間"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloadtijd"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12676,6 +13600,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロードが完了しませんでした"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De download kon niet worden voltooid"
           }
         },
         "pl" : {
@@ -12760,6 +13690,12 @@
             "value" : "インストーラ"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatieprogramma"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12840,6 +13776,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "場所"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locatie"
           }
         },
         "pl" : {
@@ -12924,6 +13866,12 @@
             "value" : "警告付きで完了しました"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voltooid met waarschuwing"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13004,6 +13952,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ファインダーで表示"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toon in Finder"
           }
         },
         "pl" : {
@@ -13088,6 +14042,12 @@
             "value" : "状態"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13168,6 +14128,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "準備完了"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gereed"
           }
         },
         "pl" : {
@@ -13252,6 +14218,12 @@
             "value" : "ダウンロード済みデータ"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gedownloade gegevens"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13332,6 +14304,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラーが作成されていません"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatieprogramma niet aangemaakt"
           }
         },
         "pl" : {
@@ -13416,6 +14394,12 @@
             "value" : "利用可能なデータがありません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen gegevens beschikbaar"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13496,6 +14480,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "インストーラー ファイルのダウンロードに失敗しました: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestanden van installatieprogramma downloaden mislukt: %@"
           }
         },
         "pl" : {
@@ -13580,6 +14570,12 @@
             "value" : "ファイル %@ の保存に失敗しました: %@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestand %@ bewaren mislukt: %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13660,6 +14656,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "サーバーは %@ に対して間違った応答コードを返しました"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De server gaf een onjuiste antwoordcode voor %@"
           }
         },
         "pl" : {
@@ -13744,6 +14746,12 @@
             "value" : "セッションペイロードディレクトリがありません"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payloadmap van sessie ontbreekt"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13824,6 +14832,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "不明なダウンロード エラー"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onbekende downloadfout"
           }
         },
         "pl" : {
@@ -13908,6 +14922,12 @@
             "value" : "ダウンロード速度: %@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloadsnelheid: %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13988,6 +15008,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ダウンロード速度: - MB/秒"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloadsnelheid: - MB/s"
           }
         },
         "pl" : {
@@ -14072,6 +15098,12 @@
             "value" : "ファイルのダウンロード"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestanden downloaden"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14152,6 +15184,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ファイル %@ をダウンロードしています..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ downloaden..."
           }
         },
         "pl" : {
@@ -14236,6 +15274,12 @@
             "value" : "期待..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wachten..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14316,6 +15360,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ファイル検証に失敗しました: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestandsverificatie mislukt: %@"
           }
         },
         "pl" : {
@@ -14400,6 +15450,12 @@
             "value" : "ファイルの検証"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestanden verifiëren"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14480,6 +15536,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ファイル %@ を確認しています..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ verifiëren..."
           }
         },
         "pl" : {
@@ -14564,6 +15626,12 @@
             "value" : "インストーラーをダウンロードして準備中です"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het installatieprogramma wordt gedownload en voorbereid"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14644,6 +15712,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apple サーバーで利用可能なインストーラーを選択します"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies een installatieprogramma dat beschikbaar is op de servers van Apple"
           }
         },
         "pl" : {
@@ -14728,6 +15802,12 @@
             "value" : "ダウンロードが完了しました。概要は以下からご覧いただけます"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download voltooid. Hieronder staat een samenvatting"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14808,6 +15888,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macOSのダウンロード"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS downloaden"
           }
         },
         "pl" : {
