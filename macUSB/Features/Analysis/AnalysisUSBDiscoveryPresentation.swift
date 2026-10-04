@@ -8,19 +8,83 @@ struct AnalysisUSBDiscoveryNotice: Equatable {
     let waiting: Bool
 }
 
+/// A lifecycle pause changes admission, not the last result shown to the user.
+struct AnalysisUSBHeldPresentation {
+    let discovery: AnalysisUSBDiscoveryState
+    let readiness: USBTargetReadiness
+    let selectionID: String?
+    let identity: String?
+    let requiredBytes: Int64?
+    let allowExternalDrives: Bool
+    let capturedAt: TimeInterval
+    var resumedAt: TimeInterval?
+}
+
 extension AnalysisLogic {
+    private var currentHeldUSBPresentation: AnalysisUSBHeldPresentation? {
+        guard let held = heldUSBDiscoveryPresentation,
+              held.selectionID == selectedDrive?.selectionID,
+              held.identity == selectedTargetIdentity,
+              held.requiredBytes == usbTargetCapacityRequirement?.minimumBytes,
+              held.allowExternalDrives == UserDefaults.standard.bool(forKey: "AllowExternalDrives") else { return nil }
+        return held
+    }
+
+    var usbDiscoveryPresentationState: AnalysisUSBDiscoveryState {
+        currentHeldUSBPresentation?.discovery ?? usbDiscoveryState
+    }
+
+    var usbTargetPresentationReadiness: USBTargetReadiness {
+        currentHeldUSBPresentation?.readiness ?? usbTargetReadiness
+    }
+
+    func holdUSBDiscoveryPresentation() {
+        let previous = currentHeldUSBPresentation
+        heldUSBDiscoveryPresentation = AnalysisUSBHeldPresentation(
+            discovery: previous?.discovery ?? usbDiscoveryState,
+            readiness: previous?.readiness ?? usbTargetReadiness,
+            selectionID: selectedDrive?.selectionID, identity: selectedTargetIdentity,
+            requiredBytes: usbTargetCapacityRequirement?.minimumBytes,
+            allowExternalDrives: UserDefaults.standard.bool(forKey: "AllowExternalDrives"),
+            capturedAt: previous?.capturedAt ?? ProcessInfo.processInfo.systemUptime
+        )
+    }
+
+    func resumeUSBDiscoveryPresentation() {
+        guard heldUSBDiscoveryPresentation != nil else { return }
+        guard var held = currentHeldUSBPresentation else {
+            heldUSBDiscoveryPresentation = nil
+            return
+        }
+        let now = ProcessInfo.processInfo.systemUptime
+        if let resumedAt = held.resumedAt {
+            // Bound the presentation grace as well: a stalled active refresh
+            // must eventually surface loss of confirmation. Admission never
+            // uses this grace or renews the evidence timestamp.
+            if now - resumedAt >= USBTargetVerification.maximumConfirmationAge {
+                heldUSBDiscoveryPresentation = nil
+            }
+        } else {
+            held.resumedAt = now
+            heldUSBDiscoveryPresentation = held
+        }
+    }
+
     var usbDiscoveryNotice: AnalysisUSBDiscoveryNotice? {
         // The availability card accompanies the persistent destructive warning.
         // Never repeat this selected-target problem above the same selector.
         if isUSBAvailabilityConfirmationExpired { return nil }
+        let usbDiscoveryState = usbDiscoveryPresentationState
+        let usbTargetReadiness = usbTargetPresentationReadiness
+        let verificationTime = currentHeldUSBPresentation?.capturedAt ?? ProcessInfo.processInfo.systemUptime
         let alternative = usbDiscoveryState.hasCurrentSnapshot && selectableUSBTargets.contains { drive in
             guard let required = usbTargetCapacityRequirement?.minimumBytes,
-                  let proof = usbDiscoveryState.snapshot?.verification[drive.selectionID], proof.problem == nil, proof.isFresh(),
+                  let proof = usbDiscoveryState.snapshot?.verification[drive.selectionID], proof.problem == nil, proof.isFresh(at: verificationTime),
                   case .success(let actual) = proof.capacity else { return false }
             return actual >= required
         }
         if let failure = usbDiscoveryState.failure {
-            return AnalysisUSBDiscoveryNotice(titleKey: "analysis.usb.discovery.refresh.title", descriptionKey: usbSelectionProblemDescriptionKey(failure), offersVerifiedAlternative: false, waiting: false)
+            return AnalysisUSBDiscoveryNotice(titleKey: "analysis.usb.discovery.refresh.title", descriptionKey: usbSelectionProblemDescriptionKey(failure, enumerationFailed: true), offersVerifiedAlternative: false, waiting: false)
         }
         if usbTargetReadiness.problem == .targetMissing,
            usbDiscoveryState.hasCurrentSnapshot, selectableUSBTargets.isEmpty,
@@ -37,21 +101,22 @@ extension AnalysisLogic {
         return nil
     }
 
-    private func usbSelectionProblemDescriptionKey(_ problem: USBDiscoveryProblem) -> String {
-        if usbDiscoveryState.failure != nil, case .query(.exitStatus) = problem {
+    private func usbSelectionProblemDescriptionKey(_ problem: USBDiscoveryProblem, enumerationFailed: Bool) -> String {
+        if enumerationFailed, case .query(.exitStatus) = problem {
             return "analysis.usb.discovery.refresh.description"
         }
         return problem.descriptionKey
     }
 
     var isUSBAvailabilityConfirmationExpired: Bool {
-        selectedDrive != nil && usbTargetReadiness.problem == .confirmationExpired
+        selectedDrive != nil && usbTargetPresentationReadiness.problem == .confirmationExpired
     }
 
     /// The setter of the picker binding is the deliberate-selection boundary.
     /// Automatic snapshot application never calls this alert path.
     func selectUSBTarget(_ selectionID: String?) {
         withAnimation(.easeInOut(duration: 0.24)) {
+            heldUSBDiscoveryPresentation = nil
             if selectionID == nil { usbTargetReadiness = .noSelection }
             selectedDriveSelectionID = selectionID
             checkCapacity()
@@ -65,7 +130,7 @@ extension AnalysisLogic {
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
         alert.messageText = String(localized: "analysis.usb.discovery.unavailable.title", table: "Analysis")
-        alert.informativeText = String(localized: String.LocalizationValue(usbSelectionProblemDescriptionKey(problem)), table: "Analysis")
+        alert.informativeText = String(localized: String.LocalizationValue(usbSelectionProblemDescriptionKey(problem, enumerationFailed: usbDiscoveryState.failure != nil)), table: "Analysis")
         alert.addButton(withTitle: String(localized: "analysis.usb.discovery.retry.action", table: "Analysis"))
         alert.addButton(withTitle: String(localized: "analysis.usb.discovery.close.action", table: "Analysis"))
         let completion: (NSApplication.ModalResponse) -> Void = { [weak self] response in
@@ -97,7 +162,7 @@ struct AnalysisUSBDiscoveryNoticeView: View {
                     Text(LocalizedStringKey(notice.descriptionKey), tableName: "Analysis")
                         .font(.subheadline)
                         .foregroundColor(notice.waiting ? .secondary : .orange.opacity(0.8))
-                    if logic.usbDiscoveryState.activity == .waiting && !notice.waiting {
+                    if logic.usbDiscoveryPresentationState.activity == .waiting && !notice.waiting {
                         Text("analysis.usb.discovery.waiting.description", tableName: "Analysis")
                             .font(.subheadline)
                             .foregroundColor(.orange.opacity(0.8))

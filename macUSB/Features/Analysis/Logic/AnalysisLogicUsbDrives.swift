@@ -57,7 +57,9 @@ extension AnalysisLogic {
         else { cancelDriveRefresh(reason: "analysis screen hidden") }
     }
 
-    func cancelDriveRefresh(reason: String = "application inactive") {
+    func cancelDriveRefresh(reason: String = "application inactive", preservePresentation: Bool = true) {
+        if preservePresentation { holdUSBDiscoveryPresentation() }
+        else { heldUSBDiscoveryPresentation = nil }
         physicalDriveRefreshGeneration &+= 1
         driveRefreshCancellation?.cancel()
         // The registry read itself cannot be interrupted. Retain ownership
@@ -71,7 +73,7 @@ extension AnalysisLogic {
 
     func usbExternalDrivePreferenceChanged() {
         log("USB discovery preference changed: AllowExternalDrives=\(UserDefaults.standard.bool(forKey: "AllowExternalDrives")).", category: "USBSelection")
-        cancelDriveRefresh(reason: "external-drive preference changed")
+        cancelDriveRefresh(reason: "external-drive preference changed", preservePresentation: false)
         refreshDrives(force: true, reason: "external-drive preference changed")
     }
 
@@ -84,7 +86,10 @@ extension AnalysisLogic {
         guard isDriveRefreshVisible, NSApp.isActive else { return }
         // Evaluate evidence on every existing UI tick, even while a worker or
         // an unreaped child prevents another scan from starting.
-        withAnimation(.easeInOut(duration: 0.24)) { checkCapacity() }
+        withAnimation(.easeInOut(duration: 0.24)) {
+            resumeUSBDiscoveryPresentation()
+            checkCapacity()
+        }
         guard !driveRefreshPolicy.isRunning else { return }
         // The worker may have returned after bounded cleanup while its child
         // still owns the process slot. Never queue another scan behind it.
@@ -122,6 +127,7 @@ extension AnalysisLogic {
                     self.usbDiscoveryState.activity = .idle
                     switch result {
                     case .complete(let snapshot), .partial(let snapshot):
+                        self.heldUSBDiscoveryPresentation = nil
                         let presentation = self.retainingUnresolvedUSBSelection(in: self.retainingUSBConfirmationTimes(in: snapshot))
                         self.usbDiscoveryState.snapshot = presentation
                         self.usbDiscoveryState.outcome = .current
@@ -129,6 +135,7 @@ extension AnalysisLogic {
                         if snapshot.issues.contains(where: { $0.problem == .query(.busy) }) { self.usbDiscoveryState.activity = .waiting }
                         diagnostics.recordSnapshot(snapshot, message: "USB scan completed: generation=\(generation), duration=\(elapsed)s, physicalTargets=\(snapshot.physicalDrives.count), optionTargets=\(snapshot.optionDrives.count), issues=\(snapshot.issues).", workflow: workflow, force: reason == "user retry")
                     case .failed(let problem):
+                        self.heldUSBDiscoveryPresentation = nil
                         self.usbDiscoveryState.outcome = .failed(problem)
                         self.checkCapacity()
                         diagnostics.record("USB scan failed: generation=\(generation), duration=\(elapsed)s, reason=\(problem).", key: "scan.result", signature: "\(problem)", workflow: workflow)
@@ -136,6 +143,7 @@ extension AnalysisLogic {
                         self.usbDiscoveryState.activity = .waiting
                         diagnostics.record("USB scan waiting: generation=\(generation), duration=\(elapsed)s, reason=runner busy.", key: "scan.result", signature: "busy", workflow: workflow)
                     case .cancelled:
+                        self.holdUSBDiscoveryPresentation()
                         self.usbDiscoveryState.activity = .suspended
                         self.usbDiscoveryState.outcome = .pending
                         self.checkCapacity()
