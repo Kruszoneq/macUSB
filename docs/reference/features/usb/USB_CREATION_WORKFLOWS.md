@@ -17,6 +17,16 @@ Every confirmed creation attempt owns one USB-creation token across macOS, Linux
 - Linux raw-copy path (`dd`) for recognized Linux `.iso` sources and manually selected raw `.iso`/`.img` sources
 - Windows ISO copy path (FAT32/MBR + optional WIM split), with a conditional macUSBoot final write for BIOS media
 
+## USB and SD Targets
+
+All workflow families accept qualified USB or removable SD targets from the shared analysis catalog. Discovery, exact capacity checks, built-in-reader identification, and final registry verification are defined in [USB Validation and Capacity](USB_VALIDATION_AND_CAPACITY.md#sd-identification-and-built-in-readers).
+
+SD targets use `SD CARD` in the analysis picker and installation summary, including cards attached through USB. Identified SD cards do not trigger the USB 2.0 warning. Generic USB readers without positive SD evidence retain USB presentation only when they qualify as external USB storage.
+
+SD classification is app-side metadata; `HelperWorkflowRequestPayload` has no SD-specific field or workflow kind. The helper receives the selected BSD device/volume path and executes the same source-dependent formatting, restore, copy, verification, and cleanup stages. macOS whole-disk preparation and its eligible GPT/HFS+ Option-volume override apply to SD targets under the same workflow rules as USB. Linux, Windows, and manual raw-image flows use whole disks. Successful media creation does not establish whether the destination firmware can boot from a particular card slot or reader.
+
+## Workflow Execution
+
 macOS target preparation:
 
 - standard `createinstallmedia`, legacy restore, and Mavericks workflows receive a physical whole-disk target by default and always run the existing `preformat` stage as GPT/HFS+ with the `mac_USB` label,

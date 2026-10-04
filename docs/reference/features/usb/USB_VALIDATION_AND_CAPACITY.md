@@ -48,16 +48,36 @@ The shared physical target snapshot is built as follows:
 - use `diskutil list -plist physical` to obtain physical whole-disk identifiers, including cards in built-in SD readers,
 - read `diskutil info -plist /dev/diskX` for each candidate,
 - bind info metadata to the requested `DeviceIdentifier` and require `WholeDisk=true` (the diskutil plist key, distinct from IOMedia's `Whole` registry property),
-- include only external physical USB devices or confirmed removable SD cards; native SD transport may report an internal reader,
+- include only external physical USB devices or confirmed removable SD cards; both native SD and USB-connected built-in readers may report `Internal=true`,
 - when `AllowExternalDrives` is disabled, exclude non-removable external USB disks,
 - retain per-target identity and capacity evidence from the same scan for admission,
 - sort targets by their `diskX` identifier.
 
 This physical enumeration does not depend on a readable or mounted macOS volume. A connected USB or SD medium that macOS cannot mount can therefore still appear directly as a selectable whole-disk target.
 
-SD identification uses the exact `Secure Digital` transport reported by diskutil/IOKit. A USB-connected card is also identified as SD when its current IOMedia or nearest block-storage device exposes the system `SD.icns` icon, or that block-storage device's `Device Characteristics` contains the exact hardware inquiry pair `Vendor Name=APPLE` and `Product Name=SD Card Reader` (ignoring case and surrounding whitespace). The hardware-pair check handles built-in readers with that identity reporting `BusProtocol=USB` and `Internal=true` without an SD icon on the inspected nodes. It addresses the USB/internal/removable combination in the MacBookPro12,1 report; that report contains diskutil metadata, so confirmation of its live registry fields requires a hardware retest. Device display names (`MediaName`, `IORegistryEntryName`), volume labels, and generic reader names are not used as type evidence. Readers that expose only generic USB storage remain supported USB targets with their USB label. Internal fixed disks and virtual devices are excluded; known unsupported registry transports are filtered before an info query. SD cards require confirmed removable status independently of `AllowExternalDrives`, so built-in readers do not require enabling external hard drives. Mounted SD volumes may report internal status and remain eligible for the Option override when GPT/HFS+ and removable checks pass. The final handoff uses the same current registry classification, including the hardware-pair check.
+### SD Identification and Built-in Readers
+
+`Internal` and removable status are independent properties. The MacBookPro12,1 report shows a physical card with `BusProtocol=USB`, `Internal=true`, and `RemovableMedia=true`: the built-in reader is connected internally, but its card is removable. `Internal=true` is therefore allowed for positively identified removable SD cards, rather than for every removable internal device.
+
+SD identification accepts the following evidence:
+
+| Evidence | Source and conditions |
+| --- | --- |
+| `Secure Digital` transport | Bound whole-disk `diskutil info` metadata or the nearest IOKit block-storage device's `Physical Interconnect`; transport matching ignores case and surrounding whitespace |
+| System `SD.icns` icon | Current IOMedia or nearest block-storage device's `IOMediaIcon.IOBundleResourceFile`, together with USB transport in that registry probe |
+| Apple SD-reader hardware identity | Nearest block-storage device's `Device Characteristics` with the exact pair `Vendor Name=APPLE` and `Product Name=SD Card Reader`, together with USB transport; vendor/product matching ignores case and surrounding whitespace |
+
+The registry probe stops at the nearest block-storage device. It does not walk past a virtual storage device to classify it from the backing hardware. Device display names (`MediaName`, `IORegistryEntryName`), volume labels, and generic reader names are not used as SD evidence. An external reader exposing only generic USB storage can still qualify as a USB target and retain its USB label. An internal USB reader without positive SD evidence is omitted; `RemovableMedia=true` alone is insufficient.
+
+Identified SD cards require confirmed removable status independently of `AllowExternalDrives`. Scan qualification reads `RemovableMedia`, then `Removable`, then the current same-identity registry media property when the preceding field is absent. Neither enabling external hard drives nor an SD hardware match admits a card with false or unknown removable status. Internal fixed disks, virtual devices, and known unsupported registry transports remain excluded.
+
+The Apple hardware-pair check addresses the USB/internal/removable combination in the MacBookPro12,1 report without requiring an SD icon on the inspected nodes. That report contains diskutil metadata rather than IOKit characteristics, so confirmation of the live hardware-pair match and successful detection still requires a hardware retest. It is not evidence that every built-in reader model has been verified.
 
 The media kind follows whole disks, Option volumes, selection normalization and PPC handoff. It selects the verbatim hardware label `SD CARD` in analysis and summary and suppresses the USB 2.0 warning for identified SD cards. Final handoff rechecks SD kind and removable status alongside the existing identity/capacity verification. This enables writing a card; boot compatibility still depends on the destination hardware and image.
+
+For an SD selection, Continue specifically requires the current physical-parent registry probe to return `mediaKind=sdCard` and `removable=true`, with the expected identity. Diskutil-only SD classification can populate a scan result but cannot bypass this final registry check. Mounted SD volumes may report internal status and qualify for the macOS Option override only when their verified SD parent and mounted-volume GPT/HFS+/removable checks pass.
+
+### Refresh and Admission Evidence
 
 The analysis screen starts discovery when it appears or the app becomes active. Its `0.5 s` UI tick still updates Option state, but physical discovery is throttled to at most once every `2.5 s` while the screen is visible and the app is active. Refreshes are serialized per analysis owner; duplicate requests are skipped instead of queued. Hiding the screen, navigating to installation, or deactivating the app cancels its current discovery. Workflow-state changes may request a refresh through the same throttle.
 
@@ -71,7 +91,7 @@ A routine refresh retains current evidence and never clears selection or replace
 
 Uncertain same-identity reads retain the last successful confirmation time without restoring failed capacity evidence; failures still block admission immediately, and prolonged uncertainty uses the availability card once that last confirmation expires. A failed whole enumeration likewise retains the presentation and its confirmation age. Expired confirmation retains the selected row and presentation but blocks Continue with `confirmationExpired`, never a claimed disconnection. The compact availability card appears above the destructive warning and uses the same warning surface, orange icon/title, secondary orange description, icon size and centered row alignment; both use symmetric contextual-card motion. The destructive warning remains visible whenever a target is selected, including application inactivity, rechecking, insufficient capacity and unavailable or expired evidence. Activity and readiness govern Continue availability independently of this warning; clearing the selection removes it. The generic discovery notice is suppressed for this selected-target condition. A successful scan of the same identity restores readiness automatically when capacity still fits; a changed identity remains blocked until deliberate reselection. Partial reads that cannot establish absence retain the selected row with failed admission evidence; a confirmed absence removes it. A failure to read one device does not discard independently verified targets: a selected target with known sufficient capacity can proceed despite another device's failure. A failed or malformed whole enumeration retains the previous presentation but invalidates its admission evidence. Returning to the screen or activating the application obtains new evidence; lifecycle cancellation is neutral, not a drive failure. Preference changes invalidate old-policy evidence and discard in-flight results captured with a different `AllowExternalDrives` value.
 
-New unreadable entries are shown only when current registry evidence independently confirms an external physical USB storage device or a removable SD card at that BSD name. The registry probe stops at the nearest block-storage device and requires USB/external or Secure Digital/removable characteristics; a cached name or `diskX` identifier is insufficient to discover a new row. The previously selected row may be retained during an uncertain read, with failed admission evidence as described above. Non-removable USB devices still follow `AllowExternalDrives`; SD cards always require confirmed removable media. A device whose supported type cannot be confirmed is omitted and logged as a partial issue. Confirmed USB/SD media with unreadable required data remains visible as unavailable. Registry entry identities are sampled before/after info reads and again before snapshot publication; volumes also carry their own current registry identity bound to that physical parent. Reuse of a BSD name with a different identity cannot automatically reauthorize a selection.
+New unreadable entries are shown only when current same-identity registry evidence independently confirms an external physical USB storage device or a removable SD card at that BSD name. SD registry evidence may use native transport, a USB SD icon, or the USB Apple hardware-pair match described above; a cached name or `diskX` identifier is insufficient to discover a new row. The previously selected row may be retained during an uncertain read, with failed admission evidence as described above. Non-removable USB devices still follow `AllowExternalDrives`; SD cards always require confirmed removable media. If an uncertain query cannot establish a supported type independently, the candidate is omitted and logged as a partial issue. Ordinary exclusions such as an unclassified internal USB device or a virtual device do not create a discovery error. Confirmed USB/SD media with unreadable required data remains visible as unavailable. Registry entry identities are sampled before/after info reads and again before snapshot publication; volumes also carry their own current registry identity bound to that physical parent. Reuse of a BSD name with a different identity cannot automatically reauthorize a selection.
 
 Whole-disk and Option-volume capacity come from current scan metadata; missing, invalid or nonpositive bytes block admission with a read/data reason. Eligible GPT/HFS+ mounted volumes are prepared without another diskutil query. Mounted-volume metadata failures remain explicit, and physical targets remain independently usable. Workflow changes normalize a volume only to its own physical parent. A missing target is removed from the list and is never recreated from cache or replaced by another disk.
 
@@ -83,17 +103,19 @@ Repeated requests are skipped rather than queued. While an owned child remains i
 
 Run the standalone resource/scheduling regression checks with `bash scripts/TestUSBDiscovery.sh`. They compile production utilities and use mocked registry ownership plus synthetic child processes; they do not launch macUSB, invoke diskutil or modify media.
 
-The Option presentation additionally reads mounted external, non-network volumes and keeps only volumes that:
+The Option presentation additionally reads mounted, non-network volumes and keeps only volumes that:
 
 - belong to a physical USB or SD whole disk from the shared snapshot,
 - use a GPT partition scheme,
 - use HFS+,
-- satisfy the same removable/external-drive preference policy.
+- satisfy the same removable/external-drive preference policy; a verified SD volume requires `volumeIsRemovable=true` even when external hard drives are enabled, and may report `volumeIsInternal=true`.
+
+Missing required mounted-volume metadata leaves an otherwise eligible row unavailable rather than authorizing it. Internal mounted volumes from a non-SD parent are excluded.
 
 UI rules:
 - while the initial target snapshot is being prepared, analysis UI shows the neutral waiting state,
 - when at least one physical USB or SD target is present but source recognition is still pending, the neutral waiting card remains visible instead of target-selection controls,
-- after the initial snapshot finishes with no eligible USB or SD physical targets, the UI shows `Nie wykryto nośnika USB`,
+- when the current presentation is empty and the snapshot has no issues, the UI shows `Nie wykryto nośnika USB`; this existing localized wording also covers an empty USB/SD catalog,
 - physical USB targets use `diskX - <size> - <USB standard>`; SD targets use `diskX - <size> - SD CARD`,
 - Option-selected HFS+ volumes use `diskXsY - <size> - <USB standard> - <volume name>` with `SD CARD` replacing the USB standard for SD cards,
 - releasing Option restores the physical presentation; if an eligible volume remains selected, the picker keeps that one selected-volume entry visible until the selection changes,
