@@ -105,7 +105,8 @@ enum USBTargetDiscoveryService {
                     record("Device \(device) omitted: transport=\(bus).", key: "qualification.\(device)", signature: "unsupportedTransport"); continue
                 }
                 if matchesRequestedDevice, (internalMedia == true && mediaKind != .sdCard) || (info["VirtualOrPhysical"] as? String)?.lowercased() == "virtual" {
-                    record("Device \(device) omitted: internal or virtual media.", key: "qualification.\(device)", signature: "internalOrVirtual"); continue
+                    let evidence = "internal=\(internalMedia.map(String.init) ?? "unknown"), physical=\(info["VirtualOrPhysical"] as? String ?? "unknown"), kind=\(mediaKind?.rawValue ?? "unknown"), removable=\(removable.map(String.init) ?? "unknown"), registry={\(after?.typeEvidence ?? "unavailable")}."
+                    record("Device \(device) omitted: internal or virtual media; \(evidence)", key: "qualification.\(device)", signature: "internalOrVirtual:\(evidence)"); continue
                 }
                 if matchesRequestedDevice, info["RemovableMediaOrExternalDevice"] as? Bool == false {
                     record("Device \(device) omitted: not removable or external.", key: "qualification.\(device)", signature: "notExternal"); continue
@@ -163,7 +164,7 @@ enum USBTargetDiscoveryService {
                 confirmedAt: problem == nil ? confirmedAt : nil
             )
             if let problem { issues.append(USBDiscoveryIssue(device: device, problem: problem)) }
-            record("Device \(device) qualification=\(problem == nil ? "verified" : "unavailable"), identity=\(after.map { String($0.identity) } ?? "unknown"), capacity=\(capacity.map(String.init) ?? "unknown") B, reason=\(problem.map { String(describing: $0) } ?? "none").", key: "qualification.\(device)", signature: "\(verification[drive.selectionID]!.identity ?? "unknown"):\(verification[drive.selectionID]!.capacity)")
+            record("Device \(device) qualification=\(problem == nil ? "verified" : "unavailable"), identity=\(after.map { String($0.identity) } ?? "unknown"), kind=\(drive.mediaKind.rawValue), removable=\(removable.map(String.init) ?? "unknown"), capacity=\(capacity.map(String.init) ?? "unknown") B, registry={\(after?.typeEvidence ?? "unavailable")}, reason=\(problem.map { String(describing: $0) } ?? "none").", key: "qualification.\(device)", signature: "\(verification[drive.selectionID]!.identity ?? "unknown"):\(verification[drive.selectionID]!.capacity):\(drive.mediaKind.rawValue)")
         }
         drives.sort { $0.device.localizedStandardCompare($1.device) == .orderedAscending }
         let physical = drives
