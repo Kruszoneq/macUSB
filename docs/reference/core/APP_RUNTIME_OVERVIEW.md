@@ -4,12 +4,14 @@ This file defines high-level runtime scope and global contracts.
 
 ## Purpose and Scope
 
-`macUSB` creates bootable USB media for:
+`macUSB` creates bootable USB and SD media for:
 
 - macOS/OS X/Mac OS X installers from `.dmg`, `.iso`, `.cdr`, and `.app` sources,
 - supported Windows families from original `.iso` images using a boot-mode-aware BIOS or UEFI workflow,
 - recognized Linux `.iso` images using the shared analysis and installation flow,
-- manually selected raw `.iso` and `.img` images written directly to USB without content analysis.
+- manually selected raw `.iso` and `.img` images written directly to USB or SD media without content analysis.
+
+All creation families share physical USB/SD target discovery and capacity validation. SD support depends on positive media identification and confirmed removable status; it does not guarantee that the destination hardware can boot from its card slot or reader. The identification rules, built-in-reader handling, and hardware verification limits are defined in [USB Validation and Capacity](../features/usb/USB_VALIDATION_AND_CAPACITY.md#sd-identification-and-built-in-readers).
 
 Manual raw-image writing is an exceptional Tools-menu path. It reuses the existing Linux `dd` workflow and SHA-256 write verification, but carries app-only presentation state so the UI does not describe the source as Linux. It is not part of standard source selection or analysis fallback: selecting `.iso` through the standard `Choose` action still runs normal macOS/Windows/Linux analysis. Modified Windows images are outside the tested workflow contract; source-image selection and provenance remain the user's responsibility.
 
@@ -17,7 +19,7 @@ Primary runtime goals:
 
 - detect installer type/version and route to the correct workflow,
 - resolve supported Windows boot modes and preserve the selected mode through helper execution,
-- safely prepare target USB media,
+- safely prepare target USB and SD media,
 - execute privileged operations through helper architecture,
 - keep the user flow guided and non-technical.
 

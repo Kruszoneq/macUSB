@@ -24,6 +24,8 @@ extension AnalysisLogic {
             let readiness: USBTargetReadiness
             if parent.map({ String($0.identity) }) != expectedParent {
                 readiness = .unverified(parent == nil ? .identityUnavailable : .identityChanged)
+            } else if drive.mediaKind == .sdCard, parent?.mediaKind != .sdCard || parent?.removable != true {
+                readiness = .unverified(.incompleteData)
             } else if selected.isWholeDiskTarget {
                 if let actual = parent?.capacityBytes {
                     readiness = actual >= required ? .ready(required: required, actual: actual) : .insufficient(required: required, actual: actual)

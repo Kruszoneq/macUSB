@@ -24,7 +24,7 @@ final class USBDiscoveryDiagnostics: @unchecked Sendable {
         var description: String {
             func describe(_ target: Target) -> String {
                 let drive = target.drive
-                return "{device=\(drive.device), name=\(drive.name), url=\(drive.url.path), size=\(drive.size), USB=\(drive.usbSpeed?.rawValue ?? "unknown"), partition=\(drive.partitionScheme?.rawValue ?? "unknown"), format=\(drive.fileSystemFormat?.rawValue ?? "unknown"), needsFormatting=\(drive.needsFormatting), identity=\(target.identity ?? "unknown"), capacity=\(String(describing: target.capacity))}"
+                return "{device=\(drive.device), name=\(drive.name), url=\(drive.url.path), size=\(drive.size), media=\(drive.mediaDisplayName), partition=\(drive.partitionScheme?.rawValue ?? "unknown"), format=\(drive.fileSystemFormat?.rawValue ?? "unknown"), needsFormatting=\(drive.needsFormatting), identity=\(target.identity ?? "unknown"), capacity=\(String(describing: target.capacity))}"
             }
             return "AllowExternalDrives=\(allowExternal), physical=[\(physical.map(describe).joined(separator: ", "))], Option=[\(option.map(describe).joined(separator: ", "))], issues=\(issues)"
         }

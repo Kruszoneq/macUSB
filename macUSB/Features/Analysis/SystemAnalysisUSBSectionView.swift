@@ -17,11 +17,11 @@ struct SystemAnalysisUSBSectionView: View {
 
     private func pickerDisplayName(for drive: USBDrive) -> String {
         if logic.usbDiscoveryState.failure != nil || logic.usbDiscoveryState.snapshot?.verification[drive.selectionID]?.problem != nil {
-            return "\(drive.device) - " + String(localized: "analysis.usb.discovery.unavailable.label", table: "Analysis")
+            let mediaSuffix = drive.mediaKind == .sdCard ? " - \(drive.mediaDisplayName)" : ""
+            return "\(drive.device) - " + String(localized: "analysis.usb.discovery.unavailable.label", table: "Analysis") + mediaSuffix
         }
         guard drive.isWholeDiskTarget else { return drive.displayName }
-        let speedText = drive.usbSpeed?.rawValue ?? "USB"
-        return "\(drive.device) - \(drive.size) - \(speedText)"
+        return drive.wholeDiskDisplayName
     }
 
     private var preservedPickerSelection: USBDrive? {

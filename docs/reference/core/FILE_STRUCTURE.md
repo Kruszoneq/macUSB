@@ -87,8 +87,8 @@
 - `macUSB/Shared/Services/RosettaAvailabilityProbe.swift` — execution-based Rosetta availability probe.
 
 - `macUSB/Shared/Services/USBDiscoveryModels.swift` — structured scan outcomes, per-target verification, discovery activity and selected-target readiness.
-- `macUSB/Shared/Services/USBTargetDiscoveryService.swift` — analysis-only physical USB qualification and prepared Option snapshots.
-- `macUSB/Shared/Services/USBDiscoveryRegistryProbe.swift` — balanced IOKit ownership, current media identity and independent physical USB evidence.
+- `macUSB/Shared/Services/USBTargetDiscoveryService.swift` — analysis-only physical USB/SD qualification and prepared Option snapshots.
+- `macUSB/Shared/Services/USBDiscoveryRegistryProbe.swift` — balanced IOKit ownership, current media identity and independent physical USB/SD evidence.
 - `macUSB/Shared/Services/USBDiscoveryVolumeCollector.swift` — current GPT/HFS+ Option-volume metadata, identity and capacity collection.
 - `macUSB/Shared/Services/USBDiscoveryDiagnostics.swift` — bounded, coalesced discovery diagnostics.
 - `macUSB/Shared/Services/USBDiscoveryProcessRunner.swift` — shared read-only subprocess exclusion, bounded I/O/cancellation/cleanup and query reports.

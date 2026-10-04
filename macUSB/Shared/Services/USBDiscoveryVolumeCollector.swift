@@ -42,12 +42,13 @@ enum USBDiscoveryVolumeCollector {
                 problem = .incompleteData
                 record("Volume \(device) metadata read failed: \(error).", "metadata.\(device)", "incompleteData")
             }
-            if values?.volumeIsInternal == true { continue }
+            if values?.volumeIsInternal == true, parent.mediaKind != .sdCard { continue }
+            if parent.mediaKind == .sdCard, values?.volumeIsRemovable == false { continue }
             if !allowExternalDrives, values?.volumeIsRemovable == false {
                 record("Volume \(device) omitted: non-removable volume; AllowExternalDrives=false.", "qualification.\(device)", "externalPolicy")
                 continue
             }
-            if values?.volumeIsInternal == nil || (!allowExternalDrives && values?.volumeIsRemovable == nil) || values?.volumeName == nil {
+            if values?.volumeIsInternal == nil || ((!allowExternalDrives || parent.mediaKind == .sdCard) && values?.volumeIsRemovable == nil) || values?.volumeName == nil {
                 problem = .incompleteData
             }
             let capacity = values?.volumeTotalCapacity.flatMap { $0 > 0 ? Int64($0) : nil }
@@ -58,7 +59,7 @@ enum USBDiscoveryVolumeCollector {
             let drive = USBDrive(
                 name: values?.volumeName ?? url.lastPathComponent, device: device,
                 size: capacity.map { ByteCountFormatter.string(fromByteCount: $0, countStyle: .file) } ?? "--",
-                url: url, usbSpeed: parent.usbSpeed, partitionScheme: .gpt, fileSystemFormat: .hfsPlus
+                url: url, usbSpeed: parent.usbSpeed, mediaKind: parent.mediaKind, partitionScheme: .gpt, fileSystemFormat: .hfsPlus
             )
             let proof = USBTargetVerification(identity: identity, capacity: problem.map { .failure($0) } ?? capacity.map { .success($0) } ?? .failure(.capacityUnavailable), confirmedAt: problem == nil ? ProcessInfo.processInfo.systemUptime : nil)
             if problem == nil { recover("Volume \(device) metadata recovered.", "metadata.\(device)") }

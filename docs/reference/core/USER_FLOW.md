@@ -14,9 +14,10 @@ Destructive start requires explicit confirmation.
 - Analysis resolves compatibility flags and workflow branch.
 - Supported-source analysis computes an exact USB capacity requirement from source size plus 5% and presents the smallest fitting drive class; unreadable source size triggers a fallback alert.
 - For macOS installers, analysis also compares the physical Mac architecture with `createinstallmedia`; Intel hosts reject ARM-only tools and unreadable architectures fail closed.
-- Recognized macOS workflows select physical USB whole disks by default. Non-PPC targets are prepared as GPT/HFS+ with the `mac_USB` label; a standard `createinstallmedia` workflow can instead reuse a GPT/HFS+ volume selected through the Option override.
+- macOS, Windows, Linux, and manual raw-image workflows share physical USB/SD target discovery. A positively identified removable SD card can qualify in a built-in reader even when macOS reports `Internal=true`; it does not require enabling external hard-drive support. Detailed identification and admission rules are in [USB Validation and Capacity](../features/usb/USB_VALIDATION_AND_CAPACITY.md#sd-identification-and-built-in-readers).
+- Recognized macOS workflows select physical USB or removable SD whole disks by default. SD cards use the `SD CARD` hardware label, including in the installation summary. Non-PPC targets are prepared as GPT/HFS+ with the `mac_USB` label; a standard `createinstallmedia` workflow can instead reuse a GPT/HFS+ volume selected through the Option override.
 - Whole-disk capacity is checked against the exact byte requirement. An Option-selected volume is checked against its own total capacity, and its insufficient-capacity card displays the required decimal GB rounded up to one digit.
-- User selects target USB and confirms destructive start.
+- User selects a USB or SD target and confirms destructive start.
 - Progress screen reflects helper-driven stages.
 - Finish screen reports success/failure/cancel plus cleanup status.
 - Language changes are available on Welcome and on the analysis screen before analysis begins. Starting analysis, forcing an analysis result, or opening the downloader locks language changes until the flow returns to Welcome.
@@ -35,7 +36,7 @@ Linux-specific runtime behavior:
 - recognized Linux image (`.iso`) unlocks the same shared install flow,
 - `Tools -> Write a Raw Image to a Drive...` accepts `.iso` and `.img` from Welcome or an empty analysis screen after a warning and dedicated picker,
 - manual raw-image selection skips content analysis and source mounting, displays the selected filename with neutral image wording, and enters the existing Linux raw-copy flow through app-only presentation state,
-- USB validation keeps capacity gating and Linux continues to use physical `diskX` targets independently of the macOS preformat and Option-override policy,
+- USB/SD validation keeps capacity gating and Linux and manual raw images use physical `diskX` targets independently of the macOS preformat and Option-override policy,
 - creation branch uses unchanged Linux raw-copy helper stages and hides Linux-specific post-write guidance for manual raw images.
 
 Windows-specific runtime behavior:

@@ -74,7 +74,7 @@ final class AnalysisLogic: ObservableObject {
             // Log only when the detected/selected drive actually changes
             if oldValue?.url != selectedDrive?.url {
                 let id = selectedDrive?.device ?? "unknown"
-                let speed = selectedDrive?.usbSpeed?.rawValue ?? "USB"
+                let speed = selectedDrive?.mediaDisplayName ?? "USB"
                 let partitionScheme = selectedDrive?.partitionScheme?.rawValue ?? "unknown"
                 let fileSystem = selectedDrive?.fileSystemFormat?.rawValue ?? "unknown"
                 if isPPC {
@@ -139,6 +139,7 @@ final class AnalysisLogic: ObservableObject {
             size: installationDrive.size,
             url: installationDrive.url,
             usbSpeed: installationDrive.usbSpeed,
+            mediaKind: installationDrive.mediaKind,
             partitionScheme: installationDrive.partitionScheme,
             fileSystemFormat: installationDrive.fileSystemFormat,
             needsFormatting: false

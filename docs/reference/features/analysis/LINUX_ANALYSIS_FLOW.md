@@ -101,14 +101,17 @@ Display format:
 Linux recognition is shown as successful detection in analysis UI and enables install handoff:
 
 - `linuxSourceURL` is assigned,
-- USB selection switches to physical external USB whole-disk targets (`diskX`),
-- Linux picker includes physical USB media regardless of mountable volume presence,
-- Linux picker labels use `diskX - <size> - <USB standard>` (no extra suffixes),
+- target selection uses physical external USB or positively identified removable SD whole disks (`diskX`) from the shared discovery snapshot,
+- Linux picker includes physical USB/SD media regardless of mountable volume presence,
+- Linux picker labels use `diskX - <size> - <USB standard>` for USB and `diskX - <size> - SD CARD` for identified SD cards (no volume-name suffix),
 - non-removable external USB disks stay gated by existing `AllowExternalDrives` preference,
+- identified SD cards always require confirmed removable status and may qualify in built-in readers reporting `Internal=true`, independently of `AllowExternalDrives`,
 - proceed is available after Linux capacity validation (APFS does not block Linux flow),
-- target discovery does not require a readable or mounted macOS volume, so otherwise unmountable USB media can still appear as physical `diskX` targets,
+- target discovery does not require a readable or mounted macOS volume, so otherwise unmountable USB/SD media can still appear as physical `diskX` targets,
 - installation workflow starts from shared summary/progress/finish UI,
 - Linux helper branch uses raw copy (`dd`) stages.
+
+Manual raw-image selection uses the same physical USB/SD target catalog and admission checks; neither Linux nor manual raw images enable the macOS Option-volume override. Media identification, current registry verification before handoff, and SD-reader limitations are defined in [USB Validation and Capacity](../usb/USB_VALIDATION_AND_CAPACITY.md#sd-identification-and-built-in-readers). Successful writing and verification do not establish boot compatibility with the destination card slot or reader.
 
 Manual raw-image selection sets Linux workflow state without distro recognition:
 
@@ -119,7 +122,7 @@ Manual raw-image selection sets Linux workflow state without distro recognition:
 - `LinuxInstallationFlowContext.isRawImageSelection` controls app presentation and is not sent to the helper,
 - source file contents are not inspected before install handoff, and the source is not registered for unmount cleanup.
 
-Required USB capacity is the selected source file's logical size plus 5%, rounded up to a byte. The UI presents the smallest fitting 2/4/8/16/32/64 GB (or larger doubling) class, while physical USB validation uses the exact byte requirement. If the source size cannot be resolved, analysis alerts the user and applies the `16 GB` class with a `15_000_000_000`-byte threshold. This rule also applies to manual raw `.iso` and `.img` selection.
+Required USB/SD capacity is the selected source file's logical size plus 5%, rounded up to a byte. The UI presents the smallest fitting 2/4/8/16/32/64 GB (or larger doubling) class, while physical USB/SD validation uses the exact byte requirement. If the source size cannot be resolved, analysis alerts the user and applies the `16 GB` class with a `15_000_000_000`-byte threshold. This rule also applies to manual raw `.iso` and `.img` selection.
 
 Linux detected state uses icon fallback chain:
 
