@@ -382,6 +382,12 @@ When branch creation is requested:
 - Do not mention documentation or translation changes unless the PR contains only documentation or translation changes.
 - In PR title/description, omit explicit listing of debug-only functionality that is not present in Release builds.
 
+### Issue closure for `development` to `main` PRs
+
+- Before preparing a PR from `development` to `main`, review the full PR diff, included commits, merged PRs, and related GitHub issues to check whether the PR contains an issue fix or implements an issue request.
+- For every issue resolved by the included changes, add a closing reference such as `Closes #123` to the proposed PR description before requesting approval, so GitHub automatically closes the issue when the PR is merged into `main`.
+- Confirm that the included changes fully resolve each issue before adding a closing reference. For related or partially addressed issues, use a non-closing reference such as `Related to #123`.
+
 ### PR approval gate (mandatory)
 
 - Before creating a PR, present the proposed PR title and PR description to the user for approval.
