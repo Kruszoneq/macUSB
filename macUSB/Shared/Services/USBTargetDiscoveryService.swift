@@ -50,17 +50,19 @@ enum USBTargetDiscoveryService {
             }
         }
 
-        let externalList: [String: Any]
-        switch query(["list", "-plist", "external"], device: "external") {
-        case .success(let plist): externalList = plist
+        // Built-in SD readers can report Internal=true. Enumerate physical
+        // disks, then qualify only external USB storage or removable SD cards.
+        let physicalList: [String: Any]
+        switch query(["list", "-plist", "physical"], device: "physical") {
+        case .success(let plist): physicalList = plist
         case .failure(.query(.busy)): return .busy
         case .failure(.query(.cancelled)): return .cancelled
         case .failure(let problem): return .failed(problem)
         }
-        guard let wholeDisks = externalList["WholeDisks"] as? [String],
+        guard let wholeDisks = physicalList["WholeDisks"] as? [String],
               Set(wholeDisks).count == wholeDisks.count,
               wholeDisks.allSatisfy({ $0.range(of: #"^disk\d+$"#, options: .regularExpression) != nil }) else {
-            record("Enumeration missing or invalid WholeDisks array. Keys=\(externalList.keys.sorted()).", key: "enumeration", signature: "incompleteData")
+            record("Enumeration missing or invalid WholeDisks array. Keys=\(physicalList.keys.sorted()).", key: "enumeration", signature: "incompleteData")
             return .failed(.incompleteData)
         }
 
@@ -72,6 +74,10 @@ enum USBTargetDiscoveryService {
         for device in wholeDisks {
             if cancellation.isCancelled { return .cancelled }
             let before = USBDiscoveryRegistryProbe.media(named: device)
+            if let bus = before?.busProtocol, USBTargetMediaKind.from(busProtocol: bus) == nil {
+                record("Device \(device) omitted: transport=\(bus).", key: "qualification.\(device)", signature: "unsupportedTransport")
+                continue
+            }
             let info: [String: Any]?
             var problem: USBDiscoveryProblem?
             switch query(["info", "-plist", "/dev/\(device)"], device: device) {
@@ -82,44 +88,52 @@ enum USBTargetDiscoveryService {
             let after = USBDiscoveryRegistryProbe.media(named: device)
             let confirmedAt = ProcessInfo.processInfo.systemUptime
             let sameMedia = before?.identity != nil && before?.identity == after?.identity
-            let registryUSB = sameMedia && after?.isExternalPhysicalUSB == true
+            let registryKind = sameMedia ? after?.mediaKind : nil
+            let registryConfirmed = registryKind == .usb || (registryKind == .sdCard && after?.removable == true)
             // diskutil info names this field WholeDisk; IOMedia uses Whole.
             // Bind all info-derived metadata to the same validated device.
             let matchingInfo = info.flatMap { $0["DeviceIdentifier"] as? String == device && $0["WholeDisk"] as? Bool == true ? $0 : nil }
+            let infoKind = USBTargetMediaKind.from(busProtocol: matchingInfo?["BusProtocol"] as? String)
+            let mediaKind = registryKind == .sdCard ? USBTargetMediaKind.sdCard : (infoKind ?? registryKind)
+            let removable = (matchingInfo?["RemovableMedia"] as? Bool) ?? (matchingInfo?["Removable"] as? Bool) ?? (sameMedia ? after?.removable : nil)
 
             if let info {
                 let matchesRequestedDevice = matchingInfo != nil
                 // Explicit exclusions are ordinary filtering, not discovery failures.
                 let internalMedia = (info["Internal"] as? Bool) ?? (info["OSInternalMedia"] as? Bool)
-                if matchesRequestedDevice, let bus = info["BusProtocol"] as? String, bus.uppercased() != "USB" {
-                    record("Device \(device) omitted: transport=\(bus).", key: "qualification.\(device)", signature: "nonUSB"); continue
+                if matchesRequestedDevice, let bus = info["BusProtocol"] as? String, infoKind == nil {
+                    record("Device \(device) omitted: transport=\(bus).", key: "qualification.\(device)", signature: "unsupportedTransport"); continue
                 }
-                if matchesRequestedDevice, internalMedia == true || (info["VirtualOrPhysical"] as? String)?.lowercased() == "virtual" {
+                if matchesRequestedDevice, (internalMedia == true && mediaKind != .sdCard) || (info["VirtualOrPhysical"] as? String)?.lowercased() == "virtual" {
                     record("Device \(device) omitted: internal or virtual media.", key: "qualification.\(device)", signature: "internalOrVirtual"); continue
                 }
                 if matchesRequestedDevice, info["RemovableMediaOrExternalDevice"] as? Bool == false {
                     record("Device \(device) omitted: not removable or external.", key: "qualification.\(device)", signature: "notExternal"); continue
                 }
-                let confirmedByInfo = (info["BusProtocol"] as? String)?.uppercased() == "USB"
-                    && internalMedia == false
+                let confirmedByInfo = ((infoKind == .usb && internalMedia == false)
+                    || (mediaKind == .sdCard && removable == true))
                     && (info["VirtualOrPhysical"] as? String)?.lowercased() == "physical"
                     && matchesRequestedDevice
-                if (!confirmedByInfo && !registryUSB) || !matchesRequestedDevice || info["Error"] != nil {
+                if (!confirmedByInfo && !registryConfirmed) || !matchesRequestedDevice || info["Error"] != nil {
                     problem = .incompleteData
                     let reportedDevice = info["DeviceIdentifier"] as? String ?? "missing or invalid"
                     let wholeDisk = (info["WholeDisk"] as? Bool).map(String.init) ?? "missing or invalid"
-                    record("Device \(device) has incomplete type/identity data: DeviceIdentifier=\(reportedDevice), WholeDisk=\(wholeDisk), infoUSB=\(confirmedByInfo), registryUSB=\(registryUSB), errorPresent=\(info["Error"] != nil). Keys=\(info.keys.sorted()).", key: "metadata.\(device)", signature: "incompleteData:\(reportedDevice):\(wholeDisk):\(confirmedByInfo):\(registryUSB)")
+                    record("Device \(device) has incomplete type/identity data: DeviceIdentifier=\(reportedDevice), WholeDisk=\(wholeDisk), infoTarget=\(confirmedByInfo), registryTarget=\(registryConfirmed), errorPresent=\(info["Error"] != nil). Keys=\(info.keys.sorted()).", key: "metadata.\(device)", signature: "incompleteData:\(reportedDevice):\(wholeDisk):\(confirmedByInfo):\(registryConfirmed)")
                 }
-                guard confirmedByInfo || registryUSB else {
+                guard confirmedByInfo || registryConfirmed else {
                     issues.append(USBDiscoveryIssue(device: device, problem: problem ?? .incompleteData))
-                    record("Device \(device) omitted: physical external USB type could not be confirmed.", key: "qualification.\(device)", signature: "unconfirmedUSB"); continue
+                    record("Device \(device) omitted: external USB or removable SD type could not be confirmed.", key: "qualification.\(device)", signature: "unconfirmedTarget"); continue
                 }
-            } else if !registryUSB {
+            } else if !registryConfirmed {
                 issues.append(USBDiscoveryIssue(device: device, problem: problem ?? .incompleteData))
-                record("Device \(device) omitted after query failure: registry does not confirm current physical external USB media.", key: "qualification.\(device)", signature: "unconfirmedUSB"); continue
+                record("Device \(device) omitted after query failure: registry does not confirm current external USB or removable SD media.", key: "qualification.\(device)", signature: "unconfirmedTarget"); continue
             }
 
-            let removable = (matchingInfo?["RemovableMedia"] as? Bool) ?? (matchingInfo?["Removable"] as? Bool) ?? after?.removable
+            // SD admission always requires removable media, even when external
+            // hard drives are enabled. An internal system disk cannot qualify.
+            if mediaKind == .sdCard, removable != true {
+                record("Device \(device) omitted: SD media is not confirmed removable.", key: "qualification.\(device)", signature: "sdRemovablePolicy"); continue
+            }
             if !allowExternalDrives, removable == false {
                 if let problem { issues.append(USBDiscoveryIssue(device: device, problem: problem)) }
                 record("Device \(device) omitted: non-removable media; AllowExternalDrives=false.", key: "qualification.\(device)", signature: "externalPolicy"); continue
@@ -136,6 +150,7 @@ enum USBTargetDiscoveryService {
                 size: capacity.map { ByteCountFormatter.string(fromByteCount: $0, countStyle: .file) } ?? "--",
                 url: URL(fileURLWithPath: "/dev/\(device)"),
                 usbSpeed: USBDriveLogic.detectUSBSpeed(forBSDName: device),
+                mediaKind: mediaKind ?? .usb,
                 partitionScheme: USBDriveLogic.detectPartitionScheme(forBSDName: device)
             )
             if problem == nil {

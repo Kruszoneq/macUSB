@@ -4,7 +4,7 @@ This file defines high-level runtime scope and global contracts.
 
 ## Purpose and Scope
 
-`macUSB` creates bootable USB media for:
+`macUSB` creates bootable USB and SD media for:
 
 - macOS/OS X/Mac OS X installers from `.dmg`, `.iso`, `.cdr`, and `.app` sources,
 - supported Windows families from original `.iso` images using a boot-mode-aware BIOS or UEFI workflow,
@@ -17,7 +17,7 @@ Primary runtime goals:
 
 - detect installer type/version and route to the correct workflow,
 - resolve supported Windows boot modes and preserve the selected mode through helper execution,
-- safely prepare target USB media,
+- safely prepare target USB and SD media,
 - execute privileged operations through helper architecture,
 - keep the user flow guided and non-technical.
 

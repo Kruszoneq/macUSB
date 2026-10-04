@@ -2,13 +2,14 @@ import Foundation
 import IOKit
 import IOKit.storage
 
-/// Independent, current evidence for unreadable physical USB media. A BSD name
+/// Independent, current evidence for physical USB and SD media. A BSD name
 /// or a previous UI snapshot alone is never enough to classify a candidate.
 enum USBDiscoveryRegistryProbe {
     struct Media {
         let identity: UInt64
         let removable: Bool?
-        let isExternalPhysicalUSB: Bool
+        let mediaKind: USBTargetMediaKind?
+        let busProtocol: String?
         let capacityBytes: Int64?
     }
 
@@ -23,7 +24,7 @@ enum USBDiscoveryRegistryProbe {
                   property(service, kIOMediaWholeKey as String) as? Bool == whole else { continue }
             var identity: UInt64 = 0
             guard IORegistryEntryGetRegistryEntryID(service, &identity) == KERN_SUCCESS else { return nil }
-            let transport: [String: Any]? = USBRegistryTraversal.firstValue(
+            let storage: (transport: [String: Any], icon: [String: Any])? = USBRegistryTraversal.firstValue(
                 from: service,
                 retain: { IOObjectRetain($0) == KERN_SUCCESS },
                 release: { _ = IOObjectRelease($0) },
@@ -37,14 +38,29 @@ enum USBDiscoveryRegistryProbe {
                     // Stop at the nearest storage device: do not classify a
                     // virtual child by walking past it to its backing USB disk.
                     guard IOObjectConformsTo(entry, "IOBlockStorageDevice") != 0 else { return nil }
-                    return property(entry, "Protocol Characteristics") as? [String: Any] ?? [:]
+                    return (
+                        property(entry, "Protocol Characteristics") as? [String: Any] ?? [:],
+                        property(entry, "IOMediaIcon") as? [String: Any] ?? [:]
+                    )
                 }
             )
+            let bus = storage?.transport["Physical Interconnect"] as? String
+            let location = storage?.transport["Physical Interconnect Location"] as? String
+            let mediaIcon = property(service, "IOMediaIcon") as? [String: Any]
+            let isSDIcon = mediaIcon?["IOBundleResourceFile"] as? String == "SD.icns"
+                || storage?.icon["IOBundleResourceFile"] as? String == "SD.icns"
+            let mediaKind: USBTargetMediaKind?
+            switch USBTargetMediaKind.from(busProtocol: bus) {
+            case .sdCard: mediaKind = .sdCard
+            case .usb where isSDIcon: mediaKind = .sdCard
+            case .usb where location == "External": mediaKind = .usb
+            default: mediaKind = nil
+            }
             return Media(
                 identity: identity,
                 removable: property(service, kIOMediaRemovableKey as String) as? Bool,
-                isExternalPhysicalUSB: transport?["Physical Interconnect"] as? String == "USB"
-                    && transport?["Physical Interconnect Location"] as? String == "External",
+                mediaKind: mediaKind,
+                busProtocol: bus,
                 capacityBytes: (property(service, kIOMediaSizeKey as String) as? NSNumber).flatMap {
                     Int64($0.stringValue).flatMap { $0 > 0 ? $0 : nil }
                 }

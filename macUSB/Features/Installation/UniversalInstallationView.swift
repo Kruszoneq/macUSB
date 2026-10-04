@@ -112,8 +112,7 @@ struct UniversalInstallationView: View {
     }
     private var selectedDriveSummaryName: String? {
         if let drive = targetDrive, drive.isWholeDiskTarget {
-            let speedText = drive.usbSpeed?.rawValue ?? "USB"
-            return "\(drive.device) - \(drive.size) - \(speedText)"
+            return drive.wholeDiskDisplayName
         }
         return targetDriveDisplayName ?? targetDrive?.displayName
     }
@@ -317,7 +316,7 @@ struct UniversalInstallationView: View {
                         .transition(.opacity)
                     }
 
-                    if let drive = targetDrive, drive.usbSpeed == .usb2 {
+                    if let drive = targetDrive, drive.isUSB2 {
                         StatusCard(tone: .warning, density: .compact) {
                             HStack(alignment: .center) {
                                 Image(systemName: "externaldrive.fill")

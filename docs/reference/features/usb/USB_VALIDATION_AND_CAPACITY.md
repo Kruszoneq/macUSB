@@ -20,7 +20,7 @@ Proceed must remain blocked until selected target passes validation.
 ## macOS Target Selection and Formatting
 
 Recognized macOS workflows use physical whole-disk (`diskX`) targets by default:
-- target labels use `diskX - <size> - <USB standard>`,
+- target labels use `diskX - <size> - <USB standard>` for USB or `diskX - <size> - SD CARD` for SD cards,
 - APFS and other existing formats remain selectable,
 - every non-PPC whole-disk target is passed to automatic GPT/HFS+ preparation with the `mac_USB` label,
 - PPC remains a specialized whole-disk path and keeps its existing APM/HFS+ formatting.
@@ -45,15 +45,19 @@ Linux, Windows, and manual raw-image workflows keep their existing physical whol
 
 The shared physical target snapshot is built as follows:
 
-- use `diskutil list -plist external` to obtain external whole-disk identifiers,
+- use `diskutil list -plist physical` to obtain physical whole-disk identifiers, including cards in built-in SD readers,
 - read `diskutil info -plist /dev/diskX` for each candidate,
 - bind info metadata to the requested `DeviceIdentifier` and require `WholeDisk=true` (the diskutil plist key, distinct from IOMedia's `Whole` registry property),
-- include only external, physical USB devices,
+- include only external physical USB devices or confirmed removable SD cards; native SD transport may report an internal reader,
 - when `AllowExternalDrives` is disabled, exclude non-removable external USB disks,
 - retain per-target identity and capacity evidence from the same scan for admission,
 - sort targets by their `diskX` identifier.
 
-This physical enumeration does not depend on a readable or mounted macOS volume. A connected USB medium that macOS cannot mount can therefore still appear directly as a selectable whole-disk target.
+This physical enumeration does not depend on a readable or mounted macOS volume. A connected USB or SD medium that macOS cannot mount can therefore still appear directly as a selectable whole-disk target.
+
+SD identification uses the exact `Secure Digital` transport reported by diskutil/IOKit. A USB-connected card is also identified as SD when its current IOMedia or nearest block-storage device exposes the system `SD.icns` icon. Device names, volume labels, and generic reader names are not used as type evidence. Readers that expose only generic USB storage remain supported USB targets with their USB label. Internal fixed disks and virtual devices are excluded; known unsupported registry transports are filtered before an info query. SD cards require confirmed removable status independently of `AllowExternalDrives`, so built-in readers do not require enabling external hard drives. Mounted SD volumes may report internal status and remain eligible for the Option override when GPT/HFS+ and removable checks pass.
+
+The media kind follows whole disks, Option volumes, selection normalization and PPC handoff. It selects the verbatim hardware label `SD CARD` in analysis and summary and suppresses the USB 2.0 warning for identified SD cards. Final handoff rechecks SD kind and removable status alongside the existing identity/capacity verification. This enables writing a card; boot compatibility still depends on the destination hardware and image.
 
 The analysis screen starts discovery when it appears or the app becomes active. Its `0.5 s` UI tick still updates Option state, but physical discovery is throttled to at most once every `2.5 s` while the screen is visible and the app is active. Refreshes are serialized per analysis owner; duplicate requests are skipped instead of queued. Hiding the screen, navigating to installation, or deactivating the app cancels its current discovery. Workflow-state changes may request a refresh through the same throttle.
 
@@ -67,7 +71,7 @@ A routine refresh retains current evidence and never clears selection or replace
 
 Uncertain same-identity reads retain the last successful confirmation time without restoring failed capacity evidence; failures still block admission immediately, and prolonged uncertainty uses the availability card once that last confirmation expires. A failed whole enumeration likewise retains the presentation and its confirmation age. Expired confirmation retains the selected row and presentation but blocks Continue with `confirmationExpired`, never a claimed disconnection. The compact availability card appears above the destructive warning and uses the same warning surface, orange icon/title, secondary orange description, icon size and centered row alignment; both use symmetric contextual-card motion. The destructive warning remains visible whenever a target is selected, including application inactivity, rechecking, insufficient capacity and unavailable or expired evidence. Activity and readiness govern Continue availability independently of this warning; clearing the selection removes it. The generic discovery notice is suppressed for this selected-target condition. A successful scan of the same identity restores readiness automatically when capacity still fits; a changed identity remains blocked until deliberate reselection. Partial reads that cannot establish absence retain the selected row with failed admission evidence; a confirmed absence removes it. A failure to read one device does not discard independently verified targets: a selected target with known sufficient capacity can proceed despite another device's failure. A failed or malformed whole enumeration retains the previous presentation but invalidates its admission evidence. Returning to the screen or activating the application obtains new evidence; lifecycle cancellation is neutral, not a drive failure. Preference changes invalidate old-policy evidence and discard in-flight results captured with a different `AllowExternalDrives` value.
 
-New unreadable entries are shown only when current registry evidence independently confirms an external physical USB storage device at that BSD name. The registry probe stops at the nearest block-storage device and requires USB/external protocol characteristics; a cached name or `diskX` identifier is insufficient to discover a new row. The previously selected row may be retained during an uncertain read, with failed admission evidence as described above. Non-removable devices still follow `AllowExternalDrives`. A device whose USB type cannot be confirmed is omitted and logged as a partial issue. Confirmed USB media with unreadable required data remains visible as unavailable. Registry entry identities are sampled before/after info reads and again before snapshot publication; volumes also carry their own current registry identity bound to that physical parent. Reuse of a BSD name with a different identity cannot automatically reauthorize a selection.
+New unreadable entries are shown only when current registry evidence independently confirms an external physical USB storage device or a removable SD card at that BSD name. The registry probe stops at the nearest block-storage device and requires USB/external or Secure Digital/removable characteristics; a cached name or `diskX` identifier is insufficient to discover a new row. The previously selected row may be retained during an uncertain read, with failed admission evidence as described above. Non-removable USB devices still follow `AllowExternalDrives`; SD cards always require confirmed removable media. A device whose supported type cannot be confirmed is omitted and logged as a partial issue. Confirmed USB/SD media with unreadable required data remains visible as unavailable. Registry entry identities are sampled before/after info reads and again before snapshot publication; volumes also carry their own current registry identity bound to that physical parent. Reuse of a BSD name with a different identity cannot automatically reauthorize a selection.
 
 Whole-disk and Option-volume capacity come from current scan metadata; missing, invalid or nonpositive bytes block admission with a read/data reason. Eligible GPT/HFS+ mounted volumes are prepared without another diskutil query. Mounted-volume metadata failures remain explicit, and physical targets remain independently usable. Workflow changes normalize a volume only to its own physical parent. A missing target is removed from the list and is never recreated from cache or replaced by another disk.
 
@@ -81,17 +85,17 @@ Run the standalone resource/scheduling regression checks with `bash scripts/Test
 
 The Option presentation additionally reads mounted external, non-network volumes and keeps only volumes that:
 
-- belong to a physical USB whole disk from the shared snapshot,
+- belong to a physical USB or SD whole disk from the shared snapshot,
 - use a GPT partition scheme,
 - use HFS+,
 - satisfy the same removable/external-drive preference policy.
 
 UI rules:
 - while the initial target snapshot is being prepared, analysis UI shows the neutral waiting state,
-- when at least one physical USB target is present but source recognition is still pending, the neutral waiting card remains visible instead of target-selection controls,
-- after the initial snapshot finishes with no eligible physical targets, the UI shows `Nie wykryto nośnika USB`,
-- physical targets use the concise label `diskX - <size> - <USB standard>`,
-- Option-selected HFS+ volumes use the mounted-volume label `diskXsY - <size> - <USB standard> - <volume name>`,
+- when at least one physical USB or SD target is present but source recognition is still pending, the neutral waiting card remains visible instead of target-selection controls,
+- after the initial snapshot finishes with no eligible USB or SD physical targets, the UI shows `Nie wykryto nośnika USB`,
+- physical USB targets use `diskX - <size> - <USB standard>`; SD targets use `diskX - <size> - SD CARD`,
+- Option-selected HFS+ volumes use `diskXsY - <size> - <USB standard> - <volume name>` with `SD CARD` replacing the USB standard for SD cards,
 - releasing Option restores the physical presentation; if an eligible volume remains selected, the picker keeps that one selected-volume entry visible until the selection changes,
 - when workflow routing changes to PPC, restore-legacy, or Mavericks, any selected volume is normalized to its parent physical `diskX` target.
 
