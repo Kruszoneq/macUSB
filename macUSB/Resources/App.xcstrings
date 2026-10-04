@@ -14953,6 +14953,358 @@
         }
       }
     },
+    "app.welcome.auto_skip.confirm.action" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisches Überspringen aktivieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable automatic skipping"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activar la omisión automática"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer le passage automatique"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attiva il salto automatico"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動スキップを有効にする"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch overslaan inschakelen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Włącz automatyczne pomijanie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ativar o avanço automático"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Включить автоматический пропуск"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otomatik atlamayı etkinleştir"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увімкнути автоматичний пропуск"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bật tự động bỏ qua"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启用自动跳过"
+          }
+        }
+      }
+    },
+    "app.welcome.auto_skip.confirm.message" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach dem Start der App und der erfolgreichen Prüfung der Berechtigungen, App-Updates und des Helper-Status wird der Startbildschirm automatisch übersprungen und die Analyse geöffnet. Falls der Helper ein Update oder eine automatische Reparatur benötigt, bleibt der Startbildschirm bei diesem App-Start sichtbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After the app launches and successfully checks permissions, app updates, and helper readiness, it will automatically skip the welcome screen and move to analysis. If the helper needs an update or automatic repair, the welcome screen will remain visible for that launch."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al iniciar la aplicación y comprobar correctamente los permisos, las actualizaciones de la aplicación y el estado del helper, se omitirá automáticamente la pantalla de bienvenida y se pasará a la etapa de análisis. Si el helper necesita una actualización o una reparación automática, la pantalla de bienvenida permanecerá visible durante ese inicio de la aplicación."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Après le lancement de l’application et la vérification réussie des autorisations, des mises à jour de l’application et de l’état de l’outil auxiliaire, l’écran d’accueil sera automatiquement ignoré pour passer à l’étape d’analyse. Si l’outil auxiliaire nécessite une mise à jour ou une réparation automatique, l’écran d’accueil restera visible lors de ce lancement."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dopo l’avvio dell’app e il completamento con esito positivo delle verifiche dei permessi, degli aggiornamenti dell’app e dello stato dell’helper, la schermata di benvenuto verrà saltata automaticamente e si passerà alla fase di analisi. Se l’helper richiede un aggiornamento o una riparazione automatica, la schermata di benvenuto rimarrà visibile per quell’avvio dell’app."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリの起動後、アクセス権、アプリのアップデート、ヘルパーの状態の確認が正常に完了すると、起動画面が自動的にスキップされ、解析に進みます。ヘルパーのアップデートまたは自動修復が必要な場合、その起動時は起動画面が表示されたままになります。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na het starten van de app en het succesvol controleren van de toegangsrechten, app-updates en de status van de helper wordt het welkomstscherm automatisch overgeslagen en gaat de app verder naar de analyse. Als de helper een update of automatisch herstel nodig heeft, blijft het welkomstscherm tijdens die start van de app zichtbaar."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Po uruchomieniu aplikacji i pomyślnym sprawdzeniu uprawnień, aktualizacji aplikacji oraz stanu helpera ekran powitalny zostanie automatycznie pominięty i nastąpi przejście do etapu analizy. Jeśli helper wymaga aktualizacji lub autonaprawy, ekran powitalny pozostanie widoczny w tym uruchomieniu aplikacji."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Após iniciar o app e verificar com sucesso as permissões, as atualizações do app e o estado do helper, a tela de boas-vindas será pulada automaticamente e o app passará para a etapa de análise. Se o helper precisar de uma atualização ou de um reparo automático, a tela de boas-vindas permanecerá visível nessa inicialização do app."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "После запуска приложения и успешной проверки разрешений, обновлений приложения и состояния helper приветственный экран будет автоматически пропущен и откроется этап анализа. Если для helper потребуется обновление или автоматическое восстановление, приветственный экран останется видимым при этом запуске приложения."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uygulama başlatıldıktan ve izinler, uygulama güncellemeleri ve yardımcının durumu başarıyla denetlendikten sonra karşılama ekranı otomatik olarak atlanır ve analiz aşamasına geçilir. Yardımcının güncellenmesi veya otomatik olarak onarılması gerekiyorsa karşılama ekranı o başlatma sırasında görünür kalır."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Після запуску застосунку й успішної перевірки дозволів, оновлень застосунку та стану помічника екран привітання буде автоматично пропущено й відкриється етап аналізу. Якщо помічник потребує оновлення або автоматичного відновлення, екран привітання залишиться видимим під час цього запуску застосунку."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sau khi ứng dụng khởi chạy và kiểm tra thành công các quyền, bản cập nhật ứng dụng và trạng thái của trình trợ giúp, màn hình chào mừng sẽ tự động được bỏ qua để chuyển sang bước phân tích. Nếu trình trợ giúp cần cập nhật hoặc tự động sửa chữa, màn hình chào mừng sẽ vẫn hiển thị trong lần khởi chạy đó."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用启动并成功检查权限、应用更新和辅助工具状态后，将自动跳过欢迎屏幕并进入分析阶段。如果辅助工具需要更新或自动修复，则在本次启动期间会保留欢迎屏幕。"
+          }
+        }
+      }
+    },
+    "app.welcome.auto_skip.confirm.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startbildschirm automatisch überspringen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skip the welcome screen automatically"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omitir automáticamente la pantalla de bienvenida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignorer automatiquement l’écran d’accueil"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saltare automaticamente la schermata di benvenuto"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "起動画面を自動的にスキップ"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welkomstscherm automatisch overslaan"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatyczne pomijanie ekranu powitalnego"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pular automaticamente a tela de boas-vindas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автоматический пропуск приветственного экрана"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karşılama ekranını otomatik olarak atlama"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автоматичний пропуск екрана привітання"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tự động bỏ qua màn hình chào mừng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动跳过欢迎屏幕"
+          }
+        }
+      }
+    },
+    "app.welcome.auto_skip.menu" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startbildschirm automatisch überspringen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatically skip the welcome screen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omitir automáticamente la pantalla de bienvenida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignorer automatiquement l’écran d’accueil"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salta automaticamente la schermata di benvenuto"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "起動画面を自動的にスキップ"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welkomstscherm automatisch overslaan"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatycznie pomijaj ekran startowy"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pular automaticamente a tela de boas-vindas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автоматически пропускать приветственный экран"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karşılama ekranını otomatik olarak atla"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автоматично пропускати екран привітання"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tự động bỏ qua màn hình chào mừng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动跳过欢迎屏幕"
+          }
+        }
+      }
+    },
     "app.welcome.footer.credit" : {
       "extractionState" : "manual",
       "localizations" : {

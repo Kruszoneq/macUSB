@@ -284,6 +284,7 @@ extension HelperServiceManager {
         healthDetails: String,
         completion: @escaping (Bool, String?) -> Void
     ) {
+        recordAutomaticRegistrationRecovery()
         reportHelperReadinessEvent("Starting helper registration recovery.")
         coordinationQueue.async {
             let service = SMAppService.daemon(plistName: Self.daemonPlistName)

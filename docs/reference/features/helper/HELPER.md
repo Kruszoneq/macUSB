@@ -159,6 +159,7 @@ Contract invariants:
 - After successful non-interactive ensure-ready, app compares current app fingerprint (`CFBundleShortVersionString` + `CFBundleVersion`) with last successful helper-repair fingerprint stored in `UserDefaults`.
 - If fingerprint changed, or no previous fingerprint exists (upgrade from older app versions), app runs automatic full helper repair in background.
 - Successful automatic repair updates stored fingerprint, remains visible in logs, and shows a short in-app toast at the bottom of the main window.
+- Startup completion returns app-side `HelperStartupResult` with readiness and whether automatic repair/update was required, including automatic registration recovery during bootstrap and version/build repair decisions captured before repair changes the stored fingerprint. Welcome uses this result to block automatic navigation for that launch even after a successful repair; helper repair execution and XPC contracts are unchanged.
 - Failed automatic repair presents one warning `NSAlert` with guidance to run `Tools → Repair helper` manually.
 - Automatic update decision, start, completion, and failure lines use English messages with the `[HH:MM:SS] [HELPER]` prefix. The start line records whether the previous fingerprint was missing or changed.
 - Automatic and manual full repair own a repair token from the start of unregister through the final registration health check.

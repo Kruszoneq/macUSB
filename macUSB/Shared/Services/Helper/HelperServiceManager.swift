@@ -41,6 +41,22 @@ final class HelperServiceManager: NSObject {
     var repairProgressSink: ((String) -> Void)?
     let statusHealthTimeout: TimeInterval = 1.6
 
+    // Read-only startup evidence; it does not control the recovery procedure.
+    private let registrationRecoveryLock = NSLock()
+    private var registrationRecoveryRevision = 0
+
+    func currentRegistrationRecoveryRevision() -> Int {
+        registrationRecoveryLock.lock()
+        defer { registrationRecoveryLock.unlock() }
+        return registrationRecoveryRevision
+    }
+
+    func recordAutomaticRegistrationRecovery() {
+        registrationRecoveryLock.lock()
+        defer { registrationRecoveryLock.unlock() }
+        registrationRecoveryRevision += 1
+    }
+
     struct HelperStatusSnapshot {
         let isHealthy: Bool
         let serviceStatus: SMAppService.Status

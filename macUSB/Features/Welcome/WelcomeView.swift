@@ -7,11 +7,13 @@ struct WelcomeView: View {
     @EnvironmentObject var languageManager: LanguageManager
     
     @State private var dummyLock: Bool = false
-    @State private var didRunStartupFlow: Bool = false
+    @State private var isWelcomeVisible = false
+    @ObservedObject private var startupCoordinator = WelcomeStartupCoordinator.shared
+    @ObservedObject private var menuState = MenuState.shared
+    @ObservedObject private var activeOperations = AppActiveOperationRegistry.shared
     @State private var navigateToAnalysis: Bool = false
     @State private var isSupportProjectHovered: Bool = false
     
-    let versionCheckURL = URL(string: "https://raw.githubusercontent.com/Kruszoneq/macUSB/main/version.json")!
     let supportProjectURL = URL(string: "https://buymeacoffee.com/kruszoneq")!
     
     // Pusty inicjalizator (wymagany dla ContentView)
@@ -48,6 +50,7 @@ struct WelcomeView: View {
             
             // --- PRZYCISK START ---
             Button {
+                startupCoordinator.cancelAutomaticNavigation()
                 navigateToAnalysis = true
             } label: {
                 HStack {
@@ -102,82 +105,47 @@ struct WelcomeView: View {
             .hidden()
         )
         .onReceive(NotificationCenter.default.publisher(for: .macUSBNavigateToAnalysis)) { _ in
+            startupCoordinator.cancelAutomaticNavigation()
             navigateToAnalysis = true
+        }
+        .onChange(of: startupCoordinator.canNavigateAutomatically) { _ in
+            attemptAutomaticNavigation()
+        }
+        .onChange(of: menuState.skipWelcomeEnabled) { _ in
+            startupCoordinator.refreshPrerequisitesIfNeeded()
+            attemptAutomaticNavigation()
+        }
+        .onChange(of: activeOperations.activeOperationCount) { _ in
+            startupCoordinator.refreshPrerequisitesIfNeeded()
+            attemptAutomaticNavigation()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            startupCoordinator.refreshPrerequisitesIfNeeded()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
+            startupCoordinator.refreshPrerequisitesIfNeeded()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSWindow.didEndSheetNotification)) { _ in
+            DispatchQueue.main.async { attemptAutomaticNavigation() }
         }
         .onAppear {
             MenuState.shared.resetLanguageChangesForWelcome()
             MenuState.shared.rawLinuxImageSelectionEnabled = true
-            guard !didRunStartupFlow else { return }
-            didRunStartupFlow = true
-            runStartupFlow()
+            isWelcomeVisible = true
+            startupCoordinator.setWelcomeActive(true)
+            startupCoordinator.startIfNeeded()
+            attemptAutomaticNavigation()
         }
         .onDisappear {
+            isWelcomeVisible = false
+            startupCoordinator.setWelcomeActive(false)
             MenuState.shared.rawLinuxImageSelectionEnabled = false
         }
     }
 
-    private func runStartupFlow() {
-        FullDiskAccessPermissionManager.shared.handleStartupPromptIfNeeded {
-            HelperServiceManager.shared.bootstrapIfNeededAtStartup { _ in
-                NotificationPermissionManager.shared.handleStartupFlowIfNeeded()
-                self.checkForUpdates { }
-            }
-        }
+    private func attemptAutomaticNavigation() {
+        guard isWelcomeVisible, !navigateToAnalysis else { return }
+        guard startupCoordinator.consumeAutomaticNavigationIfReady() else { return }
+        navigateToAnalysis = true
     }
-    
-    func checkForUpdates(completion: @escaping () -> Void) {
-        let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
-        AppLogging.info("Update check started: trigger=startup, currentVersion=\(currentVersion).", stage: .app)
-        
-        URLSession.shared.dataTask(with: versionCheckURL) { data, response, error in
-            let finishOnMain: () -> Void = {
-                DispatchQueue.main.async {
-                    completion()
-                }
-            }
-
-            guard let data = data, error == nil else {
-                AppLogging.error("Update check failed: trigger=startup, details=\(error?.localizedDescription ?? "response data missing").", stage: .app)
-                finishOnMain()
-                return
-            }
-            
-            do {
-                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String],
-                   let remoteVersion = json["version"],
-                   let downloadLink = json["url"] {
-                    
-                    if remoteVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
-                        AppLogging.info("Update check completed: trigger=startup, newerVersion=\(remoteVersion), currentVersion=\(currentVersion).", stage: .app)
-                        DispatchQueue.main.async {
-                            let alert = NSAlert()
-                            alert.icon = NSApplication.shared.applicationIconImage
-                            alert.alertStyle = .informational
-                            alert.messageText = String(localized: "app.update.available.title", table: "App")
-                            let remoteVersionLine = String(format: String(localized: "app.update.available.message", table: "App"), remoteVersion)
-                            let currentVersionLine = String(format: String(localized: "app.update.current_version", table: "App"), currentVersion)
-                            alert.informativeText = "\(remoteVersionLine)\n\(currentVersionLine)"
-                            alert.addButton(withTitle: String(localized: "app.update.action.download", table: "App"))
-                            alert.addButton(withTitle: String(localized: "app.update.action.ignore", table: "App"))
-                            let response = alert.runModal()
-                            if response == .alertFirstButtonReturn, let url = URL(string: downloadLink) {
-                                NSWorkspace.shared.open(url)
-                            }
-                            completion()
-                        }
-                    } else {
-                        AppLogging.info("Update check completed: trigger=startup, no newer version found, currentVersion=\(currentVersion), remoteVersion=\(remoteVersion).", stage: .app)
-                        finishOnMain()
-                    }
-                } else {
-                    AppLogging.error("Update check failed: trigger=startup, invalid update metadata.", stage: .app)
-                    finishOnMain()
-                }
-            } catch {
-                AppLogging.error("Update check failed: trigger=startup, details=\(error.localizedDescription).", stage: .app)
-                finishOnMain()
-            }
-        }.resume()
-    }
-    
 }

@@ -3,6 +3,11 @@ import Combine
 
 final class MenuState: ObservableObject {
     static let shared = MenuState()
+    @Published var skipWelcomeEnabled = UserDefaults.standard.bool(forKey: "SkipWelcomeScreenV1") {
+        didSet {
+            UserDefaults.standard.set(skipWelcomeEnabled, forKey: "SkipWelcomeScreenV1")
+        }
+    }
     @Published var skipAnalysisEnabled: Bool = false
     @Published var externalDrivesEnabled: Bool = UserDefaults.standard.bool(forKey: "AllowExternalDrives")
     @Published var notificationsEnabled: Bool = false

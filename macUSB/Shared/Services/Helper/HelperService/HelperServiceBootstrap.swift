@@ -2,15 +2,36 @@ import Foundation
 import AppKit
 import ServiceManagement
 
+struct HelperStartupResult {
+    let isReady: Bool
+    /// Includes version/build updates and automatic registration recovery during bootstrap.
+    let requiredAutoRepair: Bool
+}
+
 extension HelperServiceManager {
     private enum StartupAutoRepairDecision {
         case noRepairNeeded
         case needsRepair(previousFingerprint: String?)
+
+        var requiresRepair: Bool {
+            switch self {
+            case .noRepairNeeded: return false
+            case .needsRepair: return true
+            }
+        }
     }
 
-    func bootstrapIfNeededAtStartup(completion: @escaping (Bool) -> Void) {
+    func bootstrapIfNeededAtStartup(completion: @escaping (HelperStartupResult) -> Void) {
         refreshBackgroundApprovalState()
         let startupDecision = startupAutoRepairDecision()
+        let initialRecoveryRevision = currentRegistrationRecoveryRevision()
+        let finish: (Bool) -> Void = { ready in
+            completion(HelperStartupResult(
+                isReady: ready,
+                requiredAutoRepair: startupDecision.requiresRepair ||
+                    self.currentRegistrationRecoveryRevision() != initialRecoveryRevision
+            ))
+        }
 
         #if DEBUG
         if Self.isRunningFromXcodeDevelopmentBuild() {
@@ -19,34 +40,34 @@ extension HelperServiceManager {
             case .enabled:
                 validateEnabledServiceHealth(interactive: false, allowRecovery: false) { ready, _ in
                     guard ready else {
-                        completion(false)
+                        finish(false)
                         return
                     }
 
                     self.runStartupAutoRepairIfNeeded(decision: startupDecision) { autoRepairOK in
-                        completion(autoRepairOK)
+                        finish(autoRepairOK)
                     }
                 }
 
             case .requiresApproval:
                 presentStartupApprovalAlertIfNeeded {
-                    completion(false)
+                    finish(false)
                 }
 
             case .notRegistered, .notFound:
                 ensureReadyForPrivilegedWork(interactive: false) { ready, _ in
                     guard ready else {
-                        completion(false)
+                        finish(false)
                         return
                     }
 
                     self.runStartupAutoRepairIfNeeded(decision: startupDecision) { autoRepairOK in
-                        completion(autoRepairOK)
+                        finish(autoRepairOK)
                     }
                 }
 
             @unknown default:
-                completion(false)
+                finish(false)
             }
             return
         }
@@ -55,13 +76,13 @@ extension HelperServiceManager {
         ensureReadyForPrivilegedWork(interactive: false) { ready, _ in
             guard ready else {
                 self.presentStartupApprovalAlertIfNeeded {
-                    completion(false)
+                    finish(false)
                 }
                 return
             }
 
             self.runStartupAutoRepairIfNeeded(decision: startupDecision) { autoRepairOK in
-                completion(autoRepairOK)
+                finish(autoRepairOK)
             }
         }
     }
