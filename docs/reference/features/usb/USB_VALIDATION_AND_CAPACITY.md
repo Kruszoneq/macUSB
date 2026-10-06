@@ -57,25 +57,29 @@ This physical enumeration does not depend on a readable or mounted macOS volume.
 
 ### SD Identification and Built-in Readers
 
-`Internal` and removable status are independent properties. The MacBookPro12,1 report shows a physical card with `BusProtocol=USB`, `Internal=true`, and `RemovableMedia=true`: the built-in reader is connected internally, but its card is removable. `Internal=true` is therefore allowed for positively identified removable SD cards, rather than for every removable internal device.
+macUSB supports removable SD cards in built-in and external readers across macOS, Windows, Linux, and manual raw-image creation workflows. Identified removable SD cards are available independently of the external HDD/SSD support option.
 
-SD identification accepts the following evidence:
+Built-in readers are supported with native `Secure Digital` transport and with USB transport reported as `Internal=true`. Internal reader location and card removability are evaluated separately: admission requires positive SD identification and confirmed removable status.
 
-| Evidence | Source and conditions |
+SD identification uses the following system metadata:
+
+| Identification method | Source and conditions |
 | --- | --- |
-| `Secure Digital` transport | Bound whole-disk `diskutil info` metadata or the nearest IOKit block-storage device's `Physical Interconnect`; transport matching ignores case and surrounding whitespace |
+| `Secure Digital` transport | Bound whole-disk `diskutil info` metadata or the nearest IOKit block-storage device's `Physical Interconnect`; matching ignores case and surrounding whitespace |
 | System `SD.icns` icon | Current IOMedia or nearest block-storage device's `IOMediaIcon.IOBundleResourceFile`, together with USB transport in that registry probe |
-| Apple SD-reader hardware identity | Nearest block-storage device's `Device Characteristics` with the exact pair `Vendor Name=APPLE` and `Product Name=SD Card Reader`, together with USB transport; vendor/product matching ignores case and surrounding whitespace |
+| Apple SD-reader hardware identity | Nearest block-storage device's `Device Characteristics` with `Vendor Name=APPLE` and `Product Name=SD Card Reader`, together with USB transport; matching ignores case and surrounding whitespace |
 
-The registry probe stops at the nearest block-storage device. It does not walk past a virtual storage device to classify it from the backing hardware. Device display names (`MediaName`, `IORegistryEntryName`), volume labels, and generic reader names are not used as SD evidence. An external reader exposing only generic USB storage can still qualify as a USB target and retain its USB label. An internal USB reader without positive SD evidence is omitted; `RemovableMedia=true` alone is insufficient.
+The registry probe stops at the nearest block-storage device. Device display names, volume labels, and generic reader names do not establish SD identity. External readers exposing generic USB storage follow USB target qualification and retain the USB label. Internal USB readers require positive SD identification.
 
-Identified SD cards require confirmed removable status independently of `AllowExternalDrives`. Scan qualification reads `RemovableMedia`, then `Removable`, then the current same-identity registry media property when the preceding field is absent. Neither enabling external hard drives nor an SD hardware match admits a card with false or unknown removable status. Internal fixed disks, virtual devices, and known unsupported registry transports remain excluded.
+Scan qualification reads removable status from `RemovableMedia`, then `Removable`, then the current same-identity registry media property when the preceding field is absent. Cards qualify only with confirmed removable status, including when external HDD/SSD support is enabled. Internal fixed disks, virtual devices, and unsupported registry transports remain excluded.
 
-The Apple hardware-pair check addresses the USB/internal/removable combination in the MacBookPro12,1 report without requiring an SD icon on the inspected nodes. That report contains diskutil metadata rather than IOKit characteristics, so confirmation of the live hardware-pair match and successful detection still requires a hardware retest. It is not evidence that every built-in reader model has been verified.
+Identified SD cards use the verbatim `SD CARD` hardware label in analysis and installation summaries and do not display the USB 2.0 warning. SD classification is retained through whole-disk selection, Option-volume selection, selection normalization, and PPC handoff.
 
-The media kind follows whole disks, Option volumes, selection normalization and PPC handoff. It selects the verbatim hardware label `SD CARD` in analysis and summary and suppresses the USB 2.0 warning for identified SD cards. Final handoff rechecks SD kind and removable status alongside the existing identity/capacity verification. This enables writing a card; boot compatibility still depends on the destination hardware and image.
+SD targets use the existing source-specific creation workflows. macOS workflows support whole-disk preparation and eligible GPT/HFS+ volumes selected through Option. Linux, Windows, and manual raw-image workflows use physical whole disks. Boot compatibility is determined by the source image and the destination computer's firmware and reader support.
 
-For an SD selection, Continue specifically requires the current physical-parent registry probe to return `mediaKind=sdCard` and `removable=true`, with the expected identity. Diskutil-only SD classification can populate a scan result but cannot bypass this final registry check. Mounted SD volumes may report internal status and qualify for the macOS Option override only when their verified SD parent and mounted-volume GPT/HFS+/removable checks pass.
+Before Continue passes an SD target to the installation summary, the current physical-parent registry probe must confirm `mediaKind=sdCard`, `removable=true`, and the expected device identity. Capacity validation also applies. Classification from `diskutil` alone does not replace this final registry check.
+
+Mounted SD volumes qualify for the macOS Option override when their verified SD parent and mounted-volume GPT/HFS+/removable checks pass. These volumes are accepted with internal status when attached through a qualified built-in SD reader.
 
 ### Refresh and Admission Evidence
 
