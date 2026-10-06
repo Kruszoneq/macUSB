@@ -63,8 +63,8 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 - Image sources use the selected image file size; `.app` sources use the total logical size of regular files in the bundle without following symbolic links.
 - If source size is unavailable, an alert explains the fallback: macOS major version `>= 15` uses the `32 GB` class and `28_000_000_000` bytes; all other flows use the `16 GB` class and `15_000_000_000` bytes.
 - Proceed action stays blocked until selected target passes validation.
-- macOS target selection defaults to physical whole disks and automatically preformats non-PPC targets as GPT/HFS+ with the `mac_USB` label; APFS does not block this path.
-- Standard `createinstallmedia` workflows may reuse an existing GPT/HFS+ volume without preformat only through the analysis-screen Option override.
+- macOS target selection defaults to physical whole disks and automatically preformats non-PPC whole-disk targets as GPT/HFS+ with the `mac_USB` label; APFS does not block this path.
+- Standard `createinstallmedia`, restore-legacy (Lion/Mountain Lion), and Mavericks workflows may reuse an existing GPT/HFS+ volume without whole-disk preformat only through the analysis-screen Option override. Restore erases the selected volume through the existing `asr` pipeline.
 - In PPC flow, target formatting behavior is specialized and must not be forced through standard preformat assumptions.
 
 ### Detection and compatibility routing
