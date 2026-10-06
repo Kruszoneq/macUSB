@@ -438,13 +438,11 @@ extension UniversalInstallationView {
         let fileManager = FileManager.default
         let requesterUID = Int(getuid())
 
-        let canReuseCreateInstallMediaVolume = !isRestoreLegacy
-            && !isMavericks
-            && !isPPC
+        let canReuseMacOSVolume = !isPPC
             && !drive.isWholeDiskTarget
             && drive.partitionScheme == .gpt
             && drive.fileSystemFormat == .hfsPlus
-        let shouldPreformat = !isPPC && !canReuseCreateInstallMediaVolume
+        let shouldPreformat = !isPPC && !canReuseMacOSVolume
         let preparedTargetLabel = shouldPreformat ? "mac_USB" : drive.url.lastPathComponent
         let helperTargetBSDName = resolveHelperTargetBSDName(for: drive)
 

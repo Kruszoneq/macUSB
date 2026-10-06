@@ -105,8 +105,8 @@ final class AnalysisLogic: ObservableObject {
         }
     }
 
-    /// Nośnik przekazywany do etapu instalacji. PPC i procesy restore
-    /// zawsze otrzymują fizyczny whole disk. W trybie PPC flaga
+    /// Nośnik przekazywany do etapu instalacji. Tylko PPC
+    /// zawsze otrzymuje fizyczny whole disk. W trybie PPC flaga
     /// needsFormatting jest wymuszana na false, ponieważ formatowanie
     /// (APM + HFS+) jest już wbudowane w dalszy proces.
     var selectedDriveForInstallation: USBDrive? {

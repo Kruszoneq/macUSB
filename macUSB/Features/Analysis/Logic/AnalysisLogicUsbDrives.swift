@@ -9,13 +9,15 @@ extension AnalysisLogic {
     }
 
     var supportsMacOSCreateInstallMediaVolumeOverride: Bool {
-        isMacOSUSBTargetWorkflow
-            && !isPPC && !isMavericks && !isRestoreLegacy
-            && macOSArchitectureBlockReason == nil
-            && createInstallMediaInspection.architecture != .notApplicable
+        guard isMacOSUSBTargetWorkflow, !isPPC,
+              macOSArchitectureBlockReason == nil else { return false }
+        // Restore workflows reuse the same GPT/HFS+ Option catalog without
+        // requiring a createinstallmedia executable in the source installer.
+        return isRestoreLegacy || isMavericks
+            || createInstallMediaInspection.architecture != .notApplicable
     }
 
-    var requiresWholeDiskMacOSTarget: Bool { isPPC || isRestoreLegacy || isMavericks }
+    var requiresWholeDiskMacOSTarget: Bool { isPPC }
 
     var selectableUSBTargets: [USBDrive] {
         supportsMacOSCreateInstallMediaVolumeOverride ? macOSOptionUSBTargetsCache : physicalUSBTargetsCache
