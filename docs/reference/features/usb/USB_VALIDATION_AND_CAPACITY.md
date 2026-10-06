@@ -107,8 +107,6 @@ Application inactivity and screen hiding retain a separate presentation of the l
 
 Repeated requests are skipped rather than queued. While an owned child remains in the shared runner slot, the UI shows a waiting state; normal periodic ticks resume checking after the slot is released. Cancelled generations cannot overwrite current state. IOKit parent traversal owns a separate retained starting reference and releases every acquired ancestor on all return paths.
 
-Run the standalone resource/scheduling regression checks with `bash scripts/TestUSBDiscovery.sh`. They compile production utilities and use mocked registry ownership plus synthetic child processes; they do not launch macUSB, invoke diskutil or modify media.
-
 The Option presentation additionally reads mounted, non-network volumes and keeps only volumes that:
 
 - belong to a physical USB or SD whole disk from the shared snapshot,
