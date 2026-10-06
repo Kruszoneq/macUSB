@@ -31,7 +31,8 @@ macOS target preparation:
 
 - standard `createinstallmedia`, legacy restore, and Mavericks workflows receive a physical whole-disk target by default and always run the existing `preformat` stage as GPT/HFS+ with the `mac_USB` label,
 - existing APFS, HFS+, FAT, NTFS, and other target formats do not bypass default whole-disk preparation,
-- standard `createinstallmedia` may skip `preformat` only for a mounted GPT/HFS+ volume selected through the analysis-screen Option override; the existing volume path is then passed directly to `createinstallmedia`,
+- standard `createinstallmedia`, legacy restore, and Mavericks may skip `preformat` only for a mounted GPT/HFS+ volume selected through the analysis-screen Option override; the existing volume path is then passed directly to `createinstallmedia` or to `asr restore --target`, respectively,
+- legacy restore and Mavericks keep their existing source staging and `imagescan -> restore` sequence; for an Option volume, the existing `needsPreformat=false` branch omits `partitionDisk` and uses `asr restore --erase` on the selected volume rather than repartitioning the whole disk,
 - PPC receives a physical whole-disk target but remains exempt from standard `preformat`; its existing `ppc_format` stage continues to create APM/HFS+ media labeled `PPC`,
 - helper request fields, workflow kinds, and stage identifiers remain unchanged.
 

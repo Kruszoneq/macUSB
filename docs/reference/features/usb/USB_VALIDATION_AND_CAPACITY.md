@@ -27,7 +27,7 @@ Recognized macOS workflows use physical whole-disk (`diskX`) targets by default:
 
 Physical whole-disk targets are the shared base snapshot for every supported workflow, and their preparation starts independently when the analysis screen appears. The picker never uses mounted volumes as its default target source or exposes a target list before the initial snapshot is ready. A second macOS Option snapshot is prepared from the same physical-disk enumeration and adds only eligible mounted GPT/HFS+ volumes. Pressing or releasing Option switches between these prepared in-memory presentations immediately. Workflow eligibility changes and the periodic analysis-screen refresh may still trigger a new enumeration.
 
-For standard `createinstallmedia` workflows, holding Option on the analysis screen enables a mixed target list:
+For standard `createinstallmedia`, restore-legacy (Lion/Mountain Lion), and Mavericks workflows, holding Option on the analysis screen enables a mixed target list:
 - every physical `diskX` target remains in the list,
 - eligible mounted HFS+ volumes from a GPT disk are inserted directly after their matching physical `diskX` target,
 - APFS and other volumes from that disk are omitted,
@@ -37,7 +37,7 @@ For standard `createinstallmedia` workflows, holding Option on the analysis scre
 - changing the presented list does not clear, replace, or hide the name of an already selected disk or volume,
 - a selected eligible volume still skips automatic preformat when the user proceeds, even after Option is released.
 
-The Option volume override applies only to standard `createinstallmedia` workflows. PPC, restore-legacy, and Mavericks restore workflows expose and pass only physical `diskX` targets. If analysis changes into one of these workflows while a volume from that disk was selected earlier, selection is normalized to its parent physical disk. PPC then uses its dedicated APM/HFS+ formatting, while restore workflows use GPT/HFS+ preparation.
+The Option volume override applies to these three macOS workflow families. Restore-legacy and Mavericks do not require a `createinstallmedia` executable to qualify for it. An eligible selected volume is retained through handoff and skips whole-disk preparation; the existing restore pipeline erases that volume. Selecting a physical disk still uses GPT/HFS+ whole-disk preparation. PPC exposes and passes only physical `diskX` targets. If analysis changes to PPC while a volume was selected earlier, selection is normalized to its parent physical disk and PPC uses its dedicated APM/HFS+ formatting.
 
 Linux, Windows, and manual raw-image workflows keep their existing physical whole-disk selection behavior.
 
@@ -121,7 +121,7 @@ UI rules:
 - physical USB targets use `diskX - <size> - <USB standard>`; SD targets use `diskX - <size> - SD CARD`,
 - Option-selected HFS+ volumes use `diskXsY - <size> - <USB standard> - <volume name>` with `SD CARD` replacing the USB standard for SD cards,
 - releasing Option restores the physical presentation; if an eligible volume remains selected, the picker keeps that one selected-volume entry visible until the selection changes,
-- when workflow routing changes to PPC, restore-legacy, or Mavericks, any selected volume is normalized to its parent physical `diskX` target.
+- when workflow routing changes to PPC, any selected volume is normalized to its parent physical `diskX` target; restore-legacy and Mavericks retain eligible volume selections.
 
 In PPC flow, specialized target formatting behavior must not be forced through standard assumptions.
 

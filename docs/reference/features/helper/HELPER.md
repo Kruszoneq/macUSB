@@ -178,6 +178,7 @@ Contract invariants:
 ### USB Workflow Flow
 - App sends `HelperWorkflowRequestPayload`.
 - Daemon executes staged workflow (`prepare`, format/restore/createinstallmedia/copy/finalize patterns by workflow kind, plus Linux raw-copy branch).
+- macOS legacy restore and Mavericks can reuse the existing `needsPreformat=false` execution branch for an analysis-selected GPT/HFS+ Option volume. The app sends its mount point as `targetVolumePath`; helper skips whole-disk `partitionDisk` and passes that path to `asr restore --target ... --erase`. Source staging, image scanning, restore arguments, IPC fields, stage keys, cancellation and cleanup remain the existing pipeline. Whole-disk targets still request preformat, and PPC retains its dedicated format/restore stages. Target eligibility and admission are defined in `../usb/USB_VALIDATION_AND_CAPACITY.md`.
 - Progress events are emitted with stage/status keys and percent updates.
 - Cancellation and failure return deterministic result payloads.
 - Linux raw-copy branch uses helper-side Disk Arbitration mount guard for target USB (`diskX` and `diskXsY`) from `linux_unmount_target` start until `linux_verify_write` terminal outcome, then always releases guard immediately after verify.

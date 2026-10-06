@@ -79,6 +79,8 @@ For Linux fallback:
 
 ## Current Supported Routing Families
 
+Standard `createinstallmedia`, restore-legacy (Lion/Mountain Lion), and Mavericks share the existing analysis-screen Option override for eligible mounted GPT/HFS+ targets. Restore workflows qualify without requiring a `createinstallmedia` executable. They retain the selected volume through installation handoff; only PPC requires macOS volume selection to normalize to its physical parent. Discovery, capacity and identity admission rules are defined in `../usb/USB_VALIDATION_AND_CAPACITY.md`.
+
 - modern
 - legacy
 - restore-legacy
