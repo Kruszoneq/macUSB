@@ -65,14 +65,23 @@ extension HelperServiceManager {
 
     func finishRepairPresentation(success: Bool, message: String) {
         appendRepairTechnicalLogLine("Helper repair finished: success=\(success).")
+        let ownerWindow = repairProgressAlertParentWindow
         dismissRepairProgressAlertIfNeeded()
         if !success, isHelperTrustVerificationFailureMessage(message) {
             presentHelperTrustVerificationFailureAlert()
             setRepairProgressSink(nil)
             return
         }
-        presentRepairSummaryAlert(success: success, message: message)
+        presentRepairSummaryAlert(success: success, message: message, ownerWindow: ownerWindow)
         setRepairProgressSink(nil)
+    }
+
+    private func repairAlertOwnerWindow() -> NSWindow? {
+        var window = NSApp.keyWindow ?? NSApp.mainWindow
+        while let parent = window?.sheetParent {
+            window = parent
+        }
+        return window
     }
 
     private func presentRepairProgressAlertIfNeeded() {
@@ -86,7 +95,7 @@ extension HelperServiceManager {
         alert.addButton(withTitle: String(localized: "app.helper.repair.running.action", table: "App"))
         alert.buttons.first?.isEnabled = false
 
-        if let ownerWindow = NSApp.keyWindow ?? NSApp.mainWindow {
+        if let ownerWindow = repairAlertOwnerWindow() {
             repairProgressAlertParentWindow = ownerWindow
             repairProgressAlertWindow = alert.window
             alert.beginSheetModal(for: ownerWindow, completionHandler: nil)
@@ -118,7 +127,7 @@ extension HelperServiceManager {
         repairProgressAlertParentWindow = nil
     }
 
-    private func presentRepairSummaryAlert(success: Bool, message: String) {
+    private func presentRepairSummaryAlert(success: Bool, message: String, ownerWindow: NSWindow?) {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = success ? .informational : .warning
@@ -127,7 +136,7 @@ extension HelperServiceManager {
             alert.messageText = String(localized: "app.helper.repair.success.title", table: "App")
             alert.informativeText = String(localized: "app.helper.repair.success.message", table: "App")
             alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
-            presentAlert(alert)
+            presentRepairAlert(alert, ownerWindow: ownerWindow)
             return
         }
 
@@ -138,17 +147,20 @@ extension HelperServiceManager {
 
         let handler: (NSApplication.ModalResponse) -> Void = { response in
             guard response == .alertSecondButtonReturn else { return }
-            self.presentRepairDetailsAlert(fallbackMessage: message)
+            // Finish dismissing the summary before attaching another sheet to its owner.
+            DispatchQueue.main.async {
+                self.presentRepairDetailsAlert(fallbackMessage: message, ownerWindow: ownerWindow)
+            }
         }
 
-        if let window = NSApp.keyWindow ?? NSApp.mainWindow {
-            alert.beginSheetModal(for: window, completionHandler: handler)
+        if let ownerWindow {
+            alert.beginSheetModal(for: ownerWindow, completionHandler: handler)
         } else {
             handler(alert.runModal())
         }
     }
 
-    private func presentRepairDetailsAlert(fallbackMessage: String) {
+    private func presentRepairDetailsAlert(fallbackMessage: String, ownerWindow: NSWindow?) {
         let details = repairTechnicalLogs.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
         let technicalOutput = details.isEmpty ? fallbackMessage : details
 
@@ -156,9 +168,45 @@ extension HelperServiceManager {
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
         alert.messageText = String(localized: "app.helper.repair.details.title", table: "App")
-        alert.informativeText = technicalOutput
+        alert.informativeText = String(localized: "app.helper.repair.failure.message", table: "App")
+        alert.accessoryView = makeRepairLogScrollView(technicalOutput)
         alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
-        presentAlert(alert)
+        presentRepairAlert(alert, ownerWindow: ownerWindow)
+    }
+
+    private func presentRepairAlert(_ alert: NSAlert, ownerWindow: NSWindow?) {
+        if let ownerWindow {
+            alert.beginSheetModal(for: ownerWindow, completionHandler: nil)
+        } else {
+            alert.runModal()
+        }
+    }
+
+    private func makeRepairLogScrollView(_ output: String) -> NSScrollView {
+        let scrollView = NSScrollView(frame: NSRect(x: 0, y: 0, width: 420, height: 240))
+        scrollView.hasVerticalScroller = true
+        scrollView.autohidesScrollers = true
+        scrollView.borderType = .bezelBorder
+
+        let contentSize = scrollView.contentSize
+        let textView = NSTextView(frame: NSRect(origin: .zero, size: contentSize))
+        textView.isEditable = false
+        textView.isSelectable = true
+        textView.isRichText = false
+        textView.font = .monospacedSystemFont(ofSize: NSFont.smallSystemFontSize, weight: .regular)
+        textView.textColor = .textColor
+        textView.backgroundColor = .textBackgroundColor
+        textView.textContainerInset = NSSize(width: 8, height: 8)
+        textView.isVerticallyResizable = true
+        textView.isHorizontallyResizable = false
+        textView.autoresizingMask = [.width]
+        textView.minSize = NSSize(width: 0, height: contentSize.height)
+        textView.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+        textView.textContainer?.containerSize = NSSize(width: contentSize.width, height: CGFloat.greatestFiniteMagnitude)
+        textView.textContainer?.widthTracksTextView = true
+        textView.string = output
+        scrollView.documentView = textView
+        return scrollView
     }
 
     private func appendRepairTechnicalLogLine(_ line: String) {

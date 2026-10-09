@@ -173,7 +173,8 @@ Contract invariants:
 - UI surface uses `NSAlert`:
   - in-progress informational alert (non-dismissable action button while repair is running),
   - automatic transition to final status alert after completion,
-  - failure path offers an additional details alert with technical repair logs.
+  - failure path offers an additional details alert with technical repair logs in a fixed-size, vertically scrollable, selectable text view; long lines wrap instead of enlarging the alert,
+  - progress, summary, and details sheets use the same owning app window, resolving any active sheet to its parent before presentation; details are presented on the next main-queue turn after the summary response so they cannot attach to the dismissing summary window.
 
 ### USB Workflow Flow
 - App sends `HelperWorkflowRequestPayload`.
