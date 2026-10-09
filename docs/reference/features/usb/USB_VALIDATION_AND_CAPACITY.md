@@ -117,6 +117,8 @@ The Option presentation additionally reads mounted, non-network volumes and keep
 Missing required mounted-volume metadata leaves an otherwise eligible row unavailable rather than authorizing it. Internal mounted volumes from a non-SD parent are excluded.
 
 UI rules:
+- after supported macOS recognition completes, the hardware-requirement card adds an Option (⌥) hint when the workflow supports volume selection and the current presentation snapshot contains at least one eligible GPT/HFS+ volume with valid identity/capacity metadata; physical disks and unavailable volume rows do not trigger it,
+- the hint uses the same bullet styling as the other hardware requirements and symmetric contextual motion; it follows the retained lifecycle presentation and remains independent of whether Option is currently held,
 - while the initial target snapshot is being prepared, analysis UI shows the neutral waiting state,
 - when at least one physical USB or SD target is present but source recognition is still pending, the neutral waiting card remains visible instead of target-selection controls,
 - when the current presentation is empty and the snapshot has no issues, the UI shows `Nie wykryto nośnika USB`; this existing localized wording also covers an empty USB/SD catalog,

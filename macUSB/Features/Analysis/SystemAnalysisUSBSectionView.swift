@@ -103,6 +103,13 @@ struct SystemAnalysisUSBSectionView: View {
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             Text("analysis.usb.requirements.speed", tableName: "Analysis").font(.subheadline).foregroundColor(.secondary)
+                            if logic.shouldShowMacOSVolumeSelectionHint {
+                                Text("analysis.macos.usb.volume_selection.hint", tableName: "Analysis")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .transition(.move(edge: .top).combined(with: .opacity))
+                            }
                         }
                     }
                 }
@@ -234,5 +241,6 @@ struct SystemAnalysisUSBSectionView: View {
         }
         .animation(.easeInOut(duration: 0.24), value: logic.usbDiscoveryNotice)
         .animation(.easeInOut(duration: 0.24), value: logic.usbTargetPresentationReadiness)
+        .animation(.easeInOut(duration: 0.24), value: logic.shouldShowMacOSVolumeSelectionHint)
     }
 }

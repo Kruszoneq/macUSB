@@ -2763,6 +2763,94 @@
         }
       }
     },
+    "analysis.macos.usb.volume_selection.hint" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Halte die Wahltaste (⌥) gedrückt, um die verfügbaren Volumes anzuzeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Hold the Option (⌥) key to see available volumes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Mantén pulsada la tecla Opción (⌥) para ver los volúmenes disponibles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Maintenez la touche Option (⌥) enfoncée pour afficher les volumes disponibles"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Tieni premuto il tasto Opzione (⌥) per visualizzare i volumi disponibili"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Option（⌥）キーを押したままにすると、使用可能なボリュームが表示されます"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Houd de Option-toets (⌥) ingedrukt om de beschikbare volumes te zien"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Przytrzymaj klawisz Option (⌥), aby zobaczyć dostępne woluminy"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Mantenha a tecla Option (⌥) pressionada para ver os volumes disponíveis"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Удерживайте клавишу Option (⌥), чтобы увидеть доступные тома"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Kullanılabilir disk bölümlerini görmek için Option (⌥) tuşunu basılı tutun"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Утримуйте клавішу Option (⌥), щоб побачити доступні томи"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Giữ phím Option (⌥) để xem các ổ đĩa khả dụng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 按住 Option (⌥) 键以查看可用宗卷"
+          }
+        }
+      }
+    },
     "analysis.navigation.title" : {
       "extractionState" : "manual",
       "localizations" : {

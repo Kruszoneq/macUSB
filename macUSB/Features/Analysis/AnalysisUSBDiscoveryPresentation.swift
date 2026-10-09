@@ -38,6 +38,18 @@ extension AnalysisLogic {
         currentHeldUSBPresentation?.readiness ?? usbTargetReadiness
     }
 
+    var shouldShowMacOSVolumeSelectionHint: Bool {
+        guard supportsMacOSCreateInstallMediaVolumeOverride, !isAnalyzing,
+              usbDiscoveryPresentationState.hasCurrentSnapshot,
+              let snapshot = usbDiscoveryPresentationState.snapshot,
+              snapshot.allowExternalDrives == UserDefaults.standard.bool(forKey: "AllowExternalDrives") else { return false }
+        return snapshot.optionDrives.contains { drive in
+            guard !drive.isWholeDiskTarget,
+                  let proof = snapshot.verification[drive.selectionID] else { return false }
+            return proof.problem == nil
+        }
+    }
+
     func holdUSBDiscoveryPresentation() {
         let previous = currentHeldUSBPresentation
         heldUSBDiscoveryPresentation = AnalysisUSBHeldPresentation(
