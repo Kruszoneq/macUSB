@@ -8,6 +8,7 @@ Finish screen must report:
 - cleanup result state.
 - for a macOS installer classified as prerelease during analysis, keep the separate `BETA` badge visible beside the normalized system name; its tint follows the finish result card tone.
 - for Linux workflow failures, show a localized warning card (orange tone) with localized title + localized error description mapped from helper failure context (not raw helper error text).
+- Windows solid-WIM conversion failures for insufficient temporary space, temporary-folder preparation, and folder ownership use the shared `HelperWindowsWimErrorLocalizationKey` identifiers from `finish.windows.error.wim_export.*.description`. The finish screen resolves these keys directly from `FinishUSB.xcstrings`; required/available bytes, system errors, paths, and requester UID remain diagnostic data instead of untranslated error-card text.
 - after successful creation, show a localized eject-action card for safe ejection of the selected target whole-disk (`diskX`).
 - eject card behavior:
   - use accent tone and an eject symbol,

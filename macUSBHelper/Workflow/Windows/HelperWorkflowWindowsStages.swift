@@ -252,10 +252,18 @@ extension HelperWorkflowExecutor {
             }
             try fileManager.createDirectory(atPath: exportDirectoryPath, withIntermediateDirectories: false)
         } catch {
+            emitProgress(
+                stageKey: stage.key,
+                titleKey: stage.titleKey,
+                percent: latestPercent,
+                statusKey: stage.statusKey,
+                logLine: "WIM export temporary directory preparation failed: path=\(exportDirectoryPath), error=\(error.localizedDescription)",
+                shouldAdvancePercent: false
+            )
             throw HelperExecutionError.failed(
                 stage: stage.key,
                 exitCode: -1,
-                description: "Nie udało się przygotować katalogu tymczasowego do konwersji install.wim: \(error.localizedDescription)"
+                description: HelperWindowsWimErrorLocalizationKey.directoryCreation.rawValue
             )
         }
 
@@ -263,10 +271,18 @@ extension HelperWorkflowExecutor {
             let uid = uid_t(requesterUID)
             guard let userRecord = getpwuid(uid),
                   chown(exportDirectoryPath, uid, userRecord.pointee.pw_gid) == 0 else {
+                emitProgress(
+                    stageKey: stage.key,
+                    titleKey: stage.titleKey,
+                    percent: latestPercent,
+                    statusKey: stage.statusKey,
+                    logLine: "WIM export temporary directory ownership assignment failed: path=\(exportDirectoryPath), requesterUID=\(requesterUID)",
+                    shouldAdvancePercent: false
+                )
                 throw HelperExecutionError.failed(
                     stage: stage.key,
                     exitCode: -1,
-                    description: "Nie udało się ustawić właściciela katalogu tymczasowego do konwersji install.wim (UID \(requesterUID))."
+                    description: HelperWindowsWimErrorLocalizationKey.directoryOwnership.rawValue
                 )
             }
         }

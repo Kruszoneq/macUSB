@@ -391,11 +391,7 @@ extension HelperWorkflowExecutor {
         throw HelperExecutionError.failed(
             stage: stage.key,
             exitCode: -1,
-            description: String(
-                format: "Za mało wolnego miejsca na dysku tymczasowym do konwersji install.wim przed podziałem (wymagane ok. %.1f GB, dostępne %.1f GB).",
-                Double(requiredBytes) / 1_000_000_000,
-                Double(availableBytes) / 1_000_000_000
-            )
+            description: HelperWindowsWimErrorLocalizationKey.insufficientSpace.rawValue
         )
     }
 
