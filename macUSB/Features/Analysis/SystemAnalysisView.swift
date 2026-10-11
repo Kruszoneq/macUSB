@@ -638,7 +638,7 @@ struct SystemAnalysisView: View {
     private var proceedActionBar: some View {
         BottomActionBar {
             Button(action: handleProceedToInstall) {
-                HStack { Text("analysis.action.proceed", tableName: "Analysis"); Image(systemName: "arrow.right.circle.fill") }
+                HStack { Text("analysis.action.proceed", tableName: "Analysis"); Image(systemName: "arrow.forward.circle.fill") }
                     .frame(maxWidth: .infinity)
                     .padding(8)
             }

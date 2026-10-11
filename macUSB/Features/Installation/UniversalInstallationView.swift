@@ -439,7 +439,7 @@ struct UniversalInstallationView: View {
                         Button(action: showStartCreationAlert) {
                             HStack {
                                 Text(LocalizedStringKey("summary.action.start"), tableName: "Summary")
-                                Image(systemName: "arrow.right.circle.fill")
+                                Image(systemName: "arrow.forward.circle.fill")
                             }
                             .frame(maxWidth: .infinity)
                             .padding(8)
@@ -450,7 +450,7 @@ struct UniversalInstallationView: View {
                         Button(action: returnToAnalysisViewPreservingSelection) {
                             HStack {
                                 Text(LocalizedStringKey("summary.action.back"), tableName: "Summary")
-                                Image(systemName: "arrow.left.circle")
+                                Image(systemName: "arrow.backward.circle")
                             }
                             .frame(maxWidth: .infinity)
                             .padding(8)

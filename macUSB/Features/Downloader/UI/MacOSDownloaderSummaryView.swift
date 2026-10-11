@@ -100,7 +100,7 @@ extension MacOSDownloaderWindowShellView {
                             useDownloadedInstallerInAnalysis()
                         } label: {
                             HStack(spacing: 8) {
-                                Image(systemName: "arrow.right.circle.fill")
+                                Image(systemName: "arrow.forward.circle.fill")
                                 Text(String(localized: "downloader.summary.analyze.help", table: "Downloader"))
                             }
                             .frame(maxWidth: .infinity, alignment: .center)

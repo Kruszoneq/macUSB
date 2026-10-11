@@ -32,6 +32,8 @@ Use global in-app toasts only for transient, non-blocking state changes; they sh
 - Downloader and helper UI should remain visually coherent with the same design language.
 - DEBUG-only UI must never appear in Release builds.
 
+Directional navigation icons use SF Symbols' `forward` and `backward` variants so they follow the effective LTR/RTL layout direction. This includes the analysis proceed action, summary start/back actions, downloader handoff to analysis, and the PPC guidance link on the finish screen (`arrow.up.forward.square`). The Welcome start action also uses `arrow.forward`. Icons depicting code syntax or non-navigation operations retain their semantic symbols.
+
 ## Motion and Dynamic Content Contract
 
 Visibility changes initiated by the user must be animated consistently when they affect expandable or filtered lists, contextual banners/status cards, or conditional actions. Appearance and disappearance are equally important: never animate only one direction.
