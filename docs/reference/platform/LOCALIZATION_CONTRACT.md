@@ -20,6 +20,10 @@
 
 Supported language handling must remain coherent between runtime behavior and localization catalog.
 
+`LanguageManager` resolves the effective language from the saved selection or system-language detection in automatic mode. Its `locale` and `layoutDirection` describe that same language; layout direction follows Foundation's character direction for the locale's language, including right-to-left Persian (`fa`).
+
+The main SwiftUI flow explicitly injects both values into its root environment and refreshes them when the selected language changes. The downloader coordinator injects both values into its separate `NSHostingController` root when the window opens; language changes are locked while that window is open. SwiftUI sheets and child views inherit the values from their owning root. Native menus and AppKit alerts continue to use the existing `AppleLanguages` and language-change restart flow.
+
 ## Catalog and Table Map
 
 Each `.xcstrings` file represents a separate localization table in the app bundle. The table name is the filename without its extension; a key prefix does not choose a table.

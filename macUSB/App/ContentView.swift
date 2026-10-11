@@ -111,8 +111,9 @@ struct ContentView: View {
         }
         // Podpięcie konfiguratora okna
         .background(WindowConfigurator())
-        // Wstrzyknięcie języka
+        // Inject the language and layout direction
         .environment(\.locale, languageManager.locale)
+        .environment(\.layoutDirection, languageManager.layoutDirection)
         // Wymuszenie odświeżenia przy zmianie języka
         .id(languageManager.currentLanguage)
         .onChange(of: languageManager.needsRestart) { needsRestart in

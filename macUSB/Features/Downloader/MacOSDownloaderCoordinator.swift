@@ -45,9 +45,12 @@ final class MacOSDownloaderWindowManager {
         let sheetContentHeight = downloaderWindowHeight
         MenuState.shared.lockLanguageChanges(reason: "downloader_opened")
 
+        let languageManager = LanguageManager()
         let contentView = MacOSDownloaderWindowShellView(contentHeight: sheetContentHeight) { [weak self] in
             self?.close()
         }
+        .environment(\.locale, languageManager.locale)
+        .environment(\.layoutDirection, languageManager.layoutDirection)
         let hostingController = NSHostingController(rootView: contentView)
         let window = NSWindow(contentViewController: hostingController)
         let fixedSize = NSSize(

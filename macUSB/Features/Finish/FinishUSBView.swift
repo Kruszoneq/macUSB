@@ -332,7 +332,7 @@ struct FinishUSBView: View {
                                     }) {
                                         HStack(spacing: 6) {
                                             Text("finish.macos.ppc.guidance.action", tableName: "FinishUSB")
-                                            Image(systemName: "arrow.up.right.square")
+                                            Image(systemName: "arrow.up.forward.square")
                                         }
                                     }
                                     .buttonStyle(.bordered)
