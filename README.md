@@ -290,6 +290,7 @@ By default, the interface follows the system language automatically. A supported
 - 🇻🇳 Vietnamese (vi)
 - 🇹🇷 Turkish (tr)
 - 🇳🇱 Dutch (nl)
+- 🇮🇷 Persian (fa)
 
 ---
 

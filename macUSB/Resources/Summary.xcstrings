@@ -22,6 +22,12 @@
             "value" : "Volver"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بازگشت"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -109,6 +115,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خیر"
           }
         },
         "fr" : {
@@ -200,6 +212,12 @@
             "value" : "Empezar de nuevo"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شروع مجدد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -287,6 +305,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Iniciar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شروع"
           }
         },
         "fr" : {
@@ -378,6 +402,12 @@
             "value" : "Sí"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بله"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -465,6 +495,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Operación interrumpida por el usuario. Puedes empezar de nuevo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عملیات توسط کاربر متوقف شد. می‌توانید دوباره شروع کنید."
           }
         },
         "fr" : {
@@ -556,6 +592,12 @@
             "value" : "Proceso interrumpido"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فرآیند متوقف شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -643,6 +685,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abortando operación"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال لغو عملیات"
           }
         },
         "fr" : {
@@ -734,6 +782,12 @@
             "value" : "Se ha bloqueado el funcionamiento posterior de la aplicación. Para empezar de nuevo, reinicie la aplicación."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ادامهٔ کارکرد برنامه مسدود شده است. برای شروع دوباره، برنامه را مجدداً راه‌اندازی کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -821,6 +875,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Memoria USB desconectada"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو USB قطع شد"
           }
         },
         "fr" : {
@@ -912,6 +972,12 @@
             "value" : "Todo el proceso puede tardar unos minutos."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کل فرآیند ممکن است چند دقیقه طول بکشد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -999,6 +1065,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ocurrió un error"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خطایی روی داد"
           }
         },
         "fr" : {
@@ -1090,6 +1162,12 @@
             "value" : "• La imagen de Linux se escribirá en la unidad USB"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• ایمیج Linux روی درایو USB نوشته خواهد شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1177,6 +1255,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• Se prepararán los archivos de la imagen de Linux"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• فایل‌های ایمیج Linux آماده‌سازی خواهند شد"
           }
         },
         "fr" : {
@@ -1268,6 +1352,12 @@
             "value" : "Durante la creación de un medio de arranque Linux, macOS puede mostrar este mensaje: «El ordenador no ha podido leer el disco conectado.» Este comportamiento es esperado. Para continuar, selecciona «Ignorar» en esa ventana."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هنگام ایجاد رسانهٔ بوت Linux، ممکن است macOS این پیام را نشان دهد: «The disk you attached was not readable by this computer.» این رفتار طبیعی است. برای ادامه، در آن پنجره «Ignore» را انتخاب کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1355,6 +1445,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mensaje sobre la imposibilidad de leer el disco durante la creación"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پیام مربوط به رسانهٔ غیرقابل خواندن هنگام ایجاد"
           }
         },
         "fr" : {
@@ -1446,6 +1542,12 @@
             "value" : "• La estructura del instalador se finalizara"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• ساختار نصب‌کننده نهایی خواهد شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1533,6 +1635,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• La unidad USB se formateara adecuadamente"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• درایو USB به‌طور مناسب فرمت خواهد شد"
           }
         },
         "fr" : {
@@ -1624,6 +1732,12 @@
             "value" : "• La imagen de instalacion se restaurara"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• ایمیج نصب بازیابی خواهد شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1711,6 +1825,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• Se copiaran los archivos de instalacion"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• فایل‌های نصب کپی خواهند شد"
           }
         },
         "fr" : {
@@ -1802,6 +1922,12 @@
             "value" : "• La unidad USB se formateara"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• درایو USB فرمت خواهد شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1889,6 +2015,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• Se prepararan los archivos del sistema"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• فایل‌های سیستم آماده‌سازی خواهند شد"
           }
         },
         "fr" : {
@@ -1980,6 +2112,12 @@
             "value" : "• La imagen del sistema se restaurara"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• ایمیج سیستم بازیابی خواهد شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2067,6 +2205,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• La imagen del sistema se copiara y verificara"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• ایمیج سیستم کپی شده و صحت آن بررسی خواهد شد"
           }
         },
         "fr" : {
@@ -2158,6 +2302,12 @@
             "value" : "Comprobar de nuevo"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی مجدد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2245,6 +2395,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSB no ha podido confirmar si Rosetta está disponible. Vuelve a comprobarlo para continuar."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB نتوانست در دسترس بودن Rosetta را تأیید کند. برای ادامه دوباره بررسی کنید."
           }
         },
         "fr" : {
@@ -2336,6 +2492,12 @@
             "value" : "No se ha podido comprobar Rosetta"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی Rosetta امکان‌پذیر نبود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2423,6 +2585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Instalar Rosetta"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب Rosetta"
           }
         },
         "fr" : {
@@ -2514,6 +2682,12 @@
             "value" : "Comprueba tu conexión a internet e inténtalo de nuevo. Los detalles se han guardado en el registro de diagnóstico."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اتصال اینترنت خود را بررسی کرده و دوباره تلاش کنید. جزئیات در گزارش عیب‌یابی ذخیره شد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2601,6 +2775,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se ha podido instalar Rosetta"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب Rosetta امکان‌پذیر نبود"
           }
         },
         "fr" : {
@@ -2692,6 +2872,12 @@
             "value" : "Rosetta se ha instalado"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosetta نصب شده است"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2779,6 +2965,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Instalando Rosetta"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال نصب Rosetta"
           }
         },
         "fr" : {
@@ -2870,6 +3062,12 @@
             "value" : "Aceptar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "موافقم"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2957,6 +3155,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Al elegir «Aceptar», aceptas los términos del contrato de licencia de software de Apple para Rosetta. A continuación, Rosetta se instalará en este Mac."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "با انتخاب «موافقم»، شما شرایط قرارداد مجوز نرم‌افزار Apple برای Rosetta را می‌پذیرید. سپس Rosetta روی این Mac نصب خواهد شد."
           }
         },
         "fr" : {
@@ -3048,6 +3252,12 @@
             "value" : "No aceptar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مخالفم"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3135,6 +3345,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Instalar Rosetta"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب Rosetta"
           }
         },
         "fr" : {
@@ -3226,6 +3442,12 @@
             "value" : "La herramienta createinstallmedia del instalador seleccionado se ha creado para procesadores Intel y necesita Rosetta en este Mac. Instala Rosetta para empezar a crear el soporte de instalación."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابزار createinstallmedia در نصب‌کنندهٔ انتخابی برای پردازنده‌های Intel ساخته شده و در این Mac به Rosetta نیاز دارد. برای شروع ایجاد رسانهٔ نصب، Rosetta را نصب کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3313,6 +3535,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se necesita Rosetta"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب Rosetta لازم است"
           }
         },
         "fr" : {
@@ -3404,6 +3632,12 @@
             "value" : "La instalación de Rosetta ha finalizado, pero aún no se puede confirmar que esté disponible. Espera un momento y vuelve a comprobarlo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب Rosetta به پایان رسید، اما هنوز در دسترس بودن آن قابل تأیید نیست. کمی صبر کرده و سپس دوباره بررسی کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3491,6 +3725,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rosetta aún no está disponible"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosetta هنوز در دسترس نیست"
           }
         },
         "fr" : {
@@ -3582,6 +3822,12 @@
             "value" : "Intentar de nuevo"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تلاش مجدد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3669,6 +3915,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Detalles de la operacion"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جزئیات عملیات"
           }
         },
         "fr" : {
@@ -3760,6 +4012,12 @@
             "value" : "Falta el permiso obligatorio «Permitir en segundo plano» para la herramienta auxiliar. La app puede no funcionar correctamente."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مجوز لازم «Allow in the Background» برای ابزار Helper وجود ندارد. ممکن است برنامه به‌درستی کار نکند."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3847,6 +4105,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Faltan permisos obligatorios: «Acceso total al disco» para macUSB y «Permitir en segundo plano» para la herramienta auxiliar. La app puede no funcionar correctamente."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مجوزهای لازم وجود ندارند: «Full Disk Access» برای macUSB و «Allow in the Background» برای ابزار Helper. ممکن است برنامه به‌درستی کار نکند."
           }
         },
         "fr" : {
@@ -3938,6 +4202,12 @@
             "value" : "Falta un permiso obligatorio: «Acceso total al disco» para macUSB. La app puede no funcionar correctamente."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مجوز لازم وجود ندارد: «Full Disk Access» برای macUSB. ممکن است برنامه به‌درستی کار نکند."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4025,6 +4295,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Faltan permisos obligatorios"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مجوزهای لازم وجود ندارند"
           }
         },
         "fr" : {
@@ -4116,6 +4392,12 @@
             "value" : "• Los archivos temporales se eliminarán automáticamente"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• فایل‌های موقت به‌طور خودکار حذف خواهند شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4203,6 +4485,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Resumen del proceso"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نمای کلی فرآیند"
           }
         },
         "fr" : {
@@ -4294,6 +4582,12 @@
             "value" : "• La unidad USB seleccionada se desmontará"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• درایو USB انتخابی آن‌مانت خواهد شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4381,6 +4675,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• La imagen se escribirá en la unidad USB"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• ایمیج روی درایو USB نوشته خواهد شد"
           }
         },
         "fr" : {
@@ -4472,6 +4772,12 @@
             "value" : "• Se preparará el archivo de imagen"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• فایل ایمیج آماده‌سازی خواهد شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4559,6 +4865,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• Se verificará la escritura"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• صحت نوشتن بررسی خواهد شد"
           }
         },
         "fr" : {
@@ -4650,6 +4962,12 @@
             "value" : "Imagen seleccionada"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایمیج انتخابی"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4737,6 +5055,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Proceso de escritura"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فرآیند نوشتن"
           }
         },
         "fr" : {
@@ -4828,6 +5152,12 @@
             "value" : "Durante la escritura, macOS puede indicar que la unidad no se puede leer. Este comportamiento es normal. Para continuar, selecciona «Ignorar»."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هنگام نوشتن، ممکن است macOS گزارش دهد که درایو غیرقابل خواندن است. این مورد طبیعی است. برای ادامه، «Ignore» را انتخاب کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4915,6 +5245,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Posible mensaje de disco ilegible"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "احتمال نمایش پیام دیسک غیرقابل خواندن"
           }
         },
         "fr" : {
@@ -5006,6 +5342,12 @@
             "value" : "La unidad seleccionada utiliza un estándar de transferencia de datos antiguo. La escritura puede tardar varios minutos"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو انتخابی از استاندارد قدیمی‌تر انتقال داده استفاده می‌کند. نوشتن ممکن است چندین دقیقه طول بکشد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5093,6 +5435,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Memoria USB seleccionada"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو USB انتخابی"
           }
         },
         "fr" : {
@@ -5184,6 +5532,12 @@
             "value" : "Versión del sistema seleccionada"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نسخهٔ سیستم انتخابی"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5271,6 +5625,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Todos los datos de la unidad seleccionada se eliminaran. Seguro que quieres iniciar el proceso?"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تمام داده‌های روی درایو انتخابی پاک خواهند شد. آیا مطمئن هستید که می‌خواهید شروع کنید؟"
           }
         },
         "fr" : {
@@ -5362,6 +5722,12 @@
             "value" : "Advertencia de perdida de datos"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هشدار از دست رفتن داده‌ها"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5449,6 +5815,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Proceso de creación"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فرآیند ایجاد"
           }
         },
         "fr" : {
@@ -5540,6 +5912,12 @@
             "value" : "La unidad seleccionada utiliza un estándar de transferencia de datos más antiguo. El proceso de creación del instalador puede tardar varios minutos."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو انتخابی با استاندارد قدیمی‌تر انتقال داده کار می‌کند. فرآیند ایجاد نصب‌کننده ممکن است چندین دقیقه طول بکشد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5627,6 +6005,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unidad USB 2.0 seleccionada"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو USB 2.0 انتخاب شد"
           }
         },
         "fr" : {
@@ -5718,6 +6102,12 @@
             "value" : "Por favor espere..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لطفاً صبر کنید..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5805,6 +6195,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La primera vez que se inicie Windows, se te pedirá que configures una contraseña para esta cuenta"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هنگامی که Windows برای اولین بار شروع به کار می‌کند، از شما می‌خواهد برای این حساب کاربری رمز عبور تعیین کنید"
           }
         },
         "fr" : {
@@ -5896,6 +6292,12 @@
             "value" : "El nombre para mostrar contiene caracteres no permitidos"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نام نمایشی شامل نویسه‌های غیرمجاز است"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5983,6 +6385,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nombre para mostrar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نام نمایشی"
           }
         },
         "fr" : {
@@ -6074,6 +6482,12 @@
             "value" : "Introduce un nombre para mostrar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "یک نام نمایشی وارد کنید"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6161,6 +6575,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Omite determinadas restricciones de Windows y simplifica la configuración inicial del sistema."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "محدودیت‌های انتخابی Windows را دور بزنید و راه‌اندازی اولیهٔ سیستم را ساده کنید."
           }
         },
         "fr" : {
@@ -6252,6 +6672,12 @@
             "value" : "Configuración de la instalación de Windows"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پیکربندی نصب Windows"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6339,6 +6765,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Configurar…"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پیکربندی…"
           }
         },
         "fr" : {
@@ -6430,6 +6862,12 @@
             "value" : "La imagen de Windows seleccionada incluye su propia configuración automática. Puedes conservarla, sustituirla por la configuración de macUSB o detener la creación del dispositivo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایمیج Windows انتخابی شامل پیکربندی خودکار اختصاصی خود است. می‌توانید آن را نگه دارید، با پیکربندی macUSB جایگزین کنید، یا ایجاد درایو را متوقف نمایید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6517,6 +6955,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usar configuración de macUSB"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استفاده از پیکربندی macUSB"
           }
         },
         "fr" : {
@@ -6608,6 +7052,12 @@
             "value" : "Detener"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "توقف"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6695,6 +7145,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esta imagen ya contiene Autounattend.xml"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این ایمیج قبلاً حاوی Autounattend.xml است"
           }
         },
         "fr" : {
@@ -6786,6 +7242,12 @@
             "value" : "Conservar archivo de la imagen"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نگه‌داشتن فایل ایمیج"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6873,6 +7335,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Listo"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انجام شد"
           }
         },
         "fr" : {
@@ -6964,6 +7432,12 @@
             "value" : "Limitar la recopilación de datos y omitir las preguntas de privacidad"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "محدود کردن جمع‌آوری داده‌ها و صرف‌نظر از سؤالات حریم خصوصی"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7051,6 +7525,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Omitir los requisitos de hardware de Windows 11, incluidos TPM 2.0, Secure Boot y RAM"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دور زدن پیش‌نیازهای سخت‌افزاری Windows 11، از جمله TPM 2.0، Secure Boot و RAM"
           }
         },
         "fr" : {
@@ -7142,6 +7622,12 @@
             "value" : "Crear una cuenta local automáticamente"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد خودکار حساب کاربری محلی"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7229,6 +7715,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Impedir el cifrado automático de BitLocker"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جلوگیری از رمزگذاری خودکار BitLocker"
           }
         },
         "fr" : {
@@ -7320,6 +7812,12 @@
             "value" : "Omitir el requisito de cuenta Microsoft"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دور زدن الزام داشتن حساب کاربری Microsoft"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7407,6 +7905,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Omitir el requisito de configuración de la red Wi-Fi"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دور زدن الزام راه‌اندازی شبکهٔ Wi-Fi"
           }
         },
         "fr" : {
@@ -7498,6 +8002,12 @@
             "value" : "Usar los ajustes de idioma y región de este Mac"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استفاده از تنظیمات زبان و منطقه از این Mac"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7585,6 +8095,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esta imagen de Windows no incluye el idioma usado en este Mac."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این ایمیج Windows شامل زبان استفاده‌شده در این Mac نیست."
           }
         },
         "fr" : {
@@ -7676,6 +8192,12 @@
             "value" : "Seleccionadas: %d"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتخاب‌شده: %d"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7763,6 +8285,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Este medio USB se preparará solo para arrancar en modo BIOS heredado. El arranque UEFI no es compatible."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این رسانهٔ USB فقط برای بوت Legacy BIOS آماده خواهد شد. بوت UEFI پشتیبانی نمی‌شود."
           }
         },
         "fr" : {
@@ -7854,6 +8382,12 @@
             "value" : "Medio compatible con BIOS"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رسانهٔ سازگار با BIOS"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7941,6 +8475,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Elige un modo de arranque compatible con el ordenador en el que se instalará Windows"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حالت بوتی را انتخاب کنید که توسط رایانه‌ای که Windows روی آن نصب خواهد شد پشتیبانی شود"
           }
         },
         "fr" : {
@@ -8032,6 +8572,12 @@
             "value" : "No se pudo actualizar automaticamente el helper. Abre Herramientas → Reparar helper e intentalo de nuevo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تازه‌سازی خودکار Helper امکان‌پذیر نبود. ابزارها ← تعمیر Helper را باز کنید و دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8119,6 +8665,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• El cargador de arranque macUSBoot se instalará en la unidad USB"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• بوت‌لودر macUSBoot روی درایو USB نصب خواهد شد"
           }
         },
         "fr" : {
@@ -8210,6 +8762,12 @@
             "value" : "• Los archivos de instalación de Windows se copiarán y se comprobarán"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• فایل‌های نصب Windows کپی شده و بررسی خواهند شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8297,6 +8855,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• La imagen de Windows se comprobará y se preparará para la copia"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• ایمیج Windows بررسی شده و برای کپی آماده خواهد شد"
           }
         },
         "fr" : {
@@ -8388,6 +8952,12 @@
             "value" : "• La unidad USB se formateará como MBR (MS-DOS/FAT32)"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• درایو USB به‌صورت MBR (MS-DOS/FAT32) فرمت خواهد شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8475,6 +9045,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Este medio USB se preparará solo para arranque UEFI. El arranque en modo BIOS heredado no es compatible."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این رسانهٔ USB فقط برای بوت UEFI آماده خواهد شد. بوت Legacy BIOS پشتیبانی نمی‌شود."
           }
         },
         "fr" : {
@@ -8566,6 +9142,12 @@
             "value" : "Medio compatible con UEFI"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رسانهٔ سازگار با UEFI"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8653,6 +9235,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La forma más cómoda de instalar wimlib es:"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سریع‌ترین روش برای نصب wimlib این است:"
           }
         },
         "fr" : {
@@ -8744,6 +9332,12 @@
             "value" : "Instalar con Homebrew"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب با Homebrew"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8831,6 +9425,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Instala primero Homebrew y luego úsalo para instalar wimlib:"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابتدا Homebrew را نصب کنید، سپس از آن برای نصب wimlib استفاده نمایید:"
           }
         },
         "fr" : {
@@ -8922,6 +9522,12 @@
             "value" : "Primero instala Homebrew"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابتدا Homebrew را نصب کنید"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9009,6 +9615,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "¡ATENCIÓN!"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هشدار!"
           }
         },
         "fr" : {
@@ -9100,6 +9712,12 @@
             "value" : "Abrir sitio web de Homebrew"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باز کردن وب‌سایت Homebrew"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9187,6 +9805,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comprobar de nuevo"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی مجدد"
           }
         },
         "fr" : {
@@ -9278,6 +9902,12 @@
             "value" : "Esta imagen de Windows requiere dividir el archivo install.wim. Para iniciar la creación del instalador USB, instala wimlib y vuelve a comprobarlo"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این ایمیج Windows نیازمند تقسیم فایل install.wim است. برای شروع ایجاد نصب‌کنندهٔ USB، wimlib را نصب کرده و سپس دوباره بررسی کنید"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9365,6 +9995,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se requiere wimlib para continuar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برای ادامه به wimlib نیاز است"
           }
         },
         "fr" : {

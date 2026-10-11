@@ -21,6 +21,12 @@
             "value" : "Cancelar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لغو"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -107,6 +113,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cerrar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بستن"
           }
         },
         "fr" : {
@@ -197,6 +209,12 @@
             "value" : "Ahora no"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الان نه"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -283,6 +301,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aceptar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تأیید"
           }
         },
         "fr" : {
@@ -373,6 +397,12 @@
             "value" : "El instalador no se pudo guardar en la ubicación de destino. Por favor verifique sus permisos e inténtelo nuevamente."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ذخیرهٔ نصب‌کننده در مکان مقصد امکان‌پذیر نبود. لطفاً مجوزهای خود را بررسی کرده و دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -459,6 +489,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudo preparar el instalador: %@"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی نصب‌کننده ناموفق بود: %@"
           }
         },
         "fr" : {
@@ -549,6 +585,12 @@
             "value" : "El asistente devolvió un error al ensamblar el instalador."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper در سرهم‌بندی نصب‌کننده خطایی برگرداند"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -635,6 +677,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El asistente no devolvió la ruta al instalador .app"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper مسیر نصب‌کنندهٔ .app را برنگرداند"
           }
         },
         "fr" : {
@@ -725,6 +773,12 @@
             "value" : "La aplicación de instalación integrada no existe"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برنامهٔ نصب‌کنندهٔ ساخته‌شده وجود ندارد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -811,6 +865,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se encontró la imagen .dmg descargada"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایمیج .dmg دانلودشده یافت نشد"
           }
         },
         "fr" : {
@@ -901,6 +961,12 @@
             "value" : "No se encontró el InstallAssistant.pkg descargado"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فایل InstallAssistant.pkg دانلودشده یافت نشد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -987,6 +1053,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se encontró el InstallAssistantAuto.pkg descargado"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فایل InstallAssistantAuto.pkg دانلودشده یافت نشد"
           }
         },
         "fr" : {
@@ -1077,6 +1149,12 @@
             "value" : "No se puede completar la preparación. Falta el archivo InstallESD.dmg. Intente descargar este sistema nuevamente."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "امکان تکمیل آماده‌سازی وجود ندارد. فایل InstallESD.dmg موجود نیست. لطفاً دانلود این سیستم را دوباره امتحان کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1163,6 +1241,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se encontró ningún archivo de instalación para el sistema seleccionado (se requiere InstallAssistant.pkg, InstallAssistantAuto.pkg o imagen .dmg)"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هیچ فایل نصب‌کننده‌ای برای سیستم انتخابی یافت نشد (InstallAssistant.pkg، InstallAssistantAuto.pkg یا ایمیج .dmg لازم است)"
           }
         },
         "fr" : {
@@ -1253,6 +1337,12 @@
             "value" : "Falta el directorio de salida de la sesión"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پوشهٔ خروجی نشست وجود ندارد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1339,6 +1429,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparando el instalador %@"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی نصب‌کنندهٔ %@"
           }
         },
         "fr" : {
@@ -1429,6 +1525,12 @@
             "value" : "Agregando recursos necesarios..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "افزودن منابع مورد نیاز..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1515,6 +1617,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Agregando una imagen del sistema al instalador..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "افزودن ایمیج سیستم به نصب‌کننده..."
           }
         },
         "fr" : {
@@ -1605,6 +1713,12 @@
             "value" : "Copiando el paquete de instalación..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کپی کردن بستهٔ نصب‌کننده..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1691,6 +1805,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Descomprimiendo el paquete de instalación..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استخراج بستهٔ نصب‌کننده..."
           }
         },
         "fr" : {
@@ -1781,6 +1901,12 @@
             "value" : "Preparando un desembalaje extendido..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی استخراج پیشرفته..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1867,6 +1993,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terminando la preparación del instalador..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نهایی‌سازی آماده‌سازی نصب‌کننده..."
           }
         },
         "fr" : {
@@ -1957,6 +2089,12 @@
             "value" : "Terminando la preparación de tus recursos..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نهایی‌سازی آماده‌سازی منابع..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2043,6 +2181,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El instalador ha sido preparado."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب‌کننده آماده شد"
           }
         },
         "fr" : {
@@ -2133,6 +2277,12 @@
             "value" : "Abriendo la imagen del instalador..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باز کردن ایمیج دیسک نصب‌کننده..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2219,6 +2369,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abriendo el paquete de recuperación..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باز کردن بستهٔ بازیابی..."
           }
         },
         "fr" : {
@@ -2309,6 +2465,12 @@
             "value" : "Preparando el contenido del instalador..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی محتویات نصب‌کننده..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2395,6 +2557,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparando los archivos del instalador..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی فایل‌های نصب‌کننده..."
           }
         },
         "fr" : {
@@ -2485,6 +2653,12 @@
             "value" : "Preparando los archivos del instalador (%@/%@)..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی فایل‌های نصب‌کننده (%1$@/%2$@)..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2571,6 +2745,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparando el instalador..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی نصب‌کننده..."
           }
         },
         "fr" : {
@@ -2661,6 +2841,12 @@
             "value" : "Preparando recursos del instalador..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی منابع نصب‌کننده..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2747,6 +2933,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Al cerrar la ventana, la descarga se detendrá y los archivos temporales se eliminarán"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "با بستن پنجره، دانلود متوقف شده و فایل‌های موقت حذف خواهند شد"
           }
         },
         "fr" : {
@@ -2837,6 +3029,12 @@
             "value" : "¿Cancelar la descarga del sistema?"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لغو دانلود سیستم؟"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2923,6 +3121,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelar descarga y cerrar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لغو دانلود و بستن"
           }
         },
         "fr" : {
@@ -3013,6 +3217,12 @@
             "value" : "Continuar descargando"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ادامهٔ دانلود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3097,6 +3307,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Developer Beta"
+          }
+        },
+        "fa" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Developer Beta"
@@ -3191,6 +3407,12 @@
             "value" : "Public Beta"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Public Beta"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3277,6 +3499,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eliminación de archivos temporales no completada: %@"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حذف فایل‌های موقت تکمیل نشد: %@"
           }
         },
         "fr" : {
@@ -3367,6 +3595,12 @@
             "value" : "El asistente no confirmó la eliminación del directorio de sesión"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper حذف پوشهٔ نشست را تأیید نکرد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3453,6 +3687,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Completado automáticamente"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "به‌طور خودکار تکمیل شد"
           }
         },
         "fr" : {
@@ -3543,6 +3783,12 @@
             "value" : "No completado"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تکمیل نشد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3629,6 +3875,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Requiere finalización manual"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نیازمند تکمیل دستی است"
           }
         },
         "fr" : {
@@ -3719,6 +3971,12 @@
             "value" : "No hay datos para limpiar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "داده‌ای برای پاک‌سازی وجود ندارد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3805,6 +4063,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terminando el trabajo"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال نهایی‌سازی"
           }
         },
         "fr" : {
@@ -3895,6 +4159,12 @@
             "value" : "Terminando el trabajo..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال نهایی‌سازی..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3981,6 +4251,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terminando el trabajo con una advertencia..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نهایی‌سازی همراه با هشدار..."
           }
         },
         "fr" : {
@@ -4071,6 +4347,12 @@
             "value" : "Preparándose para la limpieza..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی پاک‌سازی..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4157,6 +4439,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Organizando archivos temporales..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پاک‌سازی فایل‌های موقت..."
           }
         },
         "fr" : {
@@ -4247,6 +4535,12 @@
             "value" : "El instalador se preparó, pero la eliminación de archivos temporales no se completó automáticamente."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب‌کننده آماده شد، اما پاک‌سازی فایل‌های موقت به‌طور خودکار تکمیل نشد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4333,6 +4627,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Conexión a servidores de Apple"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اتصال به سرورهای Apple"
           }
         },
         "fr" : {
@@ -4423,6 +4723,12 @@
             "value" : "Comprobando el espacio disponible en el directorio temporal..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی فضای موجود در پوشهٔ موقت..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4509,6 +4815,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Conectándose a los servidores de Apple..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال اتصال به سرورهای Apple..."
           }
         },
         "fr" : {
@@ -4599,6 +4911,12 @@
             "value" : "Conectándose a los servidores de Apple y descargando el manifiesto del sistema seleccionado..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اتصال به سرورهای Apple و دریافت مانیفست سیستم انتخابی..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4685,6 +5003,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se detectaron archivos %@ con un tamaño total de %@..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ فایل با مجموع اندازهٔ %2$@ شناسایی شد..."
           }
         },
         "fr" : {
@@ -4775,6 +5099,12 @@
             "value" : "Abre la ventana nuevamente para comenzar a buscar."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پنجره را دوباره باز کنید تا جستجو آغاز شود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4861,6 +5191,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Búsqueda cancelada"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جستجو لغو شد"
           }
         },
         "fr" : {
@@ -4951,6 +5287,12 @@
             "value" : "No se encontraron instaladores en el directorio actual de Apple"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هیچ نصب‌کننده‌ای در دایرکتوری فعلی Apple یافت نشد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5037,6 +5379,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No hay sistemas disponibles"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هیچ سیستمی در دسترس نیست"
           }
         },
         "fr" : {
@@ -5127,6 +5475,12 @@
             "value" : "La conexión a los servidores de Apple no está disponible actualmente. Inténtelo de nuevo en un momento."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اتصال به سرورهای Apple در حال حاضر امکان‌پذیر نیست. لطفاً چند لحظهٔ دیگر دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5213,6 +5567,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudo actualizar la lista del sistema"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تازه‌سازی فهرست سیستم‌ها ناموفق بود"
           }
         },
         "fr" : {
@@ -5303,6 +5663,12 @@
             "value" : "Se ha suspendido la comprobación de los sistemas disponibles. Una vez que se restablezca la conexión, intente actualizar nuevamente."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی سیستم‌های موجود متوقف شده است. پس از برقراری مجدد اتصال، دوباره تازه‌سازی کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5389,6 +5755,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La conexión a Internet no está disponible"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اتصال اینترنت برقرار نیست"
           }
         },
         "fr" : {
@@ -5479,6 +5851,12 @@
             "value" : "Buscar sistemas disponibles"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جستجو برای سیستم‌های موجود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5565,6 +5943,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Incluyendo versiones anteriores..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شامل کردن نسخه‌های قدیمی‌تر..."
           }
         },
         "fr" : {
@@ -5655,6 +6039,12 @@
             "value" : "Lista de archivos y análisis de metadatos..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحلیل فهرست فایل‌ها و متادیتا..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5741,6 +6131,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Analizando metadatos de la versión..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحلیل متادیتای نسخه‌ها..."
           }
         },
         "fr" : {
@@ -5831,6 +6227,12 @@
             "value" : "Determinando el tamaño de los archivos..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعیین اندازهٔ فایل‌ها..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5917,6 +6319,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comprobando los tamaños del instalador..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی اندازهٔ نصب‌کننده‌ها..."
           }
         },
         "fr" : {
@@ -6007,6 +6415,12 @@
             "value" : "Descargando el catálogo de Apple..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال دانلود کاتالوگ Apple..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6093,6 +6507,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Descargando el manifiesto del sistema seleccionado..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال دانلود مانیفست سیستم انتخابی..."
           }
         },
         "fr" : {
@@ -6183,6 +6603,12 @@
             "value" : "Preparando un manifiesto para el sistema más antiguo..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی مانیفست برای قدیمی‌ترین سیستم..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6269,6 +6695,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Buscando instaladores en servidores Apple..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال جستجو برای نصب‌کننده‌ها در سرورهای Apple..."
           }
         },
         "fr" : {
@@ -6359,6 +6791,12 @@
             "value" : "Cancelar descarga"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لغو دانلود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6445,6 +6883,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Continuar con un nombre nuevo"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ادامه با نام جدید"
           }
         },
         "fr" : {
@@ -6535,6 +6979,12 @@
             "value" : "La carpeta «%@» ya contiene el archivo «%@». Si continúas, la nueva imagen se guardará como «%@»."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پوشهٔ «%@» قبلاً شامل «%@» است. اگر ادامه دهید، ایمیج دیسک جدید به‌صورت «%@» ذخیره خواهد شد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6621,6 +7071,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ya existe un archivo de imagen de disco"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "یک فایل ایمیج دیسک از قبل وجود دارد"
           }
         },
         "fr" : {
@@ -6711,6 +7167,12 @@
             "value" : "No se ha podido crear la imagen de disco: %@"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد ایمیج دیسک امکان‌پذیر نبود: %@"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6797,6 +7259,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comprueba que la carpeta todavía exista y que tengas permiso para guardar archivos en ella. Después, inténtalo de nuevo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اطمینان حاصل کنید که پوشه همچنان وجود دارد و شما مجوز ذخیرهٔ فایل‌ها در آنجا را دارید، سپس دوباره تلاش کنید."
           }
         },
         "fr" : {
@@ -6887,6 +7355,12 @@
             "value" : "No se puede usar la carpeta seleccionada"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پوشهٔ انتخابی قابل استفاده نیست"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6973,6 +7447,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cambiar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تغییر"
           }
         },
         "fr" : {
@@ -7063,6 +7543,12 @@
             "value" : "Cambiar la carpeta de destino de la imagen de disco"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تغییر پوشهٔ مقصد ایمیج دیسک"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7149,6 +7635,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Guardar el instalador como imagen de disco (.dmg)"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ذخیرهٔ نصب‌کننده به‌عنوان ایمیج دیسک (.dmg)"
           }
         },
         "fr" : {
@@ -7239,6 +7731,12 @@
             "value" : "La imagen de disco se ha creado, pero no se ha podido eliminar el instalador de origen «%@». Ambos archivos permanecen en el disco."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایمیج دیسک ایجاد شد، اما امکان حذف نصب‌کنندهٔ منبع «%@» وجود نداشت. هر دو فایل روی دیسک باقی می‌مانند."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7325,6 +7823,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El archivo .dmg terminado se guardará en la carpeta seleccionada."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فایل نهایی .dmg در پوشهٔ انتخابی ذخیره خواهد شد."
           }
         },
         "fr" : {
@@ -7415,6 +7919,12 @@
             "value" : "Seleccionar carpeta"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتخاب پوشه"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7501,6 +8011,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Selecciona una carpeta para la imagen de disco"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتخاب پوشه برای ایمیج دیسک"
           }
         },
         "fr" : {
@@ -7591,6 +8107,12 @@
             "value" : "El volumen que contiene la carpeta seleccionada no tiene suficiente espacio libre para crear la imagen de disco.\n\nEspacio necesario: %@ GB\nEspacio disponible: %@ GB"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حجم دیسک حاوی پوشهٔ انتخابی فضای خالی کافی برای ایجاد ایمیج دیسک ندارد.\n\nفضای مورد نیاز: %@ GB\nفضای موجود: %@ GB"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7677,6 +8199,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No hay suficiente espacio en el destino"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فضای کافی در مقصد وجود ندارد"
           }
         },
         "fr" : {
@@ -7767,6 +8295,12 @@
             "value" : "Volver al gestor de descargas"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بازگشت به دانلودکننده"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7853,6 +8387,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El volumen del sistema no tiene suficiente espacio libre para descargar y preparar el instalador y crear la imagen de disco.\n\nEspacio necesario: %@ GB\nEspacio disponible: %@ GB"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حجم دیسک سیستم برای دانلود، آماده‌سازی نصب‌کننده و ایجاد ایمیج دیسک فضای خالی کافی ندارد.\n\nفضای مورد نیاز: %@ GB\nفضای موجود: %@ GB"
           }
         },
         "fr" : {
@@ -7943,6 +8483,12 @@
             "value" : "No hay suficiente espacio en el volumen del sistema"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فضای کافی روی حجم دیسک سیستم وجود ندارد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8029,6 +8575,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La imagen de disco se ha creado"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایمیج دیسک ایجاد شد"
           }
         },
         "fr" : {
@@ -8119,6 +8671,12 @@
             "value" : "Creando la imagen de disco..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال ایجاد ایمیج دیسک..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8205,6 +8763,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparando la imagen de disco..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال آماده‌سازی ایمیج دیسک..."
           }
         },
         "fr" : {
@@ -8295,6 +8859,12 @@
             "value" : "Eliminando el instalador de origen..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حذف نصب‌کنندهٔ منبع..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8381,6 +8951,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Creando imagen de disco"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد ایمیج دیسک"
           }
         },
         "fr" : {
@@ -8471,6 +9047,12 @@
             "value" : "Imagen de disco"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایمیج دیسک"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8554,6 +9136,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@"
+          }
+        },
+        "fa" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ %@"
@@ -8647,6 +9235,12 @@
             "value" : "Cancelar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لغو"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8733,6 +9327,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Descargar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود"
           }
         },
         "fr" : {
@@ -8823,6 +9423,12 @@
             "value" : "La versión de macOS seleccionada se descargará correctamente y se creará su instalador. Sin embargo, en un Mac con procesador Intel, este instalador no se puede usar para crear un instalador de arranque en una unidad USB. ¿Quieres continuar?"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نسخهٔ انتخابی macOS با موفقیت دانلود خواهد شد و نصب‌کنندهٔ آن ایجاد می‌شود. با این حال، در یک Mac مبتنی بر Intel، نمی‌توان از این نصب‌کننده برای ایجاد نصب‌کنندهٔ قابل بوت روی درایو USB استفاده کرد. آیا می‌خواهید ادامه دهید؟"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8909,6 +9515,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se puede crear un instalador de arranque en este Mac"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد یک نصب‌کنندهٔ قابل بوت در این Mac امکان‌پذیر نیست"
           }
         },
         "fr" : {
@@ -8999,6 +9611,12 @@
             "value" : "OK"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تأیید"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9085,6 +9703,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Detectando instaladores locales..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال شناسایی نصب‌کننده‌های محلی..."
           }
         },
         "fr" : {
@@ -9175,6 +9799,12 @@
             "value" : "DESCARGADO"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود شده"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9261,6 +9891,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لغو"
           }
         },
         "fr" : {
@@ -9351,6 +9987,12 @@
             "value" : "Volver a descargar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود مجدد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9437,6 +10079,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El instalador seleccionado ya se encuentra en la carpeta Aplicaciones. ¿Quieres volver a descargarlo?"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب‌کنندهٔ انتخابی در حال حاضر در پوشهٔ Applications وجود دارد. آیا می‌خواهید آن را دوباره دانلود کنید؟"
           }
         },
         "fr" : {
@@ -9527,6 +10175,12 @@
             "value" : "El instalador ya está descargado"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب‌کننده قبلاً دانلود شده است"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9613,6 +10267,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se han encontrado instaladores de macOS en la carpeta Aplicaciones cuya versión o compilación no se ha podido leer. Cantidad: %@."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب‌کننده‌های macOS که نسخه یا ساخت (build) آن‌ها قابل خواندن نبود در پوشهٔ Applications یافت شدند. تعداد: %@."
           }
         },
         "fr" : {
@@ -9703,6 +10363,12 @@
             "value" : "No se han podido identificar los instaladores locales"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب‌کننده‌های محلی قابل شناسایی نبودند"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9789,6 +10455,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sin acceso a Internet durante más de 1 minuto"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عدم دسترسی به اینترنت برای بیش از ۱ دقیقه"
           }
         },
         "fr" : {
@@ -9879,6 +10551,12 @@
             "value" : "La conexión a Internet no se recuperó durante 1 minuto. Los archivos temporales han sido eliminados."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اتصال اینترنت ظرف ۱ دقیقه بازیابی نشد. فایل‌های موقت حذف شدند."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9965,6 +10643,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La conexión a Internet no se recuperó durante 1 minuto. No se pudo confirmar la eliminación de archivos temporales."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اتصال اینترنت ظرف ۱ دقیقه بازیابی نشد. تأیید حذف فایل‌های موقت ناموفق بود."
           }
         },
         "fr" : {
@@ -10055,6 +10739,12 @@
             "value" : "La descarga ha sido pausada. Se reanudará automáticamente una vez que se restablezca la conexión (quedan %@ segundos)."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود متوقف شده است. پس از بازیابی اتصال، به‌طور خودکار ادامه خواهد یافت (زمان باقی‌مانده: %@ ثانیه)."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10141,6 +10831,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se ha perdido la conexión a Internet"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اتصال اینترنت قطع شده است"
           }
         },
         "fr" : {
@@ -10231,6 +10927,12 @@
             "value" : "La descarga del sistema %@ %@ se completó correctamente."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود سیستم %@ %@ با موفقیت تکمیل شد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10317,6 +11019,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Descarga completa"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود تکمیل شد"
           }
         },
         "fr" : {
@@ -10407,6 +11115,12 @@
             "value" : "Opciones"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "گزینه‌ها"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10493,6 +11207,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mostrar todas las versiones"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نمایش همهٔ نسخه‌ها"
           }
         },
         "fr" : {
@@ -10583,6 +11303,12 @@
             "value" : "Mostrar versiones beta"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نمایش نسخه‌های بتا"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10669,6 +11395,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Opciones de descarga"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "گزینه‌های دانلود"
           }
         },
         "fr" : {
@@ -10760,6 +11492,12 @@
             "value" : "Para descargar y preparar un instalador de macOS, activa la actividad en segundo plano de las apps para macUSB en Ajustes del Sistema."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برای دانلود و آماده‌سازی نصب‌کنندهٔ macOS، قابلیت App Background Activity را برای macUSB در System Settings روشن کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10846,6 +11584,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abrir los ajustes de actividad en segundo plano"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باز کردن تنظیمات Background Activity"
           }
         },
         "fr" : {
@@ -10937,6 +11681,12 @@
             "value" : "Se requiere actividad en segundo plano de las apps"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دسترسی App Background Activity لازم است"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11025,6 +11775,12 @@
             "value" : "Actividad en segundo plano"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Background Activity"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11111,6 +11867,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Acceso total al disco"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full Disk Access"
           }
         },
         "fr" : {
@@ -11202,6 +11964,12 @@
             "value" : "Para descargar y preparar un instalador de macOS, concede a macUSB acceso total al disco y activa la actividad en segundo plano para macUSB en Ajustes del Sistema."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برای دانلود و آماده‌سازی نصب‌کنندهٔ macOS، مجوز Full Disk Access را به macUSB اعطا کنید و App Background Activity را برای macUSB در System Settings روشن نمایید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11289,6 +12057,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se requieren permisos"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مجوزهای لازم"
           }
         },
         "fr" : {
@@ -11380,6 +12154,12 @@
             "value" : "Para descargar y preparar un instalador de macOS, concede a macUSB acceso total al disco en Ajustes del Sistema."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برای دانلود و آماده‌سازی نصب‌کنندهٔ macOS، مجوز Full Disk Access را در System Settings به macUSB اعطا کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11466,6 +12246,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abrir Acceso total al disco"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باز کردن Full Disk Access"
           }
         },
         "fr" : {
@@ -11557,6 +12343,12 @@
             "value" : "Se requiere acceso total al disco"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دسترسی Full Disk Access لازم است"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11644,6 +12436,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Para descargar y preparar un instalador de macOS, concede a macUSB acceso total al disco en Ajustes del Sistema. La herramienta auxiliar de macUSB tampoco está disponible. Selecciona Herramientas → Reparar helper e inténtalo de nuevo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برای دانلود و آماده‌سازی نصب‌کنندهٔ macOS، مجوز Full Disk Access را در System Settings به macUSB اعطا کنید. ابزار Helper برای macUSB نیز در دسترس نیست. ابزارها ← تعمیر Helper را انتخاب کرده و سپس دوباره تلاش کنید."
           }
         },
         "fr" : {
@@ -11735,6 +12533,12 @@
             "value" : "La herramienta auxiliar de macUSB no está disponible. Selecciona Herramientas → Reparar helper e inténtalo de nuevo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابزار Helper برای macUSB در دسترس نیست. ابزارها ← تعمیر Helper را انتخاب کرده و سپس دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11822,6 +12626,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Herramienta auxiliar no disponible"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper در دسترس نیست"
           }
         },
         "fr" : {
@@ -11912,6 +12722,12 @@
             "value" : "Faltan permisos necesarios o no hay conexión con la herramienta auxiliar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مجوزهای لازم یا ارتباط با Helper در دسترس نیست"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11998,6 +12814,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Descargar pasos"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مراحل دانلود"
           }
         },
         "fr" : {
@@ -12088,6 +12910,12 @@
             "value" : "Descarga del sistema"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود سیستم"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12174,6 +13002,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Descargar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود"
           }
         },
         "fr" : {
@@ -12264,6 +13098,12 @@
             "value" : "El elemento seleccionado no es compatible con la descarga actual"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مورد انتخابی در دانلود فعلی پشتیبانی نمی‌شود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12350,6 +13190,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Actualizar la lista del sistema"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تازه‌سازی فهرست سیستم‌ها"
           }
         },
         "fr" : {
@@ -12440,6 +13286,12 @@
             "value" : "Sistemas disponibles"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سیستم‌های موجود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12526,6 +13378,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La descarga no pudo iniciarse. No se pudo preparar la sesión de descarga: %@"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شروع دانلود ناموفق بود. آماده‌سازی نشست دانلود با شکست مواجه شد: %@"
           }
         },
         "fr" : {
@@ -12616,6 +13474,12 @@
             "value" : "Este instalador fue firmado correctamente por Apple. El certificado usado históricamente para la firma ha caducado, lo cual es esperable en versiones antiguas del sistema y no afecta la integridad del archivo descargado."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این نصب‌کننده به‌درستی توسط Apple امضا شده است. گواهینامه‌ای که پیش‌تر برای امضا استفاده شده منقضی شده است، که این امر برای انتشار نسخه‌های قدیمی سیستم طبیعی است و تأثیری بر یکپارچگی فایل دانلودشده ندارد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12702,6 +13566,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Firma de Apple confirmada"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "امضای Apple تأیید شد"
           }
         },
         "fr" : {
@@ -12792,6 +13662,12 @@
             "value" : "Para comenzar a descargar, necesita más espacio libre en el disco.\n\nMínimo requerido: %@. Disponible: %@.\n\nLibera espacio y vuelve a intentarlo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برای شروع دانلود، به فضای خالی بیشتری در دیسک نیاز دارید.\n\nحداقل فضای مورد نیاز: %@. فضای موجود: %@.\n\nفضا را آزاد کرده و دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12878,6 +13754,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No hay suficiente espacio en disco"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فضای دیسک کافی نیست"
           }
         },
         "fr" : {
@@ -12968,6 +13850,12 @@
             "value" : "No hay espacio libre: se requiere un mínimo de %@ (250%% del tamaño del instalador %@), %@ disponibles."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فضای خالی وجود ندارد: حداقل %@ لازم است (250%% از اندازهٔ نصب‌کننده %@)، %@ موجود است."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13054,6 +13942,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Proceda a crear USB con este instalador"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ادامه برای ایجاد USB با این نصب‌کننده"
           }
         },
         "fr" : {
@@ -13144,6 +14038,12 @@
             "value" : "Velocidad media"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سرعت میانگین"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13230,6 +14130,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estado de la limpieza"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وضعیت پاک‌سازی"
           }
         },
         "fr" : {
@@ -13320,6 +14226,12 @@
             "value" : "Detalles"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جزئیات"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13403,6 +14315,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%02dm %02ds"
+          }
+        },
+        "fa" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%02dm %02ds"
@@ -13496,6 +14414,12 @@
             "value" : "Tiempo de descarga"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "زمان دانلود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13582,6 +14506,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La descarga no pudo completarse"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تکمیل دانلود ناموفق بود"
           }
         },
         "fr" : {
@@ -13672,6 +14602,12 @@
             "value" : "Instalador"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب‌کننده"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13758,6 +14694,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ubicación"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مکان"
           }
         },
         "fr" : {
@@ -13848,6 +14790,12 @@
             "value" : "Completado con advertencia."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "همراه با هشدار تکمیل شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13934,6 +14882,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mostrar en el Finder"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نمایش در Finder"
           }
         },
         "fr" : {
@@ -14024,6 +14978,12 @@
             "value" : "Estado"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وضعیت"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14110,6 +15070,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Listo"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده"
           }
         },
         "fr" : {
@@ -14200,6 +15166,12 @@
             "value" : "Datos descargados"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "داده‌های دانلودشده"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14286,6 +15258,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Instalador no creado"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب‌کننده ایجاد نشد"
           }
         },
         "fr" : {
@@ -14376,6 +15354,12 @@
             "value" : "No hay datos disponibles"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "داده‌ای در دسترس نیست"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14462,6 +15446,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudieron descargar los archivos del instalador: %@"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود فایل‌های نصب‌کننده ناموفق بود: %@"
           }
         },
         "fr" : {
@@ -14552,6 +15542,12 @@
             "value" : "No se pudo guardar el archivo %@: %@"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ذخیرهٔ فایل %@ ناموفق بود: %@"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14638,6 +15634,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El servidor devolvió un código de respuesta incorrecto para %@"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سرور کد پاسخ نادرستی برای %@ برگرداند"
           }
         },
         "fr" : {
@@ -14728,6 +15730,12 @@
             "value" : "Falta el directorio de carga útil de la sesión"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پوشهٔ بار داده (payload) نشست وجود ندارد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14814,6 +15822,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error de descarga desconocido"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خطای ناشناخته در دانلود"
           }
         },
         "fr" : {
@@ -14904,6 +15918,12 @@
             "value" : "Velocidad de descarga: %@"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سرعت دانلود: %@"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14990,6 +16010,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Velocidad de descarga: - MB/s"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سرعت دانلود: - MB/s"
           }
         },
         "fr" : {
@@ -15080,6 +16106,12 @@
             "value" : "Descargando archivos"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال دانلود فایل‌ها"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15166,6 +16198,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Descargando archivo %@..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال دانلود %@..."
           }
         },
         "fr" : {
@@ -15256,6 +16294,12 @@
             "value" : "Expectativa..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در انتظار..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15342,6 +16386,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error en la verificación del archivo: %@"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی صحت فایل ناموفق بود: %@"
           }
         },
         "fr" : {
@@ -15432,6 +16482,12 @@
             "value" : "Verificando archivos"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال بررسی صحت فایل‌ها"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15518,6 +16574,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verificando archivo %@..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال بررسی صحت %@..."
           }
         },
         "fr" : {
@@ -15608,6 +16670,12 @@
             "value" : "El instalador se está descargando y preparando."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود و آماده‌سازی نصب‌کننده در حال انجام است"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15694,6 +16762,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seleccione el instalador disponible en los servidores de Apple"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "یک نصب‌کنندهٔ موجود در سرورهای Apple را انتخاب کنید"
           }
         },
         "fr" : {
@@ -15784,6 +16858,12 @@
             "value" : "Descarga completa. Un resumen está disponible a continuación."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود به پایان رسید. خلاصه‌ای از آن در زیر موجود است"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15870,6 +16950,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "descargar macos"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود macOS"
           }
         },
         "fr" : {

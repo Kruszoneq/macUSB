@@ -22,6 +22,12 @@
             "value" : "Cancelar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لغو"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -109,6 +115,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Continuar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ادامه"
           }
         },
         "fr" : {
@@ -200,6 +212,12 @@
             "value" : "Forzar desmontaje"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آن‌مانت اجباری"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -287,6 +305,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Interrumpir"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "توقف"
           }
         },
         "fr" : {
@@ -378,6 +402,12 @@
             "value" : "Interrumpiendo..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال توقف..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -465,6 +495,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El medio USB no sera arrancable si el proceso se detiene antes de finalizar. Sera necesario preparar el dispositivo nuevamente."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اگر فرآیند قبل از اتمام متوقف شود، رسانهٔ USB قابل بوت نخواهد بود. باید دستگاه را دوباره آماده کنید."
           }
         },
         "fr" : {
@@ -556,6 +592,12 @@
             "value" : "¿Interrumpir la creacion del medio USB?"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "توقف ایجاد رسانهٔ USB؟"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -643,6 +685,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se bloqueará el funcionamiento posterior de la aplicación"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ادامهٔ کارکرد برنامه مسدود خواهد شد"
           }
         },
         "fr" : {
@@ -734,6 +782,12 @@
             "value" : "Memoria USB desconectada"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو USB قطع شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -821,6 +875,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El helper no esta listo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper آماده نیست."
           }
         },
         "fr" : {
@@ -912,6 +972,12 @@
             "value" : "Error: No se ha seleccionado ningún disco."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خطا: هیچ درایوی انتخاب نشده است."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -999,6 +1065,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No tiene permiso para escribir en el dispositivo USB seleccionado. Restablece los permisos de la app en Opciones → Restablecer permisos de acceso a unidades externas y vuelve a intentarlo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مجوز نوشتن روی رسانهٔ USB انتخابی وجود ندارد. مجوزهای برنامه را در گزینه‌ها ← بازنشانی مجوزهای دسترسی به درایو خارجی بازنشانی کنید، سپس دوباره تلاش نمایید."
           }
         },
         "fr" : {
@@ -1090,6 +1162,12 @@
             "value" : "No hay una imagen de Linux de origen disponible para crear una unidad USB."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هیچ منبع ایمیج Linux برای ایجاد درایو USB در دسترس نیست."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1177,6 +1255,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La unidad seleccionada está siendo utilizada por otra app. Para continuar con la creación del medio de arranque Linux, macUSB puede forzar el desmontaje del dispositivo. Los datos no guardados en esta unidad podrían perderse. ¿Quieres forzar el desmontaje?"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو انتخابی توسط برنامهٔ دیگری در حال استفاده است. برای ادامهٔ ایجاد رسانهٔ بوت Linux، macUSB می‌تواند دستگاه را به‌صورت اجباری آن‌مانت کند. ممکن است داده‌های ذخیره‌نشده روی این درایو از دست بروند. آیا می‌خواهید آن را به‌صورت اجباری آن‌مانت کنید؟"
           }
         },
         "fr" : {
@@ -1268,6 +1352,12 @@
             "value" : "Escribiendo la imagen de Linux en el disco de destino..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نوشتن ایمیج Linux روی دیسک مقصد..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1355,6 +1445,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Creando medio Linux"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد رسانهٔ Linux"
           }
         },
         "fr" : {
@@ -1446,6 +1542,12 @@
             "value" : "Comprobando la coherencia de datos entre la imagen de origen y el medio USB..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی یکپارچگی داده‌ها بین ایمیج منبع و رسانهٔ USB..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1533,6 +1635,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verificando el medio Linux"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی صحت رسانهٔ Linux"
           }
         },
         "fr" : {
@@ -1624,6 +1732,12 @@
             "value" : "Archivo InstallESD.dmg no encontrado."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فایل InstallESD.dmg یافت نشد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1711,6 +1825,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se encontro el archivo de imagen de origen."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فایل ایمیج منبع یافت نشد."
           }
         },
         "fr" : {
@@ -1802,6 +1922,12 @@
             "value" : "Preparacion del espacio para la estructura final del instalador."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی فضا برای ساختار نهایی نصب‌کننده."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1889,6 +2015,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparacion de la estructura del instalador"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی ساختار نصب‌کننده"
           }
         },
         "fr" : {
@@ -1980,6 +2112,12 @@
             "value" : "Completando la estructura final de la app del instalador."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تکمیل ساختار نهایی برنامهٔ نصب‌کننده."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2067,6 +2205,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copia de archivos al medio de instalacion"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کپی کردن فایل‌ها روی رسانهٔ نصب‌کننده"
           }
         },
         "fr" : {
@@ -2158,6 +2302,12 @@
             "value" : "Finalizacion de los permisos de archivos del instalador."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نهایی‌سازی مجوزهای فایل نصب‌کننده."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2245,6 +2395,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aplicacion de permisos de archivos del instalador"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اعمال مجوزهای فایل نصب‌کننده"
           }
         },
         "fr" : {
@@ -2336,6 +2492,12 @@
             "value" : "Copiado de los archivos del instalador al medio USB seleccionado."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کپی کردن فایل‌های نصب‌کننده روی رسانهٔ USB انتخابی."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2423,6 +2585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Creacion del medio de instalacion"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد رسانهٔ نصب"
           }
         },
         "fr" : {
@@ -2514,6 +2682,12 @@
             "value" : "Verificacion de la imagen de instalacion antes de la grabacion."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی صحت ایمیج نصب‌کننده پیش از نوشتن."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2601,6 +2775,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verificacion de la imagen del instalador"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی صحت ایمیج نصب‌کننده"
           }
         },
         "fr" : {
@@ -2692,6 +2872,12 @@
             "value" : "Adaptacion del medio USB para un instalador PowerPC."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سازگار کردن رسانهٔ USB برای نصب‌کنندهٔ PowerPC."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2779,6 +2965,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparacion del medio USB"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی رسانهٔ USB"
           }
         },
         "fr" : {
@@ -2870,6 +3062,12 @@
             "value" : "Transferencia de la imagen del sistema a un medio compatible con PowerPC."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتقال ایمیج سیستم به رسانهٔ سازگار با PowerPC."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2957,6 +3155,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Creacion del medio de instalacion"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد رسانهٔ نصب"
           }
         },
         "fr" : {
@@ -3048,6 +3252,12 @@
             "value" : "Configuracion del medio USB para crear el instalador."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پیکربندی رسانهٔ USB برای ایجاد نصب‌کننده."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3135,6 +3345,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparacion del medio USB"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی رسانهٔ USB"
           }
         },
         "fr" : {
@@ -3226,6 +3442,12 @@
             "value" : "Transferencia de la imagen del sistema al medio USB seleccionado."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتقال ایمیج سیستم به رسانهٔ USB انتخابی."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3313,6 +3535,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Creacion del medio de instalacion"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد رسانهٔ نصب"
           }
         },
         "fr" : {
@@ -3404,6 +3632,12 @@
             "value" : "Creando medio USB"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد رسانهٔ USB"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3491,6 +3725,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparando la operacion..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی عملیات..."
           }
         },
         "fr" : {
@@ -3582,6 +3822,12 @@
             "value" : "Iniciando..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال شروع..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3669,6 +3915,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sistema seleccionado"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سیستم انتخابی"
           }
         },
         "fr" : {
@@ -3760,6 +4012,12 @@
             "value" : "Etapas de creación"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مراحل ایجاد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3847,6 +4105,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Velocidad de escritura: - MB/s"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سرعت نوشتن: - MB/s"
           }
         },
         "fr" : {
@@ -3938,6 +4202,12 @@
             "value" : "Velocidad de escritura: %d MB/s"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سرعت نوشتن: %d MB/s"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4025,6 +4295,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escribiendo la imagen"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نوشتن ایمیج"
           }
         },
         "fr" : {
@@ -4116,6 +4392,12 @@
             "value" : "Etapas de escritura"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مراحل نوشتن"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4203,6 +4485,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Imagen seleccionada"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایمیج انتخابی"
           }
         },
         "fr" : {
@@ -4294,6 +4582,12 @@
             "value" : "Otra app está usando la unidad seleccionada. Para continuar escribiendo la imagen, macUSB puede forzar el desmontaje del dispositivo. Los datos no guardados de esta unidad podrían perderse. ¿Quieres forzar el desmontaje?"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو انتخابی توسط برنامهٔ دیگری در حال استفاده است. برای ادامهٔ نوشتن ایمیج، macUSB می‌تواند دستگاه را به‌صورت اجباری آن‌مانت کند. ممکن است داده‌های ذخیره‌نشده روی این درایو از دست بروند. آیا می‌خواهید آن را به‌صورت اجباری آن‌مانت کنید؟"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4381,6 +4675,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escribiendo la imagen sin procesar en la unidad USB…"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نوشتن ایمیج خام روی درایو USB…"
           }
         },
         "fr" : {
@@ -4472,6 +4772,12 @@
             "value" : "Escribiendo la imagen"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نوشتن ایمیج"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4559,6 +4865,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comparando los datos de la imagen con la unidad USB…"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مقایسهٔ داده‌های ایمیج با درایو USB…"
           }
         },
         "fr" : {
@@ -4650,6 +4962,12 @@
             "value" : "Verificando la escritura"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی صحت نوشتن"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4737,6 +5055,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudo desmontar la unidad USB"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آن‌مانت کردن درایو USB امکان‌پذیر نیست"
           }
         },
         "fr" : {
@@ -4828,6 +5152,12 @@
             "value" : "La unidad USB estaba en uso por otra app. No se concedió permiso para forzar el desmontaje, por lo que el proceso se canceló. Cierra las apps que usan esta unidad e inténtalo de nuevo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو USB توسط برنامهٔ دیگری در حال استفاده بود. مجوز آن‌مانت اجباری آن داده نشد، بنابراین فرآیند لغو گردید. برنامه‌هایی را که از این درایو استفاده می‌کنند ببندید و دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4915,6 +5245,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se ha podido instalar macUSBoot. Vuelve a crear la unidad USB."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "امکان نصب macUSBoot وجود نداشت. ایجاد درایو USB را دوباره امتحان کنید."
           }
         },
         "fr" : {
@@ -5006,6 +5342,12 @@
             "value" : "La unidad seleccionada está siendo utilizada por otra app. Para continuar con la creación del medio de arranque de Windows, macUSB puede forzar el desmontaje del dispositivo. Los datos no guardados en esta unidad podrían perderse. ¿Quieres forzar el desmontaje?"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو انتخابی توسط برنامهٔ دیگری در حال استفاده است. برای ادامهٔ ایجاد رسانهٔ بوت Windows، macUSB می‌تواند دستگاه را به‌صورت اجباری آن‌مانت کند. ممکن است داده‌های ذخیره‌نشده روی این درایو از دست بروند. آیا می‌خواهید آن را به‌صورت اجباری آن‌مانت کنید؟"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5093,6 +5435,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eliminacion de archivos temporales para liberar espacio."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حذف فایل‌های موقت و نهایی‌سازی فرآیند..."
           }
         },
         "fr" : {
@@ -5184,6 +5532,12 @@
             "value" : "Limpieza de archivos temporales"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پاک‌سازی فایل‌های موقت"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5271,6 +5625,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Añadiendo Autounattend.xml al dispositivo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "افزودن Autounattend.xml به درایو."
           }
         },
         "fr" : {
@@ -5362,6 +5722,12 @@
             "value" : "Creando archivo de configuración"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد فایل پیکربندی"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5449,6 +5815,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiando los archivos del instalador de Windows al medio USB..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کپی کردن فایل‌های نصب‌کنندهٔ Windows روی رسانهٔ USB..."
           }
         },
         "fr" : {
@@ -5540,6 +5912,12 @@
             "value" : "Creando medio de Windows"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد رسانهٔ Windows"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5627,6 +6005,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comprobando los archivos de macUSBoot…"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی فایل‌های macUSBoot…"
           }
         },
         "fr" : {
@@ -5718,6 +6102,12 @@
             "value" : "Comprobando la disposición MBR/FAT32…"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی ساختار MBR/FAT32…"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5805,6 +6195,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Volviendo a montar la unidad USB…"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مانت مجدد درایو USB…"
           }
         },
         "fr" : {
@@ -5896,6 +6292,12 @@
             "value" : "Instalando el cargador de arranque"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب بوت‌لودر"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5983,6 +6385,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desmontando la unidad USB…"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آن‌مانت کردن درایو USB…"
           }
         },
         "fr" : {
@@ -6074,6 +6482,12 @@
             "value" : "Verificando la instalación de macUSBoot…"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی صحت نصب macUSBoot…"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6161,6 +6575,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escribiendo el código de macUSBoot en el MBR…"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نوشتن کد macUSBoot در MBR…"
           }
         },
         "fr" : {
@@ -6252,6 +6672,12 @@
             "value" : "Escribiendo la segunda etapa de macUSBoot…"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نوشتن مرحلهٔ ۲ macUSBoot…"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6339,6 +6765,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparacion de los archivos de origen para un proceso seguro."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اعتبارسنجی منبع ISO، مانت کردن ایمیج، و بررسی محدودیت‌های FAT32..."
           }
         },
         "fr" : {
@@ -6430,6 +6862,12 @@
             "value" : "Preparacion de los archivos del instalador"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی فایل‌های نصب‌کننده"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6517,6 +6955,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desmontando el disco de destino..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آن‌مانت کردن دستگاه USB و آماده‌سازی فرمت MBR/FAT32..."
           }
         },
         "fr" : {
@@ -6608,6 +7052,12 @@
             "value" : "Preparando el disco de destino"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی دیسک مقصد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6695,6 +7145,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Transferencia de la imagen del sistema al medio USB seleccionado."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تقسیم install.wim به بخش‌های سازگار با FAT32..."
           }
         },
         "fr" : {
@@ -6786,6 +7242,12 @@
             "value" : "Creacion del medio de instalacion"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تقسیم فایل نصب‌کنندهٔ Windows"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6873,6 +7335,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comprobando la coherencia de datos entre la imagen de origen y el medio USB..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی فایل‌های بوت و ساختار نصب‌کنندهٔ Windows..."
           }
         },
         "fr" : {
@@ -6964,6 +7432,12 @@
             "value" : "Verificando el medio de Windows"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی صحت رسانهٔ Windows"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7051,6 +7525,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eliminacion de archivos temporales para liberar espacio."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حذف فایل‌های موقت برای آزادسازی فضا."
           }
         },
         "fr" : {
@@ -7142,6 +7622,12 @@
             "value" : "Limpieza de archivos temporales"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پاک‌سازی فایل‌های موقت"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7229,6 +7715,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Finalizacion de la operacion y preparacion del resumen."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نهایی‌سازی عملیات و آماده‌سازی خلاصه."
           }
         },
         "fr" : {
@@ -7320,6 +7812,12 @@
             "value" : "Finalizacion del proceso"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پایان دادن به فرآیند"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7407,6 +7905,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Iniciando..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال شروع..."
           }
         },
         "fr" : {
@@ -7498,6 +8002,12 @@
             "value" : "Preparacion de los archivos de origen para un proceso seguro."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی فایل‌های منبع برای گردش کاری ایمن."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7585,6 +8095,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparacion de los archivos del instalador"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی فایل‌های نصب‌کننده"
           }
         },
         "fr" : {
@@ -7676,6 +8192,12 @@
             "value" : "Preparando la operación..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی عملیات..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7763,6 +8285,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Iniciando el proceso"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شروع فرآیند"
           }
         },
         "fr" : {
@@ -7854,6 +8382,12 @@
             "value" : "Desmontando el disco de destino..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آن‌مانت کردن دیسک مقصد..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7941,6 +8475,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparando el disco de destino"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آماده‌سازی دیسک مقصد"
           }
         },
         "fr" : {

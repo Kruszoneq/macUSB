@@ -58,7 +58,7 @@ struct WelcomeView: View {
                         .font(.headline)
                         .padding(.vertical, 8)
                         .padding(.horizontal, 30)
-                    Image(systemName: "arrow.right")
+                    Image(systemName: "arrow.forward")
                 }
             }
             .macUSBPrimaryButtonStyle()

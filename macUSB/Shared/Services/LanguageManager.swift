@@ -18,7 +18,8 @@ class LanguageManager: ObservableObject {
         "uk",       // Ukraiński
         "vi",       // Wietnamski
         "tr",       // Turecki
-        "nl"        // Niderlandzki
+        "nl",       // Niderlandzki
+        "fa"        // Perski
     ]
 
     // Sprawdza, czy dany identyfikator jest wspierany (dokładnie lub po prefiksie języka)

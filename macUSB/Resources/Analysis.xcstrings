@@ -22,6 +22,12 @@
             "value" : "Analizar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحلیل"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -109,6 +115,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لغو"
           }
         },
         "fr" : {
@@ -200,6 +212,12 @@
             "value" : "Seleccionar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتخاب"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -287,6 +305,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cerrar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بستن"
           }
         },
         "fr" : {
@@ -378,6 +402,12 @@
             "value" : "Descargar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -465,6 +495,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aceptar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تأیید"
           }
         },
         "fr" : {
@@ -556,6 +592,12 @@
             "value" : "Continuar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ادامه"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -643,6 +685,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Calcular suma de comprobación"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "محاسبهٔ چک‌سام"
           }
         },
         "fr" : {
@@ -734,6 +782,12 @@
             "value" : "Calcula la suma SHA-256 de este archivo ISO"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "محاسبهٔ چک‌سام SHA-256 برای این فایل ISO"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -821,6 +875,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se ha podido crear el búfer de la suma de comprobación (código %d)."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد بافر چک‌سام امکان‌پذیر نبود (کد %d)."
           }
         },
         "fr" : {
@@ -912,6 +972,12 @@
             "value" : "No se ha podido leer el tamaño del archivo ISO."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خواندن اندازهٔ فایل ISO امکان‌پذیر نبود."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -999,6 +1065,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se ha podido abrir el archivo ISO: %@"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باز کردن فایل ISO امکان‌پذیر نبود: %@"
           }
         },
         "fr" : {
@@ -1090,6 +1162,12 @@
             "value" : "No se ha podido leer el archivo ISO: %@"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خواندن فایل ISO امکان‌پذیر نبود: %@"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1177,6 +1255,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se ha cancelado el cálculo de la suma de comprobación."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "محاسبهٔ چک‌سام لغو شد."
           }
         },
         "fr" : {
@@ -1268,6 +1352,12 @@
             "value" : "Se ha calculado la suma SHA-256"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "چک‌سام SHA-256 محاسبه شده است"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1355,6 +1445,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiar suma de comprobación"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کپی کردن چک‌سام"
           }
         },
         "fr" : {
@@ -1446,6 +1542,12 @@
             "value" : "No se ha podido calcular la suma de comprobación. Hay más detalles disponibles en los registros de diagnóstico."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "محاسبهٔ چک‌سام امکان‌پذیر نبود. جزئیات بیشتر در گزارش‌های عیب‌یابی موجود است."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1533,6 +1635,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%d %% completado"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d%% کامل شد"
           }
         },
         "fr" : {
@@ -1624,6 +1732,12 @@
             "value" : "Calculando la suma SHA-256…"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال محاسبهٔ چک‌سام SHA-256…"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1711,6 +1825,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Suma de comprobación SHA-256"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "چک‌سام SHA-256"
           }
         },
         "fr" : {
@@ -1802,6 +1922,12 @@
             "value" : "Selecciona manualmente un archivo .dmg, .iso, .cdr o .app, o arrástralo arriba."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "یک فایل .dmg، .iso، .cdr یا .app را به‌صورت دستی انتخاب کنید، یا آن را به بالا بکشید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1889,6 +2015,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esperando el archivo del instalador"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در انتظار فایل نصب‌کننده"
           }
         },
         "fr" : {
@@ -1980,6 +2112,12 @@
             "value" : "Linux - distribución no reconocida"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linux - توزیع ناشناخته"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2067,6 +2205,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La herramienta createinstallmedia del instalador seleccionado está diseñada únicamente para ordenadores Mac con chip de Apple. Para crear el soporte de instalación, usa un Mac con chip de Apple."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابزار createinstallmedia در نصب‌کنندهٔ انتخابی فقط برای رایانه‌های Mac دارای Apple silicon طراحی شده است. برای ایجاد رسانهٔ نصب، از یک Mac دارای Apple silicon استفاده کنید."
           }
         },
         "fr" : {
@@ -2158,6 +2302,12 @@
             "value" : "Este instalador requiere un Mac con chip de Apple"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این نصب‌کننده به یک Mac دارای Apple silicon نیاز دارد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2247,6 +2397,12 @@
             "value" : "No se ha podido leer la arquitectura de la herramienta createinstallmedia. Por seguridad, no se puede usar este instalador."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "معماری ابزار createinstallmedia قابل خواندن نبود. برای ایمنی، نمی‌توان از این نصب‌کننده استفاده کرد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2334,6 +2490,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se ha podido comprobar la compatibilidad del instalador"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی سازگاری نصب‌کننده امکان‌پذیر نبود"
           }
         },
         "fr" : {
@@ -2426,6 +2588,12 @@
             "value" : "Asegúrese de que la imagen del sistema seleccionada provenga del sitio web de Mavericks Forever. Otras versiones pueden causar errores durante la creación del instalador USB."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اطمینان حاصل کنید که ایمیج سیستم انتخابی از وب‌سایت Mavericks Forever تهیه شده است. نسخه‌های دیگر ممکن است هنگام ایجاد نصب‌کنندهٔ USB باعث بروز خطا شوند."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2514,6 +2682,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OS X Mavericks detectado"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OS X Mavericks شناسایی شد"
           }
         },
         "fr" : {
@@ -2606,6 +2780,12 @@
             "value" : "Esta versión de macOS Sierra no es compatible con la aplicación. Se requiere una versión más reciente del instalador."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این نسخه از macOS Sierra توسط برنامه پشتیبانی نمی‌شود. نسخهٔ جدیدتری از نصب‌کننده لازم است."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2695,6 +2875,12 @@
             "value" : "• Se requieren al menos 15 GB de espacio libre en el disco duro"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• حداقل 15 GB فضای خالی دیسک سخت لازم است"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2781,6 +2967,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• Mantén pulsada la tecla Opción (⌥) para ver los volúmenes disponibles"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• کلید Option (⌥) را نگه دارید تا حجم‌های دیسک موجود را ببینید"
           }
         },
         "fr" : {
@@ -2872,6 +3064,12 @@
             "value" : "Configuracion de origen y destino"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پیکربندی منبع و مقصد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2959,6 +3157,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Imagen sin procesar seleccionada"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایمیج خام انتخاب شد"
           }
         },
         "fr" : {
@@ -3050,6 +3254,12 @@
             "value" : "Se detectó un instalador compatible"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب‌کنندهٔ سازگار شناسایی شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3137,6 +3347,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error de análisis"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خطای تحلیل"
           }
         },
         "fr" : {
@@ -3228,6 +3444,12 @@
             "value" : "Análisis no realizado - elección del usuario"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحلیل انجام نشد - به انتخاب کاربر"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3317,6 +3539,12 @@
             "value" : "Sistema detectado con éxito"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سیستم با موفقیت شناسایی شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3404,6 +3632,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Instalador no reconocido"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب‌کننده شناسایی نشد"
           }
         },
         "fr" : {
@@ -3496,6 +3730,12 @@
             "value" : "El sistema seleccionado no es compatible con la aplicación"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سیستم انتخابی توسط برنامه پشتیبانی نمی‌شود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3585,6 +3825,12 @@
             "value" : "Analizando archivo, por favor espere"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال تحلیل فایل، لطفاً صبر کنید"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3672,6 +3918,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Analizando"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال تحلیل"
           }
         },
         "fr" : {
@@ -3764,6 +4016,12 @@
             "value" : "El archivo .cdr o .iso seleccionado ya está montado en macOS. Desmonta esta imagen y, a continuación, vuelve a seleccionar «Analizar»."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فایل .cdr یا .iso انتخابی قبلاً در macOS مانت شده است. این ایمیج را آن‌مانت کنید، سپس دوباره «تحلیل» را انتخاب کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3852,6 +4110,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La imagen seleccionada ya está montada"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایمیج انتخابی قبلاً مانت شده است"
           }
         },
         "fr" : {
@@ -3943,6 +4207,12 @@
             "value" : "Archivo de origen..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فایل منبع..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4030,6 +4300,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• ¿Sin instalador? Utilice el botón \"Descargar\""
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• نصب‌کننده ندارید؟ از دکمهٔ «دانلود» استفاده کنید"
           }
         },
         "fr" : {
@@ -4121,6 +4397,12 @@
             "value" : "• Los formatos de archivo permitidos son .dmg, .iso, .cdr y .app"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• فرمت‌های مجاز فایل .dmg، .iso، .cdr و .app هستند"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4208,6 +4490,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• El archivo seleccionado debe contener un instalador de macOS, Windows o Linux"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• فایل انتخابی باید شامل یک نصب‌کنندهٔ macOS، Windows یا Linux باشد"
           }
         },
         "fr" : {
@@ -4299,6 +4587,12 @@
             "value" : "Requisitos"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پیش‌نیازها"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4386,6 +4680,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Selección de archivo"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتخاب فایل"
           }
         },
         "fr" : {
@@ -4477,6 +4777,12 @@
             "value" : "Mínimo %@ GB requeridos."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حداقل %@ GB لازم است."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4564,6 +4870,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La capacidad de la memoria USB seleccionada es demasiado pequeña"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ظرفیت درایو USB انتخابی بیش از حد کم است"
           }
         },
         "fr" : {
@@ -4655,6 +4967,12 @@
             "value" : "¡Todos los archivos en la memoria USB seleccionada se borrarán permanentemente!"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تمام فایل‌های روی درایو USB انتخابی برای همیشه پاک خواهند شد!"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4742,6 +5060,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "¡ADVERTENCIA!"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هشدار!"
           }
         },
         "fr" : {
@@ -4833,6 +5157,12 @@
             "value" : "La comprobación de la unidad está tardando más de lo esperado. Espera a que se confirme su disponibilidad."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی درایو بیش از حد انتظار طول می‌کشد. منتظر تأیید در دسترس بودن آن بمانید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4920,6 +5250,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se puede confirmar la disponibilidad de la unidad"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تأیید در دسترس بودن درایو امکان‌پذیر نیست"
           }
         },
         "fr" : {
@@ -5011,6 +5347,12 @@
             "value" : "No se ha podido leer la capacidad de esta unidad. Compruebe la conexión USB e inténtelo de nuevo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ظرفیت این درایو قابل خواندن نبود. اتصال USB را بررسی کرده و دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5098,6 +5440,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cerrar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بستن"
           }
         },
         "fr" : {
@@ -5189,6 +5537,12 @@
             "value" : "Los datos recibidos están incompletos o no son válidos. Vuelva a comprobarlos antes de seleccionar una unidad."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "داده‌های دریافتی ناقص یا نامعتبر است. پیش از انتخاب درایو، دوباره بررسی کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5276,6 +5630,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se ha podido leer la información de esta unidad. Compruebe la conexión USB e inténtelo de nuevo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اطلاعات این درایو قابل خواندن نبود. اتصال USB را بررسی کرده و دوباره تلاش کنید."
           }
         },
         "fr" : {
@@ -5367,6 +5727,12 @@
             "value" : "No se ha podido confirmar la identidad de la unidad seleccionada. Vuelva a comprobarla y selecciónela de nuevo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هویت درایو انتخابی تأیید نشد. دوباره بررسی کرده و آن را مجدداً انتخاب کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5454,6 +5820,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La unidad seleccionada ya no está disponible. Conéctela y selecciónela de nuevo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو انتخابی دیگر در دسترس نیست. آن را متصل کرده و دوباره انتخاب کنید."
           }
         },
         "fr" : {
@@ -5545,6 +5917,12 @@
             "value" : "Puede seleccionar una unidad que se haya comprobado correctamente."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "می‌توانید درایوی را که با موفقیت بررسی شده است انتخاب کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5632,6 +6010,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Compruebe la conexión USB y vuelva a comprobar las unidades restantes."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اتصال USB را بررسی کنید، سپس درایوهای باقی‌مانده را دوباره بررسی نمایید."
           }
         },
         "fr" : {
@@ -5723,6 +6107,12 @@
             "value" : "No se han podido comprobar algunas unidades"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برخی از درایوها قابل بررسی نبودند"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5810,6 +6200,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se ha podido iniciar o completar la comprobación de las unidades. Inténtelo de nuevo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شروع یا تکمیل بررسی درایو امکان‌پذیر نبود. دوباره تلاش کنید."
           }
         },
         "fr" : {
@@ -5901,6 +6297,12 @@
             "value" : "No se ha podido confirmar la disponibilidad de las unidades. Inténtelo de nuevo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در دسترس بودن درایو تأیید نشد. دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5988,6 +6390,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se ha podido actualizar la lista de unidades"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تازه‌سازی فهرست درایوها امکان‌پذیر نبود"
           }
         },
         "fr" : {
@@ -6079,6 +6487,12 @@
             "value" : "Volver a comprobar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی مجدد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6166,6 +6580,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La comprobación ha tardado demasiado. Compruebe la conexión USB e inténtelo de nuevo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی بیش از حد طول کشید. اتصال USB را بررسی کرده و دوباره تلاش کنید."
           }
         },
         "fr" : {
@@ -6257,6 +6677,12 @@
             "value" : "No disponible"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "غیرقابل دسترس"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6344,6 +6770,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se puede seleccionar esta unidad"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این درایو قابل انتخاب نیست"
           }
         },
         "fr" : {
@@ -6435,6 +6867,12 @@
             "value" : "La comprobación anterior aún no ha terminado. Espere un momento."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی قبلی هنوز تمام نشده است. لطفاً صبر کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6522,6 +6960,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esperando a que termine la comprobación"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در انتظار پایان بررسی"
           }
         },
         "fr" : {
@@ -6613,6 +7057,12 @@
             "value" : "Conecte la memoria USB y espere a que sea detectada..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو USB را متصل کنید و منتظر شناسایی بمانید..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6700,6 +7150,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se detectó ninguna memoria USB"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هیچ درایو USB شناسایی نشد"
           }
         },
         "fr" : {
@@ -6791,6 +7247,12 @@
             "value" : "• Se requiere una memoria USB con una capacidad mínima de %@ GB para crear el instalador"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• برای ایجاد نصب‌کننده، به یک درایو USB با حداقل ظرفیت %@ GB نیاز است"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6878,6 +7340,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• Se recomienda usar una memoria USB 3.0 o más rápida"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• استفاده از یک درایو USB 3.0 یا سریع‌تر توصیه می‌شود"
           }
         },
         "fr" : {
@@ -6969,6 +7437,12 @@
             "value" : "Requisitos de hardware"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پیش‌نیازهای سخت‌افزاری"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7056,6 +7530,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Selección de memoria USB"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتخاب درایو USB"
           }
         },
         "fr" : {
@@ -7147,6 +7627,12 @@
             "value" : "No se pudo determinar el tamaño del instalador seleccionado. Se aplicó la clase de capacidad alternativa de %@ GB para la unidad USB. Comprueba el origen antes de crear el instalador."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اندازهٔ نصب‌کنندهٔ انتخابی مشخص نشد. ردهٔ اندازهٔ درایو جایگزین %@ GB اعمال شد. قبل از ایجاد نصب‌کننده، منبع را بررسی کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7234,6 +7720,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudo determinar el tamaño del origen"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خواندن اندازهٔ منبع امکان‌پذیر نبود"
           }
         },
         "fr" : {
@@ -7325,6 +7817,12 @@
             "value" : "Usar el límite alternativo"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استفاده از آستانهٔ جایگزین"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7412,6 +7910,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seleccione la memoria USB de destino:"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو USB مقصد را انتخاب کنید:"
           }
         },
         "fr" : {
@@ -7503,6 +8007,12 @@
             "value" : "Elegir..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتخاب..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7590,6 +8100,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El volumen seleccionado es demasiado pequeño"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حجم دیسک انتخابی بیش از حد کوچک است"
           }
         },
         "fr" : {
@@ -7681,6 +8197,12 @@
             "value" : "El dispositivo USB conectado estará disponible cuando se complete el reconocimiento del sistema y se determinen los requisitos del medio."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دستگاه USB متصل‌شده پس از تکمیل شناسایی سیستم و تعیین معیارهای لازم برای رسانه، در دسترس قرار خواهد گرفت."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7768,6 +8290,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esperando el análisis del sistema"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در انتظار تحلیل سیستم"
           }
         },
         "fr" : {
@@ -7860,6 +8388,12 @@
             "value" : "La versión de Windows Server detectada no es compatible. Se admiten instaladores de Windows Server 2008 R2 o posterior."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نسخهٔ شناسایی‌شده از Windows Server پشتیبانی نمی‌شود. نصب‌کننده‌های Windows Server 2008 R2 یا جدیدتر پشتیبانی می‌شوند."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7948,6 +8482,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La versión de Windows detectada no es compatible. Se admiten instaladores de Windows Vista o posterior."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نسخهٔ شناسایی‌شده از Windows پشتیبانی نمی‌شود. نصب‌کننده‌های Windows Vista یا جدیدتر پشتیبانی می‌شوند."
           }
         },
         "fr" : {

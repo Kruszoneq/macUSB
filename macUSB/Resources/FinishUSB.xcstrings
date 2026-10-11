@@ -22,6 +22,12 @@
             "value" : "Terminar y salir"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پایان و خروج"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -109,6 +115,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Empezar de nuevo"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شروع مجدد"
           }
         },
         "fr" : {
@@ -200,6 +212,12 @@
             "value" : "Error al eliminar archivos temporales: %@"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حذف فایل‌های موقت ناموفق بود: %@"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -287,6 +305,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error de limpieza"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خطای پاک‌سازی"
           }
         },
         "fr" : {
@@ -378,6 +402,12 @@
             "value" : "Limpiando archivos temporales"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پاک‌سازی فایل‌های موقت"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -465,6 +495,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Completado en %1$02dm %2$02ds"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در %1$02dm %2$02ds تکمیل شد"
           }
         },
         "fr" : {
@@ -556,6 +592,12 @@
             "value" : "¡Trabajo completado!"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کار تمام شد!"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -643,6 +685,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expulsar unidad"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خارج کردن درایو"
           }
         },
         "fr" : {
@@ -734,6 +782,12 @@
             "value" : "Forzar expulsión"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خارج کردن اجباری"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -821,6 +875,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cuando termines, expulsa la unidad antes de desconectarla del ordenador."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پس از اتمام، پیش از جدا کردن درایو از Mac خود، آن را خارج کنید."
           }
         },
         "fr" : {
@@ -912,6 +972,12 @@
             "value" : "Expulsa de forma segura la unidad USB"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خارج کردن ایمن درایو USB"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -999,6 +1065,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cierra las apps que usan la unidad e inténtalo de nuevo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برنامه‌هایی را که از درایو استفاده می‌کنند ببندید و دوباره تلاش کنید."
           }
         },
         "fr" : {
@@ -1090,6 +1162,12 @@
             "value" : "Intentar de nuevo"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تلاش مجدد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1177,6 +1255,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se puede expulsar la unidad"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خارج کردن درایو امکان‌پذیر نیست"
           }
         },
         "fr" : {
@@ -1268,6 +1352,12 @@
             "value" : "macOS sigue sin poder expulsar la unidad. Cierra las apps que puedan estar usándola e inténtalo de nuevo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS هنوز نمی‌تواند درایو را خارج کند. هر برنامه‌ای را که ممکن است از آن استفاده کند ببندید، سپس دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1355,6 +1445,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se puede forzar la expulsión de la unidad"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خارج کردن اجباری درایو امکان‌پذیر نیست"
           }
         },
         "fr" : {
@@ -1446,6 +1542,12 @@
             "value" : "Spotlight está indexando esta unidad, por lo que macOS no puede expulsarla de forma segura. Puedes forzar la expulsión para interrumpir este proceso."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spotlight در حال ایندکس کردن این درایو است، بنابراین macOS نمی‌تواند آن را با ایمنی خارج کند. می‌توانید برای متوقف کردن این فرآیند، درایو را به‌صورت اجباری خارج کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1533,6 +1635,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spotlight impide expulsar la unidad"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spotlight مانع از خارج کردن درایو می‌شود"
           }
         },
         "fr" : {
@@ -1624,6 +1732,12 @@
             "value" : "Ahora puedes desconectar la unidad USB."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اکنون می‌توانید درایو USB را جدا کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1711,6 +1825,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La unidad se expulsó de forma segura"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو با ایمنی خارج شد"
           }
         },
         "fr" : {
@@ -1802,6 +1922,12 @@
             "value" : "La unidad se desconectó o se expulsó fuera de la app."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو خارج از برنامه قطع یا خارج شد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1889,6 +2015,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La unidad ya no está disponible"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو دیگر در دسترس نیست"
           }
         },
         "fr" : {
@@ -1980,6 +2112,12 @@
             "value" : "No se pudo completar la creación del medio"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تکمیل ایجاد رسانه امکان‌پذیر نبود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2067,6 +2205,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudo confirmar que los datos del medio USB coincidan con la imagen de origen."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تأیید تطابق داده‌های روی درایو USB با ایمیج منبع امکان‌پذیر نبود."
           }
         },
         "fr" : {
@@ -2158,6 +2302,12 @@
             "value" : "No se pudieron leer todos los datos del medio USB durante la verificación."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خواندن همهٔ داده‌ها از درایو USB هنگام بررسی صحت امکان‌پذیر نبود."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2245,6 +2395,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La operación finalizó con un error. Inténtalo de nuevo y verifica el medio USB seleccionado."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تکمیل عملیات امکان‌پذیر نبود. دوباره تلاش کرده و درایو USB انتخابی را بررسی نمایید."
           }
         },
         "fr" : {
@@ -2336,6 +2492,12 @@
             "value" : "La verificación de escritura del medio Linux falló."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی صحت نوشتن روی رسانهٔ Linux ناموفق بود."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2423,6 +2585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• Conecta la unidad USB al equipo de destino (Mac o PC)"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• درایو USB را به رایانهٔ مقصد (Mac یا PC) متصل کنید"
           }
         },
         "fr" : {
@@ -2514,6 +2682,12 @@
             "value" : "• Inicia el ordenador y elige arrancar desde la unidad USB en el menú de arranque"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• رایانه را روشن کنید و در منوی بوت، بوت شدن از درایو USB را انتخاب نمایید"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2601,6 +2775,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• Después de iniciar Linux, sigue las instrucciones del instalador del sistema"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• پس از شروع Linux، دستورالعمل‌های نصب‌کننده را دنبال کنید"
           }
         },
         "fr" : {
@@ -2692,6 +2872,12 @@
             "value" : "Se creó el medio de arranque de Linux"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رسانهٔ قابل بوت Linux ایجاد شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2779,6 +2965,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• Conecte la memoria USB al Mac de destino"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• درایو USB را به رایانهٔ Mac مقصد متصل کنید"
           }
         },
         "fr" : {
@@ -2870,6 +3062,12 @@
             "value" : "• Inicie el ordenador manteniendo pulsada la tecla Opción (⌥)"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• رایانه را در حالی که کلید Option (⌥) را نگه داشته‌اید روشن کنید"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2957,6 +3155,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "• Seleccione el instalador de macOS u OS X de la lista"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• نصب‌کنندهٔ macOS یا OS X را از فهرست انتخاب کنید"
           }
         },
         "fr" : {
@@ -3048,6 +3252,12 @@
             "value" : "Instrucciones para arrancar desde USB (GitHub)"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دستورالعمل‌های بوت USB (GitHub)"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3135,6 +3345,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Para arrancar el instalador desde una memoria USB en un Mac con PowerPC, es necesario introducir un comando en la consola de Open Firmware. Las instrucciones completas están disponibles en el sitio web de la aplicación."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برای بوت کردن نصب‌کننده از یک درایو USB در Macهای PowerPC، باید فرمانی را در کنسول Open Firmware وارد کنید. دستورالعمل‌های کامل در وب‌سایت برنامه موجود است."
           }
         },
         "fr" : {
@@ -3226,6 +3442,12 @@
             "value" : "Para Macs PowerPC"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برای Macهای PowerPC"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3313,6 +3535,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Resultado de la operacion"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نتیجهٔ عملیات"
           }
         },
         "fr" : {
@@ -3404,6 +3632,12 @@
             "value" : "¿Qué sigue?"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مرحلهٔ بعد چیست؟"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3491,6 +3725,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Conecta la unidad USB preparada a tu PC"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو USB آماده‌شده را به PC خود متصل کنید"
           }
         },
         "fr" : {
@@ -3582,6 +3822,12 @@
             "value" : "Inicia tu PC y abre el menú de arranque"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PC خود را روشن کرده و منوی بوت (Boot Menu) را باز کنید"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3669,6 +3915,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Selecciona la unidad USB de la lista de dispositivos de arranque e inicia la instalación de Windows"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "درایو USB را از فهرست دستگاه‌های بوت انتخاب کرده و راه اندازی Windows (Windows Setup) را شروع کنید"
           }
         },
         "fr" : {
@@ -3760,6 +4012,12 @@
             "value" : "El proceso de creación del instalador en el medio seleccionado ha fallado."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فرآیند ایجاد نصب‌کننده روی رسانهٔ انتخابی ناموفق بود."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3847,6 +4105,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ocurrió un error"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خطایی روی داد"
           }
         },
         "fr" : {
@@ -3938,6 +4202,12 @@
             "value" : "El proceso de escritura en el medio se completó correctamente."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فرآیند نوشتن روی رسانه با موفقیت به پایان رسید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4025,6 +4295,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El instalador está listo"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب‌کننده آماده است"
           }
         },
         "fr" : {
@@ -4116,6 +4392,12 @@
             "value" : "La verificación de la escritura de la imagen falló."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی صحت نوشتن ایمیج ناموفق بود."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4203,6 +4485,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudo escribir la imagen en la unidad seleccionada."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نوشتن ایمیج روی درایو انتخابی ناموفق بود."
           }
         },
         "fr" : {
@@ -4294,6 +4582,12 @@
             "value" : "La imagen se escribió correctamente en la unidad."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایمیج با موفقیت روی درایو نوشته شد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4381,6 +4675,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudo escribir la imagen en la unidad USB"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نوشتن ایمیج روی درایو USB امکان‌پذیر نبود"
           }
         },
         "fr" : {
@@ -4472,6 +4772,12 @@
             "value" : "Imagen sin procesar escrita en la unidad USB"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایمیج خام روی درایو USB نوشته شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4559,6 +4865,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El proceso fue interrumpido por el usuario"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فرآیند توسط کاربر متوقف شد"
           }
         },
         "fr" : {
@@ -4650,6 +4962,12 @@
             "value" : "Detalles de la interrupción"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جزئیات توقف"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4737,6 +5055,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelado"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لغو شد"
           }
         },
         "fr" : {
@@ -4828,6 +5152,12 @@
             "value" : "Inténtalo de nuevo desde el principio"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "از ابتدا دوباره تلاش کنید"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4915,6 +5245,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Detalles del error"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جزئیات خطا"
           }
         },
         "fr" : {
@@ -5006,6 +5342,12 @@
             "value" : "¡Error!"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شکست!"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5093,6 +5435,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El medio USB se preparó correctamente"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رسانهٔ USB به‌درستی آماده شد"
           }
         },
         "fr" : {
@@ -5184,6 +5532,12 @@
             "value" : "¡Éxito!"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "موفقیت!"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5271,6 +5625,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se canceló la creación del medio"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد رسانه لغو شد"
           }
         },
         "fr" : {
@@ -5362,6 +5722,12 @@
             "value" : "La creación del instalador falló"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد نصب‌کننده ناموفق بود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5449,6 +5815,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se creó el instalador del sistema"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نصب‌کنندهٔ سیستم ایجاد شد"
           }
         },
         "fr" : {
@@ -5540,6 +5912,12 @@
             "value" : "Por favor espere"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لطفاً صبر کنید"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5627,6 +6005,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se ha podido preparar la carpeta temporal para convertir install.wim. Inténtalo de nuevo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پوشهٔ موقت برای تبدیل install.wim آماده نشد. دوباره تلاش کنید."
           }
         },
         "fr" : {
@@ -5718,6 +6102,12 @@
             "value" : "No se ha podido establecer el propietario de la carpeta temporal para convertir install.wim. Inténtalo de nuevo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مالک پوشهٔ موقت برای تبدیل install.wim تنظیم نشد. دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5805,6 +6195,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No hay suficiente espacio libre en el disco que contiene la carpeta temporal para convertir install.wim antes de dividirlo. Libera espacio en el disco e inténtalo de nuevo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دیسک حاوی پوشهٔ موقت فضای خالی کافی برای تبدیل install.wim پیش از تقسیم آن ندارد. فضای دیسک را آزاد کرده و دوباره تلاش کنید."
           }
         },
         "fr" : {
