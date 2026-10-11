@@ -22,6 +22,7 @@ final class HelperWorkflowExecutor {
     var windowsInstallWimRelativePath: String?
     var windowsInstallWimSizeBytes: Int64?
     var windowsShouldSplitWim = false
+    var windowsInstallWimIsSolid = false
     var windowsHasInstallESD = false
     var windowsWimlibExecutablePath: String?
     var windowsPreparedTargetPartitionBSDName: String?
