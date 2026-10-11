@@ -5,6 +5,12 @@ struct HelperWorkflowStageLocalization {
     let statusKey: String
 }
 
+enum HelperWindowsWimErrorLocalizationKey: String {
+    case insufficientSpace = "finish.windows.error.wim_export.insufficient_space.description"
+    case directoryCreation = "finish.windows.error.wim_export.directory_creation.description"
+    case directoryOwnership = "finish.windows.error.wim_export.directory_ownership.description"
+}
+
 enum HelperWorkflowLocalizationKeys {
     static let prepareSourceTitle = "creator.workflow.prepare_source.title"
     static let prepareSourceStatus = "creator.workflow.prepare_source.status"

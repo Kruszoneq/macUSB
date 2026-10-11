@@ -5607,6 +5607,273 @@
           }
         }
       }
+    },
+    "finish.windows.error.wim_export.directory_creation.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der temporäre Ordner zum Konvertieren von install.wim konnte nicht vorbereitet werden. Versuche es erneut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The temporary folder for converting install.wim couldn’t be prepared. Try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se ha podido preparar la carpeta temporal para convertir install.wim. Inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le dossier temporaire nécessaire à la conversion du fichier install.wim n’a pas pu être préparé. Réessaie."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile preparare la cartella temporanea per convertire install.wim. Riprova."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "install.wimの変換に使用する一時フォルダを準備できませんでした。もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De tijdelijke map voor het converteren van install.wim kon niet worden voorbereid. Probeer het opnieuw."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się przygotować folderu tymczasowego do konwersji pliku install.wim. Spróbuj ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível preparar a pasta temporária para converter install.wim. Tente novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось подготовить временную папку для преобразования install.wim. Повторите попытку."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "install.wim dosyasını dönüştürmek için geçici klasör hazırlanamadı. Yeniden deneyin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося підготувати тимчасову папку для перетворення install.wim. Спробуйте ще раз."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể chuẩn bị thư mục tạm thời để chuyển đổi install.wim. Hãy thử lại."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法准备转换 install.wim 所需的临时文件夹。请重试。"
+          }
+        }
+      }
+    },
+    "finish.windows.error.wim_export.directory_ownership.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Eigentümer des temporären Ordners zum Konvertieren von install.wim konnte nicht festgelegt werden. Versuche es erneut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The owner of the temporary folder for converting install.wim couldn’t be set. Try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se ha podido establecer el propietario de la carpeta temporal para convertir install.wim. Inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le propriétaire du dossier temporaire nécessaire à la conversion du fichier install.wim n’a pas pu être défini. Réessaie."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile impostare il proprietario della cartella temporanea per convertire install.wim. Riprova."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "install.wimの変換に使用する一時フォルダの所有者を設定できませんでした。もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De eigenaar van de tijdelijke map voor het converteren van install.wim kon niet worden ingesteld. Probeer het opnieuw."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się ustawić właściciela folderu tymczasowego do konwersji pliku install.wim. Spróbuj ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível definir o proprietário da pasta temporária para converter install.wim. Tente novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось задать владельца временной папки для преобразования install.wim. Повторите попытку."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "install.wim dosyasını dönüştürmek için kullanılan geçici klasörün sahibi ayarlanamadı. Yeniden deneyin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося встановити власника тимчасової папки для перетворення install.wim. Спробуйте ще раз."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể thiết lập chủ sở hữu của thư mục tạm thời để chuyển đổi install.wim. Hãy thử lại."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法设置转换 install.wim 所需的临时文件夹的所有者。请重试。"
+          }
+        }
+      }
+    },
+    "finish.windows.error.wim_export.insufficient_space.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf dem Laufwerk mit dem temporären Ordner ist nicht genügend freier Speicherplatz vorhanden, um install.wim vor dem Aufteilen zu konvertieren. Gib Speicherplatz frei und versuche es erneut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There isn’t enough free space on the disk containing the temporary folder to convert install.wim before splitting it. Free up disk space and try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay suficiente espacio libre en el disco que contiene la carpeta temporal para convertir install.wim antes de dividirlo. Libera espacio en el disco e inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’espace libre sur le disque contenant le dossier temporaire est insuffisant pour convertir install.wim avant de le fractionner. Libère de l’espace disque et réessaie."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo spazio libero sul disco che contiene la cartella temporanea non è sufficiente per convertire install.wim prima di suddividerlo. Libera spazio sul disco e riprova."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一時フォルダがあるディスクの空き領域が不足しているため、分割前にinstall.wimを変換できません。ディスクの空き領域を増やしてから、もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er is onvoldoende vrije ruimte op de schijf met de tijdelijke map om install.wim te converteren voordat het wordt opgesplitst. Maak schijfruimte vrij en probeer het opnieuw."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Za mało wolnego miejsca na dysku z folderem tymczasowym, aby przekonwertować plik install.wim przed podziałem. Zwolnij miejsce na dysku i spróbuj ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não há espaço livre suficiente no disco que contém a pasta temporária para converter install.wim antes de dividi-lo. Libere espaço em disco e tente novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На диске с временной папкой недостаточно свободного места для преобразования install.wim перед разделением на части. Освободите место на диске и повторите попытку."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geçici klasörün bulunduğu diskte install.wim dosyasını bölmeden önce dönüştürmek için yeterli boş alan yok. Diskte yer açıp yeniden deneyin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На диску з тимчасовою папкою недостатньо вільного місця для перетворення install.wim перед поділом на частини. Звільніть місце на диску та спробуйте ще раз."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không đủ dung lượng trống trên ổ đĩa chứa thư mục tạm thời để chuyển đổi install.wim trước khi chia nhỏ. Hãy giải phóng dung lượng ổ đĩa rồi thử lại."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "存放临时文件夹的磁盘没有足够的可用空间，无法在拆分前转换 install.wim。请释放磁盘空间后重试。"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

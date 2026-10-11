@@ -3,7 +3,7 @@ import Foundation
 extension HelperWorkflowExecutor {
     func extractWindowsWimSplitProgressPercent(from line: String) -> Double? {
         guard let progressRegex = try? NSRegularExpression(
-            pattern: #"\(([0-9]{1,3})%\)\s+written\b"#,
+            pattern: #"\(([0-9]{1,3})%\)\s+(?:written|done)\b"#,
             options: [.caseInsensitive]
         ) else {
             return nil

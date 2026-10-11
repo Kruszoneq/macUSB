@@ -264,9 +264,15 @@ struct FinishUSBView: View {
                                     Text(isCancelledResult ? String(localized: "finish.result.cancelled.details.title", table: "FinishUSB") : String(localized: "finish.result.failure.details.title", table: "FinishUSB"))
                                         .font(.headline)
                                         .foregroundColor(isCancelledResult ? .orange : .red)
-                                    Text(resultDetailMessage)
-                                        .font(.subheadline)
-                                        .foregroundColor(isCancelledResult ? .orange.opacity(0.9) : .red.opacity(0.85))
+                                    Group {
+                                        if let wimErrorKey = HelperWindowsWimErrorLocalizationKey(rawValue: resultDetailMessage) {
+                                            Text(LocalizedStringKey(wimErrorKey.rawValue), tableName: "FinishUSB")
+                                        } else {
+                                            Text(resultDetailMessage)
+                                        }
+                                    }
+                                    .font(.subheadline)
+                                    .foregroundColor(isCancelledResult ? .orange.opacity(0.9) : .red.opacity(0.85))
                                 }
                                 Spacer()
                             }
