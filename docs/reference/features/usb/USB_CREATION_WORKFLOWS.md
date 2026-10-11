@@ -60,10 +60,10 @@ Manual raw-image workflow contract:
 - the source is never mounted by this path and is not registered in `InstallerSourceImageUnmountRegistry`; recognized Linux `.iso` analysis retains its existing source cleanup.
 
 Windows workflow stages:
-- `windows_prepare_source` — source ISO validation, hidden mount, FAT32-limit scan, WIM split decision (indeterminate stage),
+- `windows_prepare_source` — source ISO validation, hidden mount, FAT32-limit scan, WIM split decision, solid (LZMS) `install.wim` header detection with a temp-volume free-space check for the conversion (indeterminate stage),
 - `windows_prepare_target` — target USB unmount with retry/force prompt path and FAT32/MBR formatting (indeterminate stage),
 - `windows_create_media` — ISO file copy to USB (`rsync`) with determinate progress + write speed,
-- `windows_split_wim` — conditional `install.wim` split via `wimlib-imagex` with determinate progress + write speed (stage appears only when needed),
+- `windows_split_wim` — conditional `install.wim` split via `wimlib-imagex` with determinate progress + write speed (stage appears only when needed); a solid source WIM (UUP-based images) is first exported to a non-solid LZX WIM in the temp work directory, which is split and then removed,
 - `windows_create_autounattend` — conditional `Autounattend.xml` generation and XML validation (indeterminate stage; appears only when macUSB generates its own file),
 - `windows_verify_media` — boot-mode-aware boot file and structure validation (`boot.wim`, BIOS or UEFI markers, `install.wim`/`install.swm`) (indeterminate stage),
 - `windows_install_macusboot` — BIOS-only, non-cancellable macUSBoot artifact/layout/write/readback transaction after media verification and before cleanup (indeterminate stage),

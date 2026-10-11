@@ -59,6 +59,11 @@ extension HelperWorkflowExecutor {
                 )
             }
             windowsWimlibExecutablePath = executable
+
+            if let installWimInfo, isWindowsWimSolid(atPath: installWimInfo.path) {
+                windowsInstallWimIsSolid = true
+                try validateWindowsSolidWimExportSpace(installWimSizeBytes: installWimInfo.size, stage: stage)
+            }
         }
 
         emitProgress(
@@ -66,7 +71,7 @@ extension HelperWorkflowExecutor {
             titleKey: stage.titleKey,
             percent: latestPercent,
             statusKey: stage.statusKey,
-            logLine: "Windows source prepared: mount=\(mountedSourcePath), splitWIM=\(shouldSplitWim ? "yes" : "no"), hasESD=\(windowsHasInstallESD ? "yes" : "no"), copyBytes=\(windowsCopyStageTotalBytes ?? -1)",
+            logLine: "Windows source prepared: mount=\(mountedSourcePath), splitWIM=\(shouldSplitWim ? "yes" : "no"), solidWIM=\(windowsInstallWimIsSolid ? "yes" : "no"), hasESD=\(windowsHasInstallESD ? "yes" : "no"), copyBytes=\(windowsCopyStageTotalBytes ?? -1)",
             shouldAdvancePercent: false
         )
     }
@@ -336,6 +341,62 @@ extension HelperWorkflowExecutor {
         }
 
         return totalBytes
+    }
+
+    private func isWindowsWimSolid(atPath path: String) -> Bool {
+        guard let handle = FileHandle(forReadingAtPath: path) else {
+            return false
+        }
+        defer { try? handle.close() }
+
+        guard let header = try? handle.read(upToCount: 20), header.count == 20 else {
+            return false
+        }
+
+        let bytes = [UInt8](header)
+        guard bytes[0..<8].elementsEqual(Array("MSWIM\0\0\0".utf8)) else {
+            return false
+        }
+
+        let version = UInt32(bytes[12])
+            | (UInt32(bytes[13]) << 8)
+            | (UInt32(bytes[14]) << 16)
+            | (UInt32(bytes[15]) << 24)
+        return version == 0xE00
+    }
+
+    private func validateWindowsSolidWimExportSpace(installWimSizeBytes: Int64, stage: WorkflowStage) throws {
+        let requiredBytes = Int64(Double(installWimSizeBytes) * 1.6)
+        let tempVolumeURL = URL(fileURLWithPath: request.tempWorkPath).deletingLastPathComponent()
+        let values = try? tempVolumeURL.resourceValues(forKeys: [
+            .volumeAvailableCapacityForImportantUsageKey,
+            .volumeAvailableCapacityKey
+        ])
+        let availableBytes = values?.volumeAvailableCapacityForImportantUsage
+            ?? values?.volumeAvailableCapacity.map(Int64.init)
+
+        emitProgress(
+            stageKey: stage.key,
+            titleKey: stage.titleKey,
+            percent: latestPercent,
+            statusKey: stage.statusKey,
+            logLine: "Solid install.wim temp space check: path=\(tempVolumeURL.path), required=\(requiredBytes), available=\(availableBytes ?? -1)",
+            shouldAdvancePercent: false
+        )
+
+        guard let availableBytes, availableBytes < requiredBytes else {
+            return
+        }
+
+        throw HelperExecutionError.failed(
+            stage: stage.key,
+            exitCode: -1,
+            description: String(
+                format: "Za mało wolnego miejsca na dysku tymczasowym do konwersji install.wim przed podziałem (wymagane ok. %.1f GB, dostępne %.1f GB).",
+                Double(requiredBytes) / 1_000_000_000,
+                Double(availableBytes) / 1_000_000_000
+            )
+        )
     }
 
     private func resolveExecutablePath(named executable: String) -> String? {
