@@ -22,6 +22,12 @@
             "value" : "Veo"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "متوجه شدم"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -109,6 +115,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لغو"
           }
         },
         "fr" : {
@@ -200,6 +212,12 @@
             "value" : "Cerrar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بستن"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -287,6 +305,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Detalles"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جزئیات"
           }
         },
         "fr" : {
@@ -378,6 +402,12 @@
             "value" : "No"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خیر"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -465,6 +495,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ahora no"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الان نه"
           }
         },
         "fr" : {
@@ -556,6 +592,12 @@
             "value" : "Aceptar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تأیید"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -643,6 +685,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ir a los ajustes del sistema"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رفتن به System Settings"
           }
         },
         "fr" : {
@@ -734,6 +782,12 @@
             "value" : "Configuración del sistema"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System Settings"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -821,6 +875,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sí"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بله"
           }
         },
         "fr" : {
@@ -912,6 +972,12 @@
             "value" : "Exportar registros de diagnóstico..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برون‌بری گزارش‌های عیب‌یابی..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -999,6 +1065,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seleccionar ubicación para guardar el archivo de registros de diagnóstico"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "محل ذخیرهٔ فایل گزارش‌های عیب‌یابی را انتخاب کنید"
           }
         },
         "fr" : {
@@ -1090,6 +1162,12 @@
             "value" : "Exportar registros de diagnóstico"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برون‌بری گزارش‌های عیب‌یابی"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1177,6 +1255,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudo guardar el archivo de registros"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ذخیرهٔ فایل گزارش‌ها ناموفق بود"
           }
         },
         "fr" : {
@@ -1268,6 +1352,12 @@
             "value" : "Exportar registros de la sesión anterior..."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برون‌بری گزارش‌های نشست قبلی..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1355,6 +1445,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Elige dónde guardar los registros de la sesión anterior"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "محل ذخیرهٔ گزارش‌های نشست قبلی را انتخاب کنید"
           }
         },
         "fr" : {
@@ -1446,6 +1542,12 @@
             "value" : "Exportar registros de la sesión anterior"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برون‌بری گزارش‌های نشست قبلی"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1533,6 +1635,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esta función permite crear el instalador en discos duros externos y SSD. ¡Tenga mucho cuidado al seleccionar el disco de destino para evitar la pérdida accidental de datos!"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این قابلیت امکان ایجاد نصب‌کننده را روی دیسک‌های سخت خارجی و SSD فراهم می‌کند. لطفاً درایو مقصد انتخابی را با دقت بررسی کنید تا از پاک شدن تصادفی داده‌ها جلوگیری شود!"
           }
         },
         "fr" : {
@@ -1624,6 +1732,12 @@
             "value" : "Activar soporte para discos duros externos"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فعال‌سازی پشتیبانی از دیسک سخت خارجی"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1711,6 +1825,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudieron restablecer los permisos de acceso a medios externos. Inténtalo de nuevo o ejecuta manualmente este comando en Terminal: tccutil reset SystemPolicyRemovableVolumes %@"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بازنشانی مجوزهای دسترسی به رسانهٔ خارجی امکان‌پذیر نبود. دوباره تلاش کنید، یا این دستور را به‌صورت دستی در Terminal اجرا کنید: tccutil reset SystemPolicyRemovableVolumes %@"
           }
         },
         "fr" : {
@@ -1802,6 +1922,12 @@
             "value" : "No se pudieron borrar los permisos de acceso a unidades externas"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پاک کردن مجوزهای دسترسی به درایو خارجی امکان‌پذیر نبود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1889,6 +2015,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Restablecer permisos de acceso a unidades externas"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بازنشانی مجوزهای دسترسی به درایو خارجی"
           }
         },
         "fr" : {
@@ -1980,6 +2112,12 @@
             "value" : "Se restablecieron los permisos de macUSB para medios externos. La próxima vez que intentes crear un instalador USB, el sistema volverá a pedir permiso."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مجوزهای macUSB برای رسانه‌های خارجی بازنشانی شدند. دفعهٔ بعد که برای ایجاد یک نصب‌کنندهٔ USB تلاش کنید، سیستم مجدداً درخواست مجوز خواهد کرد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2067,6 +2205,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se borraron los permisos de acceso a unidades externas"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مجوزهای دسترسی به درایو خارجی پاک شدند"
           }
         },
         "fr" : {
@@ -2158,6 +2302,12 @@
             "value" : "El helper requiere aprobacion en Ajustes del sistema."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper نیازمند تأیید در System Settings است."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2245,6 +2395,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSB requiere permiso para ejecutarse en segundo plano para permitir la gestion de unidades. Ve a Ajustes del sistema para conceder los permisos necesarios"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB برای فعال‌سازی مدیریت درایو به مجوز فعالیت در پس‌زمینه نیاز دارد. برای اعطای مجوزهای لازم به System Settings بروید"
           }
         },
         "fr" : {
@@ -2336,6 +2492,12 @@
             "value" : "Herramienta auxiliar requerida"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابزار Helper مورد نیاز"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2423,6 +2585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSB detectó una nueva versión de la aplicación, pero la actualización automática del asistente finalizó con un error. Seleccione Herramientas → Ayudante de reparación y ejecute la reparación manualmente."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB نسخهٔ جدیدی از برنامه را شناسایی کرد، اما به‌روزرسانی خودکار Helper با خطا مواجه شد. ابزارها ← تعمیر Helper را انتخاب کرده و تعمیر را به‌صورت دستی اجرا کنید."
           }
         },
         "fr" : {
@@ -2514,6 +2682,12 @@
             "value" : "No se pudo actualizar el asistente automáticamente"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "به‌روزرسانی خودکار Helper ناموفق بود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2601,6 +2775,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Para ejecutar el helper del sistema, la aplicacion debe estar en la carpeta Aplicaciones."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برای اجرای Helper سیستم، برنامه باید در پوشهٔ Applications قرار داشته باشد."
           }
         },
         "fr" : {
@@ -2692,6 +2872,12 @@
             "value" : "Para usar el helper con privilegios, mueve la app macUSB a la carpeta Aplicaciones y vuelve a iniciarla."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برای استفاده از Helper مجاز، برنامهٔ macUSB را به پوشهٔ Applications منتقل کرده و دوباره آن را اجرا کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2779,6 +2965,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ubicacion requerida /Applications"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مکان مورد نیاز /Applications"
           }
         },
         "fr" : {
@@ -2870,6 +3062,12 @@
             "value" : "Reparar helper"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعمیر Helper"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2957,6 +3155,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estado del helper"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وضعیت Helper"
           }
         },
         "fr" : {
@@ -3048,6 +3252,12 @@
             "value" : "Ya hay otra operacion del helper en curso. Espera un momento y vuelve a intentarlo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عملیات دیگری از Helper در حال انجام است. لطفاً صبر کرده و دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3135,6 +3345,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La operacion fallo"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عملیات ناموفق بود"
           }
         },
         "fr" : {
@@ -3226,6 +3442,12 @@
             "value" : "Operacion completada"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عملیات تکمیل شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3313,6 +3535,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudo activar el helper."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فعال‌سازی Helper ناموفق بود."
           }
         },
         "fr" : {
@@ -3404,6 +3632,12 @@
             "value" : "No se pudo registrar el helper"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ثبت Helper ناموفق بود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3491,6 +3725,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El sistema bloquea el registro del ayudante (Gestión de tareas en segundo plano). Elimine las entradas antiguas de macUSB de \"Elementos de inicio de sesión/Permitir en segundo plano\", ejecute `sudo sfltool resetbtm`, reinicie macOS y ejecute solo la versión desde/Aplicaciones."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سیستم مانع از ثبت Helper می‌شود (Background Task Management). ورودی‌های قدیمی macUSB را از «Login Items / Allow in the Background» حذف کنید، `sudo sfltool resetbtm` را اجرا کنید، macOS را مجدداً راه‌اندازی کرده و فقط نسخهٔ موجود در /Applications را اجرا کنید."
           }
         },
         "fr" : {
@@ -3582,6 +3822,12 @@
             "value" : "El helper se registro, pero requiere aprobacion del usuario."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper ثبت شد، اما نیازمند تأیید کاربر است."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3669,6 +3915,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estado del helper desconocido despues del registro."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وضعیت نامشخص Helper پس از ثبت."
           }
         },
         "fr" : {
@@ -3760,6 +4012,12 @@
             "value" : "No se pudo actualizar automaticamente el helper. Abre Herramientas → Reparar helper e intentalo de nuevo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تازه‌سازی خودکار Helper امکان‌پذیر نبود. ابزارها ← تعمیر Helper را باز کنید و دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3847,6 +4105,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudo activar el asistente después del reinicio completo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فعال‌سازی Helper پس از بازنشانی کامل ناموفق بود."
           }
         },
         "fr" : {
@@ -3938,6 +4202,12 @@
             "value" : "La reparacion del helper ya esta en curso. Espera a que termine."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعمیر Helper در حال حاضر در حال انجام است. لطفاً منتظر بمانید تا پایان یابد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4025,6 +4295,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reparacion del helper completada"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعمیر Helper تکمیل شد"
           }
         },
         "fr" : {
@@ -4116,6 +4392,12 @@
             "value" : "Detalles de reparación del ayudante"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جزئیات تعمیر Helper"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4203,6 +4485,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La reparacion del helper fallo"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعمیر Helper ناموفق بود"
           }
         },
         "fr" : {
@@ -4294,6 +4582,12 @@
             "value" : "El ayudante no pudo volver a estar completamente listo. Los detalles se registran en los registros de diagnóstico."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "امکان بازگرداندن Helper به آمادگی کامل وجود نداشت. جزئیات در گزارش‌های عیب‌یابی ثبت شده است."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4381,6 +4675,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error en la reparación del asistente"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعمیر Helper ناموفق بود"
           }
         },
         "fr" : {
@@ -4472,6 +4772,12 @@
             "value" : "Sin entradas de registro"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هیچ موردی در گزارش وجود ندارد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4559,6 +4865,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ocultar registro técnico"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پنهان کردن گزارش فنی"
           }
         },
         "fr" : {
@@ -4650,6 +4962,12 @@
             "value" : "Mostrar registro técnico"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نمایش گزارش فنی"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4737,6 +5055,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Actualizo mi registro de ayudante y confirmo mi disposición para trabajar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ثبت Helper را تازه‌سازی می‌کنم و آمادگی کار را تأیید می‌نمایم"
           }
         },
         "fr" : {
@@ -4828,6 +5152,12 @@
             "value" : "Actualizo el servicio del sistema y verifico que esté listo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سرویس سیستم را تازه‌سازی می‌کنم و آمادگی را بررسی می‌نمایم"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4915,6 +5245,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estoy preparando una reparación auxiliar."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال آماده‌سازی تعمیر Helper"
           }
         },
         "fr" : {
@@ -5006,6 +5342,12 @@
             "value" : "Progreso de la reparación"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پیشرفت تعمیر"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5093,6 +5435,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reparación del asistente del sistema"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعمیر Helper سیستم"
           }
         },
         "fr" : {
@@ -5184,6 +5532,12 @@
             "value" : "Fijación…"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال تعمیر…"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5271,6 +5625,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se está actualizando el registro y la conexión del asistente del sistema."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ثبت و اتصال Helper سیستم در حال تازه‌سازی است."
           }
         },
         "fr" : {
@@ -5362,6 +5722,12 @@
             "value" : "Reparacion del helper"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعمیر Helper"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5449,6 +5815,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El ayudante permaneció activo después de darse de baja. Reparación interrumpida."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper پس از لغو ثبت همچنان فعال ماند. تعمیر متوقف شد."
           }
         },
         "fr" : {
@@ -5540,6 +5912,12 @@
             "value" : "El registro del ayudante y la verificación de la comunicación se han completado con éxito."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ثبت Helper و بررسی ارتباط با موفقیت به پایان رسید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5627,6 +6005,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La reparación del asistente se completó con éxito"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعمیر Helper با موفقیت به پایان رسید"
           }
         },
         "fr" : {
@@ -5718,6 +6102,12 @@
             "value" : "No se pudo eliminar el registro de ayudante anterior."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حذف ثبت قبلی Helper ناموفق بود."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5805,6 +6195,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Para que el asistente funcione correctamente, debe permitir que se ejecute en segundo plano en Configuración del sistema."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برای کارکرد صحیح Helper، باید در System Settings اجازهٔ اجرای آن را در پس‌زمینه صادر کنید."
           }
         },
         "fr" : {
@@ -5896,6 +6292,12 @@
             "value" : "Verificación del estado del asistente completada con la acción requerida"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی وضعیت Helper با اقدام لازم تکمیل شد"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5983,6 +6385,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "De cheques…"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال بررسی…"
           }
         },
         "fr" : {
@@ -6074,6 +6482,12 @@
             "value" : "Se está comprobando la disponibilidad del asistente del sistema."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آمادگی Helper سیستم در حال بررسی است."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6161,6 +6575,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comprobando el estado del ayudante"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی وضعیت Helper"
           }
         },
         "fr" : {
@@ -6252,6 +6672,12 @@
             "value" : "Detalles: %@"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جزئیات: %@"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6339,6 +6765,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Detalles del estado del ayudante"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جزئیات وضعیت Helper"
           }
         },
         "fr" : {
@@ -6430,6 +6862,12 @@
             "value" : "Activado"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فعال"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6517,6 +6955,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ERROR"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خطا"
           }
         },
         "fr" : {
@@ -6608,6 +7052,12 @@
             "value" : "No se pudo confirmar la disposición del ayudante."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آمادگی Helper تأیید نشد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6695,6 +7145,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La verificación del estado del asistente falló"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی وضعیت Helper ناموفق بود"
           }
         },
         "fr" : {
@@ -6786,6 +7242,12 @@
             "value" : "Ubicacion de la app: /Applications (OK)"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مکان برنامه: /Applications (مناسب)"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6873,6 +7335,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ubicacion de la app: fuera de /Applications"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مکان برنامه: خارج از /Applications"
           }
         },
         "fr" : {
@@ -6964,6 +7432,12 @@
             "value" : "Servicio Mach: %@"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سرویس Mach: %@"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7051,6 +7525,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No encontrado"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "یافت نشد"
           }
         },
         "fr" : {
@@ -7142,6 +7622,12 @@
             "value" : "No registrado"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ثبت‌نشده"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7229,6 +7715,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Requiere aprobacion"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نیازمند تأیید"
           }
         },
         "fr" : {
@@ -7320,6 +7812,12 @@
             "value" : "Estado del servicio: %@"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وضعیت سرویس: %@"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7407,6 +7905,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El asistente funciona correctamente y está listo para usarse."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper به‌درستی کار می‌کند و آمادهٔ استفاده است."
           }
         },
         "fr" : {
@@ -7498,6 +8002,12 @@
             "value" : "La verificación del estado del asistente se completó correctamente"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی وضعیت Helper با موفقیت به پایان رسید"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7585,6 +8095,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desconocido"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نامشخص"
           }
         },
         "fr" : {
@@ -7676,6 +8192,12 @@
             "value" : "Estado del helper desconocido."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وضعیت نامشخص Helper."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7763,6 +8285,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estado de XPC: %@"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سلامت XPC: %@"
           }
         },
         "fr" : {
@@ -7854,6 +8382,12 @@
             "value" : "macUSB no puede confirmar que se esté comunicando con un helper firmado y de confianza. La operación se detuvo. Abre la app macUSB actual desde la carpeta Aplicaciones y luego elige Herramientas → Reparar helper."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB نمی‌تواند تأیید کند که با یک Helper معتبر و امضاشده در ارتباط است. عملیات متوقف شد. برنامهٔ فعلی macUSB را از پوشهٔ Applications باز کنید، سپس ابزارها ← تعمیر Helper را انتخاب نمایید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7941,6 +8475,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSB no puede verificar el helper"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB نمی‌تواند Helper را تأیید کند"
           }
         },
         "fr" : {
@@ -8032,6 +8572,12 @@
             "value" : "El helper ya esta eliminado"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper قبلاً حذف شده است"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8119,6 +8665,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El helper se ha eliminado"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper حذف شد"
           }
         },
         "fr" : {
@@ -8210,6 +8762,12 @@
             "value" : "Error de conexión con el helper: %@"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خطای اتصال Helper: %@"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8297,6 +8855,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudo establecer una conexión XPC con el helper."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برقراری اتصال XPC با Helper ناموفق بود."
           }
         },
         "fr" : {
@@ -8388,6 +8952,12 @@
             "value" : "La conexión con el helper se interrumpió."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اتصال با Helper قطع شد."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8475,6 +9045,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La conexión con el helper fue invalidada."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اتصال با Helper نامعتبر شد."
           }
         },
         "fr" : {
@@ -8566,6 +9142,12 @@
             "value" : "Tiempo de espera agotado para la conexión XPC con el helper"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اتمام مهلت اتصال XPC با Helper"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8653,6 +9235,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudo codificar la solicitud del helper: %@"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "کدگذاری درخواست Helper ناموفق بود: %@"
           }
         },
         "fr" : {
@@ -8744,6 +9332,12 @@
             "value" : "El helper responde correctamente (uid=%@, euid=%@, pid=%@)"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper به‌درستی پاسخ می‌دهد (uid=%@, euid=%@, pid=%@)"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8831,6 +9425,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No se pudo crear el proxy XPC del helper."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد پراکسی XPC برای Helper ناموفق بود."
           }
         },
         "fr" : {
@@ -8922,6 +9522,12 @@
             "value" : "Se superó el tiempo de espera de la respuesta XPC del helper."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مهلت انتظار برای پاسخ XPC از Helper به پایان رسید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9009,6 +9615,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El helper no devolvió un identificador de flujo de trabajo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helper شناسهٔ گردش کاری برنگرداند."
           }
         },
         "fr" : {
@@ -9100,6 +9712,12 @@
             "value" : "Automático"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خودکار"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9189,6 +9807,12 @@
             "value" : "Idioma"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "زبان"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9273,6 +9897,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deutsch"
+          }
+        },
+        "fa" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deutsch"
@@ -9367,6 +9997,12 @@
             "value" : "English"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9456,6 +10092,12 @@
             "value" : "Español"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Español"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9524,6 +10166,101 @@
         }
       }
     },
+    "app.language.name.fa" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فارسی"
+          }
+        }
+      }
+    },
     "app.language.name.fr" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9540,6 +10277,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Français"
+          }
+        },
+        "fa" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Français"
@@ -9634,6 +10377,12 @@
             "value" : "Italiano"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Italiano"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9718,6 +10467,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日本語"
+          }
+        },
+        "fa" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "日本語"
@@ -9812,6 +10567,12 @@
             "value" : "Nederlands"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nederlands"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9896,6 +10657,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polski"
+          }
+        },
+        "fa" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Polski"
@@ -9990,6 +10757,12 @@
             "value" : "Português (BR)"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Português (BR)"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10074,6 +10847,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Русский"
+          }
+        },
+        "fa" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Русский"
@@ -10168,6 +10947,12 @@
             "value" : "Türkçe"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Türkçe"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10252,6 +11037,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Українська"
+          }
+        },
+        "fa" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Українська"
@@ -10346,6 +11137,12 @@
             "value" : "Tiếng Việt"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiếng Việt"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10430,6 +11227,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简体中文"
+          }
+        },
+        "fa" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "简体中文"
@@ -10524,6 +11327,12 @@
             "value" : "Reiniciar aplicación"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "راه‌اندازی مجدد برنامه"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10611,6 +11420,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Para cambiar el idioma de la interfaz en todos los elementos de la aplicación (incluidos menús y botones), es necesario reiniciar. Haga clic a continuación para reiniciar la aplicación."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برای تغییر زبان رابط در تمام بخش‌های برنامه (شامل منوها و دکمه‌ها)، راه‌اندازی مجدد لازم است. برای راه‌اندازی مجدد برنامه در زیر کلیک کنید."
           }
         },
         "fr" : {
@@ -10702,6 +11517,12 @@
             "value" : "Se requiere reiniciar la aplicación"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "راه‌اندازی مجدد برنامه لازم است"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10789,6 +11610,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Descargue el instalador de macOS..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود نصب‌کنندهٔ macOS..."
           }
         },
         "fr" : {
@@ -10880,6 +11707,12 @@
             "value" : "Omitir análisis de archivo"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "صرف‌نظر از تحلیل فایل"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10964,6 +11797,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac OS X Tiger 10.4 (Multi DVD)"
+          }
+        },
+        "fa" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mac OS X Tiger 10.4 (Multi DVD)"
@@ -11058,6 +11897,12 @@
             "value" : "Se omitirá la verificación de la versión para la imagen seleccionada. La aplicación forzará el reconocimiento del archivo como \"Mac OS X Tiger 10.4\" para permitir su montaje y escritura en el USB. ¿Desea continuar?"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی صحت نسخه برای ایمیج انتخابی نادیده گرفته خواهد شد. برنامه فایل را اجباراً به‌عنوان «Mac OS X Tiger 10.4» شناسایی می‌کند تا امکان مانت کردن و نوشتن روی USB فراهم شود. آیا می‌خواهید ادامه دهید؟"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11145,6 +11990,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Creando USB de Mac OS X Tiger (Multi DVD)"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ایجاد USB برای Mac OS X Tiger (Multi DVD)"
           }
         },
         "fr" : {
@@ -11236,6 +12087,12 @@
             "value" : "Reportar un error (GitHub)"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "گزارش باگ (GitHub)"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11323,6 +12180,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Repositorio de macUSB en GitHub"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مخزن GitHub برای macUSB"
           }
         },
         "fr" : {
@@ -11414,6 +12277,12 @@
             "value" : "Apoya el proyecto macUSB"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حمایت از پروژهٔ macUSB"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11501,6 +12370,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sitio web de macUSB"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وب‌سایت macUSB"
           }
         },
         "fr" : {
@@ -11592,6 +12467,12 @@
             "value" : "Opciones"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "گزینه‌ها"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11679,6 +12560,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abrir Utilidad de Discos"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باز کردن Disk Utility"
           }
         },
         "fr" : {
@@ -11770,6 +12657,12 @@
             "value" : "Herramientas"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابزارها"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11857,6 +12750,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Las notificaciones para macUSB se han bloqueado en los ajustes del sistema. Para recibir información sobre la finalización de los procesos, debes permitir que la app muestre notificaciones en el sistema."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اعلان‌های macUSB در System Settings مسدود شده‌اند. برای دریافت اطلاعات دربارهٔ فرآیندهای تکمیل‌شده، باید به برنامه اجازهٔ نمایش اعلان‌ها در سیستم را بدهید."
           }
         },
         "fr" : {
@@ -11948,6 +12847,12 @@
             "value" : "Las notificaciones están desactivadas"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اعلان‌ها خاموش هستند"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12035,6 +12940,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Activar notificaciones"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فعال‌سازی اعلان‌ها"
           }
         },
         "fr" : {
@@ -12126,6 +13037,12 @@
             "value" : "Esto te permitirá recibir información cuando finalice el proceso de preparación del medio de instalación."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "این کار به شما امکان می‌دهد پس از پایان فرآیند آماده‌سازی رسانهٔ نصب‌کننده، اطلاعات دریافت کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12213,6 +13130,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "¿Quieres habilitar las notificaciones?"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آیا می‌خواهید اعلان‌ها را فعال کنید؟"
           }
         },
         "fr" : {
@@ -12304,6 +13227,12 @@
             "value" : "Notificaciones desactivadas"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اعلان‌ها غیرفعال هستند"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12391,6 +13320,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Notificaciones activadas"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اعلان‌ها فعال هستند"
           }
         },
         "fr" : {
@@ -12482,6 +13417,12 @@
             "value" : "Ajustes de actividad en segundo plano…"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تنظیمات فعالیت در پس‌زمینه…"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12569,6 +13510,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Conceder acceso total al disco..."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اعطای Full Disk Access..."
           }
         },
         "fr" : {
@@ -12660,6 +13607,12 @@
             "value" : "Para que macUSB funcione correctamente, concédele el permiso «Acceso total al disco» en Ajustes del Sistema."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "برای اطمینان از عملکرد صحیح macUSB، مجوز «Full Disk Access» را در System Settings به آن اعطا کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12747,6 +13700,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se requiere acceso total al disco"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دسترسی Full Disk Access لازم است"
           }
         },
         "fr" : {
@@ -12838,6 +13797,12 @@
             "value" : "No se pudo abrir directamente la sección «Acceso total al disco». Ve a: Privacidad y seguridad -> Acceso total al disco."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "امکان باز کردن مستقیم بخش «Full Disk Access» وجود نداشت. به این مسیر بروید: Privacy & Security ← Full Disk Access."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12925,6 +13890,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se abrieron los Ajustes del Sistema"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System Settings باز شد"
           }
         },
         "fr" : {
@@ -13016,6 +13987,12 @@
             "value" : "Escribir una imagen sin procesar en una unidad…"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نوشتن ایمیج خام روی درایو…"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13103,6 +14080,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Continuar y elegir una imagen…"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ادامه و انتخاب ایمیج…"
           }
         },
         "fr" : {
@@ -13194,6 +14177,12 @@
             "value" : "Elige un archivo de imagen en formato .iso o .img."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "یک فایل ایمیج با فرمت .iso یا .img انتخاب کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13281,6 +14270,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Elegir una imagen sin procesar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتخاب ایمیج خام"
           }
         },
         "fr" : {
@@ -13372,6 +14367,12 @@
             "value" : "El archivo .iso o .img seleccionado se escribirá directamente en la unidad USB sin analizar su contenido. macUSB no comprobará la compatibilidad de la imagen ni si la unidad resultante podrá arrancar. ¿Quieres continuar?"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فایل .iso یا .img انتخابی مستقیماً و بدون تحلیل محتوا روی درایو USB نوشته خواهد شد. macUSB سازگاری ایمیج یا قابل بوت بودن درایو حاصل را بررسی نخواهد کرد. آیا می‌خواهید ادامه دهید؟"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13459,6 +14460,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escribir una imagen sin procesar en una unidad"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نوشتن ایمیج خام روی درایو"
           }
         },
         "fr" : {
@@ -13550,6 +14557,12 @@
             "value" : "Permanecer en macUSB"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ماندن در macUSB"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13637,6 +14650,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macUSB está realizando una operación que no se puede interrumpir de forma segura. Espera a que termine la tarea actual e intenta cerrar la app de nuevo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB در حال انجام عملیاتی است که نمی‌توان آن را با ایمنی متوقف کرد. منتظر بمانید تا کار فعلی تمام شود، سپس دوباره برای خروج از برنامه تلاش کنید."
           }
         },
         "fr" : {
@@ -13728,6 +14747,12 @@
             "value" : "No se puede cerrar macUSB ahora"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB در حال حاضر نمی‌تواند خارج شود"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13815,6 +14840,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La herramienta auxiliar se ha actualizado y está lista para usarse."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابزار Helper به‌روزرسانی شده و آمادهٔ استفاده است."
           }
         },
         "fr" : {
@@ -13906,6 +14937,12 @@
             "value" : "Correcto"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "موفقیت"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13993,6 +15030,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Actualizando la herramienta auxiliar…"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "در حال به‌روزرسانی ابزار Helper…"
           }
         },
         "fr" : {
@@ -14084,6 +15127,12 @@
             "value" : "Actualización"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "به‌روزرسانی"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14171,6 +15220,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Descargar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دانلود"
           }
         },
         "fr" : {
@@ -14262,6 +15317,12 @@
             "value" : "Ignorar"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نادیده گرفتن"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14349,6 +15410,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hay una nueva versión disponible: %@. ¡Recomendamos actualizar!"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نسخهٔ جدیدی در دسترس است: %@. به‌روزرسانی را توصیه می‌کنیم!"
           }
         },
         "fr" : {
@@ -14440,6 +15507,12 @@
             "value" : "¡Actualización disponible!"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "به‌روزرسانی در دسترس است!"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14527,6 +15600,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Versión actualmente en ejecución: %@"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نسخهٔ در حال اجرای فعلی: %@"
           }
         },
         "fr" : {
@@ -14618,6 +15697,12 @@
             "value" : "Buscar actualizaciones"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بررسی به‌روزرسانی‌ها"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14705,6 +15790,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estás usando la última versión disponible de la aplicación"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شما از جدیدترین نسخهٔ موجود برنامه استفاده می‌کنید"
           }
         },
         "fr" : {
@@ -14796,6 +15887,12 @@
             "value" : "No hay actualizaciones disponibles"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "به‌روزرسانی موجود نیست"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14883,6 +15980,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Iniciar"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شروع"
           }
         },
         "fr" : {
@@ -14973,6 +16076,12 @@
             "value" : "Activar la omisión automática"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فعال‌سازی رد کردن خودکار"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15059,6 +16168,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Al iniciar la aplicación y comprobar correctamente los permisos, las actualizaciones de la aplicación y el estado del helper, se omitirá automáticamente la pantalla de bienvenida y se pasará a la etapa de análisis. Si el helper necesita una actualización o una reparación automática, la pantalla de bienvenida permanecerá visible durante ese inicio de la aplicación."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پس از اجرای برنامه و بررسی موفقیت‌آمیز مجوزها، به‌روزرسانی‌های برنامه و آمادگی Helper، صفحهٔ خوش‌آمدگویی به‌طور خودکار رد شده و برنامه به بخش تحلیل می‌رود. اگر Helper به به‌روزرسانی یا تعمیر خودکار نیاز داشته باشد، صفحهٔ خوش‌آمدگویی در آن اجرا قابل مشاهده باقی خواهد ماند."
           }
         },
         "fr" : {
@@ -15149,6 +16264,12 @@
             "value" : "Omitir automáticamente la pantalla de bienvenida"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رد کردن خودکار صفحهٔ خوش‌آمدگویی"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15235,6 +16356,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Omitir automáticamente la pantalla de bienvenida"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رد کردن خودکار صفحهٔ خوش‌آمدگویی"
           }
         },
         "fr" : {
@@ -15326,6 +16453,12 @@
             "value" : "macUSB by Kruszoneq"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macUSB اثر Kruszoneq"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15415,6 +16548,12 @@
             "value" : "¡Apoya el proyecto!"
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حمایت از پروژه!"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15502,6 +16641,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Inicio"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شروع"
           }
         },
         "fr" : {
