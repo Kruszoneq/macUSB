@@ -100,6 +100,10 @@ class LanguageManager: ObservableObject {
     var locale: Locale {
         return Locale(identifier: currentLanguage)
     }
+
+    var layoutDirection: LayoutDirection {
+        locale.language.characterDirection == .rightToLeft ? .rightToLeft : .leftToRight
+    }
     
     // --- FUNKCJA WYKRYWANIA JĘZYKA SYSTEMOWEGO ---
     static func detectSystemLanguage() -> String {

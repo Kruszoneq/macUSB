@@ -245,6 +245,7 @@ App-side operation tracking:
 ## 9. UI Contract
 
 Localization:
+- the coordinator explicitly injects the effective app locale and language-derived layout direction into the downloader's separate SwiftUI host, as defined in [Localization Contract](../../platform/LOCALIZATION_CONTRACT.md#language-set-consistency),
 - localized downloader-owned strings reside in `macUSB/Resources/Downloader.xcstrings`, with Polish as the source language and the same 13-language set as the app,
 - UI, localized error wrappers, discovery/download/assembly/cleanup statuses, alerts, completion notifications, and the Tools-menu entry select the `Downloader` table explicitly,
 - source-text keys have semantic `downloader.*` identifiers; source wording and existing translations remain catalog values,
