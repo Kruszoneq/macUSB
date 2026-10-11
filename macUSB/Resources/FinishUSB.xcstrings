@@ -6007,6 +6007,12 @@
             "value" : "No se ha podido preparar la carpeta temporal para convertir install.wim. Inténtalo de nuevo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پوشهٔ موقت برای تبدیل install.wim آماده نشد. دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6096,6 +6102,12 @@
             "value" : "No se ha podido establecer el propietario de la carpeta temporal para convertir install.wim. Inténtalo de nuevo."
           }
         },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مالک پوشهٔ موقت برای تبدیل install.wim تنظیم نشد. دوباره تلاش کنید."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6183,6 +6195,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No hay suficiente espacio libre en el disco que contiene la carpeta temporal para convertir install.wim antes de dividirlo. Libera espacio en el disco e inténtalo de nuevo."
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دیسک حاوی پوشهٔ موقت فضای خالی کافی برای تبدیل install.wim پیش از تقسیم آن ندارد. فضای دیسک را آزاد کرده و دوباره تلاش کنید."
           }
         },
         "fr" : {
