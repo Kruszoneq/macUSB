@@ -1830,7 +1830,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "بازنشانی مجوزهای دسترسی به رسانهٔ خارجی امکان‌پذیر نبود. دوباره تلاش کنید، یا این دستور را به‌صورت دستی در Terminal اجرا کنید: tccutil reset SystemPolicyRemovableVolumes %@"
+            "value" : "بازنشانی مجوزهای دسترسی به رسانهٔ خارجی امکان‌پذیر نبود. دوباره تلاش کنید، یا این دستور را به‌صورت دستی در Terminal اجرا کنید: tccutil reset SystemPolicyRemovableVolumes ⁨%@⁩"
           }
         },
         "fr" : {
@@ -2305,7 +2305,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Helper نیازمند تأیید در System Settings است."
+            "value" : "در System Settings، Helper نیازمند تأیید است."
           }
         },
         "fr" : {
@@ -2400,7 +2400,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macUSB برای فعال‌سازی مدیریت درایو به مجوز فعالیت در پس‌زمینه نیاز دارد. برای اعطای مجوزهای لازم به System Settings بروید"
+            "value" : "برای فعال‌سازی مدیریت درایو، macUSB به مجوز فعالیت در پس‌زمینه نیاز دارد. برای اعطای مجوزهای لازم به System Settings بروید"
           }
         },
         "fr" : {
@@ -2590,7 +2590,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macUSB نسخهٔ جدیدی از برنامه را شناسایی کرد، اما به‌روزرسانی خودکار Helper با خطا مواجه شد. ابزارها ← تعمیر Helper را انتخاب کرده و تعمیر را به‌صورت دستی اجرا کنید."
+            "value" : "نسخهٔ جدیدی از برنامه توسط macUSB شناسایی شد، اما به‌روزرسانی خودکار Helper با خطا مواجه شد. ابزارها ← تعمیر Helper را انتخاب کرده و تعمیر را به‌صورت دستی اجرا کنید."
           }
         },
         "fr" : {
@@ -3825,7 +3825,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Helper ثبت شد، اما نیازمند تأیید کاربر است."
+            "value" : "ثبت Helper انجام شد، اما نیازمند تأیید کاربر است."
           }
         },
         "fr" : {
@@ -5820,7 +5820,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Helper پس از لغو ثبت همچنان فعال ماند. تعمیر متوقف شد."
+            "value" : "پس از لغو ثبت، Helper همچنان فعال ماند. تعمیر متوقف شد."
           }
         },
         "fr" : {
@@ -7910,7 +7910,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Helper به‌درستی کار می‌کند و آمادهٔ استفاده است."
+            "value" : "‏Helper به‌درستی کار می‌کند و آمادهٔ استفاده است."
           }
         },
         "fr" : {
@@ -8385,7 +8385,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macUSB نمی‌تواند تأیید کند که با یک Helper معتبر و امضاشده در ارتباط است. عملیات متوقف شد. برنامهٔ فعلی macUSB را از پوشهٔ Applications باز کنید، سپس ابزارها ← تعمیر Helper را انتخاب نمایید."
+            "value" : "تأیید ارتباط با یک Helper معتبر و امضاشده برای macUSB امکان‌پذیر نیست. عملیات متوقف شد. برنامهٔ فعلی macUSB را از پوشهٔ Applications باز کنید، سپس ابزارها ← تعمیر Helper را انتخاب نمایید."
           }
         },
         "fr" : {
@@ -8480,7 +8480,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macUSB نمی‌تواند Helper را تأیید کند"
+            "value" : "تأیید Helper توسط macUSB امکان‌پذیر نیست"
           }
         },
         "fr" : {
@@ -8575,7 +8575,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Helper قبلاً حذف شده است"
+            "value" : "قبلاً Helper حذف شده است"
           }
         },
         "fr" : {
@@ -8670,7 +8670,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Helper حذف شد"
+            "value" : "‏Helper حذف شد"
           }
         },
         "fr" : {
@@ -9335,7 +9335,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Helper به‌درستی پاسخ می‌دهد (uid=%@, euid=%@, pid=%@)"
+            "value" : "‏Helper به‌درستی پاسخ می‌دهد (uid=%@, euid=%@, pid=%@)"
           }
         },
         "fr" : {
@@ -9620,7 +9620,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Helper شناسهٔ گردش کاری برنگرداند."
+            "value" : "شناسهٔ گردش کاری توسط Helper برگردانده نشد."
           }
         },
         "fr" : {
@@ -13895,7 +13895,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "System Settings باز شد"
+            "value" : "‏System Settings باز شد"
           }
         },
         "fr" : {
@@ -14655,7 +14655,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macUSB در حال انجام عملیاتی است که نمی‌توان آن را با ایمنی متوقف کرد. منتظر بمانید تا کار فعلی تمام شود، سپس دوباره برای خروج از برنامه تلاش کنید."
+            "value" : "عملیاتی توسط macUSB در حال انجام است که نمی‌توان آن را با ایمنی متوقف کرد. منتظر بمانید تا کار فعلی تمام شود، سپس دوباره برای خروج از برنامه تلاش کنید."
           }
         },
         "fr" : {
@@ -14750,7 +14750,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macUSB در حال حاضر نمی‌تواند خارج شود"
+            "value" : "در حال حاضر macUSB نمی‌تواند خارج شود"
           }
         },
         "fr" : {
@@ -16456,7 +16456,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macUSB اثر Kruszoneq"
+            "value" : "‏macUSB اثر Kruszoneq"
           }
         },
         "fr" : {
