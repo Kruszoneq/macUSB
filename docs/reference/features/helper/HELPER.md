@@ -192,7 +192,7 @@ Contract invariants:
 - Every Windows request must include `windowsBootMode`; the service rejects requests without it before creating an executor.
 - After Windows target formatting, helper resolves the FAT32 partition from the exact requested whole disk, mounts that partition by device identifier when needed, and validates its partition identifier, exact parent whole disk, mount point, and volume UUID before every target-writing or target-verification stage. Volume labels remain presentation metadata and are not target paths.
 - Windows media copy runs only the system-provided `/usr/bin/rsync` with explicit recursive/link/time preservation. The privileged helper does not execute user-managed Homebrew or MacPorts `rsync` binaries and does not request POSIX ownership metadata for the FAT32 target.
-- The three solid-WIM conversion preflight/export-directory errors carry shared `HelperWindowsWimErrorLocalizationKey` values in the existing workflow-result `errorMessage` string. The app resolves them from `FinishUSB.xcstrings` only on the finish screen. Temporary-space byte counts and export-directory system/ownership details are emitted separately as English diagnostics; no XPC payload fields or privileged command stages change.
+- Windows WIM split decisions, solid-format classification, conversion commands, temporary-space estimates, progress, and validation limits are defined in [Windows WIM Splitting](../windows/WINDOWS_WIM_SPLITTING.md). The three conversion preflight/export-directory errors use shared `HelperWindowsWimErrorLocalizationKey` values in the existing `errorMessage` field; their presentation and best-effort cleanup are defined in [Windows WIM Failure and Cleanup](../usb/FINISH_AND_CLEANUP.md#windows-wim-failure-and-cleanup).
 - BIOS mode appends `windows_install_macusboot` after `windows_verify_media` and before cleanup. UEFI retains the existing stage graph.
 - The BIOS stage validates the pinned bundled artifact and the target MBR gap, installs StageTwo at LBA 1...5 before MBR boot code, synchronizes and reads back each write, then verifies the full protected range. It blocks Disk Arbitration auto-mounts, ignores cancellation while active, and performs exactly one final `mountDisk` attempt after releasing raw-device ownership.
 - Full macUSBoot invariants and failure categories are defined in `docs/reference/features/windows/MACUSBOOT_INSTALLATION.md`.
@@ -290,6 +290,14 @@ Daemon helper runtime:
   - Linux Disk Arbitration mount-approval guard blocking target auto-mount until verify phase completes.
 - `macUSBHelper/Workflow/Windows/Autounattend/*`
   - Windows `Autounattend.xml` configuration helpers, XML generation, and XML validation.
+- `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift`
+  - Windows source preparation, FAT32-limit scan, WIM classification, and conversion-space preflight.
+- `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsStages.swift`
+  - Windows stage graph, source copy, WIM export/split, and streaming command execution.
+- `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift`
+  - shared export/split percentage parsing.
+- `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift`
+  - Windows target payload-marker validation and source-image detach.
 - `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsBootValidation.swift`
   - boot-mode-aware, case-insensitive BIOS/UEFI source and target marker validation.
 - `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsTargetResolution.swift`

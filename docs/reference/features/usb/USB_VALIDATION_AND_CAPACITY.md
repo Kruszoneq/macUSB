@@ -17,6 +17,12 @@ The hardware-requirement card continues to show the drive class. If an Option-se
 
 Proceed must remain blocked until selected target passes validation.
 
+### Windows WIM Capacity Limits
+
+Windows target admission uses the selected ISO size, not the eventual file-copy and SWM output size. Solid-to-non-solid LZX conversion can expand `install.wim`, and the current threshold does not add a conversion-specific allowance or recalculate target capacity from the exported WIM. Passing ISO-size-plus-5% validation therefore does not guarantee that the converted payload fits the formatted target.
+
+Temporary export space is a separate requirement on the app's temporary volume. The helper's estimated preflight, including its behavior when free capacity cannot be read, is defined in [Windows WIM Splitting](../windows/WINDOWS_WIM_SPLITTING.md#temporary-space-preflight). Neither target admission nor that estimate reserves disk space.
+
 ## macOS Target Selection and Formatting
 
 Recognized macOS workflows use physical whole-disk (`diskX`) targets by default:

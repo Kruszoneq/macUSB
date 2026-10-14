@@ -60,15 +60,17 @@ Manual raw-image workflow contract:
 - the source is never mounted by this path and is not registered in `InstallerSourceImageUnmountRegistry`; recognized Linux `.iso` analysis retains its existing source cleanup.
 
 Windows workflow stages:
-- `windows_prepare_source` — source ISO validation, hidden mount, FAT32-limit scan, WIM split decision, solid (LZMS) `install.wim` header detection with a temp-volume free-space check for the conversion (indeterminate stage),
+- `windows_prepare_source` — source ISO validation, hidden mount, FAT32-limit scan, WIM split decision, and version-based solid-format classification with an estimated temp-volume space check when conversion is selected (indeterminate stage),
 - `windows_prepare_target` — target USB unmount with retry/force prompt path and FAT32/MBR formatting (indeterminate stage),
 - `windows_create_media` — ISO file copy to USB (`rsync`) with determinate progress + write speed,
-- `windows_split_wim` — conditional `install.wim` split via `wimlib-imagex` with determinate progress + write speed (stage appears only when needed); a solid source WIM (UUP-based images) is first exported to a non-solid LZX WIM in the temp work directory, which is split and then removed,
+- `windows_split_wim` — conditional oversized `install.wim` split via `wimlib-imagex` with determinate progress and target-disk speed; a source classified as solid-format is first exported to a temporary non-solid LZX WIM, then split, with best-effort removal of the export directory,
 - `windows_create_autounattend` — conditional `Autounattend.xml` generation and XML validation (indeterminate stage; appears only when macUSB generates its own file),
 - `windows_verify_media` — boot-mode-aware boot file and structure validation (`boot.wim`, BIOS or UEFI markers, `install.wim`/`install.swm`) (indeterminate stage),
 - `windows_install_macusboot` — BIOS-only, non-cancellable macUSBoot artifact/layout/write/readback transaction after media verification and before cleanup (indeterminate stage),
 - `windows_cleanup_temp` — deterministic cleanup of temp files and helper-managed hidden image mount,
 - `finalize` — terminal state transition.
+
+The exact split condition, solid-format detector, export commands, space estimates, progress interpretation, compatibility scope, and verification limits are defined in [Windows WIM Splitting](../windows/WINDOWS_WIM_SPLITTING.md). Solid mode is distinct from the LZMS compression algorithm; conversion support does not extend the tested source contract to UUP-generated or repacked images.
 
 Linux auto-mount guard invariant:
 - for Linux workflow, helper blocks system auto-mount for target whole-disk (`diskX` and `diskXsY`) from start of `linux_unmount_target` until `linux_verify_write` ends,
@@ -137,7 +139,7 @@ The complete pre-start summary, start confirmation, prerequisites, Windows confi
 - Pending and completed progress cards remain at `0.98` scale, while the active card uses `1.0`. Each helper-reported stage change animates the completed and newly active cards together with the shared stage-transition motion. The animation is presentation-only and does not delay or reorder helper events.
 - Every Windows helper request must contain `windowsBootMode`; a missing mode is rejected before stage execution.
 - Linux raw-copy must target whole-disk device, never a partition node.
-- Windows workflow must copy installer files 1:1 from ISO payload (no UEFI fallback file synthesis).
+- Windows file copy uses the ISO payload without UEFI fallback file synthesis. An oversized `install.wim` is excluded from copy and replaced by SWM parts through the documented WIM preparation path; explicitly enabled automatic configuration can also generate or replace the selected answer-file location.
 - Windows ISO copy must use only the system-provided `/usr/bin/rsync`; the privileged helper must not execute user-managed Homebrew or MacPorts `rsync` binaries.
 - Windows ISO copy uses explicit recursive/link/time preservation (`-rlt`) instead of archive mode so POSIX ownership, group, permissions, device, and special-file metadata are not requested for the FAT32 target.
 - Windows BIOS source and target verification require case-insensitive `BOOTMGR`, `boot/BCD`, and `sources/boot.wim`. UEFI verification retains the EFI-directory plus accepted EFI-loader-marker contract and also requires `sources/boot.wim` on target media.

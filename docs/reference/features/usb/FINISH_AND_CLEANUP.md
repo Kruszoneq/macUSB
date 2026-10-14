@@ -8,7 +8,7 @@ Finish screen must report:
 - cleanup result state.
 - for a macOS installer classified as prerelease during analysis, keep the separate `BETA` badge visible beside the normalized system name; its tint follows the finish result card tone.
 - for Linux workflow failures, show a localized warning card (orange tone) with localized title + localized error description mapped from helper failure context (not raw helper error text).
-- Windows solid-WIM conversion failures for insufficient temporary space, temporary-folder preparation, and folder ownership use the shared `HelperWindowsWimErrorLocalizationKey` identifiers from `finish.windows.error.wim_export.*.description`. The finish screen resolves these keys directly from `FinishUSB.xcstrings`; required/available bytes, system errors, paths, and requester UID remain diagnostic data instead of untranslated error-card text.
+- Windows WIM conversion preflight/export-directory failures use the localized presentation defined in [Windows WIM Failure and Cleanup](#windows-wim-failure-and-cleanup).
 - after successful creation, show a localized eject-action card for safe ejection of the selected target whole-disk (`diskX`).
 - eject card behavior:
   - use accent tone and an eject symbol,
@@ -39,6 +39,24 @@ App-termination path must execute centralized source-image cleanup for Windows/L
 - Finish-screen cleanup, emergency installation cleanup, downloader cleanup, tracked-image detach, and termination cleanup own cleanup-operation tokens for their full execution.
 
 Downloader-specific cleanup behavior is detailed in `docs/reference/features/downloader/DOWNLOADER.md`.
+
+### Windows WIM Failure and Cleanup
+
+The helper uses shared `HelperWindowsWimErrorLocalizationKey` identifiers in the existing workflow-result `errorMessage` field for three conversion preparation failures:
+
+| Error key under `finish.windows.error.wim_export` | Failure point |
+| --- | --- |
+| `insufficient_space.description` | `windows_prepare_source`, before target formatting, when known temporary capacity is below the estimate |
+| `directory_creation.description` | `windows_split_wim`, after formatting and file copy, when export-directory preparation fails |
+| `directory_ownership.description` | `windows_split_wim`, after formatting and file copy, when assignment to the requester's UID/group fails |
+
+The finish screen resolves these keys from `FinishUSB.xcstrings`. Required/available bytes, system errors, paths, and requester UID remain English diagnostic context. Failures from the export or split command itself use the generic stage-aware command error, including its exit status, last output line when available, and arguments; they are not mapped to these three localized preparation errors.
+
+Once export-directory preparation succeeds, a `defer` attempts to remove the directory when the split stage returns or throws, including on command failure or observed cancellation. This removal ignores its own error. Normal success, WIM failure, and cancellation also reach helper best-effort cleanup of the overall work directory; a removal failure there is logged and does not independently change the workflow result. Cleanup ordering is deterministic, but successful removal is not guaranteed.
+
+Export and splitting use the existing cancellable command path. Cancellation returns the cancelled result after the command terminates and the helper observes cancellation. Temporary cleanup does not roll back USB formatting or remove partially copied files/SWM parts. A failed or cancelled target must therefore be treated as incomplete media.
+
+The export layout, capacity estimates, diagnostic events, and verification limits are defined in [Windows WIM Splitting](../windows/WINDOWS_WIM_SPLITTING.md).
 
 ## Logging and Diagnostics
 

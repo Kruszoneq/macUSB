@@ -180,9 +180,13 @@ Current workflow gating:
 - analysis also computes Windows toolchain probe (`brew`, `wimlib-imagex`) for installation-summary pre-start gating.
 - when Windows summary expects `install.wim` split and `wimlib-imagex` is missing, start is blocked in summary until probe refresh confirms `wimlib-imagex` presence.
 
+The split expectation is based only on the size of the resolved `install.wim`; analysis does not classify solid resources, check the wimlib version, or preflight temporary export space. Helper preparation makes the execution decision and performs its conversion-space check before target formatting. Input cases and limitations are defined in [Windows WIM Splitting](../windows/WINDOWS_WIM_SPLITTING.md#split-decision-and-input-scope).
+
 Windows target selection uses physical external USB or positively identified removable SD whole disks (`diskX`) from the shared discovery snapshot. Identified SD cards use `diskX - <size> - SD CARD` in selection and summary. Built-in readers may report `Internal=true`; identified removable SD cards do not require enabling `AllowExternalDrives`. Windows does not enable the macOS Option-volume override. Media identification and current registry verification before handoff are defined in [USB Validation and Capacity](../usb/USB_VALIDATION_AND_CAPACITY.md#sd-identification-and-built-in-readers). The selected BIOS/UEFI mode controls the existing Windows workflow for either target kind; it does not guarantee that the destination firmware can boot from the selected card slot or reader.
 
 Required USB/SD capacity is the selected source ISO's logical size plus 5%, rounded up to a byte. The UI presents the smallest fitting 2/4/8/16/32/64 GB (or larger doubling) class, while physical USB/SD validation uses the exact byte requirement. If the source size cannot be resolved, analysis alerts the user and applies the `16 GB` class with a `15_000_000_000`-byte threshold.
+
+This source-based threshold does not account for solid-to-non-solid WIM expansion; [Windows WIM Capacity Limits](../usb/USB_VALIDATION_AND_CAPACITY.md#windows-wim-capacity-limits) distinguishes USB admission from temporary conversion space.
 
 ## Logging Contract
 
