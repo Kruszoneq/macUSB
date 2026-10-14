@@ -2400,7 +2400,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macUSB نتوانست در دسترس بودن Rosetta را تأیید کند. برای ادامه دوباره بررسی کنید."
+            "value" : "در دسترس بودن Rosetta توسط macUSB تأیید نشد. برای ادامه دوباره بررسی کنید."
           }
         },
         "fr" : {
@@ -2875,7 +2875,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rosetta نصب شده است"
+            "value" : "‏Rosetta نصب شده است"
           }
         },
         "fr" : {
@@ -3730,7 +3730,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rosetta هنوز در دسترس نیست"
+            "value" : "هنوز Rosetta در دسترس نیست"
           }
         },
         "fr" : {

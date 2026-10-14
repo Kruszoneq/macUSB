@@ -1070,7 +1070,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "باز کردن فایل ISO امکان‌پذیر نبود: %@"
+            "value" : "باز کردن فایل ISO امکان‌پذیر نبود: ⁨%@⁩"
           }
         },
         "fr" : {
@@ -1165,7 +1165,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "خواندن فایل ISO امکان‌پذیر نبود: %@"
+            "value" : "خواندن فایل ISO امکان‌پذیر نبود: ⁨%@⁩"
           }
         },
         "fr" : {
@@ -2115,7 +2115,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Linux - توزیع ناشناخته"
+            "value" : "‏Linux - توزیع ناشناخته"
           }
         },
         "fr" : {
@@ -2687,7 +2687,7 @@
         "fa" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "OS X Mavericks شناسایی شد"
+            "value" : "‏OS X Mavericks شناسایی شد"
           }
         },
         "fr" : {
