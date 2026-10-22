@@ -58,15 +58,15 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
 ## ⚡ Quick Start
 
 > [!WARNING]
-> Creating bootable media erases all data on the selected USB drive.
+> Creating bootable media erases all data on the selected drive, SD card, or volume.
 
 1. Install macUSB using one of the methods listed in **How to Download macUSB**.
 2. Open macUSB and either:
    - choose a local source, or
    - use the built-in Downloader to fetch a macOS installer from Apple.
-3. Select the target USB drive and review the operation details.
+3. Select the target USB drive or SD card and review the operation details.
 4. Start the process and monitor bootable media creation stage by stage.
-5. Review the final result and safely eject the USB drive directly from the final screen.
+5. Review the final result and safely eject the media directly from the final screen.
 
 > [!IMPORTANT]
 > For reliable media creation, enable **Allow in the Background** and **Full Disk Access** for macUSB in System Settings. Without them, creation workflows may fail.
@@ -172,11 +172,11 @@ Downloader options can save the completed installer as a read-only DMG in a sele
   - **Downloader stage:** required free space depends on the selected installer and optional DMG output; macUSB checks the exact requirement before downloading.
   - **USB creation stage:** additional temporary disk space may be required depending on the selected source and workflow.
 
-### USB Media
+### Target Media
 
-- **For macOS installers:** at least **16 GB**, or at least **32 GB** for **macOS Sequoia 15 and later**.
-- **For Windows/Linux images:** **1 GB** or more, depending on the size of the selected `.iso` image.
-- **Performance:** USB 3.0+ is recommended.
+- **Supported media:** USB drives and SD cards in built-in Apple readers or external readers.
+- **Capacity:** macUSB calculates the minimum required capacity from the installer or source image size, with a 5% allowance, and checks the selected drive or volume before proceeding.
+- **Performance:** USB 3.0+ is recommended for USB drives and external readers.
 
 > [!NOTE]
 > External HDD/SSD support is disabled by default each time the app launches to improve safety and reduce the risk of accidental target selection. It can be enabled from **Options → Enable external hard drive support**.
@@ -197,7 +197,7 @@ macUSB supports creating bootable USB installers across the **macOS**, **OS X**,
 On Macs running **macOS Golden Gate**, **Rosetta** is not installed by default. It is required for installers from **OS X Yosemite through macOS Catalina** that include an Intel-only `createinstallmedia` tool. macUSB checks for Rosetta automatically and, when needed, offers to install it with one click.
 
 > [!NOTE]
-> For **OS X Yosemite and later**, if the target USB drive is already partitioned as **GPT** and contains an **HFS+** volume, hold **Option (⌥)** while selecting the target to choose an individual volume without reformatting the entire drive. The selected volume itself will still be erased during installer creation.
+> For **Mac OS X Lion 10.7 and later**, hold **Option (⌥)** while selecting the target to reveal existing **HFS+** volumes on **GPT**-partitioned USB drives or SD cards. Choosing a volume erases only that volume, without repartitioning the entire drive or affecting its other volumes.
 
 [^1]: **System-specific requirements and limitations:**
 
