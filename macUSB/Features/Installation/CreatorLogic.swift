@@ -12,7 +12,7 @@ extension UniversalInstallationView {
 
         runWindowsMacUSBootPreflight { ready, message in
             guard ready else {
-                errorMessage = message ?? String(localized: "Nie udało się automatycznie odświeżyć helpera. Otwórz Narzędzia → Napraw helpera i spróbuj ponownie.")
+                errorMessage = message ?? String(localized: "summary.windows.error.helper_refresh_failed", table: "Summary")
                 finishUSBCreationOperationIfNeeded()
                 return
             }
@@ -39,10 +39,10 @@ extension UniversalInstallationView {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Ostrzeżenie o utracie danych")
-        alert.informativeText = String(localized: "Wszystkie dane na wybranym nośniku zostaną usunięte. Czy na pewno chcesz rozpocząć proces?")
-        alert.addButton(withTitle: String(localized: "Nie"))
-        alert.addButton(withTitle: String(localized: "Tak"))
+        alert.messageText = String(localized: "summary.start.alert.title", table: "Summary")
+        alert.informativeText = String(localized: "summary.start.alert.description", table: "Summary")
+        alert.addButton(withTitle: String(localized: "summary.action.no", table: "Summary"))
+        alert.addButton(withTitle: String(localized: "summary.action.yes", table: "Summary"))
 
         let completionHandler = { (response: NSApplication.ModalResponse) in
             if response == .alertSecondButtonReturn {
@@ -67,22 +67,35 @@ extension UniversalInstallationView {
         }
     }
 
+    var creationLogWorkflow: AppLogging.Workflow {
+        if isWindowsWorkflow { return .windows }
+        if isLinuxWorkflow { return linuxFlowContext?.isRawImageSelection == true ? .raw : .linux }
+        if isPPC { return .ppc }
+        if isMavericks { return .mavericks }
+        if isRestoreLegacy { return .legacyRestore }
+        if isCatalina { return .catalina }
+        if isSierra { return .sierra }
+        return .macos
+    }
+
     func log(_ message: String, category: String = "Installation") {
-        AppLogging.info(message, category: category)
+        AppLogging.info(message, stage: .usb, workflow: creationLogWorkflow)
     }
 
     func logError(_ message: String, category: String = "Installation") {
-        AppLogging.error(message, category: category)
+        AppLogging.error(message, stage: .usb, workflow: creationLogWorkflow)
     }
 
     func performEmergencyCleanup(mountPoint: URL, tempURL: URL) {
         let cleanupToken = AppActiveOperationRegistry.shared.begin(
             kind: .cleanup,
-            context: "installation_emergency_cleanup"
+            context: "installation_emergency_cleanup",
+            logStage: .usb,
+            logWorkflow: creationLogWorkflow
         )
         defer { cleanupToken.finish() }
-        log("Cleanup: odmontowuję \(mountPoint.path)")
-        log("Cleanup: usuwam katalog TEMP \(tempURL.path)")
+        log("Emergency cleanup: detaching \(mountPoint.path)")
+        log("Emergency cleanup: removing temporary directory \(tempURL.path)")
 
         let unmountTask = Process()
         unmountTask.launchPath = "/usr/bin/hdiutil"
@@ -93,6 +106,7 @@ extension UniversalInstallationView {
         if FileManager.default.fileExists(atPath: tempURL.path) {
             try? FileManager.default.removeItem(at: tempURL)
         }
+        log("Emergency cleanup completed: temporaryDirectoryExists=\(FileManager.default.fileExists(atPath: tempURL.path)).")
     }
 
     func resetFlowToStartImmediately() {
@@ -110,7 +124,7 @@ extension UniversalInstallationView {
     func showCreationProgressCancelAlert() {
         guard !isWindowsMacUSBootCancellationBlocked else {
             log(
-                "Pominięto otwarcie potwierdzenia anulowania: etap macUSBoot nie może zostać przerwany.",
+                "Cancellation confirmation skipped: the macUSBoot stage cannot be interrupted.",
                 category: "WindowsInstallFlow"
             )
             return
@@ -119,16 +133,16 @@ extension UniversalInstallationView {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Czy przerwać tworzenie nośnika?")
-        alert.informativeText = String(localized: "Nośnik USB nie będzie zdatny do rozruchu, jeśli proces zostanie zatrzymany przed zakończeniem. Konieczne będzie ponowne przygotowanie urządzenia.")
-        alert.addButton(withTitle: String(localized: "Kontynuuj"))
-        alert.addButton(withTitle: String(localized: "Przerwij"))
+        alert.messageText = String(localized: "creator.cancel.alert.title", table: "Creator")
+        alert.informativeText = String(localized: "creator.cancel.alert.description", table: "Creator")
+        alert.addButton(withTitle: String(localized: "creator.action.continue", table: "Creator"))
+        alert.addButton(withTitle: String(localized: "creator.action.stop", table: "Creator"))
 
         let completionHandler = { (response: NSApplication.ModalResponse) in
             guard response == .alertSecondButtonReturn else { return }
             guard !self.isWindowsMacUSBootCancellationBlocked else {
                 self.log(
-                    "Odrzucono potwierdzenie anulowania: helper przeszedł do nieprzerywalnego etapu macUSBoot.",
+                    "Cancellation confirmation rejected: the helper entered the non-cancellable macUSBoot stage.",
                     category: "WindowsInstallFlow"
                 )
                 return
@@ -155,7 +169,7 @@ extension UniversalInstallationView {
                 isCancelling = false
             }
             log(
-                "Pominięto żądanie anulowania: etap macUSBoot nie może zostać przerwany.",
+                "Cancellation request skipped: the macUSBoot stage cannot be interrupted.",
                 category: "WindowsInstallFlow"
             )
             return
@@ -172,7 +186,7 @@ extension UniversalInstallationView {
             DispatchQueue.main.async {
                 if cancellationAccepted {
                     self.log(
-                        "Helper przyjął żądanie anulowania; oczekuję na wynik końcowy workflow.",
+                        "Helper accepted cancellation; waiting for the final workflow result.",
                         category: self.isWindowsWorkflow ? "WindowsInstallFlow" : "Installation"
                     )
                 } else {
@@ -181,7 +195,7 @@ extension UniversalInstallationView {
                         self.isCancelling = false
                     }
                     self.log(
-                        "Helper odrzucił żądanie anulowania; aplikacja pozostaje w aktywnym workflow.",
+                        "Helper rejected cancellation; the workflow remains active.",
                         category: self.isWindowsWorkflow ? "WindowsInstallFlow" : "Installation"
                     )
                 }
@@ -195,6 +209,7 @@ extension UniversalInstallationView {
     }
 
     func completeCancellationFlow() {
+        log("Workflow cancelled; opening the finish screen.")
         if let token = usbProcessSleepBlockToken {
             SystemSleepBlocker.shared.end(token)
             usbProcessSleepBlockToken = nil
@@ -213,7 +228,7 @@ extension UniversalInstallationView {
 
     func unmountDMG() {
         let mountPoint = sourceAppURL.deletingLastPathComponent().path
-        log("UnmountDMG: próba odmontowania \(mountPoint)")
+        log("Source image detach requested: \(mountPoint)")
         guard mountPoint.hasPrefix("/Volumes/") else { return }
 
         let task = Process()
@@ -221,18 +236,18 @@ extension UniversalInstallationView {
         task.arguments = ["detach", mountPoint, "-force"]
         try? task.run()
         task.waitUntilExit()
-        log("UnmountDMG: polecenie zakończone")
+        log("Source image detach command completed: \(mountPoint)")
     }
 
     func unmountSourceImageIfNeeded() {
         if isWindowsWorkflow {
-            log("Unmount Windows image: pomijam (obsługa mountu po stronie helpera).")
+            log("Source image detach skipped: Windows source mount is managed by the helper.")
             return
         }
 
         if let linuxMountPoint = linuxFlowContext?.mountPointURLForCleanup {
             let mountPath = linuxMountPoint.path
-            log("Unmount Linux image: próba odmontowania \(mountPath)")
+            log("Source image detach requested: \(mountPath)")
 
             let task = Process()
             task.launchPath = "/usr/bin/hdiutil"
@@ -240,12 +255,12 @@ extension UniversalInstallationView {
             try? task.run()
             task.waitUntilExit()
 
-            log("Unmount Linux image: polecenie zakończone")
+            log("Source image detach command completed: \(mountPath)")
             return
         }
 
         if linuxFlowContext != nil {
-            log("Unmount Linux image: brak mounted image path, pomijam.")
+            log("Source image detach skipped: no mounted image path.")
             return
         }
 
@@ -290,10 +305,10 @@ extension UniversalInstallationView {
     func showUSBDisconnectAlert() {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
-        alert.messageText = String(localized: "Odłączono nośnik USB")
-        alert.informativeText = String(localized: "Dalsze działanie aplikacji zostanie zablokowane")
+        alert.messageText = String(localized: "creator.disconnected.title", table: "Creator")
+        alert.informativeText = String(localized: "creator.disconnected.alert.description", table: "Creator")
         alert.alertStyle = .warning
-        alert.addButton(withTitle: String(localized: "Kontynuuj"))
+        alert.addButton(withTitle: String(localized: "creator.action.continue", table: "Creator"))
 
         let completionHandler = { (_: NSApplication.ModalResponse) in
             DispatchQueue.main.async {

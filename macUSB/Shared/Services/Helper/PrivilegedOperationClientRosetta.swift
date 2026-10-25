@@ -32,7 +32,7 @@ extension PrivilegedOperationClient {
             finishOnce(.failure(NSError(
                 domain: "macUSB",
                 code: 2,
-                userInfo: [NSLocalizedDescriptionKey: String(localized: "Nie udało się uzyskać połączenia XPC z helperem.")]
+                userInfo: [NSLocalizedDescriptionKey: String(localized: "app.helper.xpc.connection_failed.message", table: "App")]
             )))
             return
         }

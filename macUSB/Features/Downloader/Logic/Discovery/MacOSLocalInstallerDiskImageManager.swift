@@ -89,8 +89,8 @@ final class MacOSLocalInstallerDiskImageManager: @unchecked Sendable {
 
         guard failures.isEmpty else {
             AppLogging.error(
-                "Cleanup obrazow lokalnego instalatora nie powiodl sie; katalog tymczasowy pozostaje w \(temporaryRoot.path). \(failures.joined(separator: " | "))",
-                category: "Downloader"
+                "Local installer image cleanup failed; temporary directory remains at \(temporaryRoot.path). \(failures.joined(separator: " | "))",
+                stage: .downloader, workflow: .discovery
             )
             throw MacOSLocalInstallerCleanupFailure(failures: failures)
         }
@@ -100,8 +100,8 @@ final class MacOSLocalInstallerDiskImageManager: @unchecked Sendable {
                 try fileManager.removeItem(at: temporaryRoot)
             } catch {
                 AppLogging.error(
-                    "Nie udalo sie usunac tymczasowego katalogu wykrywania lokalnego instalatora \(temporaryRoot.path): \(error.localizedDescription)",
-                    category: "Downloader"
+                    "Could not remove temporary local installer discovery directory \(temporaryRoot.path): \(error.localizedDescription)",
+                    stage: .downloader, workflow: .discovery
                 )
                 throw MacOSLocalInstallerCleanupFailure(
                     failures: [
@@ -130,16 +130,16 @@ final class MacOSLocalInstallerDiskImageManager: @unchecked Sendable {
                     "proba \(attempt), kod \(result.terminationStatus): \(result.standardError)"
                 diagnostics.append(diagnostic)
                 AppLogging.error(
-                    "Standardowe odmontowanie lokalnego instalatora nie powiodlo sie (\(diagnostic)).",
-                    category: "Downloader"
+                    "Normal local installer detach failed (\(diagnostic)).",
+                    stage: .downloader, workflow: .discovery
                 )
             } catch {
                 let diagnostic =
                     "proba \(attempt), blad uruchomienia: \(error.localizedDescription)"
                 diagnostics.append(diagnostic)
                 AppLogging.error(
-                    "Nie udalo sie uruchomic standardowego odmontowania lokalnego instalatora (\(diagnostic)).",
-                    category: "Downloader"
+                    "Could not start normal local installer detach (\(diagnostic)).",
+                    stage: .downloader, workflow: .discovery
                 )
             }
         }

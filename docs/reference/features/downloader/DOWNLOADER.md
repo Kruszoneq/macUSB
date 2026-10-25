@@ -185,6 +185,7 @@ Power management contract during production download flow:
 - idle sleep is blocked for the full runtime of one download session,
 - activation starts when download workflow starts (`running` state),
 - release is guaranteed on every terminal path: success, failure, or cancellation.
+- activation and release diagnostics use the selected `DOWNLOADER_MODERN`, `DOWNLOADER_LEGACY`, or `DOWNLOADER_OLDEST` label and an English reason.
 
 Summary:
 - shows transfer, average speed, duration, and output file name,
@@ -242,6 +243,16 @@ App-side operation tracking:
 ---
 
 ## 9. UI Contract
+
+Localization:
+- the coordinator explicitly injects the effective app locale and language-derived layout direction into the downloader's separate SwiftUI host, as defined in [Localization Contract](../../platform/LOCALIZATION_CONTRACT.md#language-set-consistency),
+- localized downloader-owned strings reside in `macUSB/Resources/Downloader.xcstrings`, with Polish as the source language and the same 13-language set as the app,
+- UI, localized error wrappers, discovery/download/assembly/cleanup statuses, alerts, completion notifications, and the Tools-menu entry select the `Downloader` table explicitly,
+- source-text keys have semantic `downloader.*` identifiers; source wording and existing translations remain catalog values,
+- prerequisite alert title/message keys are rendered dynamically from the same table and are manually managed for extraction,
+- shared labels and formatting strings have downloader-owned entries; their original entries remain available when other app/helper consumers use them,
+- DEBUG-only text uses untranslated English literals from code, without catalog entries or automatic extraction; this includes the developer section, retain-files toggle, retention statuses/result, and the retention-specific cancellation message,
+- raw helper status text and technical diagnostic details retain their existing transport contract; this catalog migration does not introduce new translations for previously untranslated helper or command output.
 
 Window:
 - fixed-width sheet from coordinator,
@@ -321,16 +332,18 @@ User-facing messaging:
 ## 11. DEBUG Behavior
 
 Debug-only option:
-- `DEBUG: Nie usuwaj pobranych plików`
+- `Save downloaded files (Debug)` under the `Developer` heading; both labels are untranslated English literals.
 
 When enabled:
 - session files are retained after success/failure/cancel inside current app runtime.
+- retention-specific cleanup statuses, the temporary-files summary value, and the close-confirmation message use untranslated English literals.
 
 When disabled:
 - normal final cleanup stage executes.
 
 Release:
 - no DEBUG controls in downloader options UI.
+- `shouldRetainSessionFilesForDebugMode()` always returns `false`, so retention-specific text cannot be displayed.
 
 ---
 
@@ -348,8 +361,12 @@ Downloader logs should include:
 - disk-image creation start and terminal result, including technical error details when creation fails,
 - cleanup result and final destination status.
 
-Logging category:
-- downloader events are written via `AppLogging` with category `Downloader`.
+Logging contract:
+- app-side downloader event diagnostics are written through `AppLogging` with the `DOWNLOADER` stage and English messages. Exported lines use `[HH:MM:SS] [DOWNLOADER] Message` for window and prerequisite events without an identified workflow.
+- discovery uses `DOWNLOADER_DISCOVERY`; a selected download uses `DOWNLOADER_MODERN`, `DOWNLOADER_LEGACY`, or `DOWNLOADER_OLDEST` across manifest lookup, transfer, verification, assembly, disk-image work, and cleanup. Event and error logs keep the selected workflow label, except helper assembly progress and result decode failures, which use the base `[DOWNLOADER]` label. Protected-operation token logs for the downloader window, helper assembly, and cleanup currently use the registry's default `[APP]` label.
+- helper assembly progress and tool output forwarded into the app use the same selected downloader workflow label followed by the separate `[HELPER]` source tag. The app's legacy assembly process combines stdout and stderr with a newline and trims surrounding whitespace before logging; other forwarded output and system error descriptions retain their source text.
+- an unconfirmed helper cleanup writes an English app error with the selected downloader workflow label. If the helper supplied an error description, a separate line carries that raw description with the same workflow label and `[HELPER]` source tag.
+- capacity diagnostics retain exact bytes and decimal GB, and verification logs retain expected and actual sizes or hashes. Localized status text and alerts remain presentation data.
 
 ---
 

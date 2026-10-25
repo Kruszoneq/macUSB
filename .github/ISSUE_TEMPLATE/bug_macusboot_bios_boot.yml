@@ -8,7 +8,7 @@ body:
       value: |
         Please fill in all required fields.
         Attach a photo or video if it helps show the boot problem.
-        If the problem occurred while creating the USB storage device, export diagnostic logs using `Option (⌥) + L`, then attach the exported file.
+        If the problem occurred while creating the USB storage device, attach the exported `.log` file. Use `Option (⌥) + L` for the current session, or `Help → Export logs from previous session...` for the previous app session, when available.
 
   - type: input
     id: app_version
@@ -117,10 +117,10 @@ body:
     id: diagnostic_logs
     attributes:
       label: "Diagnostic logs"
-      description: "If the problem occurred while creating the USB storage device, export diagnostic logs using Option (⌥) + L, then attach the exported .txt file."
+      description: "If the problem occurred while creating the USB storage device, export diagnostic logs from the current session using Option (⌥) + L, then attach the exported .log file. If the issue occurred during the previous app session, use Help → Export logs from previous session... instead, when available."
     validations:
       required: false
-      accept: ".txt"
+      accept: ".log"
 
   - type: upload
     id: problem_media

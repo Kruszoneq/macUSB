@@ -38,7 +38,7 @@ extension AnalysisLogic {
             }
         }
         if isPanther {
-            self.logError("Wykryto niewspierany system: Mac OS X Panther (10.3). Przerywam analizę.")
+            self.logDetectedMacOSError("Unsupported system detected: Mac OS X Panther (10.3). Stopping analysis.")
             if let userVisible = userVisibleVersionFromMounted {
                 self.recognizedVersion = "Mac OS X Panther \(userVisible)"
             } else if rawVer.starts(with: "10.3") {
@@ -88,7 +88,7 @@ extension AnalysisLogic {
         let isSierraName = nameLower.contains("sierra") && !nameLower.contains("high")
         let isUnsupportedSierraVersion = isSierraName && !isSierra
         self.isUnsupportedSierra = isUnsupportedSierraVersion
-        if isUnsupportedSierraVersion { self.logError("Ta wersja systemu macOS Sierra nie jest wspierana (wymagana 12.6.06).") }
+        if isUnsupportedSierraVersion { self.logDetectedMacOSError("This macOS Sierra version is unsupported (12.6.06 required).") }
 
         let isMavericks = nameLower.contains("mavericks") || rawVer.starts(with: "10.9")
 
@@ -167,9 +167,9 @@ extension AnalysisLogic {
             self.isUnsupportedSierra ? "isUnsupportedSierra" : nil,
             self.isMavericks ? "isMavericks" : nil
         ].compactMap { $0 }.joined(separator: ", ")
-        self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion)")
-        self.log("Przypisane flagi: \(trueFlags.isEmpty ? "brak" : trueFlags)")
-        AppLogging.separator()
+        self.logDetectedMacOS("Analysis completed. Recognized: \(self.recognizedVersion)")
+        self.logDetectedMacOS("Assigned flags: \(trueFlags.isEmpty ? "none" : trueFlags)")
+        AppLogging.separator(stage: .analysis, workflow: isPPC ? .ppc : .macos)
 
         if self.isSystemDetected {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUSBSection = true } }
@@ -201,7 +201,7 @@ extension AnalysisLogic {
             let isExact = rawVer.starts(with: "10.3") || rawVer.starts(with: "10.4") || rawVer.starts(with: "10.5") || rawVer.starts(with: "10.6")
             let exactSuffix = isExact ? " \(rawVer)" : ""
             if isPanther {
-                self.logError("Wykryto niewspierany system: Mac OS X Panther (10.3). Przerywam analizę.")
+                self.logDetectedMacOSError("Unsupported system detected: Mac OS X Panther (10.3). Stopping analysis.")
                 self.recognizedVersion = "Mac OS X Panther\(exactSuffix)"
             } else if isTiger {
                 self.recognizedVersion = "Mac OS X Tiger\(exactSuffix)"
@@ -243,7 +243,7 @@ extension AnalysisLogic {
         let isSierraName = nameLower.contains("sierra") && !nameLower.contains("high")
         let isUnsupportedSierraVersion = isSierraName && !isSierra
         self.isUnsupportedSierra = isUnsupportedSierraVersion
-        if isUnsupportedSierraVersion { self.logError("Ta wersja systemu macOS Sierra nie jest wspierana (wymagana 12.6.06).") }
+        if isUnsupportedSierraVersion { self.logDetectedMacOSError("This macOS Sierra version is unsupported (12.6.06 required).") }
 
         let isMavericks = nameLower.contains("mavericks") || rawVer.starts(with: "10.9")
 
@@ -320,9 +320,9 @@ extension AnalysisLogic {
             self.isUnsupportedSierra ? "isUnsupportedSierra" : nil,
             self.isMavericks ? "isMavericks" : nil
         ].compactMap { $0 }.joined(separator: ", ")
-        self.log("Analiza zakończona. Rozpoznano: \(self.recognizedVersion)")
-        self.log("Przypisane flagi: \(trueFlags.isEmpty ? "brak" : trueFlags)")
-        AppLogging.separator()
+        self.logDetectedMacOS("Analysis completed. Recognized: \(self.recognizedVersion)")
+        self.logDetectedMacOS("Assigned flags: \(trueFlags.isEmpty ? "none" : trueFlags)")
+        AppLogging.separator(stage: .analysis, workflow: isPPC ? .ppc : .macos)
 
         if self.isSystemDetected {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) { self.showUSBSection = true } }

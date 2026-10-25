@@ -61,48 +61,46 @@ struct USBDriveLogic {
         if IOServiceGetMatchingServices(0, match, &iterator) != KERN_SUCCESS { return nil }
         defer { IOObjectRelease(iterator) }
 
-        var media: io_object_t = IO_OBJECT_NULL
         while case let service = IOIteratorNext(iterator), service != IO_OBJECT_NULL {
             defer { IOObjectRelease(service) }
             // Sprawdź nazwę BSD i czy to whole media
             let bsdName = ioRegistryProperty(service, key: kIOBSDNameKey as String) as? String
             let isWhole = (ioRegistryProperty(service, key: kIOMediaWholeKey as String) as? NSNumber)?.boolValue ?? false
             if bsdName == bsdWholeName && isWhole {
-                // Wspinaj się po rodzicach i szukaj węzłów USB
-                var current: io_registry_entry_t = service
-                while true {
-                    var parent: io_registry_entry_t = IO_OBJECT_NULL
-                    let kr = IORegistryEntryGetParentEntry(current, kIOServicePlane, &parent)
-                    if kr != KERN_SUCCESS || parent == IO_OBJECT_NULL { break }
-
-                    // Spróbuj odczytać bcdUSB
-                    if let bcd = ioRegistryProperty(parent, key: "bcdUSB") as? NSNumber {
-                        let value = bcd.intValue
-                        if value >= 0x0400 { IOObjectRelease(parent); return .usb4 }
-                        if value >= 0x0320 { IOObjectRelease(parent); return .usb32 }
-                        if value >= 0x0310 { IOObjectRelease(parent); return .usb31 }
-                        if value >= 0x0300 { IOObjectRelease(parent); return .usb3 }
-                        if value >= 0x0200 { IOObjectRelease(parent); return .usb2 }
+                return USBRegistryTraversal.firstValue(
+                    from: service,
+                    retain: { IOObjectRetain($0) == KERN_SUCCESS },
+                    release: { _ = IOObjectRelease($0) },
+                    parent: { entry in
+                        var parent: io_registry_entry_t = IO_OBJECT_NULL
+                        guard IORegistryEntryGetParentEntry(entry, kIOServicePlane, &parent) == KERN_SUCCESS,
+                              parent != IO_OBJECT_NULL else { return nil }
+                        return parent
+                    },
+                    value: { (parent: io_registry_entry_t) -> USBPortSpeed? in
+                        if let bcd = ioRegistryProperty(parent, key: "bcdUSB") as? NSNumber {
+                            let value = bcd.intValue
+                            if value >= 0x0400 { return .usb4 }
+                            if value >= 0x0320 { return .usb32 }
+                            if value >= 0x0310 { return .usb31 }
+                            if value >= 0x0300 { return .usb3 }
+                            if value >= 0x0200 { return .usb2 }
+                        }
+                        if let speedStr = ioRegistryProperty(parent, key: "PortSpeed") as? String {
+                            let s = speedStr.lowercased()
+                            if s.contains("superspeed") { return .usb3 }
+                            if s.contains("high speed") { return .usb2 }
+                        }
+                        return nil
                     }
-                    // Spróbuj odczytać PortSpeed (np. "High Speed", "SuperSpeed")
-                    if let speedStr = ioRegistryProperty(parent, key: "PortSpeed") as? String {
-                        let s = speedStr.lowercased()
-                        if s.contains("superspeed") { IOObjectRelease(parent); return .usb3 }
-                        if s.contains("high speed") { IOObjectRelease(parent); return .usb2 }
-                    }
-
-                    IOObjectRelease(current)
-                    current = parent
-                }
-                if current != IO_OBJECT_NULL { IOObjectRelease(current) }
-                break
+                )
             }
         }
         return nil
     }
 
     /// Returns true if the mounted volume at the given URL is a network filesystem.
-    private static func isNetworkVolume(url: URL) -> Bool {
+    static func isNetworkVolume(url: URL) -> Bool {
         guard let fsName = fileSystemTypeName(url: url) else { return false }
         let networkTypes: Set<String> = ["smbfs", "afpfs", "webdav", "nfs", "cifs"]
         return networkTypes.contains(fsName)
@@ -203,26 +201,18 @@ struct USBDriveLogic {
         return requestedWhole
     }
 
-    private static func runDiskutilPlistCommand(arguments: [String]) -> [String: Any]? {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/sbin/diskutil")
-        process.arguments = arguments
-
-        let outputPipe = Pipe()
-        process.standardOutput = outputPipe
-        process.standardError = Pipe()
-
-        do {
-            try process.run()
-        } catch {
+    private static func runDiskutilPlistCommand(
+        arguments: [String], cancellation: USBDiscoveryCancellation? = nil
+    ) -> [String: Any]? {
+        switch USBDiscoveryProcessRunner.shared.run(arguments: arguments, cancellation: cancellation) {
+        case .success(let data):
+            return try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any]
+        case .failure(let reason):
+            if reason != .cancelled {
+                AppLogging.error("USB discovery query failed: \(reason).", stage: .usb)
+            }
             return nil
         }
-
-        process.waitUntilExit()
-        guard process.terminationStatus == 0 else { return nil }
-
-        let data = outputPipe.fileHandleForReading.readDataToEndOfFile()
-        return try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any]
     }
 
     private static func extractAPFSPhysicalStoreWholeDisk(from plist: [String: Any]) -> String? {
@@ -390,24 +380,20 @@ struct USBDriveLogic {
     static func enumerateAvailablePhysicalUSBDrives(allowExternalHardDrives: Bool) -> [USBDrive] {
         enumerateAvailablePhysicalUSBDrivesWithCapacities(
             allowExternalHardDrives: allowExternalHardDrives
-        ).drives
+        )?.drives ?? []
     }
 
     static func enumerateAvailablePhysicalUSBDrivesWithCapacities(
-        allowExternalHardDrives: Bool
-    ) -> (drives: [USBDrive], capacityByWholeDisk: [String: Int64]) {
-        guard let externalList = runDiskutilPlistCommand(arguments: ["list", "-plist", "external"]),
-              let wholeDisks = externalList["WholeDisks"] as? [String],
-              !wholeDisks.isEmpty else {
-            return ([], [:])
-        }
+        allowExternalHardDrives: Bool,
+        cancellation: USBDiscoveryCancellation? = nil
+    ) -> (drives: [USBDrive], capacityByWholeDisk: [String: Int64])? {
+        guard let externalList = runDiskutilPlistCommand(arguments: ["list", "-plist", "external"], cancellation: cancellation),
+              let wholeDisks = externalList["WholeDisks"] as? [String] else { return nil }
 
         var result: [USBDrive] = []
         var capacityByWholeDisk: [String: Int64] = [:]
         for wholeDisk in wholeDisks {
-            guard let info = runDiskutilPlistCommand(arguments: ["info", "-plist", "/dev/\(wholeDisk)"]) else {
-                continue
-            }
+            guard let info = runDiskutilPlistCommand(arguments: ["info", "-plist", "/dev/\(wholeDisk)"], cancellation: cancellation) else { return nil }
 
             guard isPhysicalUSBWholeDisk(info) else { continue }
             if shouldSkipExternalHardDrive(info: info, allowExternalHardDrives: allowExternalHardDrives) {
@@ -437,6 +423,7 @@ struct USBDriveLogic {
         let sorted = result.sorted { lhs, rhs in
             lhs.device.localizedStandardCompare(rhs.device) == .orderedAscending
         }
+        guard cancellation?.isCancelled != true else { return nil }
         return (sorted, capacityByWholeDisk)
     }
 
@@ -444,15 +431,17 @@ struct USBDriveLogic {
     /// The createinstallmedia Option list keeps every whole disk and inserts its
     /// mounted HFS+ volumes directly after the matching physical target.
     static func enumerateAvailableMacOSTargetSetsWithCapacities(
-        allowExternalHardDrives: Bool
+        allowExternalHardDrives: Bool,
+        cancellation: USBDiscoveryCancellation? = nil
     ) -> (
         physicalDrives: [USBDrive],
         optionDrives: [USBDrive],
         capacityByWholeDisk: [String: Int64]
-    ) {
-        let physical = enumerateAvailablePhysicalUSBDrivesWithCapacities(
-            allowExternalHardDrives: allowExternalHardDrives
-        )
+    )? {
+        guard let physical = enumerateAvailablePhysicalUSBDrivesWithCapacities(
+            allowExternalHardDrives: allowExternalHardDrives,
+            cancellation: cancellation
+        ), cancellation?.isCancelled != true else { return nil }
 
         let physicalWholeDisks = Set(physical.drives.map(\.device))
         let eligibleVolumes = enumerateAvailableVolumeDrives(
@@ -474,6 +463,7 @@ struct USBDriveLogic {
             return [drive] + volumes
         }
 
+        guard cancellation?.isCancelled != true else { return nil }
         return (physical.drives, expandedTargets, physical.capacityByWholeDisk)
     }
 

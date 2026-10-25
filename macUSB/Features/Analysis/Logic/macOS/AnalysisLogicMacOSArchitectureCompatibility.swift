@@ -7,21 +7,21 @@ enum MacOSArchitectureBlockReason: Equatable {
 }
 
 extension MacOSArchitectureBlockReason {
-    var titleLocalizationKey: String.LocalizationValue {
+    var titleLocalizationResource: LocalizedStringResource {
         switch self {
         case .intelRequiresAppleSilicon:
-            return "analysis.macos.architecture.intel_incompatible.title"
+            return LocalizedStringResource("analysis.macos.architecture.intel_incompatible.title", table: "Analysis")
         case .unknownCreateInstallMediaArchitecture, .unknownHostArchitecture:
-            return "analysis.macos.architecture.unknown.title"
+            return LocalizedStringResource("analysis.macos.architecture.unknown.title", table: "Analysis")
         }
     }
 
-    var descriptionLocalizationKey: String.LocalizationValue {
+    var descriptionLocalizationResource: LocalizedStringResource {
         switch self {
         case .intelRequiresAppleSilicon:
-            return "analysis.macos.architecture.intel_incompatible.description"
+            return LocalizedStringResource("analysis.macos.architecture.intel_incompatible.description", table: "Analysis")
         case .unknownCreateInstallMediaArchitecture, .unknownHostArchitecture:
-            return "analysis.macos.architecture.unknown.description"
+            return LocalizedStringResource("analysis.macos.architecture.unknown.description", table: "Analysis")
         }
     }
 }
@@ -38,20 +38,20 @@ extension AnalysisLogic {
         macOSRosettaRequirement = .notRequired
 
         guard inspection.hasCreateinstallmedia else {
-            log("Architektura createinstallmedia: nie dotyczy (instalator bez createinstallmedia).")
+            logMacOS("createinstallmedia architecture: not applicable (installer has no createinstallmedia).")
             return true
         }
 
         let createInstallMediaInspection = inspection.createInstallMediaInspection
         let rawArchitectures = createInstallMediaInspection.rawArchitectures.isEmpty
-            ? "brak"
+            ? "none"
             : createInstallMediaInspection.rawArchitectures.joined(separator: ", ")
-        log(
-            "Architektura createinstallmedia: \(createInstallMediaInspection.architecture.diagnosticLabel) [segmenty: \(rawArchitectures)]"
+        logMacOS(
+            "createinstallmedia architecture: \(createInstallMediaInspection.architecture.diagnosticLabel) [segments: \(rawArchitectures)]"
         )
 
         if let failureReason = createInstallMediaInspection.failureReason {
-            logError("Nie udało się sklasyfikować architektury createinstallmedia: \(failureReason)")
+            logMacOSError("Failed to classify createinstallmedia architecture: \(failureReason)")
         }
 
         guard createInstallMediaInspection.architecture != .unknown else {
@@ -60,7 +60,7 @@ extension AnalysisLogic {
         }
 
         let hostArchitecture = MacHardwareArchitecture.current
-        log("Architektura hosta dla analizy: \(hostArchitecture.diagnosticLabel)")
+        logMacOS("Host architecture for analysis: \(hostArchitecture.diagnosticLabel)")
 
         guard hostArchitecture != .unknown else {
             blockMacOSArchitectureCompatibility(reason: .unknownHostArchitecture)
@@ -78,7 +78,7 @@ extension AnalysisLogic {
            requiresRosettaForLegacyCreateInstallMedia(name: name, rawVersion: rawVersion) {
             let availability = RosettaAvailabilityProbe.check()
             macOSRosettaRequirement = .required(availability)
-            log("Sprawdzenie Rosetty: \(rosettaAvailabilityDiagnosticLabel(availability))")
+            logMacOS("Rosetta check: \(rosettaAvailabilityDiagnosticLabel(availability))")
         }
 
         return true
@@ -91,13 +91,12 @@ extension AnalysisLogic {
         showUSBSection = false
         selectedDrive = nil
         selectedDriveSelectionID = nil
-        isCapacitySufficient = false
-        capacityCheckFinished = false
+        usbTargetReadiness = .noSelection
         withAnimation(.spring(response: 0.7, dampingFraction: 0.8)) {
             showUnsupportedMessage = true
         }
-        logError("Analiza zablokowana przez zgodność architektury: \(reason)")
-        AppLogging.separator()
+        logMacOSError("Analysis blocked by architecture compatibility: \(reason)")
+        AppLogging.separator(stage: .analysis, workflow: isPPC ? .ppc : .macos)
     }
 
     private func requiresRosettaForLegacyCreateInstallMedia(name: String, rawVersion: String) -> Bool {
@@ -137,11 +136,11 @@ extension AnalysisLogic {
     private func rosettaAvailabilityDiagnosticLabel(_ availability: RosettaAvailability) -> String {
         switch availability {
         case .available:
-            return "dostępna"
+            return "available"
         case .missing:
-            return "niezainstalowana"
+            return "missing"
         case .indeterminate:
-            return "stan niejednoznaczny"
+            return "indeterminate"
         }
     }
 }

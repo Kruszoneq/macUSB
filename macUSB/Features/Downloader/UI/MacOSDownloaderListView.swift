@@ -5,7 +5,7 @@ extension MacOSDownloaderWindowShellView {
     var installerSelectionSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 10) {
-                Text(String(localized: "Dostępne systemy"))
+                Text(String(localized: "downloader.selection.title", table: "Downloader"))
                     .font(.headline)
 
                 Spacer()
@@ -27,7 +27,7 @@ extension MacOSDownloaderWindowShellView {
                             ? 0.65
                             : 1.0
                     )
-                    .help(String(localized: "downloader.prerequisites.warning_help"))
+                    .help(String(localized: "downloader.prerequisites.warning_help", table: "Downloader"))
                     .transition(.scale(scale: 0.85).combined(with: .opacity))
                 }
 
@@ -41,14 +41,14 @@ extension MacOSDownloaderWindowShellView {
                 .macUSBSecondaryButtonStyle()
                 .disabled(isDiscoveryInProgress)
                 .opacity(isDiscoveryInProgress ? 0.65 : 1.0)
-                .help(String(localized: "Odśwież listę systemów"))
+                .help(String(localized: "downloader.selection.refresh.help", table: "Downloader"))
 
                 Button {
                     isOptionsPresented = true
                 } label: {
                     HStack(spacing: 6) {
                         Image(systemName: "slider.horizontal.3")
-                        Text(String(localized: "Opcje"))
+                        Text(String(localized: "downloader.options.button.title", table: "Downloader"))
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
@@ -99,8 +99,8 @@ extension MacOSDownloaderWindowShellView {
         case .cancelled:
             if logic.familyGroups.isEmpty {
                 listMessageView(
-                    title: String(localized: "Wyszukiwanie anulowane"),
-                    description: String(localized: "Otwórz okno ponownie, aby rozpocząć wyszukiwanie")
+                    title: String(localized: "downloader.discovery.cancelled.title", table: "Downloader"),
+                    description: String(localized: "downloader.discovery.cancelled.message", table: "Downloader")
                 )
             } else {
                 installerSectionsView
@@ -110,8 +110,8 @@ extension MacOSDownloaderWindowShellView {
         case .loaded:
             if logic.familyGroups.isEmpty {
                 listMessageView(
-                    title: String(localized: "Brak dostępnych systemów"),
-                    description: String(localized: "Nie znaleziono instalatorów w aktualnym katalogu Apple")
+                    title: String(localized: "downloader.discovery.empty.title", table: "Downloader"),
+                    description: String(localized: "downloader.discovery.empty.message", table: "Downloader")
                 )
             } else {
                 installerSectionsView
@@ -131,7 +131,7 @@ extension MacOSDownloaderWindowShellView {
                     .frame(width: 64, height: 64)
                     .cornerRadius(14)
 
-                Text(String(localized: "Wyszukiwanie dostępnych systemów"))
+                Text(String(localized: "downloader.discovery.progress.title", table: "Downloader"))
                     .font(.headline)
                     .multilineTextAlignment(.center)
                     .padding(.top, 16)
@@ -145,7 +145,7 @@ extension MacOSDownloaderWindowShellView {
 
                 Text(
                     logic.statusText.isEmpty
-                        ? String(localized: "Wyszukiwanie instalatorów na serwerach Apple...")
+                        ? String(localized: "downloader.discovery.status.searching", table: "Downloader")
                         : logic.statusText
                 )
                 .font(.caption)
@@ -166,11 +166,11 @@ extension MacOSDownloaderWindowShellView {
     var discoveryFailureView: some View {
         let isOffline = isDiscoveryOfflineFailure()
         let title = isOffline
-            ? String(localized: "Połączenie internetowe jest niedostępne")
-            : String(localized: "Nie udało się odświeżyć listy systemów")
+            ? String(localized: "downloader.discovery.network_unavailable.title", table: "Downloader")
+            : String(localized: "downloader.discovery.failed.title", table: "Downloader")
         let description = isOffline
-            ? String(localized: "Sprawdzanie dostępnych systemów zostało wstrzymane. Po przywróceniu połączenia ponów próbę odświeżenia.")
-            : String(localized: "Połączenie z serwerami Apple jest obecnie niedostępne. Spróbuj ponownie za chwilę.")
+            ? String(localized: "downloader.discovery.network_unavailable.message", table: "Downloader")
+            : String(localized: "downloader.discovery.failed.message", table: "Downloader")
 
         return StatusCard(tone: .warning, density: .compact) {
             HStack(alignment: .center, spacing: 10) {
@@ -251,7 +251,11 @@ extension MacOSDownloaderWindowShellView {
 
                 VStack(alignment: .leading, spacing: 1) {
                     HStack(spacing: 7) {
-                        Text("\(entry.family) \(entry.version)")
+                        Text(String(
+                            format: String(localized: "downloader.installer.identity.format", table: "Downloader"),
+                            entry.family,
+                            entry.version
+                        ))
                             .font(.body.weight(.medium))
                             .foregroundStyle(.primary)
 
@@ -279,7 +283,7 @@ extension MacOSDownloaderWindowShellView {
                     } label: {
                         HStack(spacing: 8) {
                             Image(systemName: "arrow.down.circle.fill")
-                            Text(String(localized: "Pobierz"))
+                            Text(String(localized: "downloader.selection.download.action", table: "Downloader"))
                         }
                         .padding(.horizontal, 14)
                         .padding(.vertical, 7)
@@ -478,7 +482,7 @@ extension MacOSDownloaderWindowShellView {
     @ViewBuilder
     func downloadedBadge(for entry: MacOSInstallerEntry) -> some View {
         if entry.isDownloaded {
-            Text(String(localized: "downloader.local_installers.downloaded_badge"))
+            Text(String(localized: "downloader.local_installers.downloaded_badge", table: "Downloader"))
                 .font(.caption2.weight(.bold))
                 .foregroundStyle(Color.accentColor)
                 .padding(.horizontal, 7)

@@ -29,8 +29,8 @@ extension MontereyDownloadFlowModel {
         var installerWasStaged = false
 
         AppLogging.info(
-            "Tworzenie obrazu DMG: rozpoczęto; instalator=\(installerURL.path), plik docelowy=\(preflightPlan.destinationURL.path).",
-            category: "Downloader"
+            "DMG creation started; installer=\(installerURL.path), destination=\(preflightPlan.destinationURL.path).",
+            stage: .downloader, workflow: loggingWorkflow
         )
 
         do {
@@ -105,8 +105,8 @@ extension MontereyDownloadFlowModel {
                 diskImageStageStatus = .completed
                 completedStages.insert(.creatingDiskImage)
                 AppLogging.info(
-                    "Tworzenie obrazu DMG: zakończono pomyślnie; obraz=\(destinationURL.path).",
-                    category: "Downloader"
+                    "DMG creation succeeded; image=\(destinationURL.path).",
+                    stage: .downloader, workflow: loggingWorkflow
                 )
                 return .success(diskImageURL: destinationURL)
             } catch {
@@ -120,8 +120,8 @@ extension MontereyDownloadFlowModel {
                 diskImageStageStatus = .completed
                 completedStages.insert(.creatingDiskImage)
                 AppLogging.error(
-                    "Tworzenie obrazu DMG: zakończono z błędem usuwania instalatora źródłowego; obraz=\(destinationURL.path), zachowany instalator=\(retainedURL.path), szczegóły=\(error.localizedDescription)",
-                    category: "Downloader"
+                    "DMG creation completed with source installer removal failure; image=\(destinationURL.path), retained installer=\(retainedURL.path), details=\(error.localizedDescription)",
+                    stage: .downloader, workflow: loggingWorkflow
                 )
                 return .partialSuccess(
                     diskImageURL: destinationURL,
@@ -143,8 +143,8 @@ extension MontereyDownloadFlowModel {
                     finalInstallerAppURL = restoredURL
                 } catch {
                     AppLogging.error(
-                        "Tworzenie obrazu DMG: zakończono błędem; nie udało się przywrócić instalatora źródłowego: \(error.localizedDescription)",
-                        category: "Downloader"
+                        "DMG creation failed; could not restore source installer: \(error.localizedDescription)",
+                        stage: .downloader, workflow: loggingWorkflow
                     )
                     throw MacOSDiskImageCreationError.sourceRestoreFailed(
                         error.localizedDescription
@@ -153,14 +153,14 @@ extension MontereyDownloadFlowModel {
             }
             if creationError is CancellationError || Task.isCancelled {
                 AppLogging.info(
-                    "Tworzenie obrazu DMG: anulowano.",
-                    category: "Downloader"
+                    "DMG creation cancelled.",
+                    stage: .downloader, workflow: loggingWorkflow
                 )
                 throw CancellationError()
             }
             AppLogging.error(
-                "Tworzenie obrazu DMG: zakończono błędem: \(diskImageTechnicalDescription(for: creationError))",
-                category: "Downloader"
+                "DMG creation failed: \(diskImageTechnicalDescription(for: creationError))",
+                stage: .downloader, workflow: loggingWorkflow
             )
             throw creationError
         }

@@ -23,10 +23,10 @@ final class RawLinuxImageSelectionCoordinator {
         let alert = NSAlert()
         alert.alertStyle = .warning
         alert.icon = NSApp.applicationIconImage
-        alert.messageText = String(localized: "raw_linux_img.alert.title")
-        alert.informativeText = String(localized: "raw_linux_img.alert.message")
-        alert.addButton(withTitle: String(localized: "Anuluj"))
-        alert.addButton(withTitle: String(localized: "raw_linux_img.alert.continue_button"))
+        alert.messageText = String(localized: "app.raw_image.selection.warning.title", table: "App")
+        alert.informativeText = String(localized: "app.raw_image.selection.warning.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.action.cancel", table: "App"))
+        alert.addButton(withTitle: String(localized: "app.raw_image.selection.action.continue", table: "App"))
         activeAlert = alert
 
         let handleResponse: (NSApplication.ModalResponse) -> Void = { response in
@@ -47,24 +47,24 @@ final class RawLinuxImageSelectionCoordinator {
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
         panel.canChooseFiles = true
-        panel.title = String(localized: "raw_linux_img.panel.title")
-        panel.message = String(localized: "raw_linux_img.panel.message")
+        panel.title = String(localized: "app.raw_image.selection.picker.title", table: "App")
+        panel.message = String(localized: "app.raw_image.selection.picker.message", table: "App")
         activePanel = panel
 
         let handleResponse: (NSApplication.ModalResponse) -> Void = { response in
             self.activePanel = nil
             guard response == .OK, let url = panel.url else {
-                AppLogging.info("Anulowano wybór surowego obrazu Linux .img.", category: "FileAnalysis")
+                AppLogging.info("Raw Linux .img selection cancelled.", stage: .analysis, workflow: .raw)
                 return
             }
 
             let standardizedURL = url.standardizedFileURL
             guard ["iso", "img"].contains(standardizedURL.pathExtension.lowercased()) else {
-                AppLogging.error("Pominięto surowy obraz Linux: nieobsługiwane rozszerzenie .\(standardizedURL.pathExtension.lowercased()).", category: "FileAnalysis")
+                AppLogging.error("Raw Linux image rejected: unsupported extension .\(standardizedURL.pathExtension.lowercased()).", stage: .analysis, workflow: .raw)
                 return
             }
 
-            AppLogging.info("Wybrano surowy obraz Linux .img: \(standardizedURL.path)", category: "FileAnalysis")
+            AppLogging.info("Raw Linux .img selected: \(standardizedURL.path)", stage: .analysis, workflow: .raw)
             AnalysisSelectionHandoff.shared.setPendingRawLinuxImageURL(standardizedURL)
             NotificationCenter.default.post(name: .macUSBNavigateToAnalysis, object: nil)
             NotificationCenter.default.post(name: .macUSBApplyPendingRawLinuxImage, object: nil)

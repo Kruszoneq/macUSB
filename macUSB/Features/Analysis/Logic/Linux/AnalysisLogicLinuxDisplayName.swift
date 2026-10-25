@@ -10,7 +10,7 @@ extension AnalysisLogic {
                 base = "Linux - \(distro)"
             }
         } else {
-            base = String(localized: "Linux - nierozpoznana dystrybucja")
+            base = String(localized: "analysis.linux.unknown.display_name", table: "Analysis")
         }
 
         guard isARM else { return base }

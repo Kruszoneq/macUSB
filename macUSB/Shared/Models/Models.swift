@@ -19,6 +19,20 @@ enum USBPortSpeed: String, Equatable {
     var isUSB2: Bool { self == .usb2 }
 }
 
+/// Physical target kind, independent of the reader's USB port speed.
+enum USBTargetMediaKind: String, Hashable {
+    case usb = "USB"
+    case sdCard = "SD CARD"
+
+    static func from(busProtocol: String?) -> Self? {
+        switch busProtocol?.trimmingCharacters(in: .whitespacesAndNewlines).uppercased() {
+        case "USB": return .usb
+        case "SECURE DIGITAL": return .sdCard
+        default: return nil
+        }
+    }
+}
+
 /// Wykryty schemat partycji dla nośnika
 enum PartitionScheme: String, Equatable {
     case gpt = "GPT"
@@ -44,6 +58,7 @@ struct USBDrive: Hashable, Identifiable {
     let size: String    // np. 16 GB
     let url: URL
     let usbSpeed: USBPortSpeed?
+    let mediaKind: USBTargetMediaKind
     let partitionScheme: PartitionScheme?
     let fileSystemFormat: FileSystemFormat?
     let needsFormatting: Bool
@@ -54,6 +69,7 @@ struct USBDrive: Hashable, Identifiable {
         size: String,
         url: URL,
         usbSpeed: USBPortSpeed? = nil,
+        mediaKind: USBTargetMediaKind = .usb,
         partitionScheme: PartitionScheme? = nil,
         fileSystemFormat: FileSystemFormat? = nil,
         needsFormatting: Bool? = nil
@@ -63,6 +79,7 @@ struct USBDrive: Hashable, Identifiable {
         self.size = size
         self.url = url
         self.usbSpeed = usbSpeed
+        self.mediaKind = mediaKind
         self.partitionScheme = partitionScheme
         self.fileSystemFormat = fileSystemFormat
 
@@ -72,12 +89,18 @@ struct USBDrive: Hashable, Identifiable {
     
     // Format wyświetlania: disk1s1 - 16GB - SANDISK
     var displayName: String {
-        let speedText = usbSpeed?.rawValue ?? "USB"
-        return "\(device) - \(size) - \(speedText) - \(name)"
+        return "\(device) - \(size) - \(mediaDisplayName) - \(name)"
     }
+
+    /// Hardware labels are verbatim, like the existing USB version labels.
+    var mediaDisplayName: String {
+        mediaKind == .sdCard ? mediaKind.rawValue : (usbSpeed?.rawValue ?? "USB")
+    }
+
+    var wholeDiskDisplayName: String { "\(device) - \(size) - \(mediaDisplayName)" }
     
     /// Czy nośnik pracuje w standardzie USB 2.0
-    var isUSB2: Bool { usbSpeed?.isUSB2 == true }
+    var isUSB2: Bool { mediaKind == .usb && usbSpeed?.isUSB2 == true }
 
     /// Czy wybór reprezentuje fizyczny whole-disk (`diskX`), a nie zamontowany wolumin.
     var isWholeDiskTarget: Bool {

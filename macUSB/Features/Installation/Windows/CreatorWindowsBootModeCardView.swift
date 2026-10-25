@@ -85,13 +85,13 @@ struct CreatorWindowsBootModeCardView: View {
             configurableCard(selectionEnabled: selectionEnabled)
         case .biosOnly:
             informationalCard(
-                titleKey: "installation.summary.windows.bios_only.title",
-                bodyKey: "installation.summary.windows.bios_only.body"
+                titleKey: LocalizedStringResource("summary.windows.bios_only.title", table: "Summary"),
+                bodyKey: LocalizedStringResource("summary.windows.bios_only.body", table: "Summary")
             )
         case .uefiOnly:
             informationalCard(
-                titleKey: "installation.summary.windows.uefi_only.title",
-                bodyKey: "installation.summary.windows.uefi_only.body"
+                titleKey: LocalizedStringResource("summary.windows.uefi_only.title", table: "Summary"),
+                bodyKey: LocalizedStringResource("summary.windows.uefi_only.body", table: "Summary")
             )
         }
     }
@@ -105,7 +105,7 @@ struct CreatorWindowsBootModeCardView: View {
                         .foregroundColor(.accentColor)
                         .frame(width: MacUSBDesignTokens.iconColumnWidth)
 
-                    Text(String(localized: "installation.summary.windows.boot_mode.body"))
+                    Text(String(localized: "summary.windows.boot_mode.body", table: "Summary"))
                         .font(.headline)
                         .foregroundColor(.accentColor)
 
@@ -113,7 +113,7 @@ struct CreatorWindowsBootModeCardView: View {
                 }
 
                 Picker(
-                    String(localized: "installation.summary.windows.boot_mode.body"),
+                    String(localized: "summary.windows.boot_mode.body", table: "Summary"),
                     selection: $selectedMode
                 ) {
                     Text(verbatim: "BIOS")
@@ -130,7 +130,7 @@ struct CreatorWindowsBootModeCardView: View {
         }
     }
 
-    private func informationalCard(titleKey: String.LocalizationValue, bodyKey: String.LocalizationValue) -> some View {
+    private func informationalCard(titleKey: LocalizedStringResource, bodyKey: LocalizedStringResource) -> some View {
         StatusCard(tone: .active, density: .compact) {
             HStack(alignment: .center) {
                 Image(systemName: "info.circle.fill")
@@ -138,10 +138,10 @@ struct CreatorWindowsBootModeCardView: View {
                     .foregroundColor(.accentColor)
                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(String(localized: titleKey))
+                    Text(titleKey)
                         .font(.headline)
                         .foregroundColor(.accentColor)
-                    Text(String(localized: bodyKey))
+                    Text(bodyKey)
                         .font(.subheadline)
                         .foregroundColor(.accentColor)
                 }

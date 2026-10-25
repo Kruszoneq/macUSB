@@ -54,7 +54,7 @@ extension HelperWorkflowExecutor {
                     titleKey: stage.titleKey,
                     percent: latestPercent,
                     statusKey: stage.statusKey,
-                    logLine: "Linux unmount retry \(attempt)/\(retryCount): nośnik zajęty, ponawiam za \(retryDelaySeconds)s.",
+                    logLine: "Linux unmount retry \(attempt)/\(retryCount): target is busy; retrying in \(retryDelaySeconds)s.",
                     shouldAdvancePercent: false
                 )
                 try waitLinuxUnmountRetryDelay(seconds: retryDelaySeconds)

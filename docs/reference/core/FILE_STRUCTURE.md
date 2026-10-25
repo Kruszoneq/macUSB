@@ -13,22 +13,33 @@
 - `macUSB/Features/Finish/*` — result and cleanup UX.
 - `macUSB/Features/Downloader/*` — downloader coordinator + UI + logic split.
 
+### Welcome layout
+
+- `macUSB/Features/Welcome/WelcomeView.swift` — welcome UI, manual and optional automatic analysis navigation.
+- `macUSB/Features/Welcome/WelcomeAutoSkipPreferences.swift` — NSAlert confirmation before persisting the automatic welcome-skip preference.
+- `macUSB/Features/Welcome/WelcomeStartupCoordinator.swift` — session-owned startup orchestration, prerequisite gating, and one-shot automatic navigation.
+- `macUSB/Features/Welcome/WelcomeStartupUpdateChecker.swift` — startup update request, metadata validation, existing update alert, and explicit up-to-date/update-available/failure result.
+
 ### Analysis layout
 
-- `macUSB/Features/Analysis/SystemAnalysisView.swift` — analysis UI screen.
+- `macUSB/Features/Analysis/SystemAnalysisView.swift` — analysis UI screen and navigation/lifecycle wiring.
+- `macUSB/Features/Analysis/SystemAnalysisUSBSectionView.swift` — existing USB requirements, prepared picker and capacity/destructive-warning presentation.
+- `macUSB/Features/Analysis/AnalysisUSBDiscoveryPresentation.swift` — error/waiting cards, actual verified-alternative hint and deliberate-selection NSAlert.
 - `macUSB/Features/Analysis/AnalysisLogic.swift` — analysis state + facade API for UI bindings.
 - `macUSB/Features/Analysis/AnalysisSelectionHandoff.swift` — handoff bridge for pending installer URL from downloader flow.
 - `macUSB/Features/Analysis/AnalysisNotifications.swift` — shared `Notification.Name` constants used by analysis/flow wiring.
 - `macUSB/Features/Analysis/Checksums/*` — manual post-analysis SHA-256 checksum action for successful non-`.app` source-file flows, including POSIX streaming service, sheet state model, and SwiftUI views.
 - `macUSB/Features/Analysis/Logic/AnalysisLogicFileSelection.swift` — file selection/drop/open-panel logic.
 - `macUSB/Features/Analysis/Logic/AnalysisLogicAnalysisFlow.swift` — orchestration of analysis execution for `.app` and image sources.
+- `macUSB/Features/Analysis/Logic/AnalysisLogicSourceCapacityPolicy.swift` — image and `.app` source-size resolution, exact USB capacity requirement, display class, and fallback policy.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSCompatibility.swift` — macOS-only compatibility/version-family detection rules and flag mapping.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSArchitectureCompatibility.swift` — host/`createinstallmedia` architecture policy and Rosetta requirement handoff.
 - `macUSB/Features/Analysis/Logic/macOS/MacOSCreateInstallMediaArchitecture.swift` — CoreFoundation-backed local executable architecture inspection and normalized Apple Silicon/Intel/universal classification.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSImageMounting.swift` — image mounting + mounted-source guard + legacy image read logic.
-- `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerMetadata.swift` — installer metadata/version parsing and USB capacity mapping helpers.
+- `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerMetadata.swift` — installer metadata and marketing-version parsing.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSInstallerIcon.swift` — installer icon discovery.
-- `macUSB/Features/Analysis/Logic/AnalysisLogicUsbDrives.swift` — USB drive enumeration/refresh/capacity checks.
+- `macUSB/Features/Analysis/Logic/AnalysisLogicUSBAdmission.swift` — final asynchronous read-only target identity/capacity check before handoff, without subprocesses or new prompts.
+- `macUSB/Features/Analysis/Logic/AnalysisLogicUsbDrives.swift` — serialized USB refresh orchestration, snapshot/selection reconciliation and target-readiness policy.
 - `macUSB/Features/Analysis/Logic/macOS/AnalysisLogicMacOSLifecycle.swift` — reset/cleanup/manual Tiger flow helpers.
 - `macUSB/Features/Analysis/Logic/Windows/AnalysisLogicWindowsBootMarkers.swift` — bounded, case-insensitive BIOS/UEFI marker indexing for mounted Windows ISO sources.
 - `macUSB/Features/Analysis/Logic/Windows/AnalysisLogicWindowsBootPolicy.swift` — Windows family/architecture policy that maps detected boot markers to eligible boot modes.
@@ -74,6 +85,15 @@
 - `macUSB/Shared/Services/AppWindowCloseGuard.swift` — main-window delegate forwarding close requests to the termination coordinator.
 - `macUSB/Shared/Services/MacHardwareArchitecture.swift` — physical Mac architecture detection independent of the current process architecture.
 - `macUSB/Shared/Services/RosettaAvailabilityProbe.swift` — execution-based Rosetta availability probe.
+
+- `macUSB/Shared/Services/USBDiscoveryModels.swift` — structured scan outcomes, per-target verification, discovery activity and selected-target readiness.
+- `macUSB/Shared/Services/USBTargetDiscoveryService.swift` — analysis-only physical USB/SD qualification and prepared Option snapshots.
+- `macUSB/Shared/Services/USBDiscoveryRegistryProbe.swift` — balanced IOKit ownership, current media identity and independent physical USB/SD evidence.
+- `macUSB/Shared/Services/USBDiscoveryVolumeCollector.swift` — current GPT/HFS+ Option-volume metadata, identity and capacity collection.
+- `macUSB/Shared/Services/USBDiscoveryDiagnostics.swift` — bounded, coalesced discovery diagnostics.
+- `macUSB/Shared/Services/USBDiscoveryProcessRunner.swift` — shared read-only subprocess exclusion, bounded I/O/cancellation/cleanup and query reports.
+- `macUSB/Shared/Services/USBDriveRefreshPolicy.swift` — visible/active 2.5-second scheduling with duplicate-request exclusion.
+- `macUSB/Shared/Services/USBDriveLogic.swift` — existing USB utilities and legacy enumeration contracts for callers outside analysis.
 
 ### Permissions layout
 
@@ -125,10 +145,18 @@
 - `macUSBHelper/Workflow/Windows/MacUSBoot/*` — BIOS-only macUSBoot artifact validation, Disk Arbitration guard, raw-disk layout validation, transaction, disk operations, and orchestration.
 - `macUSBHelper/DownloaderAssembly/*`
 - `macUSBHelper/Rosetta/HelperRosettaInstaller.swift` — fixed-command, root-only Rosetta installer with bounded diagnostics.
+- `macUSBHelper/Service/HelperDiagnosticLogging.swift` — shared stage and source-tag formatting for daemon system logs.
 
-## Localization catalog
+## Localization catalogs
 
-- `macUSB/Resources/Localizable.xcstrings`
+- `macUSB/Resources/App.xcstrings` — Welcome, system menus and related app/helper messages, permission/notification prompts, update checks, startup toasts, log export, and the Tools raw-image picker, selected through `App`.
+- `macUSB/Resources/Analysis.xcstrings` — all localized analysis/source/USB selection and manual checksum presentation, selected through `Analysis`.
+- `macUSB/Resources/Summary.xcstrings` — complete pre-start summary, workflow-specific prerequisite/configuration cards, options sheets, Rosetta UI, and destructive confirmation, selected through `Summary`.
+- `macUSB/Resources/Localizable.xcstrings` — residual shared/legacy entries and areas without a dedicated catalog.
+- `macUSB/Resources/Downloader.xcstrings` — downloader-owned text and feature-specific copies of shared labels, selected through the `Downloader` table.
+- `macUSB/Resources/Creator.xcstrings` — the `Creator` table for USB execution/progress, cancellation/unmount recovery, and macOS, Windows, Linux, and raw-image helper workflow presentation.
+- `macUSB/Resources/FinishUSB.xcstrings` — the `FinishUSB` table for results, final error cards, cleanup, guidance, ejection, and USB completion notifications.
+- `macUSB/Shared/Localization/HelperWorkflowLocalizationKeys.swift` — shared app/daemon workflow presentation identifiers, legacy identifier normalization, stage mapping, and `Creator` extraction anchors.
 
 ## Bundled bootloader resources
 

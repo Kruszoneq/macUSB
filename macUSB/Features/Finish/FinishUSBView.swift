@@ -14,6 +14,7 @@ struct FinishUSBView: View {
     let isLinuxWorkflow: Bool
     let isRawImageSelection: Bool
     let isWindowsWorkflow: Bool
+    let loggingWorkflow: AppLogging.Workflow
     let didFail: Bool
     let didCancel: Bool
     let creationStartedAt: Date?
@@ -42,6 +43,7 @@ struct FinishUSBView: View {
         isLinuxWorkflow: Bool = false,
         isRawImageSelection: Bool = false,
         isWindowsWorkflow: Bool = false,
+        loggingWorkflow: AppLogging.Workflow,
         didFail: Bool,
         didCancel: Bool = false,
         creationStartedAt: Date? = nil,
@@ -61,6 +63,7 @@ struct FinishUSBView: View {
         self.isLinuxWorkflow = isLinuxWorkflow
         self.isRawImageSelection = isRawImageSelection
         self.isWindowsWorkflow = isWindowsWorkflow
+        self.loggingWorkflow = loggingWorkflow
         self.didFail = didFail
         self.didCancel = didCancel
         self.creationStartedAt = creationStartedAt
@@ -74,7 +77,8 @@ struct FinishUSBView: View {
         _ejectLogic = StateObject(
             wrappedValue: FinishUSBEjectLogic(
                 targetWholeDiskBSDName: targetWholeDiskBSDName,
-                isDebugMode: isDebugEjectMode
+                isDebugMode: isDebugEjectMode,
+                loggingWorkflow: loggingWorkflow
             )
         )
     }
@@ -96,23 +100,22 @@ struct FinishUSBView: View {
         if isDebugEjectMode { return true }
         return targetWholeDiskBSDName != nil
     }
-    private func finishEjectText(_ key: String, _ defaultValue: String) -> String {
-        let localized = Bundle.main.localizedString(forKey: key, value: nil, table: nil)
-        return localized == key ? defaultValue : localized
+    private func finishEjectText(_ key: String) -> String {
+        String(localized: String.LocalizationValue(key), table: "FinishUSB")
     }
     private var ejectActionButtonLabel: String {
         if ejectLogic.state == .debugDisabled {
-            return finishEjectText("finish.eject.button.debug", "DEBUG")
+            return "DEBUG"
         }
         if ejectLogic.state == .spotlightBlocked
             || ejectLogic.state == .forceInProgress
             || ejectLogic.state == .forceFailed {
-            return finishEjectText("finish.eject.button.force", "Wymuś wysunięcie")
+            return finishEjectText("finish.eject.button.force")
         }
         if ejectLogic.state == .failed {
-            return finishEjectText("finish.eject.error.retry", "Spróbuj ponownie")
+            return finishEjectText("finish.eject.error.retry")
         }
-        return finishEjectText("finish.eject.button.action", "Wysuń nośnik")
+        return finishEjectText("finish.eject.button.action")
     }
     private var isEjectActionEnabled: Bool {
         switch ejectLogic.state {
@@ -129,7 +132,7 @@ struct FinishUSBView: View {
     @ViewBuilder
     private func hangingBullet(_ text: String) -> some View {
         HStack(alignment: .top, spacing: 8) {
-            Text("•")
+            Text(verbatim: "•")
                 .frame(width: 10, alignment: .leading)
             Text(text)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -151,22 +154,22 @@ struct FinishUSBView: View {
         return .green
     }
     private var primaryResultTitle: String {
-        if isCancelledResult { return String(localized: "Przerwano") }
-        if isFailedResult { return String(localized: "Niepowodzenie!") }
-        return String(localized: "Sukces!")
+        if isCancelledResult { return String(localized: "finish.result.cancelled.title", table: "FinishUSB") }
+        if isFailedResult { return String(localized: "finish.result.failure.title", table: "FinishUSB") }
+        return String(localized: "finish.result.success.title", table: "FinishUSB")
     }
     private var primaryResultSubtitle: String {
-        if isCancelledResult { return String(localized: "Proces został zatrzymany przez użytkownika") }
-        if isFailedResult { return String(localized: "Spróbuj ponownie od początku") }
-        return String(localized: "Nośnik został przygotowany poprawnie")
+        if isCancelledResult { return String(localized: "finish.result.cancelled.description", table: "FinishUSB") }
+        if isFailedResult { return String(localized: "finish.result.failure.description", table: "FinishUSB") }
+        return String(localized: "finish.result.success.description", table: "FinishUSB")
     }
     private var summaryTitleText: String {
-        if isCancelledResult { return String(localized: "Tworzenie nośnika zostało przerwane") }
-        if isRawImageSelection, isFailedResult { return String(localized: "Nie udało się zapisać obrazu na nośniku USB") }
-        if isRawImageSelection { return String(localized: "Zapisano surowy obraz na nośniku USB") }
-        if isFailedResult { return String(localized: "Tworzenie instalatora nie powiodło się") }
-        if isLinuxWorkflow { return String(localized: "Utworzono nośnik startowy Linux") }
-        return String(localized: "Utworzono instalator systemu")
+        if isCancelledResult { return String(localized: "finish.summary.cancelled.title", table: "FinishUSB") }
+        if isRawImageSelection, isFailedResult { return String(localized: "finish.raw_image.result.failure.title", table: "FinishUSB") }
+        if isRawImageSelection { return String(localized: "finish.raw_image.result.success.title", table: "FinishUSB") }
+        if isFailedResult { return String(localized: "finish.summary.failure.title", table: "FinishUSB") }
+        if isLinuxWorkflow { return String(localized: "finish.linux.summary.success.title", table: "FinishUSB") }
+        return String(localized: "finish.summary.success.title", table: "FinishUSB")
     }
     
     var body: some View {
@@ -240,10 +243,10 @@ struct FinishUSBView: View {
                                     .foregroundColor(.orange)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(LocalizedStringKey(linuxErrorPresentation.titleKey))
+                                    Text(LocalizedStringKey(linuxErrorPresentation.titleKey), tableName: "FinishUSB")
                                         .font(.headline)
                                         .foregroundColor(.orange)
-                                    Text(LocalizedStringKey(effectiveLinuxErrorDescriptionKey(linuxErrorPresentation)))
+                                    Text(LocalizedStringKey(effectiveLinuxErrorDescriptionKey(linuxErrorPresentation)), tableName: "FinishUSB")
                                         .font(.subheadline)
                                         .foregroundColor(.orange.opacity(0.9))
                                 }
@@ -258,12 +261,18 @@ struct FinishUSBView: View {
                                     .foregroundColor(isCancelledResult ? .orange : .red)
                                     .frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(isCancelledResult ? String(localized: "Szczegóły przerwania") : String(localized: "Szczegóły błędu"))
+                                    Text(isCancelledResult ? String(localized: "finish.result.cancelled.details.title", table: "FinishUSB") : String(localized: "finish.result.failure.details.title", table: "FinishUSB"))
                                         .font(.headline)
                                         .foregroundColor(isCancelledResult ? .orange : .red)
-                                    Text(resultDetailMessage)
-                                        .font(.subheadline)
-                                        .foregroundColor(isCancelledResult ? .orange.opacity(0.9) : .red.opacity(0.85))
+                                    Group {
+                                        if let wimErrorKey = HelperWindowsWimErrorLocalizationKey(rawValue: resultDetailMessage) {
+                                            Text(LocalizedStringKey(wimErrorKey.rawValue), tableName: "FinishUSB")
+                                        } else {
+                                            Text(resultDetailMessage)
+                                        }
+                                    }
+                                    .font(.subheadline)
+                                    .foregroundColor(isCancelledResult ? .orange.opacity(0.9) : .red.opacity(0.85))
                                 }
                                 Spacer()
                             }
@@ -275,20 +284,20 @@ struct FinishUSBView: View {
                             HStack(alignment: .top) {
                                 Image(systemName: "info.circle.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
                                 VStack(alignment: .leading, spacing: 10) {
-                                    Text("Co dalej?").font(.headline).foregroundColor(.primary)
+                                    Text("finish.nextsteps.title", tableName: "FinishUSB").font(.headline).foregroundColor(.primary)
                                     VStack(alignment: .leading, spacing: 5) {
                                         if isLinuxWorkflow {
-                                            Text("• Podłącz nośnik USB do komputera docelowego (Mac lub PC)")
-                                            Text("• Uruchom komputer i wybierz rozruch z nośnika USB w menu startowym")
-                                            Text("• Po uruchomieniu Linuxa postępuj zgodnie z instrukcjami instalatora systemu")
+                                            Text("finish.linux.nextsteps.point1", tableName: "FinishUSB")
+                                            Text("finish.linux.nextsteps.point2", tableName: "FinishUSB")
+                                            Text("finish.linux.nextsteps.point3", tableName: "FinishUSB")
                                         } else if isWindowsWorkflow {
-                                            hangingBullet(String(localized: "finish.nextsteps.windows.pc.point1"))
-                                            hangingBullet(String(localized: "finish.nextsteps.windows.pc.point2"))
-                                            hangingBullet(String(localized: "finish.nextsteps.windows.pc.point3"))
+                                            hangingBullet(String(localized: "finish.nextsteps.windows.pc.point1", table: "FinishUSB"))
+                                            hangingBullet(String(localized: "finish.nextsteps.windows.pc.point2", table: "FinishUSB"))
+                                            hangingBullet(String(localized: "finish.nextsteps.windows.pc.point3", table: "FinishUSB"))
                                         } else {
-                                            Text("• Podłącz nośnik USB do docelowego komputera Mac")
-                                            Text("• Uruchom komputer trzymając przycisk Option (⌥)")
-                                            Text("• Wybierz instalator systemu macOS lub OS X z listy")
+                                            Text("finish.macos.nextsteps.point1", tableName: "FinishUSB")
+                                            Text("finish.macos.nextsteps.point2", tableName: "FinishUSB")
+                                            Text("finish.macos.nextsteps.point3", tableName: "FinishUSB")
                                         }
                                     }
                                     .font(.subheadline).foregroundColor(.secondary)
@@ -308,8 +317,8 @@ struct FinishUSBView: View {
                                 HStack(alignment: .top) {
                                     Image(systemName: "globe.europe.africa.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
                                     VStack(alignment: .leading, spacing: 10) {
-                                        Text("W przypadku Maca z PowerPC").font(.headline).foregroundColor(.primary)
-                                        Text("Aby uruchomić instalator z nośnika USB na Macu z PowerPC, niezbędne jest wpisanie komendy w konsoli Open Firmware. Pełna instrukcja obsługi znajduje się na stronie internetowej aplikacji.")
+                                        Text("finish.macos.ppc.guidance.title", tableName: "FinishUSB").font(.headline).foregroundColor(.primary)
+                                        Text("finish.macos.ppc.guidance.description", tableName: "FinishUSB")
                                             .font(.subheadline)
                                             .foregroundColor(.secondary)
                                     }
@@ -322,8 +331,8 @@ struct FinishUSBView: View {
                                         }
                                     }) {
                                         HStack(spacing: 6) {
-                                            Text("Instrukcja bootowania z nośnika USB (GitHub)")
-                                            Image(systemName: "arrow.up.right.square")
+                                            Text("finish.macos.ppc.guidance.action", tableName: "FinishUSB")
+                                            Image(systemName: "arrow.up.forward.square")
                                         }
                                     }
                                     .buttonStyle(.bordered)
@@ -346,11 +355,11 @@ struct FinishUSBView: View {
                         HStack(alignment: .center) {
                             Image(systemName: "trash.fill").font(sectionIconFont).foregroundColor(.accentColor).frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Czyszczenie plików tymczasowych")
+                                Text("finish.cleanup.progress.title", tableName: "FinishUSB")
                                     .font(.headline)
                                     .bold()
                                     .foregroundColor(.accentColor)
-                                Text("Proszę czekać")
+                                Text("finish.wait.description", tableName: "FinishUSB")
                                     .font(.caption)
                                     .foregroundColor(.accentColor)
                             }
@@ -366,7 +375,7 @@ struct FinishUSBView: View {
                                 HStack(alignment: .center) {
                                     Image(systemName: "checkmark.circle.fill").font(sectionIconFont).foregroundColor(.green).frame(width: MacUSBDesignTokens.iconColumnWidth)
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text("Zakończono pracę!").font(.headline).foregroundColor(.green)
+                                        Text("finish.completion.title", tableName: "FinishUSB").font(.headline).foregroundColor(.green)
                                         if let completionDurationText {
                                             Text(completionDurationText)
                                                 .font(.subheadline)
@@ -380,7 +389,7 @@ struct FinishUSBView: View {
                                 HStack(alignment: .top) {
                                     Image(systemName: "xmark.octagon.fill").font(sectionIconFont).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text("Błąd czyszczenia").font(.headline).foregroundColor(.red)
+                                        Text("finish.cleanup.error.title", tableName: "FinishUSB").font(.headline).foregroundColor(.red)
                                         if let msg = cleanupErrorMessage {
                                             Text(msg).font(.caption).foregroundColor(.red)
                                         }
@@ -391,7 +400,7 @@ struct FinishUSBView: View {
 
                         Button(action: { onReset() }) {
                             HStack {
-                                Text("Zacznij od początku")
+                                Text("finish.action.restart", tableName: "FinishUSB")
                                 Image(systemName: "arrow.counterclockwise")
                             }
                             .frame(maxWidth: .infinity)
@@ -401,7 +410,7 @@ struct FinishUSBView: View {
 
                         Button(action: { NSApplication.shared.terminate(nil) }) {
                             HStack {
-                                Text("Zakończ i wyjdź")
+                                Text("finish.action.quit", tableName: "FinishUSB")
                                 Image(systemName: "xmark.circle.fill")
                             }
                             .frame(maxWidth: .infinity)
@@ -414,7 +423,7 @@ struct FinishUSBView: View {
             }
         }
         .frame(width: MacUSBDesignTokens.windowWidth, height: MacUSBDesignTokens.windowHeight)
-        .navigationTitle("Wynik operacji")
+        .navigationTitle(Text("finish.navigation.title", tableName: "FinishUSB"))
         .navigationBarBackButtonHidden(true)
         .background(
             WindowAccessor_Finish { window in
@@ -437,8 +446,8 @@ struct FinishUSBView: View {
 
     private func effectiveLinuxErrorDescriptionKey(_ presentation: LinuxWorkflowErrorPresentation) -> String {
         if isRawImageSelection,
-           presentation.descriptionKey == "installation.error.linux.verify_write.generic" {
-            return "raw_image.error.verify.generic"
+           presentation.descriptionKey == "finish.linux.error.verify_write.generic" {
+            return "finish.raw_image.error.verify_write.generic"
         }
         return presentation.descriptionKey
     }
@@ -454,10 +463,10 @@ struct FinishUSBView: View {
                         .foregroundColor(.green)
                         .frame(width: MacUSBDesignTokens.iconColumnWidth)
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(finishEjectText("finish.eject.success.title", "Nośnik został bezpiecznie wysunięty"))
+                        Text("finish.eject.success.title", tableName: "FinishUSB")
                             .font(.headline)
                             .foregroundColor(.green)
-                        Text(finishEjectText("finish.eject.success.description", "Możesz teraz odłączyć nośnik USB."))
+                        Text("finish.eject.success.description", tableName: "FinishUSB")
                             .font(.subheadline)
                             .foregroundColor(.green.opacity(0.85))
                     }
@@ -476,10 +485,10 @@ struct FinishUSBView: View {
                                 .foregroundColor(.orange)
                                 .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 3) {
-                                Text(finishEjectText("finish.eject.spotlight.warning.title", "Spotlight uniemożliwia wysunięcie nośnika"))
+                                Text("finish.eject.spotlight.warning.title", tableName: "FinishUSB")
                                     .font(.headline)
                                     .foregroundColor(.orange)
-                                Text(finishEjectText("finish.eject.spotlight.warning.description", "Spotlight indeksuje ten nośnik, dlatego macOS nie może go bezpiecznie wysunąć. Możesz wymusić wysunięcie, aby przerwać ten proces."))
+                                Text("finish.eject.spotlight.warning.description", tableName: "FinishUSB")
                                     .font(.subheadline)
                                     .foregroundColor(.orange.opacity(0.85))
                             }
@@ -495,18 +504,18 @@ struct FinishUSBView: View {
                                 .foregroundColor(.red)
                                 .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 3) {
-                                Text(
+                                Text(LocalizedStringKey(
                                     ejectLogic.state == .forceFailed
-                                    ? finishEjectText("finish.eject.force.error.title", "Nie można wymusić wysunięcia nośnika")
-                                    : finishEjectText("finish.eject.error.title", "Nie można wysunąć nośnika")
-                                )
+                                    ? "finish.eject.force.error.title"
+                                    : "finish.eject.error.title"
+                                ), tableName: "FinishUSB")
                                     .font(.headline)
                                     .foregroundColor(.red)
-                                Text(
+                                Text(LocalizedStringKey(
                                     ejectLogic.state == .forceFailed
-                                    ? finishEjectText("finish.eject.force.error.description", "macOS nadal nie może wysunąć nośnika. Zamknij aplikacje, które mogą z niego korzystać, i spróbuj ponownie.")
-                                    : finishEjectText("finish.eject.error.description", "Zamknij aplikacje używające nośnika i spróbuj ponownie.")
-                                )
+                                    ? "finish.eject.force.error.description"
+                                    : "finish.eject.error.description"
+                                ), tableName: "FinishUSB")
                                     .font(.subheadline)
                                     .foregroundColor(.red.opacity(0.85))
                             }
@@ -524,18 +533,18 @@ struct FinishUSBView: View {
                                 .foregroundColor(.accentColor)
                                 .frame(width: MacUSBDesignTokens.iconColumnWidth)
                             VStack(alignment: .leading, spacing: 3) {
-                                Text(
+                                Text(LocalizedStringKey(
                                     ejectLogic.state == .unavailable
-                                    ? finishEjectText("finish.eject.unavailable.title", "Nośnik nie jest już dostępny")
-                                    : finishEjectText("finish.eject.card.title", "Bezpiecznie wysuń nośnik USB")
-                                )
+                                    ? "finish.eject.unavailable.title"
+                                    : "finish.eject.card.title"
+                                ), tableName: "FinishUSB")
                                 .font(.headline)
                                 .foregroundColor(.accentColor)
-                                Text(
+                                Text(LocalizedStringKey(
                                     ejectLogic.state == .unavailable
-                                    ? finishEjectText("finish.eject.unavailable.description", "Nośnik został odłączony lub wysunięty poza aplikacją.")
-                                    : finishEjectText("finish.eject.card.description", "Po zakończeniu pracy wysuń nośnik przed odłączeniem od komputera.")
-                                )
+                                    ? "finish.eject.unavailable.description"
+                                    : "finish.eject.card.description"
+                                ), tableName: "FinishUSB")
                                 .font(.subheadline)
                                 .foregroundColor(.accentColor.opacity(0.9))
                             }
@@ -548,7 +557,7 @@ struct FinishUSBView: View {
                             }
                         }) {
                             HStack {
-                                Text(ejectActionButtonLabel)
+                                Text(verbatim: ejectActionButtonLabel)
                                 if isEjectActionInProgress {
                                     ProgressView()
                                         .controlSize(.small)
@@ -570,9 +579,16 @@ struct FinishUSBView: View {
     // --- LOGIKA ---
     func performCleanupWithDelay() {
         isCleaning = true
+        AppLogging.info(
+            "Finish cleanup requested: executor=app, detachMountPoint=\(shouldDetachMountPoint), mountPoint=\(mountPoint.path), temporaryPath=\(tempWorkURL.path).",
+            stage: .usb,
+            workflow: loggingWorkflow
+        )
         let cleanupToken = AppActiveOperationRegistry.shared.begin(
             kind: .cleanup,
-            context: "finish_screen_cleanup"
+            context: "finish_screen_cleanup",
+            logStage: .usb,
+            logWorkflow: loggingWorkflow
         )
         DispatchQueue.global(qos: .userInitiated).async {
             var success = true
@@ -583,11 +599,22 @@ struct FinishUSBView: View {
                 unmountTask.arguments = ["detach", self.mountPoint.path, "-force"]
                 try? unmountTask.run()
                 unmountTask.waitUntilExit()
+                let detachMessage = "Finish cleanup image detach completed: path=\(self.mountPoint.path), exitCode=\(unmountTask.terminationStatus)."
+                if unmountTask.terminationStatus == 0 {
+                    AppLogging.info(detachMessage, stage: .usb, workflow: self.loggingWorkflow)
+                } else {
+                    AppLogging.error(detachMessage, stage: .usb, workflow: self.loggingWorkflow)
+                }
             }
             let tempCleanupNeeded = FileManager.default.fileExists(atPath: self.tempWorkURL.path)
             if tempCleanupNeeded {
                 do {
                     try FileManager.default.removeItem(at: self.tempWorkURL)
+                    AppLogging.info(
+                        "Fallback cleanup removed temporary files: path=\(self.tempWorkURL.path).",
+                        stage: .usb,
+                        workflow: self.loggingWorkflow
+                    )
                 } catch {
                     let stillExists = FileManager.default.fileExists(atPath: self.tempWorkURL.path)
                     let nsError = error as NSError
@@ -596,34 +623,43 @@ struct FinishUSBView: View {
 
                     if !stillExists || isNoSuchFile {
                         AppLogging.info(
-                            "FinishUSBView: cleanup fallback pominięty, pliki TEMP zostały już usunięte wcześniej.",
-                            category: "Installation"
+                            "Fallback cleanup skipped: temporary files were already removed.",
+                            stage: .usb,
+                            workflow: self.loggingWorkflow
                         )
                     } else {
                         success = false
-                        errorMsg = String(localized: "Nie udało się usunąć plików tymczasowych: \(error.localizedDescription)")
+                        AppLogging.error(
+                            "Fallback cleanup failed: path=\(self.tempWorkURL.path), error=\(error.localizedDescription)",
+                            stage: .usb,
+                            workflow: self.loggingWorkflow
+                        )
+                        errorMsg = String(format: String(localized: "finish.cleanup.error.description", table: "FinishUSB"), error.localizedDescription)
                     }
                 }
             } else {
                 AppLogging.info(
-                    "FinishUSBView: pomijam fallback cleanup TEMP, helper usunął pliki wcześniej.",
-                    category: "Installation"
+                    "Fallback cleanup skipped: temporary files were already absent at path=\(self.tempWorkURL.path).",
+                    stage: .usb,
+                    workflow: self.loggingWorkflow
                 )
             }
             
             DispatchQueue.main.async {
                 let durationMetrics = self.currentCompletionDuration()
                 let durationText = self.makeCompletionDurationText(durationMetrics)
-                let resultState = self.didCancel ? "PRZERWANO" : (self.didFail ? "NIEPOWODZENIE" : "SUKCES")
+                let resultState = self.didCancel ? "cancelled" : (self.didFail ? "failed" : "success")
                 if let durationMetrics {
                     AppLogging.info(
-                        "Czas procesu USB: \(durationMetrics.displayText) (\(durationMetrics.totalSeconds)s), wynik: \(resultState).",
-                        category: "Installation"
+                        "USB creation duration: \(durationMetrics.displayText) (\(durationMetrics.totalSeconds)s), result=\(resultState), cleanupSuccess=\(success).",
+                        stage: .usb,
+                        workflow: self.loggingWorkflow
                     )
                 } else {
                     AppLogging.info(
-                        "Czas procesu USB: brak danych startu, wynik: \(resultState).",
-                        category: "Installation"
+                        "USB creation duration unavailable: start time missing, result=\(resultState), cleanupSuccess=\(success).",
+                        stage: .usb,
+                        workflow: self.loggingWorkflow
                     )
                 }
 
@@ -655,7 +691,7 @@ struct FinishUSBView: View {
         let minutes = duration.totalSeconds / 60
         let seconds = duration.totalSeconds % 60
         return String(
-            format: String(localized: "Ukończono w %02dm %02ds"),
+            format: String(localized: "finish.completion.duration", table: "FinishUSB"),
             minutes,
             seconds
         )
@@ -707,16 +743,16 @@ struct FinishUSBView: View {
         let body: String
         if isRawImageSelection {
             title = isFailedResult
-                ? String(localized: "Nie udało się zapisać obrazu na nośniku USB")
-                : String(localized: "Zapisano surowy obraz na nośniku USB")
+                ? String(localized: "finish.raw_image.result.failure.title", table: "FinishUSB")
+                : String(localized: "finish.raw_image.result.success.title", table: "FinishUSB")
             body = isFailedResult
-                ? String(localized: "Proces zapisu obrazu na wybranym nośniku zakończył się niepowodzeniem.")
-                : String(localized: "Proces zapisu obrazu na nośniku zakończył się pomyślnie.")
+                ? String(localized: "finish.raw_image.notification.failure.description", table: "FinishUSB")
+                : String(localized: "finish.raw_image.notification.success.description", table: "FinishUSB")
         } else {
-            title = isFailedResult ? String(localized: "Wystąpił błąd") : String(localized: "Instalator gotowy")
+            title = isFailedResult ? String(localized: "finish.notification.failure.title", table: "FinishUSB") : String(localized: "finish.notification.success.title", table: "FinishUSB")
             body = isFailedResult
-                ? String(localized: "Proces tworzenia instalatora na wybranym nośniku zakończył się niepowodzeniem.")
-                : String(localized: "Proces zapisu na nośniku zakończył się pomyślnie.")
+                ? String(localized: "finish.notification.failure.description", table: "FinishUSB")
+                : String(localized: "finish.notification.success.description", table: "FinishUSB")
         }
 
         NotificationPermissionManager.shared.shouldDeliverInAppNotification { shouldDeliver in

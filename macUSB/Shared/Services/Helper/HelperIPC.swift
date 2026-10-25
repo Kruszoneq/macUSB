@@ -208,12 +208,13 @@ struct HelperProgressEventPayload: Codable {
         // Stage key is stable across versions, so prefer canonical keys when available.
         if let localization = HelperWorkflowLocalizationKeys.presentation(for: stageKey) {
             stageTitleKey = localization.titleKey
-            statusKey = decodedStatus.hasPrefix("helper.workflow.")
-                ? decodedStatus
+            let catalogStatus = HelperWorkflowLocalizationKeys.catalogKey(for: decodedStatus)
+            statusKey = catalogStatus.hasPrefix("creator.")
+                ? catalogStatus
                 : localization.statusKey
         } else {
-            stageTitleKey = decodedStageTitle
-            statusKey = decodedStatus
+            stageTitleKey = HelperWorkflowLocalizationKeys.catalogKey(for: decodedStageTitle)
+            statusKey = HelperWorkflowLocalizationKeys.catalogKey(for: decodedStatus)
         }
     }
 

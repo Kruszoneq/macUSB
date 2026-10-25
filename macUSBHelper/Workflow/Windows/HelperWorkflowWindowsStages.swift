@@ -202,10 +202,104 @@ extension HelperWorkflowExecutor {
             .appendingPathComponent("install.swm")
             .path
 
+        guard windowsInstallWimIsSolid else {
+            try runWindowsStreamingStageCommand(
+                stage: stage,
+                executable: wimlibPath,
+                arguments: ["split", installWimPath, targetSplitPath, "3800"]
+            )
+            return
+        }
+
+        let exportDirectoryPath = try prepareWindowsWimExportDirectory(stage: stage)
+        defer { try? fileManager.removeItem(atPath: exportDirectoryPath) }
+        let exportPath = URL(fileURLWithPath: exportDirectoryPath)
+            .appendingPathComponent("install-nonsolid.wim")
+            .path
+        let midpointPercent = (stage.startPercent + stage.endPercent) / 2
+
+        emitProgress(
+            stageKey: stage.key,
+            titleKey: stage.titleKey,
+            percent: latestPercent,
+            statusKey: stage.statusKey,
+            logLine: "Solid install.wim detected; converting to non-solid LZX before split: \(exportPath)",
+            shouldAdvancePercent: false
+        )
+
         try runWindowsStreamingStageCommand(
-            stage: stage,
+            stage: windowsSplitWimSubstage(of: stage, startPercent: stage.startPercent, endPercent: midpointPercent),
             executable: wimlibPath,
-            arguments: ["split", installWimPath, targetSplitPath, "3800"]
+            arguments: ["export", installWimPath, "all", exportPath, "--compress=LZX"]
+        )
+
+        try runWindowsStreamingStageCommand(
+            stage: windowsSplitWimSubstage(of: stage, startPercent: midpointPercent, endPercent: stage.endPercent),
+            executable: wimlibPath,
+            arguments: ["split", exportPath, targetSplitPath, "3800"]
+        )
+    }
+
+    private func prepareWindowsWimExportDirectory(stage: WorkflowStage) throws -> String {
+        let exportDirectoryPath = URL(fileURLWithPath: request.tempWorkPath)
+            .appendingPathComponent("windows_wim_export")
+            .path
+
+        do {
+            try ensureTempWorkDirectoryExists()
+            if fileManager.fileExists(atPath: exportDirectoryPath) {
+                try fileManager.removeItem(atPath: exportDirectoryPath)
+            }
+            try fileManager.createDirectory(atPath: exportDirectoryPath, withIntermediateDirectories: false)
+        } catch {
+            emitProgress(
+                stageKey: stage.key,
+                titleKey: stage.titleKey,
+                percent: latestPercent,
+                statusKey: stage.statusKey,
+                logLine: "WIM export temporary directory preparation failed: path=\(exportDirectoryPath), error=\(error.localizedDescription)",
+                shouldAdvancePercent: false
+            )
+            throw HelperExecutionError.failed(
+                stage: stage.key,
+                exitCode: -1,
+                description: HelperWindowsWimErrorLocalizationKey.directoryCreation.rawValue
+            )
+        }
+
+        if let requesterUID = request.requesterUID, requesterUID > 0 {
+            let uid = uid_t(requesterUID)
+            guard let userRecord = getpwuid(uid),
+                  chown(exportDirectoryPath, uid, userRecord.pointee.pw_gid) == 0 else {
+                emitProgress(
+                    stageKey: stage.key,
+                    titleKey: stage.titleKey,
+                    percent: latestPercent,
+                    statusKey: stage.statusKey,
+                    logLine: "WIM export temporary directory ownership assignment failed: path=\(exportDirectoryPath), requesterUID=\(requesterUID)",
+                    shouldAdvancePercent: false
+                )
+                throw HelperExecutionError.failed(
+                    stage: stage.key,
+                    exitCode: -1,
+                    description: HelperWindowsWimErrorLocalizationKey.directoryOwnership.rawValue
+                )
+            }
+        }
+
+        return exportDirectoryPath
+    }
+
+    private func windowsSplitWimSubstage(of stage: WorkflowStage, startPercent: Double, endPercent: Double) -> WorkflowStage {
+        WorkflowStage(
+            key: stage.key,
+            titleKey: stage.titleKey,
+            statusKey: stage.statusKey,
+            startPercent: startPercent,
+            endPercent: endPercent,
+            executable: stage.executable,
+            arguments: stage.arguments,
+            parseToolPercent: stage.parseToolPercent
         )
     }
 

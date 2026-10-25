@@ -59,12 +59,12 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 ### USB target safety and capacity
 
 - Before installer recognition, required capacity in UI is unresolved (`-- GB`).
-- Capacity rules:
-  - major version `<= 14`: `16 GB` UI target and `15_000_000_000` bytes threshold
-  - major version `>= 15`: `32 GB` UI target and `28_000_000_000` bytes threshold
+- For recognized macOS, Linux, Windows, and manual raw-image sources, capacity validation uses the source size plus 5%, rounded up to a whole byte. The UI displays the smallest fitting 2/4/8/16/32/64 GB (and larger doubling) drive class.
+- Image sources use the selected image file size; `.app` sources use the total logical size of regular files in the bundle without following symbolic links.
+- If source size is unavailable, an alert explains the fallback: macOS major version `>= 15` uses the `32 GB` class and `28_000_000_000` bytes; all other flows use the `16 GB` class and `15_000_000_000` bytes.
 - Proceed action stays blocked until selected target passes validation.
-- macOS target selection defaults to physical whole disks and automatically preformats non-PPC targets as GPT/HFS+ with the `mac_USB` label; APFS does not block this path.
-- Standard `createinstallmedia` workflows may reuse an existing GPT/HFS+ volume without preformat only through the analysis-screen Option override.
+- macOS target selection defaults to physical whole disks and automatically preformats non-PPC whole-disk targets as GPT/HFS+ with the `mac_USB` label; APFS does not block this path.
+- Standard `createinstallmedia`, restore-legacy (Lion/Mountain Lion), and Mavericks workflows may reuse an existing GPT/HFS+ volume without whole-disk preformat only through the analysis-screen Option override. Restore erases the selected volume through the existing `asr` pipeline.
 - In PPC flow, target formatting behavior is specialized and must not be forced through standard preformat assumptions.
 
 ### Detection and compatibility routing
@@ -105,16 +105,17 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 
 ### Localization invariants
 
-- Source language is Polish (`pl`) in `Localizable.xcstrings`.
-- New UI copy is authored in Polish first.
-- UI state, workflow payloads, and helper transport must carry localization keys instead of prelocalized strings.
+- Source language is Polish (`pl`) in every string catalog under `macUSB/Resources/`.
+- New localized UI copy is authored in Polish first; DEBUG-only text follows the exception in `UI copy and translation rules` below.
+- Localized UI state, workflow payloads, and helper transport must carry localization keys instead of prelocalized strings.
 - Resolve a key with `String(localized:)` only at a presentation boundary where an API requires a `String`; APIs that accept localization keys should receive keys directly.
 - Helper localization keys and app-side rendering keys must remain synchronized.
 - For strings that mirror macOS system UI, notifications, or alerts, match Apple’s terminology in each language instead of inventing custom wording.
 
 ### Logging and notifications invariants
 
-- Important runtime logs must go through `AppLogging`.
+- Important app-side runtime logs must go through `AppLogging`.
+- App- and helper-authored diagnostic logs use English and follow the timestamp-then-stage format defined in `docs/reference/platform/LOGGING_CONTRACT.md`. Stage and workflow labels use uppercase letters; workflow-specific operations use `[STAGE_WORKFLOW]`, and helper-origin lines append `[HELPER]` after the stage. Apply this contract as logging paths are migrated in stages.
 - Logs remain human-readable and export-ready for diagnostics.
 - Notification permission prompting remains user-initiated from menu when state is not determined.
 - Completion notifications are gated by system authorization and app-level policy.
@@ -129,7 +130,15 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
 
 ## UI copy and translation rules
 
-- All user-facing UI text must use localization keys.
+The localization-key, source-language, catalog, and translation-review rules in this section apply to localized UI text. Text shown exclusively in DEBUG is exempt from those rules.
+
+- All user-facing UI text available outside DEBUG must use localization keys.
+- Text shown only in DEBUG must be an untranslated English literal in code, with no localization key or `.xcstrings` entry. This includes DEBUG-only controls, statuses, summary values, and alert messages. In SwiftUI, use `Text(verbatim:)` and nonlocalizing label builders so automatic extraction does not create catalog entries for these literals.
+- For every new or modified localized UI text, name its semantic localization key using the `area.feature.element` format, adding more specific segments when needed. Use the same key in code and in the string catalog assigned to that feature or workflow stage (for example, `downloader.disk_image.stage.title` in `Downloader.xcstrings`). Keep the Polish source text and all translations as catalog values, never as the key itself.
+- Select the owning catalog using the table map in `docs/reference/platform/LOCALIZATION_CONTRACT.md`. Welcome, menu actions, and their app/helper messages belong to `App.xcstrings`; analysis belongs to `Analysis.xcstrings`; pre-start USB summary, prerequisites, and confirmation belong to `Summary.xcstrings`; downloader belongs to `Downloader.xcstrings`; USB execution/progress and helper workflow presentation belong to `Creator.xcstrings`; finish/result/cleanup/ejection presentation and USB completion notifications belong to `FinishUSB.xcstrings`. Workflow-qualified and shared-key names follow the naming contract in that reference. Other areas remain in `Localizable.xcstrings` until they receive a dedicated catalog. Add future feature catalogs deliberately and update the table map with their scope.
+- Explicitly select a dedicated catalog using `table:`, `tableName:`, or a table-bearing `LocalizedStringResource`, including dynamic-key presentation boundaries and extraction anchors. A semantic key prefix does not select its table.
+- Give shared text a feature-owned copy when isolating that feature's catalog. Keep the original entry for other consumers and use a semantic key in the dedicated catalog.
+- During catalog-only migrations, copy existing wording and translations without rewriting them. When replacing a Polish source-text key with a semantic key, preserve its effective Polish source value explicitly in the destination catalog.
 - Polish is the source language for new UI copy.
 - When planning a change that introduces or modifies UI text, always include the proposed Polish and English wording.
 - During implementation, provide translations for every language supported by the application.
@@ -139,7 +148,7 @@ These are the non-negotiable runtime contracts. If a task touches any of them, p
   - correct macOS and Apple terminology,
   - consistency with the meaning and context of the UI element.
 - Before completing the task, perform a final verification of all localization keys and translations.
-- Edit `Localizable.xcstrings` in the exact target serialization format produced by Xcode: two-space indentation, spaced `"key" : value` separators, expanded multiline objects, Xcode's case-insensitive natural catalog order for string keys, lexicographically ordered locale identifiers, and no compact inline localization entries. Opening or saving the catalog in Xcode must not produce a formatting-only diff.
+- Edit every `.xcstrings` catalog in the exact target serialization format produced by Xcode: two-space indentation, spaced `"key" : value` separators, expanded multiline objects, Xcode's case-insensitive natural catalog order for string keys, lexicographically ordered locale identifiers, and no compact inline localization entries. Opening or saving the catalog in Xcode must not produce a formatting-only diff.
 - Mark an actively used localization key as `"extractionState" : "manual"` when it is intentionally resolved through dynamic indirection that Xcode string extraction cannot discover; do not accept `stale` for such a key.
 - In the post-implementation report, list every localization key created or modified together with its translation in every supported language.
 - Do not place a period at the end of banner or alert titles.
@@ -253,8 +262,8 @@ Minor helper changes that do not alter behavior may proceed, but must still be r
 
 ## File naming rules
 
-- File names must use letters only (`A-Z`, `a-z`) by default.
-- Use `PascalCase` and compose names from:
+- For code files, use letters only (`A-Z`, `a-z`) in the filename stem by default.
+- Name code files in `PascalCase` (words joined together, each starting with an uppercase letter) and compose names from:
   - feature/domain prefix,
   - concrete responsibility,
   - role suffix.
@@ -263,8 +272,9 @@ Minor helper changes that do not alter behavior may proceed, but must still be r
   - `MacOSDiscoveryCatalogParser.swift`
   - `MacOSDownloadOrchestrator.swift`
   - `MacOSDownloaderListView.swift`
-- The underscore (`_`) is allowed only when an external or required structure mandates it (for example GitHub workflow conventions).
-- Do not use spaces, hyphens, digits, or other special characters in file names unless required by external format constraints.
+- In code filenames, the underscore (`_`) is allowed only when an external or required structure mandates it (for example GitHub workflow conventions).
+- Do not use spaces, hyphens, digits, or other special characters in code filenames unless required by external format constraints.
+- For new documentation files, write the filename stem in uppercase letters and separate words with underscores (for example `USB_CREATION_WORKFLOWS.md`).
 
 ## Large file split rule
 
@@ -371,6 +381,12 @@ When branch creation is requested:
 - Do not include testing information in the PR description.
 - Do not mention documentation or translation changes unless the PR contains only documentation or translation changes.
 - In PR title/description, omit explicit listing of debug-only functionality that is not present in Release builds.
+
+### Issue closure for `development` to `main` PRs
+
+- Before preparing a PR from `development` to `main`, review the full PR diff, included commits, merged PRs, and related GitHub issues to check whether the PR contains an issue fix or implements an issue request.
+- For every issue resolved by the included changes, add a closing reference such as `Closes #123` to the proposed PR description before requesting approval, so GitHub automatically closes the issue when the PR is merged into `main`.
+- Confirm that the included changes fully resolve each issue before adding a closing reference. For related or partially addressed issues, use a non-closing reference such as `Related to #123`.
 
 ### PR approval gate (mandatory)
 

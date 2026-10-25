@@ -4,10 +4,11 @@ import Foundation
 extension AnalysisLogic {
     func forceTigerMultiDVDSelection() {
         MenuState.shared.lockLanguageChanges(reason: "manual_tiger_selection")
-        cancelActiveImageAnalysisRun(reason: "Ręczne przełączenie na Tiger Multi DVD")
-        self.log("Ręcznie wybrano tryb Tiger Multi DVD")
+        cancelActiveImageAnalysisRun(reason: "manual Tiger Multi DVD selection")
+        self.log("Tiger Multi DVD mode selected manually", workflow: .ppc)
         let fileURL = self.selectedFileUrl
         DispatchQueue.global(qos: .userInitiated).async {
+            let resolvedRequirement = fileURL.flatMap { try? USBTargetCapacityRequirement.forSource(at: $0) }
             var mountPoint: String? = self.mountedDMGPath
             var effectiveSourceAppURL: URL? = nil
             if let url = fileURL {
@@ -24,6 +25,7 @@ extension AnalysisLogic {
                 }
             }
             DispatchQueue.main.async {
+                guard self.selectedFileUrl == fileURL else { return }
                 withAnimation {
                     self.isAnalyzing = false
                     self.userSkippedAnalysis = true
@@ -48,19 +50,24 @@ extension AnalysisLogic {
                     self.macOSRosettaRequirement = .notRequired
                     self.legacyArchInfo = nil
                     self.selectedDrive = nil
-                    self.capacityCheckFinished = false
-                    self.requiredUSBCapacityGB = 16
+                    self.usbTargetReadiness = .noSelection
+                    if let fileURL {
+                        self.applySourceCapacityRequirement(resolvedRequirement, sourceURL: fileURL)
+                    } else {
+                        self.usbTargetCapacityRequirement = USBTargetCapacityRequirement.fallback()
+                        self.shouldShowSourceSizeUnavailableAlert = true
+                    }
                     self.resetLinuxDetectionState()
                     self.resetWindowsDetectionState()
                 }
                 let flags = [self.isPPC ? "isPPC" : nil].compactMap { $0 }.joined(separator: ", ")
-                self.log("Ustawiono Tiger Multi DVD: recognizedVersion=\(self.recognizedVersion). Flagi: \(flags.isEmpty ? "brak" : flags)")
+                self.log("Tiger Multi DVD mode set: recognizedVersion=\(self.recognizedVersion). Flags: \(flags.isEmpty ? "none" : flags)", workflow: .ppc)
             }
         }
     }
 
     func resetAll() {
-        cancelActiveImageAnalysisRun(reason: "Pełny reset stanu analizy")
+        cancelActiveImageAnalysisRun(reason: "full analysis state reset")
         let oldMount = self.mountedDMGPath
         if let path = oldMount {
             let task = Process()
@@ -99,26 +106,22 @@ extension AnalysisLogic {
                 self.shouldShowAlreadyMountedSourceAlert = false
                 self.userSkippedAnalysis = false
                 self.shouldShowMavericksDialog = false
-                self.requiredUSBCapacityGB = nil
+                self.usbTargetCapacityRequirement = nil
+                self.shouldShowSourceSizeUnavailableAlert = false
                 self.resetLinuxDetectionState()
                 self.resetWindowsDetectionState()
 
                 self.isMacOSCreateInstallMediaVolumeOverrideActive = false
                 self.presentedUSBTargets = self.physicalUSBTargetsCache
                 self.selectedDrive = nil
-                self.hasUnreadableExternalUSBMedia = false
-                self.unreadableExternalUSBMediaCount = 0
-                self.lastUnreadableUSBDetectionDate = .distantPast
-                self.isUnreadableUSBDetectionRunning = false
 
-                self.isCapacitySufficient = false
-                self.capacityCheckFinished = false
+                self.usbTargetReadiness = .noSelection
             }
         }
     }
 
     // Call this from the UI when the user presses the "Przejdź dalej" button
     func recordProceedPressed() {
-        self.log("Użytkownik nacisnął przycisk 'Przejdź dalej'. Wybrany nośnik: \(self.selectedDrive?.url.path ?? "brak"), źródło: \(self.sourceAppURL?.path ?? "brak"), rozpoznano: \(self.recognizedVersion)")
+        self.log("User selected Continue. Selected target: \(self.selectedDrive?.url.path ?? "none"), source: \(self.sourceAppURL?.path ?? "none"), recognized: \(self.recognizedVersion)", workflow: selectedWorkflowForLogging)
     }
 }

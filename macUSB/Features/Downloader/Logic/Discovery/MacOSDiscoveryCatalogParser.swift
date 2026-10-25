@@ -6,11 +6,11 @@ extension MacOSCatalogService {
     ) async throws -> [MacOSInstallerEntry] {
         try Task.checkCancellation()
 
-        phase(String(localized: "Pobieranie katalogu Apple..."))
+        phase(String(localized: "downloader.discovery.status.downloading_catalog", table: "Downloader"))
         let sources = Constants.catalogSources
         AppLogging.info(
-            "Pobieranie katalogow installerow z Apple: \(sources.map { "\($0.channel.rawValue)=\($0.url.lastPathComponent)" }.joined(separator: ", ")).",
-            category: "Downloader"
+            "Fetching Apple installer catalogs: \(sources.map { "\($0.channel.rawValue)=\($0.url.lastPathComponent)" }.joined(separator: ", ")).",
+            stage: .downloader, workflow: .discovery
         )
 
         var batches: [CatalogCandidateBatch] = []
@@ -33,7 +33,7 @@ extension MacOSCatalogService {
                 .map(\.productID) ?? []
         )
 
-        phase(String(localized: "Analizowanie metadanych wersji..."))
+        phase(String(localized: "downloader.discovery.status.analyzing_versions", table: "Downloader"))
         var entries: [MacOSInstallerEntry] = []
         try await withThrowingTaskGroup(of: [MacOSInstallerEntry].self) { group in
             for batch in batches {
@@ -60,21 +60,21 @@ extension MacOSCatalogService {
             }
         }
 
-        phase(String(localized: "Dołączanie starszych wersji..."))
-        AppLogging.info("Dolaczanie starszych wpisow z Apple Support.", category: "Downloader")
+        phase(String(localized: "downloader.discovery.status.adding_legacy_versions", table: "Downloader"))
+        AppLogging.info("Adding older Apple Support entries.", stage: .downloader, workflow: .discovery)
         let legacyEntries = try await fetchLegacySupportEntries()
         entries.append(contentsOf: legacyEntries)
 
         let uniqueEntries = deduplicated(entries)
         AppLogging.info(
-            "Po deduplikacji pozostalo \(uniqueEntries.count) wpisow ze wszystkich aktywnych kanalow.",
-            category: "Downloader"
+            "After deduplication, \(uniqueEntries.count) entries remain across all active channels.",
+            stage: .downloader, workflow: .discovery
         )
 
-        phase(String(localized: "Sprawdzanie rozmiarów instalatorów..."))
-        AppLogging.info("Rozpoczecie sprawdzania rozmiarow instalatorow.", category: "Downloader")
+        phase(String(localized: "downloader.discovery.status.checking_installer_sizes", table: "Downloader"))
+        AppLogging.info("Started checking installer sizes.", stage: .downloader, workflow: .discovery)
         let sizeProbeResult = try await enrichedWithInstallerSizes(uniqueEntries)
-        AppLogging.info("Zakonczono sprawdzanie rozmiarow instalatorow.", category: "Downloader")
+        AppLogging.info("Finished checking installer sizes.", stage: .downloader, workflow: .discovery)
         logSizeProbeSummary(sizeProbeResult.summary)
 
         return sizeProbeResult.entries
@@ -90,8 +90,8 @@ extension MacOSCatalogService {
             catalogURL: source.url
         )
         AppLogging.info(
-            "Kanal \(source.channel.rawValue), katalog \(source.url.lastPathComponent): znaleziono \(candidates.count) kandydatow InstallAssistant.",
-            category: "Downloader"
+            "Channel \(source.channel.rawValue), catalog \(source.url.lastPathComponent): found \(candidates.count) InstallAssistant candidates.",
+            stage: .downloader, workflow: .discovery
         )
         return CatalogCandidateBatch(source: source, candidates: candidates)
     }
@@ -111,8 +111,8 @@ extension MacOSCatalogService {
         }
 
         AppLogging.info(
-            "Kanal \(source.channel.rawValue), katalog \(source.url.lastPathComponent): przeanalizowano \(candidates.count) z \(totalCandidateCount) kandydatow, zaakceptowano \(entries.count) wpisow.",
-            category: "Downloader"
+            "Channel \(source.channel.rawValue), catalog \(source.url.lastPathComponent): parsed \(candidates.count) of \(totalCandidateCount) candidates; accepted \(entries.count) entries.",
+            stage: .downloader, workflow: .discovery
         )
         return entries
     }
@@ -137,10 +137,11 @@ extension MacOSCatalogService {
             throw DiscoveryError.unsupportedEntry
         }
 
-        phase(String(localized: "Pobieranie manifestu wybranego systemu..."))
+        phase(String(localized: "downloader.discovery.status.downloading_manifest", table: "Downloader"))
         AppLogging.info(
-            "Pobieranie manifestu productID=\(productID), channel=\(entry.releaseChannel.rawValue), catalog=\(catalogURL.absoluteString)",
-            category: "Downloader"
+            "Fetching manifest productID=\(productID), channel=\(entry.releaseChannel.rawValue), catalog=\(catalogURL.absoluteString)",
+            stage: .downloader,
+            workflow: isLegacyAssemblyTarget(entry) ? .legacy : .modern
         )
         let catalogData = try await fetchData(from: catalogURL)
         let products = try parseCatalogProducts(from: catalogData)
@@ -158,7 +159,7 @@ extension MacOSCatalogService {
             return url
         }()
 
-        phase(String(localized: "Analiza listy plików i metadanych..."))
+        phase(String(localized: "downloader.discovery.status.analyzing_manifest", table: "Downloader"))
         var descriptors = packageDescriptors(from: product)
         descriptors = descriptors.filter { descriptor in
             isAllowedHost(descriptor.url) && isDownloadAssetURL(descriptor.url)
@@ -172,7 +173,7 @@ extension MacOSCatalogService {
             throw DiscoveryError.emptyDownloadManifest
         }
 
-        phase(String(localized: "Ustalanie rozmiarów plików..."))
+        phase(String(localized: "downloader.discovery.status.checking_file_sizes", table: "Downloader"))
         let probeState = SizeProbeRunState()
         var manifestItems: [DownloadManifestItem] = []
         manifestItems.reserveCapacity(descriptors.count)
@@ -224,7 +225,7 @@ extension MacOSCatalogService {
             throw DiscoveryError.unsupportedEntry
         }
 
-        phase(String(localized: "Przygotowanie manifestu dla najstarszego systemu..."))
+        phase(String(localized: "downloader.discovery.status.preparing_oldest_manifest", table: "Downloader"))
         let probeState = SizeProbeRunState()
         let candidateURLs = sizeProbeURLs(for: entry.sourceURL)
         var selectedURL: URL?
@@ -247,7 +248,7 @@ extension MacOSCatalogService {
         }
         AppLogging.info(
             "Oldest manifest source selected: original=\(entry.sourceURL.absoluteString), final=\(finalSourceURL.absoluteString), size=\(finalSizeBytes)",
-            category: "Downloader"
+            stage: .downloader, workflow: .oldest
         )
 
         let item = DownloadManifestItem(

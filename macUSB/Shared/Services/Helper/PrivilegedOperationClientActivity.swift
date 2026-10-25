@@ -1,11 +1,13 @@
 import Foundation
 
 extension PrivilegedOperationClient {
-    func registerWorkflowActivityLocked(workflowID: String) {
+    func registerWorkflowActivityLocked(workflowID: String, logWorkflow: AppLogging.Workflow) {
         workflowActivityTokens[workflowID]?.finish()
         workflowActivityTokens[workflowID] = AppActiveOperationRegistry.shared.begin(
             kind: .helperActivity,
-            context: "helper_usb_workflow:\(workflowID)"
+            context: "helper_usb_workflow:\(workflowID)",
+            logStage: .usb,
+            logWorkflow: logWorkflow
         )
     }
 

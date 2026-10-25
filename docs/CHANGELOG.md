@@ -1,6 +1,39 @@
 # macUSB Release Changelog
 ---
 
+## v2.6
+
+macUSB v2.6 adds SD card support, previous-session log export, and an option to automatically skip the welcome screen. This update extends volume selection to older Mac OS X and OS X installers, bases media capacity requirements on source size, and improves media detection, diagnostics, and Windows installer creation.
+
+### ADDED
+
+- Added the ability to create installation media on SD cards in built-in and external readers.
+- Added the ability to export retained logs from the previous session after restarting the app through **Help → Export logs from previous session...**.
+- Added **Options → Automatically skip the welcome screen**, which automatically opens the analysis screen after startup checks complete successfully. The welcome screen remains visible if a helper update or automatic repair is required during startup.
+- Added Dutch and Persian language support (#131, #142).
+
+### CHANGES
+
+- The minimum required capacity of the target media or selected volume is now calculated from the installer or source image size, with a 5% allowance. Smaller sources no longer require 16 GB media by default.
+- Extended support for creating installers on selected GPT/HFS+ volumes to Mac OS X Lion, OS X Mountain Lion, and OS X Mavericks. Holding **Option (⌥)** while selecting a target reveals eligible volumes, allowing installation media creation without repartitioning the entire drive.
+- Exported diagnostic logs are now saved as `.log` files instead of `.txt` files.
+
+### FIXED
+
+- Corrected the unsupported Windows and Windows Server installer messages on the analysis screen to identify the earliest supported versions: Windows Vista and Windows Server 2008 R2.
+- Fixed selected helper error messages not appearing in the app’s language.
+- Fixed the details window disappearing after a failed helper repair.
+- Fixed an error when splitting solid-compressed `install.wim` files that could prevent Windows installation media from being created (#141).
+
+### IMPROVEMENTS
+
+- Standardized the language and format of app and helper diagnostic messages. Messages are recorded in English regardless of the interface language.
+- Improved USB drive and SD card detection and verification, clarified availability and capacity messages, and reduced unnecessary target-list refreshes.
+- Added a hint to hold **Option (⌥)** to reveal available volumes. The hint appears after a supported macOS, OS X, or Mac OS X installer is recognized and a compatible volume is available.
+- Adapted the interface layout and navigation arrow direction for right-to-left Persian.
+
+---
+
 ## v2.5
 
 macUSB v2.5 expands installer media creation with support for writing raw disk images and exporting downloaded macOS installers as DMG files. This update also improves USB target selection, downloader behavior, protection of active operations, the background helper lifecycle, and the app’s overall visual consistency.

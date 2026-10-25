@@ -3,8 +3,8 @@ import Combine
 
 @MainActor
 final class HelperRepairPanelPresentationModel: ObservableObject {
-    @Published var statusTitle: String = String(localized: "Przygotowuję naprawę helpera")
-    @Published var statusDetail: String = String(localized: "Odświeżam usługę systemową i weryfikuję gotowość")
+    @Published var statusTitle: String = String(localized: "app.helper.repair.panel.preparing.title", table: "App")
+    @Published var statusDetail: String = String(localized: "app.helper.repair.panel.preparing.message", table: "App")
     @Published var statusResult: Bool? = nil
     @Published var statusSymbolName: String = "wrench.and.screwdriver.fill"
     @Published var logLines: [String] = []
@@ -72,10 +72,10 @@ struct HelperRepairPanelView: View {
                         .foregroundColor(.accentColor)
                         .frame(width: MacUSBDesignTokens.iconColumnWidth, alignment: .leading)
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(String(localized: "Naprawa helpera systemowego"))
+                        Text(String(localized: "app.helper.repair.panel.title", table: "App"))
                             .font(.headline)
                             .fontWeight(.semibold)
-                        Text(String(localized: "Odświeżam rejestrację helpera i potwierdzam gotowość do pracy"))
+                        Text(String(localized: "app.helper.repair.panel.message", table: "App"))
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -86,7 +86,7 @@ struct HelperRepairPanelView: View {
                 Rectangle()
                     .fill(Color.secondary.opacity(0.30))
                     .frame(height: 1)
-                Text(String(localized: "Postęp naprawy"))
+                Text(String(localized: "app.helper.repair.panel.progress.title", table: "App"))
                     .font(.footnote)
                     .fontWeight(.semibold)
                     .foregroundStyle(.secondary)
@@ -122,8 +122,8 @@ struct HelperRepairPanelView: View {
             HStack {
                 Spacer(minLength: 0)
                 Button(model.isDetailsExpanded
-                       ? String(localized: "Ukryj dziennik techniczny")
-                       : String(localized: "Pokaż dziennik techniczny")) {
+                       ? String(localized: "app.helper.repair.panel.log.hide", table: "App")
+                       : String(localized: "app.helper.repair.panel.log.show", table: "App")) {
                     model.toggleDetails()
                 }
                 .macUSBSecondaryButtonStyle()
@@ -134,7 +134,7 @@ struct HelperRepairPanelView: View {
             if model.isDetailsExpanded {
                 StatusCard(tone: .neutral, density: .compact) {
                     ScrollView {
-                        Text(model.joinedLogs.isEmpty ? String(localized: "Brak wpisów dziennika") : model.joinedLogs)
+                        Text(model.joinedLogs.isEmpty ? String(localized: "app.helper.repair.panel.log.empty", table: "App") : model.joinedLogs)
                             .textSelection(.enabled)
                             .font(.system(size: 12, weight: .regular, design: .monospaced))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -153,7 +153,7 @@ struct HelperRepairPanelView: View {
                     model.requestClose()
                 } label: {
                     HStack {
-                        Text(String(localized: "Zamknij"))
+                        Text(String(localized: "app.action.close", table: "App"))
                         Image(systemName: "xmark.circle.fill")
                     }
                     .frame(maxWidth: .infinity)

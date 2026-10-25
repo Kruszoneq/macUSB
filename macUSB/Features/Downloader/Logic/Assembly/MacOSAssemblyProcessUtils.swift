@@ -20,12 +20,14 @@ extension MontereyDownloadFlowModel {
         executable: String,
         arguments: [String]
     ) async throws -> String {
-        try await withCheckedThrowingContinuation { continuation in
+        let workflow = loggingWorkflow
+        return try await withCheckedThrowingContinuation { continuation in
             DispatchQueue.global(qos: .userInitiated).async {
                 do {
                     let output = try Self.runProcessAndCaptureOutputBlocking(
                         executable: executable,
-                        arguments: arguments
+                        arguments: arguments,
+                        workflow: workflow
                     )
                     continuation.resume(returning: output)
                 } catch {
@@ -42,7 +44,8 @@ extension MontereyDownloadFlowModel {
     ) throws -> String {
         try Self.runProcessAndCaptureOutputBlocking(
             executable: executable,
-            arguments: arguments
+            arguments: arguments,
+            workflow: loggingWorkflow
         )
     }
 
@@ -60,13 +63,13 @@ extension MontereyDownloadFlowModel {
                 )
                 AppLogging.info(
                     "\(context): detach success attempt=\(attempt) mode=normal mount=\(mountURL.path)",
-                    category: "Downloader"
+                    stage: .downloader, workflow: loggingWorkflow
                 )
                 return true
             } catch {
                 AppLogging.error(
                     "\(context): detach failed attempt=\(attempt) mode=normal mount=\(mountURL.path) error=\(error.localizedDescription)",
-                    category: "Downloader"
+                    stage: .downloader, workflow: loggingWorkflow
                 )
                 if attempt == 1 {
                     Thread.sleep(forTimeInterval: 0.25)
@@ -81,13 +84,13 @@ extension MontereyDownloadFlowModel {
             )
             AppLogging.info(
                 "\(context): detach success mode=force mount=\(mountURL.path)",
-                category: "Downloader"
+                stage: .downloader, workflow: loggingWorkflow
             )
             return true
         } catch {
             AppLogging.error(
                 "\(context): detach failed mode=force mount=\(mountURL.path) error=\(error.localizedDescription)",
-                category: "Downloader"
+                stage: .downloader, workflow: loggingWorkflow
             )
             return false
         }
@@ -95,7 +98,8 @@ extension MontereyDownloadFlowModel {
 
     private static func runProcessAndCaptureOutputBlocking(
         executable: String,
-        arguments: [String]
+        arguments: [String],
+        workflow: AppLogging.Workflow
     ) throws -> String {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: executable)
@@ -123,7 +127,7 @@ extension MontereyDownloadFlowModel {
         if !merged.isEmpty {
             AppLogging.info(
                 "legacy-assembly command \(URL(fileURLWithPath: executable).lastPathComponent): \(merged)",
-                category: "Downloader"
+                stage: .downloader, workflow: workflow
             )
         }
 

@@ -36,6 +36,7 @@ struct SystemAnalysisView: View {
     @State private var isDragTargeted: Bool = false
     @State private var checksumSheetPresentation: AnalysisChecksumSheetPresentation?
     @State private var hostingWindow: NSWindow? = nil
+    @State private var isSourceSizeAlertPresented: Bool = false
     @State private var isOptionModifierPressed: Bool = false
     @State private var optionModifierMonitor: Any? = nil
     
@@ -46,7 +47,7 @@ struct SystemAnalysisView: View {
         shouldShowChecksumAction ? 2 : (logic.showUnsupportedMessage ? 4 : 12)
     }
 
-    private func sectionDivider(_ title: LocalizedStringKey) -> some View {
+    private func sectionDivider(_ title: LocalizedStringResource) -> some View {
         HStack(spacing: 10) {
             Capsule()
                 .fill(Color.secondary.opacity(0.20))
@@ -94,9 +95,9 @@ struct SystemAnalysisView: View {
         let alert = NSAlert()
         alert.alertStyle = .informational
         alert.icon = NSApp.applicationIconImage
-        alert.messageText = String(localized: "Wykryto system OS X Mavericks", comment: "Mavericks detected alert title")
-        alert.informativeText = String(localized: "Upewnij się, że wybrany obraz systemu pochodzi ze strony Mavericks Forever. Inne wersje mogą powodować błędy w trakcie tworzenia instalatora na nośniku USB.", comment: "Mavericks detected alert description")
-        alert.addButton(withTitle: String(localized: "OK"))
+        alert.messageText = String(localized: "analysis.macos.mavericks.detected.title", table: "Analysis", comment: "Mavericks detected alert title")
+        alert.informativeText = String(localized: "analysis.macos.mavericks.detected.message", table: "Analysis", comment: "Mavericks detected alert description")
+        alert.addButton(withTitle: String(localized: "analysis.action.ok", table: "Analysis"))
         alert.beginSheetModal(for: window) { _ in
             logic.shouldShowMavericksDialog = false
         }
@@ -106,14 +107,40 @@ struct SystemAnalysisView: View {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Wybrany obraz jest już zamontowany", comment: "Already mounted CDR/ISO alert title")
-        alert.informativeText = String(localized: "Wybrany plik .cdr lub .iso jest już zamontowany w systemie macOS. Odmontuj ten obraz, a następnie wybierz „Analizuj” ponownie.", comment: "Already mounted CDR/ISO alert description")
-        alert.addButton(withTitle: String(localized: "OK"))
+        alert.messageText = String(localized: "analysis.source.already_mounted.title", table: "Analysis", comment: "Already mounted CDR/ISO alert title")
+        alert.informativeText = String(localized: "analysis.source.already_mounted.message", table: "Analysis", comment: "Already mounted CDR/ISO alert description")
+        alert.addButton(withTitle: String(localized: "analysis.action.ok", table: "Analysis"))
 
         let handleClose: (NSApplication.ModalResponse) -> Void = { _ in
             logic.shouldShowAlreadyMountedSourceAlert = false
         }
 
+        if let window = hostingWindow {
+            alert.beginSheetModal(for: window, completionHandler: handleClose)
+        } else {
+            handleClose(alert.runModal())
+        }
+    }
+
+    private func presentSourceSizeUnavailableDialog() {
+        guard !isSourceSizeAlertPresented,
+              let requirement = logic.usbTargetCapacityRequirement,
+              requirement.usedFallback else { return }
+        isSourceSizeAlertPresented = true
+        let alert = NSAlert()
+        alert.icon = NSApp.applicationIconImage
+        alert.alertStyle = .warning
+        alert.messageText = String(localized: "analysis.usb.source_size_unavailable.title", table: "Analysis")
+        alert.informativeText = String(
+            format: String(localized: "analysis.usb.source_size_unavailable.message", table: "Analysis"),
+            String(requirement.displayCapacityGB)
+        )
+        alert.addButton(withTitle: String(localized: "analysis.usb.source_size_unavailable.use_fallback", table: "Analysis"))
+
+        let handleClose: (NSApplication.ModalResponse) -> Void = { _ in
+            isSourceSizeAlertPresented = false
+            logic.shouldShowSourceSizeUnavailableAlert = false
+        }
         if let window = hostingWindow {
             alert.beginSheetModal(for: window, completionHandler: handleClose)
         } else {
@@ -181,12 +208,15 @@ struct SystemAnalysisView: View {
     private func handleViewAppear() {
         installOptionModifierMonitorIfNeeded()
         logic.setMacOSCreateInstallMediaVolumeOverrideActive(isOptionModifierPressed)
-        logic.refreshDrives()
+        logic.setDriveRefreshVisible(true)
         updateMenuState()
         consumePendingDownloaderInstallerAndAnalyze()
         consumePendingRawLinuxImageAndApply()
         if logic.shouldShowMavericksDialog {
             presentMavericksDialog()
+        }
+        if logic.shouldShowSourceSizeUnavailableAlert {
+            presentSourceSizeUnavailableDialog()
         }
     }
 
@@ -233,14 +263,14 @@ struct SystemAnalysisView: View {
             HStack(alignment: .top) {
                 Image(systemName: "info.circle.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
                 VStack(alignment: .leading, spacing: 5) {
-                    Text("Wymagania").font(.headline).foregroundColor(.primary)
+                    Text("analysis.source.requirements.title", tableName: "Analysis").font(.headline).foregroundColor(.primary)
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("• Wybrany plik musi zawierać instalator macOS, Windows lub Linux")
-                        Text("• Dozwolone formaty plików to .dmg, .iso, .cdr oraz .app")
+                        Text("analysis.source.requirements.installer", tableName: "Analysis")
+                        Text("analysis.source.requirements.formats", tableName: "Analysis")
                         if isMacOSFlowDetected {
-                            Text("• Wymagane jest co najmniej 15 GB wolnego miejsca na dysku twardym")
+                            Text("analysis.macos.source.requirements.free_space", tableName: "Analysis")
                         }
-                        Text("• Brak instalatora? Użyj przycisku „Pobierz”")
+                        Text("analysis.source.requirements.download", tableName: "Analysis")
                     }
                     .font(.subheadline).foregroundColor(.secondary)
                 }
@@ -259,7 +289,7 @@ struct SystemAnalysisView: View {
 
         return HStack {
             TextField(
-                String(localized: "Plik źródłowy..."),
+                String(localized: "analysis.source.path.placeholder", table: "Analysis"),
                 text: Binding(
                     get: { selectedFileDisplayName },
                     set: { _ in }
@@ -267,10 +297,10 @@ struct SystemAnalysisView: View {
             )
                 .textFieldStyle(.roundedBorder)
                 .disabled(true)
-            Button(String(localized: "Wybierz")) { logic.selectDMGFile() }
-            Button(String(localized: "Pobierz")) { MacOSDownloaderWindowManager.shared.present() }
+            Button(String(localized: "analysis.action.choose", table: "Analysis")) { logic.selectDMGFile() }
+            Button(String(localized: "analysis.action.download", table: "Analysis")) { MacOSDownloaderWindowManager.shared.present() }
                 .disabled(menuState.isDownloaderAccessBlocked)
-            Button(String(localized: "Analizuj")) { logic.startAnalysis() }
+            Button(String(localized: "analysis.action.analyze", table: "Analysis")) { logic.startAnalysis() }
                 .buttonStyle(.borderedProminent)
                 .tint(.accentColor)
                 .disabled(logic.selectedFilePath.isEmpty || logic.isAnalyzing || logic.isRawImageSelection)
@@ -279,7 +309,7 @@ struct SystemAnalysisView: View {
 
     private var fileSelectionSection: some View {
         VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
-            sectionDivider("Wybór pliku")
+            sectionDivider(LocalizedStringResource("analysis.source.section.title", table: "Analysis"))
             fileRequirementsBox
             fileSelectionControls
         }
@@ -300,10 +330,10 @@ struct SystemAnalysisView: View {
             HStack(alignment: .center, spacing: 10) {
                 Image(systemName: "doc.badge.plus").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(String(localized: "analysis.file.waiting_for_installer_file.title"))
+                    Text(String(localized: "analysis.file.waiting_for_installer_file.title", table: "Analysis"))
                         .font(.headline)
                         .foregroundColor(.primary)
-                    Text(String(localized: "analysis.file.waiting_for_installer_file.description"))
+                    Text(String(localized: "analysis.file.waiting_for_installer_file.description", table: "Analysis"))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -321,9 +351,9 @@ struct SystemAnalysisView: View {
                 HStack(spacing: 15) {
                     Image(systemName: "internaldrive").font(sectionIconFont).foregroundColor(.accentColor).frame(width: MacUSBDesignTokens.iconColumnWidth)
                     VStack(alignment: .leading, spacing: 5) {
-                        Text("Analizowanie").font(.headline)
+                        Text("analysis.running.title", tableName: "Analysis").font(.headline)
                         HStack(spacing: 8) {
-                            Text("Trwa analizowanie pliku, proszę czekać").font(.subheadline).foregroundColor(.secondary)
+                            Text("analysis.running.description", tableName: "Analysis").font(.subheadline).foregroundColor(.secondary)
                             ProgressView().controlSize(.small)
                         }
                     }
@@ -339,10 +369,10 @@ struct SystemAnalysisView: View {
         let isValid = (logic.sourceAppURL != nil) || logic.isPPC || logic.isLinuxDetected || windowsRecognized || windowsSupportedDetected
         let isWindowsServerFamily = logic.windowsFamily?.isServerFamily == true
         let unsupportedText = logic.isWindowsDetected
-            ? String(localized: isWindowsServerFamily ? "analysis.windows.server.unsupported_edition.description" : "analysis.windows.unsupported_edition.description")
+            ? String(localized: isWindowsServerFamily ? "analysis.windows.server.unsupported_edition.description" : "analysis.windows.unsupported_edition.description", table: "Analysis")
             : (logic.isUnsupportedSierra
-            ? String(localized: "Ta wersja systemu macOS Sierra nie jest wspierana przez aplikację. Potrzebna jest nowsza wersja instalatora.", comment: "Unsupported Sierra (not 12.6.06) message")
-            : String(localized: "Wybrany system nie jest wspierany przez aplikację", comment: "Generic unsupported system message"))
+            ? String(localized: "analysis.macos.sierra.unsupported.description", table: "Analysis", comment: "Unsupported Sierra (not 12.6.06) message")
+            : String(localized: "analysis.result.unsupported.description", table: "Analysis", comment: "Generic unsupported system message"))
 
         return VStack(alignment: .leading, spacing: MacUSBDesignTokens.bottomBarContentSpacing) {
             StatusCard(tone: logic.isRawImageSelection ? .neutral : (isValid ? .success : .error)) {
@@ -392,11 +422,11 @@ struct SystemAnalysisView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(logic.isRawImageSelection ? "Wybrano surowy obraz" : (isValid ? "Pomyślnie wykryto system" : "Błąd analizy"))
+                        Text(LocalizedStringKey(logic.isRawImageSelection ? "analysis.raw_image.result.selected.title" : (isValid ? "analysis.result.success.title" : "analysis.result.failure.title")), tableName: "Analysis")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         HStack(spacing: 8) {
-                            Text(isValid ? (logic.recognizedVersion.isEmpty ? String(localized: "Wykryto kompatybilny instalator") : logic.recognizedVersion) : unsupportedText)
+                            Text(isValid ? (logic.recognizedVersion.isEmpty ? String(localized: "analysis.result.compatible.description", table: "Analysis") : logic.recognizedVersion) : unsupportedText)
                                 .font(.headline)
                                 .foregroundColor(logic.isRawImageSelection ? .primary : (isValid ? .green : .red))
                             if isValid, !logic.isRawImageSelection, logic.isBetaInstaller {
@@ -424,7 +454,7 @@ struct SystemAnalysisView: View {
                             .frame(width: MacUSBDesignTokens.iconColumnWidth)
                         VStack(alignment: .leading, spacing: 4) {
                             if logic.userSkippedAnalysis {
-                                Text(String(localized: "Analiza nie została wykonana - wybór użytkownika"))
+                                Text(String(localized: "analysis.result.skipped.description", table: "Analysis"))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                             }
@@ -463,10 +493,10 @@ struct SystemAnalysisView: View {
                             .foregroundColor(.orange)
                             .frame(width: MacUSBDesignTokens.iconColumnWidth)
                         VStack(alignment: .leading, spacing: 3) {
-                            Text(String(localized: architectureBlockReason.titleLocalizationKey))
+                            Text(architectureBlockReason.titleLocalizationResource)
                                 .font(.headline)
                                 .foregroundColor(.orange)
-                            Text(String(localized: architectureBlockReason.descriptionLocalizationKey))
+                            Text(architectureBlockReason.descriptionLocalizationResource)
                                 .font(.subheadline)
                                 .foregroundColor(.orange.opacity(0.8))
                                 .fixedSize(horizontal: false, vertical: true)
@@ -538,6 +568,7 @@ struct SystemAnalysisView: View {
 
     private var canProceedToInstall: Bool {
         canUseUSBSelection
+            && logic.usbDiscoveryState.admissionRequest == nil
             && logic.selectedDriveForInstallation != nil
             && logic.capacityCheckFinished
             && logic.isCapacitySufficient
@@ -545,6 +576,13 @@ struct SystemAnalysisView: View {
     }
 
     private func handleProceedToInstall() {
+        logic.confirmUSBTargetForHandoff {
+            completeProceedToInstall()
+        }
+    }
+
+    private func completeProceedToInstall() {
+        guard canProceedToInstall else { return }
         selectedDriveDisplayNameSnapshot = logic.selectedDrive?.displayName
         selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
         isBetaInstallerSnapshot = logic.isBetaInstaller
@@ -600,7 +638,7 @@ struct SystemAnalysisView: View {
     private var proceedActionBar: some View {
         BottomActionBar {
             Button(action: handleProceedToInstall) {
-                HStack { Text("Przejdź dalej"); Image(systemName: "arrow.right.circle.fill") }
+                HStack { Text("analysis.action.proceed", tableName: "Analysis"); Image(systemName: "arrow.forward.circle.fill") }
                     .frame(maxWidth: .infinity)
                     .padding(8)
             }
@@ -631,7 +669,16 @@ struct SystemAnalysisView: View {
             analysisContentWithBackgrounds
                 .onReceive(driveRefreshTimer) { _ in
                     updateOptionModifierState(NSEvent.modifierFlags.contains(.option))
-                    logic.refreshDrives()
+                    if !navigateToInstall { logic.refreshDrives() }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+                    if !navigateToInstall { logic.refreshDrives(force: true, reason: "application active") }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: NSApplication.willResignActiveNotification)) { _ in
+                    logic.cancelDriveRefresh()
+                }
+                .onChange(of: navigateToInstall) {
+                    logic.setDriveRefreshVisible(!navigateToInstall)
                 }
                 .onReceive(NotificationCenter.default.publisher(for: .macUSBResetToStart)) { _ in
                     handleResetToStartNotification()
@@ -642,6 +689,7 @@ struct SystemAnalysisView: View {
     private var analysisContentWithMenuStateHandlers: AnyView {
         AnyView(
             analysisContentWithResetHandlers
+                .onChange(of: menuState.externalDrivesEnabled) { _, _ in logic.usbExternalDrivePreferenceChanged() }
                 .onChange(of: logic.showUnsupportedMessage) { _ in updateMenuState() }
                 .onChange(of: logic.recognizedVersion) { _ in updateMenuState() }
                 .onChange(of: logic.isAnalyzing) { _ in updateMenuState() }
@@ -675,6 +723,9 @@ struct SystemAnalysisView: View {
                 .onChange(of: logic.shouldShowAlreadyMountedSourceAlert) { show in
                     if show { presentAlreadyMountedSourceDialog() }
                 }
+                .onChange(of: logic.shouldShowSourceSizeUnavailableAlert) { show in
+                    if show { presentSourceSizeUnavailableDialog() }
+                }
         )
     }
 
@@ -694,6 +745,7 @@ struct SystemAnalysisView: View {
                     handleViewAppear()
                 }
                 .onDisappear {
+                    logic.setDriveRefreshVisible(false)
                     removeOptionModifierMonitor()
                     MenuState.shared.rawLinuxImageSelectionEnabled = false
                     AppWindowCloseGuard.shared.setBeforeAllowedClose(nil)
@@ -703,7 +755,7 @@ struct SystemAnalysisView: View {
     
     var body: some View {
         analysisContentWithNotificationHandlers
-            .navigationTitle("Konfiguracja źródła i celu")
+            .navigationTitle(Text("analysis.navigation.title", tableName: "Analysis"))
             .navigationBarBackButtonHidden(true)
             .sheet(item: $checksumSheetPresentation) { presentation in
                 AnalysisChecksumSheetView(sourceURL: presentation.sourceURL)
@@ -716,171 +768,6 @@ struct SystemAnalysisView: View {
             sectionIconFont: sectionIconFont,
             isSelectionEnabled: canUseUSBSelection
         )
-    }
-}
-
-struct SystemAnalysisUSBSectionView: View {
-    @ObservedObject var logic: AnalysisLogic
-    let sectionIconFont: Font
-    let isSelectionEnabled: Bool
-
-    private var shouldShowWaitingForSystemDetectionCard: Bool {
-        let isUSBConnected = !logic.presentedUSBTargets.isEmpty || logic.hasUnreadableExternalUSBMedia
-        let isAwaitingSystemRecognition = logic.recognizedVersion.isEmpty || logic.isAnalyzing
-        let isPreparingInitialTargetSnapshot = !logic.hasPreparedUSBTargetSnapshot
-        return (isUSBConnected || isPreparingInitialTargetSnapshot)
-            && isAwaitingSystemRecognition
-            && !isSelectionEnabled
-    }
-
-    private func pickerDisplayName(for drive: USBDrive) -> String {
-        guard drive.isWholeDiskTarget else { return drive.displayName }
-        let speedText = drive.usbSpeed?.rawValue ?? "USB"
-        return "\(drive.device) - \(drive.size) - \(speedText)"
-    }
-
-    private var preservedPickerSelection: USBDrive? {
-        guard let selectedDrive = logic.selectedDrive,
-              !logic.presentedUSBTargets.contains(where: { $0.selectionID == selectedDrive.selectionID }) else {
-            return nil
-        }
-        return selectedDrive
-    }
-
-    private func sectionDivider(_ title: LocalizedStringKey) -> some View {
-        HStack(spacing: 10) {
-            Capsule()
-                .fill(Color.secondary.opacity(0.20))
-                .frame(height: 1)
-            Text(title)
-                .font(.caption)
-                .foregroundColor(.secondary)
-            Capsule()
-                .fill(Color.secondary.opacity(0.20))
-                .frame(height: 1)
-        }
-        .padding(.horizontal, 2)
-        .padding(.vertical, 2)
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
-            sectionDivider("Wybór nośnika USB")
-            StatusCard(tone: .neutral, density: .compact) {
-                HStack(alignment: .top) {
-                    Image(systemName: "externaldrive.fill").font(sectionIconFont).foregroundColor(.secondary).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("Wymagania sprzętowe").font(.headline)
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text(
-                                String(
-                                    format: String(localized: "• Do utworzenia instalatora potrzebny jest nośnik USB o pojemności minimum %@ GB"),
-                                    logic.requiredUSBCapacityDisplayValue
-                                )
-                            )
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            Text("• Zalecane jest użycie dysku w standardzie USB 3.0 lub szybszym").font(.subheadline).foregroundColor(.secondary)
-                        }
-                    }
-                }
-            }
-
-            VStack(alignment: .leading, spacing: 10) {
-                if shouldShowWaitingForSystemDetectionCard {
-                    StatusCard(tone: .subtle, density: .compact) {
-                        HStack(alignment: .center, spacing: 10) {
-                            Image(systemName: "hourglass.circle")
-                                .font(sectionIconFont)
-                                .foregroundColor(.secondary)
-                                .frame(width: MacUSBDesignTokens.iconColumnWidth)
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(String(localized: "analysis.usb.waiting_for_system_detection.title"))
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
-                                Text(String(localized: "analysis.usb.waiting_for_system_detection.description"))
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
-                            Spacer()
-                        }
-                    }
-                } else {
-                    Text("Wybierz docelowy nośnik USB:").font(.subheadline)
-                    if !logic.hasPreparedUSBTargetSnapshot {
-                        ProgressView()
-                            .controlSize(.small)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    } else if logic.presentedUSBTargets.isEmpty && !logic.hasUnreadableExternalUSBMedia {
-                        StatusCard(tone: .error, density: .compact) {
-                            HStack {
-                                Image(systemName: "externaldrive.badge.xmark").font(sectionIconFont).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                                VStack(alignment: .leading) {
-                                    Text("Nie wykryto nośnika USB").font(.headline).foregroundColor(.red)
-                                    Text("Podłącz nośnik USB i poczekaj na wykrycie...").font(.caption).foregroundColor(.red.opacity(0.8))
-                                }
-                            }
-                        }
-                    } else if !logic.presentedUSBTargets.isEmpty {
-                        HStack {
-                            Picker("", selection: $logic.selectedDriveSelectionID) {
-                                Text("Wybierz...").tag(nil as String?)
-                                if let preservedPickerSelection {
-                                    Text(pickerDisplayName(for: preservedPickerSelection))
-                                        .tag(Optional(preservedPickerSelection.selectionID))
-                                }
-                                ForEach(logic.presentedUSBTargets) { drive in
-                                    Text(pickerDisplayName(for: drive)).tag(Optional(drive.selectionID))
-                                }
-                            }
-                            .labelsHidden()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                    }
-                }
-            }
-            .disabled(!isSelectionEnabled)
-            .opacity(isSelectionEnabled ? 1.0 : 0.5)
-            .onChange(of: logic.selectedDrive) { _ in logic.checkCapacity() }
-
-            if logic.selectedDrive != nil {
-                if logic.capacityCheckFinished && !logic.isCapacitySufficient {
-                    StatusCard(tone: .error, density: .compact) {
-                        HStack {
-                            Image(systemName: "xmark.circle.fill").font(sectionIconFont).foregroundColor(.red).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                            VStack(alignment: .leading) {
-                                Text("Wybrany nośnik USB ma za małą pojemność").font(.headline).foregroundColor(.red)
-                                Text(
-                                    String(
-                                        format: String(localized: "Wymagane jest minimum %@ GB."),
-                                        logic.requiredUSBCapacityDisplayValue
-                                    )
-                                )
-                                .font(.caption)
-                                .foregroundColor(.red.opacity(0.8))
-                            }
-                        }
-                    }
-                    .transition(.opacity)
-                }
-                if logic.capacityCheckFinished && logic.isCapacitySufficient {
-                    VStack(alignment: .leading, spacing: 15) {
-                        StatusCard(tone: .warning, density: .compact) {
-                            HStack(alignment: .center) {
-                                Image(systemName: "exclamationmark.triangle.fill").font(sectionIconFont).foregroundColor(.orange).frame(width: MacUSBDesignTokens.iconColumnWidth)
-                                VStack(alignment: .leading) {
-                                    Text("UWAGA!").font(.headline).foregroundColor(.orange)
-                                    Text("Wszystkie pliki na wybranym nośniku USB zostaną bezpowrotnie usunięte!").font(.subheadline).foregroundColor(.orange.opacity(0.8))
-                                }
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                    }
-                    .transition(.opacity)
-                }
-            }
-        }
     }
 }
 

@@ -23,7 +23,7 @@ extension AnalysisLogic {
             }
 
             foundLegacyPath = true
-            self.log("Znaleziono legacy installer path: \(installerURL.path)")
+            self.log("Found legacy installer path: \(installerURL.path)")
 
             if let installerInfo = validatedMountedInstallerInfo(
                 from: installerURL,
@@ -36,7 +36,7 @@ extension AnalysisLogic {
         }
 
         if !foundLegacyPath {
-            self.log("Nie znaleziono legacy path instalatora 'Install Mac OS X' w: \(mountURL.path)")
+            self.log("Legacy 'Install Mac OS X' installer path not found in: \(mountURL.path)")
         }
 
         return nil
@@ -49,7 +49,7 @@ extension AnalysisLogic {
         context: String
     ) -> MountedInstallerReadInfo? {
         let inspection = inspectMacOSInstallerApp(at: installerURL)
-        self.log("Walidacja aplikacji instalatora macOS z obrazu (\(context)): \(inspection.logSummary)")
+        self.log("macOS installer app validation from image (\(context)): \(inspection.logSummary)")
 
         guard let (name, rawVersion, appURL) = inspection.appInfo else {
             if let legacyInfo = mountedLegacyInstallerInfoIfCompatible(
@@ -57,15 +57,15 @@ extension AnalysisLogic {
                 mountedSystemVersion: mountedSystemVersion,
                 context: context
             ) {
-                self.log("Zaakceptowano legacy instalator macOS z obrazu na podstawie zamontowanego SystemVersion.plist: name=\(legacyInfo.name), version=\(legacyInfo.rawVersion), mountedSystemVersion=\(mountedSystemVersion ?? "brak")")
+                self.log("Accepted legacy macOS installer from image based on mounted SystemVersion.plist: name=\(legacyInfo.name), version=\(legacyInfo.rawVersion), mountedSystemVersion=\(mountedSystemVersion ?? "none")")
                 return (legacyInfo.name, legacyInfo.rawVersion, legacyInfo.appURL, mountPoint)
             }
 
-            self.logError("Odrzucono aplikację .app w obrazie jako instalator macOS: \(inspection.decisionReason) [path=\(installerURL.path)]")
+            self.logError("Rejected image .app as a macOS installer: \(inspection.decisionReason) [path=\(installerURL.path)]")
             return nil
         }
 
-        self.log("Rozpoznano poprawny instalator macOS z obrazu: name=\(name), version=\(rawVersion)")
+        self.log("Recognized valid macOS installer from image: name=\(name), version=\(rawVersion)")
         return (name, rawVersion, appURL, mountPoint)
     }
 
@@ -90,7 +90,7 @@ extension AnalysisLogic {
                 candidateText.contains("tiger") ||
                 candidateText.contains("leopard") ||
                 candidateText.contains("panther") else {
-            self.log("Znaleziono legacy SystemVersion.plist, ale nazwa .app nie wygląda jak instalator macOS (\(context)): \(inspection.appURL.path)")
+            self.log("Found legacy SystemVersion.plist, but the .app name does not look like a macOS installer (\(context)): \(inspection.appURL.path)")
             return nil
         }
 
@@ -150,7 +150,7 @@ extension AnalysisLogic {
         do {
             try task.run()
         } catch {
-            self.logError("Nie udało się uruchomić hdiutil info: \(error.localizedDescription)")
+            self.logError("Failed to start hdiutil info: \(error.localizedDescription)")
             return nil
         }
         task.waitUntilExit()
@@ -161,9 +161,9 @@ extension AnalysisLogic {
             let stderrText = String(data: errorData, encoding: .utf8)?
                 .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             if stderrText.isEmpty {
-                self.logError("hdiutil info zakończył się błędem (kod \(task.terminationStatus)).")
+                self.logError("hdiutil info failed (exit code \(task.terminationStatus)).")
             } else {
-                self.logError("hdiutil info zakończył się błędem: \(stderrText)")
+                self.logError("hdiutil info failed: \(stderrText)")
             }
             return nil
         }
@@ -188,10 +188,10 @@ extension AnalysisLogic {
     }
 
     func mountAndReadInfo(dmgUrl: URL, detectPreMountedSource: Bool = false) -> (mountedReadInfo: (String, String, URL, String)?, sourceAlreadyMountedPath: String?, mountedImagePath: String?)? {
-        self.log("Montowanie obrazu (DMG/ISO/CDR)")
+        self.log("Attaching image (DMG/ISO/CDR)")
         if detectPreMountedSource,
            let mountPoint = mountedPathForAlreadyAttachedImage(sourceURL: dmgUrl) {
-            self.log("Wybrany obraz .\(dmgUrl.pathExtension.lowercased()) jest już zamontowany w systemie: \(mountPoint)")
+            self.log("Selected image .\(dmgUrl.pathExtension.lowercased()) is already mounted in macOS: \(mountPoint)")
             return (mountedReadInfo: nil, sourceAlreadyMountedPath: mountPoint, mountedImagePath: nil)
         }
 
@@ -205,10 +205,10 @@ extension AnalysisLogic {
         do {
             try task.run()
         } catch {
-            self.logError("Nie udało się uruchomić hdiutil attach: \(error.localizedDescription)")
+            self.logError("Failed to start hdiutil attach: \(error.localizedDescription)")
             if detectPreMountedSource,
                let mountPoint = mountedPathForAlreadyAttachedImage(sourceURL: dmgUrl) {
-                self.log("Po błędzie uruchomienia attach wykryto już zamontowany obraz źródłowy: \(mountPoint)")
+                self.log("Source image was already mounted after attach launch failed: \(mountPoint)")
                 return (mountedReadInfo: nil, sourceAlreadyMountedPath: mountPoint, mountedImagePath: nil)
             }
             return nil
@@ -221,28 +221,28 @@ extension AnalysisLogic {
             .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         if task.terminationStatus != 0 {
             if stderrText.isEmpty {
-                self.logError("hdiutil attach zakończył się błędem (kod \(task.terminationStatus)).")
+                self.logError("hdiutil attach failed (exit code \(task.terminationStatus)).")
             } else {
-                self.logError("hdiutil attach zakończył się błędem: \(stderrText)")
+                self.logError("hdiutil attach failed: \(stderrText)")
             }
             if detectPreMountedSource,
                let mountPoint = mountedPathForAlreadyAttachedImage(sourceURL: dmgUrl) {
-                self.log("Po błędzie attach wykryto już zamontowany obraz źródłowy: \(mountPoint)")
+                self.log("Source image was already mounted after attach failed: \(mountPoint)")
                 return (mountedReadInfo: nil, sourceAlreadyMountedPath: mountPoint, mountedImagePath: nil)
             }
             return nil
         }
 
         guard let plist = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any], let entities = plist["system-entities"] as? [[String: Any]] else {
-            self.logError("Nie udało się odczytać informacji z obrazu")
+            self.logError("Failed to read image information")
             if detectPreMountedSource,
                let mountPoint = mountedPathForAlreadyAttachedImage(sourceURL: dmgUrl) {
-                self.log("Po nieudanym odczycie plist wykryto już zamontowany obraz źródłowy: \(mountPoint)")
+                self.log("Source image was already mounted after plist read failed: \(mountPoint)")
                 return (mountedReadInfo: nil, sourceAlreadyMountedPath: mountPoint, mountedImagePath: nil)
             }
             return nil
         }
-        self.log("Przetwarzanie wyników hdiutil attach (\(entities.count) encji)")
+        self.log("Processing hdiutil attach results (\(entities.count) entities)")
         var firstMountedImagePath: String?
         for e in entities {
             if let mp = e["mount-point"] as? String {
@@ -260,11 +260,11 @@ extension AnalysisLogic {
                     }
                 }
 
-                self.log("Zamontowano obraz: \(mp) [id: \(mountId)]")
+                self.log("Mounted image: \(mp) [id: \(mountId)]")
                 let mUrl = URL(fileURLWithPath: mp)
                 let mountedSystemVersion = mountedSystemUserVisibleVersion(from: mUrl)
                 if let mountedSystemVersion {
-                    self.log("Odczytano wersję systemu z zamontowanego obrazu: \(mountedSystemVersion)")
+                    self.log("Read system version from mounted image: \(mountedSystemVersion)")
                 }
 
                 if let installerInfo = self.readLegacyInstallMacOSXInfo(
@@ -277,9 +277,9 @@ extension AnalysisLogic {
 
                 if let appCandidates = rootAppCandidates(in: mUrl) {
                     if appCandidates.isEmpty {
-                        self.log("Nie znaleziono pakietu .app w zamontowanym obrazie: \(mp)")
+                        self.log("No .app bundle found in mounted image: \(mp)")
                     } else {
-                        self.log("Znaleziono pakiety .app w zamontowanym obrazie (\(appCandidates.count)). Sprawdzam deterministycznie według nazwy.")
+                        self.log("Found .app bundles in mounted image (\(appCandidates.count)). Checking deterministically by name.")
                         for appCandidate in appCandidates {
                             if let installerInfo = validatedMountedInstallerInfo(
                                 from: appCandidate,
@@ -290,30 +290,30 @@ extension AnalysisLogic {
                                 return (mountedReadInfo: installerInfo, sourceAlreadyMountedPath: nil, mountedImagePath: mp)
                             }
                         }
-                        self.log("Żaden pakiet .app w zamontowanym obrazie nie przeszedł walidacji instalatora macOS: \(mp)")
+                        self.log("No .app bundle in mounted image passed macOS installer validation: \(mp)")
                     }
                 } else {
-                    self.log("Nie udało się odczytać zawartości katalogu zamontowanego obrazu: \(mp)")
+                    self.log("Failed to read mounted image directory: \(mp)")
                 }
             }
         }
-        self.log("Próbowano zamontować obraz i znaleźć poprawny pakiet instalatora macOS .app, ale nie został odnaleziony.")
+        self.log("Attempted to attach the image and find a valid macOS installer .app, but none was found.")
         if let firstMountedImagePath {
-            self.log("Brak instalatora macOS .app na zamontowanym obrazie. Zachowuję mount-point do dalszej analizy: \(firstMountedImagePath)")
+            self.log("No macOS installer .app in mounted image. Keeping mount point for further analysis: \(firstMountedImagePath)")
             return (mountedReadInfo: nil, sourceAlreadyMountedPath: nil, mountedImagePath: firstMountedImagePath)
         }
-        self.logError("Nie udało się odczytać informacji z obrazu")
+        self.logError("Failed to read image information")
         return nil
     }
 
     func mountImageForPPC(dmgUrl: URL) -> String? {
-        self.log("Montowanie obrazu (PPC)")
+        self.log("Attaching image (PPC)", workflow: .ppc)
         let task = Process(); task.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
         task.arguments = ["attach", dmgUrl.path, "-plist", "-nobrowse", "-readonly"]
         let pipe = Pipe(); task.standardOutput = pipe; try? task.run(); task.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         guard let plist = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any], let entities = plist["system-entities"] as? [[String: Any]] else {
-            self.logError("Nie udało się zamontować obrazu (PPC)")
+            self.logError("Failed to attach image (PPC)", workflow: .ppc)
             return nil
         }
         for e in entities {
@@ -328,11 +328,11 @@ extension AnalysisLogic {
                         mountId = bsd
                     }
                 }
-                self.log("Zamontowano obraz (PPC): \(mp) [id: \(mountId)]")
+                self.log("Mounted image (PPC): \(mp) [id: \(mountId)]", workflow: .ppc)
                 return mp
             }
         }
-        self.logError("Nie udało się zamontować obrazu (PPC)")
+        self.logError("Failed to attach image (PPC)", workflow: .ppc)
         return nil
     }
 }

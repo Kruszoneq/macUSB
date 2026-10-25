@@ -39,7 +39,7 @@ final class HelperWorkflowLinuxMountGuard {
         self.callbackContext = context
         self.isStarted = true
 
-        log("Linux mount guard: start target=\(targetWholeDisk)")
+        log("Raw-copy mount guard: start target=\(targetWholeDisk)")
     }
 
     func stop(reason: String) {
@@ -58,11 +58,11 @@ final class HelperWorkflowLinuxMountGuard {
         callbackContext = nil
         isStarted = false
 
-        log("Linux mount guard: release reason=\(reason), blocked_attempts=\(blockedMountAttempts)")
+        log("Raw-copy mount guard: release reason=\(reason), blocked_attempts=\(blockedMountAttempts)")
     }
 
     func markVerifyWindowActive() {
-        log("Linux mount guard: verification window active (auto-mount blocked)")
+        log("Raw-copy mount guard: verification window active (auto-mount blocked)")
     }
 
     fileprivate func approveOrDenyMount(for disk: DADisk) -> Unmanaged<DADissenter>? {
@@ -72,7 +72,7 @@ final class HelperWorkflowLinuxMountGuard {
         }
 
         blockedMountAttempts += 1
-        log("Linux mount guard: blocked auto-mount for \(diskBSDName) (attempt=\(blockedMountAttempts))")
+        log("Raw-copy mount guard: blocked auto-mount for \(diskBSDName) (attempt=\(blockedMountAttempts))")
 
         let dissenter = DADissenterCreate(
             kCFAllocatorDefault,

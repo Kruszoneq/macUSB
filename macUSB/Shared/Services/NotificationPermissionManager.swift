@@ -64,10 +64,10 @@ final class NotificationPermissionManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Czy chcesz włączyć powiadomienia?")
-        alert.informativeText = String(localized: "Pozwoli to na otrzymanie informacji o zakończeniu procesu przygotowania nośnika instalacyjnego.")
-        alert.addButton(withTitle: String(localized: "Włącz powiadomienia"))
-        alert.addButton(withTitle: String(localized: "Nie teraz"))
+        alert.messageText = String(localized: "app.notifications.enable.title", table: "App")
+        alert.informativeText = String(localized: "app.notifications.enable.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.notifications.enable.action", table: "App"))
+        alert.addButton(withTitle: String(localized: "app.action.not_now", table: "App"))
 
         let handleResponse: (NSApplication.ModalResponse) -> Void = { response in
             if response == .alertFirstButtonReturn {
@@ -89,10 +89,10 @@ final class NotificationPermissionManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Powiadomienia są wyłączone")
-        alert.informativeText = String(localized: "Powiadomienia dla macUSB zostały zablokowane w ustawieniach systemowych. Aby otrzymywać informacje o zakończeniu procesów, należy zezwolić aplikacji na ich wyświetlanie w systemie.")
-        alert.addButton(withTitle: String(localized: "Przejdź do ustawień systemowych"))
-        alert.addButton(withTitle: String(localized: "Nie teraz"))
+        alert.messageText = String(localized: "app.notifications.disabled.title", table: "App")
+        alert.informativeText = String(localized: "app.notifications.disabled.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.action.open_system_settings", table: "App"))
+        alert.addButton(withTitle: String(localized: "app.action.not_now", table: "App"))
 
         let handleResponse: (NSApplication.ModalResponse) -> Void = { response in
             if response == .alertFirstButtonReturn {

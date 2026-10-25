@@ -6,8 +6,8 @@ extension MontereyDownloadFlowModel {
         let minimumRequired = Int64((Double(requiredBytes) * 2.5).rounded(.up))
 
         AppLogging.info(
-            "Preflight miejsca przed pobieraniem: sprawdzanie woluminu katalogu tymczasowego \(probeURL.path).",
-            category: "Downloader"
+            "Download space preflight: checking temporary directory volume \(probeURL.path).",
+            stage: .downloader, workflow: loggingWorkflow
         )
 
         let availableBytes: Int64
@@ -18,15 +18,15 @@ extension MontereyDownloadFlowModel {
             availableBytes = Int64(values.volumeAvailableCapacityForImportantUsage ?? 0)
         } catch {
             AppLogging.error(
-                "Preflight miejsca przed pobieraniem: nie udało się odczytać dostępnego miejsca dla \(probeURL.path): \(error.localizedDescription)",
-                category: "Downloader"
+                "Download space preflight: could not read available space for \(probeURL.path): \(error.localizedDescription)",
+                stage: .downloader, workflow: loggingWorkflow
             )
             throw error
         }
 
         AppLogging.info(
-            "Preflight miejsca przed pobieraniem [katalog tymczasowy]: wymagane=\(MacOSDownloadDiskSpaceDiagnostics.describe(minimumRequired)), dostępne=\(MacOSDownloadDiskSpaceDiagnostics.describe(availableBytes)), wynik=\(MacOSDownloadDiskSpaceDiagnostics.status(requiredBytes: minimumRequired, availableBytes: availableBytes)).",
-            category: "Downloader"
+            "Download space preflight [temporary directory]: required=\(MacOSDownloadDiskSpaceDiagnostics.describe(minimumRequired)), available=\(MacOSDownloadDiskSpaceDiagnostics.describe(availableBytes)), result=\(MacOSDownloadDiskSpaceDiagnostics.status(requiredBytes: minimumRequired, availableBytes: availableBytes)).",
+            stage: .downloader, workflow: loggingWorkflow
         )
         guard availableBytes >= minimumRequired else {
             throw DownloadFailureReason.insufficientDiskSpace(

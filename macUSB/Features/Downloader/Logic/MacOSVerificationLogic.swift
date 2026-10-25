@@ -39,8 +39,8 @@ extension MontereyDownloadFlowModel {
             verifyCurrentIndex = index + 1
             verifyFileName = item.name
             AppLogging.info(
-                "Weryfikacja \(verifyCurrentIndex)/\(verifyTotal): start dla \(item.name)",
-                category: "Downloader"
+                "Verification \(verifyCurrentIndex)/\(verifyTotal): started for \(item.name)",
+                stage: .downloader, workflow: loggingWorkflow
             )
             updateVerificationProgress(
                 completedFiles: verifiedCount,
@@ -70,8 +70,8 @@ extension MontereyDownloadFlowModel {
 
             if shouldRunOldestOnlyVerification {
                 AppLogging.info(
-                    "Weryfikacja \(verifyCurrentIndex)/\(verifyTotal): oldest-only checks zakonczone sukcesem dla \(item.name)",
-                    category: "Downloader"
+                    "Verification \(verifyCurrentIndex)/\(verifyTotal): oldest-only checks passed for \(item.name)",
+                    stage: .downloader, workflow: loggingWorkflow
                 )
                 verifiedCount += 1
                 verifyProgress = min(1.0, Double(verifiedCount) / totalCount)
@@ -93,8 +93,8 @@ extension MontereyDownloadFlowModel {
                 }
             ) {
                 AppLogging.info(
-                    "Weryfikacja \(verifyCurrentIndex)/\(verifyTotal): zakonczona sukcesem przez IntegrityData dla \(item.name)",
-                    category: "Downloader"
+                    "Verification \(verifyCurrentIndex)/\(verifyTotal): passed with IntegrityData for \(item.name)",
+                    stage: .downloader, workflow: loggingWorkflow
                 )
                 verifiedCount += 1
                 verifyProgress = min(1.0, Double(verifiedCount) / totalCount)
@@ -104,8 +104,8 @@ extension MontereyDownloadFlowModel {
             if shouldRunHighSierraLegacySHA256Fallback(for: entry, item: item) {
                 try verifyHighSierraReferenceSHA256(for: localURL, entry: entry, item: item)
                 AppLogging.info(
-                    "Weryfikacja \(verifyCurrentIndex)/\(verifyTotal): fallback SHA-256 dla High Sierra zakonczony sukcesem dla \(item.name)",
-                    category: "Downloader"
+                    "Verification \(verifyCurrentIndex)/\(verifyTotal): High Sierra SHA-256 fallback passed for \(item.name)",
+                    stage: .downloader, workflow: loggingWorkflow
                 )
                 verifiedCount += 1
                 verifyProgress = min(1.0, Double(verifiedCount) / totalCount)
@@ -113,12 +113,12 @@ extension MontereyDownloadFlowModel {
             }
 
             AppLogging.info(
-                "IntegrityData: brak URL dla \(item.name), kontynuuje (rozmiar + podpis pakietu).",
-                category: "Downloader"
+                "IntegrityData: URL missing for \(item.name), continuing with size and package signature checks.",
+                stage: .downloader, workflow: loggingWorkflow
             )
             AppLogging.info(
-                "Weryfikacja \(verifyCurrentIndex)/\(verifyTotal): zakonczona bez IntegrityData dla \(item.name)",
-                category: "Downloader"
+                "Verification \(verifyCurrentIndex)/\(verifyTotal): completed without IntegrityData for \(item.name)",
+                stage: .downloader, workflow: loggingWorkflow
             )
 
             verifiedCount += 1
@@ -168,8 +168,8 @@ extension MontereyDownloadFlowModel {
         let currentSize = (try? FileManager.default.attributesOfItem(atPath: fileURL.path)[.size] as? NSNumber)?
             .int64Value ?? -1
         AppLogging.info(
-            "Sprawdzanie rozmiaru \(fileName): expected=\(expectedBytes), actual=\(currentSize)",
-            category: "Downloader"
+            "Checking size of \(fileName): expected=\(expectedBytes), actual=\(currentSize)",
+            stage: .downloader, workflow: loggingWorkflow
         )
         guard currentSize == expectedBytes else {
             throw DownloadFailureReason.verificationFailed(
@@ -209,8 +209,8 @@ extension MontereyDownloadFlowModel {
                isExpiredAppleSignedPackageSignature(details) {
                 registerExpiredButTrustedAppleSignature(for: packageURL)
                 AppLogging.info(
-                    "Podpis pakietu zawiera wygasly certyfikat Apple, ale zostal zaakceptowany dla \(packageURL.lastPathComponent): \(details)",
-                    category: "Downloader"
+                    "Package signature has an expired Apple certificate but was accepted for \(packageURL.lastPathComponent): \(details)",
+                    stage: .downloader, workflow: loggingWorkflow
                 )
                 return
             }
@@ -220,8 +220,8 @@ extension MontereyDownloadFlowModel {
         }
 
         AppLogging.info(
-            "Podpis pakietu potwierdzony (pkgutil) dla \(packageURL.lastPathComponent)\(details.isEmpty ? "" : ": \(details)")",
-            category: "Downloader"
+            "Package signature verified (pkgutil) for \(packageURL.lastPathComponent)\(details.isEmpty ? "" : ": \(details)")",
+            stage: .downloader, workflow: loggingWorkflow
         )
     }
 
@@ -312,8 +312,8 @@ extension MontereyDownloadFlowModel {
         }
 
         AppLogging.info(
-            "Weryfikacja podpisu pakietu z obrazu dla \(entry.name) \(entry.version): \(packageURL.path)",
-            category: "Downloader"
+            "Verifying embedded package signature for \(entry.name) \(entry.version): \(packageURL.path)",
+            stage: .downloader, workflow: loggingWorkflow
         )
         try verifyPackageSignature(
             for: packageURL,
@@ -345,7 +345,7 @@ extension MontereyDownloadFlowModel {
 
         AppLogging.info(
             "Oldest SHA-256 verify \(entry.name) \(entry.version): expected=\(expectedSHA), actual=\(actualSHA)",
-            category: "Downloader"
+            stage: .downloader, workflow: loggingWorkflow
         )
 
         guard actualSHA.caseInsensitiveCompare(expectedSHA) == .orderedSame else {
@@ -365,7 +365,7 @@ extension MontereyDownloadFlowModel {
 
         AppLogging.info(
             "High Sierra SHA-256 fallback verify \(entry.name) \(entry.version) \(item.name): expected=\(expectedSHA), actual=\(actualSHA)",
-            category: "Downloader"
+            stage: .downloader, workflow: loggingWorkflow
         )
 
         guard actualSHA.caseInsensitiveCompare(expectedSHA) == .orderedSame else {
@@ -522,8 +522,8 @@ extension MontereyDownloadFlowModel {
     ) async throws -> Bool {
         guard let integrityDataURL = item.integrityDataURL else {
             AppLogging.info(
-                "IntegrityData: brak URL dla \(item.name).",
-                category: "Downloader"
+                "IntegrityData: URL missing for \(item.name).",
+                stage: .downloader, workflow: loggingWorkflow
             )
             return false
         }
@@ -533,8 +533,8 @@ extension MontereyDownloadFlowModel {
             )
         }
         AppLogging.info(
-            "IntegrityData: pobieram metadane dla \(item.name) z \(integrityDataURL.absoluteString)",
-            category: "Downloader"
+            "IntegrityData: fetching metadata for \(item.name) from \(integrityDataURL.absoluteString)",
+            stage: .downloader, workflow: loggingWorkflow
         )
 
         let integrityData: Data
@@ -547,8 +547,8 @@ extension MontereyDownloadFlowModel {
             }
             integrityData = data
             AppLogging.info(
-                "IntegrityData: pobrano \(data.count) B dla \(item.name)",
-                category: "Downloader"
+                "IntegrityData: fetched \(data.count) B for \(item.name)",
+                stage: .downloader, workflow: loggingWorkflow
             )
         } catch let error as DownloadFailureReason {
             throw error
@@ -562,8 +562,8 @@ extension MontereyDownloadFlowModel {
         do {
             chunkTable = try parseIntegrityChunkTable(from: integrityData, fileName: item.name)
             AppLogging.info(
-                "IntegrityData: sparsowano \(chunkTable.totalChunks) chunkow dla \(item.name)",
-                category: "Downloader"
+                "IntegrityData: parsed \(chunkTable.totalChunks) chunks for \(item.name)",
+                stage: .downloader, workflow: loggingWorkflow
             )
         } catch let error as DownloadFailureReason {
             throw error
@@ -613,7 +613,7 @@ extension MontereyDownloadFlowModel {
             if shouldLogIntegrityChunkStep(chunkIndex: chunkIndex, total: chunkTable.totalChunks) {
                 AppLogging.info(
                     "IntegrityData chunk \(chunkIndex + 1)/\(chunkTable.totalChunks) \(item.name): expected=\(checksumPreview(chunk.sha256Hex)), actual=\(checksumPreview(hexString(computed))), size=\(chunk.size)",
-                    category: "Downloader"
+                    stage: .downloader, workflow: loggingWorkflow
                 )
             }
             guard computed == chunk.sha256 else {
@@ -624,8 +624,8 @@ extension MontereyDownloadFlowModel {
             offset += UInt64(chunk.size)
         }
         AppLogging.info(
-            "IntegrityData: weryfikacja chunklist zakonczona sukcesem dla \(item.name)",
-            category: "Downloader"
+            "IntegrityData: chunklist verification passed for \(item.name)",
+            stage: .downloader, workflow: loggingWorkflow
         )
 
         return true

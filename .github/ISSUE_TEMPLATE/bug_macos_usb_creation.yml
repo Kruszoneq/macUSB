@@ -145,10 +145,10 @@ body:
     id: diagnostic_logs
     attributes:
       label: "Diagnostic logs"
-      description: "Export diagnostic logs using Option (⌥) + L, then attach the exported .txt file."
+      description: "Export diagnostic logs from the current session using Option (⌥) + L, then attach the exported .log file. If the issue occurred during the previous app session, use Help → Export logs from previous session... instead, when available."
     validations:
       required: true
-      accept: ".txt"
+      accept: ".log"
 
   - type: upload
     id: problem_media

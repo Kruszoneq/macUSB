@@ -17,7 +17,9 @@ class LanguageManager: ObservableObject {
         "it",       // Włoski
         "uk",       // Ukraiński
         "vi",       // Wietnamski
-        "tr"        // Turecki
+        "tr",       // Turecki
+        "nl",       // Niderlandzki
+        "fa"        // Perski
     ]
 
     // Sprawdza, czy dany identyfikator jest wspierany (dokładnie lub po prefiksie języka)
@@ -97,6 +99,10 @@ class LanguageManager: ObservableObject {
     // Zwraca obiekt Locale dla wybranego języka
     var locale: Locale {
         return Locale(identifier: currentLanguage)
+    }
+
+    var layoutDirection: LayoutDirection {
+        locale.language.characterDirection == .rightToLeft ? .rightToLeft : .leftToRight
     }
     
     // --- FUNKCJA WYKRYWANIA JĘZYKA SYSTEMOWEGO ---

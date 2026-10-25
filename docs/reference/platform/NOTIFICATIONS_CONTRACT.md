@@ -14,10 +14,7 @@
 
 ## Logging and Diagnostics
 
-Notification logs should include:
-- permission state transitions,
-- policy-level allow/deny decisions,
-- emission attempts for completion notifications.
+The notification permission manager and completion-notification path do not currently emit notification-specific diagnostic lines. Permission state transitions, policy-level allow/deny decisions, and completion-notification attempts are therefore not recorded in the exported app log.
 
 ## Update Trigger
 

@@ -7,7 +7,14 @@ extension MontereyDownloadFlowModel {
         diskImageConfiguration: MacOSDiskImageConfiguration,
         collisionDecision: @escaping @MainActor (MacOSDiskImageCollisionContext) -> Bool
     ) async {
-        let sleepBlockToken = SystemSleepBlocker.shared.begin(reason: "Pobieranie systemu macOS")
+        loggingWorkflow = logic.isOldestDownloadTarget(entry)
+            ? .oldest
+            : (logic.isLegacyAssemblyTarget(entry) ? .legacy : .modern)
+        let sleepBlockToken = SystemSleepBlocker.shared.begin(
+            reason: "macOS installer download",
+            loggingStage: .downloader,
+            loggingWorkflow: loggingWorkflow
+        )
         defer { SystemSleepBlocker.shared.end(sleepBlockToken) }
 
         workflowState = .running
@@ -57,16 +64,16 @@ extension MontereyDownloadFlowModel {
             }
         } catch is MacOSDiskImagePreflightCancelled {
             AppLogging.info(
-                "Preflight miejsca przed pobieraniem z obrazem DMG: anulowano po wykryciu kolizji nazwy pliku.",
-                category: "Downloader"
+                "DMG download space preflight cancelled after file name collision.",
+                stage: .downloader, workflow: loggingWorkflow
             )
             workflowState = .idle
             didCancelDiskImagePreflight = true
             activeDiskImagePreflightPlan = nil
         } catch let error as MacOSDiskImagePreflightError {
             AppLogging.error(
-                "Preflight miejsca przed pobieraniem z obrazem DMG zakończony niepowodzeniem: \(diskImagePreflightTechnicalDescription(for: error)).",
-                category: "Downloader"
+                "DMG download space preflight failed: \(diskImagePreflightTechnicalDescription(for: error)).",
+                stage: .downloader, workflow: loggingWorkflow
             )
             workflowState = .idle
             suppressInlineFailureMessage = true
@@ -89,8 +96,8 @@ extension MontereyDownloadFlowModel {
                 try await runCleanup(completionReason: .cancelled)
             } catch {
                 AppLogging.error(
-                    "Cleanup po anulowaniu pobierania nie powiodl sie: \(error.localizedDescription)",
-                    category: "Downloader"
+                    "Cleanup after cancelled download failed: \(error.localizedDescription)",
+                    stage: .downloader, workflow: loggingWorkflow
                 )
             }
         } catch {
@@ -107,8 +114,8 @@ extension MontereyDownloadFlowModel {
             }()
 
             AppLogging.error(
-                "Pobieranie systemu zakonczone bledem: \(technicalMessage)",
-                category: "Downloader"
+                "System download failed: \(technicalMessage)",
+                stage: .downloader, workflow: loggingWorkflow
             )
 
             if !isCleanupFailure {
@@ -116,17 +123,17 @@ extension MontereyDownloadFlowModel {
                     try await runCleanup(completionReason: .failed)
                 } catch {
                     AppLogging.error(
-                        "Cleanup po bledzie pobierania nie powiodl sie: \(error.localizedDescription)",
-                        category: "Downloader"
+                        "Cleanup after failed download failed: \(error.localizedDescription)",
+                        stage: .downloader, workflow: loggingWorkflow
                     )
                 }
             }
 
             if isInternetTimeoutFailure(technicalMessage) {
                 if completedStages.contains(.cleanup) {
-                    failureMessage = String(localized: "Przez 1 minutę nie udało się odzyskać połączenia internetowego. Pliki tymczasowe zostały usunięte.")
+                    failureMessage = String(localized: "downloader.network.timeout.cleaned_message", table: "Downloader")
                 } else {
-                    failureMessage = String(localized: "Przez 1 minutę nie udało się odzyskać połączenia internetowego. Nie udało się potwierdzić usunięcia plików tymczasowych.")
+                    failureMessage = String(localized: "downloader.network.timeout.cleanup_unconfirmed_message", table: "Downloader")
                 }
             } else {
                 failureMessage = userFacingFailureMessage(for: technicalMessage)
@@ -134,7 +141,7 @@ extension MontereyDownloadFlowModel {
 
             if isCleanupFailure, finalInstallerAppURL != nil {
                 isPartialSuccess = true
-                failureMessage = String(localized: "Instalator został przygotowany, ale usuwanie plików tymczasowych nie zostało ukończone automatycznie.")
+                failureMessage = String(localized: "downloader.cleanup.warning.incomplete_message", table: "Downloader")
             } else {
                 isPartialSuccess = (finalInstallerAppURL != nil || finalDiskImageURL != nil)
                     && completedStages.contains(.cleanup)
@@ -160,7 +167,7 @@ extension MontereyDownloadFlowModel {
 
     func userFacingFailureMessage(for technicalMessage: String) -> String {
         if isMovePermissionFailure(technicalMessage) {
-            return String(localized: "Nie udało się zapisać instalatora w lokalizacji docelowej. Sprawdź uprawnienia i spróbuj ponownie.")
+            return String(localized: "downloader.assembly.error.destination_access", table: "Downloader")
         }
         return technicalMessage
     }
@@ -190,7 +197,7 @@ extension MontereyDownloadFlowModel {
         collisionDecision: @escaping @MainActor (MacOSDiskImageCollisionContext) -> Bool
     ) async throws -> DownloadManifest {
         currentStage = .connection
-        connectionStatusText = String(localized: "Łączenie z serwerami Apple i pobieranie manifestu wybranego systemu...")
+        connectionStatusText = String(localized: "downloader.connection.status.fetching_manifest", table: "Downloader")
 
         let manifest = try await logic.prepareDownloadManifest(for: entry) { [weak self] status in
             Task { @MainActor [weak self] in
@@ -208,17 +215,17 @@ extension MontereyDownloadFlowModel {
                     digestPreview = trimmed
                 }
             } else {
-                digestPreview = "brak"
+                digestPreview = "none"
             }
             AppLogging.info(
-                "Manifest systemu item: name=\(item.name), size=\(item.expectedSizeBytes), digest=\(digestPreview), url=\(item.url.absoluteString)",
-                category: "Downloader"
+                "System manifest item: name=\(item.name), size=\(item.expectedSizeBytes), digest=\(digestPreview), url=\(item.url.absoluteString)",
+                stage: .downloader, workflow: loggingWorkflow
             )
         }
 
-        connectionStatusText = String(localized: "Sprawdzanie dostępnego miejsca w katalogu tymczasowym...")
+        connectionStatusText = String(localized: "downloader.connection.status.checking_space", table: "Downloader")
         if diskImageConfiguration.isEnabled {
-            let plan = try MacOSDiskImagePreflight().prepare(
+            let plan = try MacOSDiskImagePreflight(workflow: loggingWorkflow).prepare(
                 configuration: diskImageConfiguration,
                 entry: entry,
                 installerBytes: manifest.totalExpectedBytes
@@ -229,8 +236,8 @@ extension MontereyDownloadFlowModel {
             }
             if let collisionContext = plan.collisionContext {
                 AppLogging.info(
-                    "Preflight obrazu DMG: zaakceptowano zmianę nazwy z \(collisionContext.existingFileName) na \(collisionContext.proposedFileName).",
-                    category: "Downloader"
+                    "DMG preflight: accepted rename from \(collisionContext.existingFileName) to \(collisionContext.proposedFileName).",
+                    stage: .downloader, workflow: loggingWorkflow
                 )
             }
             activeDiskImagePreflightPlan = plan
@@ -241,7 +248,7 @@ extension MontereyDownloadFlowModel {
         downloadTotal = manifest.items.count
         verifyTotal = manifest.items.count
         connectionStatusText = String(
-            format: String(localized: "Wykryto %@ plików o łącznym rozmiarze %@..."),
+            format: String(localized: "downloader.connection.status.manifest_ready", table: "Downloader"),
             String(manifest.items.count),
             DownloadManifestItem.formatBytes(manifest.totalExpectedBytes)
         )

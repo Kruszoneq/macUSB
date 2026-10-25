@@ -14,6 +14,14 @@ Windows-specific behavior details are documented in:
 
 - `docs/reference/features/analysis/WINDOWS_ANALYSIS_FLOW.md`
 
+## Localization Ownership
+
+All localized source/target selection, requirements, recognition/results, compatibility/capacity alerts, actions, transitions, and checksum presentation use `Analysis.xcstrings`. Discovery error/waiting presentation and deliberate-selection alerts use `analysis.usb.discovery.*` in the same explicit table; indirectly resolved reason/title keys are manually managed. Workflow-specific keys include their family under `analysis.`; shared controls and USB requirements use universal analysis keys. The Tools-menu raw-image warning and picker belong to `App.xcstrings`. Table selection, naming, and source-language details are defined in `docs/reference/platform/LOCALIZATION_CONTRACT.md`.
+
+## USB Admission Boundary
+
+Prepared physical and Option target presentation, per-device partial failures, retry/lifecycle state, identity verification and selected-target readiness are defined in `../usb/USB_VALIDATION_AND_CAPACITY.md`. Ordinary discovery remains automatic at 2.5-second intervals; the 0.5-second UI tick and immediate Option presentation stay separate. Only a currently verified selected target with known sufficient capacity and target-specific monotonic evidence younger than 20 seconds is passed to the existing installation summary. The existing tick evaluates freshness even while discovery is running or blocked. A selected target shows the capacity error when insufficient, otherwise the destructive warning. Lifecycle suspension retains the last messages separately from admission, so inactivity and initial rechecking do not replace a capacity error with the destructive warning or temporarily remove existing discovery errors or the empty-catalog card. The bounded presentation grace and its invalidation rules are defined in the USB reference. Prolonged active loss of confirmation retains the selection and adds the `analysis.usb.discovery.availability.title` / `.description` card in `Analysis` above the destructive warning, using the same warning styling; inline discovery cards have no retry action and the generic notice does not duplicate it. Same-identity recovery restores readiness automatically, while replacement identity requires deliberate reselection. Continue still performs its exact final identity/capacity check. Source detection flags, creation workflows, helper payloads and destructive confirmation remain unchanged.
+
 ## Detection Source of Truth
 
 Analysis flags are the source of truth for workflow branch selection.
@@ -44,6 +52,8 @@ For selected macOS `.app` sources and macOS `.app` bundles found inside mounted 
 - invalid `.app` bundles found inside mounted images must not set macOS install-handoff state; `.iso` sources may still continue into Windows/Linux fallback when no valid macOS app is accepted,
 - explicitly recognized unsupported macOS outcomes, including Panther, remain unsupported detection results rather than generic invalid-app results.
 
+For a supported macOS result, USB capacity is derived from the originally selected source: the image file size for `.dmg`, `.iso`, and `.cdr`, or the total logical regular-file size inside a directly selected `.app`. The target threshold is that size plus 5%, rounded up to a byte. A source-size failure uses a visible fallback alert; macOS major version 15 or later uses the `32 GB` class and a `28_000_000_000`-byte threshold, and older versions use the `16 GB` class and a `15_000_000_000`-byte threshold. Unsupported or invalid installer outcomes do not present a source-size fallback alert.
+
 For Windows fallback:
 
 - fallback entry is limited to `.iso` sources,
@@ -68,6 +78,8 @@ For Linux fallback:
 - selecting `.iso` through the standard `Wybierz` action remains part of normal macOS/Windows/Linux analysis.
 
 ## Current Supported Routing Families
+
+Standard `createinstallmedia`, restore-legacy (Lion/Mountain Lion), and Mavericks share the existing analysis-screen Option override for eligible mounted GPT/HFS+ targets. Restore workflows qualify without requiring a `createinstallmedia` executable. They retain the selected volume through installation handoff; only PPC requires macOS volume selection to normalize to its physical parent. Discovery, capacity and identity admission rules are defined in `../usb/USB_VALIDATION_AND_CAPACITY.md`.
 
 - modern
 - legacy
@@ -161,6 +173,8 @@ Checksum calculation:
 - supports progress, cancellation, and cancellation on sheet dismissal.
 
 ## Logging and Diagnostics
+
+Analysis-screen app diagnostics are written through `AppLogging` in English with `[HH:MM:SS] [ANALYSIS]` before the workflow is known, then `[ANALYSIS_MACOS]`, `[ANALYSIS_PPC]`, `[ANALYSIS_WINDOWS]`, `[ANALYSIS_LINUX]`, or `[ANALYSIS_RAW]` when a branch is known. The manual SHA-256 action uses the shared `ANALYSIS` stage because it applies across source workflows. Source-image registration diagnostics use `ANALYSIS_WINDOWS` or `ANALYSIS_LINUX` when the image family is known. Shared source-image discovery and detach diagnostics use the base `ANALYSIS` stage. Diagnostic fields, raw tool output, paths, and system error descriptions remain available in the exported log.
 
 Analysis should log:
 - selected source type,

@@ -58,25 +58,28 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
 ## ⚡ Quick Start
 
 > [!WARNING]
-> Creating bootable media erases all data on the selected USB drive.
+> Creating bootable media erases all data on the selected drive, SD card, or volume.
 
 1. Install macUSB using one of the methods listed in **How to Download macUSB**.
 2. Open macUSB and either:
    - choose a local source, or
    - use the built-in Downloader to fetch a macOS installer from Apple.
-3. Select the target USB drive and review the operation details.
+3. Select the target USB drive or SD card and review the operation details.
 4. Start the process and monitor bootable media creation stage by stage.
-5. Review the final result and safely eject the USB drive directly from the final screen.
+5. Review the final result and safely eject the media directly from the final screen.
 
 > [!IMPORTANT]
-> For reliable media creation, enable **Allow in the Background** and **Full Disk Access** for macUSB in System Settings. Without them, creation workflows may fail.
+> Enable **Full Disk Access** and **Background App Activity** for macUSB in System Settings. These are required by the app’s current installer download and media creation workflows.
+
+- **Full Disk Access:** macUSB requires this permission to write to the selected external drive and build installers in the Downloader. On Macs with the Apple T2 Security Chip and on Apple silicon Macs, Removable Volumes access alone was insufficient for all required write operations, even with administrator privileges.
+- **Background App Activity:** macUSB uses a helper registered through Apple’s `SMAppService`. This setting is required for the helper to run and perform privileged operations, such as preparing installers, formatting media, and writing data.
 
 <table align="center">
   <tr>
     <td align="center" valign="top">
-      <strong>Allow in the Background</strong><br>
+      <strong>Background App Activity</strong><br>
       <a href="docs/readme-assets/permissions/allow-in-the-background.png">
-        <img src="docs/readme-assets/permissions/allow-in-the-background.png" alt="macOS Login Items settings with macUSB enabled in Allow in the Background" width="360">
+        <img src="docs/readme-assets/permissions/allow-in-the-background.png" alt="macOS Login Items settings with macUSB enabled under Background App Activity" width="360">
       </a><br>
       <sub>General → Login Items &amp; Extensions</sub>
     </td>
@@ -126,7 +129,13 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
 
 ---
 
-## 🌐 Downloader Workflow
+## 🌐 macOS Downloader
+
+The built-in downloader lets you browse and download macOS and older OS X installers directly from Apple servers. macUSB downloads the required files, verifies their integrity, and prepares a ready-to-use installer.
+
+- **Version selection:** by default, the list shows the latest available stable release in each system family. Downloader options can show all available versions and Public Beta releases, which are hidden by default.
+- **Downloaded installer detection:** recognized installers in `/Applications` are marked as downloaded in the list.
+- **Disk space checks:** before downloading, macUSB checks the free space needed to prepare the installer, including optional DMG output.
 
 <p align="center">
   Click a screenshot to view it at full size.
@@ -139,26 +148,26 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
       <a href="docs/readme-assets/app-screens/DownloaderCatalogOverview.png">
         <img src="docs/readme-assets/app-screens/DownloaderCatalogOverview.png" alt="Downloader installer list" width="190">
       </a><br>
-      <sub>Browse macOS installers available from Apple servers.</sub>
+      <sub>Browse available system versions and select an installer to download.</sub>
     </td>
     <td align="center" valign="top">
       <strong>2. Download Progress</strong><br>
       <a href="docs/readme-assets/app-screens/DownloaderProgress.png">
         <img src="docs/readme-assets/app-screens/DownloaderProgress.png" alt="Downloader progress view" width="190">
       </a><br>
-      <sub>Track download and preparation progress in real time.</sub>
+      <sub>Track progress, download speed, and each stage of installer verification and preparation.</sub>
     </td>
     <td align="center" valign="top">
       <strong>3. Download Summary</strong><br>
       <a href="docs/readme-assets/app-screens/DownloaderCompleted.png">
         <img src="docs/readme-assets/app-screens/DownloaderCompleted.png" alt="Downloader summary view" width="190">
       </a><br>
-      <sub>Review the final status, then continue to USB creation with the downloaded installer.</sub>
+      <sub>Review the result, reveal the completed installer in Finder, or send it directly to the USB creation workflow.</sub>
     </td>
   </tr>
 </table>
 
-Downloader options can save the completed installer as a read-only DMG in a selected destination folder.
+By default, the completed installer is saved as an `.app` in `/Applications`. To save it as a disk image, enable **Save installer as a disk image (.dmg)** in Downloader options and choose a destination folder. macUSB creates a read-only DMG containing the installer and removes the source `.app` after the image is successfully created. You can keep the image for later use or use it immediately to create bootable USB media.
 
 ---
 
@@ -172,11 +181,11 @@ Downloader options can save the completed installer as a read-only DMG in a sele
   - **Downloader stage:** required free space depends on the selected installer and optional DMG output; macUSB checks the exact requirement before downloading.
   - **USB creation stage:** additional temporary disk space may be required depending on the selected source and workflow.
 
-### USB Media
+### Target Media
 
-- **For macOS installers:** at least **16 GB**, or at least **32 GB** for **macOS Sequoia 15 and later**.
-- **For Windows/Linux images:** **1 GB** or more, depending on the size of the selected `.iso` image.
-- **Performance:** USB 3.0+ is recommended.
+- **Supported media:** USB drives and SD cards in built-in Apple readers or external readers.
+- **Capacity:** macUSB calculates the minimum required capacity from the installer or source image size, with a 5% allowance, and checks the selected drive or volume before proceeding.
+- **Performance:** USB 3.0+ is recommended for USB drives and external readers.
 
 > [!NOTE]
 > External HDD/SSD support is disabled by default each time the app launches to improve safety and reduce the risk of accidental target selection. It can be enabled from **Options → Enable external hard drive support**.
@@ -190,14 +199,14 @@ Accepted local source formats:
 
 ---
 
-## 💿 macOS Support
+## 🍎 macOS Support
 
 macUSB supports creating bootable USB installers across the **macOS**, **OS X**, and **Mac OS X** system families, from **macOS Golden Gate 27** through **Mac OS X Tiger 10.4**. Some systems have additional requirements or limitations.[^1]
 
 On Macs running **macOS Golden Gate**, **Rosetta** is not installed by default. It is required for installers from **OS X Yosemite through macOS Catalina** that include an Intel-only `createinstallmedia` tool. macUSB checks for Rosetta automatically and, when needed, offers to install it with one click.
 
 > [!NOTE]
-> For **OS X Yosemite and later**, if the target USB drive is already partitioned as **GPT** and contains an **HFS+** volume, hold **Option (⌥)** while selecting the target to choose an individual volume without reformatting the entire drive. The selected volume itself will still be erased during installer creation.
+> For **Mac OS X Lion 10.7 and later**, hold **Option (⌥)** while selecting the target to reveal existing **HFS+** volumes on **GPT**-partitioned USB drives or SD cards. Choosing a volume erases only that volume, without repartitioning the entire drive or affecting its other volumes.
 
 [^1]: **System-specific requirements and limitations:**
 
@@ -289,6 +298,8 @@ By default, the interface follows the system language automatically. A supported
 - 🇺🇦 Ukrainian (uk)
 - 🇻🇳 Vietnamese (vi)
 - 🇹🇷 Turkish (tr)
+- 🇳🇱 Dutch (nl)
+- 🇮🇷 Persian (fa)
 
 ---
 

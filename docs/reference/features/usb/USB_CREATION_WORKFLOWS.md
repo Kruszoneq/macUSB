@@ -17,11 +17,22 @@ Every confirmed creation attempt owns one USB-creation token across macOS, Linux
 - Linux raw-copy path (`dd`) for recognized Linux `.iso` sources and manually selected raw `.iso`/`.img` sources
 - Windows ISO copy path (FAT32/MBR + optional WIM split), with a conditional macUSBoot final write for BIOS media
 
+## USB and SD Targets
+
+All workflow families accept qualified USB or removable SD targets from the shared analysis catalog. Discovery, exact capacity checks, built-in-reader identification, and final registry verification are defined in [USB Validation and Capacity](USB_VALIDATION_AND_CAPACITY.md#sd-identification-and-built-in-readers).
+
+SD targets use `SD CARD` in the analysis picker and installation summary, including cards attached through USB. Identified SD cards do not trigger the USB 2.0 warning. Generic USB readers without positive SD evidence retain USB presentation only when they qualify as external USB storage.
+
+SD classification is app-side metadata; `HelperWorkflowRequestPayload` has no SD-specific field or workflow kind. The helper receives the selected BSD device/volume path and executes the same source-dependent formatting, restore, copy, verification, and cleanup stages. macOS whole-disk preparation and its eligible GPT/HFS+ Option-volume override apply to SD targets under the same workflow rules as USB. Linux, Windows, and manual raw-image flows use whole disks. Successful media creation does not establish whether the destination firmware can boot from a particular card slot or reader.
+
+## Workflow Execution
+
 macOS target preparation:
 
 - standard `createinstallmedia`, legacy restore, and Mavericks workflows receive a physical whole-disk target by default and always run the existing `preformat` stage as GPT/HFS+ with the `mac_USB` label,
 - existing APFS, HFS+, FAT, NTFS, and other target formats do not bypass default whole-disk preparation,
-- standard `createinstallmedia` may skip `preformat` only for a mounted GPT/HFS+ volume selected through the analysis-screen Option override; the existing volume path is then passed directly to `createinstallmedia`,
+- standard `createinstallmedia`, legacy restore, and Mavericks may skip `preformat` only for a mounted GPT/HFS+ volume selected through the analysis-screen Option override; the existing volume path is then passed directly to `createinstallmedia` or to `asr restore --target`, respectively,
+- legacy restore and Mavericks keep their existing source staging and `imagescan -> restore` sequence; for an Option volume, the existing `needsPreformat=false` branch omits `partitionDisk` and uses `asr restore --erase` on the selected volume rather than repartitioning the whole disk,
 - PPC receives a physical whole-disk target but remains exempt from standard `preformat`; its existing `ppc_format` stage continues to create APM/HFS+ media labeled `PPC`,
 - helper request fields, workflow kinds, and stage identifiers remain unchanged.
 
@@ -49,15 +60,17 @@ Manual raw-image workflow contract:
 - the source is never mounted by this path and is not registered in `InstallerSourceImageUnmountRegistry`; recognized Linux `.iso` analysis retains its existing source cleanup.
 
 Windows workflow stages:
-- `windows_prepare_source` — source ISO validation, hidden mount, FAT32-limit scan, WIM split decision (indeterminate stage),
+- `windows_prepare_source` — source ISO validation, hidden mount, FAT32-limit scan, WIM split decision, and version-based solid-format classification with an estimated temp-volume space check when conversion is selected (indeterminate stage),
 - `windows_prepare_target` — target USB unmount with retry/force prompt path and FAT32/MBR formatting (indeterminate stage),
 - `windows_create_media` — ISO file copy to USB (`rsync`) with determinate progress + write speed,
-- `windows_split_wim` — conditional `install.wim` split via `wimlib-imagex` with determinate progress + write speed (stage appears only when needed),
+- `windows_split_wim` — conditional oversized `install.wim` split via `wimlib-imagex` with determinate progress and target-disk speed; a source classified as solid-format is first exported to a temporary non-solid LZX WIM, then split, with best-effort removal of the export directory,
 - `windows_create_autounattend` — conditional `Autounattend.xml` generation and XML validation (indeterminate stage; appears only when macUSB generates its own file),
 - `windows_verify_media` — boot-mode-aware boot file and structure validation (`boot.wim`, BIOS or UEFI markers, `install.wim`/`install.swm`) (indeterminate stage),
 - `windows_install_macusboot` — BIOS-only, non-cancellable macUSBoot artifact/layout/write/readback transaction after media verification and before cleanup (indeterminate stage),
 - `windows_cleanup_temp` — deterministic cleanup of temp files and helper-managed hidden image mount,
 - `finalize` — terminal state transition.
+
+The exact split condition, solid-format detector, export commands, space estimates, progress interpretation, compatibility scope, and verification limits are defined in [Windows WIM Splitting](../windows/WINDOWS_WIM_SPLITTING.md). Solid mode is distinct from the LZMS compression algorithm; conversion support does not extend the tested source contract to UUP-generated or repacked images.
 
 Linux auto-mount guard invariant:
 - for Linux workflow, helper blocks system auto-mount for target whole-disk (`diskX` and `diskXsY`) from start of `linux_unmount_target` until `linux_verify_write` ends,
@@ -118,13 +131,15 @@ Windows summary pre-start prerequisites:
 
 ## Helper and Privilege Invariants
 
+The complete pre-start summary, start confirmation, prerequisites, Windows configuration sheets, BIOS capability preflight error, and Rosetta UI use `Summary.xcstrings`. Execution/progress, cancellation, unmount recovery, helper titles/statuses, and raw-image progress overrides use `Creator.xcstrings`. Workflow-specific identifiers include `macos`, `windows`, `linux`, or `raw_image` under the owning stage prefix; shared controls and stages use universal identifiers. Catalog ownership and helper compatibility handling are defined in `docs/reference/platform/LOCALIZATION_CONTRACT.md`.
+
 - Privileged operations must run through helper (`SMAppService + XPC`).
 - No terminal fallback privileged execution path.
 - Stage progression shown in UI must remain deterministic.
 - Pending and completed progress cards remain at `0.98` scale, while the active card uses `1.0`. Each helper-reported stage change animates the completed and newly active cards together with the shared stage-transition motion. The animation is presentation-only and does not delay or reorder helper events.
 - Every Windows helper request must contain `windowsBootMode`; a missing mode is rejected before stage execution.
 - Linux raw-copy must target whole-disk device, never a partition node.
-- Windows workflow must copy installer files 1:1 from ISO payload (no UEFI fallback file synthesis).
+- Windows file copy uses the ISO payload without UEFI fallback file synthesis. An oversized `install.wim` is excluded from copy and replaced by SWM parts through the documented WIM preparation path; explicitly enabled automatic configuration can also generate or replace the selected answer-file location.
 - Windows ISO copy must use only the system-provided `/usr/bin/rsync`; the privileged helper must not execute user-managed Homebrew or MacPorts `rsync` binaries.
 - Windows ISO copy uses explicit recursive/link/time preservation (`-rlt`) instead of archive mode so POSIX ownership, group, permissions, device, and special-file metadata are not requested for the FAT32 target.
 - Windows BIOS source and target verification require case-insensitive `BOOTMGR`, `boot/BCD`, and `sources/boot.wim`. UEFI verification retains the EFI-directory plus accepted EFI-loader-marker contract and also requires `sources/boot.wim` on target media.
@@ -149,6 +164,7 @@ Windows summary pre-start prerequisites:
 - Idle sleep is blocked for the full USB creation runtime.
 - Sleep blocker is activated at creation process start.
 - Sleep blocker is released on every terminal path: success, failure, and cancellation.
+- Activation and release diagnostics use the selected `USB_WORKFLOW` label and an English reason.
 - The USB-creation token follows the same terminal coverage but is independent from the sleep blocker.
 
 ## Logging and Diagnostics
@@ -160,7 +176,14 @@ Creation workflow logs should include:
 - cancellation/failure shaping,
 - critical command outcomes used for diagnosis.
 
+Protected-operation start and finish diagnostics for a selected creation workflow, its helper activity, cleanup, and finish-screen eject use the same `[USB_WORKFLOW]` label. Their kind, context, identifier, and duration remain in the message.
+
+A failed terminal helper result is logged by the app as `Helper workflow failed: <errorMessage>` under the selected USB label without an extra `[HELPER]` tag; the embedded result description may retain its original language. If a helper progress event or workflow result cannot be decoded, the app logs the decode error under the base `[USB]` label without a workflow suffix or `[HELPER]` tag.
+
+From summary entry through helper completion, macOS creation diagnostics use English `AppLogging` lines labeled `[USB_MACOS]`, `[USB_SIERRA]`, `[USB_CATALINA]`, `[USB_LEGACYRESTORE]`, `[USB_MAVERICKS]`, or `[USB_PPC]` according to the selected branch. Forwarded helper progress events and tool output append `[HELPER]` after that label. Logging labels do not alter helper workflow kinds, stage keys, or localized presentation keys.
+
 Windows summary logs additionally include boot-mode initialization, user selection changes, helper capability preflight/reload outcomes, and the boot mode sent in the request.
+Windows creation diagnostics use English `[USB_WINDOWS]` lines from summary entry through the finish screen. They include the resolved BIOS/UEFI mode, WIM-split decision, generated answer-file option flags without account names, conflict resolution for a source answer file, force-unmount decision, stage transitions, and the terminal result. Forwarded helper progress diagnostics and raw tool output use `[USB_WINDOWS] [HELPER]`. The diagnostic labels and option summaries do not change the selected mode, answer-file payload, stage graph, or localized UI.
 
 Windows macUSBoot helper logs additionally include:
 - semantic phase transitions and artifact identity/hash validation,
@@ -175,6 +198,8 @@ Linux workflow logs should additionally include:
 - raw-copy progress and speed metrics,
 - verification summary (source hash preview vs target hash preview, compared byte count, pass/fail),
 - terminal result (`success/fail/cancel`) and failed stage when present.
+
+Recognized Linux creation uses English `[USB_LINUX]` diagnostics; the manually selected raw-image path uses `[USB_RAW]` for the same helper `dd` and SHA-256 stages. Forwarded helper lines, including raw command output, mount-guard activity, verification hashes, and the best-effort post-workflow mount attempt, append `[HELPER]`. The app ignores mount-guard and post-mount diagnostic-only progress events when mapping visible stages, so those logs do not change progress presentation or the terminal result.
 
 ## Update Trigger
 

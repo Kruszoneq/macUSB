@@ -8,7 +8,7 @@ extension HelperServiceManager {
                 DispatchQueue.main.async {
                     self.presentOperationSummary(
                         success: false,
-                        message: String(localized: "Trwa już naprawa helpera. Poczekaj na jej zakończenie.")
+                        message: String(localized: "app.helper.repair.already_running.message", table: "App")
                     )
                 }
                 return false
@@ -24,12 +24,25 @@ extension HelperServiceManager {
         }
     }
 
-    func reportHelperServiceEvent(_ message: String) {
-        AppLogging.info(message, category: "HelperService")
+    func reportHelperServiceEvent(
+        _ message: String,
+        stage: AppLogging.Stage,
+        workflow: AppLogging.Workflow? = nil,
+        isError: Bool = false
+    ) {
+        if isError {
+            AppLogging.error(message, stage: stage, workflow: workflow)
+        } else {
+            AppLogging.info(message, stage: stage, workflow: workflow)
+        }
         repairSinkLock.lock()
         let sink = repairProgressSink
         repairSinkLock.unlock()
         sink?(message)
+    }
+
+    func reportHelperRepairEvent(_ message: String, isError: Bool = false) {
+        reportHelperServiceEvent(message, stage: .helper, workflow: .repair, isError: isError)
     }
 
     func setRepairProgressSink(_ sink: ((String) -> Void)?) {
@@ -41,7 +54,7 @@ extension HelperServiceManager {
     func startRepairPresentation() {
         dismissRepairProgressAlertIfNeeded()
         repairTechnicalLogs.removeAll(keepingCapacity: true)
-        appendRepairTechnicalLogLine("Rozpoczynanie operacji naprawy.")
+        appendRepairTechnicalLogLine("Helper repair started.")
         presentRepairProgressAlertIfNeeded()
         setRepairProgressSink { [weak self] message in
             DispatchQueue.main.async {
@@ -51,15 +64,24 @@ extension HelperServiceManager {
     }
 
     func finishRepairPresentation(success: Bool, message: String) {
-        appendRepairTechnicalLogLine(message)
+        appendRepairTechnicalLogLine("Helper repair finished: success=\(success).")
+        let ownerWindow = repairProgressAlertParentWindow
         dismissRepairProgressAlertIfNeeded()
         if !success, isHelperTrustVerificationFailureMessage(message) {
             presentHelperTrustVerificationFailureAlert()
             setRepairProgressSink(nil)
             return
         }
-        presentRepairSummaryAlert(success: success, message: message)
+        presentRepairSummaryAlert(success: success, message: message, ownerWindow: ownerWindow)
         setRepairProgressSink(nil)
+    }
+
+    private func repairAlertOwnerWindow() -> NSWindow? {
+        var window = NSApp.keyWindow ?? NSApp.mainWindow
+        while let parent = window?.sheetParent {
+            window = parent
+        }
+        return window
     }
 
     private func presentRepairProgressAlertIfNeeded() {
@@ -68,12 +90,12 @@ extension HelperServiceManager {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .informational
-        alert.messageText = String(localized: "Naprawa helpera")
-        alert.informativeText = String(localized: "Trwa odświeżanie rejestracji i połączenia helpera systemowego.")
-        alert.addButton(withTitle: String(localized: "Naprawianie…"))
+        alert.messageText = String(localized: "app.helper.repair.running.title", table: "App")
+        alert.informativeText = String(localized: "app.helper.repair.running.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.helper.repair.running.action", table: "App"))
         alert.buttons.first?.isEnabled = false
 
-        if let ownerWindow = NSApp.keyWindow ?? NSApp.mainWindow {
+        if let ownerWindow = repairAlertOwnerWindow() {
             repairProgressAlertParentWindow = ownerWindow
             repairProgressAlertWindow = alert.window
             alert.beginSheetModal(for: ownerWindow, completionHandler: nil)
@@ -105,47 +127,86 @@ extension HelperServiceManager {
         repairProgressAlertParentWindow = nil
     }
 
-    private func presentRepairSummaryAlert(success: Bool, message: String) {
+    private func presentRepairSummaryAlert(success: Bool, message: String, ownerWindow: NSWindow?) {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = success ? .informational : .warning
 
         if success {
-            alert.messageText = String(localized: "Naprawa helpera zakończona pomyślnie")
-            alert.informativeText = String(localized: "Rejestracja helpera i weryfikacja komunikacji zostały zakończone pomyślnie.")
-            alert.addButton(withTitle: String(localized: "OK"))
-            presentAlert(alert)
+            alert.messageText = String(localized: "app.helper.repair.success.title", table: "App")
+            alert.informativeText = String(localized: "app.helper.repair.success.message", table: "App")
+            alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
+            presentRepairAlert(alert, ownerWindow: ownerWindow)
             return
         }
 
-        alert.messageText = String(localized: "Naprawa helpera zakończona niepowodzeniem")
-        alert.informativeText = String(localized: "Nie udało się przywrócić pełnej gotowości helpera. Szczegóły zapisano w logach diagnostycznych.")
-        alert.addButton(withTitle: String(localized: "OK"))
-        alert.addButton(withTitle: String(localized: "Szczegóły"))
+        alert.messageText = String(localized: "app.helper.repair.failure.title", table: "App")
+        alert.informativeText = String(localized: "app.helper.repair.failure.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
+        alert.addButton(withTitle: String(localized: "app.action.details", table: "App"))
 
         let handler: (NSApplication.ModalResponse) -> Void = { response in
             guard response == .alertSecondButtonReturn else { return }
-            self.presentRepairDetailsAlert(fallbackMessage: message)
+            // Finish dismissing the summary before attaching another sheet to its owner.
+            DispatchQueue.main.async {
+                self.presentRepairDetailsAlert(fallbackMessage: message, ownerWindow: ownerWindow)
+            }
         }
 
-        if let window = NSApp.keyWindow ?? NSApp.mainWindow {
-            alert.beginSheetModal(for: window, completionHandler: handler)
+        if let ownerWindow {
+            alert.beginSheetModal(for: ownerWindow, completionHandler: handler)
         } else {
             handler(alert.runModal())
         }
     }
 
-    private func presentRepairDetailsAlert(fallbackMessage: String) {
+    private func presentRepairDetailsAlert(fallbackMessage: String, ownerWindow: NSWindow?) {
         let details = repairTechnicalLogs.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
         let technicalOutput = details.isEmpty ? fallbackMessage : details
 
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Szczegóły naprawy helpera")
-        alert.informativeText = technicalOutput
-        alert.addButton(withTitle: String(localized: "OK"))
-        presentAlert(alert)
+        alert.messageText = String(localized: "app.helper.repair.details.title", table: "App")
+        alert.informativeText = String(localized: "app.helper.repair.failure.message", table: "App")
+        alert.accessoryView = makeRepairLogScrollView(technicalOutput)
+        alert.addButton(withTitle: String(localized: "app.action.ok", table: "App"))
+        presentRepairAlert(alert, ownerWindow: ownerWindow)
+    }
+
+    private func presentRepairAlert(_ alert: NSAlert, ownerWindow: NSWindow?) {
+        if let ownerWindow {
+            alert.beginSheetModal(for: ownerWindow, completionHandler: nil)
+        } else {
+            alert.runModal()
+        }
+    }
+
+    private func makeRepairLogScrollView(_ output: String) -> NSScrollView {
+        let scrollView = NSScrollView(frame: NSRect(x: 0, y: 0, width: 420, height: 240))
+        scrollView.hasVerticalScroller = true
+        scrollView.autohidesScrollers = true
+        scrollView.borderType = .bezelBorder
+
+        let contentSize = scrollView.contentSize
+        let textView = NSTextView(frame: NSRect(origin: .zero, size: contentSize))
+        textView.isEditable = false
+        textView.isSelectable = true
+        textView.isRichText = false
+        textView.font = .monospacedSystemFont(ofSize: NSFont.smallSystemFontSize, weight: .regular)
+        textView.textColor = .textColor
+        textView.backgroundColor = .textBackgroundColor
+        textView.textContainerInset = NSSize(width: 8, height: 8)
+        textView.isVerticallyResizable = true
+        textView.isHorizontallyResizable = false
+        textView.autoresizingMask = [.width]
+        textView.minSize = NSSize(width: 0, height: contentSize.height)
+        textView.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+        textView.textContainer?.containerSize = NSSize(width: contentSize.width, height: CGFloat.greatestFiniteMagnitude)
+        textView.textContainer?.widthTracksTextView = true
+        textView.string = output
+        scrollView.documentView = textView
+        return scrollView
     }
 
     private func appendRepairTechnicalLogLine(_ line: String) {
@@ -153,7 +214,12 @@ extension HelperServiceManager {
         guard !trimmed.isEmpty else { return }
 
         let timestamp = repairLogFormatter.string(from: Date())
-        repairTechnicalLogs.append("[\(timestamp)] \(trimmed)")
+        let prefix = "[\(timestamp)] [HELPER_REPAIR]"
+        repairTechnicalLogs.append(
+            trimmed.components(separatedBy: "\n")
+                .map { "\(prefix) \($0)" }
+                .joined(separator: "\n")
+        )
         if repairTechnicalLogs.count > 800 {
             repairTechnicalLogs.removeFirst(repairTechnicalLogs.count - 800)
         }

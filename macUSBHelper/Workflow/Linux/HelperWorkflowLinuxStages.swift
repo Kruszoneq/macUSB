@@ -12,7 +12,7 @@ extension HelperWorkflowExecutor {
             titleKey: HelperWorkflowLocalizationKeys.prepareSourceTitle,
             percent: latestPercent,
             statusKey: HelperWorkflowLocalizationKeys.prepareSourceStatus,
-            logLine: "Linux helper workflow source: \(request.sourceAppPath), size=\(linuxSourceImageSizeBytes.map(String.init) ?? "?") bytes",
+            logLine: "Raw-copy source: \(request.sourceAppPath), size=\(linuxSourceImageSizeBytes.map(String.init) ?? "?") bytes",
             shouldAdvancePercent: false
         )
 
@@ -28,7 +28,7 @@ extension HelperWorkflowExecutor {
             titleKey: HelperWorkflowLocalizationKeys.prepareSourceTitle,
             percent: latestPercent,
             statusKey: HelperWorkflowLocalizationKeys.prepareSourceStatus,
-            logLine: "Linux helper target resolution: requested=\(request.targetBSDName), wholeDisk=\(wholeDisk), rawDevice=\(rawTargetDevice)",
+            logLine: "Raw-copy target resolution: requested=\(request.targetBSDName), wholeDisk=\(wholeDisk), rawDevice=\(rawTargetDevice)",
             shouldAdvancePercent: false
         )
 

@@ -5,6 +5,9 @@ final class PrivilegedOperationClient: NSObject {
     private static let healthDetailsRegex = try? NSRegularExpression(
         pattern: #"^Helper odpowiada poprawnie \(uid=([0-9]+), euid=([0-9]+), pid=([0-9]+)\)$"#
     )
+    private static let healthIdentityRegex = try? NSRegularExpression(
+        pattern: #"\(uid=[0-9]+, euid=[0-9]+, pid=[0-9]+\)$"#
+    )
 
     typealias EventHandler = (HelperProgressEventPayload) -> Void
     typealias CompletionHandler = (HelperWorkflowResultPayload) -> Void
@@ -15,6 +18,8 @@ final class PrivilegedOperationClient: NSObject {
     private var connection: NSXPCConnection?
     private var eventHandlers: [String: EventHandler] = [:]
     private var completionHandlers: [String: CompletionHandler] = [:]
+    private var workflowLogWorkflows: [String: AppLogging.Workflow] = [:]
+    private var pendingWorkflowLogWorkflow: AppLogging.Workflow?
     private var downloaderAssemblyEventHandlers: [String: DownloaderAssemblyEventHandler] = [:]
     private var downloaderAssemblyCompletionHandlers: [String: DownloaderAssemblyCompletionHandler] = [:]
     var workflowActivityTokens: [String: AppActiveOperationToken] = [:]
@@ -28,11 +33,15 @@ final class PrivilegedOperationClient: NSObject {
 
     func startWorkflow(
         request: HelperWorkflowRequestPayload,
+        logWorkflow: AppLogging.Workflow,
         onEvent: @escaping EventHandler,
         onCompletion: @escaping CompletionHandler,
         onStartError: @escaping (String) -> Void,
         onStarted: @escaping (String) -> Void
     ) {
+        lock.lock()
+        pendingWorkflowLogWorkflow = logWorkflow
+        lock.unlock()
         let stateLock = NSLock()
         var didFinish = false
         let finishOnce: (@escaping () -> Void) -> Void = { action in
@@ -50,6 +59,9 @@ final class PrivilegedOperationClient: NSObject {
         let failStart: (String) -> Void = { [weak self] message in
             DispatchQueue.main.async {
                 timeoutWorkItem?.cancel()
+                self?.lock.lock()
+                self?.pendingWorkflowLogWorkflow = nil
+                self?.lock.unlock()
                 self?.resetConnection()
                 finishOnce {
                     onStartError(message)
@@ -60,7 +72,7 @@ final class PrivilegedOperationClient: NSObject {
         guard let proxy = helperProxy(presentsTrustFailureAlert: true, onError: { message in
             failStart(message)
         }) else {
-            failStart(String(localized: "Nie udało się uzyskać połączenia XPC z helperem."))
+            failStart(String(localized: "app.helper.xpc.connection_failed.message", table: "App"))
             return
         }
 
@@ -69,7 +81,7 @@ final class PrivilegedOperationClient: NSObject {
             requestData = try HelperXPCCodec.encode(request)
         } catch {
             let message = String(
-                format: String(localized: "Nie udało się zakodować żądania helpera: %@"),
+                format: String(localized: "app.helper.xpc.encoding_failed.message", table: "App"),
                 error.localizedDescription
             )
             failStart(message)
@@ -80,7 +92,7 @@ final class PrivilegedOperationClient: NSObject {
             self?.resetConnection()
             DispatchQueue.main.async {
                 finishOnce {
-                    onStartError(String(localized: "Przekroczono czas oczekiwania na odpowiedź helpera XPC."))
+                    onStartError(String(localized: "app.helper.xpc.response_timeout.message", table: "App"))
                 }
             }
         }
@@ -97,18 +109,26 @@ final class PrivilegedOperationClient: NSObject {
                     timeoutWorkItem?.cancel()
 
                     if let error {
+                        self?.lock.lock()
+                        self?.pendingWorkflowLogWorkflow = nil
+                        self?.lock.unlock()
                         onStartError(error.localizedDescription)
                         return
                     }
                     guard let workflowID = workflowID as String?, !workflowID.isEmpty else {
-                        onStartError(String(localized: "Helper nie zwrócił identyfikatora zadania."))
+                        self?.lock.lock()
+                        self?.pendingWorkflowLogWorkflow = nil
+                        self?.lock.unlock()
+                        onStartError(String(localized: "app.helper.xpc.task_identifier_missing.message", table: "App"))
                         return
                     }
 
                     self?.lock.lock()
                     self?.eventHandlers[workflowID] = onEvent
                     self?.completionHandlers[workflowID] = onCompletion
-                    self?.registerWorkflowActivityLocked(workflowID: workflowID)
+                    self?.workflowLogWorkflows[workflowID] = logWorkflow
+                    self?.pendingWorkflowLogWorkflow = nil
+                    self?.registerWorkflowActivityLocked(workflowID: workflowID, logWorkflow: logWorkflow)
                     self?.lock.unlock()
 
                     onStarted(workflowID)
@@ -171,7 +191,7 @@ final class PrivilegedOperationClient: NSObject {
         guard let proxy = helperProxy(presentsTrustFailureAlert: true, onError: { message in
             failStart(message)
         }) else {
-            failStart(String(localized: "Nie udało się uzyskać połączenia XPC z helperem."))
+            failStart(String(localized: "app.helper.xpc.connection_failed.message", table: "App"))
             return
         }
 
@@ -187,7 +207,7 @@ final class PrivilegedOperationClient: NSObject {
             self?.resetConnection()
             DispatchQueue.main.async {
                 finishOnce {
-                    onStartError(String(localized: "Przekroczono czas oczekiwania na odpowiedź helpera XPC."))
+                    onStartError(String(localized: "app.helper.xpc.response_timeout.message", table: "App"))
                 }
             }
         }
@@ -209,7 +229,7 @@ final class PrivilegedOperationClient: NSObject {
                     }
 
                     guard let workflowID = workflowID as String?, !workflowID.isEmpty else {
-                        onStartError(String(localized: "Helper nie zwrócił identyfikatora zadania."))
+                        onStartError(String(localized: "app.helper.xpc.task_identifier_missing.message", table: "App"))
                         return
                     }
 
@@ -263,7 +283,7 @@ final class PrivilegedOperationClient: NSObject {
         guard let proxy = helperProxy(presentsTrustFailureAlert: true, onError: { message in
             fail(message)
         }) else {
-            fail(String(localized: "Nie udało się uzyskać połączenia XPC z helperem."))
+            fail(String(localized: "app.helper.xpc.connection_failed.message", table: "App"))
             return
         }
 
@@ -339,7 +359,7 @@ final class PrivilegedOperationClient: NSObject {
         guard let proxy = helperProxy(presentsTrustFailureAlert: presentsTrustFailureAlert, onError: { message in
             failHealth(message)
         }) else {
-            failHealth(String(localized: "Nie udało się utworzyć proxy XPC helpera."))
+            failHealth(String(localized: "app.helper.xpc.proxy_failed.message", table: "App"))
             return
         }
 
@@ -348,7 +368,7 @@ final class PrivilegedOperationClient: NSObject {
             DispatchQueue.main.async {
                 finishOnce(
                     false,
-                    "\(String(localized: "Timeout połączenia XPC z helperem")) (limit: \(String(format: "%.1f", timeout)) s)"
+                    "\(String(localized: "app.helper.xpc.connection_timeout.message", table: "App")) (limit: \(String(format: "%.1f", timeout)) s)"
                 )
             }
         }
@@ -371,6 +391,7 @@ final class PrivilegedOperationClient: NSObject {
         lock.lock()
         eventHandlers.removeValue(forKey: workflowID)
         completionHandlers.removeValue(forKey: workflowID)
+        workflowLogWorkflows.removeValue(forKey: workflowID)
         downloaderAssemblyEventHandlers.removeValue(forKey: workflowID)
         downloaderAssemblyCompletionHandlers.removeValue(forKey: workflowID)
         lock.unlock()
@@ -382,6 +403,8 @@ final class PrivilegedOperationClient: NSObject {
         connection = nil
         eventHandlers.removeAll()
         completionHandlers.removeAll()
+        workflowLogWorkflows.removeAll()
+        pendingWorkflowLogWorkflow = nil
         downloaderAssemblyEventHandlers.removeAll()
         downloaderAssemblyCompletionHandlers.removeAll()
         let activityTokens = removeAllActivityTokensLocked()
@@ -396,6 +419,8 @@ final class PrivilegedOperationClient: NSObject {
         connection = nil
         eventHandlers.removeAll()
         completionHandlers.removeAll()
+        workflowLogWorkflows.removeAll()
+        pendingWorkflowLogWorkflow = nil
         downloaderAssemblyEventHandlers.removeAll()
         downloaderAssemblyCompletionHandlers.removeAll()
         let activityTokens = removeAllActivityTokensLocked()
@@ -405,7 +430,7 @@ final class PrivilegedOperationClient: NSObject {
         existingConnection?.invalidationHandler = nil
         existingConnection?.interruptionHandler = nil
         existingConnection?.invalidate()
-        AppLogging.info("Rozłączono XPC helpera przed zamknięciem aplikacji.", category: "AppLifecycle")
+        AppLogging.info("Disconnected helper XPC before application termination.", stage: .app)
     }
 
     func helperProxy(
@@ -417,8 +442,9 @@ final class PrivilegedOperationClient: NSObject {
             DispatchQueue.main.async {
                 if HelperConnectionSecurityPolicy.isCodeSigningRequirementFailure(error) {
                     AppLogging.error(
-                        "Weryfikacja podpisu helpera XPC nie powiodła się: \(HelperConnectionSecurityPolicy.diagnosticSummary(for: error)).",
-                        category: "HelperService"
+                        "XPC helper code-signing verification failed: " +
+                        "\(HelperConnectionSecurityPolicy.diagnosticSummary(for: error)).",
+                        stage: .helper
                     )
                     if presentsTrustFailureAlert {
                         HelperServiceManager.shared.presentHelperTrustVerificationFailureAlert()
@@ -426,7 +452,7 @@ final class PrivilegedOperationClient: NSObject {
                 }
 
                 let message = String(
-                    format: String(localized: "Błąd połączenia z helperem: %@"),
+                    format: String(localized: "app.helper.xpc.connection_error.message", table: "App"),
                     self.diagnosticErrorDescription(for: error)
                 )
                 onError(message)
@@ -434,7 +460,7 @@ final class PrivilegedOperationClient: NSObject {
         }
         guard let typedProxy = proxy as? PrivilegedHelperToolXPCProtocol else {
             DispatchQueue.main.async {
-                onError(String(localized: "Nie udało się utworzyć proxy XPC helpera."))
+                onError(String(localized: "app.helper.xpc.proxy_failed.message", table: "App"))
             }
             return nil
         }
@@ -461,10 +487,10 @@ final class PrivilegedOperationClient: NSObject {
         newConnection.exportedInterface = NSXPCInterface(with: PrivilegedHelperClientXPCProtocol.self)
         newConnection.exportedObject = self
         newConnection.invalidationHandler = { [weak self] in
-            self?.handleConnectionInvalidation(String(localized: "Połączenie z helperem zostało unieważnione."))
+            self?.handleConnectionInvalidation(String(localized: "app.helper.xpc.connection_invalidated.message", table: "App"))
         }
         newConnection.interruptionHandler = { [weak self] in
-            self?.handleConnectionInvalidation(String(localized: "Połączenie z helperem zostało przerwane."))
+            self?.handleConnectionInvalidation(String(localized: "app.helper.xpc.connection_interrupted.message", table: "App"))
         }
         newConnection.resume()
         connection = newConnection
@@ -485,6 +511,8 @@ final class PrivilegedOperationClient: NSObject {
         let downloaderAssemblyCompletionSnapshot = downloaderAssemblyCompletionHandlers
         eventHandlers.removeAll()
         completionHandlers.removeAll()
+        workflowLogWorkflows.removeAll()
+        pendingWorkflowLogWorkflow = nil
         downloaderAssemblyEventHandlers.removeAll()
         downloaderAssemblyCompletionHandlers.removeAll()
         let activityTokens = removeAllActivityTokensLocked()
@@ -559,11 +587,21 @@ final class PrivilegedOperationClient: NSObject {
         let euid = nsString.substring(with: match.range(at: 2))
         let pid = nsString.substring(with: match.range(at: 3))
         return String(
-            format: String(localized: "Helper odpowiada poprawnie (uid=%@, euid=%@, pid=%@)"),
+            format: String(localized: "app.helper.xpc.health.identity", table: "App"),
             uid,
             euid,
             pid
         )
+    }
+
+    func diagnosticHealthIdentity(from details: String) -> String? {
+        guard let regex = Self.healthIdentityRegex else { return nil }
+        let nsString = details as NSString
+        let fullRange = NSRange(location: 0, length: nsString.length)
+        guard let match = regex.firstMatch(in: details, options: [], range: fullRange) else {
+            return nil
+        }
+        return nsString.substring(with: match.range)
     }
 }
 
@@ -573,21 +611,18 @@ extension PrivilegedOperationClient: PrivilegedHelperClientXPCProtocol {
         do {
             event = try HelperXPCCodec.decode(HelperProgressEventPayload.self, from: eventData as Data)
         } catch {
-            let message = String(
-                format: String(localized: "Nie udało się zdekodować zdarzenia helpera: %@"),
-                error.localizedDescription
-            )
-            AppLogging.error(message, category: "HelperLiveLog")
+            AppLogging.error("Could not decode helper progress event: \(error.localizedDescription)", stage: .usb)
             return
-        }
-
-        if let logLine = event.logLine, !logLine.isEmpty {
-            AppLogging.info(logLine, category: "HelperLiveLog")
         }
 
         lock.lock()
         let handler = eventHandlers[event.workflowID]
+        let logWorkflow = workflowLogWorkflows[event.workflowID] ?? pendingWorkflowLogWorkflow
         lock.unlock()
+
+        if let logLine = event.logLine, !logLine.isEmpty {
+            AppLogging.info(logLine, stage: .usb, workflow: logWorkflow, helperOrigin: true)
+        }
 
         if let handler {
             DispatchQueue.main.async {
@@ -601,11 +636,7 @@ extension PrivilegedOperationClient: PrivilegedHelperClientXPCProtocol {
         do {
             result = try HelperXPCCodec.decode(HelperWorkflowResultPayload.self, from: resultData as Data)
         } catch {
-            let message = String(
-                format: String(localized: "Nie udało się zdekodować wyniku helpera: %@"),
-                error.localizedDescription
-            )
-            AppLogging.error(message, category: "HelperLiveLog")
+            AppLogging.error("Could not decode helper workflow result: \(error.localizedDescription)", stage: .usb)
             finishAllWorkflowActivityAfterDecodeFailure()
             return
         }
@@ -614,6 +645,7 @@ extension PrivilegedOperationClient: PrivilegedHelperClientXPCProtocol {
         let completion = completionHandlers[result.workflowID]
         eventHandlers.removeValue(forKey: result.workflowID)
         completionHandlers.removeValue(forKey: result.workflowID)
+        workflowLogWorkflows.removeValue(forKey: result.workflowID)
         let activityToken = workflowActivityTokens.removeValue(forKey: result.workflowID)
         lock.unlock()
         activityToken?.finish()
@@ -631,8 +663,8 @@ extension PrivilegedOperationClient: PrivilegedHelperClientXPCProtocol {
             event = try HelperXPCCodec.decode(DownloaderAssemblyProgressPayload.self, from: eventData as Data)
         } catch {
             AppLogging.error(
-                "Nie udalo sie zdekodowac postepu assembly downloadera: \(error.localizedDescription)",
-                category: "HelperLiveLog"
+                "Could not decode helper downloader assembly progress: \(error.localizedDescription)",
+                stage: .downloader
             )
             return
         }
@@ -654,8 +686,8 @@ extension PrivilegedOperationClient: PrivilegedHelperClientXPCProtocol {
             result = try HelperXPCCodec.decode(DownloaderAssemblyResultPayload.self, from: resultData as Data)
         } catch {
             AppLogging.error(
-                "Nie udalo sie zdekodowac wyniku assembly downloadera: \(error.localizedDescription)",
-                category: "HelperLiveLog"
+                "Could not decode helper downloader assembly result: \(error.localizedDescription)",
+                stage: .downloader
             )
             finishAllDownloaderAssemblyActivityAfterDecodeFailure()
             return

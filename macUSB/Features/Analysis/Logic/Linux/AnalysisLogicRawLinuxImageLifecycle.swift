@@ -3,17 +3,17 @@ import SwiftUI
 
 extension AnalysisLogic {
     func forceRawLinuxImageSelection(_ sourceURL: URL) {
-        cancelActiveImageAnalysisRun(reason: "Wybór surowego obrazu .iso/.img")
+        cancelActiveImageAnalysisRun(reason: "raw .iso/.img image selection")
 
         let standardizedURL = sourceURL.standardizedFileURL
         let sourceExtension = standardizedURL.pathExtension.lowercased()
         guard ["iso", "img"].contains(sourceExtension) else {
-            logError("Nie można wymusić surowego zapisu dla .\(sourceExtension).")
+            logRawError("Cannot enable raw image writing for .\(sourceExtension).")
             return
         }
         MenuState.shared.lockLanguageChanges(reason: "raw_linux_selection")
 
-        log("Ręcznie wybrano surowy obraz .iso/.img (bez analizy pliku).")
+        logRaw("Raw .iso/.img image selected manually without file analysis.")
 
         withAnimation {
             self.selectedFilePath = standardizedURL.path
@@ -48,20 +48,16 @@ extension AnalysisLogic {
             self.isPPC = false
             self.legacyArchInfo = nil
             self.selectedDrive = nil
-            self.capacityCheckFinished = false
+            self.usbTargetReadiness = .noSelection
             self.shouldShowMavericksDialog = false
             self.shouldShowAlreadyMountedSourceAlert = false
+            self.shouldShowSourceSizeUnavailableAlert = false
         }
 
-        let capacityResolution = resolveRequiredUSBCapacityForImageSource(standardizedURL)
-        requiredUSBCapacityGB = capacityResolution.requiredCapacityGB
-        if let fileSizeBytes = capacityResolution.sourceFileSizeBytes,
-           let fileSizeSource = capacityResolution.sourceFileSizeSource {
-            log("Raw image source size: \(fileSizeBytes) bytes (source=\(fileSizeSource))")
-        } else if capacityResolution.usedFallback {
-            log("Raw image source size unavailable. Applying fallback USB threshold: \(capacityResolution.requiredCapacityGB) GB")
-        }
-        log("Raw image required USB threshold: \(capacityResolution.requiredCapacityGB) GB")
-        log("Ustawiono ręczny zapis surowego obrazu: recognizedVersion=\(recognizedVersion), source=\(standardizedURL.path)")
+        applySourceCapacityRequirement(
+            try? USBTargetCapacityRequirement.forSource(at: standardizedURL),
+            sourceURL: standardizedURL
+        )
+        logRaw("Manual raw image writing configured: recognizedVersion=\(recognizedVersion), source=\(standardizedURL.path)")
     }
 }

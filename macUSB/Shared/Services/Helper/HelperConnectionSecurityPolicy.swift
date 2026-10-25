@@ -14,24 +14,25 @@ enum HelperConnectionSecurityPolicy {
         "anchor apple generic and certificate leaf[subject.OU] = \"\(teamIdentifier)\" and identifier \"\(expectedHelperBundleIdentifier)\""
 
     static var localizedFailureTitle: String {
-        String(localized: "Nie można zweryfikować helpera macUSB")
+        String(localized: "app.helper.trust.failure.title", table: "App")
     }
 
     static var localizedFailureMessage: String {
-        String(localized: "macUSB nie może potwierdzić, że komunikuje się z zaufanym, podpisanym helperem. Operacja została przerwana. Uruchom aktualną aplikację macUSB z katalogu Applications, a następnie wybierz Narzędzia → Napraw helpera.")
+        String(localized: "app.helper.trust.failure.message", table: "App")
     }
 
     static func configure(_ connection: NSXPCConnection, machServiceName: String) {
         AppLogging.info(
-            "Rozpoczynam konfigurację weryfikacji podpisu helpera XPC: machService=\(machServiceName), expectedHelperBundleID=\(expectedHelperBundleIdentifier).",
-            category: "HelperService"
+            "Configuring XPC helper code-signing requirement: " +
+            "machService=\(machServiceName), expectedHelperBundleID=\(expectedHelperBundleIdentifier).",
+            stage: .helper
         )
 
         connection.setCodeSigningRequirement(trustedHelperRequirement)
 
         AppLogging.info(
-            "Weryfikacja podpisu helpera XPC skonfigurowana: machService=\(machServiceName), status=OK.",
-            category: "HelperService"
+            "XPC helper code-signing requirement configured: machService=\(machServiceName), status=OK.",
+            stage: .helper
         )
     }
 

@@ -20,7 +20,7 @@ struct MacOSDownloaderWindowShellView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: MacUSBDesignTokens.sectionGroupSpacing) {
             VStack(alignment: .leading, spacing: 8) {
-                Text(String(localized: "Pobieranie systemu macOS"))
+                Text(String(localized: "downloader.window.title", table: "Downloader"))
                     .font(.title3.weight(.semibold))
                 Text(managerDescriptionText)
                     .font(.body)
@@ -106,8 +106,8 @@ struct MacOSDownloaderWindowShellView: View {
         .onChange(of: showBetaVersions) {
             selectedInstallerID = nil
             AppLogging.info(
-                "Zmieniono widocznosc publicznych wersji beta na \(showBetaVersions). Natychmiast zastosowano animowany filtr do wynikow aktywnej sesji bez ponownego sprawdzania katalogow Apple.",
-                category: "Downloader"
+                "Public Beta visibility changed to \(showBetaVersions). Applied the animated filter to current results without refreshing Apple catalogs.",
+                stage: .downloader
             )
         }
         .onChange(of: downloadFlowModel.isFinished) {
@@ -143,8 +143,8 @@ struct MacOSDownloaderWindowShellView: View {
 
     var closeButtonTitle: String {
         shouldConfirmCloseDuringDownload
-            ? String(localized: "Anuluj")
-            : String(localized: "Zamknij")
+            ? String(localized: "downloader.action.cancel", table: "Downloader")
+            : String(localized: "downloader.action.close", table: "Downloader")
     }
 
     var downloaderScreenTransition: AnyTransition {
@@ -155,12 +155,12 @@ struct MacOSDownloaderWindowShellView: View {
 
     var managerDescriptionText: String {
         if activeDownloadEntry == nil {
-            return String(localized: "Wybierz instalator dostępny na serwerach Apple")
+            return String(localized: "downloader.window.selection.description", table: "Downloader")
         }
         if downloadFlowModel.isFinished {
-            return String(localized: "Pobieranie zakończone. Podsumowanie jest dostępne poniżej")
+            return String(localized: "downloader.window.summary.description", table: "Downloader")
         }
-        return String(localized: "Trwa pobieranie i przygotowywanie instalatora")
+        return String(localized: "downloader.window.process.description", table: "Downloader")
     }
 
     var shouldConfirmCloseDuringDownload: Bool {
@@ -174,15 +174,15 @@ struct MacOSDownloaderWindowShellView: View {
             let shouldClose = presentCloseDownloadConfirmationAlert()
             guard shouldClose else {
                 AppLogging.info(
-                    "Anulowano zamkniecie okna downloadera podczas aktywnego pobierania.",
-                    category: "Downloader"
+                    "Cancelled closing the downloader window during an active download.",
+                    stage: .downloader
                 )
                 return
             }
 
             AppLogging.info(
-                "Potwierdzono anulowanie pobierania i zamkniecie okna downloadera.",
-                category: "Downloader"
+                "Confirmed download cancellation and closing the downloader window.",
+                stage: .downloader
             )
             downloadFlowModel.stop()
             if !downloadFlowModel.shouldRetainSessionFilesForDebugMode() {
@@ -199,14 +199,14 @@ struct MacOSDownloaderWindowShellView: View {
         let alert = NSAlert()
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
-        alert.messageText = String(localized: "Anulować pobieranie systemu?")
+        alert.messageText = String(localized: "downloader.cancellation.alert.title", table: "Downloader")
         if downloadFlowModel.shouldRetainSessionFilesForDebugMode() {
-            alert.informativeText = String(localized: "Po zamknięciu okna pobieranie zostanie przerwane, a pliki tymczasowe pozostaną do czasu zamknięcia aplikacji")
+            alert.informativeText = "When you close the window, the download will stop and the temporary files will remain until you close the application"
         } else {
-            alert.informativeText = String(localized: "Po zamknięciu okna pobieranie zostanie przerwane, a pliki tymczasowe zostaną usunięte")
+            alert.informativeText = String(localized: "downloader.cancellation.alert.message", table: "Downloader")
         }
-        alert.addButton(withTitle: String(localized: "Kontynuuj pobieranie"))
-        alert.addButton(withTitle: String(localized: "Anuluj pobieranie i zamknij"))
+        alert.addButton(withTitle: String(localized: "downloader.cancellation.continue.action", table: "Downloader"))
+        alert.addButton(withTitle: String(localized: "downloader.cancellation.confirm.action", table: "Downloader"))
         return alert.runModal() == .alertSecondButtonReturn
     }
 
@@ -223,15 +223,15 @@ struct MacOSDownloaderWindowShellView: View {
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
         alert.messageText = String(
-            localized: "downloader.local_installers.unrecognized_title"
+            localized: "downloader.local_installers.unrecognized_title", table: "Downloader"
         )
         alert.informativeText = String(
             format: String(
-                localized: "downloader.local_installers.unrecognized_message"
+                localized: "downloader.local_installers.unrecognized_message", table: "Downloader"
             ),
             String(logic.unrecognizedLocalInstallerCount)
         )
-        alert.addButton(withTitle: String(localized: "common.action.ok"))
+        alert.addButton(withTitle: String(localized: "downloader.local_installers.acknowledge.action", table: "Downloader"))
         alert.runModal()
     }
 
@@ -240,19 +240,19 @@ struct MacOSDownloaderWindowShellView: View {
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
         alert.messageText = String(
-            localized: "downloader.local_installers.redownload_title"
+            localized: "downloader.local_installers.redownload_title", table: "Downloader"
         )
         alert.informativeText = String(
-            localized: "downloader.local_installers.redownload_message"
+            localized: "downloader.local_installers.redownload_message", table: "Downloader"
         )
         alert.addButton(
             withTitle: String(
-                localized: "downloader.local_installers.redownload_cancel"
+                localized: "downloader.local_installers.redownload_cancel", table: "Downloader"
             )
         )
         alert.addButton(
             withTitle: String(
-                localized: "downloader.local_installers.redownload_confirm"
+                localized: "downloader.local_installers.redownload_confirm", table: "Downloader"
             )
         )
         return alert.runModal() == .alertSecondButtonReturn
@@ -263,19 +263,19 @@ struct MacOSDownloaderWindowShellView: View {
         alert.icon = NSApp.applicationIconImage
         alert.alertStyle = .warning
         alert.messageText = String(
-            localized: "downloader.intel_bootable_installer_warning.title"
+            localized: "downloader.intel_bootable_installer_warning.title", table: "Downloader"
         )
         alert.informativeText = String(
-            localized: "downloader.intel_bootable_installer_warning.message"
+            localized: "downloader.intel_bootable_installer_warning.message", table: "Downloader"
         )
         alert.addButton(
             withTitle: String(
-                localized: "downloader.intel_bootable_installer_warning.confirm"
+                localized: "downloader.intel_bootable_installer_warning.confirm", table: "Downloader"
             )
         )
         alert.addButton(
             withTitle: String(
-                localized: "downloader.intel_bootable_installer_warning.cancel"
+                localized: "downloader.intel_bootable_installer_warning.cancel", table: "Downloader"
             )
         )
         return alert.runModal() == .alertFirstButtonReturn
@@ -309,19 +309,24 @@ struct MacOSDownloaderWindowShellView: View {
         logic.supportsProductionDownload(entry)
     }
 
+    func loggingWorkflow(for entry: MacOSInstallerEntry) -> AppLogging.Workflow {
+        if logic.isOldestDownloadTarget(entry) { return .oldest }
+        return logic.isLegacyAssemblyTarget(entry) ? .legacy : .modern
+    }
+
     func handleDownloadTap(for entry: MacOSInstallerEntry) {
         guard supportsProductionDownload(entry) else {
             AppLogging.info(
-                "Pobieranie jest obecnie dostepne tylko dla: macOS High Sierra, Mojave, Catalina, Big Sur, Monterey, Ventura, Sonoma, Sequoia, Tahoe i Golden Gate.",
-                category: "Downloader"
+                "Download is currently available only for: macOS High Sierra, Mojave, Catalina, Big Sur, Monterey, Ventura, Sonoma, Sequoia, Tahoe, and Golden Gate.",
+                stage: .downloader
             )
             return
         }
 
         guard !prerequisiteController.isChecking else {
             AppLogging.info(
-                "Pominieto ponowne sprawdzenie wymagan downloadera, poniewaz poprzednie nadal trwa.",
-                category: "Downloader"
+                "Skipped downloader prerequisite refresh because a check is already running.",
+                stage: .downloader
             )
             return
         }
@@ -329,8 +334,8 @@ struct MacOSDownloaderWindowShellView: View {
         prerequisiteController.refresh(trigger: .downloadAction) { snapshot in
             guard snapshot.allowsDownload else {
                 AppLogging.info(
-                    "Zablokowano rozpoczecie pobierania z powodu niespelnionych wymagan downloadera.",
-                    category: "Downloader"
+                    "Download start blocked because downloader prerequisites are not met.",
+                    stage: .downloader
                 )
                 presentDownloaderPrerequisiteAlert(for: snapshot)
                 return
@@ -345,28 +350,28 @@ struct MacOSDownloaderWindowShellView: View {
         if requiresIntelBootableInstallerWarning(entry) {
             guard presentIntelBootableInstallerWarningAlert() else {
                 AppLogging.info(
-                    "Anulowano pobieranie instalatora \(entry.name) \(entry.version) (\(entry.build)) po ostrzezeniu o braku mozliwosci utworzenia nosnika USB na Macu z procesorem Intel.",
-                    category: "Downloader"
+                    "Cancelled download of installer \(entry.name) \(entry.version) (\(entry.build)) after the Intel Mac bootable USB warning.",
+                    stage: .downloader, workflow: loggingWorkflow(for: entry)
                 )
                 return
             }
             AppLogging.info(
-                "Potwierdzono pobieranie instalatora \(entry.name) \(entry.version) (\(entry.build)) mimo braku mozliwosci utworzenia nosnika USB na Macu z procesorem Intel.",
-                category: "Downloader"
+                "Confirmed download of installer \(entry.name) \(entry.version) (\(entry.build)) despite the Intel Mac bootable USB warning.",
+                stage: .downloader, workflow: loggingWorkflow(for: entry)
             )
         }
 
         if entry.isDownloaded {
             guard presentRedownloadConfirmationAlert() else {
                 AppLogging.info(
-                    "Anulowano ponowne pobieranie lokalnie wykrytego instalatora \(entry.name) \(entry.version) (\(entry.build)).",
-                    category: "Downloader"
+                    "Cancelled redownload of locally detected installer \(entry.name) \(entry.version) (\(entry.build)).",
+                    stage: .downloader, workflow: loggingWorkflow(for: entry)
                 )
                 return
             }
             AppLogging.info(
-                "Potwierdzono ponowne pobieranie lokalnie wykrytego instalatora \(entry.name) \(entry.version) (\(entry.build)).",
-                category: "Downloader"
+                "Confirmed redownload of locally detected installer \(entry.name) \(entry.version) (\(entry.build)).",
+                stage: .downloader, workflow: loggingWorkflow(for: entry)
             )
         }
 
@@ -389,17 +394,17 @@ struct MacOSDownloaderWindowShellView: View {
         )
 
         AppLogging.info(
-            "Uruchomiono pobieranie systemu dla \(entry.name) \(entry.version).",
-            category: "Downloader"
+            "Started system download for \(entry.name) \(entry.version).",
+            stage: .downloader, workflow: loggingWorkflow(for: entry)
         )
     }
 
     func sendDownloadCompletionNotificationIfInactive(for entry: MacOSInstallerEntry) {
         guard !NSApp.isActive else { return }
 
-        let title = String(localized: "Pobieranie zakończone")
+        let title = String(localized: "downloader.notification.completed.title", table: "Downloader")
         let body = String(
-            format: String(localized: "Pobieranie systemu %@ %@ zostało zakończone pomyślnie."),
+            format: String(localized: "downloader.notification.completed.message", table: "Downloader"),
             entry.name,
             entry.version
         )
@@ -408,8 +413,8 @@ struct MacOSDownloaderWindowShellView: View {
             guard shouldDeliver else { return }
             scheduleSystemNotification(title: title, body: body)
             AppLogging.info(
-                "Wyslano powiadomienie systemowe o zakonczeniu pobierania \(entry.name) \(entry.version).",
-                category: "Downloader"
+                "Sent system notification for completed download of \(entry.name) \(entry.version).",
+                stage: .downloader, workflow: loggingWorkflow(for: entry)
             )
         }
     }

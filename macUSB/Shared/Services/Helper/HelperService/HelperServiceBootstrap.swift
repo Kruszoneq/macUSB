@@ -2,15 +2,36 @@ import Foundation
 import AppKit
 import ServiceManagement
 
+struct HelperStartupResult {
+    let isReady: Bool
+    /// Includes version/build updates and automatic registration recovery during bootstrap.
+    let requiredAutoRepair: Bool
+}
+
 extension HelperServiceManager {
     private enum StartupAutoRepairDecision {
         case noRepairNeeded
         case needsRepair(previousFingerprint: String?)
+
+        var requiresRepair: Bool {
+            switch self {
+            case .noRepairNeeded: return false
+            case .needsRepair: return true
+            }
+        }
     }
 
-    func bootstrapIfNeededAtStartup(completion: @escaping (Bool) -> Void) {
+    func bootstrapIfNeededAtStartup(completion: @escaping (HelperStartupResult) -> Void) {
         refreshBackgroundApprovalState()
         let startupDecision = startupAutoRepairDecision()
+        let initialRecoveryRevision = currentRegistrationRecoveryRevision()
+        let finish: (Bool) -> Void = { ready in
+            completion(HelperStartupResult(
+                isReady: ready,
+                requiredAutoRepair: startupDecision.requiresRepair ||
+                    self.currentRegistrationRecoveryRevision() != initialRecoveryRevision
+            ))
+        }
 
         #if DEBUG
         if Self.isRunningFromXcodeDevelopmentBuild() {
@@ -19,34 +40,34 @@ extension HelperServiceManager {
             case .enabled:
                 validateEnabledServiceHealth(interactive: false, allowRecovery: false) { ready, _ in
                     guard ready else {
-                        completion(false)
+                        finish(false)
                         return
                     }
 
                     self.runStartupAutoRepairIfNeeded(decision: startupDecision) { autoRepairOK in
-                        completion(autoRepairOK)
+                        finish(autoRepairOK)
                     }
                 }
 
             case .requiresApproval:
                 presentStartupApprovalAlertIfNeeded {
-                    completion(false)
+                    finish(false)
                 }
 
             case .notRegistered, .notFound:
                 ensureReadyForPrivilegedWork(interactive: false) { ready, _ in
                     guard ready else {
-                        completion(false)
+                        finish(false)
                         return
                     }
 
                     self.runStartupAutoRepairIfNeeded(decision: startupDecision) { autoRepairOK in
-                        completion(autoRepairOK)
+                        finish(autoRepairOK)
                     }
                 }
 
             @unknown default:
-                completion(false)
+                finish(false)
             }
             return
         }
@@ -55,13 +76,13 @@ extension HelperServiceManager {
         ensureReadyForPrivilegedWork(interactive: false) { ready, _ in
             guard ready else {
                 self.presentStartupApprovalAlertIfNeeded {
-                    completion(false)
+                    finish(false)
                 }
                 return
             }
 
             self.runStartupAutoRepairIfNeeded(decision: startupDecision) { autoRepairOK in
-                completion(autoRepairOK)
+                finish(autoRepairOK)
             }
         }
     }
@@ -72,14 +93,20 @@ extension HelperServiceManager {
     ) {
         switch decision {
         case .noRepairNeeded:
-            reportHelperServiceEvent("Auto-aktualizacja helpera: brak potrzeby naprawy (wersja/build bez zmian).")
+            reportHelperServiceEvent(
+                "Automatic helper update skipped: app version and build are unchanged.",
+                stage: .helper
+            )
             completion(true)
 
         case .needsRepair(let previousFingerprint):
             let currentFingerprint = currentAppRepairFingerprint()
-            let previousDescription = previousFingerprint ?? "brak"
+            let previousDescription = previousFingerprint ?? "none"
+            let reason = previousFingerprint == nil ? "missingPreviousFingerprint" : "changedFingerprint"
             reportHelperServiceEvent(
-                "Auto-aktualizacja helpera: wykryto zmianę wersji/builda aplikacji lub brak poprzedniego fingerprintu (stary=\(previousDescription), nowy=\(currentFingerprint))."
+                "Automatic helper update started: reason=\(reason), " +
+                "previous=\(previousDescription), current=\(currentFingerprint).",
+                stage: .helper
             )
             Task { @MainActor in
                 AppToastCenter.shared.showHelperAutoUpdateRunning()
@@ -89,7 +116,8 @@ extension HelperServiceManager {
                 if ready {
                     self.storeSuccessfulHelperRepairFingerprint(currentFingerprint)
                     self.reportHelperServiceEvent(
-                        "Auto-aktualizacja helpera zakończona sukcesem dla fingerprintu \(currentFingerprint)."
+                        "Automatic helper update completed: fingerprint=\(currentFingerprint).",
+                        stage: .helper
                     )
                     Task { @MainActor in
                         AppToastCenter.shared.showHelperAutoUpdateCompleted(visibleFor: 5)
@@ -98,9 +126,11 @@ extension HelperServiceManager {
                     return
                 }
 
-                let details = message ?? String(localized: "Nieznany błąd")
+                let details = message ?? "Unknown error"
                 self.reportHelperServiceEvent(
-                    "Auto-aktualizacja helpera zakończona błędem: \(details)."
+                    "Automatic helper update failed: repair result=\(details).",
+                    stage: .helper,
+                    isError: true
                 )
                 DispatchQueue.main.async {
                     AppToastCenter.shared.dismiss()

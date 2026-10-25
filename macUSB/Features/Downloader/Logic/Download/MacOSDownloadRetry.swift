@@ -18,32 +18,32 @@ extension MontereyDownloadFlowModel {
             } catch {
                 if isOfflineDownloadError(error) {
                     AppLogging.error(
-                        "Wykryto brak dostepu do internetu podczas pobierania \(item.name). Oczekiwanie na ponowne polaczenie (maksymalnie 60 sekund).",
-                        category: "Downloader"
+                        "Internet connection lost while downloading \(item.name). Waiting up to 60 seconds for reconnection.",
+                        stage: .downloader, workflow: loggingWorkflow
                     )
                     let recovered = try await waitForInternetReconnect(timeoutSeconds: internetReconnectTimeoutSeconds, probeURL: item.url)
                     if recovered {
                         networkWarningMessage = nil
                         downloadFileName = String(
-                            format: String(localized: "Pobieranie pliku %@..."),
+                            format: String(localized: "downloader.transfer.status.downloading_file", table: "Downloader"),
                             item.name
                         )
                         AppLogging.info(
-                            "Polaczenie internetowe przywrocone. Wznawiam pobieranie \(item.name).",
-                            category: "Downloader"
+                            "Internet connection restored. Resuming download of \(item.name).",
+                            stage: .downloader, workflow: loggingWorkflow
                         )
                         continue
                     }
 
-                    throw DownloadFailureReason.downloadFailed(String(localized: "Brak dostępu do internetu przez ponad 1 minutę"))
+                    throw DownloadFailureReason.downloadFailed(String(localized: "downloader.network.error.reconnect_timeout", table: "Downloader"))
                 }
 
                 lastError = error
                 if attempt < attempts {
                     let delayNanoseconds = UInt64(500_000_000 * attempt * attempt)
                     AppLogging.info(
-                        "Retry pobierania pliku \(item.name): proba \(attempt + 1)/\(attempts), opoznienie \(delayNanoseconds / 1_000_000) ms.",
-                        category: "Downloader"
+                        "Retrying file download \(item.name): attempt \(attempt + 1)/\(attempts), delay \(delayNanoseconds / 1_000_000) ms.",
+                        stage: .downloader, workflow: loggingWorkflow
                     )
                     try await Task.sleep(nanoseconds: delayNanoseconds)
                     continue
@@ -51,7 +51,7 @@ extension MontereyDownloadFlowModel {
             }
         }
 
-        throw lastError ?? DownloadFailureReason.downloadFailed(String(localized: "Nieznany błąd pobierania"))
+        throw lastError ?? DownloadFailureReason.downloadFailed(String(localized: "downloader.transfer.error.unknown", table: "Downloader"))
     }
 
     func isOfflineDownloadError(_ error: Error) -> Bool {
@@ -81,7 +81,7 @@ extension MontereyDownloadFlowModel {
             let remaining = max(0, timeoutSeconds - elapsed)
 
             networkWarningMessage = String(
-                format: String(localized: "Pobieranie zostało wstrzymane. Wznowienie nastąpi automatycznie po odzyskaniu połączenia (pozostało: %@ s)."),
+                format: String(localized: "downloader.network.warning.reconnect_countdown", table: "Downloader"),
                 String(remaining)
             )
             downloadSpeedText = "0.0 MB/s"

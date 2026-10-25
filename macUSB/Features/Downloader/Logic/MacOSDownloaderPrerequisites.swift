@@ -44,9 +44,9 @@ final class MacOSDownloaderPrerequisiteController: ObservableObject {
     ) {
         guard !isChecking else {
             AppLogging.info(
-                "Pominieto rownolegle sprawdzenie wymagan downloadera " +
+                "Skipped concurrent downloader prerequisite check " +
                 "[trigger=\(trigger.rawValue)].",
-                category: "Downloader"
+                stage: .downloader
             )
             return
         }
@@ -56,8 +56,8 @@ final class MacOSDownloaderPrerequisiteController: ObservableObject {
         isChecking = true
 
         AppLogging.info(
-            "Rozpoczynam pasywne sprawdzenie wymagan downloadera [trigger=\(trigger.rawValue)].",
-            category: "Downloader"
+            "Starting passive downloader prerequisite check [trigger=\(trigger.rawValue)].",
+            stage: .downloader
         )
 
         var fullDiskAccessStatus: FullDiskAccessStatus?
@@ -82,17 +82,17 @@ final class MacOSDownloaderPrerequisiteController: ObservableObject {
             self.activeCheckID = nil
 
             let statusMessage =
-                "Zakonczono pasywne sprawdzenie wymagan downloadera " +
+                "Completed passive downloader prerequisite check " +
                 "[trigger=\(trigger.rawValue), fda=\(fullDiskAccessStatus.rawValue), " +
                 "helper=\(helperSnapshot.state.rawValue), " +
                 "service=\(self.serviceStatusDiagnosticName(helperSnapshot.serviceStatus)), " +
                 "allowsDownload=\(result.allowsDownload)]."
-            AppLogging.info(statusMessage, category: "Downloader")
+            AppLogging.info(statusMessage, stage: .downloader)
 
             if let details = helperSnapshot.healthDetails, !details.isEmpty {
                 AppLogging.error(
-                    "Pasywny health-check XPC downloadera nie powiodl sie: \(details)",
-                    category: "Downloader"
+                    "Passive downloader XPC health check failed: \(details)",
+                    stage: .downloader
                 )
             }
 

@@ -31,7 +31,7 @@ extension UniversalInstallationView {
                     category: "WindowsInstallFlow"
                 )
                 self.log(
-                    "WindowsPrerequisiteGate: start blocked=\(self.windowsPrerequisiteShouldBlockStart ? "TAK" : "NIE")",
+                    "WindowsPrerequisiteGate: start blocked=\(self.windowsPrerequisiteShouldBlockStart)",
                     category: "WindowsInstallFlow"
                 )
             }

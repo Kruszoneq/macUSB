@@ -373,13 +373,13 @@ extension DownloaderAssemblyExecutor {
             emit(
                 percent: nil,
                 status: "Instalowanie składników systemu...",
-                logLine: "legacy-dist patch: brak zmian w tresci (pattern not matched) source=\(originalDistributionURL.path)"
+                logLine: "legacy-dist patch: no content changes (pattern not matched) source=\(originalDistributionURL.path)"
             )
         } else {
             emit(
                 percent: nil,
                 status: "Instalowanie składników systemu...",
-                logLine: "legacy-dist patch: zastosowano modyfikacje zgodnosci source=\(originalDistributionURL.path) chars_before=\(originalLength) chars_after=\(text.count)"
+                logLine: "legacy-dist patch: applied compatibility changes source=\(originalDistributionURL.path) chars_before=\(originalLength) chars_after=\(text.count)"
             )
         }
 
@@ -445,7 +445,7 @@ extension DownloaderAssemblyExecutor {
             emit(
                 percent: nil,
                 status: "Instalowanie składników systemu...",
-                logLine: "legacy-assembly compatibility: ustawiono CM_BUILD dla \(packageURL.lastPathComponent)"
+                logLine: "legacy-assembly compatibility: set CM_BUILD for \(packageURL.lastPathComponent)"
             )
         } else {
             environment = nil
@@ -475,7 +475,7 @@ extension DownloaderAssemblyExecutor {
             emit(
                 percent: nil,
                 status: "Kończenie przygotowania instalatora...",
-                logLine: "assembly ownership: pomijam zmiane własności (brak requesterUID)"
+                logLine: "assembly ownership: skipping ownership change (requesterUID missing)"
             )
             return
         }
@@ -500,7 +500,7 @@ extension DownloaderAssemblyExecutor {
         emit(
             percent: nil,
             status: "Ustawianie własności instalatora...",
-            logLine: "assembly ownership: zakonczono dla \(installerAppURL.path)"
+            logLine: "assembly ownership: completed for \(installerAppURL.path)"
         )
     }
 

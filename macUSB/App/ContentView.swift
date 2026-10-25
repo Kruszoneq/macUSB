@@ -64,6 +64,7 @@ struct ContentView: View {
                                 path = NavigationPath()
                             },
                             isPPC: false,
+                            loggingWorkflow: .macos,
                             didFail: false,
                             cleanupTempWorkURL: debugCleanupTempWorkURL,
                             shouldDetachMountPoint: false,
@@ -78,6 +79,7 @@ struct ContentView: View {
                                 path = NavigationPath()
                             },
                             isPPC: true,
+                            loggingWorkflow: .ppc,
                             didFail: false,
                             cleanupTempWorkURL: debugTigerCleanupTempWorkURL,
                             shouldDetachMountPoint: false,
@@ -93,6 +95,7 @@ struct ContentView: View {
                             },
                             isPPC: false,
                             isLinuxWorkflow: true,
+                            loggingWorkflow: .linux,
                             didFail: false,
                             cleanupTempWorkURL: debugLinuxCleanupTempWorkURL,
                             shouldDetachMountPoint: false,
@@ -108,8 +111,9 @@ struct ContentView: View {
         }
         // Podpięcie konfiguratora okna
         .background(WindowConfigurator())
-        // Wstrzyknięcie języka
+        // Inject the language and layout direction
         .environment(\.locale, languageManager.locale)
+        .environment(\.layoutDirection, languageManager.layoutDirection)
         // Wymuszenie odświeżenia przy zmianie języka
         .id(languageManager.currentLanguage)
         .onChange(of: languageManager.needsRestart) { needsRestart in
@@ -123,25 +127,25 @@ struct ContentView: View {
         .onReceive(NotificationCenter.default.publisher(for: .macUSBDebugGoToBigSurSummary)) { _ in
             scheduleDebugSummaryNavigation(
                 route: .debugFinishUSBBigSurSuccess,
-                logMessage: "DEBUG: Zaplanowano przejście do podsumowania Big Sur za 2 sekundy"
+                logMessage: "DEBUG: Scheduled Big Sur summary navigation in 2 seconds."
             )
         }
         .onReceive(NotificationCenter.default.publisher(for: .macUSBDebugGoToTigerSummary)) { _ in
             scheduleDebugSummaryNavigation(
                 route: .debugFinishUSBTigerSuccess,
-                logMessage: "DEBUG: Zaplanowano przejście do podsumowania Tiger (isPPC) za 2 sekundy"
+                logMessage: "DEBUG: Scheduled Tiger (PPC) summary navigation in 2 seconds."
             )
         }
         .onReceive(NotificationCenter.default.publisher(for: .macUSBDebugGoToLinuxSummary)) { _ in
             scheduleDebugSummaryNavigation(
                 route: .debugFinishUSBLinuxSuccess,
-                logMessage: "DEBUG: Zaplanowano przejście do podsumowania Linux (Ubuntu 24.04) za 2 sekundy"
+                logMessage: "DEBUG: Scheduled Linux (Ubuntu 24.04) summary navigation in 2 seconds."
             )
         }
     }
 
     private func scheduleDebugSummaryNavigation(route: AppRoute, logMessage: String) {
-        AppLogging.info(logMessage, category: "Navigation")
+        AppLogging.info(logMessage, stage: .app)
         pendingDebugNavigationWorkItem?.cancel()
 
         let workItem = DispatchWorkItem {
@@ -172,9 +176,9 @@ struct ContentView: View {
         let alert = NSAlert()
         alert.alertStyle = .informational
         alert.icon = NSApp.applicationIconImage
-        alert.messageText = String(localized: "Wymagany restart aplikacji")
-        alert.informativeText = String(localized: "Aby zmienić język interfejsu we wszystkich elementach aplikacji (w tym menu i przyciskach), wymagany jest restart. Kliknij poniżej, aby uruchomić aplikację ponownie.")
-        alert.addButton(withTitle: String(localized: "Uruchom aplikację ponownie"))
+        alert.messageText = String(localized: "app.language.restart.title", table: "App")
+        alert.informativeText = String(localized: "app.language.restart.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.language.restart.action", table: "App"))
 
         if let window = NSApp.keyWindow ?? NSApp.mainWindow {
             alert.beginSheetModal(for: window) { response in

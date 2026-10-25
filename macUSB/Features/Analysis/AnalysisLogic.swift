@@ -61,40 +61,11 @@ final class AnalysisLogic: ObservableObject {
     @Published var windowsAutounattendMacLocale: CreatorWindowsAutounattendMacLocale? = nil
 
     @Published var presentedUSBTargets: [USBDrive] = []
-    @Published var hasUnreadableExternalUSBMedia: Bool = false
-    @Published var unreadableExternalUSBMediaCount: Int = 0
     @Published var selectedDriveSelectionID: String? {
         didSet {
             guard !isSynchronizingDriveSelection else { return }
 
-            let normalizedSelectionID: String?
-            if let selectedDriveSelectionID, selectedDriveSelectionID.isEmpty {
-                normalizedSelectionID = nil
-            } else {
-                normalizedSelectionID = selectedDriveSelectionID
-            }
-
-            if normalizedSelectionID != selectedDriveSelectionID {
-                synchronizeDriveSelection {
-                    self.selectedDriveSelectionID = normalizedSelectionID
-                }
-                return
-            }
-
-            guard let selectionID = normalizedSelectionID else {
-                if selectedDrive != nil {
-                    selectedDrive = nil
-                }
-                return
-            }
-
-            if let matchingDrive = selectableUSBTargets.first(where: { $0.selectionID == selectionID }) {
-                if selectedDrive?.selectionID != matchingDrive.selectionID {
-                    selectedDrive = matchingDrive
-                }
-            } else if selectedDrive != nil {
-                selectedDrive = nil
-            }
+            resolveUSBSelection(selectedDriveSelectionID)
         }
     }
 
@@ -103,21 +74,26 @@ final class AnalysisLogic: ObservableObject {
             // Log only when the detected/selected drive actually changes
             if oldValue?.url != selectedDrive?.url {
                 let id = selectedDrive?.device ?? "unknown"
-                let speed = selectedDrive?.usbSpeed?.rawValue ?? "USB"
+                let speed = selectedDrive?.mediaDisplayName ?? "USB"
                 let partitionScheme = selectedDrive?.partitionScheme?.rawValue ?? "unknown"
                 let fileSystem = selectedDrive?.fileSystemFormat?.rawValue ?? "unknown"
                 if isPPC {
                     self.log(
-                        "Wybrano nośnik: \(id) (\(speed)) — Pojemność: \(self.selectedDrive?.size ?? "?"), Schemat: \(partitionScheme), Format: \(fileSystem), Tryb: PPC, APM",
+                        "Selected target: \(id) (\(speed)) — Capacity: \(self.selectedDrive?.size ?? "?"), Partition scheme: \(partitionScheme), Format: \(fileSystem), Mode: PPC, APM",
                         category: "USBSelection"
                     )
                 } else {
-                    let needsFormattingText = (selectedDrive?.needsFormatting ?? true) ? "TAK" : "NIE"
+                    let needsFormattingText = (selectedDrive?.needsFormatting ?? true) ? "yes" : "no"
                     self.log(
-                        "Wybrano nośnik: \(id) (\(speed)) — Pojemność: \(self.selectedDrive?.size ?? "?"), Schemat: \(partitionScheme), Format: \(fileSystem), Wymaga formatowania w kolejnych etapach: \(needsFormattingText)",
+                        "Selected target: \(id) (\(speed)) — Capacity: \(self.selectedDrive?.size ?? "?"), Partition scheme: \(partitionScheme), Format: \(fileSystem), Requires formatting in later stages: \(needsFormattingText)",
                         category: "USBSelection"
                     )
                 }
+            }
+
+            if !isSynchronizingDriveSelection {
+                selectedTargetIdentity = selectedDrive.flatMap { usbDiscoveryState.snapshot?.verification[$0.selectionID]?.identity }
+                checkCapacity(logResult: true)
             }
 
             let newSelectionID = selectedDrive?.selectionID
@@ -129,12 +105,18 @@ final class AnalysisLogic: ObservableObject {
         }
     }
 
-    /// Nośnik przekazywany do etapu instalacji. PPC i procesy restore
-    /// zawsze otrzymują fizyczny whole disk. W trybie PPC flaga
+    /// Nośnik przekazywany do etapu instalacji. Tylko PPC
+    /// zawsze otrzymuje fizyczny whole disk. W trybie PPC flaga
     /// needsFormatting jest wymuszana na false, ponieważ formatowanie
     /// (APM + HFS+) jest już wbudowane w dalszy proces.
     var selectedDriveForInstallation: USBDrive? {
-        guard let drive = selectedDrive else { return nil }
+        guard usbTargetReadiness.isReady, usbDiscoveryState.hasCurrentSnapshot,
+              usbDiscoveryState.snapshot?.allowExternalDrives == UserDefaults.standard.bool(forKey: "AllowExternalDrives"),
+              let drive = selectedDrive,
+              let proof = usbDiscoveryState.snapshot?.verification[drive.selectionID], proof.problem == nil, proof.isFresh(),
+              proof.identity == selectedTargetIdentity,
+              case .success(let bytes) = proof.capacity,
+              let required = usbTargetCapacityRequirement?.minimumBytes, bytes >= required else { return nil }
         let installationDrive: USBDrive
         if requiresWholeDiskMacOSTarget {
             if drive.isWholeDiskTarget {
@@ -157,25 +139,41 @@ final class AnalysisLogic: ObservableObject {
             size: installationDrive.size,
             url: installationDrive.url,
             usbSpeed: installationDrive.usbSpeed,
+            mediaKind: installationDrive.mediaKind,
             partitionScheme: installationDrive.partitionScheme,
             fileSystemFormat: installationDrive.fileSystemFormat,
             needsFormatting: false
         )
     }
 
-    @Published var isCapacitySufficient: Bool = false
-    @Published var capacityCheckFinished: Bool = false
-    @Published var requiredUSBCapacityGB: Int? = nil
-    var lastUnreadableUSBDetectionDate: Date = .distantPast
-    let unreadableUSBDetectionInterval: TimeInterval = 2.5
-    var isUnreadableUSBDetectionRunning: Bool = false
-    var isPhysicalDriveRefreshRunning: Bool = false
+    @Published var usbDiscoveryState = AnalysisUSBDiscoveryState()
+    @Published var heldUSBDiscoveryPresentation: AnalysisUSBHeldPresentation?
+    @Published var usbTargetReadiness: USBTargetReadiness = .noSelection
+    @Published var usbTargetCapacityRequirement: USBTargetCapacityRequirement? = nil
+    @Published var shouldShowSourceSizeUnavailableAlert: Bool = false
+    var driveRefreshPolicy = USBDriveRefreshPolicy()
+    var isDriveRefreshVisible = false
+    var driveRefreshCancellation: USBDiscoveryCancellation?
     var physicalDriveRefreshGeneration: UInt = 0
-    var wholeDiskCapacityCache: [String: Int64] = [:]
-    var physicalUSBTargetsCache: [USBDrive] = []
-    var macOSOptionUSBTargetsCache: [USBDrive] = []
+    var selectedTargetIdentity: String?
+    var isUSBSelectionAlertPresented = false
+    let usbDiscoveryDiagnostics = USBDiscoveryDiagnostics()
     var isMacOSCreateInstallMediaVolumeOverrideActive: Bool = false
-    @Published var hasPreparedUSBTargetSnapshot: Bool = false
+
+    var physicalUSBTargetsCache: [USBDrive] { usbDiscoveryState.snapshot?.physicalDrives ?? [] }
+    var macOSOptionUSBTargetsCache: [USBDrive] { usbDiscoveryState.snapshot?.optionDrives ?? [] }
+    var hasPreparedUSBTargetSnapshot: Bool { usbDiscoveryState.snapshot != nil }
+    var isCapacitySufficient: Bool { usbTargetReadiness.isReady }
+    var capacityCheckFinished: Bool {
+        switch usbTargetReadiness {
+        case .ready, .insufficient: return true
+        default: return false
+        }
+    }
+
+    deinit {
+        driveRefreshCancellation?.cancel()
+    }
     let imageAnalysisTimeoutSeconds: TimeInterval = 20
     var activeImageAnalysisRunID: UUID? = nil
     var imageAnalysisTimeoutWorkItem: DispatchWorkItem? = nil
@@ -184,7 +182,17 @@ final class AnalysisLogic: ObservableObject {
     private var isSynchronizingDriveSelection: Bool = false
 
     var requiredUSBCapacityDisplayValue: String {
-        requiredUSBCapacityGB.map(String.init) ?? "--"
+        usbTargetCapacityRequirement.map { String($0.displayCapacityGB) } ?? "--"
+    }
+
+    var requiredVolumeCapacityDisplayValue: String {
+        guard let minimumBytes = usbTargetCapacityRequirement?.minimumBytes else { return "--" }
+        let tenths = minimumBytes / 100_000_000 + (minimumBytes % 100_000_000 == 0 ? 0 : 1)
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 1
+        formatter.maximumFractionDigits = 1
+        return formatter.string(from: NSNumber(value: Double(tenths) / 10)) ?? "--"
     }
 
     // Computed: true only when app has recognized a supported system and can proceed normally
@@ -199,16 +207,75 @@ final class AnalysisLogic: ObservableObject {
     }
 
     // MARK: - Logging
-    func log(_ message: String, category: String = "FileAnalysis") {
-        AppLogging.info(message, category: category)
+    var selectedWorkflowForLogging: AppLogging.Workflow? {
+        if isRawImageSelection { return .raw }
+        if isWindowsDetected { return .windows }
+        if isLinuxDetected { return .linux }
+        if isPPC { return .ppc }
+        if isSystemDetected { return .macos }
+        return nil
     }
 
-    func logError(_ message: String, category: String = "FileAnalysis") {
-        AppLogging.error(message, category: category)
+    func log(_ message: String, category: String = "FileAnalysis", workflow: AppLogging.Workflow? = nil) {
+        let stage: AppLogging.Stage = category == "USBSelection" ? .usb : .analysis
+        AppLogging.info(message, stage: stage, workflow: workflow ?? (stage == .usb ? selectedWorkflowForLogging : nil))
     }
 
-    func stage(_ title: String) {
-        AppLogging.stage(title)
+    func logError(_ message: String, category: String = "FileAnalysis", workflow: AppLogging.Workflow? = nil) {
+        let stage: AppLogging.Stage = category == "USBSelection" ? .usb : .analysis
+        AppLogging.error(message, stage: stage, workflow: workflow ?? (stage == .usb ? selectedWorkflowForLogging : nil))
+    }
+
+    func logUnclassified(_ message: String) {
+        AppLogging.info(message, stage: .analysis)
+    }
+
+    func logUnclassifiedError(_ message: String) {
+        AppLogging.error(message, stage: .analysis)
+    }
+
+    func logMacOS(_ message: String, category: String = "FileAnalysis") {
+        log(message, category: category, workflow: .macos)
+    }
+
+    func logMacOSError(_ message: String, category: String = "FileAnalysis") {
+        logError(message, category: category, workflow: .macos)
+    }
+
+    func logDetectedMacOS(_ message: String) {
+        log(message, workflow: isPPC ? .ppc : .macos)
+    }
+
+    func logDetectedMacOSError(_ message: String) {
+        logError(message, workflow: isPPC ? .ppc : .macos)
+    }
+
+    func logWindows(_ message: String, category: String = "FileAnalysis") {
+        log(message, category: category, workflow: .windows)
+    }
+
+    func logWindowsError(_ message: String, category: String = "FileAnalysis") {
+        logError(message, category: category, workflow: .windows)
+    }
+
+    func logLinux(_ message: String, category: String = "FileAnalysis") {
+        log(message, category: category, workflow: .linux)
+    }
+
+    func logLinuxError(_ message: String, category: String = "FileAnalysis") {
+        logError(message, category: category, workflow: .linux)
+    }
+
+    func logRaw(_ message: String, category: String = "FileAnalysis") {
+        log(message, category: category, workflow: .raw)
+    }
+
+    func logRawError(_ message: String, category: String = "FileAnalysis") {
+        logError(message, category: category, workflow: .raw)
+    }
+
+    func stage(_ title: String, workflow: AppLogging.Workflow? = nil) {
+        AppLogging.info(title, stage: .analysis, workflow: workflow)
     }
 
     func synchronizeDriveSelection(_ updates: () -> Void) {
@@ -225,7 +292,7 @@ final class AnalysisLogic: ObservableObject {
 
 extension AnalysisLogic {
     func beginImageAnalysisRun(sourceURL: URL) -> UUID {
-        cancelActiveImageAnalysisRun(reason: "Uruchamianie nowej analizy obrazu")
+        cancelActiveImageAnalysisRun(reason: "starting a new image analysis")
 
         let runID = UUID()
         activeImageAnalysisRunID = runID
@@ -235,7 +302,7 @@ extension AnalysisLogic {
         }
         imageAnalysisTimeoutWorkItem = timeoutWorkItem
 
-        log("Uruchomiono timeout analizy obrazu: \(Int(imageAnalysisTimeoutSeconds)) s [runID=\(runID.uuidString)]")
+        log("Image analysis timeout started: \(Int(imageAnalysisTimeoutSeconds)) s [runID=\(runID.uuidString)]")
         DispatchQueue.main.asyncAfter(deadline: .now() + imageAnalysisTimeoutSeconds, execute: timeoutWorkItem)
         return runID
     }
@@ -246,7 +313,7 @@ extension AnalysisLogic {
         imageAnalysisTimeoutWorkItem?.cancel()
         imageAnalysisTimeoutWorkItem = nil
         activeImageAnalysisRunID = nil
-        log("Zakończono analizę obrazu przed timeoutem [runID=\(runID.uuidString)]: \(reason)")
+        log("Image analysis completed before timeout [runID=\(runID.uuidString)]: \(reason)", workflow: selectedWorkflowForLogging)
         return true
     }
 
@@ -265,20 +332,21 @@ extension AnalysisLogic {
         imageAnalysisTimeoutWorkItem?.cancel()
         imageAnalysisTimeoutWorkItem = nil
         activeImageAnalysisRunID = nil
-        log("Anulowano aktywną sesję analizy obrazu [runID=\(runID.uuidString)]: \(reason)")
+        log("Active image analysis session cancelled [runID=\(runID.uuidString)]: \(reason)")
         cleanupLinuxAttachSession(reason: "cancel_active_run")
     }
 
     func logIgnoredStaleImageAnalysisCallback(_ runID: UUID, stage: String) {
-        log("Ignoruję spóźniony wynik analizy obrazu [runID=\(runID.uuidString)] (\(stage)).")
+        log("Ignoring stale image analysis result [runID=\(runID.uuidString)] (\(stage)).")
     }
 
     func applyUnrecognizedInstallerState(timeoutReason: String? = nil) {
         if let timeoutReason {
             logError(timeoutReason)
         }
-        recognizedVersion = String(localized: "Nie rozpoznano instalatora")
-        requiredUSBCapacityGB = nil
+        recognizedVersion = String(localized: "analysis.result.unrecognized.description", table: "Analysis")
+        usbTargetCapacityRequirement = nil
+        shouldShowSourceSizeUnavailableAlert = false
         sourceAppURL = nil
         detectedSystemIcon = nil
         isBetaInstaller = false
@@ -288,8 +356,8 @@ extension AnalysisLogic {
         resetLinuxDetectionState()
         resetWindowsDetectionState()
         isAnalyzing = false
-        log("Analiza zakończona: nie rozpoznano instalatora.")
-        AppLogging.separator()
+        log("Analysis completed: installer not recognized.")
+        AppLogging.separator(stage: .analysis)
     }
 
     private func handleImageAnalysisTimeout(runID: UUID, sourceURL: URL) {
@@ -306,7 +374,7 @@ extension AnalysisLogic {
         detachMountedImageAfterAnalysisTimeout(sourceURL: sourceURL)
 
         applyUnrecognizedInstallerState(
-            timeoutReason: "Przekroczono timeout analizy obrazu (\(Int(imageAnalysisTimeoutSeconds)) s): \(sourceURL.lastPathComponent). Anuluję analizowanie i oznaczam obraz jako niewspierany/nierozpoznany."
+            timeoutReason: "Image analysis timed out (\(Int(imageAnalysisTimeoutSeconds)) s): \(sourceURL.lastPathComponent). Cancelling analysis and marking the image unsupported or unrecognized."
         )
     }
 
@@ -323,7 +391,7 @@ extension AnalysisLogic {
 
         let uniqueMountPaths = Array(Set(mountPaths)).sorted()
         guard !uniqueMountPaths.isEmpty else {
-            log("Timeout analizy obrazu: brak aktywnego mount-point do odmontowania dla \(sourceURL.lastPathComponent).")
+            log("Image analysis timeout: no active mount point to detach for \(sourceURL.lastPathComponent).")
             return
         }
 
@@ -338,19 +406,19 @@ extension AnalysisLogic {
                 try task.run()
                 task.waitUntilExit()
             } catch {
-                logError("Timeout analizy obrazu: nie udało się uruchomić odmontowania \(mountPath): \(error.localizedDescription)")
+                logError("Image analysis timeout: failed to start detaching \(mountPath): \(error.localizedDescription)")
                 continue
             }
 
             if task.terminationStatus == 0 {
-                log("Timeout analizy obrazu: odmontowano obraz \(mountPath).")
+                log("Image analysis timeout: detached image \(mountPath).")
             } else {
                 let stderrText = String(decoding: errorPipe.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                 if stderrText.isEmpty {
-                    logError("Timeout analizy obrazu: odmontowanie nie powiodło się dla \(mountPath) (kod \(task.terminationStatus)).")
+                    logError("Image analysis timeout: detaching failed for \(mountPath) (exit code \(task.terminationStatus)).")
                 } else {
-                    logError("Timeout analizy obrazu: odmontowanie nie powiodło się dla \(mountPath): \(stderrText)")
+                    logError("Image analysis timeout: detaching failed for \(mountPath): \(stderrText)")
                 }
             }
         }
@@ -373,7 +441,7 @@ extension AnalysisLogic {
         do {
             try task.run()
         } catch {
-            logError("Timeout analizy obrazu: nie udało się uruchomić hdiutil info: \(error.localizedDescription)")
+            logError("Image analysis timeout: failed to start hdiutil info: \(error.localizedDescription)")
             return nil
         }
         task.waitUntilExit()
@@ -384,9 +452,9 @@ extension AnalysisLogic {
             let stderrText = String(decoding: errorData, as: UTF8.self)
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             if stderrText.isEmpty {
-                logError("Timeout analizy obrazu: hdiutil info zakończył się błędem (kod \(task.terminationStatus)).")
+                logError("Image analysis timeout: hdiutil info failed (exit code \(task.terminationStatus)).")
             } else {
-                logError("Timeout analizy obrazu: hdiutil info zakończył się błędem: \(stderrText)")
+                logError("Image analysis timeout: hdiutil info failed: \(stderrText)")
             }
             return nil
         }

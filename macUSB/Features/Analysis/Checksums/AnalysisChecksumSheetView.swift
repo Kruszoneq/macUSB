@@ -41,7 +41,7 @@ struct AnalysisChecksumSheetView: View {
                     .font(.title3)
                     .symbolRenderingMode(.monochrome)
                     .foregroundColor(.primary)
-                Text(String(localized: "checksum.sheet.title"))
+                Text(String(localized: "analysis.checksum.sheet.title", table: "Analysis"))
                     .font(.headline)
                 Spacer()
             }
@@ -55,12 +55,12 @@ struct AnalysisChecksumSheetView: View {
         switch viewModel.phase {
         case .running:
             VStack(alignment: .leading, spacing: 10) {
-                Text(String(localized: "checksum.sheet.running.description"))
+                Text(String(localized: "analysis.checksum.sheet.running.description", table: "Analysis"))
                     .foregroundColor(.secondary)
                 ProgressView(value: viewModel.progress)
                 Text(
                     String(
-                        format: String(localized: "checksum.sheet.progress.percent"),
+                        format: String(localized: "analysis.checksum.sheet.progress.percent", table: "Analysis"),
                         Int((viewModel.progress * 100).rounded())
                     )
                 )
@@ -69,7 +69,7 @@ struct AnalysisChecksumSheetView: View {
             }
         case .completed:
             VStack(alignment: .leading, spacing: 10) {
-                Text(String(localized: "checksum.sheet.completed.description"))
+                Text(String(localized: "analysis.checksum.sheet.completed.description", table: "Analysis"))
                     .foregroundColor(.secondary)
                 if let checksum = viewModel.checksum {
                     Text(checksum)
@@ -81,11 +81,11 @@ struct AnalysisChecksumSheetView: View {
                 }
             }
         case .cancelled:
-            Text(String(localized: "checksum.sheet.cancelled.description"))
+            Text(String(localized: "analysis.checksum.sheet.cancelled.description", table: "Analysis"))
                 .foregroundColor(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         case .failed:
-            Text(viewModel.failureMessage ?? String(localized: "checksum.sheet.failed.description"))
+            Text(viewModel.failureMessage ?? String(localized: "analysis.checksum.sheet.failed.description", table: "Analysis"))
                 .foregroundColor(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -102,7 +102,7 @@ struct AnalysisChecksumSheetView: View {
                         .padding(.horizontal, 10)
                         .padding(.vertical, 6)
                 }
-                .help(String(localized: "checksum.sheet.copy.button.help"))
+                .help(String(localized: "analysis.checksum.sheet.copy.button.help", table: "Analysis"))
                 .macUSBSecondaryButtonStyle()
             }
 
@@ -133,9 +133,9 @@ struct AnalysisChecksumSheetView: View {
     private var primaryButtonTitle: String {
         switch viewModel.phase {
         case .running:
-            return String(localized: "Anuluj")
+            return String(localized: "analysis.action.cancel", table: "Analysis")
         case .completed, .cancelled, .failed:
-            return String(localized: "Zamknij")
+            return String(localized: "analysis.action.close", table: "Analysis")
         }
     }
 

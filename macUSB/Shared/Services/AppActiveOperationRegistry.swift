@@ -17,6 +17,8 @@ struct AppActiveOperationSnapshot: Identifiable {
     let kind: AppActiveOperationKind
     let context: String
     let startedAt: Date
+    let logStage: AppLogging.Stage
+    let logWorkflow: AppLogging.Workflow?
 }
 
 final class AppActiveOperationToken {
@@ -58,12 +60,19 @@ final class AppActiveOperationRegistry: ObservableObject {
     private init() {}
 
     @discardableResult
-    func begin(kind: AppActiveOperationKind, context: String) -> AppActiveOperationToken {
+    func begin(
+        kind: AppActiveOperationKind,
+        context: String,
+        logStage: AppLogging.Stage = .app,
+        logWorkflow: AppLogging.Workflow? = nil
+    ) -> AppActiveOperationToken {
         let operation = AppActiveOperationSnapshot(
             id: UUID(),
             kind: kind,
             context: normalizedContext(context),
-            startedAt: Date()
+            startedAt: Date(),
+            logStage: logStage,
+            logWorkflow: logWorkflow
         )
         let count = lock.withLock {
             operations[operation.id] = operation
@@ -71,8 +80,9 @@ final class AppActiveOperationRegistry: ObservableObject {
         }
         publishActiveOperationCount(count)
         AppLogging.info(
-            "Rozpoczęto chronioną operację [kind=\(kind.rawValue), context=\(operation.context), id=\(operation.id.uuidString)].",
-            category: "AppLifecycle"
+            "Protected operation started [kind=\(kind.rawValue), context=\(operation.context), id=\(operation.id.uuidString)].",
+            stage: logStage,
+            workflow: logWorkflow
         )
         return AppActiveOperationToken(registry: self, operationID: operation.id)
     }
@@ -98,13 +108,14 @@ final class AppActiveOperationRegistry: ObservableObject {
         let duration = max(0, Date().timeIntervalSince(operation.startedAt))
         AppLogging.info(
             String(
-                format: "Zakończono chronioną operację [kind=%@, context=%@, id=%@, duration=%.2fs].",
+                format: "Protected operation finished [kind=%@, context=%@, id=%@, duration=%.2fs].",
                 operation.kind.rawValue,
                 operation.context,
                 operation.id.uuidString,
                 duration
             ),
-            category: "AppLifecycle"
+            stage: operation.logStage,
+            workflow: operation.logWorkflow
         )
     }
 

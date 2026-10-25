@@ -8,7 +8,7 @@ extension MontereyDownloadFlowModel {
         stepName: String,
         operation: @escaping () throws -> Void
     ) async throws {
-        AppLogging.info("Legacy assembly: \(stepName) start", category: "Downloader")
+        AppLogging.info("Legacy assembly: \(stepName) start", stage: .downloader, workflow: loggingWorkflow)
         buildStatusText = statusText
         buildProgress = max(buildProgress ?? progressStart, progressStart)
 
@@ -26,11 +26,11 @@ extension MontereyDownloadFlowModel {
             try await runBlockingOperation(operation)
             progressTask.cancel()
             buildProgress = max(buildProgress ?? progressStart, progressEnd)
-            AppLogging.info("Legacy assembly: \(stepName) success", category: "Downloader")
+            AppLogging.info("Legacy assembly: \(stepName) success", stage: .downloader, workflow: loggingWorkflow)
         } catch {
             progressTask.cancel()
             let message = error.localizedDescription
-            AppLogging.error("Legacy assembly: \(stepName) failed: \(message)", category: "Downloader")
+            AppLogging.error("Legacy assembly: \(stepName) failed: \(message)", stage: .downloader, workflow: loggingWorkflow)
             if error is DownloadFailureReason {
                 throw error
             }
@@ -48,7 +48,7 @@ extension MontereyDownloadFlowModel {
     ) async throws -> String {
         AppLogging.info(
             "Legacy assembly: \(stepName) start executable=\(URL(fileURLWithPath: executable).lastPathComponent) args=\(arguments.joined(separator: " "))",
-            category: "Downloader"
+            stage: .downloader, workflow: loggingWorkflow
         )
         buildStatusText = statusText
         buildProgress = max(buildProgress ?? progressStart, progressStart)
@@ -70,7 +70,7 @@ extension MontereyDownloadFlowModel {
             )
             progressTask.cancel()
             buildProgress = max(buildProgress ?? progressStart, progressEnd)
-            AppLogging.info("Legacy assembly: \(stepName) success", category: "Downloader")
+            AppLogging.info("Legacy assembly: \(stepName) success", stage: .downloader, workflow: loggingWorkflow)
             return output
         } catch {
             progressTask.cancel()

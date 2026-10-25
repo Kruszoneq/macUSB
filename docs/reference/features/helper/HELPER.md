@@ -118,6 +118,7 @@ Contract invariants:
 - Stage keys and status keys are treated as stable technical identifiers.
 - App-side localization rendering must stay compatible with helper payload content.
 - Helper workflow `stageTitleKey` and `statusKey` values must be localization catalog keys only (no user-facing literal strings in payload fields).
+- USB workflow presentation identifiers are `creator.*` keys shared through `HelperWorkflowLocalizationKeys.swift` and rendered from `Creator.xcstrings` by the app. The app decoder normalizes older `helper.workflow.*` identifiers, including macUSBoot phase statuses, into their current catalog keys. Workflow/stage identifiers and IPC fields retain their existing shape.
 - IPC shape changes are major helper changes and require explicit confirmation before implementation.
 - `queryCapabilities` returns `HelperCapabilitiesPayload`; a macUSBoot-compatible helper advertises `windows.macusboot.v1` only after the signed bundle resource set passes full artifact validation against names, sizes, and SHA-256 values compiled into the helper executable. The manifest and checksum file are consistency metadata and cannot authorize a different artifact. Capability versions describe functional contract compatibility; app version/build fingerprint changes remain responsible for helper re-registration.
 
@@ -158,7 +159,9 @@ Contract invariants:
 - After successful non-interactive ensure-ready, app compares current app fingerprint (`CFBundleShortVersionString` + `CFBundleVersion`) with last successful helper-repair fingerprint stored in `UserDefaults`.
 - If fingerprint changed, or no previous fingerprint exists (upgrade from older app versions), app runs automatic full helper repair in background.
 - Successful automatic repair updates stored fingerprint, remains visible in logs, and shows a short in-app toast at the bottom of the main window.
+- Startup completion returns app-side `HelperStartupResult` with readiness and whether automatic repair/update was required, including automatic registration recovery during bootstrap and version/build repair decisions captured before repair changes the stored fingerprint. Welcome uses this result to block automatic navigation for that launch even after a successful repair; helper repair execution and XPC contracts are unchanged.
 - Failed automatic repair presents one warning `NSAlert` with guidance to run `Tools → Repair helper` manually.
+- Automatic update decision, start, completion, and failure lines use English messages with the `[HH:MM:SS] [HELPER]` prefix. The start line records whether the previous fingerprint was missing or changed.
 - Automatic and manual full repair own a repair token from the start of unregister through the final registration health check.
 
 ### Hard-Repair Flow
@@ -170,11 +173,13 @@ Contract invariants:
 - UI surface uses `NSAlert`:
   - in-progress informational alert (non-dismissable action button while repair is running),
   - automatic transition to final status alert after completion,
-  - failure path offers an additional details alert with technical repair logs.
+  - failure path offers an additional details alert with technical repair logs in a fixed-size, vertically scrollable, selectable text view; long lines wrap instead of enlarging the alert,
+  - progress, summary, and details sheets use the same owning app window, resolving any active sheet to its parent before presentation; details are presented on the next main-queue turn after the summary response so they cannot attach to the dismissing summary window.
 
 ### USB Workflow Flow
 - App sends `HelperWorkflowRequestPayload`.
 - Daemon executes staged workflow (`prepare`, format/restore/createinstallmedia/copy/finalize patterns by workflow kind, plus Linux raw-copy branch).
+- macOS legacy restore and Mavericks can reuse the existing `needsPreformat=false` execution branch for an analysis-selected GPT/HFS+ Option volume. The app sends its mount point as `targetVolumePath`; helper skips whole-disk `partitionDisk` and passes that path to `asr restore --target ... --erase`. Source staging, image scanning, restore arguments, IPC fields, stage keys, cancellation and cleanup remain the existing pipeline. Whole-disk targets still request preformat, and PPC retains its dedicated format/restore stages. Target eligibility and admission are defined in `../usb/USB_VALIDATION_AND_CAPACITY.md`.
 - Progress events are emitted with stage/status keys and percent updates.
 - Cancellation and failure return deterministic result payloads.
 - Linux raw-copy branch uses helper-side Disk Arbitration mount guard for target USB (`diskX` and `diskXsY`) from `linux_unmount_target` start until `linux_verify_write` terminal outcome, then always releases guard immediately after verify.
@@ -187,6 +192,7 @@ Contract invariants:
 - Every Windows request must include `windowsBootMode`; the service rejects requests without it before creating an executor.
 - After Windows target formatting, helper resolves the FAT32 partition from the exact requested whole disk, mounts that partition by device identifier when needed, and validates its partition identifier, exact parent whole disk, mount point, and volume UUID before every target-writing or target-verification stage. Volume labels remain presentation metadata and are not target paths.
 - Windows media copy runs only the system-provided `/usr/bin/rsync` with explicit recursive/link/time preservation. The privileged helper does not execute user-managed Homebrew or MacPorts `rsync` binaries and does not request POSIX ownership metadata for the FAT32 target.
+- Windows WIM split decisions, solid-format classification, conversion commands, temporary-space estimates, progress, and validation limits are defined in [Windows WIM Splitting](../windows/WINDOWS_WIM_SPLITTING.md). The three conversion preflight/export-directory errors use shared `HelperWindowsWimErrorLocalizationKey` values in the existing `errorMessage` field; their presentation and best-effort cleanup are defined in [Windows WIM Failure and Cleanup](../usb/FINISH_AND_CLEANUP.md#windows-wim-failure-and-cleanup).
 - BIOS mode appends `windows_install_macusboot` after `windows_verify_media` and before cleanup. UEFI retains the existing stage graph.
 - The BIOS stage validates the pinned bundled artifact and the target MBR gap, installs StageTwo at LBA 1...5 before MBR boot code, synchronizes and reads back each write, then verifies the full protected range. It blocks Disk Arbitration auto-mounts, ignores cancellation while active, and performs exactly one final `mountDisk` attempt after releasing raw-device ownership.
 - Full macUSBoot invariants and failure categories are defined in `docs/reference/features/windows/MACUSBOOT_INSTALLATION.md`.
@@ -256,6 +262,8 @@ Daemon helper runtime:
   - daemon-side IPC contracts and payload types.
 - `macUSBHelper/Service/PrivilegedHelperService.swift`
   - XPC service entrypoints and active executor lifecycle, including downloader session cleanup endpoint.
+- `macUSBHelper/Service/HelperDiagnosticLogging.swift`
+  - timestamped, stage-labeled system diagnostics emitted by the daemon.
 - `macUSBHelper/Service/PrivilegedHelperServiceCapabilities.swift`
   - helper capability identifiers and advertised capability payload.
 - `macUSBHelper/Service/HelperListenerDelegate.swift`
@@ -282,6 +290,14 @@ Daemon helper runtime:
   - Linux Disk Arbitration mount-approval guard blocking target auto-mount until verify phase completes.
 - `macUSBHelper/Workflow/Windows/Autounattend/*`
   - Windows `Autounattend.xml` configuration helpers, XML generation, and XML validation.
+- `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsSourceLogic.swift`
+  - Windows source preparation, FAT32-limit scan, WIM classification, and conversion-space preflight.
+- `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsStages.swift`
+  - Windows stage graph, source copy, WIM export/split, and streaming command execution.
+- `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsWimSplitProgressParsing.swift`
+  - shared export/split percentage parsing.
+- `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsValidationLogic.swift`
+  - Windows target payload-marker validation and source-image detach.
 - `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsBootValidation.swift`
   - boot-mode-aware, case-insensitive BIOS/UEFI source and target marker validation.
 - `macUSBHelper/Workflow/Windows/HelperWorkflowWindowsTargetResolution.swift`
@@ -315,8 +331,14 @@ Important behavior:
 
 Rules:
 - Important runtime events should be routed through `AppLogging` on app-side.
-- Repair flow should produce readable operational logs.
+- App-side XPC helper code-signing requirement configuration and rejection lines use English messages with the `[HH:MM:SS] [HELPER]` prefix.
+- Ensure-ready XPC health check lines use the same prefix. Successful checks include `uid`, `euid`, and `pid` when the helper supplies them; localized health details remain available to presentation flows.
+- Ensure-ready and IPC reload lifecycle lines also use English `[HELPER]` diagnostics, including interactive mode and English `SMAppService` status values. Localized completion messages and alerts remain presentation data.
+- Manual and automatic full repair write English `[HELPER_REPAIR]` operational logs through `AppLogging`; the repair-details alert uses the same label. Service status names in diagnostics are English, while repair alerts remain localized.
+- Direct daemon system logs carry an operation stage and the separate `[HELPER]` source tag. XPC trust and process lifecycle use `[HELPER] [HELPER]`; Rosetta and Linux post-mount use `[USB] [HELPER]` before app-side workflow selection is available.
 - Helper live tool output is diagnostic and must not become the UI source of truth for stage semantics.
+- Forwarded USB workflow progress diagnostics, including raw tool output, are recorded by app-side `AppLogging` with the operation's `USB` workflow label and a separate `[HELPER]` source tag. The app wraps a failed workflow result's `errorMessage` in a `[USB_WORKFLOW]` error line without that extra tag. App-side XPC diagnostics retain the base `HELPER` stage without the source tag; app-side repair uses `HELPER_REPAIR` without that source tag.
+- Forwarded downloader assembly diagnostics, including helper tool output, are recorded by app-side `AppLogging` with the selected `DOWNLOADER_MODERN` or `DOWNLOADER_OLDEST` workflow label and a separate `[HELPER]` source tag. Helper-authored downloader messages are English; localized progress status remains presentation data.
 - macUSBoot phase status keys are stable localization identifiers carried in progress events; live log lines remain technical diagnostics and never include binary contents.
 
 Diagnostics should allow answering:

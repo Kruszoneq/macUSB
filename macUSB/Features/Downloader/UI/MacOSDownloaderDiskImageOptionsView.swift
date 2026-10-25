@@ -11,20 +11,20 @@ struct MacOSDownloaderDiskImageOptionsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text(String(localized: "Opcje pobierania"))
+            Text(String(localized: "downloader.options.title", table: "Downloader"))
                 .font(.headline)
 
-            Toggle(String(localized: "Pokaż wszystkie wersje"), isOn: $showAllAvailableVersions)
+            Toggle(String(localized: "downloader.options.show_all_versions", table: "Downloader"), isOn: $showAllAvailableVersions)
                 .toggleStyle(.checkbox)
 
             Toggle(
-                String(localized: "downloader.options.showBetaVersions"),
+                String(localized: "downloader.options.showBetaVersions", table: "Downloader"),
                 isOn: $showBetaVersions
             )
             .toggleStyle(.checkbox)
 
             Toggle(isOn: diskImageToggleBinding) {
-                Text("downloader.disk_image.option.title")
+                Text("downloader.disk_image.option.title", tableName: "Downloader")
             }
             .toggleStyle(.checkbox)
 
@@ -42,10 +42,10 @@ struct MacOSDownloaderDiskImageOptionsView: View {
                     Button {
                         chooseDiskImageDestination(isInitialSelection: false)
                     } label: {
-                        Text("downloader.disk_image.folder.change")
+                        Text("downloader.disk_image.folder.change", tableName: "Downloader")
                     }
                     .macUSBSecondaryButtonStyle()
-                    .help(String(localized: "downloader.disk_image.folder.change_help"))
+                    .help(String(localized: "downloader.disk_image.folder.change_help", table: "Downloader"))
                 }
                 .padding(.leading, 22)
                 .transition(.move(edge: .top).combined(with: .opacity))
@@ -56,7 +56,7 @@ struct MacOSDownloaderDiskImageOptionsView: View {
                 Capsule()
                     .fill(Color.secondary.opacity(0.20))
                     .frame(height: 1)
-                Text(String(localized: "Deweloperskie"))
+                Text(verbatim: "Developer")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                 Capsule()
@@ -65,8 +65,10 @@ struct MacOSDownloaderDiskImageOptionsView: View {
             }
             .padding(.vertical, 2)
 
-            Toggle(String(localized: "Zachowaj pobrane pliki (Debug)"), isOn: $preserveDownloadedFilesInDebug)
-                .toggleStyle(.checkbox)
+            Toggle(isOn: $preserveDownloadedFilesInDebug) {
+                Text(verbatim: "Save downloaded files (Debug)")
+            }
+            .toggleStyle(.checkbox)
             #endif
 
             Spacer(minLength: 0)
@@ -76,7 +78,7 @@ struct MacOSDownloaderDiskImageOptionsView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text(String(localized: "OK"))
+                    Text(String(localized: "downloader.action.ok", table: "Downloader"))
                         .padding(.horizontal, 16)
                         .padding(.vertical, 6)
                 }
@@ -109,9 +111,9 @@ struct MacOSDownloaderDiskImageOptionsView: View {
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = false
         panel.canCreateDirectories = true
-        panel.title = String(localized: "downloader.disk_image.picker.title")
-        panel.message = String(localized: "downloader.disk_image.picker.message")
-        panel.prompt = String(localized: "downloader.disk_image.picker.prompt")
+        panel.title = String(localized: "downloader.disk_image.picker.title", table: "Downloader")
+        panel.message = String(localized: "downloader.disk_image.picker.message", table: "Downloader")
+        panel.prompt = String(localized: "downloader.disk_image.picker.prompt", table: "Downloader")
         if let diskImageDestinationDirectoryURL {
             panel.directoryURL = diskImageDestinationDirectoryURL
         }

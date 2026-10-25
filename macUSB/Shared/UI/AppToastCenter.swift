@@ -91,11 +91,11 @@ private struct AppToastView: View {
                 .frame(width: 22, height: 22)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(LocalizedStringKey(toast.titleKey))
+                Text(LocalizedStringKey(toast.titleKey), tableName: "App")
                     .font(.headline)
                     .lineLimit(1)
 
-                Text(LocalizedStringKey(toast.messageKey))
+                Text(LocalizedStringKey(toast.messageKey), tableName: "App")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

@@ -70,8 +70,8 @@ final class MacOSLocalInstallerMetadataReader: @unchecked Sendable {
                 throw CancellationError()
             } catch {
                 AppLogging.error(
-                    "Odczyt Distribution z \(packageURL.path) nie powiodl sie; sprawdzam kolejne zrodlo metadanych: \(error.localizedDescription)",
-                    category: "Downloader"
+                    "Reading Distribution from \(packageURL.path) failed; trying the next metadata source: \(error.localizedDescription)",
+                    stage: .downloader, workflow: .discovery
                 )
             }
         }
@@ -144,8 +144,8 @@ final class MacOSLocalInstallerMetadataReader: @unchecked Sendable {
             options: [.skipsPackageDescendants],
             errorHandler: { url, error in
                 AppLogging.error(
-                    "Blad skanowania zamontowanego obrazu \(url.path): \(error.localizedDescription)",
-                    category: "Downloader"
+                    "Failed to scan mounted image \(url.path): \(error.localizedDescription)",
+                    stage: .downloader, workflow: .discovery
                 )
                 return true
             }

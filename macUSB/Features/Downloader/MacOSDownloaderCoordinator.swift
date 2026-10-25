@@ -23,8 +23,8 @@ final class MacOSDownloaderWindowManager {
     func present() {
         guard !MenuState.shared.isDownloaderAccessBlocked else {
             AppLogging.info(
-                "Otwarcie downloadera zablokowane: trwa lub podsumowuje sie proces tworzenia nośnika USB.",
-                category: "Downloader"
+                "Downloader opening blocked: USB creation is running or showing its summary.",
+                stage: .downloader
             )
             return
         }
@@ -36,8 +36,8 @@ final class MacOSDownloaderWindowManager {
 
         guard let parentWindow = NSApp.keyWindow ?? NSApp.mainWindow else {
             AppLogging.error(
-                "Nie mozna otworzyc okna downloadera: brak aktywnego okna macUSB.",
-                category: "Downloader"
+                "Cannot open downloader: no active macUSB window.",
+                stage: .downloader
             )
             return
         }
@@ -45,9 +45,12 @@ final class MacOSDownloaderWindowManager {
         let sheetContentHeight = downloaderWindowHeight
         MenuState.shared.lockLanguageChanges(reason: "downloader_opened")
 
+        let languageManager = LanguageManager()
         let contentView = MacOSDownloaderWindowShellView(contentHeight: sheetContentHeight) { [weak self] in
             self?.close()
         }
+        .environment(\.locale, languageManager.locale)
+        .environment(\.layoutDirection, languageManager.layoutDirection)
         let hostingController = NSHostingController(rootView: contentView)
         let window = NSWindow(contentViewController: hostingController)
         let fixedSize = NSSize(
@@ -56,7 +59,7 @@ final class MacOSDownloaderWindowManager {
         )
 
         window.styleMask = [.titled]
-        window.title = String(localized: "Pobieranie systemu macOS")
+        window.title = String(localized: "downloader.window.title", table: "Downloader")
         window.setContentSize(fixedSize)
         window.minSize = fixedSize
         window.maxSize = fixedSize
@@ -71,8 +74,8 @@ final class MacOSDownloaderWindowManager {
         parentWindow.beginSheet(window)
 
         AppLogging.info(
-            "Otwarto okno menedzera pobierania systemow macOS.",
-            category: "Downloader"
+            "Opened the macOS downloader window.",
+            stage: .downloader
         )
     }
 
@@ -92,8 +95,8 @@ final class MacOSDownloaderWindowManager {
         NSApp.activate(ignoringOtherApps: true)
 
         AppLogging.info(
-            "Zamknieto okno menedzera pobierania systemow macOS.",
-            category: "Downloader"
+            "Closed the macOS downloader window.",
+            stage: .downloader
         )
     }
 }

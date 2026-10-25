@@ -48,8 +48,8 @@ final class AppTerminationCoordinator {
         }.joined(separator: ", ")
 
         AppLogging.info(
-            "Zablokowano zamknięcie aplikacji [source=\(source), active=\(details)].",
-            category: "AppLifecycle"
+            "Application termination blocked [source=\(source), active=\(details)].",
+            stage: .app
         )
     }
 
@@ -63,9 +63,9 @@ final class AppTerminationCoordinator {
         let alert = NSAlert()
         alert.alertStyle = .warning
         alert.icon = NSApp.applicationIconImage
-        alert.messageText = String(localized: "app.termination.active.title")
-        alert.informativeText = String(localized: "app.termination.active.message")
-        alert.addButton(withTitle: String(localized: "app.termination.active.confirm"))
+        alert.messageText = String(localized: "app.termination.active.title", table: "App")
+        alert.informativeText = String(localized: "app.termination.active.message", table: "App")
+        alert.addButton(withTitle: String(localized: "app.termination.active.confirm", table: "App"))
         blockedAlert = alert
 
         let completion: (NSApplication.ModalResponse) -> Void = { [weak self] _ in
