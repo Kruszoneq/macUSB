@@ -69,14 +69,17 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
 5. Review the final result and safely eject the media directly from the final screen.
 
 > [!IMPORTANT]
-> For reliable media creation, enable **Allow in the Background** and **Full Disk Access** for macUSB in System Settings. Without them, creation workflows may fail.
+> Enable **Full Disk Access** and **Background App Activity** for macUSB in System Settings. These are required by the app’s current installer download and media creation workflows.
+
+- **Full Disk Access:** macUSB requires this permission to write to the selected external drive and build installers in the Downloader. On Macs with the Apple T2 Security Chip and on Apple silicon Macs, Removable Volumes access alone was insufficient for all required write operations, even with administrator privileges.
+- **Background App Activity:** macUSB uses a helper registered through Apple’s `SMAppService`. This setting is required for the helper to run and perform privileged operations, such as preparing installers, formatting media, and writing data.
 
 <table align="center">
   <tr>
     <td align="center" valign="top">
-      <strong>Allow in the Background</strong><br>
+      <strong>Background App Activity</strong><br>
       <a href="docs/readme-assets/permissions/allow-in-the-background.png">
-        <img src="docs/readme-assets/permissions/allow-in-the-background.png" alt="macOS Login Items settings with macUSB enabled in Allow in the Background" width="360">
+        <img src="docs/readme-assets/permissions/allow-in-the-background.png" alt="macOS Login Items settings with macUSB enabled under Background App Activity" width="360">
       </a><br>
       <sub>General → Login Items &amp; Extensions</sub>
     </td>
