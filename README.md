@@ -129,7 +129,13 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
 
 ---
 
-## 🌐 Downloader Workflow
+## 🌐 macOS Downloader
+
+The built-in downloader lets you browse and download macOS and older OS X installers directly from Apple servers. macUSB downloads the required files, verifies their integrity, and prepares a ready-to-use installer.
+
+- **Version selection:** by default, the list shows the latest available stable release in each system family. Downloader options can show all available versions and Public Beta releases, which are hidden by default.
+- **Downloaded installer detection:** recognized installers in `/Applications` are marked as downloaded in the list.
+- **Disk space checks:** before downloading, macUSB checks the free space needed to prepare the installer, including optional DMG output.
 
 <p align="center">
   Click a screenshot to view it at full size.
@@ -142,26 +148,26 @@ Thanks to user feedback, macUSB has grown beyond legacy macOS installer creation
       <a href="docs/readme-assets/app-screens/DownloaderCatalogOverview.png">
         <img src="docs/readme-assets/app-screens/DownloaderCatalogOverview.png" alt="Downloader installer list" width="190">
       </a><br>
-      <sub>Browse macOS installers available from Apple servers.</sub>
+      <sub>Browse available system versions and select an installer to download.</sub>
     </td>
     <td align="center" valign="top">
       <strong>2. Download Progress</strong><br>
       <a href="docs/readme-assets/app-screens/DownloaderProgress.png">
         <img src="docs/readme-assets/app-screens/DownloaderProgress.png" alt="Downloader progress view" width="190">
       </a><br>
-      <sub>Track download and preparation progress in real time.</sub>
+      <sub>Track progress, download speed, and each stage of installer verification and preparation.</sub>
     </td>
     <td align="center" valign="top">
       <strong>3. Download Summary</strong><br>
       <a href="docs/readme-assets/app-screens/DownloaderCompleted.png">
         <img src="docs/readme-assets/app-screens/DownloaderCompleted.png" alt="Downloader summary view" width="190">
       </a><br>
-      <sub>Review the final status, then continue to USB creation with the downloaded installer.</sub>
+      <sub>Review the result, reveal the completed installer in Finder, or send it directly to the USB creation workflow.</sub>
     </td>
   </tr>
 </table>
 
-Downloader options can save the completed installer as a read-only DMG in a selected destination folder.
+By default, the completed installer is saved as an `.app` in `/Applications`. To save it as a disk image, enable **Save installer as a disk image (.dmg)** in Downloader options and choose a destination folder. macUSB creates a read-only DMG containing the installer and removes the source `.app` after the image is successfully created. You can keep the image for later use or use it immediately to create bootable USB media.
 
 ---
 
@@ -193,7 +199,7 @@ Accepted local source formats:
 
 ---
 
-## 💿 macOS Support
+## 🍎 macOS Support
 
 macUSB supports creating bootable USB installers across the **macOS**, **OS X**, and **Mac OS X** system families, from **macOS Golden Gate 27** through **Mac OS X Tiger 10.4**. Some systems have additional requirements or limitations.[^1]
 
