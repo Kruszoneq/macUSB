@@ -7,6 +7,8 @@ struct UniversalInstallationView: View {
 
     let sourceAppURL: URL
     let targetDrive: USBDrive?
+    /// Registry identity verified at the analysis handoff.
+    let targetDriveIdentity: String?
     let targetDriveDisplayName: String?
     let systemName: String
     let detectedSystemIcon: NSImage?
@@ -70,6 +72,7 @@ struct UniversalInstallationView: View {
     @State var cancellationRequestedBeforeWorkflowStart: Bool = false
     @State var isCancelled: Bool = false
     @State var isUSBDisconnectedLock: Bool = false
+    @State var isUSBDisconnectAlertPending: Bool = false
     @State var usbCheckTimer: Timer?
 
     @State var helperOperationFailed: Bool = false

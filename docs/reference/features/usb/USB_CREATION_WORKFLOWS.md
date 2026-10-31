@@ -5,6 +5,8 @@
 Start path is destructive and must require explicit confirmation.
 Workflow selection must respect analyzed compatibility flags.
 
+Confirming Start re-reads the physical parent's registry identity verified at the analysis handoff in the same main-thread turn that starts the workflow. A target can be unplugged and replaced under the open confirmation sheet, and the disconnect alert raised meanwhile is queued behind it. If a disconnect is pending, the identity is unavailable, or it no longer matches, the workflow does not start, the creation token is released, `Start confirmation blocked` is logged, and the disconnect alert is shown once. Replugging the same disk also changes this identity and blocks the start.
+
 Every confirmed creation attempt owns one USB-creation token across macOS, Linux, and Windows branches. The token begins before workflow preflight and ends only on start failure, terminal success/failure, or confirmed terminal cancellation. An accepted helper cancellation request keeps the token active until the final helper result. Helper cleanup stages add a nested cleanup token.
 
 ## Workflow Families
