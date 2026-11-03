@@ -45,18 +45,25 @@ extension UniversalInstallationView {
         alert.addButton(withTitle: String(localized: "summary.action.yes", table: "Summary"))
 
         let completionHandler = { (response: NSApplication.ModalResponse) in
-            if response == .alertSecondButtonReturn {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    self.navigateToCreationProgress = true
-                }
-                self.startCreationProcessEntry()
-            } else if self.isWindowsWorkflow {
-                self.windowsAutounattendConfiguration.existingFileDecision = nil
-                self.persistWindowsAutounattendConfiguration()
-                self.finishUSBCreationOperationIfNeeded()
-            } else {
-                self.finishUSBCreationOperationIfNeeded()
+            guard response == .alertSecondButtonReturn else {
+                self.abandonConfirmedStart()
+                return
             }
+            // The sheet can stay open while the target is unplugged and another
+            // disk takes its BSD name, so verify it in the same turn as the start.
+            if let reason = self.confirmedTargetBlockReason() {
+                self.logError("Start confirmation blocked: target=\(self.targetDrive?.device ?? "none"), reason=\(reason).")
+                self.abandonConfirmedStart()
+                self.stopUSBMonitoring()
+                if !self.isUSBDisconnectAlertPending && !self.isUSBDisconnectedLock {
+                    self.showUSBDisconnectAlert()
+                }
+                return
+            }
+            withAnimation(.easeInOut(duration: 0.2)) {
+                self.navigateToCreationProgress = true
+            }
+            self.startCreationProcessEntry()
         }
 
         if let window = NSApp.windows.first {
@@ -65,6 +72,32 @@ extension UniversalInstallationView {
             let response = alert.runModal()
             completionHandler(response)
         }
+    }
+
+    private func abandonConfirmedStart() {
+        if isWindowsWorkflow {
+            windowsAutounattendConfiguration.existingFileDecision = nil
+            persistWindowsAutounattendConfiguration()
+        }
+        finishUSBCreationOperationIfNeeded()
+    }
+
+    /// Compares the physical parent with the registry identity verified at the
+    /// analysis handoff. Replugging the same disk also changes this identity.
+    private func confirmedTargetBlockReason() -> String? {
+        if isUSBDisconnectedLock || isUSBDisconnectAlertPending {
+            return "disconnect detected"
+        }
+        guard let drive = targetDrive,
+              let expectedParent = targetDriveIdentity?.components(separatedBy: ":").first else {
+            return "target identity unavailable"
+        }
+        let wholeDisk = USBDriveLogic.wholeDiskName(from: drive.device)
+        let currentParent = USBDiscoveryRegistryProbe.media(named: wholeDisk).map { String($0.identity) }
+        guard currentParent == expectedParent else {
+            return "identity changed (expected=\(expectedParent), current=\(currentParent ?? "none"))"
+        }
+        return nil
     }
 
     var creationLogWorkflow: AppLogging.Workflow {
@@ -310,8 +343,10 @@ extension UniversalInstallationView {
         alert.alertStyle = .warning
         alert.addButton(withTitle: String(localized: "creator.action.continue", table: "Creator"))
 
+        isUSBDisconnectAlertPending = true
         let completionHandler = { (_: NSApplication.ModalResponse) in
             DispatchQueue.main.async {
+                self.isUSBDisconnectAlertPending = false
                 self.isTabLocked = false
                 DispatchQueue.global(qos: .userInitiated).async {
                     self.unmountSourceImageIfNeeded()

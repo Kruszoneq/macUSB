@@ -22,6 +22,7 @@ struct SystemAnalysisView: View {
     
     @State private var selectedDriveDisplayNameSnapshot: String? = nil
     @State private var selectedDriveForInstallationSnapshot: USBDrive? = nil
+    @State private var selectedTargetIdentitySnapshot: String? = nil
     @State private var isBetaInstallerSnapshot: Bool = false
     @State private var linuxFlowContextSnapshot: LinuxInstallationFlowContext? = nil
     @State private var windowsWorkflowSupportedSnapshot: Bool = false
@@ -191,6 +192,7 @@ struct SystemAnalysisView: View {
         navigateToInstall = false
         selectedDriveDisplayNameSnapshot = nil
         selectedDriveForInstallationSnapshot = nil
+        selectedTargetIdentitySnapshot = nil
         isBetaInstallerSnapshot = false
         linuxFlowContextSnapshot = nil
         windowsWorkflowSupportedSnapshot = false
@@ -518,6 +520,7 @@ struct SystemAnalysisView: View {
                     destination: UniversalInstallationView(
                         sourceAppURL: sourceURL,
                         targetDrive: selectedDriveForInstallationSnapshot,
+                        targetDriveIdentity: selectedTargetIdentitySnapshot,
                         targetDriveDisplayName: selectedDriveDisplayNameSnapshot,
                         systemName: logic.recognizedVersion,
                         detectedSystemIcon: logic.detectedSystemIcon,
@@ -585,6 +588,7 @@ struct SystemAnalysisView: View {
         guard canProceedToInstall else { return }
         selectedDriveDisplayNameSnapshot = logic.selectedDrive?.displayName
         selectedDriveForInstallationSnapshot = logic.selectedDriveForInstallation
+        selectedTargetIdentitySnapshot = logic.selectedTargetIdentity
         isBetaInstallerSnapshot = logic.isBetaInstaller
         linuxFlowContextSnapshot = logic.linuxInstallationFlowContext
         windowsWorkflowSupportedSnapshot = logic.isWindowsWorkflowSupported
